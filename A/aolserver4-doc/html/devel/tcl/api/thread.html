@@ -1,0 +1,1008 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<a name=top><h1>Thread, Cache, and Scheduling Functions</h1></a>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/thread.html,v 1.2 2002/03/19 20:30:11 kriston Exp $
+</small>
+<p>
+
+
+<h2><a href=./ name=ns_cond>ns_cond</a></h2>
+
+Manage events
+
+<h3>Syntax</h3>
+
+ns_cond broadcast eventid<br>
+
+ns_cond create<br>
+
+ns_cond destroy eventid<br>
+
+ns_cond set eventid<br>
+
+ns_cond wait eventid lockid ?timeout?<br>
+
+
+<h3>Description</h3>
+
+Note that this function is the same as the ns_event function, except
+that ns_cond has a more efficient underlying implementation.
+
+<p>
+
+ns_cond broadcast wakes up all threads waiting on the specified event.
+The eventid argument is the event ID returned by ns_cond create when
+the event was created.
+
+<p>
+
+ns_cond create initializes an event and returns an event ID for the
+new event.
+
+<p>
+
+ns_cond destroy frees the resources associated with the specified
+event. The eventid argument is the event ID returned by ns_cond create
+when the event was created.
+
+<p>
+
+ns_cond set wakes up the specified event. The eventid argument is the
+event ID returned by ns_cond create when the event was created.
+
+<p>
+
+ns_cond wait waits for the specified event for a specified time. The
+eventid argument is the event ID returned by ns_cond create when the
+event was created. The lockid argument is the id of a mutex lock. The
+timeout argument is the time to wait in seconds. The return value is 0
+(zero) if the event timed out and 1(one) if the event was woken up.
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_critsec>ns_critsec</a></h2>
+
+Manage critical sections
+
+<h3>Syntax</h3>
+
+
+ns_critsec create<br>
+
+ns_critsec destroy csid<br>
+
+ns_critsec enter csid<br>
+
+ns_critsec leave csid<br>
+
+ 
+<h3>Description</h3>
+
+
+<p>
+
+ns_critsec create creates a critical section and returns a critical
+section ID.
+
+<p>
+
+ns_critsec destroy destroys the specified critical section. The csid
+argument is the critical section ID returned by ns_critsec create when
+the critical section was created.
+
+<p>
+
+ns_critsec enter enters the specified critical section. The csid
+argument is the critical section ID returned by ns_critsec create when
+the critical section was created.
+
+<p>
+
+ns_critsec leave leaves the specified critical section. The csid
+argument is the critical section ID returned by ns_critsec create when
+the critical section was created.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_event>ns_event</a></h2>
+
+Manage events
+
+<h3>Syntax</h3>
+
+
+ns_event broadcast eventid<br>
+
+ns_event create<br>
+
+ns_event destroy eventid<br>
+
+ns_event set eventid<br>
+
+ns_event wait eventid lockid ?timeout?<br>
+
+
+<h3>Description</h3>
+
+ns_event broadcast wakes up all threads waiting on the specified
+event. The eventid argument is the event ID returned by ns_event
+create when the event was created.
+
+<p>
+
+ns_event create initializes an event and returns an event ID for the
+new event.
+
+<p>
+
+ns_event destroy frees the resources associated with the specified
+event. The eventid argument is the event ID returned by ns_event
+create when the event was created.
+
+<p>
+
+ns_event set wakes up the specified event. The eventid argument is the
+event ID returned by ns_event create when the event was created.
+
+<p>
+
+ns_event wait waits for the specified event for a specified time. The
+eventid argument is the event ID returned by ns_event create when the
+event was created. The lockid argument is the id of a mutex lock. The
+timeout argument is the time to wait in seconds. The return value is 0
+(zero) if the event timed out and 1(one) if the event was woken up.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_mutex>ns_mutex</a></h2>
+
+Manage mutexes
+
+<h3>Syntax</h3>
+
+
+ns_mutex create<br>
+
+ns_mutex destroy mutexid<br>
+
+ns_mutex lock mutexid<br>
+
+ns_mutex unlock mutexid<br>
+
+<h3>Description</h3>
+
+ns_mutex create initializes a mutual exclusion lock and returns an ID
+for it.
+
+<p>
+
+ns_mutex destroy frees the resources associated with the specified
+mutual exclusion lock. The mutexid argument is the mutex ID returned
+by ns_mutex create when the mutex was created.
+
+<p>
+
+ns_mutex lock acquires the specified mutual exclusion lock. The
+mutexid argument is the mutex ID returned by ns_mutex create when the
+mutex was created.
+
+<p>
+
+ns_mutex unlock unlocks the specified mutual exclusion lock. The
+mutexid argument is the mutex ID returned by ns_mutex create when the
+mutex was created.
+
+ 
+<h3>Example</h3>
+
+At startup (for example, in your init.tcl procedure), open a shared
+file and create a lock for it.  Note that this is very unscalable due
+to the fact that many threads can be waiting around for the one lock.
+
+<pre>
+ns_share Shared
+set Shared(file) [open myfile.data]
+set Shared(lock) [ns_mutex create]
+detach $Shared(file)
+</pre>
+
+Later (for example, in a request procedure), access the data file:
+
+<pre>
+ns_share Shared
+ns_mutex lock $Shared(lock)
+catch {
+    ... access $Shared(file) ...
+}
+ns_mutex unlock $Shared(lock)
+
+</pre>
+
+Note: The "catch" is important so the lock isn't held if Tcl unwinds
+due to an error accessing the file.
+
+<p>
+
+At shutdown (for example, in your shutdown procedure registered with
+ns_atshutdown), close the file and destroy the lock:
+
+<pre>
+ns_share Shared
+close $Shared(file)
+ns_mutex destroy $Shared(lock)
+</pre>
+
+<p>
+
+Try to avoid ns_share whenever possible.  The lock contention will
+kill your server's performance.  Investigate using the nsv commands
+instead to share data among multiple interpreters and multiple
+threads.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_rwlock>ns_rwlock</a></h2>
+
+Create, destroy, and manipulate read/write locks
+
+<h3>Syntax</h3>
+
+ns_rwlock create<br>
+
+ns_rwlock destroy rwlockid<br>
+
+ns_rwlock readlock rwlockid<br>
+
+ns_rwlock readunlock rwlockid<br>
+
+ns_rwlock writelock rwlockid<br>
+
+ns_rwlock writeunlock rwlockid<br>
+
+
+<h3>Description</h3>
+
+
+ns_rwlock create initializes a read/write lock and returns an ID for
+it.
+
+<p>
+
+ns_rwlock destroy frees the resources associated with the specified
+read/write lock. The rwlockid argument is the read/write lock ID
+returned by ns_rwlock create when the lock was created.
+
+<p>
+
+ns_rwlock readlock acquires a read lock. Any number of read locks can
+be pending. If there's a write lock active, the read lock acquisition
+blocks until the write lock is released.
+
+<p>
+
+ns_rwlock readunlock releases a read lock.
+
+<p>
+
+ns_rwlock writelock acquires a write lock. Only one write lock can be
+in effect. If there are pending read locks active, the write lock
+acquisition blocks until all of the read locks drain. If a subsequent
+read lock acquisition attempt is made, the write lock has priority.
+
+<p>
+
+ns_rwlock writeunlock releases a write lock
+
+<p>
+
+About Read/Write Locks
+
+<p>
+
+Read/write locks are a serialization mechanism for using data
+structures where multiple reads can happen simultaneously, but where
+writes must happen singly. For example, suppose you have a hash table
+that is heavily used but doesn't change very often. You'd like to have
+multiple threads be able to read from the table without blocking on
+each other, but when you need to update the table, you can do so
+safely without having to worry about other threads reading incorrect
+data.
+
+<p>
+
+The principal feature of read/write locks is the mechanism of which
+locks have priority and which locks must wait. Any number of read
+locks can be pending. If there's a write lock active, the read lock
+acquisition blocks until the write lock is released. Also, only one
+write lock can be in effect. If there are pending read locks active,
+the write lock acquisition blocks until all of the read locks drain.
+If a subsequent read lock acquisition attempt is made while a write
+lock is waiting to acquire, the write lock has priority.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sema>ns_sema</a></h2>
+
+Manage semaphores
+
+<h3>Syntax</h3>
+
+ns_sema create ?count?<br>
+
+ns_sema destroy semaid<br>
+
+ns_sema release semaid ?count?<br>
+
+ns_sema wait semaid<br>
+
+
+<h3>Description</h3>
+
+ns_sema create initializes a semaphore and returns an ID for it. If
+the count argument is specified, the semaphore is initialized with
+that count. The default for count is 0.
+
+<p>
+
+ns_sema destroy frees the resources associated with the specified
+semaphore. The semaid argument is the ID returned by ns_sema create
+when the semaphore was created.
+
+<p>
+
+ns_sema release increments the count of the specified semaphore. By
+default, the semaphore is incremented 1 (one) time. If the count
+argument is specified, the semaphore is incremented count times. The
+semaid argument is the ID returned by ns_sema create when the
+semaphore was created.
+
+<p>
+
+ns_sema wait waits for the count of the specified semaphore to be
+greater than 0 (zero). If it is greater than 0, the count is
+decremented and processing continues. If it is not greater than 0, it
+is blocked until this is possible. The semaid argument is the ID
+returned by ns_sema create when the semaphore was created.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_thread>ns_thread</a></h2>
+
+Manage threads
+
+<h3>Syntax</h3>
+
+
+ns_thread begin script<br>
+
+ns_thread begindetached script<br>
+
+ns_thread get<br>
+
+ns_thread getid<br>
+
+ns_thread wait tid<br>
+
+ns_thread yield<br>
+
+
+<h3>Description</h3>
+
+ns_thread begin begins a new thread which evaluates the specified
+script and then exits. It returns a thread ID that must eventually be
+passed to ns_thread wait. (Failing to call ns_thread wait will
+eventually result in no new threads being created.)
+
+<p>
+
+ns_thread begindetached begins a detached thread that doesn't have to
+be (and can't be) waited for.
+
+<p>
+
+ns_thread get gets the thread ID of the current thread. The result is
+a thread ID that can be passed to ns_thread wait and may look
+something like "tid532".
+
+<p>
+
+ns_thread getid gets the thread integer number for the current thread.
+The result is a small integer used for identifying threads is a
+human-readable way, such as "1" or "1120", for example.
+
+<p>
+
+ns_thread wait waits for the specified thread to exit. The tid
+argument is a thread ID returned by ns_thread begin or ns_thread get.
+
+<p>
+
+ns_thread yield causes the current thread to yield.
+
+
+<h3>Example</h3>
+
+This example is similar to the example under the ns_sockselect
+function of connecting to the 10 servers and waiting to service them
+with the ns_sockselect command. In this case, though, each connection
+gets it's own thread.
+
+<pre>
+# This is the procedure which is evaluated for each thread and
+# handles a single connection to host number $i
+
+proc getpage {i} {
+    global pages
+    # new thread will start here - first connect to host
+    set host [format "www%2d.foo.com" $i]
+    set fds [ns_sockopen $host 80
+    set r [lindex $fds 0]
+    set w [lindex $fds 1]
+    # next, send request
+    puts $w "GET /index.htm HTTP/1.0\r\n\r"
+    flush $w
+    # then read page
+    set pages($i) [read $r]
+    # and close sockets
+    close $w
+    close $r
+    # thread goes away here and other threads waiting
+    # on ns_thread wait will wakeup
+}
+
+# Here's the loop which creates the threads which run getpage.
+for {set i 1} {$i < 9} {incr i} {
+    set tids($i) [ns_thread begin "getpage $i"]
+}
+
+# wait for the threads to exit and then process the pages
+for {set i 1} {$i < 9} {incr i} {
+    ns_thread wait $tids($i)
+    # output page
+    ... process the page in $pages($i) put there by other thread ...
+}
+</pre>
+<p>
+
+Note that the code here is much simpler to follow than the
+ns_sockselect example; that's the benefit of multithreaded
+programming. However, it uses more resources as threads need to be
+created and initialized. This can be a problem if you plan to create
+many threads.
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cache_flush>ns_cache_flush</a></h2>
+
+Remove cache entry.
+
+<h3>Syntax</h3>
+
+ns_cache_flush cache key
+
+<h3>Description</h3>
+
+This function removes the cache entry specified by key from the cache
+specified by cache.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cache_names>ns_cache_names</a></h2>
+
+Return cache names.
+
+<h3>Syntax</h3>
+
+ns_cache_names
+
+<h3>Description</h3>
+
+This function returns a Tcl list of cache names.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cache_size>ns_cache_size</a></h2>
+
+Return size of cache.
+
+<h3>Syntax</h3>
+
+ns_cache_size cache
+
+<h3>Description</h3>
+
+This function returns the size of the specified cache.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cache_stats>ns_cache_stats</a></h2>
+
+Return cache statistics.
+
+<h3>Syntax</h3>
+
+ns_cache_stats cache ?arrayvar?
+
+<h3>Description</h3>
+
+   If no arrayvar is specified, this function returns cache statistics in
+   the following format:
+<pre>
+    "entries: #   flushed: #   hits: #   misses: #   hitrate: #"
+</pre>
+
+<p>
+
+If an arrayvar is specified, this fills the array with the elements:
+entries, flushed, hits, misses, and hitrates.  The entries are
+populated with their corresponding values.
+
+<p>
+
+See the nstelemetry.adp utility for an example of how ns_cache_stats
+is used.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_atclose>ns_atclose</a></h2>
+
+Register a script to be executed when the current connection closes
+
+<h3>Syntax</h3>
+
+
+ns_atclose {script | procname ?args?}
+
+<h3>Description</h3>
+
+ns_atclose adds the specified script or procedure (procname) to a list
+of scripts that are invoked when the current connection ends. The
+scripts are invoked in the reverse order in which they were
+registered. The scripts still get run if the connection closes early,
+or if there are Tcl errors following the script registration. If
+ns_atclose is invoked within a scheduled procedure, the atclose
+handler is invoked at the end of each scheduled execution of the
+procedure.
+
+<h3>Example</h3>
+
+This example makes a temporary file that gets deleted when the
+connection ends:
+
+<pre>
+proc show_at_close { } {
+    set tmpfile [ns_tmpnam]
+    # open tmpfile, write stuff to it and close it
+    ns_atclose "ns_unlink -nocomplain $tmpfile"
+    return $tmpfile
+} ;# show_at_close
+</pre>
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_atexit>ns_atexit</a></h2>
+
+
+Register a script to be run at server shutdown
+
+<h3>Syntax</h3>
+
+
+ns_atexit {script | procname ?args?}
+
+<h3>Description</h3>
+
+ns_atexit registers a Tcl script or procedure to be run when the
+server shuts down. This function is the same as ns_atshutdown.
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_atshutdown>ns_atshutdown</a></h2>
+
+
+Register a script to be run at server shutdown
+
+<h3>Syntax</h3>
+
+
+ns_atshutdown {script | procname ?args?}
+
+<h3>Description</h3>
+
+ns_atshutdown registers a Tcl script or procedure to be run when the
+virtual server shuts down.
+
+<h3>Example</h3>
+
+<pre>
+
+proc theLastThing {} {
+    global Shared
+    close $Shared(file)
+    ns_mutex destroy $Shared(lock)
+}
+
+...
+ns_atshutdown theLastThing
+...
+
+</pre>
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_atsignal>ns_atsignal</a></h2>
+
+
+Register a script to be run in response to a SIGHUP signal
+
+<h3>Syntax</h3>
+
+
+ns_atsignal {script | procname ?args?}
+
+<h3>Description</h3>
+
+ns_atsignal registers a Tcl script or procedure to be run in response
+to a SIGHUP signal.
+
+<h3>Example</h3>
+
+<pre>
+proc dosomething blah {
+    ns_log Notice "proc with arg '$blah'"
+}
+ns_atsignal dosomething $arg1
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_schedule_daily>ns_schedule_daily</a></h2>
+
+
+Schedule a procedure to run once a day
+
+<h3>Syntax</h3>
+
+
+ns_schedule_daily ?-thread? ?-once? hour minute {script | procname
+?args?}
+
+<h3>Description</h3>
+
+ns_schedule_daily runs the specified Tcl script or procedure
+(procname) once a day at the time specified by hour and minute. The
+hour can be from 0 to 23, and the minute can be from 0 to 59.
+
+<p>
+
+Specify -thread if you want a thread created to run the procedure.
+This will allow the scheduler to continue with other scheduled
+procedures. Specifying -thread is appropriate in situations where the
+script will not return immediately, such as when the script performs
+network activity.
+
+<p>
+
+Specify -once if you want the script to run only one time. The default
+is that the script will be re-scheduled after each time it is run.
+
+<p>
+
+ns_schedule_daily returns an id number for the scheduled procedure
+that is needed to stop the scheduled procedure with
+ns_unschedule_proc.
+
+<h3>Example</h3>
+
+This example defines a script called rolllog that uses ns_accesslog to
+roll the access log to a file with an extension containing the current
+date. The ns_schedule_daily function is used to execute the rolllog
+script on a daily basis.
+
+<pre>
+# Script to roll and rcp log file to host "grinder"
+proc rolllog {} {
+    set suffix [ns_strftime "%y-%m-%d"]
+    set new [ns_accesslog file].$suffix
+    ns_accesslog roll $new
+    exec rcp $new grinder:/logs/[file tail $new]
+}
+# Schedule "rolllog" to run at 3:30 am each morning
+ns_schedule_daily -thread 3 30 rolllog
+</pre>
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_schedule_proc>ns_schedule_proc</a></h2>
+
+
+Schedule a procedure to run at specified intervals
+
+<h3>Syntax</h3>
+
+
+ns_schedule_proc ?-thread? ?-once? interval {script | procname ?args?}
+
+<h3>Description</h3>
+
+ns_schedule_proc runs the specified Tcl script or procedure (procname)
+at an interval specified by interval. The interval is the number of
+seconds between runs of the script.
+
+<p>
+
+Specify -thread if you want a thread created to run the procedure.
+This will allow the scheduler to continue with other scheduled
+procedures. Specifying -thread is appropriate in situations where the
+script will not return immediately, such as when the script performs
+network activity.
+
+<p>
+
+Specify -once if you want the script to run only one time. The default
+is that the script will be re-scheduled after each time it is run.
+
+<p>
+
+ns_schedule_proc returns an id number for the scheduled procedure that
+is needed to stop the scheduled procedure with ns_unschedule_proc.
+
+<h3>Example</h3>
+
+<pre>
+proc dosomething blah {
+    ns_log Notice "proc with arg '$blah'"
+}
+ns_schedule_proc 10 dosomething $arg1
+</pre>
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_schedule_weekly>ns_schedule_weekly</a></h2>
+
+
+Schedule a procedure to run once a week
+
+<h3>Syntax</h3>
+
+
+ns_schedule_weekly ?-thread? ?-once? day hour minute {script |
+procname ?args?}
+
+<h3>Description</h3>
+
+ns_schedule_weekly runs the specified Tcl script or procedure
+(procname) once a week on the day specified by day and the time
+specified by hour and minute. The day can be from 0 to 6, where 0
+represents Sunday. The hour can be from 0 to 23, and the minute can be
+from 0 to 59.
+
+<p>
+
+Specify -thread if you want a thread created to run the procedure.
+This will allow the scheduler to continue with other scheduled
+procedures. Specifying -thread is appropriate in situations where the
+script will not return immediately, such as when the script performs
+network activity.
+
+<p>
+
+Specify -once if you want the script to run only one time. The default
+is that the script will be re-scheduled after each time it is run.
+
+<p>
+
+ns_schedule_weekly returns an id number for the scheduled procedure
+that is needed to stop the scheduled procedure with
+ns_unschedule_proc.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_unschedule_proc>ns_unschedule_proc</a></h2>
+
+
+Stop a scheduled procedure.
+
+
+<h3>Syntax</h3>
+
+
+ns_unschedule_proc id
+
+<h3>Description</h3>
+
+ns_unschedule_proc stops a scheduled procedure from executing anymore.
+The scheduled procedure to be stopped is identified by its id, which
+was returned by the ns_schedule* function that was used to schedule
+the procedure.
+
+
+<p>
+
+<hr>
+
+<br>
+
+</body>
+</html>

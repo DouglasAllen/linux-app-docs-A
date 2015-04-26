@@ -1,0 +1,1491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 5. Filesystem Types</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 5. Filesystem Types">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 5. Filesystem Types">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Filesystem-Types"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_8.html#g_t_002dT-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Network-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_8.html#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Filesystem-Types-1"></a>
+<h1 class="chapter">5. Filesystem Types</h1>
+<a name="index-Filesystem-types"></a>
+<a name="index-Mount-types"></a>
+<a name="index-Types-of-filesystem"></a>
+
+<p>To mount a volume, <i>Amd</i> must be told the type of filesystem to be
+used.  Each filesystem type typically requires additional information
+such as the fileserver name for NFS.
+</p>
+<p>From the point of view of <i>Amd</i>, a <em>filesystem</em> is anything that
+can resolve an incoming name lookup.  An important feature is support
+for multiple filesystem types.  Some of these filesystems are
+implemented in the local kernel and some on remote fileservers, whilst
+the others are implemented internally by <i>Amd</i>.
+</p>
+<p>The two common filesystem types are UFS and NFS.  Four other user
+accessible filesystems (&lsquo;<samp>link</samp>&rsquo;, &lsquo;<samp>program</samp>&rsquo;, &lsquo;<samp>auto</samp>&rsquo; and
+&lsquo;<samp>direct</samp>&rsquo;) are also implemented internally by <i>Amd</i> and these are
+described below.  There are two additional filesystem types internal to
+<i>Amd</i> which are not directly accessible to the user (&lsquo;<samp>inherit</samp>&rsquo;
+and &lsquo;<samp>error</samp>&rsquo;).  Their use is described since they may still have an
+effect visible to the user.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Network-Filesystem">5.1 Network Filesystem (&lsquo;<samp>nfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          A single NFS filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Network-Host-Filesystem">5.2 Network Host Filesystem (&lsquo;<samp>host</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     NFS mount a host&rsquo;s entire export tree.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Network-Filesystem-Group">5.3 Network Filesystem Group (&lsquo;<samp>nfsx</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">    An atomic group of NFS filesystems.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Unix-Filesystem">5.4 Unix Filesystem (&lsquo;<samp>ufs</samp>&rsquo;, &lsquo;<samp>xfs</samp>&rsquo;, or &lsquo;<samp>efs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">             Native disk filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Caching-Filesystem">5.5 Caching Filesystem (&lsquo;<samp>cachefs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          Caching from remote server filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#CD_002dROM-Filesystem">5.6 CD-ROM Filesystem (&lsquo;<samp>cdfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           ISO9660 CD ROM.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#UDF-Filesystem">5.7 CD-ROM Filesystem (&lsquo;<samp>udf</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">              Universal Disk Format filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Loopback-Filesystem">5.8 Loopback Filesystem (&lsquo;<samp>lofs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">         Local loopback-mount filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Memory_002fRAM-Filesystem">5.9 Memory/RAM Filesystem (&lsquo;<samp>mfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">       A memory or RAM-based filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Null-Filesystem">5.10 Null Filesystem (&lsquo;<samp>nullfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">             4.4BSD&rsquo;s loopback-mount filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Floppy-Filesystem">5.11 Floppy Filesystem (&lsquo;<samp>pcfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           MS-DOS Floppy filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Translucent-Filesystem">5.12 Translucent Filesystem (&lsquo;<samp>tfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">      The directory merging filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Shared-Memory_002bSwap-Filesystem">5.13 Shared Memory+Swap Filesystem (&lsquo;<samp>tmpfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Sun&rsquo;s tmpfs filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#User-ID-Mapping-Filesystem">5.14 User ID Mapping Filesystem (&lsquo;<samp>umapfs</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  4.4BSD&rsquo;s umapfs filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Program-Filesystem">5.15 Program Filesystem (&lsquo;<samp>program</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          Generic Program mounts.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Symbolic-Link-Filesystem">5.16 Symbolic Link Filesystem (&lsquo;<samp>link</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">    Local link.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Symbolic-Link-Filesystem-II">5.17 Symbolic Link Filesystem II (&lsquo;<samp>linkx</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Local link referencing existing filesystem.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#NFS_002dLink-Filesystem">5.18 NFS-Link Filesystem (&lsquo;<samp>nfsl</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">         Link if path exists, NFS otherwise.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Automount-Filesystem">5.19 Automount Filesystem (&lsquo;<samp>auto</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Direct-Automount-Filesystem">5.20 Direct Automount Filesystem (&lsquo;<samp>direct</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Union-Filesystem">5.21 Union Filesystem (&lsquo;<samp>union</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Error-Filesystem">5.22 Error Filesystem (&lsquo;<samp>error</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Top_002dlevel-Filesystem">5.23 Top-level Filesystem (&lsquo;<samp>toplvl</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Root-Filesystem">5.24 Root Filesystem (&lsquo;<samp>root</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Inheritance-Filesystem">5.25 Inheritance Filesystem (&lsquo;<samp>inherit</samp>&rsquo;)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Network-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Filesystem-Types" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Network-Host-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Network-Filesystem-_0028nfs_0029"></a>
+<h2 class="section">5.1 Network Filesystem (&lsquo;<samp>nfs</samp>&rsquo;)</h2>
+<a name="index-NFS"></a>
+<a name="index-Mounting-an-NFS-filesystem"></a>
+<a name="index-How-to-mount-and-NFS-filesystem"></a>
+<a name="index-nfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-nfs"></a>
+
+<p>The <em>nfs</em> (&lsquo;<samp>type:=nfs</samp>&rsquo;) filesystem type provides access to Sun&rsquo;s NFS.
+</p>
+<p>The following options must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-rhost_002c-mount-option"></a>
+<a name="index-Mount-option_003b-rhost"></a>
+</dd>
+<dt> <code>rhost</code></dt>
+<dd><p>the remote fileserver.  This must be an entry in the hosts database.  IP
+addresses are not accepted.  The default value is taken
+from the local host name (<code>${host}</code>) if no other value is
+specified.
+</p>
+<a name="index-rfs_002c-mount-option"></a>
+<a name="index-Mount-option_003b-rfs"></a>
+</dd>
+<dt> <code>rfs</code></dt>
+<dd><p>the remote filesystem.
+If no value is specified for this option, an internal default of
+<code>${path}</code> is used.
+</p></dd>
+</dl>
+
+<p>NFS mounts require a two stage process.  First, the <em>file handle</em> of
+the remote file system must be obtained from the server.  Then a mount
+system call must be done on the local system.  <i>Amd</i> keeps a cache
+of file handles for remote file systems.  The cache entries have a
+lifetime of a few minutes.
+</p>
+<p>If a required file handle is not in the cache, <i>Amd</i> sends a request
+to the remote server to obtain it.
+</p>
+<p>Historically, this documentation has maintained that <i>Amd</i> will try
+all the locations in parallel and use the first one which responds
+with a valid file handle. This has not been the case for quite some
+time, however. Instead, <i>Amd</i> will go through each location, one by
+one, and will only skip to the next one if the previous one either
+fails or times out.
+</p>
+<p>An NFS entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">jsp  host!=charm;type:=nfs;rhost:=charm;rfs:=/home/charm;sublink:=jsp
+</pre></td></tr></table>
+
+<p>The mount system call and any unmount attempts are always done
+in a new task to avoid the possibility of blocking <i>Amd</i>.
+</p>
+<hr size="6">
+<a name="Network-Host-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Network-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Network-Filesystem-Group" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Network-Host-Filesystem-_0028host_0029"></a>
+<h2 class="section">5.2 Network Host Filesystem (&lsquo;<samp>host</samp>&rsquo;)</h2>
+<a name="index-Network-host-filesystem"></a>
+<a name="index-Mounting-entire-export-trees"></a>
+<a name="index-How-to-mount-all-NFS-exported-filesystems"></a>
+<a name="index-host_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-host"></a>
+
+
+<p>The <em>host</em> (&lsquo;<samp>type:=host</samp>&rsquo;) filesystem allows access to the entire export tree of an
+NFS server.  The implementation is layered above the &lsquo;<samp>nfs</samp>&rsquo;
+implementation so keep-alives work in the same way.  The only option
+which needs to be specified is &lsquo;<samp>rhost</samp>&rsquo; which is the name of the
+fileserver to mount.
+</p>
+<p>The &lsquo;<samp>host</samp>&rsquo; filesystem type works by querying the mount daemon on
+the given fileserver to obtain its export list.  <i>Amd</i> then obtains
+filehandles for each of the exported filesystems.  Any errors at this
+stage cause that particular filesystem to be ignored.  Finally each
+filesystem is mounted.  Again, errors are logged but ignored.  One
+common reason for mounts to fail is that the mount point does not exist.
+Although <i>Amd</i> attempts to automatically create the mount point, it
+may be on a remote filesystem to which <i>Amd</i> does not have write
+permission.
+</p>
+<p>When an attempt to unmount a &lsquo;<samp>host</samp>&rsquo; filesystem mount fails, <i>Amd</i>
+remounts any filesystems which had successfully been unmounted.  To do
+this <i>Amd</i> queries the mount daemon again and obtains a fresh copy of
+the export list.  <i>Amd</i> then tries to mount any exported filesystems
+which are not currently mounted.
+</p>
+<p>Sun&rsquo;s automounter provides a special &lsquo;<samp>-hosts</samp>&rsquo; map.  To achieve the
+same effect with <i>Amd</i> requires two steps.  First a mount map must
+be created as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">*       type:=host;rhost:=${key};fs:=${autodir}/${rhost}/root
+</pre></td></tr></table>
+
+<p>and then start <i>Amd</i> with the following command
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /net net.map
+</pre></td></tr></table>
+
+<p>where &lsquo;<samp>net.map</samp>&rsquo; is the name of map described above.  Note that the
+value of <code>${fs}</code> is overridden in the map.  This is done to avoid
+a clash between the mount tree and any other filesystem already mounted
+from the same fileserver.
+</p>
+<p>If different mount options are needed for different hosts then
+additional entries can be added to the map, for example
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">host2       opts:=ro,nosuid,soft
+</pre></td></tr></table>
+
+<p>would soft mount &lsquo;<samp>host2</samp>&rsquo; read-only.
+</p>
+<hr size="6">
+<a name="Network-Filesystem-Group"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Network-Host-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Unix-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Network-Filesystem-Group-_0028nfsx_0029"></a>
+<h2 class="section">5.3 Network Filesystem Group (&lsquo;<samp>nfsx</samp>&rsquo;)</h2>
+<a name="index-Network-filesystem-group"></a>
+<a name="index-Atomic-NFS-mounts"></a>
+<a name="index-Mounting-an-atomic-group-of-NFS-filesystems"></a>
+<a name="index-How-to-mount-an-atomic-group-of-NFS-filesystems"></a>
+<a name="index-nfsx_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-nfsx"></a>
+
+<p>The <em>nfsx</em> (&lsquo;<samp>type:=nfsx</samp>&rsquo;) filesystem allows a group of filesystems to be mounted
+from a single NFS server.  The implementation is layered above the
+&lsquo;<samp>nfs</samp>&rsquo; implementation so keep-alives work in the same way.
+</p>
+<p><em>WARNING</em>: &lsquo;<samp>nfsx</samp>&rsquo; is meant to be a &ldquo;last resort&rdquo; kind of
+solution. It is racy and poorly supported. The authors <em>highly</em>
+recommend that other solutions be considered before relying on it.
+</p>
+<p>The options are the same as for the &lsquo;<samp>nfs</samp>&rsquo; filesystem with one
+difference for &lsquo;<samp>rfs</samp>&rsquo;, as explained below.
+</p>
+<p>The following options should be specified:
+</p>
+<dl compact="compact">
+<dt> <code>rhost</code></dt>
+<dd><p>the remote fileserver.  The default value is taken from the local
+host name (<code>${host}</code>) if no other value is specified.
+</p>
+</dd>
+<dt> <code>rfs</code></dt>
+<dd><p>is a list of filesystems to mount, and must be specified.
+The list is in the form of a comma separated strings.
+</p></dd>
+</dl>
+
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pub  type:=nfsx;rhost:=gould;\
+     rfs:=/public,/,graphics,usenet;fs:=${autodir}/${rhost}/root
+</pre></td></tr></table>
+
+<p>The first string defines the root of the tree, and is applied as a
+prefix to the remaining members of the list which define the individual
+filesystems.  The first string is <em>not</em> used as a filesystem name.
+A serial operation is used to determine the local mount points to
+ensure a consistent layout of a tree of mounts.
+</p>
+<p>Here, the <em>three</em> filesystems, &lsquo;<samp>/public</samp>&rsquo;,
+&lsquo;<samp>/public/graphics</samp>&rsquo; and &lsquo;<samp>/public/usenet</samp>&rsquo;, would be mounted.
+</p>
+<p>A local mount point, <code>${fs}</code>, <em>must</em> be specified.  The
+default local mount point will not work correctly in the general case.
+A suggestion is to use &lsquo;<samp>fs:=${autodir}/${rhost}/root</samp>&rsquo;.
+</p>
+<hr size="6">
+<a name="Unix-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Network-Filesystem-Group" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Caching-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Unix-Filesystem-_0028ufs_002c-xfs_002c-or-efs_0029"></a>
+<h2 class="section">5.4 Unix Filesystem (&lsquo;<samp>ufs</samp>&rsquo;, &lsquo;<samp>xfs</samp>&rsquo;, or &lsquo;<samp>efs</samp>&rsquo;)</h2>
+<a name="index-Unix-filesystem"></a>
+<a name="index-UFS"></a>
+<a name="index-XFS"></a>
+<a name="index-EFS"></a>
+<a name="index-Mounting-a-UFS-filesystem"></a>
+<a name="index-Mounting-a-local-disk"></a>
+<a name="index-How-to-mount-a-UFS-filesystems"></a>
+<a name="index-How-to-mount-a-local-disk"></a>
+<a name="index-Disk-filesystems"></a>
+<a name="index-ufs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-ufs"></a>
+<a name="index-xfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-xfs"></a>
+<a name="index-efs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-efs"></a>
+
+<p>The <em>ufs</em> (&lsquo;<samp>type:=ufs</samp>&rsquo;) filesystem type provides access to the system&rsquo;s standard
+disk filesystem&mdash;usually a derivative of the Berkeley Fast Filesystem.
+</p>
+<p>The following option must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-dev_002c-mount-option"></a>
+<a name="index-Mount-option_003b-dev"></a>
+</dd>
+<dt> <code>dev</code></dt>
+<dd><p>the block special device to be mounted.
+</p></dd>
+</dl>
+
+<p>A UFS entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">jsp   host==charm;type:=ufs;dev:=/dev/sd0d;sublink:=jsp
+</pre></td></tr></table>
+
+<p>UFS is the default Unix disk-based file system, which Am-utils picks up
+during the autoconfiguration phase.  Some systems have more than one
+type, such as IRIX, that comes with EFS (Extent File System) and XFS
+(Extended File System).  In those cases, you may explicitly set the file
+system type, by using entries such:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ez1   type:=efs;dev:=/dev/xd0a
+ez2   type:=xfs;dev:=/dev/sd3c
+</pre></td></tr></table>
+
+<p>The UFS/XFS/EFS filesystems are never timed out by default, i.e. they
+will never be unmounted by <i>Amd</i>. If automatic unmounting is
+desired, the &ldquo;unmount&rdquo; option should be added to the mount options
+for the entry.
+</p>
+<hr size="6">
+<a name="Caching-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Unix-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#CD_002dROM-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Caching-Filesystem-_0028cachefs_0029"></a>
+<h2 class="section">5.5 Caching Filesystem (&lsquo;<samp>cachefs</samp>&rsquo;)</h2>
+<a name="index-Caching-Filesystem"></a>
+<a name="index-cachefs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-cachefs"></a>
+
+<p>The <em>cachefs</em> (&lsquo;<samp>type:=cachefs</samp>&rsquo;) filesystem caches files from
+one location onto another, presumably providing faster access.  It is
+particularly useful to cache from a larger and remote (slower) NFS
+partition to a smaller and local (faster) UFS directory.
+</p>
+<p>The following options must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-cachedir_002c-mount-option"></a>
+<a name="index-Mount-option_003b-cachedir"></a>
+</dd>
+<dt> <code>cachedir</code></dt>
+<dd><p>the directory where the cache is stored.
+</p></dd>
+<dt> <code>rfs</code></dt>
+<dd><p>the path name to the &ldquo;back file system&rdquo; to be cached from.
+</p></dd>
+<dt> <code>fs</code></dt>
+<dd><p>the &ldquo;front file system&rdquo; mount point to the cached files, where <i>Amd</i>
+will set a symbolic link pointing to.
+</p></dd>
+</dl>
+
+<p>A CacheFS entry for, say, the &lsquo;<tt>/import</tt>&rsquo; <i>Amd</i> mount point, might
+be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">copt  type:=cachefs;cachedir:=/cache;rfs:=/import/opt;fs:=/n/import/copt
+</pre></td></tr></table>
+
+<p>Access to the pathname &lsquo;<tt>/import/copt</tt>&rsquo; will follow a symbolic link
+to &lsquo;<tt>/n/import/copt</tt>&rsquo;.  The latter is the mount point for a caching
+file system, that caches from &lsquo;<tt>/import/opt</tt>&rsquo; to &lsquo;<tt>/cache</tt>&rsquo;.
+</p>
+<p>The cachefs filesystem is never timed out by default, i.e. it will
+never be unmounted by <i>Amd</i>. If automatic unmounting is desired, the
+&ldquo;unmount&rdquo; option should be added to the mount options for the entry.
+</p>
+<p><b>Caveats</b>:
+</p><ol>
+<li> This file system is currently only implemented for Solaris 2.x!
+</li><li> Before being used for the first time, the cache directory <i>must</i> be
+initialized with &lsquo;<samp>cfsadmin -c <var>cachedir</var></samp>&rsquo;.  See the manual page for
+<b>cfsadmin</b>(1M) for more information.
+</li><li> The &ldquo;back file system&rdquo; mounted must be a complete file system, not
+a subdirectory thereof; otherwise you will get an error &ldquo;Invalid Argument&rdquo;.
+</li><li> If <i>Amd</i> aborts abnormally, the state of the cache may be
+inconsistent, requiring running the command &lsquo;<tt>fsck -F cachefs
+<var>cachedir</var></tt>&rsquo;.  Otherwise you will get the error &ldquo;No Space Left on Device&rdquo;.
+</li></ol>
+
+<hr size="6">
+<a name="CD_002dROM-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Caching-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#UDF-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="CD_002dROM-Filesystem-_0028cdfs_0029"></a>
+<h2 class="section">5.6 CD-ROM Filesystem (&lsquo;<samp>cdfs</samp>&rsquo;)</h2>
+<a name="index-CD_002dROM-Filesystem"></a>
+<a name="index-cdfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-cdfs"></a>
+
+<p>The <em>cdfs</em> (&lsquo;<samp>type:=cdfs</samp>&rsquo;) filesystem mounts a CD-ROM with an
+ISO9660 format filesystem on it.
+</p>
+<p>The following option must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-dev_002c-mount-option-1"></a>
+<a name="index-Mount-option_003b-dev-1"></a>
+</dd>
+<dt> <code>dev</code></dt>
+<dd><p>the block special device to be mounted.
+</p></dd>
+</dl>
+
+<p>Some operating systems will fail to mount read-only CDs unless the
+&lsquo;<samp>ro</samp>&rsquo; option is specified.  A cdfs entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">cdfs      os==sunos4;type:=cdfs;dev:=/dev/sr0 \
+          os==sunos5;addopts:=ro;type:=cdfs;dev:=/dev/dsk/c0t6d0s2
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="UDF-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#CD_002dROM-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Loopback-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="CD_002dROM-Filesystem-_0028udf_0029"></a>
+<h2 class="section">5.7 CD-ROM Filesystem (&lsquo;<samp>udf</samp>&rsquo;)</h2>
+<a name="index-CD_002dROM-Filesystem-1"></a>
+<a name="index-udf_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-udf"></a>
+
+<p>The <em>udf</em> (&lsquo;<samp>type:=udf</samp>&rsquo;) filesystem mounts media with a
+Universal Disk Format (UDF) filesystem on it, e.g., a video DVD.
+</p>
+<p>The following option must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-dev_002c-mount-option-2"></a>
+<a name="index-Mount-option_003b-dev-2"></a>
+</dd>
+<dt> <code>dev</code></dt>
+<dd><p>the block special device to be mounted.
+</p></dd>
+</dl>
+
+<p>Some operating systems will fail to mount read-only media unless the
+&lsquo;<samp>ro</samp>&rsquo; option is specified.  A udf entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">udf      os==sunos4;type:=udf;dev:=/dev/sr0 \
+         os==sunos5;addopts:=ro;type:=udf;dev:=/dev/dsk/c0t6d0s2
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Loopback-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#UDF-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Memory_002fRAM-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Loopback-Filesystem-_0028lofs_0029"></a>
+<h2 class="section">5.8 Loopback Filesystem (&lsquo;<samp>lofs</samp>&rsquo;)</h2>
+<a name="index-Loopback-Filesystem"></a>
+<a name="index-lofs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-lofs"></a>
+
+<p>The <em>lofs</em> (&lsquo;<samp>type:=lofs</samp>&rsquo;) filesystem is also called the
+loopback filesystem.  It mounts a local directory on another, thus
+providing mount-time binding to another location (unlike symbolic
+links).
+</p>
+<p>The loopback filesystem is particularly useful within the context of a
+chroot-ed directory (via <b>chroot</b>(2)), to provide access to
+directories otherwise inaccessible.
+</p>
+<p>The following option must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-rfs_002c-mount-option-1"></a>
+<a name="index-Mount-option_003b-rfs-1"></a>
+</dd>
+<dt> <code>rfs</code></dt>
+<dd><p>the pathname to be mounted on top of <code>${fs}</code>.
+</p></dd>
+</dl>
+
+<p>Usually, the FTP server runs in a chroot-ed environment, for security
+reasons.  In this example, lofs is used to provide a subdirectory within
+a user&rsquo;s home directory, also available for public ftp.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">lofs      type:=lofs;rfs:=/home/ezk/myftpdir;fs:=/usr/ftp/pub/ezk
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Memory_002fRAM-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Loopback-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Null-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Memory_002fRAM-Filesystem-_0028mfs_0029"></a>
+<h2 class="section">5.9 Memory/RAM Filesystem (&lsquo;<samp>mfs</samp>&rsquo;)</h2>
+<a name="index-Memory_002fRAM-Filesystem"></a>
+<a name="index-mfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-mfs"></a>
+
+<p>The <em>mfs</em> (&lsquo;<samp>type:=mfs</samp>&rsquo;) filesystem is available in 4.4BSD,
+Linux, and other systems.  It creates a filesystem in a portion of the
+system&rsquo;s memory, thus providing very fast file (volatile) access.
+</p>
+<p>XXX: THIS FILESYSTEM IS NOT IMPLEMENTED YET!
+</p>
+<hr size="6">
+<a name="Null-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Memory_002fRAM-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Floppy-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Null-Filesystem-_0028nullfs_0029"></a>
+<h2 class="section">5.10 Null Filesystem (&lsquo;<samp>nullfs</samp>&rsquo;)</h2>
+<a name="index-Null-Filesystem"></a>
+<a name="index-nullfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-nullfs"></a>
+
+<p>The <em>nullfs</em> (&lsquo;<samp>type:=nullfs</samp>&rsquo;) filesystem is available from 4.4BSD,
+and is very similar to the loopback filesystem, <em>lofs</em>.
+</p>
+<p>XXX: THIS FILESYSTEM IS NOT IMPLEMENTED YET!
+</p>
+<hr size="6">
+<a name="Floppy-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Null-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Translucent-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Floppy-Filesystem-_0028pcfs_0029"></a>
+<h2 class="section">5.11 Floppy Filesystem (&lsquo;<samp>pcfs</samp>&rsquo;)</h2>
+<a name="index-Floppy-Filesystem"></a>
+<a name="index-pcfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-pcfs"></a>
+
+<p>The <em>pcfs</em> (&lsquo;<samp>type:=pcfs</samp>&rsquo;) filesystem mounts a floppy previously
+formatted for the MS-DOS format.
+</p>
+<p>The following option must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-dev_002c-mount-option-3"></a>
+<a name="index-Mount-option_003b-dev-3"></a>
+</dd>
+<dt> <code>dev</code></dt>
+<dd><p>the block special device to be mounted.
+</p></dd>
+</dl>
+
+<p>A pcfs entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pcfs      os==sunos4;type:=pcfs;dev:=/dev/fd0 \
+          os==sunos5;type:=pcfs;dev:=/dev/diskette
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Translucent-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Floppy-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Shared-Memory_002bSwap-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Translucent-Filesystem-_0028tfs_0029"></a>
+<h2 class="section">5.12 Translucent Filesystem (&lsquo;<samp>tfs</samp>&rsquo;)</h2>
+<a name="index-Translucent-Filesystem"></a>
+<a name="index-tfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-tfs"></a>
+
+<p>The <em>tfs</em> (&lsquo;<samp>type:=tfs</samp>&rsquo;) filesystem is an older version of the
+4.4BSD <em>unionfs</em>.
+</p>
+<p>XXX: THIS FILESYSTEM IS NOT IMPLEMENTED YET!
+</p>
+<hr size="6">
+<a name="Shared-Memory_002bSwap-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Translucent-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#User-ID-Mapping-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Shared-Memory_002bSwap-Filesystem-_0028tmpfs_0029"></a>
+<h2 class="section">5.13 Shared Memory+Swap Filesystem (&lsquo;<samp>tmpfs</samp>&rsquo;)</h2>
+<a name="index-Shared-Memory-and-Swap-Filesystem"></a>
+<a name="index-tmpfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-tmpfs"></a>
+
+<p>The <em>tmpfs</em> (&lsquo;<samp>type:=tmpfs</samp>&rsquo;) filesystem shares memory between a
+the swap device and the rest of the system.  It is generally used to
+provide a fast access &lsquo;<tt>/tmp</tt>&rsquo; directory, one that uses memory that
+is otherwise unused.  This filesystem is available in SunOS 4.x and 5.x.
+</p>
+<p>XXX: THIS FILESYSTEM IS NOT IMPLEMENTED YET!
+</p>
+<hr size="6">
+<a name="User-ID-Mapping-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Shared-Memory_002bSwap-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Program-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="User-ID-Mapping-Filesystem-_0028umapfs_0029"></a>
+<h2 class="section">5.14 User ID Mapping Filesystem (&lsquo;<samp>umapfs</samp>&rsquo;)</h2>
+<a name="index-User-ID-Mapping-Filesystem"></a>
+<a name="index-umapfs_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-umapfs"></a>
+
+<p>The <em>umapfs</em> (&lsquo;<samp>type:=umapfs</samp>&rsquo;) filesystem maps User IDs of file
+ownership, and is available from 4.4BSD.
+</p>
+<p>XXX: THIS FILESYSTEM IS NOT IMPLEMENTED YET!
+</p>
+<hr size="6">
+<a name="Program-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#User-ID-Mapping-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Symbolic-Link-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Program-Filesystem-_0028program_0029"></a>
+<h2 class="section">5.15 Program Filesystem (&lsquo;<samp>program</samp>&rsquo;)</h2>
+<a name="index-Program-filesystem"></a>
+<a name="index-Mount-a-filesystem-under-program-control"></a>
+<a name="index-program_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-program"></a>
+
+<p>The <em>program</em> (&lsquo;<samp>type:=program</samp>&rsquo;) filesystem type allows a
+program to be run whenever a mount or unmount is required.  This allows
+easy addition of support for other filesystem types, such as MIT&rsquo;s
+Remote Virtual Disk (RVD) which has a programmatic interface via the
+commands &lsquo;<samp>rvdmount</samp>&rsquo; and &lsquo;<samp>rvdunmount</samp>&rsquo;.
+</p>
+<p>Both of the following options must be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-mount_002c-mount-option"></a>
+<a name="index-Mount-option_003b-mount"></a>
+</dd>
+<dt> <code>mount</code></dt>
+<dd><p>the program which will perform the mount.
+</p>
+<a name="index-unmount_002c-mount-option"></a>
+<a name="index-umount_002c-mount-option"></a>
+<a name="index-Mount-option_003b-unmount"></a>
+<a name="index-Mount-option_003b-umount"></a>
+</dd>
+<dt> <code>unmount</code></dt>
+<dt> <code>umount</code></dt>
+<dd><p>the program which will perform the unmount.  For convenience, you may
+use either &lsquo;<samp>unmount</samp>&rsquo; or &lsquo;<samp>umount</samp>&rsquo; but not both.  If neither
+is defined, <i>Amd</i> will default to &lsquo;<samp>umount ${fs}</samp>&rsquo; (the actual
+unmount program pathname will be automatically determined at the time
+GNU <code>configure</code> runs.)
+</p></dd>
+</dl>
+
+<p>The exit code from these two programs is interpreted as a Unix error
+code.  As usual, exit code zero indicates success.  To execute the
+program, <i>Amd</i> splits the string on whitespace to create an array of
+substrings.  Single quotes &lsquo;<samp>'</samp>&rsquo; can be used to quote whitespace
+if that is required in an argument.  There is no way to escape or change
+the single quote character.
+</p>
+<p>To run e.g. the program &lsquo;<samp>rvdmount</samp>&rsquo; with a host name and filesystem as
+arguments, it would be specified by
+&lsquo;<samp>fs:=${autodir}${path};type:=program;mount:=&quot;/etc/rvdmount
+rvdmount fserver ${fs}&quot;;unmount:=&quot;/etc/rdvumount rvdumount ${fs}&quot;</samp>&rsquo;.
+</p>
+<p>The first element in the array is taken as the pathname of the program
+to execute.  The other members of the array form the argument vector
+to be passed to the program, <em>including argument zero</em>.  The array
+is exactly the same as the array passed to the execv() system call
+(man execv for details).  The split string must have at least two
+elements.  The programs are directly executed by <i>Amd</i>, not via a
+shell.  Therefore, if a script is to be used as a mount/umount
+program, it <em>must</em> begin with a <code>#!</code> interpreter specification.
+</p>
+<p>Often, this program mount type is used for Samba mounts, where you
+need a double slash in pathnames.  However, <i>Amd</i> normalizes
+sequences of slashes into one slash.  Therefore, you must use an
+escaped slash, preceded by an escaped backslash.  So to get a double
+slash in the mount command, you need the eight character sequence
+&lsquo;<samp>\\\/\\\/</samp>&rsquo; in your map.  For example:
+</p>
+<p>&lsquo;<samp>mount=&quot;/sbin/mount mount -r -t smbfs -o-N,-Ihostname \\\/\\\/guest@venus/mp3&quot;</samp>&rsquo;
+</p>
+<p>If a filesystem type is to be heavily used, it may be worthwhile adding
+a new filesystem type into <i>Amd</i>, but for most uses the program
+filesystem should suffice.
+</p>
+<p>When the program is run, standard input and standard error are inherited
+from the current values used by <i>Amd</i>.  Standard output is a
+duplicate of standard error.  The value specified with the <code>-l</code>
+command line option has no effect on standard error.
+</p>
+<p><i>Amd</i> guarantees that the mountpoint will be created before calling
+the mount program, and that it will be removed after the umount
+program returns success.
+</p>
+<hr size="6">
+<a name="Symbolic-Link-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Program-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Symbolic-Link-Filesystem-II" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Symbolic-Link-Filesystem-_0028link_0029"></a>
+<h2 class="section">5.16 Symbolic Link Filesystem (&lsquo;<samp>link</samp>&rsquo;)</h2>
+<a name="index-Symbolic-link-filesystem"></a>
+<a name="index-Referencing-part-of-the-local-name-space"></a>
+<a name="index-Mounting-part-of-the-local-name-space"></a>
+<a name="index-How-to-reference-part-of-the-local-name-space"></a>
+<a name="index-link_002c-filesystem-type"></a>
+<a name="index-symlink_002c-link-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-link"></a>
+
+<p>Each filesystem type creates a symbolic link to point from the volume
+name to the physical mount point.  The &lsquo;<samp>link</samp>&rsquo; filesystem does the
+same without any other side effects.  This allows any part of the
+machines name space to be accessed via <i>Amd</i>.
+</p>
+<p>One common use for the symlink filesystem is &lsquo;<tt>/homes</tt>&rsquo; which can be
+made to contain an entry for each user which points to their
+(auto-mounted) home directory.  Although this may seem rather expensive,
+it provides a great deal of administrative flexibility.
+</p>
+<p>The following option must be defined:
+</p>
+<dl compact="compact">
+<dt> <code>fs</code></dt>
+<dd><p>The value of <var>fs</var> option specifies the destination of the link, as
+modified by the <var>sublink</var> option.  If <var>sublink</var> is non-null, it
+is appended to <code>${fs}</code><code>/</code> and the resulting string is used
+as the target.
+</p></dd>
+</dl>
+
+<p>The &lsquo;<samp>link</samp>&rsquo; filesystem can be thought of as identical to the
+&lsquo;<samp>ufs</samp>&rsquo; filesystem but without actually mounting anything.
+</p>
+<p>An example entry might be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">jsp   host==charm;type:=link;fs:=/home/charm;sublink:=jsp
+</pre></td></tr></table>
+<p>which would return a symbolic link pointing to &lsquo;<tt>/home/charm/jsp</tt>&rsquo;.
+</p>
+<hr size="6">
+<a name="Symbolic-Link-Filesystem-II"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Symbolic-Link-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#NFS_002dLink-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Symbolic-Link-Filesystem-II-_0028linkx_0029"></a>
+<h2 class="section">5.17 Symbolic Link Filesystem II (&lsquo;<samp>linkx</samp>&rsquo;)</h2>
+<a name="index-Symbolic-link-filesystem-II"></a>
+<a name="index-Referencing-an-existing-part-of-the-local-name-space"></a>
+<a name="index-Mounting-an-existing-part-of-the-local-name-space"></a>
+<a name="index-How-to-reference-an-existing-part-of-the-local-name-space"></a>
+<a name="index-linkx_002c-filesystem-type"></a>
+<a name="index-symlink_002c-linkx-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-linkx"></a>
+
+<p>The <em>linkx</em> (&lsquo;<samp>type:=linkx</samp>&rsquo;) filesystem type is identical to &lsquo;<samp>link</samp>&rsquo; with the
+exception that the target of the link must exist.  Existence is checked
+with the <b>lstat</b>(2) system call.
+</p>
+<p>The &lsquo;<samp>linkx</samp>&rsquo; filesystem type is particularly useful for wildcard map
+entries.  In this case, a list of possible targets can be given and
+<i>Amd</i> will choose the first one which exists on the local machine.
+</p>
+<hr size="6">
+<a name="NFS_002dLink-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Symbolic-Link-Filesystem-II" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Automount-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="NFS_002dLink-Filesystem-_0028nfsl_0029"></a>
+<h2 class="section">5.18 NFS-Link Filesystem (&lsquo;<samp>nfsl</samp>&rsquo;)</h2>
+<a name="index-NFS_002dLink-filesystem-II"></a>
+<a name="index-Referencing-an-existing-part-of-the-name-space-if-target-exists"></a>
+<a name="index-Mounting-a-remote-part-of-the-name-space-if-target-is-missing"></a>
+<a name="index-Symlink-if-target-exists_002c-NFS-otherwise"></a>
+<a name="index-nfsl_002c-filesystem-type"></a>
+<a name="index-symlink_002c-nfsl-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-nfsl"></a>
+
+<p>The <em>nfsl</em> (&lsquo;<samp>type:=nfsl</samp>&rsquo;) filesystem type is a combination of two others:
+&lsquo;<samp>link</samp>&rsquo; and &lsquo;<samp>nfs</samp>&rsquo;.  If the local host name is equal to the
+value of <code>${rhost}</code> <em>and</em> the target pathname listed in
+<code>${fs}</code> exists, &lsquo;<samp>nfsl</samp>&rsquo; will behave exactly as
+&lsquo;<samp>type:=link</samp>&rsquo;, and refer to the target as a symbolic link.  If the
+local host name is not equal to the value of <code>${rhost}</code>, or if
+the target of the link does not exist, <i>Amd</i> will treat it as
+&lsquo;<samp>type:=nfs</samp>&rsquo;, and will mount a remote pathname for it.
+</p>
+<p>The &lsquo;<samp>nfsl</samp>&rsquo; filesystem type is particularly useful as a shorthand
+for the more cumbersome and yet one of the most popular <i>Amd</i>
+entries.  For example, you can simplify all map entries that look like:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">zing    -fs:=/n/shekel/u/zing \
+        host!=shekel;type:=nfs;rhost:=shekel;rfs:=${fs} \
+        host==shekel;type:=link
+</pre></td></tr></table>
+
+<p>or
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">zing    -fs:=/n/shekel/u/zing \
+        exists(${fs});type:=link \
+        !exists(${fs});type:=nfs;rhost:=shekel;rfs:=${fs}
+</pre></td></tr></table>
+
+<p>into a shorter form
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">zing    type:=nfsl;fs:=/n/shekel/u/zing;rhost:=shekel;rfs:=${fs}
+</pre></td></tr></table>
+
+<p>Not just does it make the maps smaller and simpler, but it avoids
+possible mistakes that often happen when forgetting to set up the two
+entries (one for &lsquo;<samp>type:=nfs</samp>&rsquo; and the other for &lsquo;<samp>type:=link</samp>&rsquo;)
+necessary to perform transparent mounts of existing or remote mounts.
+</p>
+<hr size="6">
+<a name="Automount-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#NFS_002dLink-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Direct-Automount-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Automount-Filesystem-_0028auto_0029"></a>
+<h2 class="section">5.19 Automount Filesystem (&lsquo;<samp>auto</samp>&rsquo;)</h2>
+<a name="index-Automount-filesystem"></a>
+<a name="index-Map-cache-types"></a>
+<a name="index-Setting-map-cache-parameters"></a>
+<a name="index-How-to-set-map-cache-parameters"></a>
+<a name="index-How-to-start-an-indirect-automount-point"></a>
+<a name="index-auto_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-auto"></a>
+<a name="index-SIGHUP-signal"></a>
+<a name="index-Map-cache-synchronizing"></a>
+<a name="index-Synchronizing-the-map-cache"></a>
+<a name="index-Map-cache-options"></a>
+<a name="index-Regular-expressions-in-maps"></a>
+
+<p>The <em>auto</em> (&lsquo;<samp>type:=auto</samp>&rsquo;) filesystem type creates a new automount point below an
+existing automount point.  Top-level automount points appear as system
+mount points.  An automount mount point can also appear as a
+sub-directory of an existing automount point.  This allows some
+additional structure to be added, for example to mimic the mount tree of
+another machine.
+</p>
+<p>The following options may be specified:
+</p>
+<dl compact="compact">
+<dd><a name="index-cache_002c-mount-map-option"></a>
+<a name="index-Mount-map-option_003b-cache"></a>
+</dd>
+<dt> <code>cache</code></dt>
+<dd><p>specifies whether the data in this mount-map should be
+cached.  The default value is &lsquo;<samp>none</samp>&rsquo;, in which case
+no caching is done in order to conserve memory.
+</p>
+<p>However, better performance and reliability can be obtained by caching
+some or all of a mount-map.
+</p>
+<p>If the cache option specifies &lsquo;<samp>all</samp>&rsquo;,
+the entire map is enumerated when the mount point is created.
+</p>
+<p>If the cache option specifies &lsquo;<samp>inc</samp>&rsquo;, caching is done incrementally
+as and when data is required.
+Some map types do not support cache mode &lsquo;<samp>all</samp>&rsquo;, in which case &lsquo;<samp>inc</samp>&rsquo;
+is used whenever &lsquo;<samp>all</samp>&rsquo; is requested.
+</p>
+<p>Caching can be entirely disabled by using cache mode &lsquo;<samp>none</samp>&rsquo;.
+</p>
+<p>If the cache option specifies &lsquo;<samp>regexp</samp>&rsquo; then the entire map will be
+enumerated and each key will be treated as an egrep-style regular
+expression.  The order in which a cached map is searched does not
+correspond to the ordering in the source map so the regular expressions
+should be mutually exclusive to avoid confusion.
+</p>
+<p>Each mount map type has a default cache type, usually &lsquo;<samp>inc</samp>&rsquo;, which
+can be selected by specifying &lsquo;<samp>mapdefault</samp>&rsquo;.
+</p>
+<p>The cache mode for a mount map can only be selected on the command line.
+Starting <i>Amd</i> with the command:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /homes hesiod.homes -cache:=inc
+</pre></td></tr></table>
+
+<p>will cause &lsquo;<samp>/homes</samp>&rsquo; to be automounted using the <em>Hesiod</em> name
+server with local incremental caching of all successfully resolved names.
+</p>
+<p>All cached data is forgotten whenever <i>Amd</i> receives a &lsquo;<samp>SIGHUP</samp>&rsquo;
+signal and, if cache &lsquo;<samp>all</samp>&rsquo; mode was selected, the cache will be
+reloaded.  This can be used to inform <i>Amd</i> that a map has been
+updated.  In addition, whenever a cache lookup fails and <i>Amd</i> needs
+to examine a map, the map&rsquo;s modify time is examined.  If the cache is
+out of date with respect to the map then it is flushed as if a
+&lsquo;<samp>SIGHUP</samp>&rsquo; had been received.
+</p>
+<p>An additional option (&lsquo;<samp>sync</samp>&rsquo;) may be specified to force <i>Amd</i> to
+check the map&rsquo;s modify time whenever a cached entry is being used.  For
+example, an incremental, synchronized cache would be created by the
+following command:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /homes hesiod.homes -cache:=inc,sync
+</pre></td></tr></table>
+
+</dd>
+<dt> <code>fs</code></dt>
+<dd><p>specifies the name of the mount map to use for the new mount point.
+</p>
+<p>Arguably this should have been specified with the <code>${rfs}</code> option but
+we are now stuck with it due to historical accident.
+</p>
+
+</dd>
+<dt> <code>pref</code></dt>
+<dd><p>alters the name that is looked up in the mount map.  If
+<code>${pref}</code>, the <em>prefix</em>, is non-null then it is prepended
+to the name requested by the kernel <em>before</em> the map is
+searched. The default prefix is the prefix of the parent map (if any)
+with name of the auto node appended to it. That means if you want no
+prefix you must say so in the map: &lsquo;<samp>pref:=null</samp>&rsquo;.
+</p>
+</dd>
+<dt> <code>opts</code></dt>
+<dd><p>Normally, &lsquo;<samp>auto</samp>&rsquo; style maps are not browsable even if you turn on
+directory browsability (see section <a href="am-utils_10.html#browsable_005fdirs-Parameter"><tt>browsable_dirs</tt> Parameter</a>).  To enable
+browsing entries in &lsquo;<samp>auto</samp>&rsquo; maps, specify &lsquo;<samp>opts:=browsable</samp>&rsquo;
+or &lsquo;<samp>opts:=fullybrowsable</samp>&rsquo; in
+the description of this map.
+</p>
+</dd>
+</dl>
+
+<p>The server &lsquo;<samp>dylan.doc.ic.ac.uk</samp>&rsquo; has two user disks:
+&lsquo;<samp>/dev/dsk/2s0</samp>&rsquo; and &lsquo;<samp>/dev/dsk/5s0</samp>&rsquo;.  These are accessed as
+&lsquo;<samp>/home/dylan/dk2</samp>&rsquo; and &lsquo;<samp>/home/dylan/dk5</samp>&rsquo; respectively.  Since
+&lsquo;<samp>/home</samp>&rsquo; is already an automount point, this naming is achieved with
+the following map entries:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">dylan        type:=auto;fs:=${map};pref:=${key}/
+dylan/dk2    type:=ufs;dev:=/dev/dsk/2s0
+dylan/dk5    type:=ufs;dev:=/dev/dsk/5s0
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Direct-Automount-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Automount-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Union-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Direct-Automount-Filesystem-_0028direct_0029"></a>
+<h2 class="section">5.20 Direct Automount Filesystem (&lsquo;<samp>direct</samp>&rsquo;)</h2>
+<a name="index-Direct-automount-filesystem"></a>
+<a name="index-How-to-start-a-direct-automount-point"></a>
+<a name="index-direct_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-direct"></a>
+
+<p>The <em>direct</em> (&lsquo;<samp>type:=direct</samp>&rsquo;) filesystem is almost identical to
+the automount filesystem.  Instead of appearing to be a directory of
+mount points, it appears as a symbolic link to a mounted filesystem.
+The mount is done at the time the link is accessed.  See section <a href="#Automount-Filesystem">Automount Filesystem (&lsquo;<samp>auto</samp>&rsquo;)</a>, for a list of required options.
+</p>
+<p>Direct automount points are created by specifying the &lsquo;<samp>direct</samp>&rsquo;
+filesystem type on the command line:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd ... /usr/man auto.direct -type:=direct
+</pre></td></tr></table>
+
+<p>where &lsquo;<samp>auto.direct</samp>&rsquo; would contain an entry such as:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">usr/man    -type:=nfs;rfs:=/usr/man \
+           rhost:=man-server1  rhost:=man-server2
+</pre></td></tr></table>
+
+<p>In this example, &lsquo;<samp>man-server1</samp>&rsquo; and &lsquo;<samp>man-server2</samp>&rsquo; are file
+servers which export copies of the manual pages.  Note that the key
+which is looked up is the name of the automount point without the
+leading &lsquo;<samp>/</samp>&rsquo;.
+</p>
+<p>Note that the implementation of the traditional <em>direct</em> filesystem is
+essentially a hack (pretending that the root of an NFS filesystem is a
+symlink) and many modern operating systems get very unhappy about
+it. For example, Linux kernel 2.4+ completely disallows it, and Solaris
+2.8 fails to unmount it when <i>Amd</i> shuts down. Therefore, the use of
+the traditional <em>direct</em> filesystem is strongly discouraged; it is
+only semi-supported, at best.
+</p>
+<p>The autofs implementations that permit direct mounts are fully
+supported, however. That currently includes all versions of
+Solaris. Linux autofs does NOT support direct mounts at all.
+</p>
+<hr size="6">
+<a name="Union-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Direct-Automount-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Error-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Union-Filesystem-_0028union_0029"></a>
+<h2 class="section">5.21 Union Filesystem (&lsquo;<samp>union</samp>&rsquo;)</h2>
+<a name="index-Union-filesystem"></a>
+<a name="index-union_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-union"></a>
+
+<p>The <em>union</em> (&lsquo;<samp>type:=union</samp>&rsquo;) filesystem type allows the contents of several
+directories to be merged and made visible in a single directory.  This
+can be used to overcome one of the major limitations of the Unix mount
+mechanism which only allows complete directories to be mounted.
+</p>
+<p>For example, supposing &lsquo;<tt>/tmp</tt>&rsquo; and &lsquo;<tt>/var/tmp</tt>&rsquo; were to be merged
+into a new directory called &lsquo;<tt>/mtmp</tt>&rsquo;, with files in &lsquo;<tt>/var/tmp</tt>&rsquo;
+taking precedence.  The following command could be used to achieve this
+effect:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd ... /mtmp union:/tmp:/var/tmp -type:=union
+</pre></td></tr></table>
+
+<p>Currently, the unioned directories must <em>not</em> be automounted.  That
+would cause a deadlock.  This seriously limits the current usefulness of
+this filesystem type and the problem will be addressed in a future
+release of <i>Amd</i>.
+</p>
+<p>Files created in the union directory are actually created in the last
+named directory.  This is done by creating a wildcard entry which points
+to the correct directory.  The wildcard entry is visible if the union
+directory is listed, so allowing you to see which directory has
+priority.
+</p>
+<p>The files visible in the union directory are computed at the time
+<i>Amd</i> is started, and are not kept up-to-date with respect to the
+underlying directories.  Similarly, if a link is removed, for example
+with the &lsquo;<samp>rm</samp>&rsquo; command, it will be lost forever.
+</p>
+<hr size="6">
+<a name="Error-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Union-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top_002dlevel-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Error-Filesystem-_0028error_0029"></a>
+<h2 class="section">5.22 Error Filesystem (&lsquo;<samp>error</samp>&rsquo;)</h2>
+<a name="index-Error-filesystem"></a>
+<a name="index-error_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-error"></a>
+
+<p>The <em>error</em> (&lsquo;<samp>type:=error</samp>&rsquo;) filesystem type is used internally as a catch-all in the
+case where none of the other filesystems was selected, or some other
+error occurred.  Lookups and mounts always fail with &ldquo;No such file or
+directory&rdquo;.  All other operations trivially succeed.
+</p>
+<p>The error filesystem is not directly accessible.
+</p>
+<hr size="6">
+<a name="Top_002dlevel-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Error-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Root-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Top_002dlevel-Filesystem-_0028toplvl_0029"></a>
+<h2 class="section">5.23 Top-level Filesystem (&lsquo;<samp>toplvl</samp>&rsquo;)</h2>
+<a name="index-Top-level-filesystem"></a>
+<a name="index-toplvl_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-toplvl"></a>
+
+<p>The <em>toplvl</em> (&lsquo;<samp>type:=toplvl</samp>&rsquo;) filesystems is derived from the &lsquo;<samp>auto</samp>&rsquo; filesystem
+and is used to mount the top-level automount nodes.  Requests of this
+type are automatically generated from the command line arguments.
+</p>
+<hr size="6">
+<a name="Root-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top_002dlevel-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Inheritance-Filesystem" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Root-Filesystem-_0028root_0029"></a>
+<h2 class="section">5.24 Root Filesystem (&lsquo;<samp>root</samp>&rsquo;)</h2>
+<a name="index-Root-filesystem"></a>
+<a name="index-root_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-root"></a>
+
+<p>The <em>root</em> (&lsquo;<samp>type:=root</samp>&rsquo;) filesystem type acts as an internal
+placeholder onto which <i>Amd</i> can pin &lsquo;<samp>toplvl</samp>&rsquo; mounts.  Only one
+node of this type need ever exist and one is created automatically
+during startup.  The effect of having more than one root node is
+undefined.
+</p>
+<p>The root filesystem is not directly accessible.
+</p>
+<hr size="6">
+<a name="Inheritance-Filesystem"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Root-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystem-Types" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Inheritance-Filesystem-_0028inherit_0029"></a>
+<h2 class="section">5.25 Inheritance Filesystem (&lsquo;<samp>inherit</samp>&rsquo;)</h2>
+<a name="index-Inheritance-filesystem"></a>
+<a name="index-Nodes-generated-on-a-restart"></a>
+<a name="index-inherit_002c-filesystem-type"></a>
+<a name="index-Filesystem-type_003b-inherit"></a>
+
+<p>The <em>inheritance</em> (&lsquo;<samp>type:=inherit</samp>&rsquo;) filesystem is not directly
+accessible.  Instead, internal mount nodes of this type are
+automatically generated when <i>Amd</i> is started with the <code>-r</code> option.
+At this time the system mount table is scanned to locate any filesystems
+which are already mounted.  If any reference to these filesystems is
+made through <i>Amd</i> then instead of attempting to mount it, <i>Amd</i>
+simulates the mount and <em>inherits</em> the filesystem.  This allows a
+new version of <i>Amd</i> to be installed on a live system simply by
+killing the old daemon with &lsquo;<samp>SIGTERM</samp>&rsquo; and starting the new one.
+</p>
+<p>This filesystem type is not generally visible externally, but it is
+possible that the output from &lsquo;<samp>amq -m</samp>&rsquo; may list &lsquo;<samp>inherit</samp>&rsquo; as
+the filesystem type.  This happens when an inherit operation cannot
+be completed for some reason, usually because a fileserver is down.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

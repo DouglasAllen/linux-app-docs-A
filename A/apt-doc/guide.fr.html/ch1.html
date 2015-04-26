@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Guide d'utilisation d'APT - Généralités</title>
+
+<link href="index.html" rel="start">
+<link href="index.html" rel="prev">
+<link href="ch2.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Généralités">
+<link href="ch2.html" rel="chapter" title="2 apt-get">
+<link href="ch3.html" rel="chapter" title="3 DSelect">
+<link href="ch4.html" rel="chapter" title="4 L'interface">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Anatomie du système de gestion des paquets">
+<link href="ch4.html#s4.1" rel="section" title="4.1 Démarrage">
+<link href="ch4.html#s4.2" rel="section" title="4.2 Le rapport d'état">
+<link href="ch4.html#s4.3" rel="section" title="4.3 L'affichage d'état">
+<link href="ch4.html#s4.4" rel="section" title="4.4 Dpkg">
+<link href="ch4.html#s4.2.1" rel="subsection" title="4.2.1 La liste des paquets supplémentaires">
+<link href="ch4.html#s4.2.2" rel="subsection" title="4.2.2 Les paquets à supprimer">
+<link href="ch4.html#s4.2.3" rel="subsection" title="4.2.3 La liste des nouveaux paquets">
+<link href="ch4.html#s4.2.4" rel="subsection" title="4.2.4 La liste des paquets conservés">
+<link href="ch4.html#s4.2.5" rel="subsection" title="4.2.5 L'avertissement pour paquets retenus">
+<link href="ch4.html#s4.2.6" rel="subsection" title="4.2.6 Résumé final">
+
+</head>
+
+<body>
+
+<p><a name="ch1"></a></p>
+<hr>
+
+<p>
+[ <a href="index.html">précédent</a> ]
+[ <a href="index.html#contents">Table des matières</a> ]
+[ 1 ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch2.html">suivant</a> ]
+</p>
+
+<hr>
+
+<h1>
+Guide d'utilisation d'APT
+<br>Chapitre 1 - Généralités
+</h1>
+
+<hr>
+
+<p>
+Le paquet APT comporte actuellement deux parties&nbsp;:&nbsp;la méthode APT
+pour <code>dselect</code> et l'interface en ligne de commande
+<code>apt-get</code>.  Les deux fournissent des méthodes d'installation et de
+suppression de paquets ainsi que de téléchargement de nouveaux paquets par
+Internet.
+</p>
+
+<hr>
+
+<h2><a name="s1.1"></a>1.1 Anatomie du système de gestion des paquets</h2>
+
+<p>
+Le système de gestion de paquets de Debian intègre de nombreuses informations
+associées à chaque paquet afin de garantir qu'il s'intègre proprement et
+facilement sur le système.  Une des fonctionnalités les plus immédiatement
+visibles est le système de gestion des dépendances.
+</p>
+
+<p>
+Le système de gestion des dépendances permet aux programmes de partage des
+éléments du système, tels que les bibliothèques de fonctions.  Il permet
+d'isoler dans des paquets spécifiques certains parties moins utilisées des
+programmes afin de limiter le nombre d'éléments que l'utilisateur ordinaire a
+besoin d'installer.  Ce système de gestion des dépendances permet également
+d'effectuer des choix parmi les divers agents de transport de courrier
+électronique, les serveurs X et d'autres cxomposants du système.
+</p>
+
+<p>
+La première étape de compréhension de la gestion de dépendances est
+d'examiner le fonctionnement d'une dépendance simple.  Une dépendance simple
+est le cas où un paquet donné a besoin qu'un autre paquet soit installé
+simultanément pour pouvoir fonctionner correctement.
+</p>
+
+<p>
+Par example, mailcrypt est une extension à Emacs qui permet de gérer le
+courrier électronique chiffré avec GPG.  Si GPG n'est pas installé,
+mailcrypt est inutile.  Donc le paquet mailcrypt a une dépendance simple sur
+GPG.  De plus, étant une extension à Emacs sans lequel il est totalement
+inutile, il a une dépendance simple sur emacs.
+</p>
+
+<p>
+Un autre type de dépendance importante est la dépendance en conflit.  Cela
+signifie qu'un paquet ne fonctionne pas lorsqu'il est installé en même temps
+qu'un autre paquet donné, ce qui peut même être dommageable pour le
+système.  Un exemple est par exemple constitué par les agents de transport de
+courrier tels que sendmail, exim ou qmail.  Il n'est pas possible d'installer
+deux agents de transport de courrier simultanément puisque les deux ont besoin
+d'être à l'écoute sur le réseau pour recevoir le courrier électronique.
+Installer deux programmes de ce type sur le même système pourrait conduire à
+des pertes de données, ce qui explique que tous les agents de transport de
+courrier électronique soient établis comme étant en conflit les uns avec les
+autres.
+</p>
+
+<p>
+Il existe également la possibilité pour un paquet donné de prétendre être
+un autre paquet.  Par exemple, exim et sendmail sont analogues sur de nombreux
+aspects&nbsp;;&nbsp;ils servent tous deux à acheminer le courrier
+électronique et leur interface d'utilisation est la même.  Pour cette raison,
+le système de gestion des paquets leur fournit la possibilité d'indiquer
+qu'ils sont chacun un agent de transport de courrier («&nbsp;mail transport
+agent&nbsp;») en indiquant qu'ils fournissent («&nbsp;Provides&nbsp;»)
+«&nbsp;mail-transport-agent&nbsp;».  Ainsi, un paquet qui a besoin de cette
+fonctionnalité peut dépendre simplement d'un paquet
+«&nbsp;mail-transprot-agent&nbsp;».  Cette fonctionnalité utile peut
+toutefois rendre la correction de certains défauts des paquets plus complexe.
+</p>
+
+<p>
+À un instant donné, une dépendance donnée peut être ou pas remplie par des
+paquets installés ou pas encore installés.  APT tente donc de résoudre les
+problèmes de dépendances par l'intermédiaire d'un certain nombre
+d'algorithmes automatiques qui simplifient le choix des paquets à installer.
+</p>
+
+<hr>
+
+<p>
+[ <a href="index.html">précédent</a> ]
+[ <a href="index.html#contents">Table des matières</a> ]
+[ 1 ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch2.html">suivant</a> ]
+</p>
+
+<hr>
+
+<p>
+Guide d'utilisation d'APT
+</p>
+
+<address>
+$Id: guide.sgml,v 1.7 2003/04/26 23:26:13 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

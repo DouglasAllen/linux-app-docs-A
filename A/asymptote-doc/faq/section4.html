@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head><title>
+Asymptote FAQ - Section 4
+</title>
+<link rev="made" href="mailto:">
+<link rel="Contents" href="index.html">
+<link rel="Start" href="index.html">
+<link rel="Next" href="section5.html"><link rel="Previous" href="section3.html"><link rel="Bookmark" title="Asymptote FAQ" href="index.html">
+</head><body text="#000000" bgcolor="#FFFFFF"><h1>
+Asymptote FAQ - Section 4 <br>
+Questions about labels
+</h1>
+
+<ul>
+<li><a href="#greek" rel=subdocument>Q4.1. How do I get Greek letters like omega to show up in my
+labels?</a>
+<li><a href="#matlabels" rel=subdocument>Q4.2. Can Asymptote use matrices as labels?</a>
+<li><a href="#latexpackage" rel=subdocument>Q4.3. How do I tell Asymptote to load a particular LaTeX package, like
+<code>mathptmx</code>?</a>
+<li><a href="#internatfonts" rel=subdocument>Q4.4. How can I use international fonts in Asymptote
+labels?</a>
+<li><a href="#Fourier" rel=subdocument>Q4.5. How can I use Fourier fonts? </a>
+<li><a href="#decsep" rel=subdocument>Q4.6. Is there any way to change the default appearance of the decimal
+separator, using a comma instead of a dot?</a>
+<li><a href="#rotatelabel" rel=subdocument>Q4.7. How can I get a rotated label with the filled box rotated as well so
+that it fits the text? </a>
+<li><a href="#rotatelabel3D" rel=subdocument>Q4.8. How can I rotate labels in a 3D figure?</a>
+<li><a href="#fixedsize" rel=subdocument>Q4.9. How can I draw some squares and circles of a fixed size and put a
+label in the middle of them?</a>
+<li><a href="#colorssaturation" rel=subdocument>Q4.10. The binary operator * can be used to scale the color of a pen by a
+real number. Does this scaling factor have to be less than
+1?</a>
+<li><a href="#commadecimalseparator" rel=subdocument>Q4.11. Why is the space after the comma decimal separator in my locale so
+large?</a>
+<li><a href="#hyperref" rel=subdocument>Q4.12. How can I prevent <code>texpreamble(&quot;\usepackage[pdftex]{hyperref}&quot;)</code> from changing the page size?</a>
+</ul><hr>
+
+<h2><A name="greek">
+Question 4.1.  How do I get Greek letters like omega to show up in my
+labels?
+</A></h2>
+
+In (La)TeX, Greek letters can be obtained in math mode by prepending a
+ backslash to the letter name. So for a omega symbol, use
+&quot;$\omega$&quot;. Everything between the dollar signs is considered to be a math formula. Uppercase
+Greek letters can be used by capitalizing the first letter of the name:
+<pre>
+label(&quot;$\omega$&quot;,(0,0));
+label(&quot;$\Omega$&quot;,(20,0));
+</pre>
+
+<h2><A name="matlabels">
+Question 4.2.  Can Asymptote use matrices as
+labels?
+</A></h2>
+
+Yes:  <pre>
+usepackage(&quot;amsmath&quot;);
+label(&quot;$\begin{matrix} 1 &amp; 2 \\\ 1 &amp; 1 \end{matrix}$&quot;,(0,0));
+</pre>
+
+<h2><A name="latexpackage">
+Question 4.3.  How do I tell Asymptote to load a particular LaTeX
+package, like <code>mathptmx</code>?
+</A></h2>
+
+Put  <pre>
+usepackage(&quot;mathptmx&quot;);
+</pre>
+at the beginning of your file. Note: to enable the Adobe Times Roman
+font for text, you will also need to say: <pre>
+defaultpen(TimesRoman());
+</pre>
+
+<h2><A name="internatfonts">
+Question 4.4.  How can I use international fonts in Asymptote
+labels?
+</A></h2>
+
+See <A href="http://asymptote.sourceforge.net/doc/unicode.html">http://asymptote.sourceforge.net/doc/unicode.html</A>.  
+<h2><A name="Fourier">
+Question 4.5.  How can I use Fourier fonts?
+
+</A></h2>
+
+<pre>
+usepackage(&quot;fourier&quot;);
+defaultpen(font(&quot;T1&quot;,&quot;fut\textfamilyextension&quot;,&quot;m&quot;,&quot;n&quot;));
+</pre>
+
+<h2><A name="decsep">
+Question 4.6.  Is there any way to change the default appearance of
+the decimal separator, using a comma instead of a
+dot?
+</A></h2>
+
+Just set your locale appropriately: <pre>
+locale(&quot;it_IT&quot;);
+usepackage(&quot;icomma&quot;);
+label(format(0.5));
+</pre>
+
+<h2><A name="rotatelabel">
+Question 4.7.  How can I get a rotated label with the filled box
+rotated as well so that it fits the text?
+
+</A></h2>
+
+<pre>
+frame f;
+label(f,&quot;This is some text&quot;,white,Fill(blue));
+add(rotate(65)*f);
+</pre>
+
+<h2><A name="rotatelabel3D">
+Question 4.8.  How can I rotate labels in a 3D
+figure?
+</A></h2>
+
+You need to first project the triple to a pair like this: 
+<pre>
+import three;
+size(100,100);
+
+draw(rotate(90,project(Z))*&quot;A&quot;,O--X);
+</pre>
+
+<h2><A name="fixedsize">
+Question 4.9.  How can I draw some squares and circles of a fixed size
+and put a label in the middle of them?
+</A></h2>
+
+Fixed-size objects should be drawn on a separate picture and then
+added to  currentpicture. Here is one way (see also
+<A href="http://asymptote.sourceforge.net/gallery/subpictures.asy">http://asymptote.sourceforge.net/gallery/subpictures.asy</A> and <A href="http://asymptote.sourceforge.net/gallery/mosquito.asy">http://asymptote.sourceforge.net/gallery/mosquito.asy</A>):  <pre>
+real u=2cm;
+ 
+picture square;
+draw(square,scale(u)*shift(-0.5,-0.5)*unitsquare);
+ 
+picture circle;
+draw(circle,scale(0.5u)*unitcircle);
+ 
+void add(picture pic=currentpicture, Label L, picture object, pair z) { 
+add(pic,object,z);
+label(pic,L,z);
+} 
+ 
+add(&quot;square&quot;,square,(0,0));
+add(&quot;circle&quot;,circle,(5cm,0));
+</pre>
+
+<h2><A name="colorssaturation">
+Question 4.10.  The binary operator * can be used to scale the color
+of a pen by a real number. Does this scaling factor have to be less
+than 1?
+</A></h2>
+
+The scaling factor can be greater than 1. But keep in mind that the
+rgb color  components saturate at 1.  
+<p>
+Try   <pre>
+write(cyan); write(0.8*cyan); write(1.5*cyan);
+</pre>
+and you will quickly see what is going on. 
+
+<p>
+To get a lighter cyan you can say white+cyan, 
+which yields rgb(0.5,1,1). If you want something even lighter specify
+the  rgb colors directly,  for example, rgb(0.9,1,1).  
+<p>
+Alternatively, work in cmyk colour space, which is nicer in that it
+handles  saturation separately from hue:  
+<p>
+0.1*Cyan is light and 0.9*Cyan is dark. 
+You can also say 0.1*cmyk(red).  
+<h2><A name="commadecimalseparator">
+Question 4.11.  Why is the space after the comma decimal separator in
+my locale so large?
+</A></h2>
+
+LaTeX is treating the comma as punctuation and not as a decimal
+separator.  The solution is to load the <code>icomma</code> package near the beginning of your file:
+<pre>
+usepackage(&quot;icomma&quot;);
+</pre>
+
+<h2><A name="hyperref">
+Question 4.12.  How can I prevent <code>texpreamble(&quot;\usepackage[pdftex]{hyperref}&quot;)</code> from changing the page size?
+</A></h2>
+
+<pre>
+texpreamble(&quot;\usepackage[pdftex,setpagesize=false]{hyperref}&quot;);
+</pre>
+<hr>
+Next: <a href="section5.html" rel=precedes>Questions about arrows</a>.<br>
+Back: <a href="section3.html" rev=precedes>Questions about paths</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+<A href="http://asymptote.sourceforge.net">Asymptote</A> 
+- 26 August 2012
+</address><br>
+Extracted from Asymptote Frequently Asked Questions,
+Copyright &copy; 2012 .
+</body></html>

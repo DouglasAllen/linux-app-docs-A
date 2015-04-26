@@ -1,0 +1,63 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_SetUserAuthorizeProc</TITLE>
+<LINK rel=Previous href="c-ch352.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch354.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch352.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch354.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="589349">
+</a><h3>Ns_SetUserAuthorizeProc</h3>
+<a name="589430">
+</a><h4>Overview</h4>
+Set function used by Ns_AuthorizeUser
+<a name="589435">
+</a><a name="589432">
+</a><h4>Syntax</h4>
+<pre>    <a name="589442"></a><code>void Ns_SetUserAuthorizeProc(
+</code>    <a name="589481"></a><code>Ns_UserAuthorizeProc *procPtr
+</code>    <a name="589482"></a><code>);
+</code></pre><p><a name="589433">
+</a><h4>Description</h4>
+<p><a name="589460">
+</a>Sets a procedure to handle calls to Ns_AuthorizeUser. This function should only be called once per execution of AOLserver. The <code>procPtr</code> should be of the form:</p>
+<pre>    <a name="589463"></a>typedef int (Ns_UserAuthorizeProc) (char *user, char *passwd);
+</pre><p><p><a name="589465">
+</a>It should return NS_OK on a match or NS_ERROR if any problem is encountered or the password does not match.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch352.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch354.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

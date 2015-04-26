@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ovirt - oVirt/RHEV platform management &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="quantum_floating_ip - Add/Remove floating IP from an instance" href="quantum_floating_ip_module.html" />
+    <link rel="prev" title="nova_keypair - Add/Delete key pair from nova" href="nova_keypair_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quantum_floating_ip_module.html" title="quantum_floating_ip - Add/Remove floating IP from an instance"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nova_keypair_module.html" title="nova_keypair - Add/Delete key pair from nova"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ovirt-ovirt-rhev-platform-management">
+<span id="ovirt"></span><h1>ovirt - oVirt/RHEV platform management<a class="headerlink" href="#ovirt-ovirt-rhev-platform-management" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Vincent Van der Kussen</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>allows you to create new instances, either from scratch or an image, in addition to deleting or stopping instances on the oVirt/RHEV platform</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>disk_alloc</td>
+<td>no</td>
+<td>thin</td>
+    <td><ul><li>thin</li><li>preallocated</li></ul></td>
+    <td>define if disk is thin or preallocated</td>
+</tr>
+        <tr>
+<td>disk_int</td>
+<td>no</td>
+<td>virtio</td>
+    <td><ul><li>virtio</li><li>ide</li></ul></td>
+    <td>interface type of the disk</td>
+</tr>
+        <tr>
+<td>image</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>template to use for the instance</td>
+</tr>
+        <tr>
+<td>instance_cores</td>
+<td>no</td>
+<td>1</td>
+    <td><ul></ul></td>
+    <td>define the instance's number of cores</td>
+</tr>
+        <tr>
+<td>instance_cpus</td>
+<td>no</td>
+<td>1</td>
+    <td><ul></ul></td>
+    <td>the instance's number of cpu's</td>
+</tr>
+        <tr>
+<td>instance_disksize</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>size of the instance's disk in GB</td>
+</tr>
+        <tr>
+<td>instance_mem</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the instance's amount of memory in MB</td>
+</tr>
+        <tr>
+<td>instance_name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the name of the instance to use</td>
+</tr>
+        <tr>
+<td>instance_network</td>
+<td>no</td>
+<td>rhevm</td>
+    <td><ul></ul></td>
+    <td>the logical network the machine should belong to</td>
+</tr>
+        <tr>
+<td>instance_nic</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>name of the network interface in oVirt/RHEV</td>
+</tr>
+        <tr>
+<td>instance_os</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>type of Operating System</td>
+</tr>
+        <tr>
+<td>instance_type</td>
+<td>no</td>
+<td>server</td>
+    <td><ul><li>server</li><li>desktop</li></ul></td>
+    <td>define if the instance is a server or desktop</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>password of the user to authenticate with</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the oVirt/RHEV datacenter where you want to deploy to</td>
+</tr>
+        <tr>
+<td>resource_type</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>new</li><li>template</li></ul></td>
+    <td>whether you want to deploy an image or create an instance from scratch.</td>
+</tr>
+        <tr>
+<td>sdomain</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the Storage Domain where you want to create the instance's disk on.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li><li>shutdown</li><li>started</li><li>restarted</li></ul></td>
+    <td>create, terminate or remove instances</td>
+</tr>
+        <tr>
+<td>url</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the url of the oVirt instance</td>
+</tr>
+        <tr>
+<td>user</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the user to authenticate with</td>
+</tr>
+        <tr>
+<td>zone</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>deploy the image to this oVirt cluster</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires ovirt-engine-sdk</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Basic example provisioning from image.
+
+action: ovirt &gt;
+    user=admin@internal
+    url=https://ovirt.example.com
+    instance_name=ansiblevm04
+    password=secret
+    image=centos_64
+    zone=cluster01
+    resource_type=template"
+
+# Full example to create new instance from scratch
+action: ovirt &gt;
+    instance_name=testansible
+    resource_type=new
+    instance_type=server
+    user=admin@internal
+    password=secret
+    url=https://ovirt.example.com
+    instance_disksize=10
+    zone=cluster01
+    region=datacenter1
+    instance_cpus=1
+    instance_nic=nic1
+    instance_network=rhevm
+    instance_mem=1000
+    disk_alloc=thin
+    sdomain=FIBER01
+    instance_cores=1
+    instance_os=rhel_6x64
+    disk_int=virtio"
+
+# stopping an instance
+action: ovirt &gt;
+    instance_name=testansible
+    state=stopped
+    user=admin@internal
+    password=secret
+    url=https://ovirt.example.com
+
+# starting an instance
+action: ovirt &gt;
+    instance_name=testansible
+    state=started
+    user=admin@internal
+    password=secret
+    url=https://ovirt.example.com</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ovirt - oVirt/RHEV platform management</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nova_keypair_module.html"
+                        title="previous chapter">nova_keypair - Add/Delete key pair from nova</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quantum_floating_ip_module.html"
+                        title="next chapter">quantum_floating_ip - Add/Remove floating IP from an instance</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="quantum_floating_ip_module.html" title="quantum_floating_ip - Add/Remove floating IP from an instance"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nova_keypair_module.html" title="nova_keypair - Add/Delete key pair from nova"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Costs in the interactive dependency resolver</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s03.html" title="Resolving package dependencies"><link rel="prev" href="ch02s03s03.html" title="Resolving Dependencies Interactively"><link rel="next" href="ch02s03s05.html" title="Configuring the interactive dependency resolver"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s03s04.html#secDependencyResolutionCostsAndCostComponents" title="Costs and cost components"><link rel="subsection" href="ch02s03s04.html#secDependencyResolutionCostsSafetyCosts" title="Safety costs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Costs in the interactive dependency resolver</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s03s03.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Resolving package dependencies</th><td width="20%" align="right"> <a accesskey="n" href="ch02s03s05.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Costs in the interactive dependency resolver"><div class="titlepage"><div><div><h3 class="title"><a name="secDependencyResolutionCosts"></a>Costs in the interactive dependency resolver</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s03s04.html#secDependencyResolutionCostsAndCostComponents">Costs and cost components</a></span></dt><dt><span class="section"><a href="ch02s03s04.html#secDependencyResolutionCostsSafetyCosts">Safety costs</a></span></dt></dl></div><div class="section" title="Costs and cost components"><div class="titlepage"><div><div><h4 class="title"><a name="secDependencyResolutionCostsAndCostComponents"></a>Costs and cost components</h4></div></div></div><p>
+            The <em class="firstterm">cost</em> of a solution produced by
+            the interactive dependency resolver is a value that
+            <span class="command"><strong>aptitude</strong></span> uses to determine how <span class="quote">“<span class="quote">bad</span>”</span> that
+            solution is.  Solutions that are <span class="quote">“<span class="quote">better</span>”</span> are
+            always displayed before solutions that are
+            <span class="quote">“<span class="quote">worse</span>”</span>.  The cost of solutions is defined in
+            the configuration option <a class="link" href="ch02s05s05.html#configProblemResolver-SolutionCost"><code class="literal">Aptitude::ProblemResolver::SolutionCost</code></a>.
+          </p><p>
+            Some typical costs are shown in <a class="xref" href="ch02s03s04.html#exampleResolverCosts" title="Example 2.1. Sample resolver costs">Example 2.1, “Sample resolver costs”</a>.
+          </p><div class="example"><a name="exampleResolverCosts"></a><p class="title"><b>Example 2.1. Sample resolver costs</b></p><div class="example-contents"><p>
+              The default cost, sorting solutions by their <a class="link" href="ch02s03s04.html#secDependencyResolutionCostsSafetyCosts" title="Safety costs">safety
+              cost</a>, then by their apt pin priority:
+            </p><pre class="screen">safety, priority</pre><p>
+              Remove as few packages as possible, then cancel as few
+              actions as possible:
+            </p><pre class="screen">removals, canceled-actions</pre><p>
+              Sort solutions by the number of packages they remove
+              <span class="emphasis"><em>plus</em></span> twice the number of actions
+              they cancel.
+            </p><pre class="screen">removals + 2 * canceled-actions</pre></div></div><br class="example-break"><p>
+            As can be seen from the above examples, a cost is not
+            necessarily a single number.  In fact, a cost consists of
+            one or more <em class="firstterm">cost components</em>, each
+            of which is a number associated with the solution.  When
+            sorting solutions, the resolver examines cost components
+            in order, proceeding to later components only if the
+            earlier ones are equal.  For instance, in the cost
+            <span class="quote">“<span class="quote"><code class="literal">removals,
+            canceled-actions</code></span>”</span>, solutions with fewer
+            removals always appear before solutions with more
+            removals, regardless of how many canceled actions they
+            have.  However, solutions with the same number of removals
+            are sorted so that solutions with fewer canceled actions
+            appear first.
+          </p><p>
+            Cost components come in two flavors:
+            <span class="emphasis"><em>basic</em></span> cost components and
+            <span class="emphasis"><em>compound</em></span> cost components.
+          </p><p>
+            Basic components simply name some property of the
+            solution, such as
+            <span class="quote">“<span class="quote"><code class="literal">upgrades</code></span>”</span> or
+            <span class="quote">“<span class="quote"><code class="literal">removals</code></span>”</span>.  A list of
+            built-in basic components provided by <span class="command"><strong>aptitude</strong></span> can be
+            found in <a class="xref" href="ch02s03s04.html#tableBasicCostComponents" title="Table 2.1. Basic cost components">Table 2.1, “Basic cost components”</a>.  You
+            can also create your own cost components using the
+            <code class="literal">add-to-cost-component</code> and
+            <code class="literal">raise-cost-component</code> hints; see <a class="xref" href="ch02s03s05.html#secDependencyResolutionHints" title="Configuring resolver hints">the section called “Configuring resolver hints”</a> for details.
+          </p><p>
+            Each basic component is either a
+            <span class="emphasis"><em>counter</em></span> or a
+            <span class="emphasis"><em>level</em></span>.  Counters count how many of a
+            solution's actions meet some condition (such as removing
+            packages or installing new packages), while levels
+            associate a number with each action and compute the
+            highest number associated with any action in the solution.
+          </p><div class="table"><a name="tableBasicCostComponents"></a><p class="title"><b>Table 2.1. Basic cost components</b></p><div class="table-contents"><table summary="Basic cost components" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">broken-holds</code></td><td>Counter</td><td>
+                    Counts the number of holds that the solution
+                    breaks, if the resolver is allowed to break holds
+                    (<a class="link" href="ch02s05s05.html#configProblemResolver-Allow-Break-Holds"><code class="literal">Aptitude::ProblemResolver::Allow-Break-Holds</code></a>).
+                  </td></tr><tr class="oddrow"><td><code class="literal">canceled-actions</code></td><td>Counter</td><td>
+                    Counts the number of pending actions that the
+                    solution cancels (keeping packages at their
+                    current version).
+                  </td></tr><tr><td><code class="literal">installs</code></td><td>Counter</td><td>
+                    Counts the number of packages that the solution
+                    installs.
+                  </td></tr><tr class="oddrow"><td><code class="literal">non-default-versions</code></td><td>Counter</td><td>
+                    Counts the number of versions that the solution
+                    installs or upgrades from non-default sources.
+                  </td></tr><tr><td><code class="literal">priority</code></td><td>Level</td><td>
+                    A value that increases as the apt pin priority of
+                    a version decreases.  Specifically, this is
+                    computed by negating the pin priority (so, e.g.,
+                    if the pin priority is 500, this component will
+                    compute -500).
+                  </td></tr><tr class="oddrow"><td><code class="literal">removals</code></td><td>Counter</td><td>
+                    Counts the number of packages that the solution
+                    removes.
+                  </td></tr><tr><td><code class="literal">removals-of-manual</code></td><td>Counter</td><td>
+                    Counts the number of manually installed packages
+                    that the solution removes.
+                  </td></tr><tr class="oddrow"><td><code class="literal">safety</code></td><td>Level</td><td>
+                    A broad heuristic that increases as actions become
+                    less <span class="quote">“<span class="quote">safe</span>”</span>; see <a class="xref" href="ch02s03s04.html#secDependencyResolutionCostsSafetyCosts" title="Safety costs">the section called “Safety costs”</a>
+                    for details.
+                  </td></tr><tr><td><code class="literal">upgrades</code></td><td>Counter</td><td>
+                    Counts the number of packages that the solution
+                    upgrades.
+                  </td></tr></tbody></table></div></div><br class="table-break"><p>
+            Compound components are built by combining the values of
+            basic components.  For instance, <code class="literal">removals +
+            canceled-actions</code> adds the components
+            <code class="literal">removal</code> and
+            <code class="literal">canceled-actions</code>, resulting in a
+            component that counts the number of removals
+            <span class="emphasis"><em>and</em></span> canceled actions.  Compound
+            components combine counters by adding them together and
+            levels by taking their maximum value, as shown in <a class="xref" href="ch02s03s04.html#figureCompoundCostComponents" title="Figure 2.11. Syntax of compound cost components">Figure 2.11, “Syntax of compound cost components”</a>.
+          </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+              It is an error to add two levels, or to take the maximum
+              of two counters, or to combine levels and counters in
+              any way.  For instance, the costs <code class="literal">removals +
+              safety</code> and <code class="literal">max(upgrades,
+              installs)</code> will be treated as errors and
+              ignored by the resolver.<sup>[<a name="idp3586136" href="#ftn.idp3586136" class="footnote">13</a>]</sup>
+            </p></td></tr></table></div><div class="figure"><a name="figureCompoundCostComponents"></a><p class="title"><b>Figure 2.11. Syntax of compound cost components</b></p><div class="figure-contents"><div class="informalexample"><p>
+                Add two or more basic costs:
+              </p><pre class="synopsis">
+                <code class="literal">[<span class="optional"><em class="replaceable"><code>scale1</code></em></span>]*<em class="replaceable"><code>cost1</code></em> + [<span class="optional"><em class="replaceable"><code>scale2</code></em></span>]*<em class="replaceable"><code>cost2</code></em> + ...</code>
+              </pre><p>
+                Take the maximum value of two or more basic costs:
+              </p><pre class="synopsis">
+                <code class="literal">max([<span class="optional"><em class="replaceable"><code>scale1</code></em></span>]*<em class="replaceable"><code>cost1</code></em>, [<span class="optional"><em class="replaceable"><code>scale2</code></em></span>]*<em class="replaceable"><code>cost2</code></em>, ...)</code>
+              </pre></div></div></div><br class="figure-break"><p>
+            Note that each individual basic component can be
+            multiplied by a scaling factor before it is combined with
+            other components.  This can be used to control the
+            trade-offs that the resolver makes between costs.  For
+            instance, a cost of <code class="literal">2*removals +
+            3*upgrades</code> says that three removals are exactly as
+            <span class="quote">“<span class="quote">bad</span>”</span> as two upgrades.  Solutions that
+            contain four removals and one upgrade will be considered
+            equivalent to solutions containing one removal and three
+            upgrades, since both have a cost of eleven.
+          </p></div><div class="section" title="Safety costs"><div class="titlepage"><div><div><h4 class="title"><a name="secDependencyResolutionCostsSafetyCosts"></a>Safety costs</h4></div></div></div><div class="figure"><a name="figureSafetyCostLevels"></a><p class="title"><b>Figure 2.12. Safety cost levels</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/safety-cost-level-diagram.png" alt="Safety cost levels"></div></div></div><br class="figure-break"><p>
+            The <code class="literal">safety</code> cost component is a
+            heuristic estimate of how <span class="quote">“<span class="quote">safe</span>”</span> or
+            <span class="quote">“<span class="quote">unsafe</span>”</span> a solution is.  Safety costs can be
+            thought of as a way of dividing solutions into several
+            numbered <span class="quote">“<span class="quote">levels</span>”</span>, where <span class="quote">“<span class="quote">less
+            safe</span>”</span> levels are given higher numbers.  <a class="xref" href="ch02s03s04.html#figureSafetyCostLevels" title="Figure 2.12. Safety cost levels">Figure 2.12, “Safety cost levels”</a> shows how this works
+            with <span class="command"><strong>aptitude</strong></span>'s default settings.
+          </p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+              Safety cost levels are just one way to control the order
+              in which dependency solutions are returned.  See <a class="xref" href="ch02s03s04.html" title="Costs in the interactive dependency resolver">the section called “Costs in the interactive dependency resolver”</a> for a full
+              description of how to change the order in which
+              <span class="command"><strong>aptitude</strong></span> sorts solutions.
+            </p></td></tr></table></div><p>
+            By default, <span class="command"><strong>aptitude</strong></span> initializes the resolver with a
+            <span class="quote">“<span class="quote">reasonable</span>”</span> set of safety cost levels.  They
+            are:
+          </p><div class="table"><a name="tableDefaultSafetyCostLevels"></a><p class="title"><b>Table 2.2. Default safety cost levels</b></p><div class="table-contents"><table summary="Default safety cost levels" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Cost level</th><th>Description</th><th>Configuration option</th></tr></thead><tbody><tr><td>10,000</td><td>
+                    Solutions that include only <span class="quote">“<span class="quote">safe</span>”</span>
+                    actions (installing the default target for a
+                    package or keeping a package at its current
+                    version) and package removals.
+                  </td><td><code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Safe-Level">Aptitude::ProblemResolver::Safe-Level</a></code>, <code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Remove-Level">Aptitude::ProblemResolver::Remove-Level</a></code></td></tr><tr class="oddrow"><td>20,000</td><td>
+                    The solution that cancels all the user's actions.
+                  </td><td><code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Keep-All-Level">Aptitude::ProblemResolver::Keep-All-Level</a></code></td></tr><tr><td>40,000</td><td>
+                    Solutions that break holds set by the user or
+                    install forbidden versions.
+                  </td><td><code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Break-Hold-Level">Aptitude::ProblemResolver::Break-Hold-Level</a></code></td></tr><tr class="oddrow"><td>50,000</td><td>
+                    Solutions that install packages from non-default
+                    versions (such as
+                    <span class="quote">“<span class="quote"><code class="literal">experimental</code></span>”</span>,
+                    for instance).
+                  </td><td><code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Non-Default-Level">Aptitude::ProblemResolver::Non-Default-Level</a></code></td></tr><tr><td>60,000</td><td>
+                    Solutions that remove Essential packages.
+                  </td><td><code class="literal"><a class="link" href="ch02s05s05.html#configProblemResolver-Remove-Essential-Level">Aptitude::ProblemResolver::Remove-Essential-Level</a></code></td></tr></tbody></table></div></div><br class="table-break"><p>
+            If a solution qualifies for several safety cost levels, it
+            will be placed in the highest one, that is, the one that
+            appears last.  For example, a solution that upgrades one
+            package to its default version and breaks a hold on a
+            second package will be placed at level 40,000.  You can
+            adjust the levels of individual versions using resolver
+            hints; see <a class="xref" href="ch02s03s05.html#secDependencyResolutionHints" title="Configuring resolver hints">the section called “Configuring resolver hints”</a>
+            for details.  The default levels are illustrated in <a class="xref" href="ch02s03s04.html#figureSafetyCostLevels" title="Figure 2.12. Safety cost levels">Figure 2.12, “Safety cost levels”</a>.
+          </p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp3586136" href="#idp3586136" class="para">13</a>] </sup>This limit was
+              imposed because more complex cost structures could make
+              it difficult to optimize the resolver.  Future versions
+              of the program might remove some of the restrictions if
+              they turn out to be unnecessary.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s03s03.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s03.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s03s05.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Resolving Dependencies Interactively </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Configuring the interactive dependency resolver</td></tr></table></div></body></html>

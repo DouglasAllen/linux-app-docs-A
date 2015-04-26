@@ -1,0 +1,61 @@
+
+<HTML>
+
+<HEAD>
+
+<meta name="GENERATOR" content="Microsoft Internet Assistant for PowerPoint 97">
+ <TITLE>Example: Proxy</TITLE> 
+</HEAD>
+
+<BODY     >
+
+ <H1>Example: Proxy</H1> 
+ <P><UL>
+AOLserver Process</UL></P>
+<P><UL>
+Proxy Shell</UL></P>
+<P><UL>
+1. At startup, pool is initialized with init script, e.g., open db</UL></P>
+<P><UL>
+3. Script evaluated in proxy, results returned through pipe</UL></P>
+<P><UL>
+4. Proxy results available in
+</UL><UL>
+AOLserver interp-&#062result</UL></P>
+<P><UL>
+2. Scripts sent to proxy with proxy.send:
+</UL><UL>
+
+</UL><UL>
+&#060html&#062
+</UL><UL>
+Search Results:
+</UL><UL>
+&#060%
+</UL><UL>
+  set script “pls.search $query”
+</UL><UL>
+  foreach doc [proxy.send db $script] {
+</UL><UL>
+    ns_adp_puts [putheadline $doc]
+</UL><UL>
+  }
+</UL><UL>
+%&#062
+</UL><UL>
+...</UL></P>
+<P></P> 
+<P>
+<TABLE>
+  <TD HEIGHT=100 WIDTH=100> <A HREF="tsld053.htm">Previous slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=100> <A HREF="tsld055.htm">Next slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=150> <A HREF="tsld001.htm">Back to first slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=150> <A HREF="sld054.htm">View graphic version</A> </TD>
+</TABLE>
+<BR>
+</P>
+
+
+
+</Body>
+</HTML>

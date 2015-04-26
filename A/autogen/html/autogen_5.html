@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- This manual is for GNU AutoGen version 5.12, updated July 2011.
+
+Copyright C 1992-2011 by Bruce Korb.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+
+ -->
+<!-- Created on July 10, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>GNU AutoGen - The Automated Program Generator: 6. Configuring and Installing</title>
+
+<meta name="description" content="GNU AutoGen - The Automated Program Generator: 6. Configuring and Installing">
+<meta name="keywords" content="GNU AutoGen - The Automated Program Generator: 6. Configuring and Installing">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Installation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="autogen_4.html#autogen-Examples" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#configuring" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Configuring-and-Installing"></a>
+<h1 class="chapter">6. Configuring and Installing</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#configuring">6.1 Configuring AutoGen</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#AutoGen-CGI">6.2 AutoGen as a CGI server</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#signal-names">6.3 Signal Names</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#installing">6.4 Installing AutoGen</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+
+<hr size="6">
+<a name="configuring"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Installation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#AutoGen-CGI" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Installation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Installation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Configuring-AutoGen"></a>
+<h2 class="section">6.1 Configuring AutoGen</h2>
+<a name="index-configuring"></a>
+
+<p>AutoGen is configured and built using Libtool, Automake and Autoconf.
+Consequently, you can install it wherever you wish using the various
+&lsquo;<samp>--prefix</samp>&rsquo; options.  To the various configuration options supplied
+by these tools, AutoGen adds a few of its own:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>--disable-shell</samp>&rsquo;</dt>
+<dd><p>AutoGen is now capable of acting as a CGI forms server, See section <a href="#AutoGen-CGI">AutoGen as a CGI server</a>.
+As such, it will gather its definitions using either &lsquo;<samp>GET</samp>&rsquo; or
+&lsquo;<samp>POST</samp>&rsquo; methods.  All you need to do is have a template named
+&lsquo;<tt>cgi.tpl</tt>&rsquo; handy or specify a different one with a command line
+option.
+</p>
+<p>However, doing this without disabling the server shell brings
+considerable risk.  If you were to pass user input to a script
+that contained, say, the classic &quot;&lsquo;<samp>`rm -rf /`</samp>&rsquo;&quot;, you might have
+a problem.  This configuration option will cause shell template
+commands to simply return the command string as the result.
+No mistakes.  Much safer.  Strongly recommended.
+The default is to have server shell scripting enabled.
+</p>
+<p>Disabling the shell will have some build side effects, too.
+</p>
+<ul>
+<li>
+Many of the make check tests will fail, since they assume
+a working server shell.
+</li><li>
+The getdefs and columns programs are not built.
+The options are distributed as definition files and they
+cannot be expanded with a shell-disabled AutoGen.
+</li><li>
+Similarly, the documentation cannot be regenerated because
+the documentation templates depend on subshell functionality.
+</li></ul>
+
+</dd>
+<dt> &lsquo;<samp>--enable-debug</samp>&rsquo;</dt>
+<dd><p>Turning on AutoGen debugging enables very detailed inspection of
+the input definitions and monitoring shell script processing.
+These options are not particularly useful to anyone not directly
+involved in maintaining AutoGen.  If you do choose to enable AutoGen
+debugging, be aware that the usage page was generated without these
+options, so when the build process reaches the documentation rebuild,
+there will be a failure.  &lsquo;<samp>cd</samp>&rsquo; into the &lsquo;<tt>agen5</tt>&rsquo; build
+directory, &lsquo;<samp>make</samp>&rsquo; the &lsquo;<samp>autogen.texi</samp>&rsquo; file and all will
+be well thereafter.
+</p>
+</dd>
+<dt> &lsquo;<samp>--with-regex-header</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>--with-header-path</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>--with-regex-lib</samp>&rsquo;</dt>
+<dd><p>These three work together to specify how to compile with and link to
+a particular POSIX regular expression library.  The value for
+&lsquo;<tt>--with-regex-header=value</tt>&rsquo; must be the name of the relevant header
+file.  The AutoGen sources will attempt to include that source with
+a <code>#include &lt;value&gt;</code> C preprocessing statement.  The <code>path</code> from the
+&lsquo;<tt>--with-header-path=path</tt>&rsquo; will be added to <code>CPPFLAGS</code> as &lsquo;<tt>-Ipath</tt>&rsquo;.
+The <code>lib-specs</code> from &lsquo;<tt>--with-regex-lib=lib-specs</tt>&rsquo; will be added
+to <code>LDFLAGS</code> without any adornment.
+</p></dd>
+</dl>
+
+
+
+<hr size="6">
+<a name="AutoGen-CGI"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#configuring" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#signal-names" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Installation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Installation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="AutoGen-as-a-CGI-server"></a>
+<h2 class="section">6.2 AutoGen as a CGI server</h2>
+
+<p>AutoGen is now capable of acting as a CGI forms server.
+It behaves as a CGI server if the definitions input is from stdin
+and the environment variable <code>REQUEST_METHOD</code> is defined
+and set to either &quot;GET&quot; or &quot;POST&quot;.  If set to anything else,
+AutoGen will exit with a failure message.  When set to one of those
+values, the CGI data will be converted to AutoGen definitions
+(see section <a href="autogen_1.html#Definitions-File">Definitions File</a>) and the template named &quot;<code>cgi.tpl</code>&quot;
+will be processed.
+</p>
+<p>This works by including the name of the real template to process
+in the form data and having the &quot;<code>cgi.tpl</code>&quot; template include
+that template for processing.  I do this for processing the form
+<a href="http://autogen.sourceforge.net/conftest.html">http://autogen.sourceforge.net/conftest.html</a>.  The &quot;<code>cgi.tpl</code>&quot;
+looks approximately like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;? AutoGen5 Template ?&gt;
+&lt;?
+IF (not (exist? &quot;template&quot;))                       ?&gt;&lt;?
+  form-error                                       ?&gt;&lt;?
+
+ELIF (=* (get &quot;template&quot;) &quot;/&quot;)                     ?&gt;&lt;?
+  form-error                                       ?&gt;&lt;?
+
+ELIF (define tpl-file (string-append &quot;cgi-tpl/&quot;
+                      (get &quot;template&quot;)))
+     (access? tpl-file R_OK)                       ?&gt;&lt;?
+  INCLUDE (. tpl-file)                             ?&gt;&lt;?
+
+ELIF (set! tpl-file (string-append tpl-file &quot;.tpl&quot;))
+     (access? tpl-file R_OK)                       ?&gt;&lt;?
+  INCLUDE (. tpl-file)                             ?&gt;&lt;?
+
+ELSE                                               ?&gt;&lt;?
+  form-error                                       ?&gt;&lt;?
+ENDIF                                              ?&gt;
+</pre></td></tr></table>
+
+<p>This forces the template to be found in the &quot;<code>cgi-tpl/</code>&quot;
+directory.  Note also that there is no suffix specified in the
+pseudo macro (see section <a href="autogen_2.html#pseudo-macro">Format of the Pseudo Macro</a>).  That tells AutoGen to emit
+the output to &lsquo;<tt>stdout</tt>&rsquo;.
+</p>
+<p>The output is actually spooled until it is complete so that,
+in the case of an error, the output can be discarded and a proper
+error message can be written in its stead.
+</p>
+<p><strong>Please also note</strong> that it is advisable, <em>especially</em> for network
+accessible machines, to configure AutoGen (see section <a href="#configuring">Configuring AutoGen</a>) with
+shell processing disabled (<code>--disable-shell</code>).  That will make it
+impossible for any referenced template to hand data to a subshell for
+interpretation.
+</p>
+
+<hr size="6">
+<a name="signal-names"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#AutoGen-CGI" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#installing" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Installation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Installation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Signal-Names"></a>
+<h2 class="section">6.3 Signal Names</h2>
+<a name="index-Signal-Names"></a>
+
+<p>When AutoGen is first built, it tries to use <code>psignal(3)</code>,
+<code>sys_siglist</code>, <code>strsigno(3)</code> and <code>strsignal(3)</code> from the
+host operating system.  If your system does not supply these, the
+AutoGen distribution will.  However, it will use the distributed mapping
+and this mapping is unlikely to match what your system uses.  This can
+be fixed.  Once you have installed autogen, the mapping can be rebuilt
+on the host operating system.  To do so, you must perform the
+following steps:
+</p>
+<ol>
+<li>
+Build and install AutoGen in a place where it will be found in your
+search path.
+
+</li><li>
+<code>cd ${top_srcdir}/compat</code>
+
+</li><li>
+<code>autogen strsignal.def</code>
+
+</li><li>
+Verify the results by examining the &lsquo;<tt>strsignal.h</tt>&rsquo; file produced.
+
+</li><li>
+Re-build and re-install AutoGen.
+</li></ol>
+
+<p>If you have any problems or peculiarities that cause this process to
+fail on your platform, please send me copies of the header files
+containing the signal names and numbers, along with the full path names
+of these files.  I will endeavor to fix it.  There is a shell script
+inside of &lsquo;<tt>strsignal.def</tt>&rsquo; that tries to hunt down the information.
+</p>
+
+<hr size="6">
+<a name="installing"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#signal-names" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Installation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Installation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Installing-AutoGen"></a>
+<h2 class="section">6.4 Installing AutoGen</h2>
+<a name="index-Installing"></a>
+
+<p>There are several files that get installed.  The number depend
+whether or not both shared and archive libraries are to be
+installed.  The following assumes that everything is installed
+relative to <code>$prefix</code>.  You can, of course, use
+<code>configure</code> to place these files where you wish.
+</p>
+<p><strong>NB</strong>  AutoGen does not contain any compiled-in path names.
+All support directories are located via option processing,
+the environment variable <code>HOME</code> or finding the directory where
+the executable came from.
+</p>
+<p>The installed files are:
+</p>
+<ol>
+<li>
+The executables in &lsquo;<tt>bin</tt>&rsquo; (autogen, getdefs and columns).
+
+</li><li>
+The AutoOpts link libraries as &lsquo;<tt>lib/libopts.*</tt>&rsquo;.
+
+</li><li>
+An include file in &lsquo;<tt>include/options.h</tt>&rsquo;, needed for
+Automated Option Processing (see next chapter).
+
+</li><li>
+Several template files and a scheme script in &lsquo;<tt>share/autogen</tt>&rsquo;, needed
+for Automated Option Processing (see section <a href="autogen_6.html#AutoOpts">Automated Option Processing</a>), parsing definitions
+written with scheme syntax (see section <a href="autogen_1.html#Dynamic-Text">Dynamic Text</a>), the templates for
+producing documentation for your program (see section <a href="autogen_6.html#documentation-attributes">Man and Info doc Attributes</a>),
+autoconf test macros, and AutoFSM.
+
+</li><li>
+Info-style help files as &lsquo;<tt>info/autogen.info*</tt>&rsquo;.
+These files document AutoGen, the option processing
+library AutoOpts, and several add-on components.
+
+</li><li>
+The three man pages for the three executables are installed in man/man1.
+</li></ol>
+
+<p>This program, library and supporting files can be installed
+with three commands:
+</p>
+<ul>
+<li>
+&lt;src-dir&gt;/configure [ &lt;configure-options&gt; ]
+</li><li>
+make
+</li><li>
+make install
+</li></ul>
+
+<p>However, you may wish to insert <code>make check</code>
+before the <code>make install</code> command.
+</p>
+<p>If you do perform a <code>make check</code> and there are any failures, you
+will find the results in <code>&lt;module&gt;/test/FAILURES</code>.  Needless to say, I
+would be interested in seeing the contents of those files and any
+associated messages.  If you choose to go on and analyze one of these
+failures, you will need to invoke the test scripts individually.  You
+may do so by specifying the test (or list of test) in the TESTS make
+variable, thus:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">gmake TESTS=test-name.test check
+</pre></td></tr></table>
+
+<p>I specify <code>gmake</code> because most makes will not let you override
+internal definitions with command line arguments.  <code>gmake</code> does.
+</p>
+<p>All of the AutoGen tests are written to honor the contents of the
+<tt>VERBOSE</tt> environment variable.  Normally, any commentary generated
+during a test run is discarded unless the <tt>VERBOSE</tt> environment
+variable is set.  So, to see what is happening during the test, you
+might invoke the following with <i>bash</i> or <i>ksh</i>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">VERBOSE=1 gmake TESTS=&quot;for.test forcomma.test&quot; check
+</pre></td></tr></table>
+
+<p>Or equivalently with <i>csh</i>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">env VERBOSE=1 gmake TESTS=&quot;for.test forcomma.test&quot; check
+</pre></td></tr></table>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Installation" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon</em> on <em>July 10, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

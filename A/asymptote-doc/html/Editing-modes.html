@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Editing modes - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Installation.html#Installation" title="Installation">
+<link rel="prev" href="Compiling-from-UNIX-source.html#Compiling-from-UNIX-source" title="Compiling from UNIX source">
+<link rel="next" href="Subversion.html#Subversion" title="Subversion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Editing-modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Subversion.html#Subversion">Subversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-from-UNIX-source.html#Compiling-from-UNIX-source">Compiling from UNIX source</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Installation.html#Installation">Installation</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 Editing modes</h3>
+
+<p><a name="index-Editing-modes-46"></a><a name="index-g_t_0040code_007bemacs_007d-47"></a><a name="index-g_t_0040code_007basy_002dmode_007d-48"></a><a name="index-g_t_0040code_007blasy_002dmode_007d-49"></a>Users of <code>emacs</code> can edit <code>Asymptote</code> code with the mode
+<code>asy-mode</code>, which is installed and enabled by default in the Debian
+package.
+
+   <p>Particularly useful key bindings in this mode are <code>C-c C-c</code>, which compiles
+and displays the current buffer, and the key binding <code>C-c ?</code>, which
+shows the available function prototypes for the command at the cursor. 
+For full functionality you should also install the Apache Software Foundation
+package <code>two-mode-mode</code>:
+<blockquote>
+<a href="http://www.dedasys.com/freesoftware/files/two-mode-mode.el">http://www.dedasys.com/freesoftware/files/two-mode-mode.el</a>
+</blockquote>
+   Once installed, you can use the hybrid mode <code>lasy-mode</code> to edit a
+LaTeX file containing embedded <code>Asymptote</code> code (see <a href="LaTeX-usage.html#LaTeX-usage">LaTeX usage</a>). 
+This mode can be enabled within <code>latex-mode</code>
+with the key sequence <code>M-x lasy-mode &lt;RET&gt;</code>. 
+On <code>UNIX</code> systems, additional keywords will be generated from
+all <code>asy</code> files in the space-separated list of directories
+specified by the environment variable <code>ASYMPTOTE_SITEDIR</code>. 
+Further documentation of <code>asy-mode</code> is available within
+<code>emacs</code> by pressing the sequence keys <code>C-h f asy-mode &lt;RET&gt;</code>.
+
+   <p><a name="index-g_t_0040code_007bvim_007d-50"></a><a name="index-g_t_0040code_007basy_002evim_007d-51"></a>Fans of <code>vim</code> can customize <code>vim</code> for <code>Asymptote</code> with
+
+<pre class="verbatim">cp @value{Datadir}/doc/asymptote/examples/asy.vim.gz ~/.vim/syntax/asy.vim.gz
+gunzip ~/.vim/syntax/asy.vim.gz
+</pre>
+
+<p class="noindent">and add the following to their <code>~/.vimrc</code> file:
+<pre class="verbatim">augroup filetypedetect
+au BufNewFile,BufRead *.asy     setf asy
+augroup END
+filetype plugin on
+</pre>
+
+   <p>If any of these directories or files don't exist, just create them. 
+To set <code>vim</code> up to run the current asymptote script using <code>:make</code>
+just add to <code>~/.vim/ftplugin/asy.vim</code>:
+<pre class="verbatim">setlocal makeprg=asy\ %
+setlocal errorformat=%f:\ %l.%c:\ %m
+</pre>
+
+   <p><a name="index-g_t_0040code_007bKDE-editor_007d-52"></a><a name="index-g_t_0040code_007bKate_007d-53"></a><a name="index-g_t_0040code_007basymptote_002exml_007d-54"></a>Syntax highlighting support for the <acronym>KDE</acronym> editor <code>Kate</code>
+can be enabled by running <code>asy-kate.sh</code> in the
+<code>/usr/share/asymptote</code> directory and putting the generated
+<code>asymptote.xml</code> file in <code>~/.kde/share/apps/katepart/syntax/</code>.
+
+   </body></html>
+

@@ -1,0 +1,1920 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Induction.Lexicographic</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Lexicographic induction</a
+      ><a name="132"
+      >
+</a
+      ><a name="133" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="205"
+      >
+
+</a
+      ><a name="207" class="Keyword"
+      >module</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Induction.Lexicographic.html#1" class="Module"
+      >Induction</a
+      ><a name="223"
+      >.</a
+      ><a name="224" href="Induction.Lexicographic.html#1" class="Module"
+      >Lexicographic</a
+      ><a name="237"
+      > </a
+      ><a name="238" class="Keyword"
+      >where</a
+      ><a name="243"
+      >
+
+</a
+      ><a name="245" class="Keyword"
+      >open</a
+      ><a name="249"
+      > </a
+      ><a name="250" class="Keyword"
+      >import</a
+      ><a name="256"
+      > </a
+      ><a name="257" href="Induction.html#1" class="Module"
+      >Induction</a
+      ><a name="266"
+      >
+</a
+      ><a name="267" class="Keyword"
+      >open</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Keyword"
+      >import</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="283"
+      >.</a
+      ><a name="284" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="291"
+      >
+
+</a
+      ><a name="293" class="Comment"
+      >-- The structure of lexicographic induction.</a
+      ><a name="337"
+      >
+
+</a
+      ><a name="339" href="Induction.Lexicographic.html#339" class="Function"
+      >&#931;-Rec</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Symbol"
+      >:</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Symbol"
+      >&#8704;</a
+      ><a name="348"
+      > </a
+      ><a name="349" class="Symbol"
+      >{</a
+      ><a name="350" href="Induction.Lexicographic.html#350" class="Bound"
+      >&#8467;</a
+      ><a name="351" class="Symbol"
+      >}</a
+      ><a name="352"
+      > </a
+      ><a name="353" class="Symbol"
+      >{</a
+      ><a name="354" href="Induction.Lexicographic.html#354" class="Bound"
+      >A</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Symbol"
+      >:</a
+      ><a name="357"
+      > </a
+      ><a name="358" class="PrimitiveType"
+      >Set</a
+      ><a name="361"
+      > </a
+      ><a name="362" href="Induction.Lexicographic.html#350" class="Bound"
+      >&#8467;</a
+      ><a name="363" class="Symbol"
+      >}</a
+      ><a name="364"
+      > </a
+      ><a name="365" class="Symbol"
+      >{</a
+      ><a name="366" href="Induction.Lexicographic.html#366" class="Bound"
+      >B</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Symbol"
+      >:</a
+      ><a name="369"
+      > </a
+      ><a name="370" href="Induction.Lexicographic.html#354" class="Bound"
+      >A</a
+      ><a name="371"
+      > </a
+      ><a name="372" class="Symbol"
+      >&#8594;</a
+      ><a name="373"
+      > </a
+      ><a name="374" class="PrimitiveType"
+      >Set</a
+      ><a name="377"
+      > </a
+      ><a name="378" href="Induction.Lexicographic.html#350" class="Bound"
+      >&#8467;</a
+      ><a name="379" class="Symbol"
+      >}</a
+      ><a name="380"
+      > </a
+      ><a name="381" class="Symbol"
+      >&#8594;</a
+      ><a name="382"
+      >
+        </a
+      ><a name="391" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Induction.Lexicographic.html#354" class="Bound"
+      >A</a
+      ><a name="402"
+      > </a
+      ><a name="403" class="Symbol"
+      >&#8594;</a
+      ><a name="404"
+      > </a
+      ><a name="405" class="Symbol"
+      >(&#8704;</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Induction.Lexicographic.html#408" class="Bound"
+      >x</a
+      ><a name="409"
+      > </a
+      ><a name="410" class="Symbol"
+      >&#8594;</a
+      ><a name="411"
+      > </a
+      ><a name="412" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="421"
+      > </a
+      ><a name="422" class="Symbol"
+      >(</a
+      ><a name="423" href="Induction.Lexicographic.html#366" class="Bound"
+      >B</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Induction.Lexicographic.html#408" class="Bound"
+      >x</a
+      ><a name="426" class="Symbol"
+      >))</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >&#8594;</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="440"
+      > </a
+      ><a name="441" class="Symbol"
+      >(</a
+      ><a name="442" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Induction.Lexicographic.html#354" class="Bound"
+      >A</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="Induction.Lexicographic.html#366" class="Bound"
+      >B</a
+      ><a name="447" class="Symbol"
+      >)</a
+      ><a name="448"
+      >
+</a
+      ><a name="449" href="Induction.Lexicographic.html#339" class="Function"
+      >&#931;-Rec</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Induction.Lexicographic.html#455" class="Bound"
+      >RecA</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Induction.Lexicographic.html#460" class="Bound"
+      >RecB</a
+      ><a name="464"
+      > </a
+      ><a name="465" href="Induction.Lexicographic.html#465" class="Bound"
+      >P</a
+      ><a name="466"
+      > </a
+      ><a name="467" class="Symbol"
+      >(</a
+      ><a name="468" href="Induction.Lexicographic.html#468" class="Bound"
+      >x</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Induction.Lexicographic.html#472" class="Bound"
+      >y</a
+      ><a name="473" class="Symbol"
+      >)</a
+      ><a name="474"
+      > </a
+      ><a name="475" class="Symbol"
+      >=</a
+      ><a name="476"
+      >
+  </a
+      ><a name="479" class="Comment"
+      >-- Either x is constant and y is &quot;smaller&quot;, ...</a
+      ><a name="526"
+      >
+  </a
+      ><a name="529" href="Induction.Lexicographic.html#460" class="Bound"
+      >RecB</a
+      ><a name="533"
+      > </a
+      ><a name="534" href="Induction.Lexicographic.html#468" class="Bound"
+      >x</a
+      ><a name="535"
+      > </a
+      ><a name="536" class="Symbol"
+      >(&#955;</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Induction.Lexicographic.html#539" class="Bound"
+      >y'</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >&#8594;</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Induction.Lexicographic.html#465" class="Bound"
+      >P</a
+      ><a name="545"
+      > </a
+      ><a name="546" class="Symbol"
+      >(</a
+      ><a name="547" href="Induction.Lexicographic.html#468" class="Bound"
+      >x</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Induction.Lexicographic.html#539" class="Bound"
+      >y'</a
+      ><a name="553" class="Symbol"
+      >))</a
+      ><a name="555"
+      > </a
+      ><a name="556" href="Induction.Lexicographic.html#472" class="Bound"
+      >y</a
+      ><a name="557"
+      >
+    </a
+      ><a name="562" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="563"
+      >
+  </a
+      ><a name="566" class="Comment"
+      >-- ...or x is &quot;smaller&quot; and y is arbitrary.</a
+      ><a name="609"
+      >
+  </a
+      ><a name="612" href="Induction.Lexicographic.html#455" class="Bound"
+      >RecA</a
+      ><a name="616"
+      > </a
+      ><a name="617" class="Symbol"
+      >(&#955;</a
+      ><a name="619"
+      > </a
+      ><a name="620" href="Induction.Lexicographic.html#620" class="Bound"
+      >x'</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Symbol"
+      >&#8594;</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >&#8704;</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Induction.Lexicographic.html#627" class="Bound"
+      >y'</a
+      ><a name="629"
+      > </a
+      ><a name="630" class="Symbol"
+      >&#8594;</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Induction.Lexicographic.html#465" class="Bound"
+      >P</a
+      ><a name="633"
+      > </a
+      ><a name="634" class="Symbol"
+      >(</a
+      ><a name="635" href="Induction.Lexicographic.html#620" class="Bound"
+      >x'</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Induction.Lexicographic.html#627" class="Bound"
+      >y'</a
+      ><a name="642" class="Symbol"
+      >))</a
+      ><a name="644"
+      > </a
+      ><a name="645" href="Induction.Lexicographic.html#468" class="Bound"
+      >x</a
+      ><a name="646"
+      >
+
+</a
+      ><a name="648" href="Induction.Lexicographic.html#648" class="Function Operator"
+      >_&#8855;_</a
+      ><a name="651"
+      > </a
+      ><a name="652" class="Symbol"
+      >:</a
+      ><a name="653"
+      > </a
+      ><a name="654" class="Symbol"
+      >&#8704;</a
+      ><a name="655"
+      > </a
+      ><a name="656" class="Symbol"
+      >{</a
+      ><a name="657" href="Induction.Lexicographic.html#657" class="Bound"
+      >&#8467;</a
+      ><a name="658" class="Symbol"
+      >}</a
+      ><a name="659"
+      > </a
+      ><a name="660" class="Symbol"
+      >{</a
+      ><a name="661" href="Induction.Lexicographic.html#661" class="Bound"
+      >A</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Induction.Lexicographic.html#663" class="Bound"
+      >B</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >:</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="PrimitiveType"
+      >Set</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Induction.Lexicographic.html#657" class="Bound"
+      >&#8467;</a
+      ><a name="672" class="Symbol"
+      >}</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >&#8594;</a
+      ><a name="675"
+      >
+      </a
+      ><a name="682" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="Induction.Lexicographic.html#661" class="Bound"
+      >A</a
+      ><a name="693"
+      > </a
+      ><a name="694" class="Symbol"
+      >&#8594;</a
+      ><a name="695"
+      > </a
+      ><a name="696" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="705"
+      > </a
+      ><a name="706" href="Induction.Lexicographic.html#663" class="Bound"
+      >B</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >&#8594;</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >(</a
+      ><a name="721" href="Induction.Lexicographic.html#661" class="Bound"
+      >A</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Induction.Lexicographic.html#663" class="Bound"
+      >B</a
+      ><a name="726" class="Symbol"
+      >)</a
+      ><a name="727"
+      >
+</a
+      ><a name="728" href="Induction.Lexicographic.html#728" class="Bound"
+      >RecA</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Induction.Lexicographic.html#648" class="Function Operator"
+      >&#8855;</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Induction.Lexicographic.html#735" class="Bound"
+      >RecB</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >=</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Induction.Lexicographic.html#339" class="Function"
+      >&#931;-Rec</a
+      ><a name="747"
+      > </a
+      ><a name="748" href="Induction.Lexicographic.html#728" class="Bound"
+      >RecA</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >(&#955;</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Induction.Lexicographic.html#756" class="Bound"
+      >_</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >&#8594;</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Induction.Lexicographic.html#735" class="Bound"
+      >RecB</a
+      ><a name="764" class="Symbol"
+      >)</a
+      ><a name="765"
+      >
+
+</a
+      ><a name="767" class="Comment"
+      >-- Constructs a recursor builder for lexicographic induction.</a
+      ><a name="828"
+      >
+
+</a
+      ><a name="830" href="Induction.Lexicographic.html#830" class="Function"
+      >&#931;-rec-builder</a
+      ><a name="843"
+      > </a
+      ><a name="844" class="Symbol"
+      >:</a
+      ><a name="845"
+      >
+  </a
+      ><a name="848" class="Symbol"
+      >&#8704;</a
+      ><a name="849"
+      > </a
+      ><a name="850" class="Symbol"
+      >{</a
+      ><a name="851" href="Induction.Lexicographic.html#851" class="Bound"
+      >&#8467;</a
+      ><a name="852" class="Symbol"
+      >}</a
+      ><a name="853"
+      > </a
+      ><a name="854" class="Symbol"
+      >{</a
+      ><a name="855" href="Induction.Lexicographic.html#855" class="Bound"
+      >A</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >:</a
+      ><a name="858"
+      > </a
+      ><a name="859" class="PrimitiveType"
+      >Set</a
+      ><a name="862"
+      > </a
+      ><a name="863" href="Induction.Lexicographic.html#851" class="Bound"
+      >&#8467;</a
+      ><a name="864" class="Symbol"
+      >}</a
+      ><a name="865"
+      > </a
+      ><a name="866" class="Symbol"
+      >{</a
+      ><a name="867" href="Induction.Lexicographic.html#867" class="Bound"
+      >B</a
+      ><a name="868"
+      > </a
+      ><a name="869" class="Symbol"
+      >:</a
+      ><a name="870"
+      > </a
+      ><a name="871" href="Induction.Lexicographic.html#855" class="Bound"
+      >A</a
+      ><a name="872"
+      > </a
+      ><a name="873" class="Symbol"
+      >&#8594;</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="PrimitiveType"
+      >Set</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Induction.Lexicographic.html#851" class="Bound"
+      >&#8467;</a
+      ><a name="880" class="Symbol"
+      >}</a
+      ><a name="881"
+      >
+    </a
+      ><a name="886" class="Symbol"
+      >{</a
+      ><a name="887" href="Induction.Lexicographic.html#887" class="Bound"
+      >RecA</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >:</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Induction.Lexicographic.html#855" class="Bound"
+      >A</a
+      ><a name="905" class="Symbol"
+      >}</a
+      ><a name="906"
+      >
+    </a
+      ><a name="911" class="Symbol"
+      >{</a
+      ><a name="912" href="Induction.Lexicographic.html#912" class="Bound"
+      >RecB</a
+      ><a name="916"
+      > </a
+      ><a name="917" class="Symbol"
+      >:</a
+      ><a name="918"
+      > </a
+      ><a name="919" class="Symbol"
+      >&#8704;</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Induction.Lexicographic.html#921" class="Bound"
+      >x</a
+      ><a name="922"
+      > </a
+      ><a name="923" class="Symbol"
+      >&#8594;</a
+      ><a name="924"
+      > </a
+      ><a name="925" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="934"
+      > </a
+      ><a name="935" class="Symbol"
+      >(</a
+      ><a name="936" href="Induction.Lexicographic.html#867" class="Bound"
+      >B</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Induction.Lexicographic.html#921" class="Bound"
+      >x</a
+      ><a name="939" class="Symbol"
+      >)}</a
+      ><a name="941"
+      > </a
+      ><a name="942" class="Symbol"
+      >&#8594;</a
+      ><a name="943"
+      >
+  </a
+      ><a name="946" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Induction.Lexicographic.html#887" class="Bound"
+      >RecA</a
+      ><a name="966"
+      > </a
+      ><a name="967" class="Symbol"
+      >&#8594;</a
+      ><a name="968"
+      > </a
+      ><a name="969" class="Symbol"
+      >(&#8704;</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Induction.Lexicographic.html#972" class="Bound"
+      >x</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Symbol"
+      >&#8594;</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="991"
+      > </a
+      ><a name="992" class="Symbol"
+      >(</a
+      ><a name="993" href="Induction.Lexicographic.html#912" class="Bound"
+      >RecB</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Induction.Lexicographic.html#972" class="Bound"
+      >x</a
+      ><a name="999" class="Symbol"
+      >))</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" class="Symbol"
+      >&#8594;</a
+      ><a name="1003"
+      >
+  </a
+      ><a name="1006" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" class="Symbol"
+      >(</a
+      ><a name="1023" href="Induction.Lexicographic.html#339" class="Function"
+      >&#931;-Rec</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="Induction.Lexicographic.html#887" class="Bound"
+      >RecA</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Induction.Lexicographic.html#912" class="Bound"
+      >RecB</a
+      ><a name="1038" class="Symbol"
+      >)</a
+      ><a name="1039"
+      >
+</a
+      ><a name="1040" href="Induction.Lexicographic.html#830" class="Function"
+      >&#931;-rec-builder</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" class="Symbol"
+      >{</a
+      ><a name="1055"
+      >RecA </a
+      ><a name="1060" class="Symbol"
+      >=</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" href="Induction.Lexicographic.html#1062" class="Bound"
+      >RecA</a
+      ><a name="1066" class="Symbol"
+      >}</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" class="Symbol"
+      >{</a
+      ><a name="1069"
+      >RecB </a
+      ><a name="1074" class="Symbol"
+      >=</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Induction.Lexicographic.html#1076" class="Bound"
+      >RecB</a
+      ><a name="1080" class="Symbol"
+      >}</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="Induction.Lexicographic.html#1082" class="Bound"
+      >recA</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Induction.Lexicographic.html#1087" class="Bound"
+      >recB</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Induction.Lexicographic.html#1094" class="Bound"
+      >f</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" class="Symbol"
+      >(</a
+      ><a name="1097" href="Induction.Lexicographic.html#1097" class="Bound"
+      >x</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Induction.Lexicographic.html#1101" class="Bound"
+      >y</a
+      ><a name="1102" class="Symbol"
+      >)</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" class="Symbol"
+      >=</a
+      ><a name="1105"
+      >
+  </a
+      ><a name="1108" class="Symbol"
+      >(</a
+      ><a name="1109" href="Induction.Lexicographic.html#1137" class="Function"
+      >p&#8321;</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Induction.Lexicographic.html#1097" class="Bound"
+      >x</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="Induction.Lexicographic.html#1101" class="Bound"
+      >y</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Induction.Lexicographic.html#1531" class="Function"
+      >p&#8322;x</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="Induction.Lexicographic.html#1531" class="Function"
+      >p&#8322;x</a
+      ><a name="1125" class="Symbol"
+      >)</a
+      ><a name="1126"
+      >
+  </a
+      ><a name="1129" class="Keyword"
+      >where</a
+      ><a name="1134"
+      >
+  </a
+      ><a name="1137" href="Induction.Lexicographic.html#1137" class="Function"
+      >p&#8321;</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" class="Symbol"
+      >:</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Symbol"
+      >&#8704;</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Induction.Lexicographic.html#1144" class="Bound"
+      >x</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Induction.Lexicographic.html#1146" class="Bound"
+      >y</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" class="Symbol"
+      >&#8594;</a
+      ><a name="1149"
+      >
+       </a
+      ><a name="1157" href="Induction.Lexicographic.html#1062" class="Bound"
+      >RecA</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" class="Symbol"
+      >(&#955;</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Induction.Lexicographic.html#1165" class="Bound"
+      >x'</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" class="Symbol"
+      >&#8594;</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" class="Symbol"
+      >&#8704;</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Induction.Lexicographic.html#1172" class="Bound"
+      >y'</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" class="Symbol"
+      >&#8594;</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" class="Symbol"
+      >(</a
+      ><a name="1180" href="Induction.Lexicographic.html#1165" class="Bound"
+      >x'</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="Induction.Lexicographic.html#1172" class="Bound"
+      >y'</a
+      ><a name="1187" class="Symbol"
+      >))</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Induction.Lexicographic.html#1144" class="Bound"
+      >x</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" class="Symbol"
+      >&#8594;</a
+      ><a name="1193"
+      >
+       </a
+      ><a name="1201" href="Induction.Lexicographic.html#1076" class="Bound"
+      >RecB</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Induction.Lexicographic.html#1144" class="Bound"
+      >x</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" class="Symbol"
+      >(&#955;</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" href="Induction.Lexicographic.html#1211" class="Bound"
+      >y'</a
+      ><a name="1213"
+      > </a
+      ><a name="1214" class="Symbol"
+      >&#8594;</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" class="Symbol"
+      >(</a
+      ><a name="1219" href="Induction.Lexicographic.html#1144" class="Bound"
+      >x</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" href="Induction.Lexicographic.html#1211" class="Bound"
+      >y'</a
+      ><a name="1225" class="Symbol"
+      >))</a
+      ><a name="1227"
+      > </a
+      ><a name="1228" href="Induction.Lexicographic.html#1146" class="Bound"
+      >y</a
+      ><a name="1229"
+      >
+  </a
+      ><a name="1232" href="Induction.Lexicographic.html#1137" class="Function"
+      >p&#8321;</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" href="Induction.Lexicographic.html#1235" class="Bound"
+      >x</a
+      ><a name="1236"
+      > </a
+      ><a name="1237" href="Induction.Lexicographic.html#1237" class="Bound"
+      >y</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" href="Induction.Lexicographic.html#1239" class="Bound"
+      >x-rec</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" class="Symbol"
+      >=</a
+      ><a name="1246"
+      > </a
+      ><a name="1247" href="Induction.Lexicographic.html#1087" class="Bound"
+      >recB</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" href="Induction.Lexicographic.html#1235" class="Bound"
+      >x</a
+      ><a name="1253"
+      >
+                      </a
+      ><a name="1276" class="Symbol"
+      >(&#955;</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Induction.Lexicographic.html#1279" class="Bound"
+      >y'</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >&#8594;</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" class="Symbol"
+      >(</a
+      ><a name="1287" href="Induction.Lexicographic.html#1235" class="Bound"
+      >x</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Induction.Lexicographic.html#1279" class="Bound"
+      >y'</a
+      ><a name="1293" class="Symbol"
+      >))</a
+      ><a name="1295"
+      >
+                      </a
+      ><a name="1318" class="Symbol"
+      >(&#955;</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" href="Induction.Lexicographic.html#1321" class="Bound"
+      >y</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Induction.Lexicographic.html#1323" class="Bound"
+      >y-rec</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" class="Symbol"
+      >&#8594;</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Induction.Lexicographic.html#1094" class="Bound"
+      >f</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" class="Symbol"
+      >(</a
+      ><a name="1334" href="Induction.Lexicographic.html#1235" class="Bound"
+      >x</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Induction.Lexicographic.html#1321" class="Bound"
+      >y</a
+      ><a name="1339" class="Symbol"
+      >)</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" class="Symbol"
+      >(</a
+      ><a name="1342" href="Induction.Lexicographic.html#1323" class="Bound"
+      >y-rec</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Induction.Lexicographic.html#1239" class="Bound"
+      >x-rec</a
+      ><a name="1355" class="Symbol"
+      >))</a
+      ><a name="1357"
+      >
+                      </a
+      ><a name="1380" href="Induction.Lexicographic.html#1237" class="Bound"
+      >y</a
+      ><a name="1381"
+      >
+
+  </a
+      ><a name="1385" href="Induction.Lexicographic.html#1385" class="Function"
+      >p&#8322;</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" class="Symbol"
+      >:</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" class="Symbol"
+      >&#8704;</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Induction.Lexicographic.html#1392" class="Bound"
+      >x</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" class="Symbol"
+      >&#8594;</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Induction.Lexicographic.html#1062" class="Bound"
+      >RecA</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" class="Symbol"
+      >(&#955;</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Induction.Lexicographic.html#1404" class="Bound"
+      >x'</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" class="Symbol"
+      >&#8594;</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" class="Symbol"
+      >&#8704;</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" href="Induction.Lexicographic.html#1411" class="Bound"
+      >y'</a
+      ><a name="1413"
+      > </a
+      ><a name="1414" class="Symbol"
+      >&#8594;</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1417"
+      > </a
+      ><a name="1418" class="Symbol"
+      >(</a
+      ><a name="1419" href="Induction.Lexicographic.html#1404" class="Bound"
+      >x'</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" href="Induction.Lexicographic.html#1411" class="Bound"
+      >y'</a
+      ><a name="1426" class="Symbol"
+      >))</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" href="Induction.Lexicographic.html#1392" class="Bound"
+      >x</a
+      ><a name="1430"
+      >
+  </a
+      ><a name="1433" href="Induction.Lexicographic.html#1385" class="Function"
+      >p&#8322;</a
+      ><a name="1435"
+      > </a
+      ><a name="1436" class="Symbol"
+      >=</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="Induction.Lexicographic.html#1082" class="Bound"
+      >recA</a
+      ><a name="1442"
+      > </a
+      ><a name="1443" class="Symbol"
+      >(&#955;</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" href="Induction.Lexicographic.html#1446" class="Bound"
+      >x</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" class="Symbol"
+      >&#8594;</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" class="Symbol"
+      >&#8704;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Induction.Lexicographic.html#1452" class="Bound"
+      >y</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" class="Symbol"
+      >&#8594;</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" href="Induction.Lexicographic.html#1092" class="Bound"
+      >P</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" class="Symbol"
+      >(</a
+      ><a name="1459" href="Induction.Lexicographic.html#1446" class="Bound"
+      >x</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" href="Induction.Lexicographic.html#1452" class="Bound"
+      >y</a
+      ><a name="1464" class="Symbol"
+      >))</a
+      ><a name="1466"
+      >
+            </a
+      ><a name="1479" class="Symbol"
+      >(&#955;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Induction.Lexicographic.html#1482" class="Bound"
+      >x</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" href="Induction.Lexicographic.html#1484" class="Bound"
+      >x-rec</a
+      ><a name="1489"
+      > </a
+      ><a name="1490" href="Induction.Lexicographic.html#1490" class="Bound"
+      >y</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" class="Symbol"
+      >&#8594;</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" href="Induction.Lexicographic.html#1094" class="Bound"
+      >f</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" class="Symbol"
+      >(</a
+      ><a name="1497" href="Induction.Lexicographic.html#1482" class="Bound"
+      >x</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Induction.Lexicographic.html#1490" class="Bound"
+      >y</a
+      ><a name="1502" class="Symbol"
+      >)</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" class="Symbol"
+      >(</a
+      ><a name="1505" href="Induction.Lexicographic.html#1137" class="Function"
+      >p&#8321;</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Induction.Lexicographic.html#1482" class="Bound"
+      >x</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="Induction.Lexicographic.html#1490" class="Bound"
+      >y</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Induction.Lexicographic.html#1484" class="Bound"
+      >x-rec</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" href="Induction.Lexicographic.html#1484" class="Bound"
+      >x-rec</a
+      ><a name="1525" class="Symbol"
+      >))</a
+      ><a name="1527"
+      >
+
+  </a
+      ><a name="1531" href="Induction.Lexicographic.html#1531" class="Function"
+      >p&#8322;x</a
+      ><a name="1534"
+      > </a
+      ><a name="1535" class="Symbol"
+      >=</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" href="Induction.Lexicographic.html#1385" class="Function"
+      >p&#8322;</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="Induction.Lexicographic.html#1097" class="Bound"
+      >x</a
+      ><a name="1541"
+      >
+
+</a
+      ><a name="1543" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >[_&#8855;_]</a
+      ><a name="1548"
+      > </a
+      ><a name="1549" class="Symbol"
+      >:</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" class="Symbol"
+      >&#8704;</a
+      ><a name="1552"
+      > </a
+      ><a name="1553" class="Symbol"
+      >{</a
+      ><a name="1554" href="Induction.Lexicographic.html#1554" class="Bound"
+      >&#8467;</a
+      ><a name="1555" class="Symbol"
+      >}</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" class="Symbol"
+      >{</a
+      ><a name="1558" href="Induction.Lexicographic.html#1558" class="Bound"
+      >A</a
+      ><a name="1559"
+      > </a
+      ><a name="1560" href="Induction.Lexicographic.html#1560" class="Bound"
+      >B</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" class="Symbol"
+      >:</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" class="PrimitiveType"
+      >Set</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" href="Induction.Lexicographic.html#1554" class="Bound"
+      >&#8467;</a
+      ><a name="1569" class="Symbol"
+      >}</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" class="Symbol"
+      >{</a
+      ><a name="1572" href="Induction.Lexicographic.html#1572" class="Bound"
+      >RecA</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" class="Symbol"
+      >:</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" href="Induction.Lexicographic.html#1558" class="Bound"
+      >A</a
+      ><a name="1590" class="Symbol"
+      >}</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" class="Symbol"
+      >{</a
+      ><a name="1593" href="Induction.Lexicographic.html#1593" class="Bound"
+      >RecB</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="Symbol"
+      >:</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="Induction.Lexicographic.html#1560" class="Bound"
+      >B</a
+      ><a name="1611" class="Symbol"
+      >}</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" class="Symbol"
+      >&#8594;</a
+      ><a name="1614"
+      >
+        </a
+      ><a name="1623" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="1638"
+      > </a
+      ><a name="1639" href="Induction.Lexicographic.html#1572" class="Bound"
+      >RecA</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" class="Symbol"
+      >&#8594;</a
+      ><a name="1645"
+      > </a
+      ><a name="1646" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="1661"
+      > </a
+      ><a name="1662" href="Induction.Lexicographic.html#1593" class="Bound"
+      >RecB</a
+      ><a name="1666"
+      > </a
+      ><a name="1667" class="Symbol"
+      >&#8594;</a
+      ><a name="1668"
+      >
+        </a
+      ><a name="1677" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" class="Symbol"
+      >(</a
+      ><a name="1694" href="Induction.Lexicographic.html#1572" class="Bound"
+      >RecA</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" href="Induction.Lexicographic.html#648" class="Function Operator"
+      >&#8855;</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Induction.Lexicographic.html#1593" class="Bound"
+      >RecB</a
+      ><a name="1705" class="Symbol"
+      >)</a
+      ><a name="1706"
+      >
+</a
+      ><a name="1707" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >[</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" href="Induction.Lexicographic.html#1709" class="Bound"
+      >recA</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >&#8855;</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Induction.Lexicographic.html#1716" class="Bound"
+      >recB</a
+      ><a name="1720"
+      > </a
+      ><a name="1721" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >]</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" class="Symbol"
+      >=</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" href="Induction.Lexicographic.html#830" class="Function"
+      >&#931;-rec-builder</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Induction.Lexicographic.html#1709" class="Bound"
+      >recA</a
+      ><a name="1743"
+      > </a
+      ><a name="1744" class="Symbol"
+      >(&#955;</a
+      ><a name="1746"
+      > </a
+      ><a name="1747" href="Induction.Lexicographic.html#1747" class="Bound"
+      >_</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" class="Symbol"
+      >&#8594;</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Induction.Lexicographic.html#1716" class="Bound"
+      >recB</a
+      ><a name="1755" class="Symbol"
+      >)</a
+      ><a name="1756"
+      >
+
+</a
+      ><a name="1758" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="1830"
+      >
+</a
+      ><a name="1831" class="Comment"
+      >-- Example</a
+      ><a name="1841"
+      >
+
+</a
+      ><a name="1843" class="Keyword"
+      >private</a
+      ><a name="1850"
+      >
+
+  </a
+      ><a name="1854" class="Keyword"
+      >open</a
+      ><a name="1858"
+      > </a
+      ><a name="1859" class="Keyword"
+      >import</a
+      ><a name="1865"
+      > </a
+      ><a name="1866" href="Data.Nat.html#1" class="Module"
+      >Data</a
+      ><a name="1870"
+      >.</a
+      ><a name="1871" href="Data.Nat.html#1" class="Module"
+      >Nat</a
+      ><a name="1874"
+      >
+  </a
+      ><a name="1877" class="Keyword"
+      >open</a
+      ><a name="1881"
+      > </a
+      ><a name="1882" class="Keyword"
+      >import</a
+      ><a name="1888"
+      > </a
+      ><a name="1889" href="Induction.Nat.html#1" class="Module"
+      >Induction</a
+      ><a name="1898"
+      >.</a
+      ><a name="1899" href="Induction.Nat.html#1" class="Module"
+      >Nat</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" class="Symbol"
+      >as</a
+      ><a name="1905"
+      > </a
+      ><a name="1906" class="Module"
+      >N</a
+      ><a name="1907"
+      >
+
+  </a
+      ><a name="1911" class="Comment"
+      >-- The Ackermann function &#224; la R&#243;zsa P&#233;ter.</a
+      ><a name="1954"
+      >
+
+  </a
+      ><a name="1958" href="Induction.Lexicographic.html#1958" class="Function"
+      >ackermann</a
+      ><a name="1967"
+      > </a
+      ><a name="1968" class="Symbol"
+      >:</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" class="Symbol"
+      >&#8594;</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" class="Symbol"
+      >&#8594;</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1979"
+      >
+  </a
+      ><a name="1982" href="Induction.Lexicographic.html#1958" class="Function"
+      >ackermann</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" href="Induction.Lexicographic.html#1992" class="Bound"
+      >m</a
+      ><a name="1993"
+      > </a
+      ><a name="1994" href="Induction.Lexicographic.html#1994" class="Bound"
+      >n</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >=</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Induction.html#1244" class="Function"
+      >build</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >[</a
+      ><a name="2005"
+      > </a
+      ><a name="2006" href="Induction.Nat.html#688" class="Function"
+      >N</a
+      ><a name="2007"
+      >.</a
+      ><a name="2008" href="Induction.Nat.html#688" class="Function"
+      >rec-builder</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >&#8855;</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="Induction.Nat.html#688" class="Function"
+      >N</a
+      ><a name="2023"
+      >.</a
+      ><a name="2024" href="Induction.Nat.html#688" class="Function"
+      >rec-builder</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" href="Induction.Lexicographic.html#1543" class="Function Operator"
+      >]</a
+      ><a name="2037"
+      >
+                        </a
+      ><a name="2062" href="Induction.Lexicographic.html#2096" class="Function"
+      >AckPred</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" href="Induction.Lexicographic.html#2141" class="Function"
+      >ack</a
+      ><a name="2073"
+      > </a
+      ><a name="2074" class="Symbol"
+      >(</a
+      ><a name="2075" href="Induction.Lexicographic.html#1992" class="Bound"
+      >m</a
+      ><a name="2076"
+      > </a
+      ><a name="2077" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2078"
+      > </a
+      ><a name="2079" href="Induction.Lexicographic.html#1994" class="Bound"
+      >n</a
+      ><a name="2080" class="Symbol"
+      >)</a
+      ><a name="2081"
+      >
+    </a
+      ><a name="2086" class="Keyword"
+      >where</a
+      ><a name="2091"
+      >
+    </a
+      ><a name="2096" href="Induction.Lexicographic.html#2096" class="Function"
+      >AckPred</a
+      ><a name="2103"
+      > </a
+      ><a name="2104" class="Symbol"
+      >:</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2107"
+      > </a
+      ><a name="2108" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" class="Symbol"
+      >&#8594;</a
+      ><a name="2113"
+      > </a
+      ><a name="2114" class="PrimitiveType"
+      >Set</a
+      ><a name="2117"
+      >
+    </a
+      ><a name="2122" href="Induction.Lexicographic.html#2096" class="Function"
+      >AckPred</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" class="Symbol"
+      >_</a
+      ><a name="2131"
+      > </a
+      ><a name="2132" class="Symbol"
+      >=</a
+      ><a name="2133"
+      > </a
+      ><a name="2134" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2135"
+      >
+
+    </a
+      ><a name="2141" href="Induction.Lexicographic.html#2141" class="Function"
+      >ack</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" class="Symbol"
+      >:</a
+      ><a name="2146"
+      > </a
+      ><a name="2147" class="Symbol"
+      >&#8704;</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="Induction.Lexicographic.html#2149" class="Bound"
+      >p</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" class="Symbol"
+      >&#8594;</a
+      ><a name="2152"
+      > </a
+      ><a name="2153" class="Symbol"
+      >(</a
+      ><a name="2154" href="Induction.Nat.html#631" class="Function"
+      >N</a
+      ><a name="2155"
+      >.</a
+      ><a name="2156" href="Induction.Nat.html#631" class="Function"
+      >Rec</a
+      ><a name="2159"
+      > </a
+      ><a name="2160" href="Induction.Lexicographic.html#648" class="Function Operator"
+      >&#8855;</a
+      ><a name="2161"
+      > </a
+      ><a name="2162" href="Induction.Nat.html#631" class="Function"
+      >N</a
+      ><a name="2163"
+      >.</a
+      ><a name="2164" href="Induction.Nat.html#631" class="Function"
+      >Rec</a
+      ><a name="2167" class="Symbol"
+      >)</a
+      ><a name="2168"
+      > </a
+      ><a name="2169" href="Induction.Lexicographic.html#2096" class="Function"
+      >AckPred</a
+      ><a name="2176"
+      > </a
+      ><a name="2177" href="Induction.Lexicographic.html#2149" class="Bound"
+      >p</a
+      ><a name="2178"
+      > </a
+      ><a name="2179" class="Symbol"
+      >&#8594;</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" href="Induction.Lexicographic.html#2096" class="Function"
+      >AckPred</a
+      ><a name="2188"
+      > </a
+      ><a name="2189" href="Induction.Lexicographic.html#2149" class="Bound"
+      >p</a
+      ><a name="2190"
+      >
+    </a
+      ><a name="2195" href="Induction.Lexicographic.html#2141" class="Function"
+      >ack</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" class="Symbol"
+      >(</a
+      ><a name="2200" href="Data.Nat.html#699" class="InductiveConstructor"
+      >zero</a
+      ><a name="2204"
+      >  </a
+      ><a name="2206" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2207"
+      > </a
+      ><a name="2208" href="Induction.Lexicographic.html#2208" class="Bound"
+      >n</a
+      ><a name="2209" class="Symbol"
+      >)</a
+      ><a name="2210"
+      >     </a
+      ><a name="2215" class="Symbol"
+      >_</a
+      ><a name="2216"
+      >                   </a
+      ><a name="2235" class="Symbol"
+      >=</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" class="Number"
+      >1</a
+      ><a name="2238"
+      > </a
+      ><a name="2239" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="2240"
+      > </a
+      ><a name="2241" href="Induction.Lexicographic.html#2208" class="Bound"
+      >n</a
+      ><a name="2242"
+      >
+    </a
+      ><a name="2247" href="Induction.Lexicographic.html#2141" class="Function"
+      >ack</a
+      ><a name="2250"
+      > </a
+      ><a name="2251" class="Symbol"
+      >(</a
+      ><a name="2252" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" href="Induction.Lexicographic.html#2256" class="Bound"
+      >m</a
+      ><a name="2257"
+      > </a
+      ><a name="2258" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2259"
+      > </a
+      ><a name="2260" href="Data.Nat.html#699" class="InductiveConstructor"
+      >zero</a
+      ><a name="2264" class="Symbol"
+      >)</a
+      ><a name="2265"
+      >  </a
+      ><a name="2267" class="Symbol"
+      >(_</a
+      ><a name="2269"
+      >         </a
+      ><a name="2278" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" href="Induction.Lexicographic.html#2280" class="Bound"
+      >ackm&#8226;</a
+      ><a name="2285" class="Symbol"
+      >)</a
+      ><a name="2286"
+      > </a
+      ><a name="2287" class="Symbol"
+      >=</a
+      ><a name="2288"
+      > </a
+      ><a name="2289" href="Induction.Lexicographic.html#2280" class="Bound"
+      >ackm&#8226;</a
+      ><a name="2294"
+      > </a
+      ><a name="2295" class="Number"
+      >1</a
+      ><a name="2296"
+      >
+    </a
+      ><a name="2301" href="Induction.Lexicographic.html#2141" class="Function"
+      >ack</a
+      ><a name="2304"
+      > </a
+      ><a name="2305" class="Symbol"
+      >(</a
+      ><a name="2306" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="2309"
+      > </a
+      ><a name="2310" href="Induction.Lexicographic.html#2310" class="Bound"
+      >m</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="2317"
+      > </a
+      ><a name="2318" href="Induction.Lexicographic.html#2318" class="Bound"
+      >n</a
+      ><a name="2319" class="Symbol"
+      >)</a
+      ><a name="2320"
+      > </a
+      ><a name="2321" class="Symbol"
+      >(</a
+      ><a name="2322" href="Induction.Lexicographic.html#2322" class="Bound"
+      >ack[1+m]n</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2333"
+      > </a
+      ><a name="2334" href="Induction.Lexicographic.html#2334" class="Bound"
+      >ackm&#8226;</a
+      ><a name="2339" class="Symbol"
+      >)</a
+      ><a name="2340"
+      > </a
+      ><a name="2341" class="Symbol"
+      >=</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" href="Induction.Lexicographic.html#2334" class="Bound"
+      >ackm&#8226;</a
+      ><a name="2348"
+      > </a
+      ><a name="2349" href="Induction.Lexicographic.html#2322" class="Bound"
+      >ack[1+m]n</a
+      ><a name="2358"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT User's Guide: 8. How to Build Efficient ASIS Applications</title>
+
+<meta name="description" content="ASIS-for-GNAT User's Guide: 8. How to Build Efficient ASIS Applications">
+<meta name="keywords" content="ASIS-for-GNAT User's Guide: 8. How to Build Efficient ASIS Applications">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="How-to-Build-Efficient-ASIS-Applications"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_7.html#ASIS-Tutorials" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Tree-Swapping-as-a-Performance-Issue" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_7.html#ASIS-Tutorials" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="How-to-Build-Efficient-ASIS-Applications-1"></a>
+<h1 class="chapter">8. How to Build Efficient ASIS Applications</h1>
+<a name="index-ASIS-Performance"></a>
+
+<p>This chapter identifies some potential performance issues with ASIS applications
+and offers some advice on how to address these issues.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Tree-Swapping-as-a-Performance-Issue">8.1 Tree Swapping as a Performance Issue</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Queries-That-Can-Cause-Tree-Swapping">8.2 Queries That Can Cause Tree Swapping</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#How-to-Avoid-Unnecessary-Tree-Swapping">8.3 How to Avoid Unnecessary Tree Swapping</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using-gnatmake-to-Create-Tree-Files">8.4 Using <code>gnatmake</code> to Create Tree Files</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Tree-Swapping-as-a-Performance-Issue"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Queries-That-Can-Cause-Tree-Swapping" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Tree-Swapping-as-a-Performance-Issue-1"></a>
+<h2 class="section">8.1 Tree Swapping as a Performance Issue</h2>
+<a name="index-Tree-swapping-_0028ASIS-performance-issue_0029-1"></a>
+
+<p>If an ASIS <code>Context</code> comprises more then one tree, then ASIS may need to switch
+between different trees during an ASIS application run. Switching between
+trees may require ASIS to repeatedly read in the same set of trees, and this may slow
+down an application considerably.
+</p>
+<p>Basically, there are two causes for tree swapping:
+</p>
+<ul>
+<li>
+<em>Processing of semantically independent units.</em> Suppose in <code>Context</code> <code>Cont</code> we have
+ units <code>P</code> and <code>Q</code> that do not depend on each other, and <code>Cont</code> does
+ not contain any third unit depending on both <code>P</code> and <code>Q</code>. This
+ means that <code>P</code> and <code>Q</code> cannot be represented by the same tree. To
+ obtain information about <code>P</code>, ASIS needs to access the tree &lsquo;<tt>p.adt</tt>&rsquo;,
+ and to get some information about <code>Q</code>, ASIS needs
+ &lsquo;<tt>q.adt</tt>&rsquo;. Therefore, if an application retrieves some information from
+ <code>P</code>, and then starts processing <code>Q</code>, ASIS has to read
+ &lsquo;<tt>q.adt</tt>&rsquo;.
+
+</li><li>
+<em>Processing of information from dependent units.</em>
+A unit <code>U</code> may be present not only in the tree created for <code>U</code>, but also in
+all the trees created for units which semantically depend upon <code>U</code>.
+Suppose we have a library procedure <code>Proc</code> depending on a
+ library package <code>Pack</code>, and in the set of trees making up our <code>Context</code> we
+ have trees &lsquo;<tt>pack.adt</tt>&rsquo; and &lsquo;<tt>proc.adt</tt>&rsquo;. Suppose we have some
+ <code>Element</code> representing a component of <code>Pack</code>, when &lsquo;<tt>pack.adt</tt>&rsquo; was
+ accessed by ASIS, and suppose that because of some other actions undertaken
+ by an application ASIS changed the tree being accessed to &lsquo;<tt>proc.adt</tt>&rsquo;.
+ Suppose that now the application wants to do something with the <code>Element</code>
+ representing some component of <code>Pack</code> and obtained from &lsquo;<tt>pack.adt</tt>&rsquo;. Even
+ though the unit <code>Pack</code> is represented by the currently accessed tree
+ &lsquo;<tt>proc.adt</tt>&rsquo;, ASIS has to switch back to &lsquo;<tt>pack.adt</tt>&rsquo;, because all the
+ references into the tree structure kept as a part of the value of this
+ <code>Element</code> are valid only for &lsquo;<tt>pack.adt</tt>&rsquo;.
+</li></ul>
+
+
+<hr size="6">
+<a name="Queries-That-Can-Cause-Tree-Swapping"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Tree-Swapping-as-a-Performance-Issue" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Avoid-Unnecessary-Tree-Swapping" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Queries-That-Can-Cause-Tree-Swapping-1"></a>
+<h2 class="section">8.2 Queries That Can Cause Tree Swapping</h2>
+
+<p>In ASIS-for-GNAT, tree swapping can currently take place only when
+processing queries defined in:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">Asis.Elements
+Asis.Declarations
+Asis.Definitions
+Asis.Statements
+Asis.Clauses
+Asis.Expressions
+Asis.Text
+</pre></td></tr></table>
+
+<p>but not for those queries in the above packages that return enumeration or boolean results.
+</p>
+<p>For any instantiation of <code>Asis.Iterator.Traverse_Element</code>,
+<a name="index-Asis_002eIterator_002eTraverse_005fElement-generic-procedure-1"></a>
+the traversal itself
+can cause at most one tree read to get the tree appropriate for processing the
+<code>Element</code> to be traversed, but procedures provided as actuals for
+<code>Pre_Operation</code> and <code>Post_Operation</code> may cause additional tree
+swappings.
+</p>
+
+<hr size="6">
+<a name="How-to-Avoid-Unnecessary-Tree-Swapping"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Queries-That-Can-Cause-Tree-Swapping" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-gnatmake-to-Create-Tree-Files" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="How-to-Avoid-Unnecessary-Tree-Swapping-1"></a>
+<h2 class="section">8.3 How to Avoid Unnecessary Tree Swapping</h2>
+<a name="index-Tree-swapping-_0028ASIS-performance-issue_0029-2"></a>
+
+<p>To speed up your application, try to avoid unnecessary tree swapping. The
+following guidelines may help:
+</p>
+<ul>
+<li>
+ Try to minimize the set of tree files processed by your application. In
+ particular, try to avoid having separate trees created for subunits.
+
+<p> Minimizing the set of tree files processed by the application also cuts
+ down the time needed for opening a <code>Context</code>. Try to use <code>gnatmake</code> to create
+ a suitable set of tree files covering an Ada program for processing by
+ an ASIS application.
+</p>
+</li><li>
+ Choose the <code>Context</code> definition appropriate to your application. For
+ example, use &ldquo;one tree&rdquo; <code>Context</code> (&lsquo;<samp>-C1</samp>&rsquo;) for applications that are limited
+ to processing single units (such as a pretty printer or <code>gnatstub</code>). By
+ processing the tree file created for this unit, ASIS can get all the
+ syntactic and semantic information about this unit. Using the &ldquo;one tree&rdquo; <code>Context</code>
+ definition, an application has only one tree file to read when
+ opening a <code>Context</code>, and no other tree file will be read during the
+ application run. An &ldquo;N-trees&rdquo; <code>Context</code> is a natural extension of &ldquo;one tree&rdquo;
+ <code>Context</code> for applications that know in advance which units will be
+ processed, but opening a <code>Context</code> takes longer, and ASIS may switch among
+ different tree files during an application run. Use &ldquo;all trees&rdquo; <code>Context</code>
+ only for applications which are not targeted at processing a specific
+ unit or a specific set of units, but are supposed to process all the
+ available units, or when an application has to process a large
+ system consisting of a many units. When using an
+ application based on an &ldquo;all trees&rdquo; <code>Context</code>, use the approach for creating
+ tree files described above to minimize a set of tree files to be
+ processed.
+
+</li><li>
+ In your ASIS application, try to avoid switching between processing units or
+ sets of units with no dependencies among them; such a switching will
+ cause tree swapping.
+
+</li><li>
+ If you are going to analyze a library unit having both a spec and a body,
+ start by obtaining an <code>Element</code> from the body of this unit. This will set
+ the tree created for the body as the tree accessed by ASIS, and this tree
+ will allow both the spec and the body of this unit to be processed
+ without tree swapping.
+
+</li><li>
+ To see a &ldquo;tree swapping profile&rdquo; of your application use the &lsquo;<samp>-dt</samp>&rsquo; debug flag
+ when initializing ASIS (<code>Asis.Implementation.Initialize (&quot;-dt&quot;)</code>).
+<a name="index-Asis_002eImplementation_002eInitialize-procedure-1"></a>
+ The
+ information returned may give you some hints on
+ how to avoid tree swapping.
+</li></ul>
+
+
+<hr size="6">
+<a name="Using-gnatmake-to-Create-Tree-Files"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#How-to-Avoid-Unnecessary-Tree-Swapping" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-gnatmake-to-Create-Tree-Files-1"></a>
+<h2 class="section">8.4 Using <code>gnatmake</code> to Create Tree Files</h2>
+<a name="index-gnatmake-_0028for-creating-tree-files_0029"></a>
+
+<p>To create a suitable set of tree files, you may use <code>gnatmake</code>. GNAT
+creates an &lsquo;<tt>ALI</tt>&rsquo; file for every successful compilation, whether or not
+code has been generated. Therefore, it is possible to run <code>gnatmake</code> with
+the &lsquo;<samp>-gnatct</samp>&rsquo; option;
+<a name="index-_002dgnatct-option-2"></a>
+this will create the set of
+tree files for all the compilation units needed in the resulting program.
+Below we will use
+<code>gnatmake</code> to create a set of tree files for a complete Ada program
+(partition). You may adapt this approach to an incomplete program or to a
+partition without a main subprogram, applying <code>gnatmake</code> to some of its
+components.
+</p>
+<p>Using <code>gnatmake</code> for creating tree files has another advantage: it will
+keep tree files consistent among themselves and with the sources.
+</p>
+<p>There are two different ways to use <code>gnatmake</code> to create a set of tree
+files.
+</p>
+<p>First, suppose you have object, &lsquo;<tt>ALI</tt>&rsquo; and tree files for your program in the same
+directory, and &lsquo;<tt>main_subprogram.adb</tt>&rsquo; contains the body of the main
+subprogram. If you run <code>gnatmake</code> as
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gnatmake -f -c -gnatct ... main_subprogram.adb
+</pre></td></tr></table>
+
+<p>this will create the trees representing the full program for which
+<code>main_subprogram</code> is the main procedure. The trees will be created &ldquo;from scratch&rdquo;;
+that is, if some tree files already exist, they will be recreated. This is
+because <code>gnatmake</code> is being called with the &lsquo;<samp>-f</samp>&rsquo; option
+(which means &ldquo;force recompilation&rdquo;).
+Usng <code>gnatmake</code> without the &lsquo;<samp>-f</samp>&rsquo; option for creating tree files is not reliable
+if your tree files are in the same directory as the object files, because
+object and tree files &ldquo;share&rdquo; the same set of &lsquo;<tt>ALI</tt>&rsquo; files.
+If the
+object files exist and are consistent with the &lsquo;<tt>ALI</tt>&rsquo; and source
+files, the source will not be recompiled for creating a tree file unless the &lsquo;<samp>-f</samp>&rsquo;
+option is set.
+</p>
+<p>A different approach is to combine the tree files and the associated &lsquo;<tt>ALI</tt>&rsquo; files
+in a separate directory, and to use this directory only for keeping the tree
+files and maintaining their consistency with source files. Thus, the object
+files and their associated &lsquo;<tt>ALI</tt>&rsquo; files should be in another directory.
+In this case, by invoking <code>gnatmake</code> through:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gnatmake -c -gnatct ... main_subprogram.adb
+</pre></td></tr></table>
+
+<p>(that is, without forcing recompilation) you will still obtain a full and
+consistent set of tree files representing your program, but in this case the
+existing tree files will be reused.
+</p>
+<p>See the next chapter for specific details related to Ada compilation units
+belonging to precompiled Ada libraries.
+</p>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#How-to-Build-Efficient-ASIS-Applications" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

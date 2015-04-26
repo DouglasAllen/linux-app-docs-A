@@ -1,0 +1,133 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:39 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_crypt</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_crypt</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_crypt
+&minus; commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_crypt</b>
+<i>key salt
+_________________________________________________________________</i></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_crypt
+encrypted the <i>key,</i> also known as the <i>password,</i>
+using the <i>salt</i> and returns the result. It uses the
+same algorithm as the unix crypt command.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The result from
+ns_crypt is a 13-character string. The first two characters
+correspond to the salt, and the remaining eleven characters
+correspond to the <i>password</i> encrypted with the
+specified <i>salt.</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>password</i> is a string (typically that of a password to
+be used for nscp and/or nsperm authentication).</p>
+
+<p style="margin-left:11%; margin-top: 1em"><i>salt</i>
+should be two characters, typically from the set
+[a-zA-Z0-9./]. If the empty string is specified as the
+<i>salt</i> then ns_crypt returns the empty string. If a
+string longer than two characters is specified for the
+<i>salt</i> it is truncated to two characters. If a one
+character <i>salt</i> is provided the output will appear to
+have a two-character <i>salt (the single character
+repeated), however, the encrypted value</i> <b>does not</b>
+correspond to the same <i>password</i> being encrypted with
+the equivalent two character <i>salt.</i> (As a result
+sticking with a two character salt is highly
+recommended.)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Input to
+ns_crypt <b>is</b> case-sensitive.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver ns <br>
+ns0WvClsyIL4A</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver NS <br>
+NSDQ1dPM.409Q</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver tcl <br>
+tcAbgtlzbEhVc</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver tc <br>
+tcAbgtlzbEhVc</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver .. <br>
+..7TNvXHLxJ9Y</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_crypt aolserver . <br>
+..fwmBaZuzrRs</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n), nscp, nsperm, crypt(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

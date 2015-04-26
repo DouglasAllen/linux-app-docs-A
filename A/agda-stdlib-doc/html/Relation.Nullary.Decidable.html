@@ -1,0 +1,1810 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Relation.Nullary.Decidable</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Operations on and properties of decidable relations</a
+      ><a name="160"
+      >
+</a
+      ><a name="161" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="233"
+      >
+
+</a
+      ><a name="235" class="Keyword"
+      >module</a
+      ><a name="241"
+      > </a
+      ><a name="242" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Relation</a
+      ><a name="250"
+      >.</a
+      ><a name="251" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Nullary</a
+      ><a name="258"
+      >.</a
+      ><a name="259" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Decidable</a
+      ><a name="268"
+      > </a
+      ><a name="269" class="Keyword"
+      >where</a
+      ><a name="274"
+      >
+
+</a
+      ><a name="276" class="Keyword"
+      >open</a
+      ><a name="280"
+      > </a
+      ><a name="281" class="Keyword"
+      >import</a
+      ><a name="287"
+      > </a
+      ><a name="288" href="Data.Bool.html#1" class="Module"
+      >Data</a
+      ><a name="292"
+      >.</a
+      ><a name="293" href="Data.Bool.html#1" class="Module"
+      >Bool</a
+      ><a name="297"
+      >
+</a
+      ><a name="298" class="Keyword"
+      >open</a
+      ><a name="302"
+      > </a
+      ><a name="303" class="Keyword"
+      >import</a
+      ><a name="309"
+      > </a
+      ><a name="310" href="Data.Empty.html#1" class="Module"
+      >Data</a
+      ><a name="314"
+      >.</a
+      ><a name="315" href="Data.Empty.html#1" class="Module"
+      >Empty</a
+      ><a name="320"
+      >
+</a
+      ><a name="321" class="Keyword"
+      >open</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Keyword"
+      >import</a
+      ><a name="332"
+      > </a
+      ><a name="333" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="337"
+      >.</a
+      ><a name="338" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="345"
+      > </a
+      ><a name="346" class="Keyword"
+      >hiding</a
+      ><a name="352"
+      > </a
+      ><a name="353" class="Symbol"
+      >(</a
+      ><a name="354"
+      >map</a
+      ><a name="357" class="Symbol"
+      >)</a
+      ><a name="358"
+      >
+</a
+      ><a name="359" class="Keyword"
+      >open</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Keyword"
+      >import</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Data.Unit.html#1" class="Module"
+      >Data</a
+      ><a name="375"
+      >.</a
+      ><a name="376" href="Data.Unit.html#1" class="Module"
+      >Unit</a
+      ><a name="380"
+      >
+</a
+      ><a name="381" class="Keyword"
+      >open</a
+      ><a name="385"
+      > </a
+      ><a name="386" class="Keyword"
+      >import</a
+      ><a name="392"
+      > </a
+      ><a name="393" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="401"
+      >
+</a
+      ><a name="402" class="Keyword"
+      >open</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Keyword"
+      >import</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Function.Equality.html#1" class="Module"
+      >Function</a
+      ><a name="422"
+      >.</a
+      ><a name="423" href="Function.Equality.html#1" class="Module"
+      >Equality</a
+      ><a name="431"
+      > </a
+      ><a name="432" class="Keyword"
+      >using</a
+      ><a name="437"
+      > </a
+      ><a name="438" class="Symbol"
+      >(</a
+      ><a name="439"
+      >_&#10216;$&#10217;_</a
+      ><a name="444" class="Symbol"
+      >)</a
+      ><a name="445"
+      >
+</a
+      ><a name="446" class="Keyword"
+      >open</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Keyword"
+      >import</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Function.Equivalence.html#1" class="Module"
+      >Function</a
+      ><a name="466"
+      >.</a
+      ><a name="467" href="Function.Equivalence.html#1" class="Module"
+      >Equivalence</a
+      ><a name="478"
+      >
+  </a
+      ><a name="481" class="Keyword"
+      >using</a
+      ><a name="486"
+      > </a
+      ><a name="487" class="Symbol"
+      >(</a
+      ><a name="488"
+      >_&#8660;_</a
+      ><a name="491" class="Symbol"
+      >;</a
+      ><a name="492"
+      > equivalence</a
+      ><a name="504" class="Symbol"
+      >;</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Keyword"
+      >module</a
+      ><a name="512"
+      > Equivalence</a
+      ><a name="524" class="Symbol"
+      >)</a
+      ><a name="525"
+      >
+</a
+      ><a name="526" class="Keyword"
+      >open</a
+      ><a name="530"
+      > </a
+      ><a name="531" class="Keyword"
+      >import</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Keyword"
+      >using</a
+      ><a name="549"
+      > </a
+      ><a name="550" class="Symbol"
+      >(</a
+      ><a name="551"
+      >Lift</a
+      ><a name="555" class="Symbol"
+      >)</a
+      ><a name="556"
+      >
+</a
+      ><a name="557" class="Keyword"
+      >open</a
+      ><a name="561"
+      > </a
+      ><a name="562" class="Keyword"
+      >import</a
+      ><a name="568"
+      > </a
+      ><a name="569" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation</a
+      ><a name="577"
+      >.</a
+      ><a name="578" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Binary</a
+      ><a name="584"
+      >.</a
+      ><a name="585" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >PropositionalEquality</a
+      ><a name="606"
+      >
+</a
+      ><a name="607" class="Keyword"
+      >open</a
+      ><a name="611"
+      > </a
+      ><a name="612" class="Keyword"
+      >import</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Relation.Nullary.html#1" class="Module"
+      >Relation</a
+      ><a name="627"
+      >.</a
+      ><a name="628" href="Relation.Nullary.html#1" class="Module"
+      >Nullary</a
+      ><a name="635"
+      >
+
+</a
+      ><a name="637" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8970;_&#8971;</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Symbol"
+      >:</a
+      ><a name="642"
+      > </a
+      ><a name="643" class="Symbol"
+      >&#8704;</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Symbol"
+      >{</a
+      ><a name="646" href="Relation.Nullary.Decidable.html#646" class="Bound"
+      >p</a
+      ><a name="647" class="Symbol"
+      >}</a
+      ><a name="648"
+      > </a
+      ><a name="649" class="Symbol"
+      >{</a
+      ><a name="650" href="Relation.Nullary.Decidable.html#650" class="Bound"
+      >P</a
+      ><a name="651"
+      > </a
+      ><a name="652" class="Symbol"
+      >:</a
+      ><a name="653"
+      > </a
+      ><a name="654" class="PrimitiveType"
+      >Set</a
+      ><a name="657"
+      > </a
+      ><a name="658" href="Relation.Nullary.Decidable.html#646" class="Bound"
+      >p</a
+      ><a name="659" class="Symbol"
+      >}</a
+      ><a name="660"
+      > </a
+      ><a name="661" class="Symbol"
+      >&#8594;</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="Relation.Nullary.Decidable.html#650" class="Bound"
+      >P</a
+      ><a name="668"
+      > </a
+      ><a name="669" class="Symbol"
+      >&#8594;</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="675"
+      >
+</a
+      ><a name="676" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8970;</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="681"
+      > </a
+      ><a name="682" class="Symbol"
+      >_</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8971;</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >=</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="Data.Bool.html#622" class="InductiveConstructor"
+      >true</a
+      ><a name="692"
+      >
+</a
+      ><a name="693" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8970;</a
+      ><a name="694"
+      > </a
+      ><a name="695" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="697"
+      >  </a
+      ><a name="699" class="Symbol"
+      >_</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8971;</a
+      ><a name="702"
+      > </a
+      ><a name="703" class="Symbol"
+      >=</a
+      ><a name="704"
+      > </a
+      ><a name="705" href="Data.Bool.html#637" class="InductiveConstructor"
+      >false</a
+      ><a name="710"
+      >
+
+</a
+      ><a name="712" href="Relation.Nullary.Decidable.html#712" class="Function"
+      >True</a
+      ><a name="716"
+      > </a
+      ><a name="717" class="Symbol"
+      >:</a
+      ><a name="718"
+      > </a
+      ><a name="719" class="Symbol"
+      >&#8704;</a
+      ><a name="720"
+      > </a
+      ><a name="721" class="Symbol"
+      >{</a
+      ><a name="722" href="Relation.Nullary.Decidable.html#722" class="Bound"
+      >p</a
+      ><a name="723" class="Symbol"
+      >}</a
+      ><a name="724"
+      > </a
+      ><a name="725" class="Symbol"
+      >{</a
+      ><a name="726" href="Relation.Nullary.Decidable.html#726" class="Bound"
+      >P</a
+      ><a name="727"
+      > </a
+      ><a name="728" class="Symbol"
+      >:</a
+      ><a name="729"
+      > </a
+      ><a name="730" class="PrimitiveType"
+      >Set</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Relation.Nullary.Decidable.html#722" class="Bound"
+      >p</a
+      ><a name="735" class="Symbol"
+      >}</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Symbol"
+      >&#8594;</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Relation.Nullary.Decidable.html#726" class="Bound"
+      >P</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >&#8594;</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="PrimitiveType"
+      >Set</a
+      ><a name="750"
+      >
+</a
+      ><a name="751" href="Relation.Nullary.Decidable.html#712" class="Function"
+      >True</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Relation.Nullary.Decidable.html#756" class="Bound"
+      >Q</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >=</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Data.Bool.html#1007" class="Function"
+      >T</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8970;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Relation.Nullary.Decidable.html#756" class="Bound"
+      >Q</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8971;</a
+      ><a name="767"
+      >
+
+</a
+      ><a name="769" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="774"
+      > </a
+      ><a name="775" class="Symbol"
+      >:</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >&#8704;</a
+      ><a name="778"
+      > </a
+      ><a name="779" class="Symbol"
+      >{</a
+      ><a name="780" href="Relation.Nullary.Decidable.html#780" class="Bound"
+      >p</a
+      ><a name="781" class="Symbol"
+      >}</a
+      ><a name="782"
+      > </a
+      ><a name="783" class="Symbol"
+      >{</a
+      ><a name="784" href="Relation.Nullary.Decidable.html#784" class="Bound"
+      >P</a
+      ><a name="785"
+      > </a
+      ><a name="786" class="Symbol"
+      >:</a
+      ><a name="787"
+      > </a
+      ><a name="788" class="PrimitiveType"
+      >Set</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Relation.Nullary.Decidable.html#780" class="Bound"
+      >p</a
+      ><a name="793" class="Symbol"
+      >}</a
+      ><a name="794"
+      > </a
+      ><a name="795" class="Symbol"
+      >&#8594;</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Relation.Nullary.Decidable.html#784" class="Bound"
+      >P</a
+      ><a name="802"
+      > </a
+      ><a name="803" class="Symbol"
+      >&#8594;</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="PrimitiveType"
+      >Set</a
+      ><a name="808"
+      >
+</a
+      ><a name="809" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="814"
+      > </a
+      ><a name="815" href="Relation.Nullary.Decidable.html#815" class="Bound"
+      >Q</a
+      ><a name="816"
+      > </a
+      ><a name="817" class="Symbol"
+      >=</a
+      ><a name="818"
+      > </a
+      ><a name="819" href="Data.Bool.html#1007" class="Function"
+      >T</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >(</a
+      ><a name="822" href="Data.Bool.html#873" class="Function"
+      >not</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8970;</a
+      ><a name="827"
+      > </a
+      ><a name="828" href="Relation.Nullary.Decidable.html#815" class="Bound"
+      >Q</a
+      ><a name="829"
+      > </a
+      ><a name="830" href="Relation.Nullary.Decidable.html#637" class="Function Operator"
+      >&#8971;</a
+      ><a name="831" class="Symbol"
+      >)</a
+      ><a name="832"
+      >
+
+</a
+      ><a name="834" class="Comment"
+      >-- Gives a witness to the &quot;truth&quot;.</a
+      ><a name="868"
+      >
+
+</a
+      ><a name="870" href="Relation.Nullary.Decidable.html#870" class="Function"
+      >toWitness</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="Symbol"
+      >:</a
+      ><a name="881"
+      > </a
+      ><a name="882" class="Symbol"
+      >&#8704;</a
+      ><a name="883"
+      > </a
+      ><a name="884" class="Symbol"
+      >{</a
+      ><a name="885" href="Relation.Nullary.Decidable.html#885" class="Bound"
+      >p</a
+      ><a name="886" class="Symbol"
+      >}</a
+      ><a name="887"
+      > </a
+      ><a name="888" class="Symbol"
+      >{</a
+      ><a name="889" href="Relation.Nullary.Decidable.html#889" class="Bound"
+      >P</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="Symbol"
+      >:</a
+      ><a name="892"
+      > </a
+      ><a name="893" class="PrimitiveType"
+      >Set</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Relation.Nullary.Decidable.html#885" class="Bound"
+      >p</a
+      ><a name="898" class="Symbol"
+      >}</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Symbol"
+      >{</a
+      ><a name="901" href="Relation.Nullary.Decidable.html#901" class="Bound"
+      >Q</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >:</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="Relation.Nullary.Decidable.html#889" class="Bound"
+      >P</a
+      ><a name="910" class="Symbol"
+      >}</a
+      ><a name="911"
+      > </a
+      ><a name="912" class="Symbol"
+      >&#8594;</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Relation.Nullary.Decidable.html#712" class="Function"
+      >True</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Relation.Nullary.Decidable.html#901" class="Bound"
+      >Q</a
+      ><a name="920"
+      > </a
+      ><a name="921" class="Symbol"
+      >&#8594;</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Relation.Nullary.Decidable.html#889" class="Bound"
+      >P</a
+      ><a name="924"
+      >
+</a
+      ><a name="925" href="Relation.Nullary.Decidable.html#870" class="Function"
+      >toWitness</a
+      ><a name="934"
+      > </a
+      ><a name="935" class="Symbol"
+      >{</a
+      ><a name="936"
+      >Q </a
+      ><a name="938" class="Symbol"
+      >=</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Relation.Nullary.Decidable.html#944" class="Bound"
+      >p</a
+      ><a name="945" class="Symbol"
+      >}</a
+      ><a name="946"
+      > </a
+      ><a name="947" class="Symbol"
+      >_</a
+      ><a name="948"
+      >  </a
+      ><a name="950" class="Symbol"
+      >=</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Relation.Nullary.Decidable.html#944" class="Bound"
+      >p</a
+      ><a name="953"
+      >
+</a
+      ><a name="954" href="Relation.Nullary.Decidable.html#870" class="Function"
+      >toWitness</a
+      ><a name="963"
+      > </a
+      ><a name="964" class="Symbol"
+      >{</a
+      ><a name="965"
+      >Q </a
+      ><a name="967" class="Symbol"
+      >=</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="971"
+      >  </a
+      ><a name="973" class="Symbol"
+      >_}</a
+      ><a name="975"
+      > </a
+      ><a name="976" class="Symbol"
+      >()</a
+      ><a name="978"
+      >
+
+</a
+      ><a name="980" class="Comment"
+      >-- Establishes a &quot;truth&quot;, given a witness.</a
+      ><a name="1022"
+      >
+
+</a
+      ><a name="1024" href="Relation.Nullary.Decidable.html#1024" class="Function"
+      >fromWitness</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" class="Symbol"
+      >:</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" class="Symbol"
+      >&#8704;</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" class="Symbol"
+      >{</a
+      ><a name="1041" href="Relation.Nullary.Decidable.html#1041" class="Bound"
+      >p</a
+      ><a name="1042" class="Symbol"
+      >}</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" class="Symbol"
+      >{</a
+      ><a name="1045" href="Relation.Nullary.Decidable.html#1045" class="Bound"
+      >P</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" class="Symbol"
+      >:</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="PrimitiveType"
+      >Set</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Relation.Nullary.Decidable.html#1041" class="Bound"
+      >p</a
+      ><a name="1054" class="Symbol"
+      >}</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" class="Symbol"
+      >{</a
+      ><a name="1057" href="Relation.Nullary.Decidable.html#1057" class="Bound"
+      >Q</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" class="Symbol"
+      >:</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" href="Relation.Nullary.Decidable.html#1045" class="Bound"
+      >P</a
+      ><a name="1066" class="Symbol"
+      >}</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" class="Symbol"
+      >&#8594;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Relation.Nullary.Decidable.html#1045" class="Bound"
+      >P</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" class="Symbol"
+      >&#8594;</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Relation.Nullary.Decidable.html#712" class="Function"
+      >True</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" href="Relation.Nullary.Decidable.html#1057" class="Bound"
+      >Q</a
+      ><a name="1080"
+      >
+</a
+      ><a name="1081" href="Relation.Nullary.Decidable.html#1024" class="Function"
+      >fromWitness</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" class="Symbol"
+      >{</a
+      ><a name="1094"
+      >Q </a
+      ><a name="1096" class="Symbol"
+      >=</a
+      ><a name="1097"
+      > </a
+      ><a name="1098" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" href="Relation.Nullary.Decidable.html#1102" class="Bound"
+      >p</a
+      ><a name="1103" class="Symbol"
+      >}</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" class="Symbol"
+      >=</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="Function.html#1058" class="Function"
+      >const</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" class="Symbol"
+      >_</a
+      ><a name="1114"
+      >
+</a
+      ><a name="1115" href="Relation.Nullary.Decidable.html#1024" class="Function"
+      >fromWitness</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" class="Symbol"
+      >{</a
+      ><a name="1128"
+      >Q </a
+      ><a name="1130" class="Symbol"
+      >=</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" href="Relation.Nullary.Decidable.html#1135" class="Bound"
+      >&#172;p</a
+      ><a name="1137" class="Symbol"
+      >}</a
+      ><a name="1138"
+      > </a
+      ><a name="1139" class="Symbol"
+      >=</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" href="Relation.Nullary.Decidable.html#1135" class="Bound"
+      >&#172;p</a
+      ><a name="1143"
+      >
+
+</a
+      ><a name="1145" href="Relation.Nullary.Decidable.html#1145" class="Function"
+      >map</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" class="Symbol"
+      >:</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" class="Symbol"
+      >&#8704;</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" class="Symbol"
+      >{</a
+      ><a name="1154" href="Relation.Nullary.Decidable.html#1154" class="Bound"
+      >p</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" href="Relation.Nullary.Decidable.html#1156" class="Bound"
+      >q</a
+      ><a name="1157" class="Symbol"
+      >}</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" class="Symbol"
+      >{</a
+      ><a name="1160" href="Relation.Nullary.Decidable.html#1160" class="Bound"
+      >P</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" class="Symbol"
+      >:</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" class="PrimitiveType"
+      >Set</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" href="Relation.Nullary.Decidable.html#1154" class="Bound"
+      >p</a
+      ><a name="1169" class="Symbol"
+      >}</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" class="Symbol"
+      >{</a
+      ><a name="1172" href="Relation.Nullary.Decidable.html#1172" class="Bound"
+      >Q</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" class="Symbol"
+      >:</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" class="PrimitiveType"
+      >Set</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="Relation.Nullary.Decidable.html#1156" class="Bound"
+      >q</a
+      ><a name="1181" class="Symbol"
+      >}</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" class="Symbol"
+      >&#8594;</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="Relation.Nullary.Decidable.html#1160" class="Bound"
+      >P</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" href="Function.Equivalence.html#711" class="Function Operator"
+      >&#8660;</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Relation.Nullary.Decidable.html#1172" class="Bound"
+      >Q</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" class="Symbol"
+      >&#8594;</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1196"
+      > </a
+      ><a name="1197" href="Relation.Nullary.Decidable.html#1160" class="Bound"
+      >P</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" class="Symbol"
+      >&#8594;</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1204"
+      > </a
+      ><a name="1205" href="Relation.Nullary.Decidable.html#1172" class="Bound"
+      >Q</a
+      ><a name="1206"
+      >
+</a
+      ><a name="1207" href="Relation.Nullary.Decidable.html#1145" class="Function"
+      >map</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" href="Relation.Nullary.Decidable.html#1211" class="Bound"
+      >P&#8660;Q</a
+      ><a name="1214"
+      > </a
+      ><a name="1215" class="Symbol"
+      >(</a
+      ><a name="1216" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Relation.Nullary.Decidable.html#1220" class="Bound"
+      >p</a
+      ><a name="1221" class="Symbol"
+      >)</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" class="Symbol"
+      >=</a
+      ><a name="1224"
+      > </a
+      ><a name="1225" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >(</a
+      ><a name="1230" href="Function.Equivalence.html#638" class="Function"
+      >Equivalence</a
+      ><a name="1241"
+      >.</a
+      ><a name="1242" href="Function.Equivalence.html#638" class="Function"
+      >to</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" href="Relation.Nullary.Decidable.html#1211" class="Bound"
+      >P&#8660;Q</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="Function.Equality.html#699" class="Function Operator"
+      >&#10216;$&#10217;</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Relation.Nullary.Decidable.html#1220" class="Bound"
+      >p</a
+      ><a name="1254" class="Symbol"
+      >)</a
+      ><a name="1255"
+      >
+</a
+      ><a name="1256" href="Relation.Nullary.Decidable.html#1145" class="Function"
+      >map</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Relation.Nullary.Decidable.html#1260" class="Bound"
+      >P&#8660;Q</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >(</a
+      ><a name="1265" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" href="Relation.Nullary.Decidable.html#1268" class="Bound"
+      >&#172;p</a
+      ><a name="1270" class="Symbol"
+      >)</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >=</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" class="Symbol"
+      >(</a
+      ><a name="1278" href="Relation.Nullary.Decidable.html#1268" class="Bound"
+      >&#172;p</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" href="Function.Equality.html#699" class="Function Operator"
+      >_&#10216;$&#10217;_</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" class="Symbol"
+      >(</a
+      ><a name="1290" href="Function.Equivalence.html#659" class="Function"
+      >Equivalence</a
+      ><a name="1301"
+      >.</a
+      ><a name="1302" href="Function.Equivalence.html#659" class="Function"
+      >from</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="Relation.Nullary.Decidable.html#1260" class="Bound"
+      >P&#8660;Q</a
+      ><a name="1310" class="Symbol"
+      >))</a
+      ><a name="1312"
+      >
+
+</a
+      ><a name="1314" href="Relation.Nullary.Decidable.html#1314" class="Function"
+      >map&#8242;</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" class="Symbol"
+      >:</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" class="Symbol"
+      >&#8704;</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" class="Symbol"
+      >{</a
+      ><a name="1324" href="Relation.Nullary.Decidable.html#1324" class="Bound"
+      >p</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" href="Relation.Nullary.Decidable.html#1326" class="Bound"
+      >q</a
+      ><a name="1327" class="Symbol"
+      >}</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" class="Symbol"
+      >{</a
+      ><a name="1330" href="Relation.Nullary.Decidable.html#1330" class="Bound"
+      >P</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" class="Symbol"
+      >:</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" class="PrimitiveType"
+      >Set</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Relation.Nullary.Decidable.html#1324" class="Bound"
+      >p</a
+      ><a name="1339" class="Symbol"
+      >}</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" class="Symbol"
+      >{</a
+      ><a name="1342" href="Relation.Nullary.Decidable.html#1342" class="Bound"
+      >Q</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" class="Symbol"
+      >:</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" class="PrimitiveType"
+      >Set</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Relation.Nullary.Decidable.html#1326" class="Bound"
+      >q</a
+      ><a name="1351" class="Symbol"
+      >}</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" class="Symbol"
+      >&#8594;</a
+      ><a name="1354"
+      >
+       </a
+      ><a name="1362" class="Symbol"
+      >(</a
+      ><a name="1363" href="Relation.Nullary.Decidable.html#1330" class="Bound"
+      >P</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" class="Symbol"
+      >&#8594;</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Relation.Nullary.Decidable.html#1342" class="Bound"
+      >Q</a
+      ><a name="1368" class="Symbol"
+      >)</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" class="Symbol"
+      >&#8594;</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" class="Symbol"
+      >(</a
+      ><a name="1373" href="Relation.Nullary.Decidable.html#1342" class="Bound"
+      >Q</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" class="Symbol"
+      >&#8594;</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" href="Relation.Nullary.Decidable.html#1330" class="Bound"
+      >P</a
+      ><a name="1378" class="Symbol"
+      >)</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="Symbol"
+      >&#8594;</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" href="Relation.Nullary.Decidable.html#1330" class="Bound"
+      >P</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" class="Symbol"
+      >&#8594;</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" href="Relation.Nullary.Decidable.html#1342" class="Bound"
+      >Q</a
+      ><a name="1395"
+      >
+</a
+      ><a name="1396" href="Relation.Nullary.Decidable.html#1314" class="Function"
+      >map&#8242;</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" href="Relation.Nullary.Decidable.html#1401" class="Bound"
+      >P&#8594;Q</a
+      ><a name="1404"
+      > </a
+      ><a name="1405" href="Relation.Nullary.Decidable.html#1405" class="Bound"
+      >Q&#8594;P</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" class="Symbol"
+      >=</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" href="Relation.Nullary.Decidable.html#1145" class="Function"
+      >map</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" class="Symbol"
+      >(</a
+      ><a name="1416" href="Function.Equivalence.html#804" class="Function"
+      >equivalence</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" href="Relation.Nullary.Decidable.html#1401" class="Bound"
+      >P&#8594;Q</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" href="Relation.Nullary.Decidable.html#1405" class="Bound"
+      >Q&#8594;P</a
+      ><a name="1435" class="Symbol"
+      >)</a
+      ><a name="1436"
+      >
+
+</a
+      ><a name="1438" class="Comment"
+      >-- If a decision procedure returns &quot;yes&quot;, then we can extract the</a
+      ><a name="1503"
+      >
+</a
+      ><a name="1504" class="Comment"
+      >-- proof using from-yes.</a
+      ><a name="1528"
+      >
+
+</a
+      ><a name="1530" href="Relation.Nullary.Decidable.html#1530" class="Function"
+      >From-yes</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" class="Symbol"
+      >:</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" class="Symbol"
+      >&#8704;</a
+      ><a name="1542"
+      > </a
+      ><a name="1543" class="Symbol"
+      >{</a
+      ><a name="1544" href="Relation.Nullary.Decidable.html#1544" class="Bound"
+      >p</a
+      ><a name="1545" class="Symbol"
+      >}</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" class="Symbol"
+      >{</a
+      ><a name="1548" href="Relation.Nullary.Decidable.html#1548" class="Bound"
+      >P</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" class="Symbol"
+      >:</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" class="PrimitiveType"
+      >Set</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="Relation.Nullary.Decidable.html#1544" class="Bound"
+      >p</a
+      ><a name="1557" class="Symbol"
+      >}</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" class="Symbol"
+      >&#8594;</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1564"
+      > </a
+      ><a name="1565" href="Relation.Nullary.Decidable.html#1548" class="Bound"
+      >P</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" class="Symbol"
+      >&#8594;</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" class="PrimitiveType"
+      >Set</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" href="Relation.Nullary.Decidable.html#1544" class="Bound"
+      >p</a
+      ><a name="1574"
+      >
+</a
+      ><a name="1575" href="Relation.Nullary.Decidable.html#1530" class="Function"
+      >From-yes</a
+      ><a name="1583"
+      > </a
+      ><a name="1584" class="Symbol"
+      >{</a
+      ><a name="1585"
+      >P </a
+      ><a name="1587" class="Symbol"
+      >=</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" href="Relation.Nullary.Decidable.html#1589" class="Bound"
+      >P</a
+      ><a name="1590" class="Symbol"
+      >}</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" class="Symbol"
+      >(</a
+      ><a name="1593" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" class="Symbol"
+      >_)</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" class="Symbol"
+      >=</a
+      ><a name="1601"
+      > </a
+      ><a name="1602" href="Relation.Nullary.Decidable.html#1589" class="Bound"
+      >P</a
+      ><a name="1603"
+      >
+</a
+      ><a name="1604" href="Relation.Nullary.Decidable.html#1530" class="Function"
+      >From-yes</a
+      ><a name="1612"
+      >         </a
+      ><a name="1621" class="Symbol"
+      >(</a
+      ><a name="1622" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1624"
+      >  </a
+      ><a name="1626" class="Symbol"
+      >_)</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" class="Symbol"
+      >=</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Level.html#745" class="Record"
+      >Lift</a
+      ><a name="1635"
+      > </a
+      ><a name="1636" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="1637"
+      >
+
+</a
+      ><a name="1639" href="Relation.Nullary.Decidable.html#1639" class="Function"
+      >from-yes</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" class="Symbol"
+      >:</a
+      ><a name="1649"
+      > </a
+      ><a name="1650" class="Symbol"
+      >&#8704;</a
+      ><a name="1651"
+      > </a
+      ><a name="1652" class="Symbol"
+      >{</a
+      ><a name="1653" href="Relation.Nullary.Decidable.html#1653" class="Bound"
+      >p</a
+      ><a name="1654" class="Symbol"
+      >}</a
+      ><a name="1655"
+      > </a
+      ><a name="1656" class="Symbol"
+      >{</a
+      ><a name="1657" href="Relation.Nullary.Decidable.html#1657" class="Bound"
+      >P</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" class="Symbol"
+      >:</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" class="PrimitiveType"
+      >Set</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Relation.Nullary.Decidable.html#1653" class="Bound"
+      >p</a
+      ><a name="1666" class="Symbol"
+      >}</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" class="Symbol"
+      >(</a
+      ><a name="1669" href="Relation.Nullary.Decidable.html#1669" class="Bound"
+      >p</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" class="Symbol"
+      >:</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Relation.Nullary.Decidable.html#1657" class="Bound"
+      >P</a
+      ><a name="1678" class="Symbol"
+      >)</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" class="Symbol"
+      >&#8594;</a
+      ><a name="1681"
+      > </a
+      ><a name="1682" href="Relation.Nullary.Decidable.html#1530" class="Function"
+      >From-yes</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" href="Relation.Nullary.Decidable.html#1669" class="Bound"
+      >p</a
+      ><a name="1692"
+      >
+</a
+      ><a name="1693" href="Relation.Nullary.Decidable.html#1639" class="Function"
+      >from-yes</a
+      ><a name="1701"
+      > </a
+      ><a name="1702" class="Symbol"
+      >(</a
+      ><a name="1703" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Relation.Nullary.Decidable.html#1707" class="Bound"
+      >p</a
+      ><a name="1708" class="Symbol"
+      >)</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" class="Symbol"
+      >=</a
+      ><a name="1711"
+      > </a
+      ><a name="1712" href="Relation.Nullary.Decidable.html#1707" class="Bound"
+      >p</a
+      ><a name="1713"
+      >
+</a
+      ><a name="1714" href="Relation.Nullary.Decidable.html#1639" class="Function"
+      >from-yes</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" class="Symbol"
+      >(</a
+      ><a name="1724" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1726"
+      >  </a
+      ><a name="1728" class="Symbol"
+      >_)</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" class="Symbol"
+      >=</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" class="Symbol"
+      >_</a
+      ><a name="1734"
+      >
+
+</a
+      ><a name="1736" class="Comment"
+      >-- If a decision procedure returns &quot;no&quot;, then we can extract the proof</a
+      ><a name="1806"
+      >
+</a
+      ><a name="1807" class="Comment"
+      >-- using from-no.</a
+      ><a name="1824"
+      >
+
+</a
+      ><a name="1826" href="Relation.Nullary.Decidable.html#1826" class="Function"
+      >From-no</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" class="Symbol"
+      >:</a
+      ><a name="1835"
+      > </a
+      ><a name="1836" class="Symbol"
+      >&#8704;</a
+      ><a name="1837"
+      > </a
+      ><a name="1838" class="Symbol"
+      >{</a
+      ><a name="1839" href="Relation.Nullary.Decidable.html#1839" class="Bound"
+      >p</a
+      ><a name="1840" class="Symbol"
+      >}</a
+      ><a name="1841"
+      > </a
+      ><a name="1842" class="Symbol"
+      >{</a
+      ><a name="1843" href="Relation.Nullary.Decidable.html#1843" class="Bound"
+      >P</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" class="Symbol"
+      >:</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" class="PrimitiveType"
+      >Set</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" href="Relation.Nullary.Decidable.html#1839" class="Bound"
+      >p</a
+      ><a name="1852" class="Symbol"
+      >}</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" class="Symbol"
+      >&#8594;</a
+      ><a name="1855"
+      > </a
+      ><a name="1856" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1859"
+      > </a
+      ><a name="1860" href="Relation.Nullary.Decidable.html#1843" class="Bound"
+      >P</a
+      ><a name="1861"
+      > </a
+      ><a name="1862" class="Symbol"
+      >&#8594;</a
+      ><a name="1863"
+      > </a
+      ><a name="1864" class="PrimitiveType"
+      >Set</a
+      ><a name="1867"
+      > </a
+      ><a name="1868" href="Relation.Nullary.Decidable.html#1839" class="Bound"
+      >p</a
+      ><a name="1869"
+      >
+</a
+      ><a name="1870" href="Relation.Nullary.Decidable.html#1826" class="Function"
+      >From-no</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" class="Symbol"
+      >{</a
+      ><a name="1879"
+      >P </a
+      ><a name="1881" class="Symbol"
+      >=</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" href="Relation.Nullary.Decidable.html#1883" class="Bound"
+      >P</a
+      ><a name="1884" class="Symbol"
+      >}</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" class="Symbol"
+      >(</a
+      ><a name="1887" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1889"
+      >  </a
+      ><a name="1891" class="Symbol"
+      >_)</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" class="Symbol"
+      >=</a
+      ><a name="1895"
+      > </a
+      ><a name="1896" href="Relation.Nullary.Core.html#398" class="Function Operator"
+      >&#172;</a
+      ><a name="1897"
+      > </a
+      ><a name="1898" href="Relation.Nullary.Decidable.html#1883" class="Bound"
+      >P</a
+      ><a name="1899"
+      >
+</a
+      ><a name="1900" href="Relation.Nullary.Decidable.html#1826" class="Function"
+      >From-no</a
+      ><a name="1907"
+      >         </a
+      ><a name="1916" class="Symbol"
+      >(</a
+      ><a name="1917" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" class="Symbol"
+      >_)</a
+      ><a name="1923"
+      > </a
+      ><a name="1924" class="Symbol"
+      >=</a
+      ><a name="1925"
+      > </a
+      ><a name="1926" href="Level.html#745" class="Record"
+      >Lift</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="1932"
+      >
+
+</a
+      ><a name="1934" href="Relation.Nullary.Decidable.html#1934" class="Function"
+      >from-no</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" class="Symbol"
+      >:</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" class="Symbol"
+      >&#8704;</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" class="Symbol"
+      >{</a
+      ><a name="1947" href="Relation.Nullary.Decidable.html#1947" class="Bound"
+      >p</a
+      ><a name="1948" class="Symbol"
+      >}</a
+      ><a name="1949"
+      > </a
+      ><a name="1950" class="Symbol"
+      >{</a
+      ><a name="1951" href="Relation.Nullary.Decidable.html#1951" class="Bound"
+      >P</a
+      ><a name="1952"
+      > </a
+      ><a name="1953" class="Symbol"
+      >:</a
+      ><a name="1954"
+      > </a
+      ><a name="1955" class="PrimitiveType"
+      >Set</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" href="Relation.Nullary.Decidable.html#1947" class="Bound"
+      >p</a
+      ><a name="1960" class="Symbol"
+      >}</a
+      ><a name="1961"
+      > </a
+      ><a name="1962" class="Symbol"
+      >(</a
+      ><a name="1963" href="Relation.Nullary.Decidable.html#1963" class="Bound"
+      >p</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" class="Symbol"
+      >:</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" href="Relation.Nullary.Core.html#468" class="Datatype"
+      >Dec</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="Relation.Nullary.Decidable.html#1951" class="Bound"
+      >P</a
+      ><a name="1972" class="Symbol"
+      >)</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" class="Symbol"
+      >&#8594;</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="Relation.Nullary.Decidable.html#1826" class="Function"
+      >From-no</a
+      ><a name="1983"
+      > </a
+      ><a name="1984" href="Relation.Nullary.Decidable.html#1963" class="Bound"
+      >p</a
+      ><a name="1985"
+      >
+</a
+      ><a name="1986" href="Relation.Nullary.Decidable.html#1934" class="Function"
+      >from-no</a
+      ><a name="1993"
+      > </a
+      ><a name="1994" class="Symbol"
+      >(</a
+      ><a name="1995" href="Relation.Nullary.Core.html#531" class="InductiveConstructor"
+      >no</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Relation.Nullary.Decidable.html#1998" class="Bound"
+      >&#172;p</a
+      ><a name="2000" class="Symbol"
+      >)</a
+      ><a name="2001"
+      > </a
+      ><a name="2002" class="Symbol"
+      >=</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="Relation.Nullary.Decidable.html#1998" class="Bound"
+      >&#172;p</a
+      ><a name="2006"
+      >
+</a
+      ><a name="2007" href="Relation.Nullary.Decidable.html#1934" class="Function"
+      >from-no</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" class="Symbol"
+      >(</a
+      ><a name="2016" href="Relation.Nullary.Core.html#504" class="InductiveConstructor"
+      >yes</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" class="Symbol"
+      >_)</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" class="Symbol"
+      >=</a
+      ><a name="2024"
+      > </a
+      ><a name="2025" class="Symbol"
+      >_</a
+      ><a name="2026"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

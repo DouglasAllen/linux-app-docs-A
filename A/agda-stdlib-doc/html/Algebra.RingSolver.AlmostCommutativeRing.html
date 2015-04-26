@@ -1,0 +1,2271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.RingSolver.AlmostCommutativeRing</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Commutative semirings with some additional structure (&quot;almost&quot;</a
+      ><a name="171"
+      >
+</a
+      ><a name="172" class="Comment"
+      >-- commutative rings), used by the ring solver</a
+      ><a name="218"
+      >
+</a
+      ><a name="219" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="291"
+      >
+
+</a
+      ><a name="293" class="Keyword"
+      >module</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Algebra.RingSolver.AlmostCommutativeRing.html#1" class="Module"
+      >Algebra</a
+      ><a name="307"
+      >.</a
+      ><a name="308" href="Algebra.RingSolver.AlmostCommutativeRing.html#1" class="Module"
+      >RingSolver</a
+      ><a name="318"
+      >.</a
+      ><a name="319" href="Algebra.RingSolver.AlmostCommutativeRing.html#1" class="Module"
+      >AlmostCommutativeRing</a
+      ><a name="340"
+      > </a
+      ><a name="341" class="Keyword"
+      >where</a
+      ><a name="346"
+      >
+
+</a
+      ><a name="348" class="Keyword"
+      >open</a
+      ><a name="352"
+      > </a
+      ><a name="353" class="Keyword"
+      >import</a
+      ><a name="359"
+      > </a
+      ><a name="360" href="Relation.Binary.html#1" class="Module"
+      >Relation</a
+      ><a name="368"
+      >.</a
+      ><a name="369" href="Relation.Binary.html#1" class="Module"
+      >Binary</a
+      ><a name="375"
+      >
+</a
+      ><a name="376" class="Keyword"
+      >open</a
+      ><a name="380"
+      > </a
+      ><a name="381" class="Keyword"
+      >import</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="Algebra.html#1" class="Module"
+      >Algebra</a
+      ><a name="395"
+      >
+</a
+      ><a name="396" class="Keyword"
+      >open</a
+      ><a name="400"
+      > </a
+      ><a name="401" class="Keyword"
+      >import</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Algebra.Structures.html#1" class="Module"
+      >Algebra</a
+      ><a name="415"
+      >.</a
+      ><a name="416" href="Algebra.Structures.html#1" class="Module"
+      >Structures</a
+      ><a name="426"
+      >
+</a
+      ><a name="427" class="Keyword"
+      >open</a
+      ><a name="431"
+      > </a
+      ><a name="432" class="Keyword"
+      >import</a
+      ><a name="438"
+      > </a
+      ><a name="439" href="Algebra.FunctionProperties.html#1" class="Module"
+      >Algebra</a
+      ><a name="446"
+      >.</a
+      ><a name="447" href="Algebra.FunctionProperties.html#1" class="Module"
+      >FunctionProperties</a
+      ><a name="465"
+      >
+</a
+      ><a name="466" class="Keyword"
+      >import</a
+      ><a name="472"
+      > </a
+      ><a name="473" href="Algebra.Morphism.html#1" class="Module"
+      >Algebra</a
+      ><a name="480"
+      >.</a
+      ><a name="481" href="Algebra.Morphism.html#1" class="Module"
+      >Morphism</a
+      ><a name="489"
+      > </a
+      ><a name="490" class="Symbol"
+      >as</a
+      ><a name="492"
+      > </a
+      ><a name="493" class="Module"
+      >Morphism</a
+      ><a name="501"
+      >
+</a
+      ><a name="502" class="Keyword"
+      >open</a
+      ><a name="506"
+      > </a
+      ><a name="507" class="Keyword"
+      >import</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="522"
+      >
+</a
+      ><a name="523" class="Keyword"
+      >open</a
+      ><a name="527"
+      > </a
+      ><a name="528" class="Keyword"
+      >import</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="540"
+      >
+
+</a
+      ><a name="542" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="614"
+      >
+</a
+      ><a name="615" class="Comment"
+      >-- Definitions</a
+      ><a name="629"
+      >
+
+</a
+      ><a name="631" class="Keyword"
+      >record</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="Algebra.RingSolver.AlmostCommutativeRing.html#638" class="Record"
+      >IsAlmostCommutativeRing</a
+      ><a name="661"
+      >
+         </a
+      ><a name="671" class="Symbol"
+      >{</a
+      ><a name="672" href="Algebra.RingSolver.AlmostCommutativeRing.html#672" class="Bound"
+      >a</a
+      ><a name="673"
+      > </a
+      ><a name="674" href="Algebra.RingSolver.AlmostCommutativeRing.html#674" class="Bound"
+      >&#8467;</a
+      ><a name="675" class="Symbol"
+      >}</a
+      ><a name="676"
+      > </a
+      ><a name="677" class="Symbol"
+      >{</a
+      ><a name="678" href="Algebra.RingSolver.AlmostCommutativeRing.html#678" class="Bound"
+      >A</a
+      ><a name="679"
+      > </a
+      ><a name="680" class="Symbol"
+      >:</a
+      ><a name="681"
+      > </a
+      ><a name="682" class="PrimitiveType"
+      >Set</a
+      ><a name="685"
+      > </a
+      ><a name="686" href="Algebra.RingSolver.AlmostCommutativeRing.html#672" class="Bound"
+      >a</a
+      ><a name="687" class="Symbol"
+      >}</a
+      ><a name="688"
+      > </a
+      ><a name="689" class="Symbol"
+      >(</a
+      ><a name="690" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="693"
+      > </a
+      ><a name="694" class="Symbol"
+      >:</a
+      ><a name="695"
+      > </a
+      ><a name="696" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="Algebra.RingSolver.AlmostCommutativeRing.html#678" class="Bound"
+      >A</a
+      ><a name="701"
+      > </a
+      ><a name="702" href="Algebra.RingSolver.AlmostCommutativeRing.html#674" class="Bound"
+      >&#8467;</a
+      ><a name="703" class="Symbol"
+      >)</a
+      ><a name="704"
+      >
+         </a
+      ><a name="714" class="Symbol"
+      >(</a
+      ><a name="715" href="Algebra.RingSolver.AlmostCommutativeRing.html#715" class="Bound Operator"
+      >_+_</a
+      ><a name="718"
+      > </a
+      ><a name="719" href="Algebra.RingSolver.AlmostCommutativeRing.html#719" class="Bound Operator"
+      >_*_</a
+      ><a name="722"
+      > </a
+      ><a name="723" class="Symbol"
+      >:</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Algebra.FunctionProperties.Core.html#715" class="Function"
+      >Op&#8322;</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Algebra.RingSolver.AlmostCommutativeRing.html#678" class="Bound"
+      >A</a
+      ><a name="730" class="Symbol"
+      >)</a
+      ><a name="731"
+      > </a
+      ><a name="732" class="Symbol"
+      >(</a
+      ><a name="733" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-_</a
+      ><a name="735"
+      > </a
+      ><a name="736" class="Symbol"
+      >:</a
+      ><a name="737"
+      > </a
+      ><a name="738" href="Algebra.FunctionProperties.Core.html#672" class="Function"
+      >Op&#8321;</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Algebra.RingSolver.AlmostCommutativeRing.html#678" class="Bound"
+      >A</a
+      ><a name="743" class="Symbol"
+      >)</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >(</a
+      ><a name="746" href="Algebra.RingSolver.AlmostCommutativeRing.html#746" class="Bound"
+      >0#</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="Algebra.RingSolver.AlmostCommutativeRing.html#749" class="Bound"
+      >1#</a
+      ><a name="751"
+      > </a
+      ><a name="752" class="Symbol"
+      >:</a
+      ><a name="753"
+      > </a
+      ><a name="754" href="Algebra.RingSolver.AlmostCommutativeRing.html#678" class="Bound"
+      >A</a
+      ><a name="755" class="Symbol"
+      >)</a
+      ><a name="756"
+      > </a
+      ><a name="757" class="Symbol"
+      >:</a
+      ><a name="758"
+      > </a
+      ><a name="759" class="PrimitiveType"
+      >Set</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >(</a
+      ><a name="764" href="Algebra.RingSolver.AlmostCommutativeRing.html#672" class="Bound"
+      >a</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Algebra.RingSolver.AlmostCommutativeRing.html#674" class="Bound"
+      >&#8467;</a
+      ><a name="769" class="Symbol"
+      >)</a
+      ><a name="770"
+      > </a
+      ><a name="771" class="Keyword"
+      >where</a
+      ><a name="776"
+      >
+  </a
+      ><a name="779" class="Keyword"
+      >field</a
+      ><a name="784"
+      >
+    </a
+      ><a name="789" href="Algebra.RingSolver.AlmostCommutativeRing.html#789" class="Field"
+      >isCommutativeSemiring</a
+      ><a name="810"
+      > </a
+      ><a name="811" class="Symbol"
+      >:</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Algebra.Structures.html#6665" class="Record"
+      >IsCommutativeSemiring</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="838"
+      > </a
+      ><a name="839" href="Algebra.RingSolver.AlmostCommutativeRing.html#715" class="Bound Operator"
+      >_+_</a
+      ><a name="842"
+      > </a
+      ><a name="843" href="Algebra.RingSolver.AlmostCommutativeRing.html#719" class="Bound Operator"
+      >_*_</a
+      ><a name="846"
+      > </a
+      ><a name="847" href="Algebra.RingSolver.AlmostCommutativeRing.html#746" class="Bound"
+      >0#</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="Algebra.RingSolver.AlmostCommutativeRing.html#749" class="Bound"
+      >1#</a
+      ><a name="852"
+      >
+    </a
+      ><a name="857" href="Algebra.RingSolver.AlmostCommutativeRing.html#857" class="Field"
+      >-&#8255;cong</a
+      ><a name="863"
+      >                </a
+      ><a name="879" class="Symbol"
+      >:</a
+      ><a name="880"
+      > </a
+      ><a name="881" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-_</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Relation.Binary.Core.html#1388" class="Function Operator"
+      >Preserves</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Relation.Binary.Core.html#1388" class="Function Operator"
+      >&#10230;</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="903"
+      >
+    </a
+      ><a name="908" href="Algebra.RingSolver.AlmostCommutativeRing.html#908" class="Field"
+      >-&#8255;*-distrib&#737;</a
+      ><a name="920"
+      >          </a
+      ><a name="930" class="Symbol"
+      >:</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >&#8704;</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Algebra.RingSolver.AlmostCommutativeRing.html#934" class="Bound"
+      >x</a
+      ><a name="935"
+      > </a
+      ><a name="936" href="Algebra.RingSolver.AlmostCommutativeRing.html#936" class="Bound"
+      >y</a
+      ><a name="937"
+      > </a
+      ><a name="938" class="Symbol"
+      >&#8594;</a
+      ><a name="939"
+      > </a
+      ><a name="940" class="Symbol"
+      >((</a
+      ><a name="942" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Algebra.RingSolver.AlmostCommutativeRing.html#934" class="Bound"
+      >x</a
+      ><a name="945" class="Symbol"
+      >)</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="Algebra.RingSolver.AlmostCommutativeRing.html#719" class="Bound Operator"
+      >*</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Algebra.RingSolver.AlmostCommutativeRing.html#936" class="Bound"
+      >y</a
+      ><a name="950" class="Symbol"
+      >)</a
+      ><a name="951"
+      >     </a
+      ><a name="956" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >&#8776;</a
+      ><a name="957"
+      > </a
+      ><a name="958" class="Symbol"
+      >(</a
+      ><a name="959" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >(</a
+      ><a name="962" href="Algebra.RingSolver.AlmostCommutativeRing.html#934" class="Bound"
+      >x</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="Algebra.RingSolver.AlmostCommutativeRing.html#719" class="Bound Operator"
+      >*</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="Algebra.RingSolver.AlmostCommutativeRing.html#936" class="Bound"
+      >y</a
+      ><a name="967" class="Symbol"
+      >))</a
+      ><a name="969"
+      >
+    </a
+      ><a name="974" href="Algebra.RingSolver.AlmostCommutativeRing.html#974" class="Field"
+      >-&#8255;+-comm</a
+      ><a name="982"
+      >              </a
+      ><a name="996" class="Symbol"
+      >:</a
+      ><a name="997"
+      > </a
+      ><a name="998" class="Symbol"
+      >&#8704;</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Algebra.RingSolver.AlmostCommutativeRing.html#1000" class="Bound"
+      >x</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Algebra.RingSolver.AlmostCommutativeRing.html#1002" class="Bound"
+      >y</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" class="Symbol"
+      >&#8594;</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" class="Symbol"
+      >((</a
+      ><a name="1008" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Algebra.RingSolver.AlmostCommutativeRing.html#1000" class="Bound"
+      >x</a
+      ><a name="1011" class="Symbol"
+      >)</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Algebra.RingSolver.AlmostCommutativeRing.html#715" class="Bound Operator"
+      >+</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" class="Symbol"
+      >(</a
+      ><a name="1016" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Algebra.RingSolver.AlmostCommutativeRing.html#1002" class="Bound"
+      >y</a
+      ><a name="1019" class="Symbol"
+      >))</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" href="Algebra.RingSolver.AlmostCommutativeRing.html#690" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >(</a
+      ><a name="1025" href="Algebra.RingSolver.AlmostCommutativeRing.html#733" class="Bound Operator"
+      >-</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" class="Symbol"
+      >(</a
+      ><a name="1028" href="Algebra.RingSolver.AlmostCommutativeRing.html#1000" class="Bound"
+      >x</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Algebra.RingSolver.AlmostCommutativeRing.html#715" class="Bound Operator"
+      >+</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Algebra.RingSolver.AlmostCommutativeRing.html#1002" class="Bound"
+      >y</a
+      ><a name="1033" class="Symbol"
+      >))</a
+      ><a name="1035"
+      >
+
+  </a
+      ><a name="1039" class="Keyword"
+      >open</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Algebra.Structures.html#6665" class="Module"
+      >IsCommutativeSemiring</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Algebra.RingSolver.AlmostCommutativeRing.html#789" class="Function"
+      >isCommutativeSemiring</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" class="Keyword"
+      >public</a
+      ><a name="1094"
+      >
+
+</a
+      ><a name="1096" class="Keyword"
+      >record</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Record"
+      >AlmostCommutativeRing</a
+      ><a name="1124"
+      > </a
+      ><a name="1125" href="Algebra.RingSolver.AlmostCommutativeRing.html#1125" class="Bound"
+      >c</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" href="Algebra.RingSolver.AlmostCommutativeRing.html#1127" class="Bound"
+      >&#8467;</a
+      ><a name="1128"
+      > </a
+      ><a name="1129" class="Symbol"
+      >:</a
+      ><a name="1130"
+      > </a
+      ><a name="1131" class="PrimitiveType"
+      >Set</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" class="Symbol"
+      >(</a
+      ><a name="1136" href="Level.html#287" class="Primitive"
+      >suc</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" class="Symbol"
+      >(</a
+      ><a name="1141" href="Algebra.RingSolver.AlmostCommutativeRing.html#1125" class="Bound"
+      >c</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" href="Algebra.RingSolver.AlmostCommutativeRing.html#1127" class="Bound"
+      >&#8467;</a
+      ><a name="1146" class="Symbol"
+      >))</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" class="Keyword"
+      >where</a
+      ><a name="1154"
+      >
+  </a
+      ><a name="1157" class="Keyword"
+      >infix</a
+      ><a name="1162"
+      >  </a
+      ><a name="1164" class="Number"
+      >8</a
+      ><a name="1165"
+      > -_
+  </a
+      ><a name="1171" class="Keyword"
+      >infixl</a
+      ><a name="1177"
+      > </a
+      ><a name="1178" class="Number"
+      >7</a
+      ><a name="1179"
+      > _*_
+  </a
+      ><a name="1186" class="Keyword"
+      >infixl</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" class="Number"
+      >6</a
+      ><a name="1194"
+      > _+_
+  </a
+      ><a name="1201" class="Keyword"
+      >infix</a
+      ><a name="1206"
+      >  </a
+      ><a name="1208" class="Number"
+      >4</a
+      ><a name="1209"
+      > _&#8776;_
+  </a
+      ><a name="1216" class="Keyword"
+      >field</a
+      ><a name="1221"
+      >
+    </a
+      ><a name="1226" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Field"
+      >Carrier</a
+      ><a name="1233"
+      >                 </a
+      ><a name="1250" class="Symbol"
+      >:</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" class="PrimitiveType"
+      >Set</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Algebra.RingSolver.AlmostCommutativeRing.html#1125" class="Bound"
+      >c</a
+      ><a name="1257"
+      >
+    </a
+      ><a name="1262" href="Algebra.RingSolver.AlmostCommutativeRing.html#1262" class="Field Operator"
+      >_&#8776;_</a
+      ><a name="1265"
+      >                     </a
+      ><a name="1286" class="Symbol"
+      >:</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" href="Algebra.RingSolver.AlmostCommutativeRing.html#1127" class="Bound"
+      >&#8467;</a
+      ><a name="1301"
+      >
+    </a
+      ><a name="1306" href="Algebra.RingSolver.AlmostCommutativeRing.html#1306" class="Field Operator"
+      >_+_</a
+      ><a name="1309"
+      >                     </a
+      ><a name="1330" class="Symbol"
+      >:</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" href="Algebra.FunctionProperties.Core.html#715" class="Function"
+      >Op&#8322;</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1343"
+      >
+    </a
+      ><a name="1348" href="Algebra.RingSolver.AlmostCommutativeRing.html#1348" class="Field Operator"
+      >_*_</a
+      ><a name="1351"
+      >                     </a
+      ><a name="1372" class="Symbol"
+      >:</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" href="Algebra.FunctionProperties.Core.html#715" class="Function"
+      >Op&#8322;</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1385"
+      >
+    </a
+      ><a name="1390" href="Algebra.RingSolver.AlmostCommutativeRing.html#1390" class="Field Operator"
+      >-_</a
+      ><a name="1392"
+      >                      </a
+      ><a name="1414" class="Symbol"
+      >:</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" href="Algebra.FunctionProperties.Core.html#672" class="Function"
+      >Op&#8321;</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1427"
+      >
+    </a
+      ><a name="1432" href="Algebra.RingSolver.AlmostCommutativeRing.html#1432" class="Field"
+      >0#</a
+      ><a name="1434"
+      >                      </a
+      ><a name="1456" class="Symbol"
+      >:</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1465"
+      >
+    </a
+      ><a name="1470" href="Algebra.RingSolver.AlmostCommutativeRing.html#1470" class="Field"
+      >1#</a
+      ><a name="1472"
+      >                      </a
+      ><a name="1494" class="Symbol"
+      >:</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Bound"
+      >Carrier</a
+      ><a name="1503"
+      >
+    </a
+      ><a name="1508" href="Algebra.RingSolver.AlmostCommutativeRing.html#1508" class="Field"
+      >isAlmostCommutativeRing</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" class="Symbol"
+      >:</a
+      ><a name="1533"
+      >
+      </a
+      ><a name="1540" href="Algebra.RingSolver.AlmostCommutativeRing.html#638" class="Record"
+      >IsAlmostCommutativeRing</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" href="Algebra.RingSolver.AlmostCommutativeRing.html#1262" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" href="Algebra.RingSolver.AlmostCommutativeRing.html#1306" class="Bound Operator"
+      >_+_</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" href="Algebra.RingSolver.AlmostCommutativeRing.html#1348" class="Bound Operator"
+      >_*_</a
+      ><a name="1575"
+      > </a
+      ><a name="1576" href="Algebra.RingSolver.AlmostCommutativeRing.html#1390" class="Bound Operator"
+      >-_</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="Algebra.RingSolver.AlmostCommutativeRing.html#1432" class="Bound"
+      >0#</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Algebra.RingSolver.AlmostCommutativeRing.html#1470" class="Bound"
+      >1#</a
+      ><a name="1584"
+      >
+
+  </a
+      ><a name="1588" class="Keyword"
+      >open</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" href="Algebra.RingSolver.AlmostCommutativeRing.html#638" class="Module"
+      >IsAlmostCommutativeRing</a
+      ><a name="1616"
+      > </a
+      ><a name="1617" href="Algebra.RingSolver.AlmostCommutativeRing.html#1508" class="Function"
+      >isAlmostCommutativeRing</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" class="Keyword"
+      >public</a
+      ><a name="1647"
+      >
+
+  </a
+      ><a name="1651" href="Algebra.RingSolver.AlmostCommutativeRing.html#1651" class="Function"
+      >commutativeSemiring</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" class="Symbol"
+      >:</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Algebra.html#7862" class="Record"
+      >CommutativeSemiring</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" class="Symbol"
+      >_</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" class="Symbol"
+      >_</a
+      ><a name="1696"
+      >
+  </a
+      ><a name="1699" href="Algebra.RingSolver.AlmostCommutativeRing.html#1651" class="Function"
+      >commutativeSemiring</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" class="Symbol"
+      >=</a
+      ><a name="1720"
+      >
+    </a
+      ><a name="1725" class="Keyword"
+      >record</a
+      ><a name="1731"
+      > </a
+      ><a name="1732" class="Symbol"
+      >{</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" class="Field"
+      >isCommutativeSemiring</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" class="Symbol"
+      >=</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Algebra.RingSolver.AlmostCommutativeRing.html#789" class="Function"
+      >isCommutativeSemiring</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" class="Symbol"
+      >}</a
+      ><a name="1781"
+      >
+
+  </a
+      ><a name="1785" class="Keyword"
+      >open</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="Algebra.html#7862" class="Module"
+      >CommutativeSemiring</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Algebra.RingSolver.AlmostCommutativeRing.html#1651" class="Function"
+      >commutativeSemiring</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" class="Keyword"
+      >public</a
+      ><a name="1836"
+      >
+         </a
+      ><a name="1846" class="Keyword"
+      >using</a
+      ><a name="1851"
+      > </a
+      ><a name="1852" class="Symbol"
+      >(</a
+      ><a name="1853"
+      > setoid
+               </a
+      ><a name="1876" class="Symbol"
+      >;</a
+      ><a name="1877"
+      > +-semigroup</a
+      ><a name="1889" class="Symbol"
+      >;</a
+      ><a name="1890"
+      > +-monoid</a
+      ><a name="1899" class="Symbol"
+      >;</a
+      ><a name="1900"
+      > +-commutativeMonoid
+               </a
+      ><a name="1936" class="Symbol"
+      >;</a
+      ><a name="1937"
+      > *-semigroup</a
+      ><a name="1949" class="Symbol"
+      >;</a
+      ><a name="1950"
+      > *-monoid</a
+      ><a name="1959" class="Symbol"
+      >;</a
+      ><a name="1960"
+      > *-commutativeMonoid
+               </a
+      ><a name="1996" class="Symbol"
+      >;</a
+      ><a name="1997"
+      > semiring
+               </a
+      ><a name="2022" class="Symbol"
+      >)</a
+      ><a name="2023"
+      >
+
+  </a
+      ><a name="2027" href="Algebra.RingSolver.AlmostCommutativeRing.html#2027" class="Function"
+      >rawRing</a
+      ><a name="2034"
+      > </a
+      ><a name="2035" class="Symbol"
+      >:</a
+      ><a name="2036"
+      > </a
+      ><a name="2037" href="Algebra.html#9175" class="Record"
+      >RawRing</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" class="Symbol"
+      >_</a
+      ><a name="2046"
+      >
+  </a
+      ><a name="2049" href="Algebra.RingSolver.AlmostCommutativeRing.html#2027" class="Function"
+      >rawRing</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" class="Symbol"
+      >=</a
+      ><a name="2058"
+      > </a
+      ><a name="2059" class="Keyword"
+      >record</a
+      ><a name="2065"
+      >
+    </a
+      ><a name="2070" class="Symbol"
+      >{</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" class="Field Operator"
+      >_+_</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" class="Symbol"
+      >=</a
+      ><a name="2077"
+      > </a
+      ><a name="2078" href="Algebra.RingSolver.AlmostCommutativeRing.html#1306" class="Function Operator"
+      >_+_</a
+      ><a name="2081"
+      >
+    </a
+      ><a name="2086" class="Symbol"
+      >;</a
+      ><a name="2087"
+      > </a
+      ><a name="2088" class="Field Operator"
+      >_*_</a
+      ><a name="2091"
+      > </a
+      ><a name="2092" class="Symbol"
+      >=</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" href="Algebra.RingSolver.AlmostCommutativeRing.html#1348" class="Function Operator"
+      >_*_</a
+      ><a name="2097"
+      >
+    </a
+      ><a name="2102" class="Symbol"
+      >;</a
+      ><a name="2103"
+      > </a
+      ><a name="2104" class="Field Operator"
+      >-_</a
+      ><a name="2106"
+      >  </a
+      ><a name="2108" class="Symbol"
+      >=</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" href="Algebra.RingSolver.AlmostCommutativeRing.html#1390" class="Function Operator"
+      >-_</a
+      ><a name="2112"
+      >
+    </a
+      ><a name="2117" class="Symbol"
+      >;</a
+      ><a name="2118"
+      > </a
+      ><a name="2119" class="Field"
+      >0#</a
+      ><a name="2121"
+      >  </a
+      ><a name="2123" class="Symbol"
+      >=</a
+      ><a name="2124"
+      > </a
+      ><a name="2125" href="Algebra.RingSolver.AlmostCommutativeRing.html#1432" class="Function"
+      >0#</a
+      ><a name="2127"
+      >
+    </a
+      ><a name="2132" class="Symbol"
+      >;</a
+      ><a name="2133"
+      > </a
+      ><a name="2134" class="Field"
+      >1#</a
+      ><a name="2136"
+      >  </a
+      ><a name="2138" class="Symbol"
+      >=</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" href="Algebra.RingSolver.AlmostCommutativeRing.html#1470" class="Function"
+      >1#</a
+      ><a name="2142"
+      >
+    </a
+      ><a name="2147" class="Symbol"
+      >}</a
+      ><a name="2148"
+      >
+
+</a
+      ><a name="2150" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="2222"
+      >
+</a
+      ><a name="2223" class="Comment"
+      >-- Homomorphisms</a
+      ><a name="2239"
+      >
+
+</a
+      ><a name="2241" class="Keyword"
+      >record</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" href="Algebra.RingSolver.AlmostCommutativeRing.html#2248" class="Record Operator"
+      >_-Raw-AlmostCommutative&#10230;_</a
+      ><a name="2273"
+      >
+         </a
+      ><a name="2283" class="Symbol"
+      >{</a
+      ><a name="2284" href="Algebra.RingSolver.AlmostCommutativeRing.html#2284" class="Bound"
+      >r&#8321;</a
+      ><a name="2286"
+      > </a
+      ><a name="2287" href="Algebra.RingSolver.AlmostCommutativeRing.html#2287" class="Bound"
+      >r&#8322;</a
+      ><a name="2289"
+      > </a
+      ><a name="2290" href="Algebra.RingSolver.AlmostCommutativeRing.html#2290" class="Bound"
+      >r&#8323;</a
+      ><a name="2292" class="Symbol"
+      >}</a
+      ><a name="2293"
+      >
+         </a
+      ><a name="2303" class="Symbol"
+      >(</a
+      ><a name="2304" href="Algebra.RingSolver.AlmostCommutativeRing.html#2304" class="Bound"
+      >From</a
+      ><a name="2308"
+      > </a
+      ><a name="2309" class="Symbol"
+      >:</a
+      ><a name="2310"
+      > </a
+      ><a name="2311" href="Algebra.html#9175" class="Record"
+      >RawRing</a
+      ><a name="2318"
+      > </a
+      ><a name="2319" href="Algebra.RingSolver.AlmostCommutativeRing.html#2284" class="Bound"
+      >r&#8321;</a
+      ><a name="2321" class="Symbol"
+      >)</a
+      ><a name="2322"
+      >
+         </a
+      ><a name="2332" class="Symbol"
+      >(</a
+      ><a name="2333" href="Algebra.RingSolver.AlmostCommutativeRing.html#2333" class="Bound"
+      >To</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" class="Symbol"
+      >:</a
+      ><a name="2337"
+      > </a
+      ><a name="2338" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Record"
+      >AlmostCommutativeRing</a
+      ><a name="2359"
+      > </a
+      ><a name="2360" href="Algebra.RingSolver.AlmostCommutativeRing.html#2287" class="Bound"
+      >r&#8322;</a
+      ><a name="2362"
+      > </a
+      ><a name="2363" href="Algebra.RingSolver.AlmostCommutativeRing.html#2290" class="Bound"
+      >r&#8323;</a
+      ><a name="2365" class="Symbol"
+      >)</a
+      ><a name="2366"
+      > </a
+      ><a name="2367" class="Symbol"
+      >:</a
+      ><a name="2368"
+      > </a
+      ><a name="2369" class="PrimitiveType"
+      >Set</a
+      ><a name="2372"
+      > </a
+      ><a name="2373" class="Symbol"
+      >(</a
+      ><a name="2374" href="Algebra.RingSolver.AlmostCommutativeRing.html#2284" class="Bound"
+      >r&#8321;</a
+      ><a name="2376"
+      > </a
+      ><a name="2377" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="2378"
+      > </a
+      ><a name="2379" href="Algebra.RingSolver.AlmostCommutativeRing.html#2287" class="Bound"
+      >r&#8322;</a
+      ><a name="2381"
+      > </a
+      ><a name="2382" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="2383"
+      > </a
+      ><a name="2384" href="Algebra.RingSolver.AlmostCommutativeRing.html#2290" class="Bound"
+      >r&#8323;</a
+      ><a name="2386" class="Symbol"
+      >)</a
+      ><a name="2387"
+      > </a
+      ><a name="2388" class="Keyword"
+      >where</a
+      ><a name="2393"
+      >
+  </a
+      ><a name="2396" class="Keyword"
+      >private</a
+      ><a name="2403"
+      >
+    </a
+      ><a name="2408" class="Keyword"
+      >module</a
+      ><a name="2414"
+      > </a
+      ><a name="2415" href="Algebra.RingSolver.AlmostCommutativeRing.html#2415" class="Module"
+      >F</a
+      ><a name="2416"
+      > </a
+      ><a name="2417" class="Symbol"
+      >=</a
+      ><a name="2418"
+      > </a
+      ><a name="2419" href="Algebra.html#9175" class="Module"
+      >RawRing</a
+      ><a name="2426"
+      > </a
+      ><a name="2427" href="Algebra.RingSolver.AlmostCommutativeRing.html#2304" class="Bound"
+      >From</a
+      ><a name="2431"
+      >
+    </a
+      ><a name="2436" class="Keyword"
+      >module</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" href="Algebra.RingSolver.AlmostCommutativeRing.html#2443" class="Module"
+      >T</a
+      ><a name="2444"
+      > </a
+      ><a name="2445" class="Symbol"
+      >=</a
+      ><a name="2446"
+      > </a
+      ><a name="2447" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Module"
+      >AlmostCommutativeRing</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" href="Algebra.RingSolver.AlmostCommutativeRing.html#2333" class="Bound"
+      >To</a
+      ><a name="2471"
+      >
+  </a
+      ><a name="2474" class="Keyword"
+      >open</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" href="Algebra.Morphism.html#237" class="Module"
+      >Morphism</a
+      ><a name="2487"
+      >.</a
+      ><a name="2488" href="Algebra.Morphism.html#586" class="Module"
+      >Definitions</a
+      ><a name="2499"
+      > </a
+      ><a name="2500" href="Algebra.html#9261" class="Function"
+      >F</a
+      ><a name="2501"
+      >.</a
+      ><a name="2502" href="Algebra.html#9261" class="Function"
+      >Carrier</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Function"
+      >T</a
+      ><a name="2511"
+      >.</a
+      ><a name="2512" href="Algebra.RingSolver.AlmostCommutativeRing.html#1226" class="Function"
+      >Carrier</a
+      ><a name="2519"
+      > </a
+      ><a name="2520" href="Algebra.RingSolver.AlmostCommutativeRing.html#1262" class="Function Operator"
+      >T</a
+      ><a name="2521"
+      >.</a
+      ><a name="2522" href="Algebra.RingSolver.AlmostCommutativeRing.html#1262" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="2525"
+      >
+  </a
+      ><a name="2528" class="Keyword"
+      >field</a
+      ><a name="2533"
+      >
+    </a
+      ><a name="2538" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2541"
+      >    </a
+      ><a name="2545" class="Symbol"
+      >:</a
+      ><a name="2546"
+      > </a
+      ><a name="2547" href="Algebra.Morphism.html#678" class="Function"
+      >Morphism</a
+      ><a name="2555"
+      >
+    </a
+      ><a name="2560" href="Algebra.RingSolver.AlmostCommutativeRing.html#2560" class="Field"
+      >+-homo</a
+      ><a name="2566"
+      > </a
+      ><a name="2567" class="Symbol"
+      >:</a
+      ><a name="2568"
+      > </a
+      ><a name="2569" href="Algebra.Morphism.html#910" class="Function"
+      >Homomorphic&#8322;</a
+      ><a name="2581"
+      > </a
+      ><a name="2582" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Bound Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="Algebra.html#9281" class="Function Operator"
+      >F</a
+      ><a name="2587"
+      >.</a
+      ><a name="2588" href="Algebra.html#9281" class="Function Operator"
+      >_+_</a
+      ><a name="2591"
+      > </a
+      ><a name="2592" href="Algebra.RingSolver.AlmostCommutativeRing.html#1306" class="Function Operator"
+      >T</a
+      ><a name="2593"
+      >.</a
+      ><a name="2594" href="Algebra.RingSolver.AlmostCommutativeRing.html#1306" class="Function Operator"
+      >_+_</a
+      ><a name="2597"
+      >
+    </a
+      ><a name="2602" href="Algebra.RingSolver.AlmostCommutativeRing.html#2602" class="Field"
+      >*-homo</a
+      ><a name="2608"
+      > </a
+      ><a name="2609" class="Symbol"
+      >:</a
+      ><a name="2610"
+      > </a
+      ><a name="2611" href="Algebra.Morphism.html#910" class="Function"
+      >Homomorphic&#8322;</a
+      ><a name="2623"
+      > </a
+      ><a name="2624" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Bound Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2627"
+      > </a
+      ><a name="2628" href="Algebra.html#9307" class="Function Operator"
+      >F</a
+      ><a name="2629"
+      >.</a
+      ><a name="2630" href="Algebra.html#9307" class="Function Operator"
+      >_*_</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" href="Algebra.RingSolver.AlmostCommutativeRing.html#1348" class="Function Operator"
+      >T</a
+      ><a name="2635"
+      >.</a
+      ><a name="2636" href="Algebra.RingSolver.AlmostCommutativeRing.html#1348" class="Function Operator"
+      >_*_</a
+      ><a name="2639"
+      >
+    </a
+      ><a name="2644" href="Algebra.RingSolver.AlmostCommutativeRing.html#2644" class="Field"
+      >-&#8255;homo</a
+      ><a name="2650"
+      > </a
+      ><a name="2651" class="Symbol"
+      >:</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" href="Algebra.Morphism.html#803" class="Function"
+      >Homomorphic&#8321;</a
+      ><a name="2665"
+      > </a
+      ><a name="2666" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Bound Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2669"
+      > </a
+      ><a name="2670" href="Algebra.html#9333" class="Function Operator"
+      >F</a
+      ><a name="2671"
+      >.</a
+      ><a name="2672" href="Algebra.html#9333" class="Function Operator"
+      >-_</a
+      ><a name="2674"
+      >  </a
+      ><a name="2676" href="Algebra.RingSolver.AlmostCommutativeRing.html#1390" class="Function Operator"
+      >T</a
+      ><a name="2677"
+      >.</a
+      ><a name="2678" href="Algebra.RingSolver.AlmostCommutativeRing.html#1390" class="Function Operator"
+      >-_</a
+      ><a name="2680"
+      >
+    </a
+      ><a name="2685" href="Algebra.RingSolver.AlmostCommutativeRing.html#2685" class="Field"
+      >0-homo</a
+      ><a name="2691"
+      > </a
+      ><a name="2692" class="Symbol"
+      >:</a
+      ><a name="2693"
+      > </a
+      ><a name="2694" href="Algebra.Morphism.html#721" class="Function"
+      >Homomorphic&#8320;</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Bound Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2710"
+      > </a
+      ><a name="2711" href="Algebra.html#9359" class="Function"
+      >F</a
+      ><a name="2712"
+      >.</a
+      ><a name="2713" href="Algebra.html#9359" class="Function"
+      >0#</a
+      ><a name="2715"
+      >  </a
+      ><a name="2717" href="Algebra.RingSolver.AlmostCommutativeRing.html#1432" class="Function"
+      >T</a
+      ><a name="2718"
+      >.</a
+      ><a name="2719" href="Algebra.RingSolver.AlmostCommutativeRing.html#1432" class="Function"
+      >0#</a
+      ><a name="2721"
+      >
+    </a
+      ><a name="2726" href="Algebra.RingSolver.AlmostCommutativeRing.html#2726" class="Field"
+      >1-homo</a
+      ><a name="2732"
+      > </a
+      ><a name="2733" class="Symbol"
+      >:</a
+      ><a name="2734"
+      > </a
+      ><a name="2735" href="Algebra.Morphism.html#721" class="Function"
+      >Homomorphic&#8320;</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="Algebra.RingSolver.AlmostCommutativeRing.html#2538" class="Bound Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2751"
+      > </a
+      ><a name="2752" href="Algebra.html#9381" class="Function"
+      >F</a
+      ><a name="2753"
+      >.</a
+      ><a name="2754" href="Algebra.html#9381" class="Function"
+      >1#</a
+      ><a name="2756"
+      >  </a
+      ><a name="2758" href="Algebra.RingSolver.AlmostCommutativeRing.html#1470" class="Function"
+      >T</a
+      ><a name="2759"
+      >.</a
+      ><a name="2760" href="Algebra.RingSolver.AlmostCommutativeRing.html#1470" class="Function"
+      >1#</a
+      ><a name="2762"
+      >
+
+</a
+      ><a name="2764" href="Algebra.RingSolver.AlmostCommutativeRing.html#2764" class="Function"
+      >-raw-almostCommutative&#10230;</a
+      ><a name="2787"
+      >
+  </a
+      ><a name="2790" class="Symbol"
+      >:</a
+      ><a name="2791"
+      > </a
+      ><a name="2792" class="Symbol"
+      >&#8704;</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" class="Symbol"
+      >{</a
+      ><a name="2795" href="Algebra.RingSolver.AlmostCommutativeRing.html#2795" class="Bound"
+      >r&#8321;</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" href="Algebra.RingSolver.AlmostCommutativeRing.html#2798" class="Bound"
+      >r&#8322;</a
+      ><a name="2800" class="Symbol"
+      >}</a
+      ><a name="2801"
+      > </a
+      ><a name="2802" class="Symbol"
+      >(</a
+      ><a name="2803" href="Algebra.RingSolver.AlmostCommutativeRing.html#2803" class="Bound"
+      >R</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" class="Symbol"
+      >:</a
+      ><a name="2806"
+      > </a
+      ><a name="2807" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Record"
+      >AlmostCommutativeRing</a
+      ><a name="2828"
+      > </a
+      ><a name="2829" href="Algebra.RingSolver.AlmostCommutativeRing.html#2795" class="Bound"
+      >r&#8321;</a
+      ><a name="2831"
+      > </a
+      ><a name="2832" href="Algebra.RingSolver.AlmostCommutativeRing.html#2798" class="Bound"
+      >r&#8322;</a
+      ><a name="2834" class="Symbol"
+      >)</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" class="Symbol"
+      >&#8594;</a
+      ><a name="2837"
+      >
+    </a
+      ><a name="2842" href="Algebra.RingSolver.AlmostCommutativeRing.html#2027" class="Function"
+      >AlmostCommutativeRing</a
+      ><a name="2863"
+      >.</a
+      ><a name="2864" href="Algebra.RingSolver.AlmostCommutativeRing.html#2027" class="Function"
+      >rawRing</a
+      ><a name="2871"
+      > </a
+      ><a name="2872" href="Algebra.RingSolver.AlmostCommutativeRing.html#2803" class="Bound"
+      >R</a
+      ><a name="2873"
+      > </a
+      ><a name="2874" href="Algebra.RingSolver.AlmostCommutativeRing.html#2248" class="Record Operator"
+      >-Raw-AlmostCommutative&#10230;</a
+      ><a name="2897"
+      > </a
+      ><a name="2898" href="Algebra.RingSolver.AlmostCommutativeRing.html#2803" class="Bound"
+      >R</a
+      ><a name="2899"
+      >
+</a
+      ><a name="2900" href="Algebra.RingSolver.AlmostCommutativeRing.html#2764" class="Function"
+      >-raw-almostCommutative&#10230;</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Algebra.RingSolver.AlmostCommutativeRing.html#2924" class="Bound"
+      >R</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" class="Symbol"
+      >=</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" class="Keyword"
+      >record</a
+      ><a name="2934"
+      >
+  </a
+      ><a name="2937" class="Symbol"
+      >{</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="2942"
+      >    </a
+      ><a name="2946" class="Symbol"
+      >=</a
+      ><a name="2947"
+      > </a
+      ><a name="2948" href="Function.html#1017" class="Function"
+      >id</a
+      ><a name="2950"
+      >
+  </a
+      ><a name="2953" class="Symbol"
+      >;</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" class="Field"
+      >+-homo</a
+      ><a name="2961"
+      > </a
+      ><a name="2962" class="Symbol"
+      >=</a
+      ><a name="2963"
+      > </a
+      ><a name="2964" class="Symbol"
+      >&#955;</a
+      ><a name="2965"
+      > </a
+      ><a name="2966" href="Algebra.RingSolver.AlmostCommutativeRing.html#2966" class="Bound"
+      >_</a
+      ><a name="2967"
+      > </a
+      ><a name="2968" href="Algebra.RingSolver.AlmostCommutativeRing.html#2968" class="Bound"
+      >_</a
+      ><a name="2969"
+      > </a
+      ><a name="2970" class="Symbol"
+      >&#8594;</a
+      ><a name="2971"
+      > </a
+      ><a name="2972" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="2976"
+      >
+  </a
+      ><a name="2979" class="Symbol"
+      >;</a
+      ><a name="2980"
+      > </a
+      ><a name="2981" class="Field"
+      >*-homo</a
+      ><a name="2987"
+      > </a
+      ><a name="2988" class="Symbol"
+      >=</a
+      ><a name="2989"
+      > </a
+      ><a name="2990" class="Symbol"
+      >&#955;</a
+      ><a name="2991"
+      > </a
+      ><a name="2992" href="Algebra.RingSolver.AlmostCommutativeRing.html#2992" class="Bound"
+      >_</a
+      ><a name="2993"
+      > </a
+      ><a name="2994" href="Algebra.RingSolver.AlmostCommutativeRing.html#2994" class="Bound"
+      >_</a
+      ><a name="2995"
+      > </a
+      ><a name="2996" class="Symbol"
+      >&#8594;</a
+      ><a name="2997"
+      > </a
+      ><a name="2998" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="3002"
+      >
+  </a
+      ><a name="3005" class="Symbol"
+      >;</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" class="Field"
+      >-&#8255;homo</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" class="Symbol"
+      >=</a
+      ><a name="3015"
+      > </a
+      ><a name="3016" class="Symbol"
+      >&#955;</a
+      ><a name="3017"
+      > </a
+      ><a name="3018" href="Algebra.RingSolver.AlmostCommutativeRing.html#3018" class="Bound"
+      >_</a
+      ><a name="3019"
+      > </a
+      ><a name="3020" class="Symbol"
+      >&#8594;</a
+      ><a name="3021"
+      > </a
+      ><a name="3022" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="3026"
+      >
+  </a
+      ><a name="3029" class="Symbol"
+      >;</a
+      ><a name="3030"
+      > </a
+      ><a name="3031" class="Field"
+      >0-homo</a
+      ><a name="3037"
+      > </a
+      ><a name="3038" class="Symbol"
+      >=</a
+      ><a name="3039"
+      > </a
+      ><a name="3040" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="3044"
+      >
+  </a
+      ><a name="3047" class="Symbol"
+      >;</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" class="Field"
+      >1-homo</a
+      ><a name="3055"
+      > </a
+      ><a name="3056" class="Symbol"
+      >=</a
+      ><a name="3057"
+      > </a
+      ><a name="3058" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="3062"
+      >
+  </a
+      ><a name="3065" class="Symbol"
+      >}</a
+      ><a name="3066"
+      >
+  </a
+      ><a name="3069" class="Keyword"
+      >where</a
+      ><a name="3074"
+      > </a
+      ><a name="3075" class="Keyword"
+      >open</a
+      ><a name="3079"
+      > </a
+      ><a name="3080" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Module"
+      >AlmostCommutativeRing</a
+      ><a name="3101"
+      > </a
+      ><a name="3102" href="Algebra.RingSolver.AlmostCommutativeRing.html#2924" class="Bound"
+      >R</a
+      ><a name="3103"
+      >
+
+</a
+      ><a name="3105" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="3177"
+      >
+</a
+      ><a name="3178" class="Comment"
+      >-- Conversions</a
+      ><a name="3192"
+      >
+
+</a
+      ><a name="3194" class="Comment"
+      >-- Commutative rings are almost commutative rings.</a
+      ><a name="3244"
+      >
+
+</a
+      ><a name="3246" href="Algebra.RingSolver.AlmostCommutativeRing.html#3246" class="Function"
+      >fromCommutativeRing</a
+      ><a name="3265"
+      > </a
+      ><a name="3266" class="Symbol"
+      >:</a
+      ><a name="3267"
+      >
+  </a
+      ><a name="3270" class="Symbol"
+      >&#8704;</a
+      ><a name="3271"
+      > </a
+      ><a name="3272" class="Symbol"
+      >{</a
+      ><a name="3273" href="Algebra.RingSolver.AlmostCommutativeRing.html#3273" class="Bound"
+      >r&#8321;</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" href="Algebra.RingSolver.AlmostCommutativeRing.html#3276" class="Bound"
+      >r&#8322;</a
+      ><a name="3278" class="Symbol"
+      >}</a
+      ><a name="3279"
+      > </a
+      ><a name="3280" class="Symbol"
+      >&#8594;</a
+      ><a name="3281"
+      > </a
+      ><a name="3282" href="Algebra.html#10462" class="Record"
+      >CommutativeRing</a
+      ><a name="3297"
+      > </a
+      ><a name="3298" href="Algebra.RingSolver.AlmostCommutativeRing.html#3273" class="Bound"
+      >r&#8321;</a
+      ><a name="3300"
+      > </a
+      ><a name="3301" href="Algebra.RingSolver.AlmostCommutativeRing.html#3276" class="Bound"
+      >r&#8322;</a
+      ><a name="3303"
+      > </a
+      ><a name="3304" class="Symbol"
+      >&#8594;</a
+      ><a name="3305"
+      > </a
+      ><a name="3306" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Record"
+      >AlmostCommutativeRing</a
+      ><a name="3327"
+      > </a
+      ><a name="3328" class="Symbol"
+      >_</a
+      ><a name="3329"
+      > </a
+      ><a name="3330" class="Symbol"
+      >_</a
+      ><a name="3331"
+      >
+</a
+      ><a name="3332" href="Algebra.RingSolver.AlmostCommutativeRing.html#3246" class="Function"
+      >fromCommutativeRing</a
+      ><a name="3351"
+      > </a
+      ><a name="3352" href="Algebra.RingSolver.AlmostCommutativeRing.html#3352" class="Bound"
+      >CR</a
+      ><a name="3354"
+      > </a
+      ><a name="3355" class="Symbol"
+      >=</a
+      ><a name="3356"
+      > </a
+      ><a name="3357" class="Keyword"
+      >record</a
+      ><a name="3363"
+      >
+  </a
+      ><a name="3366" class="Symbol"
+      >{</a
+      ><a name="3367"
+      > </a
+      ><a name="3368" class="Field"
+      >isAlmostCommutativeRing</a
+      ><a name="3391"
+      > </a
+      ><a name="3392" class="Symbol"
+      >=</a
+      ><a name="3393"
+      > </a
+      ><a name="3394" class="Keyword"
+      >record</a
+      ><a name="3400"
+      >
+      </a
+      ><a name="3407" class="Symbol"
+      >{</a
+      ><a name="3408"
+      > </a
+      ><a name="3409" class="Field"
+      >isCommutativeSemiring</a
+      ><a name="3430"
+      > </a
+      ><a name="3431" class="Symbol"
+      >=</a
+      ><a name="3432"
+      > </a
+      ><a name="3433" href="Algebra.Structures.html#11865" class="Function"
+      >isCommutativeSemiring</a
+      ><a name="3454"
+      >
+      </a
+      ><a name="3461" class="Symbol"
+      >;</a
+      ><a name="3462"
+      > </a
+      ><a name="3463" class="Field"
+      >-&#8255;cong</a
+      ><a name="3469"
+      >                </a
+      ><a name="3485" class="Symbol"
+      >=</a
+      ><a name="3486"
+      > </a
+      ><a name="3487" href="Algebra.Structures.html#2117" class="Function"
+      >-&#8255;cong</a
+      ><a name="3493"
+      >
+      </a
+      ><a name="3500" class="Symbol"
+      >;</a
+      ><a name="3501"
+      > </a
+      ><a name="3502" class="Field"
+      >-&#8255;*-distrib&#737;</a
+      ><a name="3514"
+      >          </a
+      ><a name="3524" class="Symbol"
+      >=</a
+      ><a name="3525"
+      > </a
+      ><a name="3526" href="Algebra.Props.Ring.html#860" class="Function"
+      >-&#8255;*-distrib&#737;</a
+      ><a name="3538"
+      >
+      </a
+      ><a name="3545" class="Symbol"
+      >;</a
+      ><a name="3546"
+      > </a
+      ><a name="3547" class="Field"
+      >-&#8255;+-comm</a
+      ><a name="3555"
+      >              </a
+      ><a name="3569" class="Symbol"
+      >=</a
+      ><a name="3570"
+      > </a
+      ><a name="3571" href="Algebra.Props.AbelianGroup.html#766" class="Function"
+      >&#8315;&#185;-&#8729;-comm</a
+      ><a name="3580"
+      >
+      </a
+      ><a name="3587" class="Symbol"
+      >}</a
+      ><a name="3588"
+      >
+  </a
+      ><a name="3591" class="Symbol"
+      >}</a
+      ><a name="3592"
+      >
+  </a
+      ><a name="3595" class="Keyword"
+      >where</a
+      ><a name="3600"
+      >
+  </a
+      ><a name="3603" class="Keyword"
+      >open</a
+      ><a name="3607"
+      > </a
+      ><a name="3608" href="Algebra.html#10462" class="Module"
+      >CommutativeRing</a
+      ><a name="3623"
+      > </a
+      ><a name="3624" href="Algebra.RingSolver.AlmostCommutativeRing.html#3352" class="Bound"
+      >CR</a
+      ><a name="3626"
+      >
+  </a
+      ><a name="3629" class="Keyword"
+      >import</a
+      ><a name="3635"
+      > </a
+      ><a name="3636" href="Algebra.Props.Ring.html#1" class="Module"
+      >Algebra</a
+      ><a name="3643"
+      >.</a
+      ><a name="3644" href="Algebra.Props.Ring.html#1" class="Module"
+      >Props</a
+      ><a name="3649"
+      >.</a
+      ><a name="3650" href="Algebra.Props.Ring.html#1" class="Module"
+      >Ring</a
+      ><a name="3654"
+      > </a
+      ><a name="3655" class="Symbol"
+      >as</a
+      ><a name="3657"
+      > </a
+      ><a name="3658" class="Module"
+      >R</a
+      ><a name="3659" class="Symbol"
+      >;</a
+      ><a name="3660"
+      > </a
+      ><a name="3661" class="Keyword"
+      >open</a
+      ><a name="3665"
+      > </a
+      ><a name="3666" href="Algebra.Props.Ring.html#1" class="Module"
+      >R</a
+      ><a name="3667"
+      > </a
+      ><a name="3668" href="Algebra.html#10932" class="Function"
+      >ring</a
+      ><a name="3672"
+      >
+  </a
+      ><a name="3675" class="Keyword"
+      >import</a
+      ><a name="3681"
+      > </a
+      ><a name="3682" href="Algebra.Props.AbelianGroup.html#1" class="Module"
+      >Algebra</a
+      ><a name="3689"
+      >.</a
+      ><a name="3690" href="Algebra.Props.AbelianGroup.html#1" class="Module"
+      >Props</a
+      ><a name="3695"
+      >.</a
+      ><a name="3696" href="Algebra.Props.AbelianGroup.html#1" class="Module"
+      >AbelianGroup</a
+      ><a name="3708"
+      > </a
+      ><a name="3709" class="Symbol"
+      >as</a
+      ><a name="3711"
+      > </a
+      ><a name="3712" class="Module"
+      >AG</a
+      ><a name="3714" class="Symbol"
+      >;</a
+      ><a name="3715"
+      > </a
+      ><a name="3716" class="Keyword"
+      >open</a
+      ><a name="3720"
+      > </a
+      ><a name="3721" href="Algebra.Props.AbelianGroup.html#1" class="Module"
+      >AG</a
+      ><a name="3723"
+      > </a
+      ><a name="3724" href="Algebra.html#9753" class="Function"
+      >+-abelianGroup</a
+      ><a name="3738"
+      >
+
+</a
+      ><a name="3740" class="Comment"
+      >-- Commutative semirings can be viewed as almost commutative rings by</a
+      ><a name="3809"
+      >
+</a
+      ><a name="3810" class="Comment"
+      >-- using identity as the &quot;almost negation&quot;.</a
+      ><a name="3853"
+      >
+
+</a
+      ><a name="3855" href="Algebra.RingSolver.AlmostCommutativeRing.html#3855" class="Function"
+      >fromCommutativeSemiring</a
+      ><a name="3878"
+      > </a
+      ><a name="3879" class="Symbol"
+      >:</a
+      ><a name="3880"
+      >
+  </a
+      ><a name="3883" class="Symbol"
+      >&#8704;</a
+      ><a name="3884"
+      > </a
+      ><a name="3885" class="Symbol"
+      >{</a
+      ><a name="3886" href="Algebra.RingSolver.AlmostCommutativeRing.html#3886" class="Bound"
+      >r&#8321;</a
+      ><a name="3888"
+      > </a
+      ><a name="3889" href="Algebra.RingSolver.AlmostCommutativeRing.html#3889" class="Bound"
+      >r&#8322;</a
+      ><a name="3891" class="Symbol"
+      >}</a
+      ><a name="3892"
+      > </a
+      ><a name="3893" class="Symbol"
+      >&#8594;</a
+      ><a name="3894"
+      > </a
+      ><a name="3895" href="Algebra.html#7862" class="Record"
+      >CommutativeSemiring</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" href="Algebra.RingSolver.AlmostCommutativeRing.html#3886" class="Bound"
+      >r&#8321;</a
+      ><a name="3917"
+      > </a
+      ><a name="3918" href="Algebra.RingSolver.AlmostCommutativeRing.html#3889" class="Bound"
+      >r&#8322;</a
+      ><a name="3920"
+      > </a
+      ><a name="3921" class="Symbol"
+      >&#8594;</a
+      ><a name="3922"
+      > </a
+      ><a name="3923" href="Algebra.RingSolver.AlmostCommutativeRing.html#1103" class="Record"
+      >AlmostCommutativeRing</a
+      ><a name="3944"
+      > </a
+      ><a name="3945" class="Symbol"
+      >_</a
+      ><a name="3946"
+      > </a
+      ><a name="3947" class="Symbol"
+      >_</a
+      ><a name="3948"
+      >
+</a
+      ><a name="3949" href="Algebra.RingSolver.AlmostCommutativeRing.html#3855" class="Function"
+      >fromCommutativeSemiring</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" href="Algebra.RingSolver.AlmostCommutativeRing.html#3973" class="Bound"
+      >CS</a
+      ><a name="3975"
+      > </a
+      ><a name="3976" class="Symbol"
+      >=</a
+      ><a name="3977"
+      > </a
+      ><a name="3978" class="Keyword"
+      >record</a
+      ><a name="3984"
+      >
+  </a
+      ><a name="3987" class="Symbol"
+      >{</a
+      ><a name="3988"
+      > </a
+      ><a name="3989" class="Field Operator"
+      >-_</a
+      ><a name="3991"
+      >                      </a
+      ><a name="4013" class="Symbol"
+      >=</a
+      ><a name="4014"
+      > </a
+      ><a name="4015" href="Function.html#1017" class="Function"
+      >id</a
+      ><a name="4017"
+      >
+  </a
+      ><a name="4020" class="Symbol"
+      >;</a
+      ><a name="4021"
+      > </a
+      ><a name="4022" class="Field"
+      >isAlmostCommutativeRing</a
+      ><a name="4045"
+      > </a
+      ><a name="4046" class="Symbol"
+      >=</a
+      ><a name="4047"
+      > </a
+      ><a name="4048" class="Keyword"
+      >record</a
+      ><a name="4054"
+      >
+      </a
+      ><a name="4061" class="Symbol"
+      >{</a
+      ><a name="4062"
+      > </a
+      ><a name="4063" class="Field"
+      >isCommutativeSemiring</a
+      ><a name="4084"
+      > </a
+      ><a name="4085" class="Symbol"
+      >=</a
+      ><a name="4086"
+      > </a
+      ><a name="4087" href="Algebra.html#8197" class="Function"
+      >isCommutativeSemiring</a
+      ><a name="4108"
+      >
+      </a
+      ><a name="4115" class="Symbol"
+      >;</a
+      ><a name="4116"
+      > </a
+      ><a name="4117" class="Field"
+      >-&#8255;cong</a
+      ><a name="4123"
+      >                </a
+      ><a name="4139" class="Symbol"
+      >=</a
+      ><a name="4140"
+      > </a
+      ><a name="4141" href="Function.html#1017" class="Function"
+      >id</a
+      ><a name="4143"
+      >
+      </a
+      ><a name="4150" class="Symbol"
+      >;</a
+      ><a name="4151"
+      > </a
+      ><a name="4152" class="Field"
+      >-&#8255;*-distrib&#737;</a
+      ><a name="4164"
+      >          </a
+      ><a name="4174" class="Symbol"
+      >=</a
+      ><a name="4175"
+      > </a
+      ><a name="4176" class="Symbol"
+      >&#955;</a
+      ><a name="4177"
+      > </a
+      ><a name="4178" href="Algebra.RingSolver.AlmostCommutativeRing.html#4178" class="Bound"
+      >_</a
+      ><a name="4179"
+      > </a
+      ><a name="4180" href="Algebra.RingSolver.AlmostCommutativeRing.html#4180" class="Bound"
+      >_</a
+      ><a name="4181"
+      > </a
+      ><a name="4182" class="Symbol"
+      >&#8594;</a
+      ><a name="4183"
+      > </a
+      ><a name="4184" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="4188"
+      >
+      </a
+      ><a name="4195" class="Symbol"
+      >;</a
+      ><a name="4196"
+      > </a
+      ><a name="4197" class="Field"
+      >-&#8255;+-comm</a
+      ><a name="4205"
+      >              </a
+      ><a name="4219" class="Symbol"
+      >=</a
+      ><a name="4220"
+      > </a
+      ><a name="4221" class="Symbol"
+      >&#955;</a
+      ><a name="4222"
+      > </a
+      ><a name="4223" href="Algebra.RingSolver.AlmostCommutativeRing.html#4223" class="Bound"
+      >_</a
+      ><a name="4224"
+      > </a
+      ><a name="4225" href="Algebra.RingSolver.AlmostCommutativeRing.html#4225" class="Bound"
+      >_</a
+      ><a name="4226"
+      > </a
+      ><a name="4227" class="Symbol"
+      >&#8594;</a
+      ><a name="4228"
+      > </a
+      ><a name="4229" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="4233"
+      >
+      </a
+      ><a name="4240" class="Symbol"
+      >}</a
+      ><a name="4241"
+      >
+  </a
+      ><a name="4244" class="Symbol"
+      >}</a
+      ><a name="4245"
+      >
+  </a
+      ><a name="4248" class="Keyword"
+      >where</a
+      ><a name="4253"
+      > </a
+      ><a name="4254" class="Keyword"
+      >open</a
+      ><a name="4258"
+      > </a
+      ><a name="4259" href="Algebra.html#7862" class="Module"
+      >CommutativeSemiring</a
+      ><a name="4278"
+      > </a
+      ><a name="4279" href="Algebra.RingSolver.AlmostCommutativeRing.html#3973" class="Bound"
+      >CS</a
+      ><a name="4281"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

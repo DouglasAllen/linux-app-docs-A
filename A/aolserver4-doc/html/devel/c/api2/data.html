@@ -1,0 +1,2184 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1>Data Structure C Library Functions</h1>
+
+<p>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/c/index.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+<p>
+
+
+
+Append the specified argument plus a terminating null character to the
+   end of the Ns_DString. It is useful for making strings like:
+   "foo\0bar\0baz\0". It returns the string associated with the current
+   Ns_DString.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringExport</a></h2>
+
+Export the string of an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DStringExport(
+    Ns_DString *src
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringExport function returns the current Ns_DString string
+   and leaves the Ns_DString in the initialized state. The string
+   returned needs to be freed eventually with Ns_Free.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    char *stringdest;
+    Ns_DStringInit(&ds);
+    Ns_DStringAppend(&ds, "foo");
+    stringdest = Ns_DStringExport(&ds);
+    /* do something with `stringdest' */
+    Ns_Free(stringdest);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringFree</a></h2>
+
+Free any allocated memory used by an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DStringFree(
+    Ns_DString *dsPtr
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringFree function frees any memory associated with an
+   Ns_DString.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringAppend(&ds, "foo");
+    /* do something with the dstring */
+    printf ("%s\n", ds.string);
+    Ns_DStringFree(&ds); /* finished with dstring */
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringInit</a></h2>
+
+Initialize an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DStringInit(
+    Ns_DString *dsPtr
+    );
+</pre>
+
+<h3>Description</h3>
+
+Before using an Ns_DString, you must initialize it with
+   Ns_DStringInit. Storage for a Ns_DString is often on the stack in the
+   calling function. The example below shows a typical usage.
+
+<h3>Examples</h3>
+
+<pre>
+    int MyFunctions(int a, int b)
+    {
+        Ns_DString ds;
+        Ns_DStringInit(&ds);
+        /* ds is now initialized and ready to pass to
+          another function */
+        ...
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringLength</a></h2>
+
+Return the current length of an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DStringLength(
+    Ns_DString *dsPtr
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringLength macro returns the current length of the
+   Ns_DString.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringAppend(&ds, "<html></html>");
+    printf("len=%d\n", Ns_DStringLength(&ds));
+    Ns_DStringFree(&ds); /* finished with dstring */
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringNAppend</a></h2>
+
+Append n-characters of a string to an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DStringNAppend(
+    Ns_DString *dsPtr,
+    char *string,
+    int length
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringNAppend function appends a string up to the specified
+   number of characters, plus a terminating null character.( Unlike the
+   Tcl_DStringAppend function, which only works with string data, the
+   AOLserver Ns_DStringNAppend function can append binary data.) The
+   string may overflow from static space to the heap as a result of
+   calling this function. It returns the string associated with the
+   current Ns_DString.
+
+<h3>Examples</h3>
+
+<pre>
+   The resulting Ns_DString in this example, ds, would contain "foo\0"
+   and have a length of 3:
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringNAppend(&ds, "fooasdf", 3);
+    printf("%s\n", ds.string);
+    Ns_DStringFree(&ds); /* finished with dstring */
+
+   If you need a null-terminated list of null-terminated strings, such as
+   "foo\0bar\0\0", you would add one to the length of the appended
+   strings to get the extra terminating null character. For example:
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringNAppend(&ds, "foo", 4);
+    Ns_DStringNAppend(&ds, "bar", 4);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringPrintf</a></h2>
+
+Append a formatted string to an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DStringPrintf(
+    Ns_DString *dsPtr,
+    char *fmt,
+    ...
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringPrintf function appends a string that has been created
+   by calling the sprintf function with the given format and optional
+   arguments. This function currently uses a fixed length buffer of 1024
+   characters to sprintf() the data before appending to the Ns_DString.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+
+    Ns_DStringInit(&ds);
+    Ns_DStringPrintf(&ds, "/path%d", getpid());
+    /* do something with dstring */
+    printf ("%s\n", ds.string);
+    Ns_DStringFree(&ds); /* finished with dstring */
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringTrunc</a></h2>
+
+Truncate an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DStringTrunc(
+    Ns_DString *dsPtr,
+    int length
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringTrunc function truncates an Ns_DString to the given
+   length. Unlike Ns_DStringFree, which truncates the Ns_DString to
+   length 0 and frees any memory that may have been allocated on the
+   heap, Ns_DStringTrunc allows you to truncate the string to any length.
+   It maintains any memory allocated on the heap. This function is useful
+   in a loop where the Ns_DString is likely to overflow the static space
+   each time through. Using Ns_DStringTrunc instead of Ns_DStringFree
+   will avoid having the Ns_DString call malloc to obtain the addition
+   space in each iteration. You will need to call Ns_DStringFree
+   eventually to free any space that may have been allocated for the
+   Ns_DString.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    int i;
+
+    Ns_DStringInit(&ds);
+    for (i=0; i < 50; i++) {
+        Ns_DStringPrintf(&ds, "%s%d", "aBigString", i);
+        /* do something with the dstring constructed above*/
+        Ns_DStringTrunc(&ds, 0);
+    }
+
+
+    Ns_DStringFree(&ds); /* finished with dstring */
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringValue</a></h2>
+
+Return the current value of an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DStringValue(
+    Ns_DString *dsPtr
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringValue macro returns a pointer to the current value of an
+   Ns_DString. This may be a pointer to the Ns_DString's static space or
+   to a string allocated on the heap if the static space has overflowed.
+   It is not safe to use the value returned by this macro after an
+   intervening call to Ns_DStringAppend because the Ns_DString string
+   could overflow to or move within the heap.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringAppend(&ds, "foo");
+    /* do something with the dstring */
+    printf ("%s\n", Ns_DStringValue(&ds));
+    Ns_DStringFree(&ds); /* finished with dstring */
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DStringVarAppend</a></h2>
+
+Append a variable number of strings to an Ns_DString
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DStringVarAppend(
+    Ns_DString *dsPtr,
+    ...
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DStringVarAppend function appends a variable number of strings
+   to an Ns_DString. The list must end with NULL.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DString ds;
+    Ns_DStringInit(&ds);
+    Ns_DStringVarAppend(&ds, "foo", "bar", NULL);
+    /* do something with the dstring */
+    printf ("%s\n", ds.string);
+    Ns_DStringFree(&ds); /* finished with dstring */
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_QueryToSet</a></h2>
+
+Parse query data into Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_QueryToSet (
+    char* query,
+    Ns_Set* set
+    );
+</pre>
+
+<h3>Description</h3>
+
+Parse query data (such as "a=b&c=d&jkl=rew") into an Ns_Set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ServerSpecificAlloc</a></h2>
+
+Return unique integer to use in other functions
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_ServerSpecificAlloc(void);
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ServerSpecificAlloc function returns a unique integer to be
+   used in the Ns_ServerSpecific* storage functions, below.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ServerSpecificDestroy</a></h2>
+
+Delete server-specific data
+
+<h3>Syntax</h3>
+
+<pre>    
+    void *Ns_ServerSpecificDestroy(
+    char *handle,
+    int id,
+    int flags
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ServerSpecificDelete function deletes server-specific data
+   previously stored with Ns_ServerSpecificSet. The flags argument can be
+   NS_OP_NODELETE or NS_OP_RECURSE. NS_OP_NODELETE determines whether the
+   deletefunc specified in Ns_ServerSpecificSet is called. NS_OP_RECURSE
+   determines whether this operation is applied recursively. An id of -1
+   matches all ids.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ServerSpecificGet</a></h2>
+
+Retrieve server-specific data
+
+<h3>Syntax</h3>
+
+<pre>    
+    void *Ns_ServerSpecificGet(
+    char *handle,
+    int id
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ServerSpecificGet function retrieves server-specific data
+   stored previously with the Ns_ServerSpecificSet function.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ServerSpecificSet</a></h2>
+
+Store server-specific data for subsequent retrieval
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_ServerSpecificSet(
+    char *handle,
+    int id,
+    void *data,
+    int flags,
+    void (*deletefunc) (void *)
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ServerSpecificSet function stores server-specific data,
+   allowing subsequent retrieval using handle and id. The flags argument
+   can be NS_OP_NODELETE. The deletefunc function is called with data as
+   an argument when this handle/id combination is re-registered or
+   deleted, or when this server shuts down, unless NS_OP_NODELETE is set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetCopy</a></h2>
+
+Create a new copy of a set
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_SetCopy(
+    Ns_Set *old
+    );
+</pre>
+
+<h3>Description</h3>
+
+This function returns a newly allocated set that contains the same
+   fields as the original set. The two sets share no memory and can be
+   freed individually.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *setA;
+    Ns_Set *setB;
+
+    setA = Ns_SetCreate("setA");
+    Ns_SetPut(setA, "foo", "foovalue");
+    setB = Ns_SetCopy(setA);
+    Ns_SetFree(setA);
+    /* do something with setB */
+    Ns_SetFree(setB);
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetCreate</a></h2>
+
+Create a new Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_SetCreate(
+    char *name
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetCreate function allocates and returns a pointer to a new
+   Ns_Set. You must eventually call Ns_SetFree to release the memory used
+   by the set.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+
+    aSet = Ns_SetCreate(""); /* set name can be NULL */
+    Ns_SetPut(aSet, "foo", "foovalue");
+    /* do something with aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetDelete</a></h2>
+
+Remove a field from a set by field index
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetDelete(
+    Ns_Set *set,
+    int index
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetDelete function removes the field of the given index from
+   the set. Any fields that follow the deleted field are moved up to keep
+   the set contiguous.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "foo", "foovalue");
+    Ns_SetPut(aSet, "bar", "barvalue");
+    Ns_SetDelete(aSet, 0); /* deletes foo->foovalue */
+    /* finish processing of aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetDeleteKey</a></h2>
+
+Remove a field from a set by key name
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetDeleteKey(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetDeleteKey function removes the field whose key name matches
+   the given key. Any fields that follow the deleted field are moved up
+   to keep the set contiguous. If more than one field in the set has the
+   same key name, Ns_Set-DeleteKey deletes just the first field.
+
+<p>
+
+The Ns_SetIDeleteKey function is this function's case-insensitive
+   counterpart.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "foo", "foovalue");
+    Ns_SetPut(aSet, "bar", "barvalue");
+    Ns_SetDeleteKey(aSet, "foo"); /* deletes foo->foovalue */
+    /* finish processing of aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetDriverProc</a></h2>
+
+Set socket driver callback
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetDriverProc (
+    Ns_Driver driver,
+    Ns_DrvId id,
+    void* proc
+    );
+</pre>
+
+<h3>Description</h3>
+
+Set a single socket driver callback procedure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetEvent</a></h2>
+
+Wake up one waiting event
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetEvent(
+    Ns_Event * event
+    );
+</pre>
+
+<h3>Description</h3>
+
+Wake up one waiter, if there are any waiters to be awakened.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetFind</a></h2>
+
+Locate the index of a field within an Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetFind(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetFind function returns the index of the first field whose key
+   name matches the given key. The index is in C array order, i.e., 0 is
+   the index of the first field. If no fields are found, Ns_SetFind
+   returns -1. If more than one field in the set has the same key name,
+   Ns_SetFind returns just the first field index.
+
+<p>
+
+The Ns_SetIFind function is this function's case-insensitive
+   counterpart.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    int index;
+
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "Foo", "foovalue");
+    Ns_SetPut(aSet, "Bar", "barvalue");
+    index = Ns_SetFind(aSet, "Foo"); /* case sensitive search*/
+    if (index == -1) {
+        Ns_Log(Warning, "set key Foo not found");
+    } else {
+        Ns_Log(Notice, "Value for Foo is %s",
+                        Ns_SetGet(aSet, "Foo"));
+    }
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetFree</a></h2>
+
+Free memory used by an Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetFree(
+    Ns_Set *set
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetFree function deletes all the fields of an Ns_Set and frees
+   the set structure. After calling Ns_SetFree, the set is no longer
+   valid and cannot be used.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+
+    aSet = Ns_SetCreate(""); /* set name can be NULL */
+    Ns_SetPut(aSet, "foo", "foovalue");
+    /* do something with aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetGet</a></h2>
+
+Return the value for a field
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_SetGet(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetGet function returns the value of the first field whose key
+   name matches the given key. Ns_SetGet returns NULL if no field is
+   found. If more than one field in the set has the same key name,
+   Ns_SetGet returns just the first field.
+
+<p>
+
+The Ns_SetIGet function is this function's case-insensitive
+   counterpart.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    int index;
+
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "Foo", "foovalue");
+    Ns_SetPut(aSet, "Bar", "barvalue");
+    Ns_Log(Notice, "Value for Foo is %s", Ns_SetGet(aSet, "Foo"));
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetIDeleteKey</a></h2>
+
+Remove a field from a set by key name case-insentively
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetIDeleteKey(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetIDeleteKey function is the case-insensitive counterpart to
+   the Ns_SetDeleteKey function. It removes the field whose key name
+   matches the given key case-insensitively. Any fields that follow the
+   deleted field are moved up to keep the set contiguous. If more than
+   one field in the set has the same key name, Ns_Set-IDeleteKey deletes
+   just the first field.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "foo", "foovalue");
+    Ns_SetPut(aSet, "bar", "barvalue");
+    Ns_SetIDeleteKey(aSet, "Foo"); /* deletes foo->foovalue */
+    /* finish processing of aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetIFind</a></h2>
+
+Locate the index of a field case-insensitively
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetIFind(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetIFind function is the case-insensitive counterpart of the
+   Ns_SetFind function. It returns the index of the first field whose key
+   name matches the given key case-insensitively. The index is in C array
+   order, i.e., 0 is the index of the first field. If no fields are
+   found, Ns_SetIFind returns -1. If more than one field in the set has
+   the same key name, Ns_SetIFind returns just the first field index.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    int index;
+
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "Foo", "foovalue");
+    Ns_SetPut(aSet, "Bar", "barvalue");
+    index = Ns_SetIFind(aSet, "foo"); /* case insensitive search*/
+    if (index == -1) {
+        Ns_Log(Warning, "set key foo not found");
+    } else {
+        Ns_Log(Notice, "Value for Foo is %s",
+                        Ns_SetGet(aSet, "ooo"));
+    }
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetIGet</a></h2>
+
+Return the value for a field case-insensitively
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_SetIGet(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetIGet function is the case-insensitive counterpart to the
+   Ns_SetGet function. It returns the value of the first field whose key
+   name matches the given key case-insensitively. Ns_SetIGet returns NULL
+   if no field is found. If more than one field in the set has the same
+   key name, Ns_SetIGet returns just the first field.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    int index;
+
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "Foo", "foovalue");
+    Ns_SetPut(aSet, "Bar", "barvalue");
+    Ns_Log(Notice, "Value for foo is %s", Ns_SetIGet(aSet, "foo"));
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetIUnique</a></h2>
+
+Check if a key in an Ns_Set is unique (case insensitive)
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetIUnique(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_SetIUnique returns 1 if the specified key is unique in the
+   specified set and 0 if it is not. The test for uniqueness is performed
+   case-insensitively. The case-sensitive counterpart to this function is
+   Ns_SetUnique.
+
+<p>
+
+For example, a client could send multiple "Accept:" headers which
+   would end up in the header set for the connection. Ns_SetIUnique would
+   then return 0 for the header set and the "Accept" key, because there
+   are multiple fields with the key "Accept".
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetKey</a></h2>
+
+Return the key name of a field
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_SetKey(
+    Ns_Set *set,
+    int index
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetKey macro returns the field key name of the field at the
+   given index.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "foo", "foovalue");
+    Ns_SetPut(aSet, "bar", "barvalue");
+    printf("Key at index 0 is %s\n", Ns_SetKey(aSet, 0));
+    /* finish processing of aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetLast</a></h2>
+
+Return the index of the last element of a set
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetLast(
+    Ns_Set *set
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetLast function returns the index of the last element of the
+   set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetListFind</a></h2>
+
+Locate a set by name in a set list
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_SetListFind(
+    Ns_Set **sets,
+    char *name
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetListFind function returns the set of the given name in
+   NULL-terminated array of sets most likely generated by the Ns_SetSplit
+   function.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetListFree</a></h2>
+
+Free a list of sets
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetListFree(
+    Ns_Set **sets
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetListFree function frees the sets in a NULL-terminated array
+   of sets and then frees the array itself. This function is normally
+   used to free a list of sets generated by Ns_SetSplit.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetMerge</a></h2>
+
+Merge two sets
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetMerge(
+    Ns_Set *high,
+    Ns_Set *low
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetMerge function appends any fields from the low set to the
+   high set if a field with the name key name does not already exist in
+   the high set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetMove</a></h2>
+
+Move fields from one set to the end of another
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetMove(
+    Ns_Set *to,
+    Ns_Set *from
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetMove function moves all fields from the from set to the end
+   of the to set. Ns_SetMove leaves from as a valid empty set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetName</a></h2>
+
+Return the name of a set
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_SetName(
+    Ns_Set *set
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetName function returns the name of the set, which may be
+   NULL.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetPrint</a></h2>
+
+Print the contents of a set to the AOLserver error log
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetPrint(
+    Ns_Set *set
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetPrint function prints all fields in a set to the AOLserver
+   error log file (or the terminal if the AOLserver is running in
+   foreground mode). It is useful for debugging.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetPut</a></h2>
+
+Add a field to an Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetPut(
+    Ns_Set *set,
+    char *key,
+    char *value
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetPut function adds a new field to a set whose key name is the
+   given key and value is the given value. The value of the new field may
+   be NULL. The index of the new field is returned. Ns_SetPut strcpy's
+   the value and uses realloc's to adjust the size of the fields to
+   accommodate.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *aSet;
+    aSet = Ns_SetCreate("");
+    Ns_SetPut(aSet, "foo", "foovalue");
+    Ns_SetPut(aSet, "bar", "barvalue");
+    /* finish processing of aSet */
+    Ns_SetFree(aSet);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetPutValue</a></h2>
+
+Set the value of a field
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetPutValue(
+    Ns_Set *set,
+    int index,
+    char *value
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetPutValue function sets the value of the field at the given
+   index to the new value. Any existing value of the affected field
+   overwritten. If the specified index is greater than the number of
+   fields in the set, this function does nothing.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetRequestAuthorizeProc</a></h2>
+
+Set function used by Ns_AuthorizeRequest
+
+<h3>Syntax</h3>
+
+<pre>    
+    typedef int (Ns_RequestAuthorizeProc) (
+    char *hServer,
+    char *method,
+    char *url,
+    char *authuser,
+    char *authpasswd,
+    char *peeraddr
+    );
+    void Ns_SetRequestAuthorizeProc(
+    char *hServer,
+    Ns_RequestAuthorizeProc *proc
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetRequestAuthorizeProc can be used to set the procedure used
+   by Ns_AuthorizeRequest to authenticate users accessing URLs on your
+   system. The authentication procedure must match the
+   Ns_RequestAuthorizeProc prototype and return one of the values listed
+   in the description of Ns_AuthorizeRequest above.
+
+<p>
+
+The AOLserver permissions module calls Ns_SetRequestAuthorizeProc at
+   startup to register its file-based permission system. If your site
+   already has a permission system in place, you could write a C module
+   whose initialization function opens a connected to the existing system
+   and then calls Ns_SetRequestAuthorizeProc to override the permission
+   module's authentication system.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetRequestUrl</a></h2>
+
+Fill in request structure
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetRequestUrl (
+    Ns_Request* request,
+    char* url
+    );
+</pre>
+
+<h3>Description</h3>
+
+Fill in a request structure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetSize</a></h2>
+
+Return the current size of a set
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetSize(
+    Ns_Set *set
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetSize macro returns the current number of fields in a set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetSplit</a></h2>
+
+Split a set into an array of new sets
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set **Ns_SetSplit(
+    Ns_Set *set,
+    char sep
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetSplit function assumes that each key name in the fields of a
+   set contains a separating character. The fields of the set are
+   partitioned into new sets whose set names are the characters before
+   the separator and whose field key names are the characters after the
+   separator. For example, if the separator is `.' and the set has fields
+   whose key names are the following:
+
+    dog.sound
+    dog.food
+    cat.sound
+    cat.food
+
+   Ns_SetSplit would create two new sets named dog and cat, each
+   containing two fields whose key names are sound and food.
+
+<p>
+
+Ns_SetSplit returns a newly allocated NULL-terminated array of new
+   sets. The original set is left unaltered. The list of new sets can be
+   freed at once with the Ns_SetListFree function.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a name= href=./>Ns_SetTrunc</a></h2>
+
+Truncate an Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetTrunc(
+    Ns_Set *set,
+    int size
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetTrunc function reduces the set to the first size key-value
+   pairs and frees the memory for the rest of the key-value pairs that
+   may have been in the set.
+
+<h3>Examples</h3>
+
+<pre>
+        /* Eliminate the headers sent by a browser. */
+        Ns_SetTrunc(conn->headers, 0);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetUnique</a></h2>
+
+Check if a key in an Ns_Set is unique (case sensitive)
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_SetUnique(
+    Ns_Set *set,
+    char *key
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_SetUnique returns 1 if the specified key is unique in the specified
+   set and 0 if it is not. The test for uniqueness is performed
+   case-sensitively. The case-insensitive counterpart to this function is
+   Ns_SetIUnique.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_SetUpdate</a></h2>
+
+Update an Ns_Set value
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_SetUpdate (
+    Ns_Set* set,
+    char* key,
+    char* value
+    );
+</pre>
+
+<h3>Description</h3>
+
+Remove an item from the Ns_Set whose key = key, if one exists, and
+   then re-add the item with the new value.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a name= href=./>Ns_SetValue</a></h2>
+
+Return the value of a field
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_SetValue(
+    Ns_Set *set,
+    int index
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_SetValue macro returns the value of the field at the given
+   index.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a name= href=./>Ns_TclEnterSet</a></h2>
+
+Make an Ns_Set accessible through Tcl
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_TclEnterSet(
+    Tcl_Interp *interp,
+    Ns_Set *set,
+    int flags
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_TclEnterSet makes an Ns_Set accessible through Tcl. The new set ID
+   is sprintf'ed directly into interp->result. It returns either NS_OK or
+   NS_ERROR. The flags can be one or more of the following:
+
+<p>
+
+NS_TCL_SET_TEMPORARY:
+
+<p>
+
+The set is temporary and private to the Tcl interpreter. The set ID
+   will be automatically deleted by Ns_TclDeAllocateInterp().
+
+<p>
+
+NS_TCL_SET_PERSISTENT:
+
+<p>
+
+The set can be accessed by any Tcl interpreter in the server and the
+   set ID will persist beyond the interpreter's next call to
+   Ns_TclDeAllocateInterp().
+
+<p>
+
+NS_TCL_SET_DYNAMIC:
+
+<p>
+
+The set was dynamically allocated for use by Tcl and will be
+   garbage-collected when the cooresponding set ID is deleted through
+   either Ns_TclFreeSet() or Ns_TclDeAllocateInterp().
+
+<p>
+
+Sets created by Tcl are normally DYNAMIC and TEMPORARY unless the
+   -persist option is used in the Tcl function when creating the set.
+
+<h3>Examples</h3>
+
+<pre>
+    set = Ns_SetCreate(name);
+    return Ns_TclEnterSet(interp, set,
+        NS_TCL_SET_TEMPORARY | NS_TCL_SET_DYNAMIC);
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a name= href=./>Ns_TclFreeSet</a></h2>
+
+Free an Ns_Set
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_TclFreeSet(
+    Tcl_Interp *interp,
+    char *setId
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_TclFreeSet frees the set specified by the set ID for the
+   interpreter. If the set was initially entered with the
+   NS_TCL_SET_DYNAMIC flag with Ns_TclEnterSet, the actual Ns_Set is also
+   freed. Otherwise, the actual Ns_Set is not freed and the programmer is
+   responsible for eventually freeing it.
+
+<p>
+
+The ns_set free Tcl function calls this function.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a name= href=./>Ns_TclGetSet</a></h2>
+
+Return the Ns_Set for the specified set ID
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_TclGetSet(
+    Tcl_Interp *interp,
+    char *setId
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_TclGetSet returns the Ns_Set for the specified set ID. It returns
+   NULL if the set ID is invalid or if there is no such set ID. The
+   Ns_TclGetSet2 function does essentially the same thing, except the
+   Ns_Set is stored in a pointer.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_TclGetSet2</a></h2>
+
+Return the Ns_Set for the specified set ID in a pointer
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_TclGetSet2(
+    Tcl_Interp *interp,
+    char *setId,
+    Ns_Set **setPtr
+    );
+</pre>
+
+<h3>Description</h3>
+
+Ns_TclGetSet2 returns the Ns_Set in setPtr for the specified set ID.
+   It returns TCL_OK if the set ID is valid and found. It returns
+   TCL_ERROR if the set is invalid or can't be found.
+
+<h3>Examples</h3>
+
+<pre>
+    if (Ns_TclGetSet2(interp, argv[1], &set) != TCL_OK {
+        return TCL_ERROR;
+    }
+
+   You can then access the Ns_Set pointed to by set.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+
+<h2><a name= href=./>Ns_UrlSpecificAlloc</a></h2>
+
+Return unique integer to use in other functions
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_UrlSpecificAlloc(void);
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UrlSpecificAlloc function returns a unique integer to be used
+   in the Ns_UrlSpecific* storage functions below.
+
+<h3>Examples</h3>
+
+<pre>
+    static int myId;
+
+    void
+    Init(void)
+    {
+        /* Allocate the id once at startup. */
+        myId = Ns_UrlSpecificAlloc();
+    }
+
+    void
+    Store(char *server, char *method, char *url, char *data)
+    {
+        Ns_UrlSpecificSet(server, method, url, myId,
+                data, 0, NULL);
+    }
+
+    char *
+    Fetch(char *server, char *method, char *url)
+    {
+        char *data;
+
+        data = Ns_UrlSpecificGet(server, method, url, myId);
+        return (char *) data;
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_UrlSpecificDestroy</a></h2>
+
+Delete URL-specific data
+
+<h3>Syntax</h3>
+
+<pre>    
+    void *Ns_UrlSpecificDestroy(
+    char *handle,
+    char *method,
+    char *url,
+    int id,
+    int flags
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UrlSpecificDestroy function deletes URL-specific data
+   previously stored with Ns_UrlSpecificSet with the same method/URL
+   combination and the same inheritance setting.
+
+<p>
+
+The flags argument can be NS_OP_NODELETE, NS_OP_RECURSE, or
+   NS_OP_NOINHERIT. NS_OP_NODELETE determines whether the deletefunc
+   specified in Ns_UrlSpecificSet is called. If NS_OP_RECURSE is set,
+   then data for all URLs more specific than the passed-in URL is also
+   destroyed. If the flags argument specifies NS_OP_NOINHERIT in
+   Ns_UrlSpecificDestroy, the data stored with the NS_OP_NOINHERIT flag
+   in Ns_UrlSpecificSet will be deleted. If the flags argument does not
+   specify NS_OP_NOINHERIT, the data stored without the NS_OP_NOINHERIT
+   flag will be deleted.
+
+<p>
+
+An id of -1 matches all ids. For example,
+   Ns_UrlSpecificDestroy("myserver", "GET", "/", -1, NS_OP_RECURSE)
+   removes all data for the method GET for server "myserver".
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_UrlSpecificGet</a></h2>
+
+Retrieve URL-specific data
+
+<h3>Syntax</h3>
+
+<pre>    
+    void *Ns_UrlSpecificGet(
+    char *handle,
+    char *method,
+    char *url,
+    int id
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UrlSpecificGet function retrieves the best match that it can
+   find. For instance, suppose you had previously registered a
+   handle/method/url/id combination of {myserver, GET, /, 1} and
+   {myserver, GET, /inventory, 1}. The following call, then, would match
+   the data registered at {myserver, GET, /inventory, 1}:
+
+        Ns_UrlSpecificGet("myserver", "GET", "/inventory/RJ45", 1)
+
+    <h3>Examples</h3>
+
+    
+<pre>
+    See the example for Ns_UrlSpecificAlloc.
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_UrlSpecificGetExact</a></h2>
+
+Retrieve URL-specific data
+
+<h3>Syntax</h3>
+
+<pre>    
+    void *Ns_UrlSpecificGetExact(
+    char *handle,
+    char *method,
+    char *url,
+    int id,
+    int flags
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UrlSpecificGetExact function retrieves stored data for the
+   exact specified method/URL/id combination and with the same
+   inheritance setting.
+
+<p>
+
+If the flags argument is set to NS_OP_NOINHERIT in
+   Ns_UrlSpecificGetExact, the data stored with the NS_OP_NOINHERIT flag
+   in Ns_UrlSpecificSet will be retrieved. If the flags argument is set
+   to 0, the data stored without the NS_OP_NOINHERIT flag will be
+   retrieved.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_UrlSpecificSet</a></h2>
+
+Store URL-specific data for subsequent retrieval
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_UrlSpecificSet(
+    char *handle,
+    char *method,
+    char *url,
+    int id,
+    void *data,
+    int flags
+    void (*deletefunc) (void *)
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UrlSpecificSet function stores data in memory, allowing
+   subsequent retrieval using handle, method, url, id, and inheritance
+   flag.
+
+<p>
+
+The flags argument can be NS_OP_NOINHERIT or NS_OP_NODELETE. You can
+   store two sets of data based on the same handle, method, url, and id
+   combination-- one set with inheritance on and one set with inheritance
+   off. If the NS_OP_NOINHERIT flag is set, the data is stored based on
+   the exact URL. If NS_OP_NOINHERIT is omitted, the data is stored based
+   on the specified URL and any URL below it. In this case,
+   Ns_UrlSpecificGetExact will match to the closest URL when retrieving
+   the data.
+
+<p>
+
+The deletefunc argument is called with data as an argument when this
+   handle/url/method/id combination is re-registered or deleted, or when
+   this server shuts down. unless NS_OP_NODELETE is set.
+
+<p>
+
+Normally, calling Ns_UrlSpecificSet on a handle/url/method/id
+   combination which already has an operation registered for it causes
+   the previous operation's delete procedure to be called. You can
+   override this behavior by adding the NS_OP_NODELETE flag.
+
+<h3>Examples</h3>
+
+<pre>
+    See the example for Ns_UrlSpecificAlloc.
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+</body>
+</html>
+
+
+

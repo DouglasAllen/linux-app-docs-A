@@ -1,0 +1,72 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DbPoolPutHandle</TITLE>
+<LINK rel=Previous href="c-ch148.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch150.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch148.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch150.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="115896">
+</a><h3>Ns_DbPoolPutHandle</h3>
+<a name="115897">
+</a><h4>Overview</h4>
+Release a database handle for a pool
+<a name="78027">
+</a><a name="132774">
+</a><h4>Syntax</h4>
+<pre>    <a name="78029"></a>void Ns_DbPoolPutHandle(
+    <a name="78030"></a>Ns_DbHandle *handle
+    <a name="78031"></a>);
+</pre><p><a name="134135">
+</a><h4>Description</h4>
+<p><a name="78033">
+</a>The Ns_DbPoolPutHandle function releases the database handle <code>handle</code> into the pool it was derived from. If the handle was not originally obtained from a pool, an error message is written to the log.</p>
+<a name="224980">
+</a><h4>Examples</h4>
+<pre>    <a name="224981"></a>Ns_DbHandle *handle;
+    <a name="224982"></a>if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+    <a name="224983"></a>	Ns_Set *row;
+    <a name="224984"></a>	row = Ns_DbSelect(handle, "select * from aTable");
+    <a name="224985"></a>	...
+    <a name="224989"></a>	Ns_DbPoolPutHandle(handle); /* done with handle */
+</pre><p><p><a name="224986">
+</a>}</p>
+<p><a name="224978">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch148.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch150.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

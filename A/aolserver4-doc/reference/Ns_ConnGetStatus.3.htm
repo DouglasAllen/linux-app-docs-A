@@ -1,0 +1,210 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:20 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnStatus</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnStatus</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnGetStatus,
+Ns_ConnSetStatus &minus; Routines to manage the HTTP
+response status</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnGetStatus</b>(<i>conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_ConnSetStatus</b>(<i>conn, status</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p style="margin-top: 1em">Ns_Conn <i>conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="42%">
+
+
+<p style="margin-top: 1em">Pointer to open connection.</p></td>
+<td width="6%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p>int <i>status</i> (in)</p></td>
+<td width="9%"></td>
+<td width="42%">
+
+
+<p>Integer HTTP status code.</p></td>
+<td width="6%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:52%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These routines
+manage the HTTP response code sent to the client in a later
+call to <b>Ns_ConnFlush</b> or <b>Ns_ConnFlushDirect</b>.
+Higher level routines such as the <b>Ns_ConnReturn</b>
+functions normally call these routines automatically using
+standard HTTP status codes and the
+<b>Ns_ConnQueueHeaders</b> routine can be used to set the
+status code for lower level code which bypasses
+<b>Ns_ConnFlush</b>. <br>
+int <b>Ns_ConnGetStatus</b>(<i>conn</i>)</p>
+
+<p style="margin-left:22%;">Return the current HTTP status
+to be sent.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnSetStatus</b>(<i>conn, status</i>)</p>
+
+<p style="margin-left:22%;">Set the status code to be sent
+in the response, for example, 200 for a normal
+&quot;OK&quot; response. A later call to <b>Ns_ConnFlush</b>
+will construct the appropriate HTTP response including the
+given status with the cooresponding string status code.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates setting an odd status code followed by
+a call to <b>Ns_ConnFlushDirect</b> to send some data:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">Ns_ConnSetStatus(conn,
+600);</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p>Ns_ConnSetType(conn, &quot;text/plain&quot;);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p>Ns_ConnFlushDirect(conn, &quot;hello&quot;, 5, 0);</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+should provide similar results:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>Ns_ConnSetRequiredHeaders(conn, &quot;text/plain&quot;,
+5);</p> </td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>Ns_ConnQueueHeaders(conn, 600);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>Ns_ConnPuts(conn, &quot;hello&quot;);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>Ns_ConnClose(conn);</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnGetType(3),
+Ns_ConnSetType(3), Ns_ConnFlush(3), Ns_ConnFlushDirect(3),
+Ns_ConnSetRequiredHeaders(3), Ns_ConnQueueHeaders(3),
+ns_conn(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connectionn,
+response, status</p>
+<hr>
+</body>
+</html>

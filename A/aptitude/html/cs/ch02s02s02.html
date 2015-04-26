@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Získání informací o balíku</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="ch02s02.html" title="Správa balíků"><link rel="prev" href="ch02s02s01.html" title="Správa seznamu balíků"><link rel="next" href="ch02s02s03.html" title="Změna stavu balíků"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s02s02.html#idp3569384" title="Seznam balíků"><link rel="subsection" href="ch02s02s02.html#secPackageInfo" title="Podrobné informace o balíku"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Získání informací o balíku</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02s01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Správa balíků</th><td width="20%" align="right"> <a accesskey="n" href="ch02s02s03.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="section" title="Získání informací o balíku"><div class="titlepage"><div><div><h3 class="title"><a name="secAccessingPackageInformation"></a>Získání informací o balíku</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s02s02.html#idp3569384">Seznam balíků</a></span></dt><dt><span class="section"><a href="ch02s02s02.html#secPackageInfo">Podrobné informace o balíku</a></span></dt></dl></div><p>
+
+Informace o balících jsou v <span class="command"><strong>aptitude</strong></span> umístěny na několika místech.
+Seznam balíků nabízí rychlý přehled o stavu každého balíku,
+podrobnosti jsou však skryty v dalších pohledech.
+
+</p><div class="section" title="Seznam balíků"><div class="titlepage"><div><div><h4 class="title"><a name="idp3569384"></a>Seznam balíků</h4></div></div></div><p>
+
+Seznam balíků poskytuje <span class="quote">„<span class="quote">kouknu-a-vidím</span>“</span> souhrn o stavu
+balíku. Například řádek s programem <code class="systemitem">webmin</code>
+vypadá na autorově počítači takto:
+
+</p><pre class="screen">piAU  webmin                                        +5837kB &lt;žádná&gt;     1.160-2</pre><p>
+
+Čtyři znaky na levém okraji obrazovky ukazují, že balík momentálně
+není nainstalován (<span class="quote">„<span class="quote">p</span>“</span>), ale při nejbližší příležitosti
+nainstalován bude (<span class="quote">„<span class="quote">i</span>“</span>), že byl vybrán k instalaci
+automaticky (<span class="quote">„<span class="quote">A</span>“</span>) a že není důvěryhodný
+(<span class="quote">„<span class="quote">U</span>“</span>). Na pravé straně jsou vidět aktuální a nejnovější
+dostupné verze spolu s informací o tom, kolik místa na disku tato
+instalace zabere.
+
+</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+
+Pohled na balíky si můžete přizpůsobit dle libosti, podrobnosti
+naleznete v kapitole <a class="xref" href="ch02s04s01.html#secDisplayFormat" title="Přizpůsobení zobrazení balíků">„Přizpůsobení zobrazení balíků“</a>.
+
+</p></td></tr></table></div><p>
+
+Tyto čtyři příznaky na levé straně obrazovky poskytují základní
+informace o stavu balíku. První znak zobrazuje <span class="emphasis"><em>aktuální
+stav</em></span>, druhý značí <span class="emphasis"><em>akci</em></span>, která se má
+s balíkem provést, třetí znak říká, zda byl balík <span class="emphasis"><em>instalován
+automaticky</em></span> (viz <a class="xref" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">„Správa automaticky instalovaných balíků“</a>) a čtvrtý
+upozorňuje, zda je balík důvěryhodný (viz <a class="xref" href="ch02s02s06.html" title="Pochopení a správa důvěryhodnosti balíků">„Pochopení a správa důvěryhodnosti balíků“</a>).
+
+</p><p>
+
+Možné hodnoty příznaků <span class="quote">„<span class="quote">aktuální stav</span>“</span>
+a <span class="quote">„<span class="quote">akce</span>“</span> jsou popsány v tabulkách <a class="xref" href="ch02s02s02.html#figureCurrentFlag" title="Obrázek 2.9. Hodnoty příznaku „aktuální stav“">2.9 – „Hodnoty příznaku <span class="quote">„<span class="quote">aktuální stav</span>“</span>“</a> a <a class="xref" href="ch02s02s02.html#figureActionFlag" title="Obrázek 2.10. Hodnoty příznaku „akce“">2.10 – „Hodnoty příznaku <span class="quote">„<span class="quote">akce</span>“</span>“</a>.
+
+</p><div class="figure"><a name="figureCurrentFlag"></a><p class="title"><b>Obrázek 2.9. Hodnoty příznaku <span class="quote">„<span class="quote">aktuální stav</span>“</span></b></p><div class="figure-contents"><div class="informaltable"><table border="0"><colgroup><col><col><col></colgroup><tbody><tr><td><code class="computeroutput">i</code></td><td>-</td><td>
+
+Balík je nainstalován a všechny jeho závislosti jsou splněny.
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">c</code></td><td>-</td><td>
+
+Balík byl odstraněn, ale jeho konfigurační soubory jsou stále
+v systému.
+
+    </td></tr><tr><td><code class="computeroutput">p</code></td><td>-</td><td>
+
+Balík byl odstraněn včetně konfiguračních souborů, anebo nikdy nebyl
+nainstalován.
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">v</code></td><td>-</td><td>
+
+Balík je pouze virtuální.
+
+    </td></tr><tr><td><code class="computeroutput">B</code></td><td>-</td><td>
+
+Balík má poškozené závislosti.
+
+</td></tr><tr class="oddrow"><td><code class="computeroutput">u</code></td><td>-</td><td>
+
+
+Balík byl rozbalen, ale ještě nebyl nakonfigurován.
+
+    </td></tr><tr><td><code class="computeroutput">C</code></td><td>-</td><td>
+
+Částečně zkonfigurovaný: konfigurace balíku byla přerušena.
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">H</code></td><td>-</td><td>
+
+Částečně instalovaný: instalace balíku byla přerušena.
+
+    </td></tr></tbody></table></div></div></div><br class="figure-break"><div class="figure"><a name="figureActionFlag"></a><p class="title"><b>Obrázek 2.10. Hodnoty příznaku <span class="quote">„<span class="quote">akce</span>“</span></b></p><div class="figure-contents"><div class="informaltable"><table border="0"><colgroup><col><col><col></colgroup><tbody><tr><td><code class="computeroutput">i</code></td><td>-</td><td>Balík bude instalován.</td></tr><tr class="oddrow"><td><code class="computeroutput">u</code></td><td>-</td><td>Balík bude aktualizován.</td></tr><tr><td><code class="computeroutput">d</code></td><td>-</td><td>
+
+Balík bude odstraněn, ale jeho konfigurační soubory zůstanou
+v systému. (Rozhodnete-li se jej znovu nainstalovat, nebudete ho muset
+zdlouhavě nastavovat, ale využije se stávající nastavení.)
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">p</code></td><td>-</td><td>
+
+Balík bude vyčištěn (tj. smazán včetně konfiguračních souborů).
+
+    </td></tr><tr><td><code class="computeroutput">h</code></td><td>-</td><td>
+
+Balík bude podržen ve stávající verzi. Dokud podržení nezrušíte, balík
+nebude aktualizován ani když bude k dispozici novější verze.
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">F</code></td><td>-</td><td>
+
+Aktualizace tohoto balíku byla zakázána.
+
+    </td></tr><tr><td><code class="computeroutput">r</code></td><td>-</td><td>
+
+Balík bude reinstalován.
+
+    </td></tr><tr class="oddrow"><td><code class="computeroutput">B</code></td><td>-</td><td>
+
+Balík je <span class="quote">„<span class="quote">poškozený</span>“</span> - některé jeho závislosti nebudou
+splněny. Dokud budete mít poškozené balíky, <span class="command"><strong>aptitude</strong></span> vám nedovolí
+nic instalovat, aktualizovat a tím méně odstraňovat.
+
+    </td></tr></tbody></table></div></div></div><br class="figure-break"><p>
+
+Pokud váš terminál podporuje barvy, <span class="command"><strong>aptitude</strong></span> je využije pro
+zvýraznění stavu balíků. Barvy pozadí:
+
+</p><div class="variablelist"><dl><dt><span class="term">Černá</span></dt><dd><p>
+
+Balík nemůže být aktualizován, nebude instalován a nemá žádné problémy
+se závislostmi. Je-li balík nainstalován, bude jeho název zvýrazněn.
+
+</p></dd><dt><span class="term">Zelená</span></dt><dd><p>
+
+Balík bude instalován.
+
+</p></dd><dt><span class="term">Modrá</span></dt><dd><p>
+
+Balík je momentálně nainstalován a bude aktualizován.
+
+</p></dd><dt><span class="term">Fuchsiová</span></dt><dd><p>
+
+Balík je momentálně nainstalován, ale bude odstraněn.
+
+</p></dd><dt><span class="term">Bílá</span></dt><dd><p>
+
+Balík je momentálně nainstalován a je <span class="quote">„<span class="quote">podržen</span>“</span> ve své
+aktuální verzi: automatické aktualizace jej budou ignorovat.
+
+</p></dd><dt><span class="term">Červená</span></dt><dd><p>
+
+Balík je poškozen: některé z jeho závislostí nebudou splněny.
+
+</p></dd></dl></div><p>
+
+A konečně spodní polovina obrazovky zobrazuje dlouhý popis. Když
+<span class="command"><strong>aptitude</strong></span> zjistí, že má balík prsty v nějakém závislostním problému,
+pokusí se zde tento problém popsat. Mezi popisem balíku a jeho
+závislostmi se můžete přepínat klávesou <span class="keycap"><strong>i</strong></span>.
+
+</p></div><div class="section" title="Podrobné informace o balíku"><div class="titlepage"><div><div><h4 class="title"><a name="secPackageInfo"></a>Podrobné informace o balíku</h4></div></div></div><p>
+
+Stisk klávesy <span class="keycap"><strong>Enter</strong></span> zobrazí podrobné informace
+o vybraném balíku:
+
+</p><div class="screenshot"><div class="mediaobject"><img src="images/info-snapshot.png" longdesc="ld-idp3607000.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-idp3607000.html" target="longdesc">D</a>]</span></div></div></div><p>
+
+Tento pohled se dá ovládat stejně, jako seznam balíků. Například na
+předchozím obrázku jsem rozbalil nesplněnou závislost na
+<code class="systemitem">apt-doc</code>, čímž se zobrazily dostupné verze
+<code class="systemitem">apt-doc</code>, které mohou tuto závislost splnit.
+S verzemi lze pracovat stejně jako s balíky: například pro instalaci
+balíku <code class="systemitem">apt-doc</code> ve verzi
+<code class="systemitem">0.5.25</code> označíte příslušný řádek a stisknete
+klávesu <span class="keycap"><strong>+</strong></span>.
+
+</p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+
+Pro rychlé splnění závislosti ji vyberte a stiskněte
+<span class="keycap"><strong>+</strong></span>; <span class="command"><strong>aptitude</strong></span> se pokusí ji splnit.
+
+</p></td></tr></table></div><p>
+
+Kromě závislostí balíku můžete vidět i názvy virtuálních balíků, které
+poskytuje, balíky, které na něm závisí a úplně dole také dostupné
+verze vybraného balíku.
+
+</p><p>
+
+Jako obvykle můžete tuto obrazovku opustit klávesou <span class="keycap"><strong>q</strong></span>
+a vrátit se tak do předchozího pohledu. Pro větší pohodlí existuje
+ještě několik menších pohledů, které zobrazují pouze vybranou
+podmnožinu informací o balíku.  Klávesa <span class="keycap"><strong>v</strong></span> zobrazí
+pouze dostupné verze, <span class="keycap"><strong>d</strong></span> závislosti
+a <span class="keycap"><strong>r</strong></span> <span class="quote">„<span class="quote">reverzní závislosti</span>“</span> (které balíky
+závisí na vybraném balíku).
+
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02s01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s02s03.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Správa seznamu balíků </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> Změna stavu balíků</td></tr></table></div></body></html>

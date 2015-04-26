@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Slices - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Arrays.html#Arrays" title="Arrays">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slices"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Arrays.html#Arrays">Arrays</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.12.1 Slices</h4>
+
+<p><a name="index-slices-802"></a>
+Asymptote allows a section of an array to be addressed as a slice
+using a Python-like syntax.  If <code>A</code> is an array, the expression
+<code>A[m:n]</code> returns a new array consisting of the elements of <code>A</code> with
+indices from <code>m</code> up to but not including <code>n</code>. For example,
+<pre class="verbatim">int[] x={0,1,2,3,4,5,6,7,8,9};
+int[] y=x[2:6];  // y={2,3,4,5};
+int[] z=x[5:10]; // z={5,6,7,8,9};
+</pre>
+
+   <p>If the left index is omitted, it is taken be <code>0</code>.  If the right index is
+omitted it is taken to be the length of the array.  If both are omitted, the
+slice then goes from the start of the array to the end, producing a non-cyclic
+deep copy of the array.  For example:
+<pre class="verbatim">int[] x={0,1,2,3,4,5,6,7,8,9};
+int[] y=x[:4];  // y={0,1,2,3}
+int[] z=x[5:];  // z={5,6,7,8,9}
+int[] w=x[:];   // w={0,1,2,3,4,5,6,7,8,9}, distinct from array x.
+</pre>
+
+   <p>If A is a non-cyclic array, it is illegal to use negative values for either of
+the indices.  If the indices exceed the length of the array, however, they are
+politely truncated to that length.
+
+   <p>For cyclic arrays, the slice <code>A[m:n]</code> still consists of the cells with
+indices in the set [<code>m</code>,<code>n</code>), but now negative
+values and values beyond the length of the array are allowed.  The indices
+simply wrap around.  For example:
+
+<pre class="verbatim">int[] x={0,1,2,3,4,5,6,7,8,9};
+x.cyclic=true;
+int[] y=x[8:15];  // y={8,9,0,1,2,3,4}.
+int[] z=x[-5:5];  // z={5,6,7,8,9,0,1,2,3,4}
+int[] w=x[-3:17]; // w={7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6}
+</pre>
+
+   <p>Notice that with cyclic arrays, it is possible to include the same element of
+the original array multiple times within a slice.  Regardless of the original
+array, arrays produced by slices are always non-cyclic.
+
+   <p>If the left and right indices of a slice are the same, the result is an empty
+array.  If the array being sliced is empty, the result is an empty array.  Any
+slice with a left index greater than its right index will yield an error.
+
+   <p>Slices can also be assigned to, changing the value of the original array.  If
+the array being assigned to the slice has a different length than the
+slice itself, elements will be inserted or removed from the array to
+accommodate it. For instance:
+<pre class="verbatim">string[] toppings={"mayo", "salt", "ham", "lettuce"};
+toppings[0:2]=new string[] {"mustard", "pepper"};
+    // Now toppings={"mustard", "pepper", "ham", "lettuce"}
+toppings[2:3]=new string[] {"turkey", "bacon" };
+    // Now toppings={"mustard", "pepper", "turkey", "bacon", "lettuce"}
+toppings[0:3]=new string[] {"tomato"};
+    // Now toppings={"tomato", "bacon", "lettuce"}
+</pre>
+
+   <p>If an array is assigned to a slice of itself, a copy of the original array
+is assigned to the slice.  That is, code such as <code>x[m:n]=x</code> is equivalent
+to <code>x[m:n]=copy(x)</code>.  One can use the shorthand <code>x[m:m]=y</code> to insert
+the contents of the array <code>y</code> into the array <code>x</code> starting at the
+location just before <code>x[m]</code>.
+
+   <p>For a cyclic array, a slice is bridging if it addresses cells up to the end of
+the array and then continues on to address cells at the start of the array. 
+For instance, if <code>A</code> is a cyclic array of length 10, <code>A[8:12]</code>,
+<code>A[-3:1]</code>, and <code>A[5:25]</code> are bridging slices whereas <code>A[3:7]</code>,
+<code>A[7:10]</code>, <code>A[-3:0]</code> and <code>A[103:107]</code> are not.  Bridging slices
+can only be assigned to if the number of elements in the slice is exactly equal
+to the number of elements we are assigning to it.  Otherwise, there is no clear
+way to decide which of the new entries should be <code>A[0]</code> and an error is
+reported.  Non-bridging slices may be assigned an array of any length.
+
+   <p>For a cyclic array <code>A</code> an expression of the form
+<code>A[A.length:A.length]</code> is equivalent to the expression <code>A[0:0]</code> and
+so assigning to this slice will insert values at the start of the array. 
+<code>A.append()</code> can be used to insert values at the end of the array.
+
+   <p>It is illegal to assign to a slice of a cyclic array that repeats any of the
+cells.
+
+   </body></html>
+

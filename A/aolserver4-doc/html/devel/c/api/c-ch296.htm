@@ -1,0 +1,80 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_RegisterRequest</TITLE>
+<LINK rel=Previous href="c-ch295.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch297.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch295.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch297.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="860948">
+</a><h3>Ns_RegisterRequest</h3>
+<a name="126975">
+</a><h4>Overview</h4>
+Register one or two functions to handle HTTP requests for a method/URL combination
+<a name="44134">
+</a><a name="133172">
+</a><h4>Syntax</h4>
+<pre>    <a name="368457"></a>typedef void *Ns_OpContext;
+    <a name="368458"></a>typedef int (Ns_OpProc) (void *context, Ns_Conn *conn);
+    <a name="368459"></a>typedef void (Ns_OpDeleteProc) (void *context);
+    <a name="368469"></a>
+    <a name="368460"></a>void Ns_RegisterRequest(
+    <a name="368461"></a>char *hServer,
+    <a name="368462"></a>char *method,
+    <a name="368463"></a>char *URL,
+    <a name="368464"></a>Ns_OpProc *proc,
+    <a name="368465"></a>Ns_OpDeleteProc *deleteProc,
+    <a name="368466"></a>Ns_OpContext context,
+    <a name="368467"></a>int flags
+    <a name="44147"></a>);
+</pre><p><a name="134604">
+</a><h4>Description</h4>
+<p><a name="368471">
+</a>The Ns_RegisterRequest function registers function proc to handle HTTP requests. When the specified server receives an HTTP request, it finds the most specific registered operation. The default operation for a GET (i.e., the one registered with URL \Q/') serves up a page out of the file system.</p>
+<p><a name="368472">
+</a>The server passes your procedure the context you specify here and the Ns_Conn structure associated with the new HTTP connection.</p>
+<p><a name="368473">
+</a>When a procedure is unregistered with either Ns_UnRegisterRequest or by registering another procedure with the same method and URL, the server calls the deleteProc with the same context. You can use this to do any cleanup you might require (e.g., close an index file or free something from the heap). If the value of deleteProc is NULL, the server does nothing.</p>
+<p><a name="368474">
+</a>The flags parameter specifies one or more constants that can be OR'ed together. The available flags are NS_OP_NOINHERIT and NS_OP_NODELETE.</p>
+<p><a name="368475">
+</a>NS_OP_NOINHERIT tells AOLserver to only call your procedure if the URL matches exactly (the default behavior is to look for the closest match). You can register two procedures for the same method/URL combination by calling Ns_RegisterRequest once with NS_OP_NOINHERIT specified and once without NS_OP_NOINHERIT specified. The first procedure will be called if there is an exact match with the specified URL. The second procedure will be called if the requested URL is below the specified URL, provided there is not already another procedure registered with a closer match.</p>
+<p><a name="44152">
+</a>NS_OP_NODELETE specifies that the previous procedure's deleteproc should not be called. NS_OP_NODELETE can be used in conjunction with Ns_GetRequest to implement wrappers.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch295.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch297.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

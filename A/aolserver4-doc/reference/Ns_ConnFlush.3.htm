@@ -1,0 +1,316 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:17 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnFlush</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnFlush</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnFlush,
+Ns_ConnFlushDirect &minus; Flush content to an open
+connection</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnFlush</b>(<i>conn, buf, len, stream</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnFlushDirect</b>(<i>conn, buf, len, stream</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p style="margin-top: 1em">char <i>*buf</i> (in)</p></td>
+<td width="9%"></td>
+<td width="48%">
+
+
+<p style="margin-top: 1em">Pointer to buffer to send.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p>Ns_Conn <i>conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="48%">
+
+
+<p>Pointer to current connection.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p>int <i>len</i> (in)</p></td>
+<td width="9%"></td>
+<td width="48%">
+
+
+<p>Length of bytes pointed to by <i>buf</i>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p>int <i>stream</i> (in)</p></td>
+<td width="9%"></td>
+<td width="48%">
+
+
+<p>Boolean value to indicate a streamed response.</p></td></tr>
+</table>
+
+
+<p style="margin-left:52%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These routines
+support sending content to the client through the
+connection&rsquo;s communcation driver. They support
+generating both complete single responses or streaming
+content through multiple calls. They both take a pointer to
+the current connection specified by the <i>conn</i> argument
+and a pointer to content to send specified by <i>buf</i> of
+length <i>len</i>. If <i>len</i> is negative, <i>buf</i> is
+assumed to be a null terminated string and <i>len</i> is
+calculated by <b>strlen</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>stream</i> argument, if zero, indicates a single response
+should be generated. In this case, an appropriate
+<i>content-length</i> header is generated, the content is
+sent, and the connection is closed with <b>Ns_ConnClose</b>.
+If <i>stream</i> is not zero, the call is assumed to be one
+of potential multiple calls which will send content
+incrementally to the client. Content streamed in this case
+is sent either in <i>chunked</i> encoding mode for HTTP/1.1
+clients or directly, without a <i>content-length</i> as was
+common in pre-HTTP/1.1 applications. Applications which
+stream content should be sure to make a final call
+<b>Ns_ConnFlush</b> or <b>Ns_ConnFlushDirect</b> with
+<i>stream</i> set to zero to correctly flush and close the
+connection.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>Ns_ConnFlush</b> and <b>Ns_ConnFlushDirect</b> differ in
+their treatment of the given content before sending.
+<b>Ns_ConnFlushDirect</b> does not alter the content in
+anyway, treating is as an arbitrary array of bytes.
+<b>Ns_ConnFlush</b> assumes the content is UTF-8 text, e.g.,
+the result of an ADP page execution. In this case, if the
+connection has an associated output encoding set with the
+<b>Ns_ConnSetEncoding</b> routine, it will be used to encode
+the content in the requested character set (e.g., from UTF-8
+to iso8859-1). In addition, if the server has gzip
+compression enabled, the <b>nszlib</b> module is loaded, the
+connection has been marked for gzip compression with the
+<b>Ns_ConnSetGzipFlag</b>, and the size of the output data
+is greater than the server configured minimun gzip
+compression size, the content will be compressed and an
+appropriate header will be generated for the client. Gzip
+compression is not supported when content is streamed to the
+client.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The first call
+to <b>Ns_ConnFlush</b> or <b>Ns_ConnFlushDirect</b> for a
+connection, in stream or single response mode, will result
+in appropriate headers being constructed and sent first
+before any user data. These headers include the basic
+headers constructed via <b>Ns_ConnSetRequiredHeaders</b>
+plus any additional application specific headers queued for
+output via <b>Ns_ConnSetHeaders</b> or
+<b>Ns_ConnCondSetHeaders</b>. The <b>Ns_ConnFlush</b>
+routine may add additional headers as needed to specify
+<i>chunked</i> and/or <i>gzip</i> encoding.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example generates a simple text response:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">Ns_ConnSetStatus(conn,
+200);</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p>Ns_ConnSetType(conn, &quot;text/plain&quot;);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p>Ns_ConnFlush(conn, &quot;Hello&quot;, 5, 0);</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates streaming:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnSetStatus(conn, 200);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnSetType(conn, &quot;text/plain&quot;);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>for (i = 0; i &lt; 10; ++i) {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>sprintf(buf, &quot;stream: %d0, i);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnFlush(conn, buf, -1, 1);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnFlush(conn, &quot;done!&quot;, 5, 0);</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnSend(n),
+Ns_ConnClose(3), Ns_ConnSetRequiredHeaders(3),
+Ns_ConnQueueHeaders(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection i/o,
+gzip, stream, encoding, flush</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,2845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Input/Output Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Input/Output Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Input/Output Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Input/Output</em> module is an orginal implementation that provides objects for i/o operations. Although input and output files are the standard objects that one might expect, the module facilities for directory access, path manipulation and i/o event management. At the heart of this module is the concept of stream associated with the transcoding object which enable the passage between one coding system to another. It is also this module which provides the stream selector object. </p>
+<div class="section">
+Input and output streams</div>
+<p class="text">
+ The <tt class="code">afnix-sio</tt> module is based on facilities provided by two base classes, namely, the <tt class="code">InputStream</tt> stream and the <tt class="code">OutputStream</tt> stream. Both classes have associated predicates with the name <tt class="code">input-stream-p</tt> and <tt class="code">output-stream-p</tt>. The base class associated is the <tt class="code">Stream</tt> class those sole purpose is to define the stream coding mode. </p>
+<p class="subsect">
+Stream base class</p>
+<p class="text">
+ The <tt class="code">Stream</tt> class is the base class for the <tt class="code">InputStream</tt> and <tt class="code">OutputStream</tt> classes. The <tt class="code">Stream</tt> class is used to define the stream coding mode that affects how characters are read or written. When a stream operates in <em>byte mode</em>, each character is assumed to be encoded in one byte. In that case, the input stream methods <tt class="code">read</tt> and <tt class="code">getu</tt> are equivalent and no transformation is performed when writing characters. This behavior is the default stream behavior. For certain stream, like terminal, this behavior is changed depending on the current localization settings. For instance, if the current locale is operating with an <em>UTF-8</em> codeset, the <tt class="code">Terminal</tt> stream coding mode is automatically adjusted to reflect this situation. Since the <em>US-ASCII</em> codeset is predominant and the default steam coding mode is the byte mode, there should be no conflict during the read and write operations. </p>
+<p class="subsect">
+Stream transcoding</p>
+<p class="text">
+ The <tt class="code">Stream</tt> class provides the support for the transcoding of different codesets. All <em>ISO-8859</em> codesets are supported. Since the engine operates internally with Unicode characters, the transcoding operation takes care of changing a character in one particular codeset into its equivalent Unicode representation. This operation is done for an input stream that operates in byte mode. For an output stream, the opposite operation is done. An internal Unicode characters representation is therefore mapped into a particular codeset. Note that only the codeset characters can be mapped. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Codeset</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+DEFAULT</td>
+<td class="text">
+Default codeset, i.e US-ASCII</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-01</td>
+<td class="text">
+ISO-8859-1 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-02</td>
+<td class="text">
+ISO-8859-2 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-03</td>
+<td class="text">
+ISO-8859-3 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-04</td>
+<td class="text">
+ISO-8859-4 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-05</td>
+<td class="text">
+ISO-8859-5 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-06</td>
+<td class="text">
+ISO-8859-6 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-07</td>
+<td class="text">
+ISO-8859-7 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-08</td>
+<td class="text">
+ISO-8859-8 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-09</td>
+<td class="text">
+ISO-8859-9 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-10</td>
+<td class="text">
+ISO-8859-10 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-11</td>
+<td class="text">
+ISO-8859-11 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-13</td>
+<td class="text">
+ISO-8859-13 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-14</td>
+<td class="text">
+ISO-8859-14 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-15</td>
+<td class="text">
+ISO-8859-15 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+ISO-16</td>
+<td class="text">
+ISO-8859-16 codeset</td>
+</tr>
+<tr class="text">
+<td class="text">
+UTF-08</td>
+<td class="text">
+Unicode UTF-8 codeset</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The <tt class="code">set-encoding-mode</tt> can be used to set the stream encoding codeset. The method operates either by enumeration or string. The <tt class="code">get-encoding-mode</tt> returns the stream encoding mode. There are some time good reasons to force a stream encoding mode. For example, a file encoded in UTF-8 that is read will require this call since the default stream mode is to work in byte mode. It should be noted that there is a difference between the enumeration and the string encoding mode. The enumeration mode defines whether the stream operates in byte or UTF-8 mode. When the stream operates in byte mode, it is also necessary to define the transcoding mode with the <tt class="code">set-transcoding-mode</tt> method. For simplicity, the string version of the <tt class="code">set-encoding-mode</tt> takes care of setting both the stream mode and the transcoding mode. It is also worth to note that internally, the <tt class="code">Stream</tt> class is derived from the <tt class="code">Transcoder</tt> class. </p>
+<p class="subsect">
+Input stream </p>
+<p class="text">
+ The <tt class="code">InputStream</tt> base class has several method for reading and testing for byte availability. Moreover, the class provides a push-back buffer. Reading bytes is in the form of three methods. The <tt class="code">read</tt> method without argument returns the next available byte or the <em>end-of-stream</em><tt class="code">eos</tt>. With an integer argument, the <tt class="code">read</tt> method returns a <tt class="code">Buffer</tt> with at most the number of requested bytes. The <tt class="code">readln</tt> method returns the next available line. When it is necessary to read characters instead of bytes, the <tt class="code">getu</tt> is more appropriate since it returns an Unicode character. </p>
+<p class="subsect">
+Output stream</p>
+<p class="text">
+ The <tt class="code">OutputStream</tt> base class provides the base methods to write to an output stream. The <tt class="code">write</tt> method takes literal objects which are automatically converted to string representation and then written to the output stream. Note that for the case of a <tt class="code">Buffer</tt> object, it is the buffer itself that take a stream argument and not the opposite. </p>
+<p class="subsect">
+The valid-p predicate</p>
+<p class="text">
+ The input stream provides a general mechanism to test and read for bytes. The base method is the <tt class="code">valid-p</tt> predicate that returns <tt class="code">true</tt> if a byte can be read from the stream. It is important to understand its behavior which depends on the stream type. Without argument, the <tt class="code">valid-p</tt> predicate checks for an available byte from the input stream. This predicate will block if no byte is available. On the other end, for a bounded stream like an input file, the method will not block at the end of file. With one integer argument, the <tt class="code">valid-p</tt> predicate will timeout after the specified time specified in milliseconds. This second behavior is particularly useful with unbound stream like socket stream. </p>
+<p class="subsect">
+The eos-p predicate</p>
+<p class="text">
+ The <tt class="code">eos-p</tt> predicate does not take argument. The predicate behaves like <tt class="code">not (valid-p 0)</tt>. However, there are more subtle behaviors. For an input file, the predicate will return <tt class="code">true</tt> if and only if a byte cannot be read. If a byte has been pushed-back and the <em>end-of-stream</em> marker is reached, the method will return false. For an input terminal, the method returns true if the user and entered the <em>end-of-stream</em> byte. Once again, the method reacts to the contents of the push-back buffer. For certain input stream, like a tcp socket, the method will return true when no byte can be read, that is here, the connection has been closed. For an udp socket, the method will return <tt class="code">true</tt> when all datagram bytes have be read. </p>
+<p class="subsect">
+The read method</p>
+<p class="text">
+ The <tt class="code">read</tt> method is sometimes disturbing. Nevertheless, the method is a blocking one and will return a byte when completed. The noticeable exception is the returned byte when an <em>end-of-stream</em> marker has been reached. The method returns the <em>ctrl-d</em> byte. Since a binary file might contains valid byte like <em>ctrl-d</em> it is necessary to use the <tt class="code">valid-p</tt> or <tt class="code">eos-p</tt> predicate to check for a file reading completion. This remark apply also to bounded streams like a tcp socket. For some type of streams like a udp socket, the method will block when all datagram bytes have been consumed and no more datagram has arrived. With this kind of stream, there is no <em>end-of-stream</em> condition and therefore care should be taken to properly assert the stream content. This last remark is especially true for the <tt class="code">readln</tt> method. The method will return when the <em>end-of-stream</em> marker is reached, even if a newline byte has not been read. With an udp socket, such behavior will not happen. </p>
+<p class="subsect">
+Buffer read mode</p>
+<p class="text">
+ The <tt class="code">read</tt> method with an integer argument, returns a buffer with at least the number of bytes specified as an argument. This method is particularly useful when the contents has a precise size. The method returns a <tt class="code">Buffer</tt> object which can later be used to read, or transform bytes. Multi-byte conversion to number should use such approach. The <tt class="code">read</tt> method does not necessarily returns the number of requested bytes. Once the buffer is returned, the <tt class="code">length</tt> method can be used to check the buffer size. Note also the existence of the <tt class="code">to-string</tt> method which returns a string representation of the buffer. </p>
+<pre class="frame">
+<![CDATA[# try to read 256 bytes
+const buf (is:read 256)
+# get the buffer size
+println (buf:length)
+# get a string representation
+println (buf:to-string)
+
+]]></pre>
+<div class="section">
+File stream</div>
+<p class="text">
+ The <tt class="code">afnix-sio</tt> module provides two classes for file access. The <tt class="code">InputFile</tt> class open a file for input. The <tt class="code">OutputFile</tt> class opens a file for output. The <tt class="code">InputFile</tt> class is derived from the <tt class="code">InputStream</tt> base class. The <tt class="code">OutputFile</tt> class is derived from the <tt class="code">OutputStream</tt> class. By default an output file is created if it does not exist. If the file already exist, the file is truncated to 0. Another constructor for the output file gives more control about this behavior. It takes two boolean flags that defines the truncate and append mode. </p>
+<pre class="frame">
+<![CDATA[# load the module
+interp:library "afnix-sio"
+# create an input file by name
+const if (afnix:sio:InputFile "orig.txt")
+# create an output file by name
+const of (afnix:sio:OutputFile "copy.txt")
+
+]]></pre>
+<p class="subsect">
+Stream information</p>
+<p class="text">
+ Both <tt class="code">InputFile</tt> and <tt class="code">OutputFile</tt> supports the <tt class="code">get-name</tt> method which returns the file name. </p>
+<pre class="frame">
+<![CDATA[println (if:get-name)
+println (of:get-name)
+
+]]></pre>
+<p class="text">
+ Predicates are also available for these classes. The <tt class="code">input-file-p</tt> returns true for an input file object.The <tt class="code">output-file-p</tt> returns true for an output file object. </p>
+<pre class="frame">
+<![CDATA[afnix:sio:input-stream-p  if
+afnix:sio:output-stream-p of
+afnix:sio:input-file-p    if
+afnix:sio:output-file-p   of
+
+]]></pre>
+<p class="subsect">
+Reading and writing</p>
+<p class="text">
+ The <tt class="code">read</tt> method reads a byte on an input stream. The <tt class="code">write</tt> method writes one or more literal arguments on the output stream. The <tt class="code">writeln</tt> method writes one or more literal arguments followed by a newline byte on the output stream. The <tt class="code">newline</tt> method write a newline byte on the output stream. The <tt class="code">eos-p</tt> predicate returns true for an input stream, if the stream is at the end. The <tt class="code">valid-p</tt> predicate returns true if an input stream is in a valid state. With these methods, copying a file is a simple operation. </p>
+<pre class="frame">
+<![CDATA[# load the module and open the files
+interp:library "afnix-sio"
+const if (afnix:sio:InputFile "orig.txt")
+const of (afnix:sio:OutputFile "copy.txt")
+# loop in the input file and write
+while (if:valid-p) (of:write (if:read))
+
+]]></pre>
+<p class="text">
+ The use of the <tt class="code">readln</tt> method can be more effective. The example below is a simple cat program which take the file name an argument. </p>
+<pre class="frame">
+<![CDATA[# cat a file on the output terminal
+# usage: axi 0601.als file
+# get the io module
+interp:library "afnix-sio"
+# cat a file
+const cat (name) {
+  const f (afnix:sio:InputFile name)
+  while (f:valid-p) (println (f:readln))
+  f:close
+}
+# get the file
+if (== 0 (interp:argv:length)) {
+  errorln "usage: axi 0601.als file"
+} {
+  cat (interp:argv:get 0)
+}
+
+]]></pre>
+<div class="section">
+Multiplexing</div>
+<p class="text">
+ I/O multiplexing is the ability to manipulate several streams at the same time and process one at a time. Although the use of threads reduce the needs for i/o multiplexing, there is still situations where they are needed. In other words, I/O multiplexing is identical to the <tt class="code">valid-p</tt> predicate, except that it works with several stream objects. </p>
+<p class="subsect">
+Selector object</p>
+<p class="text">
+ I/O multiplexing is accomplished with the <tt class="code">Selector</tt> class. The constructor takes 0 or several stream arguments. The class manages automatically to differentiate between <tt class="code">InputStream</tt> stream and <tt class="code">OutputStream</tt> streams. Once the class is constructed, it is possible to get the first stream ready for reading or writing or all of them. We assume in the following example that <tt class="code">is</tt> and <tt class="code">os</tt> are respectively an input and an output stream. </p>
+<pre class="frame">
+<![CDATA[# create a selector
+const slt (afnix:sio:Selector is)
+# at this stage the selector has one stream
+# the add method can add more streams
+slt:add os
+
+]]></pre>
+<p class="text">
+ The <tt class="code">add</tt> method adds a new stream to the selector. The stream must be either an <tt class="code">InputStream</tt> and <tt class="code">OutputStream</tt> stream or an exception is raised. If the stream is both an input and an output stream, the preference is given to the input stream. If this preference is not acceptable, the <tt class="code">input-add</tt> or the <tt class="code">output-add</tt> methods might be preferable. The <tt class="code">input-length</tt> method returns the number of input streams in this selector. The <tt class="code">output-length</tt> method returns the number of output streams in this selector. The <tt class="code">input-get</tt> method returns the selector input stream by index. The <tt class="code">output-get</tt> method returns the selector output stream by index. </p>
+<p class="subsect">
+Waiting for i/o event</p>
+<p class="text">
+ The <tt class="code">wait</tt> and <tt class="code">wait-all</tt> methods can be used to detect a status change in the selector. Without argument both methods will block indefinitely until one stream change. With one integer argument, both method blocks until one stream change or the integer argument timeout expires. The timeout is expressed in milliseconds. Note that 0 indicates an immediate return. The <tt class="code">wait</tt> method returns the first stream which is ready either for reading or writing depending whether it is an input or output stream. The <tt class="code">wait-all</tt> method returns a vector with all streams that have changed their status. The <tt class="code">wait</tt> method returns <tt class="code">nil</tt> if the no stream have changed. Similarly, the <tt class="code">wait-all</tt> method returns an empty vector. </p>
+<pre class="frame">
+<![CDATA[# wait for a status change
+const is (slt:wait)
+# is is ready for reading - make sure it is an input one
+if (afnix:sio:input-stream-p is) (is:read)
+
+]]></pre>
+<p class="text">
+ A call to the <tt class="code">wait</tt> method will always returns the first input stream. </p>
+<p class="subsect">
+Marking mode</p>
+<p class="text">
+ When used with several input streams in a multi-threaded context, the selector behavior can becomes quite complicated. For this reason, the selector can be configured to operate in marking mode. In such mode, the selector can be marked as ready by a thread independently of the bounded streams. This is a useful mechanism which can be used to cancel a select loop. The <tt class="code">mark</tt> method is designed to mark the selector while the <tt class="code">marked-p</tt> predicate returns true if the stream has been marked. </p>
+<div class="section">
+Terminal streams</div>
+<p class="text">
+ Terminal streams are another kind of streams available in the standard i/o module. The <tt class="code">InputTerm</tt>, <tt class="code">OutputTerm</tt> and <tt class="code">ErrorTerm</tt> classes are low level classes used to read or write from or to the standard streams. The basic methods to read or write are the same as the file streams. Reading from the input terminal is not a good idea, since the class does not provide any formatting capability. One may prefer to use the <tt class="code">Terminal</tt> class. The use of the output terminal or error terminal streams is convenient when the interpreter standard streams have been changed but one still need to print to the terminal. </p>
+<p class="subsect">
+Terminal class</p>
+<p class="text">
+ The <tt class="code">Terminal</tt> class combines an input stream and an output stream with some line editing capabilities. When the class is created, the constructed attempts to detect if the input and output streams are bounded to a terminal (i.e tty). If the line editing capabilities can be loaded (i.e non canonical mode), the terminal is initialized for line editing. Arrows, backspace, delete and other control sequences are available when using the <tt class="code">read-line</tt> method. The standard methods like <tt class="code">read</tt> or <tt class="code">readln</tt> do not use the line editing features. When using a terminal, the prompt can be set to whatever the user wishes with the methods <tt class="code">set-primary-prompt</tt> or <tt class="code">set-secondary-prompt</tt>. A secondary prompt is displayed when the <tt class="code">read-line</tt> method is called with the boolean argument false. </p>
+<pre class="frame">
+<![CDATA[const term (Terminal)
+term:set-primary-prompt "demo:"
+const line (term:read-line)
+errorln line
+
+]]></pre>
+<p class="subsect">
+Using the error terminal</p>
+<p class="text">
+ The <tt class="code">ErrorTerm</tt> class is the most frequently used class for printing data on the standard error stream. The reserved keywords <tt class="code">error</tt> or <tt class="code">errorln</tt> are available to write on the interpreter error stream. If the interpreter error stream has been changed, the use of the <tt class="code">ErrorTerm</tt> will provide the facility required to print directly on the terminal. The <tt class="code">cat</tt> program can be rewritten to do exactly this. </p>
+<pre class="frame">
+<![CDATA[# cat a file on the error terminal
+# get the io module
+interp:library "afnix-sio"
+# cat a file
+const cat (name es) {
+  const f (afnix:sio:InputFile name)
+  while (f:valid-p) (es:writeln (f:readln))
+  f:close
+}
+
+]]></pre>
+<div class="section">
+Directory</div>
+<p class="text">
+ The <tt class="code">Directory</tt> class provides a facility to manipulate directories. A directory object is created either by name or without argument by considering the current working directory. Once the directory object is created, it is possible to retrieve its contents, create new directory or remove empty one. </p>
+<p class="subsect">
+Reading a directory</p>
+<p class="text">
+ A <tt class="code">Directory</tt> object is created either by name or without argument. With no argument, the current directory is opened. When the current directory is opened, its full name is computed internally and can be retrieved with the <tt class="code">get-name</tt> method. </p>
+<pre class="frame">
+<![CDATA[# print the current directory
+const pwd (afnix:sio:Directory)
+println   (pwd:get-name)
+
+]]></pre>
+<p class="text">
+ Once the directory object is opened, it is possible to list its contents. The <tt class="code">get-list</tt> method returns the full contents of the directory object. The <tt class="code">get-files</tt> method returns a list of files in this directory. The <tt class="code">get-subdirs</tt> method returns a list of sub directories in this directory. </p>
+<pre class="frame">
+<![CDATA[# print a list of files
+const pwd (afnix:sio:Directory)
+const lsf (d:get-files)
+for (name) (lsf) (println name)
+
+]]></pre>
+<p class="subsect">
+Creating and removing directories</p>
+<p class="text">
+ The <tt class="code">mkdir</tt> and <tt class="code">rmdir</tt> methods can be used to create or remove a directory. Both methods take a string argument and construct a full path name from the directory name and the argument. This approach has the advantage of being file system independent. If the directory already exists, the <tt class="code">mkdir</tt> methods succeeds. The <tt class="code">rmdir</tt> method requires the directory to be empty. </p>
+<pre class="frame">
+<![CDATA[const tmp (afnix:sio:Directory (
+    afnix:sio:absolute-path "tmp"))
+const exp (tmp:mkdir "examples")
+const lsf (exp:get-files)
+println   (lsf:length)
+tmp:rmdir "examples"
+
+]]></pre>
+<p class="text">
+ The function <tt class="code">absolute-path</tt> constructs an absolute path name from the argument list. If relative path needs to be constructed, the function <tt class="code">relative-path</tt> might be used instead. </p>
+<div class="section">
+Logtee</div>
+<p class="text">
+ The <tt class="code">Logtee</tt> class is a message logger facility associated with an output stream. When a message is added to the logger object, the message is also sent to the output stream, depending on the controlling flags. The name "logtee" comes from the contraction of "logger" and "tee". One particularity of the class is that without a stream, the class behaves like a regular logger. </p>
+<p class="subsect">
+Creating a logger</p>
+<p class="text">
+ The <tt class="code">Logtee</tt> default constructor creates a standard logger object without an output stream. The instance can also be created by size or with an output stream or both. A third method can also attach an information string. </p>
+<pre class="frame">
+<![CDATA[# create a logger with the interpreter stream
+const log (Logtee (interp:get-output-stream))
+assert true (logger-p log)
+
+]]></pre>
+<p class="subsect">
+Adding messages</p>
+<p class="text">
+ The process of adding messages is similar to the regular logger. The only difference is that the message is placed on the output stream if a control flag is set and the message level is less or equal the report level. In the other word, the control flag controls the message display -- the tee operation -- while the report level filters some of the messages. </p>
+<pre class="frame">
+<![CDATA[log:add 2 "a level 2 message"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">set-tee</tt> method sets the control flag. The <tt class="code">set-report-level</tt> method sets the report level. Note that the <tt class="code">set-report-level</tt> and its associated <tt class="code">get-report-level</tt> method is part of the base <tt class="code">Logger</tt> class. </p>
+<div class="section">
+Path name</div>
+<p class="text">
+ The <tt class="code">Pathname</tt> class is a base class designed to ease the manipulation of system path. It is particularly useful when it come to manipulate directory component. </p>
+<p class="subsect">
+Creating a path name</p>
+<p class="text">
+ A path name is created either by file name or by file and directory name. In the first case, only the file name is used. In the second case, the full path name is characterized. </p>
+<pre class="frame">
+<![CDATA[# create a new path name
+const path (afnix:sio:Pathname "axi")
+
+]]></pre>
+<p class="subsect">
+Adding a directory path</p>
+<p class="text">
+ The best way to add a directory path is to use the <tt class="code">absolute-path</tt> or the <tt class="code">relative-path</tt> functions. </p>
+<pre class="frame">
+<![CDATA[# adding a directory path
+const name (afnix:sio:absolute-path "usr" "bin")
+path:set-directory-name name
+
+]]></pre>
+<p class="subsect">
+Getting the path information</p>
+<p class="text">
+ The path information can be obtained individually or globally. The <tt class="code">get-file-name</tt> and <tt class="code">get-directory-name</tt> methods return respectively the file and directory name. The <tt class="code">get-root</tt> method returns the root component of the directory name. The <tt class="code">get-full</tt> method returns the full path name. </p>
+<hr/>
+<div class="appendix">
+Standard Input/Output Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Transcoder</div>
+<p class="text">
+ The <tt class="code">Transcoder</tt> class is a codeset transcoder class. The class is responsible to map a byte character in a given codeset into its associated Unicode character. It should be noted that not all characters can be transcoded. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>transcoder-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constants</p>
+<div class="frame">
+<i>DEFAULT</i><hr/>
+<p class="text">
+
+	  The DEFAULT constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode. In default mode, each character is not
+	  transcoded. This mode is the identity mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-01</i><hr/>
+<p class="text">
+
+	  The I8859-01 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-6 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-02</i><hr/>
+<p class="text">
+
+	  The I8859-02 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-2 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-03</i><hr/>
+<p class="text">
+
+	  The I8859-03 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-3 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-04</i><hr/>
+<p class="text">
+
+	  The I8859-04 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-4 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-05</i><hr/>
+<p class="text">
+
+	  The I8859-05 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-5 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-06</i><hr/>
+<p class="text">
+
+	  The I8859-06 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-6 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-07</i><hr/>
+<p class="text">
+
+	  The I8859-07 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-7 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-08</i><hr/>
+<p class="text">
+
+	  The I8859-08 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-8 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-09</i><hr/>
+<p class="text">
+
+	  The I8859-09 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-9 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-10</i><hr/>
+<p class="text">
+
+	  The I8859-10 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-10 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-11</i><hr/>
+<p class="text">
+
+	  The I8859-11 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-11 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-13</i><hr/>
+<p class="text">
+
+	  The I8859-13 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-13 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-14</i><hr/>
+<p class="text">
+
+	  The I8859-14 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-14 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-15</i><hr/>
+<p class="text">
+
+	  The I8859-15 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-15 codeset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>I8859-16</i><hr/>
+<p class="text">
+
+	  The I8859-16 constant is used by the
+	  set-transcoding-mode method to specify the class
+	  transcoding mode that corresponds to the ISO-8859-16 codeset.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Transcoder</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Transcoder constructor creates a default transcoder
+	  that operates in default mode by using the identity function.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Transcoder</i><i> (constant)</i><hr/>
+<p class="text">
+
+	  The Transcoder constructor creates a transcoder
+	  with the argument mode.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-transcoding-mode</i><i> (&rarr; none)</i><i> (constant)</i><hr/>
+<p class="text">
+
+	  The set-transcoding-mode method sets the class
+	  transcoding mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-transcoding-mode</i><i> (&rarr; constant)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-transcoding-mode method returns the class
+	  transcoding mode. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>valid-p</i><i> (&rarr; Byte|Character)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The valid-p predicate returns true if character can
+	  be transcoded. If the argument is a byte, the method returns
+	  true if the byte can be transcoded to a character. If the
+	  argument is a character, the method returns true if the
+	  character can be transcoded to a byte.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>encode</i><i> (&rarr; Byte)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The encode method encodes a byte into a character.
+	  If the character cannot be encoded, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>decode</i><i> (&rarr; Character)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The decode method decodes a character into a byte.
+	  If the character cannot be decoded, an exception is raised.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Stream</div>
+<p class="text">
+ The <tt class="code">Stream</tt> class is a base class for the standard streams. The class is automatically constructed by a derived class and provides the common methods for all streams. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>stream-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Transcoder
+</i>
+</pre>
+<p class="elem">
+Constants</p>
+<div class="frame">
+<i>BYTE</i><hr/>
+<p class="text">
+
+	  The BYTE constant is used by the
+	  set-coding-mode method to specify the stream coding mode.
+	  In byte mode, each character is assumed to be coded with one
+	  byte. This value affects the getu and
+	  write methods
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>UTF-8</i><hr/>
+<p class="text">
+
+	  The UTF-8 constant is used by the
+	  set-coding-mode method to specify the stream coding mode.
+	  In UTF-8 mode, each character is assumed to be coded in the
+	  UTF-8 representation. This value affects the getu and
+	  write methods
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-encoding-mode</i><i> (&rarr; none)</i><i> (constant|String)</i><hr/>
+<p class="text">
+
+	  The set-encoding-mode method sets the stream coding mode
+	  that affects how characters are read or written. In the
+	  enumeration form, the method only sets the stream coding mode
+	  which is either byte or UTF-8 mode. In the string mode, the
+	  method sets the stream encoding mode and the transcoding mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-encoding-mode</i><i> (&rarr; constant)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-coding-mode method returns the stream coding mode
+	  which affects how characters are read or written.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputStream</div>
+<p class="text">
+ The <tt class="code">InputStream</tt> class is a base class for the standard i/o module. The class is automatically constructed by a derived class and provides the common methods for all input streams. The input stream is associated with a timeout value which is used for read operation. By default, timeout is infinite, meaning that any read without data will be a blocking one. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-stream-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Stream
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>flush</i><i> (&rarr; none|Character)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The flush method the input stream buffer. In the
+	  first form, without argument, the input stream buffer is
+	  entirely flushed. In the second form, the input stream buffer is
+	  flushed until the character argument is found.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-timeout</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-timeout method returns the input stream
+	  timeout. A negative value is a blocking timeout.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-timeout</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-timeout method sets the input stream
+	  timeout. A negative value is a blocking timeout. Changing the
+	  stream timeout does not cancel any pending read operation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>read</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The read method returns the next byte available
+	  from the input stream. If the stream has been closed or
+	  consumed, the end-of-stream byte is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>read</i><i> (&rarr; Buffer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The read method returns a buffer object with at
+	  most the number of bytes specified as an argument. The
+	  buffer length method should be used to check how
+	  many bytes have been placed in the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>readln</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The readln method returns the next line available
+	  from the input stream. If the stream has been closed or
+	  consumed, the end-of-stream character is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>getu</i><i> (&rarr; Character)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The getu method returns the next available Unicode
+	  character from the input stream. If the stream has been closed or
+	  consumed, the end-of-stream character is
+	  returned. During the read process, if the character decoding
+	  operation fails, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>valid-p</i><i> (&rarr; Boolean)</i><i> (none|Integer)</i><hr/>
+<p class="text">
+
+	  The valid-p method returns true if the input stream
+	  is in a valid state. By valid state, we mean that the input
+	  stream can return a byte with a call to the read
+	  method. With one argument, the method timeout after the
+	  specified time in milliseconds. If the timeout is null, the
+	  method returns immediately. With -1, the method blocks
+	  indefinitely if no byte is available.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>eos-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The eos-p predicate returns true if the input stream
+	  has been closed or all bytes consumed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pushback</i><i> (&rarr; Integer)</i><i> (Byte|Character|String)</i><hr/>
+<p class="text">
+
+	  The pushback method push-back a byte, an Unicode
+	  character or a string in the input stream. Subsequent calls to
+	  read will return the last pushed bytes. Pushing a string is
+	  equivalent to push each encoded bytes of the string. The method
+	  returns the number of bytes pushed back.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-buffer-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-buffer-length method returns the length of
+	  the push-back buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string representation
+	  of the input stream buffer.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputFile</div>
+<p class="text">
+ The <tt class="code">InputFile</tt> class provide the facility for an input file stream. An input file instance is created with a file name. If the file does not exist or cannot be opened, an exception is raised. The <tt class="code">InputFile</tt> class is derived from the <tt class="code">InputStream</tt> class. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-file-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i><i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>InputFile</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The InputFile constructor create an input file by
+	  name. If the file cannot be created, an exception is raised. The
+	  first argument is the file name to open.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>InputFile</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The InputFile constructor create an input file by
+	  name and encoding mode. If the file cannot be created, an
+	  exception is raised. The first argument is the file name to
+	  open.The second argument is the encoding mode to use.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>close</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The close method close the input file and returns
+	  true on success, false otherwise. In case of success, multiple
+	  calls return true. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lseek</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The lseek set the input file position to the
+	  integer argument. Note that the push-back buffer is reset after
+	  this call.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the input
+	  file. The length is expressed in bytes.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-modification-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-modification-time method returns the
+	  modification time of the file. The returned argument is
+	  suitable for the Time and Date
+	  system classes.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputMapped</div>
+<p class="text">
+ The <tt class="code">InputMapped</tt> class is an input stream class that provides the facility for reading a mapped input stream. The input stream is mapped at construction given a file name, a size and a file offset. An anonymous mapped input stream can also be designed with a buffer object. Finally, without any information an always valid null input stream is constructed. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-mapped-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>InputMapped</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The InputMapped constructor create a null input stream.
+	  This stream acts as a null character generator.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>InputMapped</i><i> (String|Buffer)</i><hr/>
+<p class="text">
+
+	  The InputMapped constructor create a mapped input
+	  stream by name or buffer. In the first form, a string is used as
+	  file name to be mapped an input stream. In the second form, a
+	  buffer is mapped as an input stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>InputMapped</i><i> (String Integer Integer)</i><hr/>
+<p class="text">
+
+	  The InputMapped constructor create a mapped input
+	  stream by name, size and offset. The string argument is the file
+	  name to map. The second argument is the desired mapped size. 
+	  The third argument is the offset inside the file before mapping it.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>lseek</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The lseek set the input mapped file position to the
+	  integer argument. Note that the push-back buffer is reset after
+	  this call.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the input
+	  mapped file. The length is expressed in bytes.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputString</div>
+<p class="text">
+ The <tt class="code">InputString</tt> class provide the facility for an input string stream. The class is initialized or set with a string and then behaves like a stream. This class is very useful to handle generic stream method without knowing what kind of stream is behind it. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-string-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>InputString</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The InputString constructor creates an empty input
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>InputString</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The InputString constructor creates an input string by
+	  value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get method returns the next available byte
+	  from the input stream but do not remove it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set method sets the input string by first
+	  resetting the push-back buffer and then initializing the input
+	  string with the argument value.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputTerm</div>
+<p class="text">
+ The <tt class="code">InputTerm</tt> class provide the facility for an input terminal stream. The input terminal reads byte from the standard input stream. No line editing facility is provided with this class This is a low level class, and normally, the <tt class="code">Terminal</tt> class should be used instead. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-term-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i><i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>InputTerm</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The InputTerm constructor creates a default input
+	  terminal.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-ignore-eos</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-ignore-eos method set the input terminal
+	  end-of-stream ignore flag. When the flag is on, any character
+	  that match a ctrl-d is changed to the end-of-stream mapped
+	  character returned by a read. This method is useful to
+	  prevent a reader to exit when the ctrl-d byte is
+	  generated. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-mapped-eos</i><i> (&rarr; none)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The set-mapped-eos method set the input terminal
+	  end-of-stream mapped character. By default the character is
+	  set to end-of-line. This method should be
+	  used in conjunction with the set-ignore-eos method.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+OutputStream</div>
+<p class="text">
+ The <tt class="code">OutputStream</tt> class is a base class for the standard i/o module. The class is automatically constructed by a derived class and provide the common methods for all output streams. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>output-stream-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Stream
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>write</i><i> (&rarr; Integer)</i><i> (Literal+)</i><hr/>
+<p class="text">
+
+	  The write method write one or more literal
+	  arguments on the output stream. This method returns the number
+	  of characters written.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>writeln</i><i> (&rarr; none)</i><i> (Literal+)</i><hr/>
+<p class="text">
+
+	  The writeln method write one or more literal
+	  argument to the output stream and finish with a newline. This
+	  method return nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>errorln</i><i> (&rarr; none)</i><i> (Literal+)</i><hr/>
+<p class="text">
+
+	  The errorln method write one or more literal
+	  argument to the associated output error stream and finish with a
+	  newline. Most of the time, the output stream and error stream
+	  are the same except for an output terminal.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>newline</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The newline method writes a new line byte to
+	  the output stream. The method returns nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write-soh</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write-soh method writes
+	  a start-of-heading character to the output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write-stx</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write-stx method writes
+	  a start-of-transmission character to the output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write-etx</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write-etx method writes an end-of-transmission
+	  character to the output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write-eos</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write-eos method writes an end-of-stream
+	  character to the output stream.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+OutputFile</div>
+<p class="text">
+ The <tt class="code">OutputFile</tt> class provide the facility for an output file stream. An output file instance is created with a file name. If the file does not exist, it is created. If the file cannot be created, an exception is raised. Once the file is created, it is possible to write literals. The class is derived from the <tt class="code">OutputStream</tt> class. By default an output file is created if it does not exist. If the file already exist, the file is truncated to 0. Another constructor for the output file gives more control about this behavior. It takes two boolean flags that defines the truncate and append mode. The <em>t-flag</em> is the truncate flag. The <em>a-flag</em> is the append flag. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>output-file-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>OutputStream
+</i><i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>OutputFile</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The OutputFile constructor create an output file by
+	  name. If the file cannot be created, an exception is raised. The
+	  first argument is the file name to create.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>OutputFile</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The OutputFile constructor create an output file by
+	  name and encoding mode. If the file cannot be created, an
+	  exception is raised. The first argument is the file name to
+	  create. The second argument is the encoding mode to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>OutputFile</i><i> (String Boolean Boolean)</i><hr/>
+<p class="text">
+
+	  The OutputFile constructor create an output file by
+	  name. If the file cannot be created, an exception is raised. The
+	  first argument is the file name to create. The second argument
+	  is the truncate flag. If the file already exists and the
+	  truncate flag is set, the file is truncated to 0. The third
+	  argument is the append mode. If set to true, the file is open in
+	  append mode.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>close</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The close method closes the output file and returns
+	  true on success, false otherwise. In case of success, multiple
+	  calls returns true. 
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+OutputString</div>
+<p class="text">
+ The <tt class="code">OutputString</tt> class provide the facility for an output string stream. The class is initially empty and acts as a buffer which accumulate the write method bytes. The <tt class="code">to-string</tt> method can be used to retrieve the buffer content. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>output-string-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>OutputString</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The OutputString constructor creates a default output
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>OutputString</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The OutputString constructor creates an output string by
+	  value. The output string stream is initialized with the string
+	  value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>flush</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The flush method flushes the output stream by resetting
+	  the stream buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the output
+	  string buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string representation
+	  of the output string buffer.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+OutputBuffer</div>
+<p class="text">
+ The <tt class="code">OutputBuffer</tt> class provide the facility for an output byte stream. The class is initially empty and acts as a buffer which accumulate the write method bytes. The <tt class="code">to-string</tt> method can be used to retrieve the buffer content as a string. The <tt class="code">format</tt> method can be used to retrieve the buffer content as an octet string. content. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>output-buffer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>OutputBuffer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The OutputBuffer constructor creates a default output
+	  buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>OutputBuffer</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The OutputBuffer constructor creates an output buffer by
+	  value. The output buffer stream is initialized with the string
+	  value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>flush</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The flush method flushes the output stream by resetting
+	  the stream buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the output
+	  buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string representation
+	  of the output buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>format</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The format method returns an octet string representation
+	  of the output buffer.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+OutputTerm</div>
+<p class="text">
+ The <tt class="code">OutputTerm</tt> class provide the facility for an output terminal. The output terminal is defined as the standard output stream. If the standard error stream needs to be used, the <tt class="code">ErrorTerm</tt> class is more appropriate. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>output-term-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>OutputTerm</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The OutputTerm constructor creates a default output
+	  terminal
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>ErrorTerm</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The ErrorTerm constructor creates a default error
+	  terminal
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Terminal</div>
+<p class="text">
+ The <tt class="code">Terminal</tt> class provides the facility for an i/o terminal with line editing capability. The class combines the <tt class="code">InputTerm</tt> and <tt class="code">OutputTerm</tt> methods. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>terminal-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputTerm
+</i><i>OutputTerm
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Terminal</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Terminal constructor creates a default terminal
+	  which combines an input and output terminal with line editing
+	  capabilities.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-primary-prompt</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-primary-prompt method sets the terminal primary
+	  prompt which is used when the read-line method is 
+	  called. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-secondary-prompt</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-secondary-prompt method sets the terminal
+	  secondary prompt which is used when the read-line
+	  method is called.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-primary-prompt</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-primary-prompt method returns the terminal primary
+	  prompt.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-secondary</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-secondary-prompt method returns the terminal
+	  secondary prompt.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Intercom</div>
+<p class="text">
+ The <tt class="code">Intercom</tt> class is the interpreter communication class. The class operates with two streams. One output stream is used to send serialized data while the input stream is used to deserialize data. The <tt class="code">send</tt> method can be used to send the data, while the <tt class="code">recv</tt> can be used to receive them. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>intercom-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Intercom</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Intercom constructor creates a default interpreter
+	  communication object. There is no stream attached to it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Intercom</i><i> (InputStream|OutputStream)</i><hr/>
+<p class="text">
+
+	  The Intercom constructor creates an  interpreter
+	  communication object with an input or an output stream. In the
+	  first form, the input stream object is used by
+	  the recv method to read data object. In the second
+	  form, the output stream object is used by the send
+	  method to send data object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Intercom</i><i> (InputStream OutputStream)</i><hr/>
+<p class="text">
+
+	  The Intercom constructor creates an interpreter
+	  communication object with an input and an output stream.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>send</i><i> (&rarr; none)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The send method serialize the object argument with
+	  the help of the output stream bound to the interpreter
+	  communication object. If there is no output stream, nothing is sent.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>recv</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The recv method deserialize an object with the help
+	  of the input stream bound to the interpreter communication
+	  object. If there is no output stream, nil is returned. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>request</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The request method perform an atomic send receive 
+	  operation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-input-stream</i><i> (&rarr; none)</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The set-input-stream method binds an input stream
+	  to the interpreter communication object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-input-stream</i><i> (&rarr; InputStream)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-input-stream method returns the input
+	  stream bound to the interpreter communication object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-output-stream</i><i> (&rarr; none)</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The set-output-stream method binds an output stream
+	  to the interpreter communication object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-output-stream</i><i> (&rarr; OutputStream)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-output-stream method returns the output
+	  stream bound to the interpreter communication object.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+InputOutput</div>
+<p class="text">
+ The <tt class="code">InputOutput</tt> class implements an input-output stream with a buffer which holds character during the processing of transit between the output stream to the input stream. The theory of operation goes as follow. The internal buffer is filled with characters with the help of the output stream. The characters are consumed from the buffer with the help of the input stream (read method). If the buffer becomes empty the <tt class="code">eos-p</tt> predicate returns true, the <tt class="code">valid-p</tt> predicate false and the <tt class="code">read</tt> method will return the <tt class="code">eos</tt> character. The InputOutput buffer can also be initialized with a buffer. This provides a nice mechanism to use a buffer like an input stream. The i/o operations implemented by this class are non-blocking. As a consequence, it is not possible to suspend a thread with this class and have it awaken when some characters are available in the input stream. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>input-output-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i><i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>InputOutput</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The InputOutput constructor creates a default
+	  input/output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>InputOutput</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The InputOutput constructor creates an input/output
+	  stream initialized with the string argument. The string argument
+	  is used to fill the string buffer.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get method returns the next available byte
+	  from the input stream but do not remove it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set method sets the input string by first
+	  resetting the push-back buffer and then initializing the input
+	  string with the argument value.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Selector</div>
+<p class="text">
+ The <tt class="code">Selector</tt> class provides some facilities to perform i/o multiplexing. The constructor takes 0 or several stream arguments.The class manages automatically the differentiation between the <tt class="code">InputStream</tt> and the <tt class="code">OutputStream</tt> objects. Once the class is constructed, it is possible to get the first stream ready for reading or writing or all of them. It is also possible to add more steams after construction with the <tt class="code">add</tt> method. When a call to the <tt class="code">wait</tt> method succeeds, the method returns the first available stream. If the <tt class="code">waitall</tt> method is called, the method returns a vector with all ready steams. The selector can be configured to operate in marking mode. In such mode, the selector can be marked as ready by a thread independently of the bounded streams. This is a useful mechanism which can be used to cancel a select loop. The <tt class="code">mark</tt> method is designed to mark the selector while the <tt class="code">marked-p</tt> predicate returns true if the stream has been marked. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>selector
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Selector</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Selector constructor creates a default stream
+	  selector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Selector</i><i> ([Boolean] [InputStream|OutputStream]*)</i><hr/>
+<p class="text">
+
+	  The Selector constructor creates a stream selector
+	  with 0 or more stream arguments. If the first argument is a
+	  boolean, the selector is constructed marked mode.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (InputStream|OutputStream)</i><hr/>
+<p class="text">
+
+	  The add method adds an input or output stream to
+	  the selector. If the stream is both an input and an output
+	  stream, the preference is given to the input stream. If this 
+	  preference is not acceptable, the input-add or
+	  the output-add methods might be preferable.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>input-add</i><i> (&rarr; none)</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The input-add method adds an input stream to
+	  the selector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>output-add</i><i> (&rarr; none)</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The output-add method adds an output stream to
+	  the selector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wait</i><i> (&rarr; Stream)</i><i> (none|Integer)</i><hr/>
+<p class="text">
+
+	  The wait method waits for a status change in the
+	  selector and returns the first stream that has change
+	  status. With one argument, the selector time-out after the
+	  specified time in milliseconds. Note that at the time of the
+	  return, several streams may have changed status.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wait-all</i><i> (&rarr; Vector)</i><i> (none|Integer)</i><hr/>
+<p class="text">
+
+	  The wait method waits for a status change in the
+	  selector and returns all streams that has change status in a
+	  vector object. With one argument, the selector time-out after
+	  the specified time in milliseconds. If the selector has
+	  timed-out, the vector is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>input-get</i><i> (&rarr; InputStream)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The input-get method returns the input streams in
+	  the selector by index. If the index is out of bound, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>output-get</i><i> (&rarr; OutputStream)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The output-get method returns the output streams in
+	  the selector by index. If the index is out of bound, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>input-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The input-length method returns the number of input
+	  streams in the selector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>output-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The output-length method returns the number of
+	  output streams in the selector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mark</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The mark method marks a selector object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>marked-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The marked-p predicate returns true if the selector
+	  has been marked.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Logtee</div>
+<p class="text">
+ The <tt class="code">Logtee</tt> class provides the facility of a logger object associated with an output stream. When a message is added, the message is written to the output stream depending on an internal flag. By default the tee mode is false and can be activated with the <tt class="code">set-tee</tt> method. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>logtee-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Logger
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Logtee</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a default logger
+	  without an output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger with a
+	  specific size without an output stream.
+	  terminal
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger with an
+	  output stream. The object is initialized to operate in write
+	  mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer OutputStream)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger with a
+	  specific size with an output stream. The first argument is the
+	  logger size. The second argument is the output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer String OutputStream)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger with a
+	  specific size, an information string and an output stream. The
+	  first argument is the logger size. The second argument is
+	  information string. The third argument is the output stream.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-tee-stream</i><i> (&rarr; none)</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The set-tee-stream method sets the tee output
+	  stream. This stream is different from the logger output stream
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tee-stream</i><i> (&rarr; OutputStream)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-tee-stream method returns the object
+	  output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-tee</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-tee method sets the object tee flag. When
+	  the flag is true, the logger writes the added message on the
+	  output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tee</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-tee method returns the object tee flag. When
+	  the flag is true, the logger writes the added message on the
+	  output stream.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Pathname</div>
+<p class="text">
+ The <tt class="code">Pathname</tt> class is a base class designed to manipulate system i/o paths. The class operates with a directory name and a file name. Both names are kept separated to ease the path manipulation. The path components can be extracted individually. However, it shall be noted that the first component has a special treatment to process the root directory name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>pathname-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Pathname</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Pathname constructor creates a default path
+	  name without file and directory names.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Pathname</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Pathname constructor creates a path name with
+	  a file name. The first string argument is the file name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Pathname</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Pathname constructor creates a pathname with a
+	  file and directory name. The first string argument is the file
+	  name. The second string argument is the directory name.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the path name by removing all
+	  path and file information.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>dir-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The dir-p predicate returns true if the path is a
+	  directory.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>file-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The file-p predicate returns true if the path is a
+	  file.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-file-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-file-name method set the path name file
+	  name. The string argument is the file name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-file-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-file-name method returns the path name file name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-directory-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add-directory-name method add the directory name
+	  to the directory path component. The string argument is the
+	  directory name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-directory-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-directory-name method set the directory name file
+	  name. The string argument is the directory name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-directory-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-directory-name method returns the path name
+	  directory name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of directory
+	  path elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-path method returns a directory path
+	  element by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-root</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-root method returns the root component of a
+	  directory name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-full</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-full method returns the full path name by
+	  combining the directory name with the file name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-path</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add-path method add a new path component by
+	  name. The path is separated into individual component and added
+	  to the directory path unless it is a root path. If the file name
+	  is set, the file name is added as a directory component. If the
+	  path is a root path, a new path name is rebuilt. This last case
+	  is equivalent to a call to set-file-name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>normalize</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The normalize method rebuild the path name by
+	  determining the full path nature if possible. In case of
+	  success, the path structure reflects the actual path type.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Pathlist</div>
+<p class="text">
+ The <tt class="code">Pathlist</tt> class is a base class designed to ease the manipulation of a file search path. The class acts like a list of search paths and various facilities are provided to find a valid path for a given name. The path list can be manipulated like any other list. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>pathlist-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Pathlist</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Pathlist constructor creates a default path list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Pathlist</i><i> (Boolean|String)</i><hr/>
+<p class="text">
+
+	  The Pathlist constructor creates a path list with a
+	  local search flag or with an initial path component. In the
+	  first form, a boolean argument controls the local search
+	  flag. In the second for, a string argument is used as the
+	  initial path component.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the path list by clearing
+	  the local search flag and removing all path components.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>local-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The local-p predicate returns true if the local
+	  search flag is set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-local-search</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-local-search method sets the local search flag.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of directory
+	  path elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-path method returns a directory path
+	  element by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-path</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add-path method add a new path component by name.
+	  The string argument is the name to add.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>file-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The file-p predicate returns true if the file name
+	  argument can be resolved. If the local search flag is set, the
+	  local directory is check first.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>resolve</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The resolve method returns a string representation
+	  of the resolved file path. If the local search flag is set and
+	  the file name is found locally, the initial name argument is
+	  returned.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Functions</p>
+<div class="frame">
+<i>dir-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The dir-p function returns true if the argument name
+	is a directory name, false otherwise.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>file-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The file-p function returns true if the argument name
+	is a regular file name, false otherwise.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>tmp-name</i><i> (&rarr; String)</i><i> (String?)</i><hr/>
+<p class="text">
+
+	The tmp-name function returns a name suitable for the use
+	as a temporary file name. Without argument, a default prefix is
+	used to build the name. An optional string prefix can control the
+	original name.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>tmp-path</i><i> (&rarr; String)</i><i> (String?)</i><hr/>
+<p class="text">
+
+	The tmp-path function returns a path suitable for the use
+	as a temporary file name. Without argument, a default prefix is
+	used to build the path. An optional string prefix can control the
+	original name.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>absolute-path</i><i> (&rarr; String)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The absolute-path function returns an absolute path
+	name from an argument list. Without argument, the command returns
+	the root directory name. With one or several argument, the
+	absolute path is computed from the root directory.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>relative-path</i><i> (&rarr; String)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The relative-path function returns a relative path
+	name from an argument list. With one argument, the function
+	returns it. With two or more arguments, the relative path is
+	computed by joining each argument with the previous one.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>rmfile</i><i> (&rarr; none)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The rmfile function removes one or several files
+	specified as the arguments. If one file fails to be removed, an
+	exception is raised.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>mkdir</i><i> (&rarr; none)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The mkdir function creates one or several directories
+	specified as the arguments. If one directory fails to be created,
+	an exception is raised.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>mhdir</i><i> (&rarr; none)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The mhdir function creates hierarchically one or
+	several directories specified as the arguments. If one directory
+	fails to be created, an exception is raised.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>rmdir</i><i> (&rarr; none)</i><i> (String+)</i><hr/>
+<p class="text">
+
+	The rmdir function removes one or several directories
+	specified as the arguments. If one directory fails to be removed,
+	an exception is raised.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-base-name</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The get-base-name function returns the base name from
+	a path. The base name can be either a file name or a directory
+	name. By definition, a path is made of a base path and a base name.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-base-path</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The get-base-path function returns the base path from
+	a path. The base path is a directory name. By definition, a path
+	is made of a base path and a base name.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-extension</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The get-extension function returns the extension from
+	a path.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>remove-extension</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The remove-extension function returns the extension from
+	a path. In order to get a base file name from a path, the
+	get-base-name function must be called first.
+      </p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Directory</div>
+<p class="text">
+ The <tt class="code">Directory</tt> class provides some facilities to access a directory. By default, a directory object is constructed to represent the current directory. With one argument, the object is constructed from the directory name. Once the object is constructed, it is possible to retrieve its content. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>directory-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Directory</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Directory constructor creates a directory object
+	  those location is the current directory. If the directory cannot
+	  be opened, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Directory</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Directory constructor create a directory object
+	  by name. If the directory cannot be opened, an exception is
+	  raised. The first argument is the directory name to open.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>mkdir</i><i> (&rarr; Directory)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The mkdir method creates a new directory in the
+	  current one. The full path is constructed by taking the
+	  directory name and adding the argument. Once the directory is
+	  created, the method returns a directory object of the newly
+	  constructed directory. An exception is thrown if the directory
+	  cannot be created.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>rmdir</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The rmdir method removes an empty directory. The
+	  full path is constructed by taking the directory name and adding
+	  the argument. An exception is thrown if the directory cannot be
+	  removed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>rmfile</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The rmfile method removes a file in the current
+	  directory. The full path is constructed by taking the directory
+	  name and adding the argument. An exception is thrown if the file
+	  cannot be removed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the directory name. If
+	  the default directory was created, the method returns the full
+	  directory path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-list</i><i> (&rarr; List)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-list method returns the directory
+	  contents. The method returns a list of strings. The list
+	  contains all valid names at the time of the call, including the
+	  current directory and the parent directory.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-files</i><i> (&rarr; List)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-files method returns the directory
+	  contents. The method returns a list of strings of files. The
+	  list contains all valid names at the time of the call.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-subdirs</i><i> (&rarr; List)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-subdirs method returns the sub
+	  directories. The method returns a list of strings of
+	  sub-directories. The list contains all valid names at the time of
+	  the call, including the current directory and the parent directory.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-name method returns the next available
+	  name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-path method returns the next available
+	  path name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-file-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-file-name method returns the next available
+	  file name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-file-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-file-path method returns the next available
+	  file path name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-dir-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-dir-name method returns the next available
+	  directory name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>next-dir-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The next-dir-path method returns the next available
+	  directory path name from the directory stream. This method is useful when
+	  operating with a large number of elements.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Logtee</div>
+<p class="text">
+ The <tt class="code">Logtee</tt> class is a message logger facility associated with an output stream. When a message is added to the logger object, the message is also sent to the output stream, depending on the controlling flags. The name "logtee" comes from the contraction of "logger" and "tee". One particularity of the class is that without a stream, the class behaves like a regular logger. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>logtee-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Logger
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Logtee</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a default logger
+	  without an output stream
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger object with
+	  a specific size without an output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Output)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger object with
+	  an output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer Output)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger object with
+	  a specific size and an output stream. The first argument is the
+	  logger window size. The second argument is the output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logtee</i><i> (Integer String Output)</i><hr/>
+<p class="text">
+
+	  The Logtee constructor creates a logger object with
+	  a specific size, an information string and an output stream. The
+	  first argument is the logger window size. The second argument is
+	  the logger information string. The third argument is the output
+	  stream.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-output-stream</i><i> (&rarr; none)</i><i> (Output)</i><hr/>
+<p class="text">
+
+	  The set-output-stream method attaches the output
+	  stream to the logtee object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-output-stream</i><i> (&rarr; Output)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-output-stream method returns the logtee
+	  output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-tee</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-tee method sets the logtee control
+	  flag. The control flag controls the message display to the
+	  output stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tee</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-tee method returns the logtee output stream.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+NamedFifo</div>
+<p class="text">
+ The <tt class="code">NameFifo</tt> class is a string vector designed to operate as a stream fifo object. The class provides the facility to read or write the fifo content from a stream. The stream can be created by name for writing, in which case the named fifo operates as a backup object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>named-fifo-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Strvec
+</i><i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>NamedFifo</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The NamedFifo constructor creates a default named
+	  fifo without a backing name. In this case the fifo cannot be
+	  read or written by stream.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>NamedFifo</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The NamedFifo constructor creates a named fifo by
+	  name. The name is used as a file name for reading or writing the
+	  fifo.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>NamedFifo</i><i> (String Boolean)</i><hr/>
+<p class="text">
+
+	  The NamedFifo constructor creates a named fifo by
+	  name. The name is used as a file name for reading or writing the
+	  fifo.If the boolean argument is true, the fifo is read.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>read</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The read method reads the fifo file name and fill
+	  the fifo.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write method writes the fifo contents to the
+	  fifo file name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the fifo file name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+FileInfo</div>
+<p class="text">
+ The <tt class="code">FileInfo</tt> is a file information class that holds the primary information related to a file, such like its size or its modification time. The file information is set at construction but can be updated with the help of the <tt class="code">update</tt> method. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>file-info-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i></i><i> (String)</i><hr/>
+<p class="text">
+
+	  The FileInfo constructor creates a file information
+	  by name. The string argument is the file name to query.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the file size information.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-modification-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-modification-time method returns the file
+	  modification time. The time can be used as an argument to
+	  the Time or Date object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>update</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The update method the file information data.
+	</p>
+</div>
+<p/>
+</body>
+</html>

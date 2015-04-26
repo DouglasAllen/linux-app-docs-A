@@ -1,0 +1,1258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT Reference Manual: 3. Implementation-Specific Features and Implementation Permissions</title>
+
+<meta name="description" content="ASIS-for-GNAT Reference Manual: 3. Implementation-Specific Features and Implementation Permissions">
+<meta name="keywords" content="ASIS-for-GNAT Reference Manual: 3. Implementation-Specific Features and Implementation Permissions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Implementation_002dSpecific-Features-and-Implementation-Permissions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_rm_2.html#Asis_002eExtensions_002eIterator" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_2.html#ASIS-Extensions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Implementation_002dSpecific-Features-and-Implementation-Permissions-1"></a>
+<h1 class="chapter">3. Implementation-Specific Features and Implementation Permissions</h1>
+<a name="index-Implementation_002dspecific-features"></a>
+<a name="index-Implementation-permissions"></a>
+
+<p>ASIS permits four kinds of implementation-specific behavior.
+</p>
+<p>First, ASIS subprograms that define an interface between an ASIS
+implementation and the underlying Ada implementation have
+implementation-specific parameters. There are three such queries &mdash;
+<code>Asis.Implementation.Initialize</code>,
+<a name="index-Asis_002eImplementation_002eInitialize-procedure"></a>
+<code>Asis.Implementation.Finalize</code> and
+<a name="index-Asis_002eImplementation_002eFinalize-procedure"></a>
+<code>Asis.Ada_Environments.Associate</code>.
+<a name="index-Asis_002eAda_005fEnvironments_002eAssociate-procedure"></a>
+Each has a string parameter
+named <code>Parameters</code> with an implementation-specific meaning. The meaning
+of the <code>Parameters</code> string in ASIS-for-GNAT is discussed in
+<a href="#Interacting-with-the-Underlying-Ada-Implementation">Interacting with the Underlying Ada Implementation</a>.
+</p>
+<p>Second, in some areas the ASIS standard explicitly grants the
+implementation permission to provide restricted functionality;
+generally this allows omitting features that could present
+considerable implementation difficulty.
+Such permissions usually affect more than one ASIS query.
+The ASIS package <code>Asis.Implementation.Permissions</code>
+<a name="index-Asis_002eImplementation_002ePermissions-package"></a>
+contains boolean
+queries identifying the choices made by a given ASIS implementation.
+The ASIS-for-GNAT approach to these implementation permissions is discussed in
+<a href="#Implementation-Permissions">Implementation Permissions</a>.
+</p>
+<p>Third, the ASIS standard defines specific implementation permissions
+for some queries.
+Also, the result of a query may be implementation specific because of the
+nature of the query.
+See
+<a href="#ASIS-Queries-Having-Specific-Implementation-Permissions-or-Implementation_002dSpecific-Results">ASIS Queries Having Specific Implementation Permissions or Implementation-Specific Results</a>.
+</p>
+<p>Finally, ASIS-for-GNAT provides special <code>Context</code> manipulation mechanisms
+that supplement those defined in the ASIS standard.
+These additional <code>Context</code> modes may be useful for
+some ASIS applications.
+</p>
+
+
+<hr size="6">
+<a name="Interacting-with-the-Underlying-Ada-Implementation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Format-of-the-Parameters-String" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Interacting-with-the-Underlying-Ada-Implementation-1"></a>
+<h2 class="section">3.1 Interacting with the Underlying Ada Implementation</h2>
+
+<p>This section describes how to use the <code>Parameters</code> string to
+pass implementation-specific information to several ASIS subprograms.
+</p>
+
+<hr size="6">
+<a name="Format-of-the-Parameters-String"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eImplementation_002eInitialize" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Format-of-the-Parameters-String-1"></a>
+<h3 class="subsection">3.1.1 Format of the <code>Parameters</code> String</h3>
+<a name="index-Parameters-string-format"></a>
+
+<p>A <code>Parameters</code> string is passed to three ASIS
+subprograms: <code>Asis.Implementation.Initialize</code>,
+<a name="index-Asis_002eImplementation_002eInitialize-procedure-1"></a>
+<code>Asis.Implementation.Finalize</code>,
+<a name="index-Asis_002eImplementation_002eFinalize-procedure-1"></a>
+and <code>Asis.Ada_Environments.Associate</code>.
+<a name="index-Asis_002eAda_005fEnvironments_002eAssociate-procedure-1"></a>
+</p>
+<p>The <code>Parameters</code> string comprises substrings delimited by separators.
+The substrings are called <em>parameters</em> (with lower-case &rsquo;p&rsquo;) below.
+A separator is a non-empty string comprising characters from the set
+<code>{ <code>&lt;Space&gt;</code>,<code>&lt;LF&gt;</code>, <code>&lt;CR&gt;</code>}</code>.
+There may be 0 or more parameters in a <code>Parameters</code> string, and there
+may be separators before the first and/or after the last parameter.
+</p>
+<p>Each of the queries <code>Asis.Implementation.Initialize</code>,
+<code>Asis.Implementation.Finalize</code>, and
+<code>Asis.Ada_Environments.Associate</code> has specific rules for the
+format of its parameters.
+If some parameter is not well-formed,
+then either a warning message is generated or else
+the <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-1"></a>
+exception is raised with the <code>Parameter_Error</code> status.
+<a name="index-Parameter_005fError-error-status"></a>
+The descriptions below explain the situations where
+<code>ASIS_Failed</code> is raised.
+</p>
+
+<hr size="6">
+<a name="Parameters-of-Asis_002eImplementation_002eInitialize"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Format-of-the-Parameters-String" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eImplementation_002eFinalize" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Parameters-of-Asis_002eImplementation_002eInitialize-1"></a>
+<h3 class="subsection">3.1.2 Parameters of <code>Asis.Implementation.Initialize</code></h3>
+<a name="index-Asis_002eImplementation_002eInitialize-procedure-2"></a>
+
+<p>The allowed parameters for <code>Asis.Implementation.Initialize</code> are as
+follows:
+</p>
+<dl compact="compact">
+<dt> <code>-d&lt;flag&gt;</code></dt>
+<dd><p>The specific ASIS-for-GNAT debug flag named <code>&lt;flag&gt;</code> is set ON
+<a name="index-Debug-flag-parameter-_0028to-Asis_002eImplementation_002eInitialize_0029"></a>
+</p>
+</dd>
+<dt> <code>-dall</code></dt>
+<dd><p>All the ASIS-for-GNAT debug flags are set ON
+</p>
+</dd>
+<dt> <code>-k</code></dt>
+<dd><p>Keep going even if an internal implementation error is detected.
+When a non-ASIS exception is raised, it is replaced by
+raising <code>ASIS_Failed</code> with <code>Unhandled_Exception_Error</code> status (this
+is the only case when <code>Unhandled_Exception_Error</code> is set) and the
+<code>Diagnosis</code> string containing the name and the message from the
+non-ASIS exception originally raised
+</p>
+</dd>
+<dt> <code>-nbb</code></dt>
+<dd><p>No bug box. Do not output to <code>Standard_Error</code> the bug box
+containing the description of the internal implementation bug.
+Implies <code>-k</code>
+</p>
+</dd>
+<dt> <code>-vs</code></dt>
+<dd><p>Set the strong GNAT/ASIS version check when reading the tree files
+</p>
+</dd>
+<dt> <code>-we</code></dt>
+<dd><p>All ASIS warnings are treated as errors.
+<a name="index-Warning-messages"></a>
+When execution reaches the point where the warning would occur,
+the <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-2"></a>
+exception is raised;
+the warning message is the ASIS <code>Diagnosis</code> string.
+<a name="index-Diagnosis-string"></a>
+</p>
+</dd>
+<dt> <code>-ws</code></dt>
+<dd><p>All ASIS warning messages are suppressed.
+</p></dd>
+</dl>
+
+<p>The <code>&lt;flag&gt;</code> value for the &lsquo;<samp>-d</samp>&rsquo; parameter
+may be any lower case letter from <code>a</code> through <code>z</code> or any digit
+from <code>0</code> through <code>9</code>, although
+not all of the 36 possible flags are implemented.
+For more information,
+refer to the documentation in the source file &lsquo;<tt>a4g-a_debug.adb</tt>&rsquo;.
+See also <a href="asis_rm_4.html#ASIS-Debug-Flags">ASIS Debug Flags</a>.
+</p>
+<p>If more then one parameter controlling the warning mode
+<a name="index-Warning-messages-1"></a>
+is set in the <code>Parameters</code> string, all but the last one are ignored.
+</p>
+
+<hr size="6">
+<a name="Parameters-of-Asis_002eImplementation_002eFinalize"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eImplementation_002eInitialize" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eAda_005fEnvironments_002eAssociate" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Parameters-of-Asis_002eImplementation_002eFinalize-1"></a>
+<h3 class="subsection">3.1.3 Parameters of <code>Asis.Implementation.Finalize</code></h3>
+<a name="index-Asis_002eImplementation_002eFinalize-procedure-2"></a>
+
+<p>No parameters are allowed for <code>Asis.Implementation.Finalize</code>.
+</p>
+<p><code>Asis.Implementation.Finalize</code> resets all the general
+ASIS-for-GNAT parameters to their default values (that is, all the debug flags
+are set OFF, and the warning mode is set to the default warning mode).
+</p>
+
+<hr size="6">
+<a name="Parameters-of-Asis_002eAda_005fEnvironments_002eAssociate"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eImplementation_002eFinalize" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Interacting-with-the-Underlying-Ada-Implementation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Parameters-of-Asis_002eAda_005fEnvironments_002eAssociate-1"></a>
+<h3 class="subsection">3.1.4 Parameters of <code>Asis.Ada_Environments.Associate</code></h3>
+<a name="index-Asis_002eAda_005fEnvironments_002eAssociate-procedure-2"></a>
+
+<p>The following parameters are allowed:
+</p>
+<dl compact="compact">
+<dt> <code>-C1</code></dt>
+<dd><p>The <code>Context</code> comprises a single tree file,
+<a name="index-Tree-file"></a>
+whose name is given as the next parameter in the <code>Parameters</code> string.
+</p>
+</dd>
+<dt> <code>-CN</code></dt>
+<dd><p>The <code>Context</code> comprises a set of one or more tree files, whose names are
+given as the next set of parameters in the <code>Parameters</code> string.
+</p>
+</dd>
+<dt> <code>-CA</code></dt>
+<dd><p>The <code>Context</code> comprises all the tree files in the tree search path.
+</p>
+</dd>
+<dt> <code>-FS</code></dt>
+<dd><p>All the trees considered as making up a given <code>Context</code> are created
+&ldquo;on the fly&rdquo;, whether or not the corresponding tree file already exists.
+Once created, a tree file then is reused as long as the <code>Context</code> remains
+open.
+</p>
+</dd>
+<dt> <code>-FT</code></dt>
+<dd><p>Only pre-created trees are used; no tree files are created by ASIS.
+</p>
+</dd>
+<dt> <code>-FM</code></dt>
+<dd><p>Mixed approach: if a needed tree does not exist, an attempt is made to create
+ it &ldquo;on the fly&rdquo;.
+</p>
+</dd>
+<dt> <code>-SA</code></dt>
+<dd><p>Source files for all the <code>Compilation_Unit</code>s belonging to the
+<code>Context</code> (except
+ the predefined <code>Standard</code> package) are considered in the consistency
+ check when opening the <code>Context</code>.
+<a name="index-Consistency-checking"></a>
+</p>
+</dd>
+<dt> <code>-SE</code></dt>
+<dd><p>Only existing source files for all the <code>Compilation_Units</code> belonging to
+the <code>Context</code> are considered in the consistency check when opening the
+<code>Context</code>.
+</p>
+</dd>
+<dt> <code>-SN</code></dt>
+<dd><p>No source files from the underlying file system are taken into account when
+checking the consistency of the set of tree files making up the
+<code>Context</code>.
+</p>
+</dd>
+<dt> <code>-I&lt;dir&gt;</code></dt>
+<dd><p>Defines the directory in which to search for source files when compiling
+sources to create a tree &ldquo;on the fly&rdquo;.
+</p>
+</dd>
+<dt> <code>--GCC=<var>compiler_name</var></code></dt>
+<dd><p>Defines the program to be called to create the tree on the fly
+</p>
+</dd>
+<dt> <code>-gnatec&lt;file&gt;</code></dt>
+<dd><p>Defines the additional configuration file to be used when calling GNAT to
+create the tree on the fly for &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; Context
+</p>
+</dd>
+<dt> <code>-gnatA</code></dt>
+<dd><p>Avoid processing &lsquo;<tt>gnat.adc</tt>&rsquo; when calling GNAT to create
+ the tree on the fly for &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; Context
+</p>
+</dd>
+<dt> <code>-T&lt;dir&gt;</code></dt>
+<dd><p>Defines the directory in which to search for a tree file.
+</p>
+</dd>
+<dt> <code>&lt;file_name&gt;</code></dt>
+<dd><p>Defines the name of a tree file (used in conjunction with &lsquo;<samp>-C1</samp>&rsquo; or
+&lsquo;<samp>-CN</samp>&rsquo;).
+</p></dd>
+</dl>
+
+<p>For the &lsquo;<samp>-I</samp>&rsquo; and &lsquo;<samp>-T</samp>&rsquo; parameters, <code>&lt;dir&gt;</code> should denote an
+existing directory in the underlying file system. The &ldquo;.&rdquo; and &ldquo;..&rdquo;
+notations are allowed, as well as relative or absolute directory names.
+If <code>&lt;dir&gt;</code> does not denote an existing directory, <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-3"></a>
+with <code>Parameter_Error</code> status is raised.
+</p>
+<p>For ASIS &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; Context, Context parameters &lsquo;<samp>-I</samp>&rsquo;,
+&lsquo;<samp>-gnatec</samp>&rsquo; and &lsquo;<samp>-gnatA</samp>&rsquo; are passed to the GNAT call to create
+the tree on the fly and these parameters have exactly the same meaning as they
+have for GNAT.
+</p>
+<p>A tree file name given by a <code>&lt;file_name&gt;</code> parameter may or may not
+contain directory information.
+</p>
+<p>Any relative directory name or file name containing relative directory
+information should start from &ldquo;.&rdquo; or &ldquo;..&rdquo;.
+</p>
+<p>If a directory or a file name used as a part of some Context parameter contains
+space characters, this name should be quoted.
+</p>
+<p>The search path
+<a name="index-Search-path"></a>
+associated with an ASIS <code>Context</code> consists of the directories
+listed as parameters for the <code>Asis.Ada_Environments.Associate</code> query, in
+the same order as they are included in the actual <code>Parameters</code> string.
+The ASIS source search path consists only of the directories following
+&lsquo;<samp>-I</samp>&rsquo;, and the ASIS tree search path consists only of the directories
+following &lsquo;<samp>-T</samp>&rsquo;. If no source (tree) directories are present in the
+value of the <code>Parameters</code> string, then the ASIS source (tree) search path
+consists of the current directory only.  Otherwise the current directory is
+included in the ASIS search path if and only if it is set explicitly as
+&lsquo;<samp>-I.</samp>&rsquo; or &lsquo;<samp>-T.</samp>&rsquo; respectively.
+</p>
+<p>If an ASIS <code>Context</code> is associated with an &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo;
+option, the <code>Context</code> source search path is used to locate sources of the
+units for which tree files need to be created, and to locate other source
+files needed during compilation. For example, if we have:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample"> Asis.Ada_Environments.Associate
+  (My_Context,
+  &quot;My_Context_Name&quot;,
+  &quot;-CA -FS -I./dir -I.&quot;);
+</pre></td></tr></table>
+
+<p>then, when processing a call:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample"> My_Unit := Asis.Compilation_Units.Library_Unit_Declaration
+            (&quot;Foo&quot;, My_Context);
+</pre></td></tr></table>
+
+<p>ASIS first tries to locate the source file &lsquo;<tt>foo.ads</tt>&rsquo; in &lsquo;<tt>./dir</tt>&rsquo;, and
+if this attempt fails, it tries to locate it in the current directory. If
+there is no such file in the current directory, ASIS continues the search by
+looking into the directories listed in the value of <code>ADA_INCLUDE_PATH</code>
+environment variable. If the source file is found (say in the current
+directory), ASIS creates the tree file by calling the compiler:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatc -gnatt -I./dir -I. -I- foo.ads
+</pre></td></tr></table>
+
+<p>If an ASIS <code>Context</code> is associated with &lsquo;<samp>-CA</samp>&rsquo; option, then, when
+this <code>Context</code> is opened, ASIS processes all the tree files located in
+the tree search path associated with the <code>Context</code>.
+</p>
+<p>The following further rules define the required combinations of parameters
+in the actual <code>Parameters</code> string:
+</p>
+<ul>
+<li>
+&lsquo;<samp>-C1</samp>&rsquo; and &lsquo;<samp>-CN</samp>&rsquo; require &lsquo;<samp>-FT</samp>&rsquo;
+
+</li><li>
+&lsquo;<samp>-FS</samp>&rsquo; and &lsquo;<samp>-FM</samp>&rsquo; require &lsquo;<samp>-SA</samp>&rsquo;
+</li></ul>
+
+<p>In case an incompatible combination is set, <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-4"></a>
+with <code>Parameter_Error</code>
+<a name="index-Parameter_005fError-error-status-1"></a>
+status is raised.
+</p>
+<p>If the actual <code>Parameters</code> string passed to
+<code>Associate</code> contains no parameters, the default parameters
+are &lsquo;<samp>-CA</samp>&rsquo;, &lsquo;<samp>-FT</samp>&rsquo;, and &lsquo;<samp>-SA</samp>&rsquo;.
+</p>
+<p>The &lsquo;<samp>-FS</samp>&rsquo; and &lsquo;<samp>-FM</samp>&rsquo; options define <em>dynamic Context modes</em>;
+<a name="index-Dynamic-Context-modes"></a>
+they allow the content of a <code>Context</code> (that is, the set
+of ASIS <code>Compilation_Unit</code>s contained in the <code>Context</code>) to be
+changed while the <code>Context</code> is open. See <a href="#Dynamic-Context-Modes">Dynamic <code>Context</code> Modes</a> for
+more details.
+</p>
+<p>For the <code>Name</code> parameter
+<a name="index-Name-parameter-_0028to-Asis_002eAda_005fEnvironments_002eAssociate_0029"></a>
+of the <code>Asis.Ada_Environments.Associate</code>
+query, any string can be passed as an actual parameter.
+No verification is performed on the contents, and no semantics are
+associated with this parameter.
+</p>
+
+<hr size="6">
+<a name="Implementation-Permissions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Parameters-of-Asis_002eAda_005fEnvironments_002eAssociate" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Asis_002eImplementation_002ePermissions-Queries" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Implementation-Permissions-1"></a>
+<h2 class="section">3.2 Implementation Permissions</h2>
+<a name="index-Implementation-permissions-1"></a>
+
+<p>This section describes how ASIS-for-GNAT deals with
+implementation permissions.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Asis_002eImplementation_002ePermissions-Queries">3.2.1 <code>Asis.Implementation.Permissions</code> Queries</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Processing-Implicit-Elements">3.2.2 Processing Implicit <code>Element</code>s</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Processing-Several-Contexts-at-a-Time">3.2.3 Processing Several Contexts at a Time</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Implementation_002dDefined-Types-and-Values">3.2.4 Implementation-Defined Types and Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Asis_002eImplementation_002ePermissions-Queries"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Processing-Implicit-Elements" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Asis_002eImplementation_002ePermissions-Queries-1"></a>
+<h3 class="subsection">3.2.1 <code>Asis.Implementation.Permissions</code> Queries</h3>
+<a name="index-Asis_002eImplementation_002ePermissions-queries"></a>
+
+<p>The Boolean queries defined in the <code>Asis.Implementation.Permissions</code>
+package return the following results:
+</p>
+<table>
+<tr><td><em>Query</em></td><td><em>Value</em></td></tr>
+<tr><td><code>Is_Formal_Parameter_Named_Notation_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Default_In_Mode_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Generic_Actual_Part_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Record_Component_Associations_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Is_Prefix_Call_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Function_Call_Parameters_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Call_Statement_Parameters_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Discriminant_Associations_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Is_Line_Number_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Is_Span_Column_Position_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Is_Commentary_Supported</code></td><td><code>True</code></td></tr>
+<tr><td><code>Attributes_Are_Supported</code></td><td><code>False</code></td></tr>
+<tr><td><code>Implicit_Components_Supported</code></td><td><code>False</code> (*)</td></tr>
+<tr><td><code>Object_Declarations_Normalized</code></td><td><code>False</code></td></tr>
+<tr><td><code>Predefined_Operations_Supported</code></td><td><code>False</code> (*)</td></tr>
+<tr><td><code>Inherited_Declarations_Supported</code></td><td><code>True</code>  (*)</td></tr>
+<tr><td><code>Inherited_Subprograms_Supported</code></td><td><code>True</code>  (*)</td></tr>
+<tr><td><code>Generic_Macro_Expansion_Supported</code></td><td><code>True</code></td></tr>
+</table>
+
+<p>(*) See also <a href="#Processing-Implicit-Elements">Processing Implicit <code>Element</code>s</a>.
+</p>
+
+<hr size="6">
+<a name="Processing-Implicit-Elements"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Asis_002eImplementation_002ePermissions-Queries" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Processing-Several-Contexts-at-a-Time" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Processing-Implicit-Elements-1"></a>
+<h3 class="subsection">3.2.2 Processing Implicit <code>Element</code>s</h3>
+<a name="index-Implicit-Elements"></a>
+
+<p>ASIS <code>Element</code>s represent both explicit and implicit<a name="DOCF4" href="asis_rm_fot.html#FOOT4">(4)</a>
+components of Ada programs.
+Some ASIS queries can return implicit <code>Element</code>s (that is,
+<code>Element</code>s representing implicit Ada constructs). Any syntactic or
+semantic query should accept an implicit <code>Element</code> as an <code>Element</code>
+parameter, but the ASIS Standard allows an implementation not to support
+implicit <code>Element</code>s at all, or to support them only partially. If an
+implementation does not support the implicit <code>Element</code> representing
+a particular kind of construct, then an ASIS query that is supposed to process
+this implicit <code>Element</code> should return either a <code>Nil_Element</code> or a
+<code>Nil_Element_List</code> depending on whether the query returns a single
+<code>Element</code> or an <code>Element_List</code>.
+</p>
+<p>Implicit <code>Element</code>s are partially supported by ASIS-for-GNAT.
+</p>
+<p>ASIS-for-GNAT supports implicit <code>Element</code>s for the following constructs:
+</p>
+<ul>
+<li> Derived user-defined subprograms
+</li><li> Derived enumeration literals
+</li><li> Derived record components
+</li></ul>
+
+<p>ASIS-for-GNAT does not
+support implicit <code>Element</code>s representing implicit declarations of
+predefined type operations (such as &ldquo;<code>=</code>&rdquo;, or the &ldquo;<code>+</code>&rdquo;
+operation for numeric types).
+</p>
+
+<hr size="6">
+<a name="Processing-Several-Contexts-at-a-Time"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Processing-Implicit-Elements" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation_002dDefined-Types-and-Values" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Processing-Several-Contexts-at-a-Time-1"></a>
+<h3 class="subsection">3.2.3 Processing Several Contexts at a Time</h3>
+
+<p>According to the ASIS Standard, the number of ASIS <code>Context</code>s that can be
+associated and opened at a time, as well as the number of ASIS
+<code>Compilation_Unit</code>s that can be processed at a time, are
+implementation specific.
+ASIS-for-GNAT does not impose any restriction on the number of
+<code>Context</code>s opened at the same time, or on the number of
+<code>Compilation_Unit</code>s that can be obtained from all the opened
+<code>Context</code>s, as long as the application does not go beyond general
+system resource limitations.
+<a name="index-Implementation-limits"></a>
+</p>
+<p>However, for a <code>Context</code> associated with an &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo;
+option, all the trees created &ldquo;on the fly&rdquo; while obtaining
+<code>Compilation_Unit</code>s from this <code>Context</code> are placed in the current
+directory. If the current directory also contains
+some tree files belonging to another <code>Context</code>, the latter may become
+corrupted. To process more than one <code>Context</code> safely, an application
+should have at most one <code>Context</code> associated with the &lsquo;<samp>-FS</samp>&rsquo; or
+&lsquo;<samp>-FM</samp>&rsquo; option. Moreover, if among <code>Context</code>s processed at the same
+time there is one that can create trees &ldquo;on the fly&rdquo;, then the other
+<code>Context</code>s should not use tree files located in the current directory.
+</p>
+
+<hr size="6">
+<a name="Implementation_002dDefined-Types-and-Values"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Processing-Several-Contexts-at-a-Time" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Queries-Having-Specific-Implementation-Permissions-or-Implementation_002dSpecific-Results" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Implementation_002dDefined-Types-and-Values-1"></a>
+<h3 class="subsection">3.2.4 Implementation-Defined Types and Values</h3>
+
+<p>All the implementation-defined types, subtypes and values depend on the
+subtype <code>Implementation_Defined_Integer_Type</code>
+<a name="index-Implementation_005fDefined_005fInteger_005fType-subtype"></a>
+and on the
+<code>Implementation_Defined_Integer_Constant</code>
+<a name="index-Implementation_005fDefined_005fInteger_005fConstant--named-number"></a>
+defined in package <code>Asis</code>.
+ASIS-for-GNAT&rsquo;s declarations for these entities are the same as in the ASIS
+Standard:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample"> subtype Implementation_Defined_Integer_Type is Integer;
+Implementation_Defined_Integer_Constant : constant := 2**31-1;
+</pre></td></tr></table>
+
+<p>All the ASIS (sub)types used as list indexes for ASIS array types have
+<code>Implementation_Defined_Integer_Constant</code> as an upper bound.
+</p>
+
+<hr size="6">
+<a name="ASIS-Queries-Having-Specific-Implementation-Permissions-or-Implementation_002dSpecific-Results"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Implementation_002dDefined-Types-and-Values" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Dynamic-Context-Modes" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Queries-Having-Specific-Implementation-Permissions-or-Implementation_002dSpecific-Results-1"></a>
+<h2 class="section">3.3 ASIS Queries Having Specific Implementation Permissions or Implementation-Specific Results</h2>
+<a name="index-Implementation-permissions-2"></a>
+
+<p>This section documents
+queries having implementation permissions (given under <code>--|IP</code> sentinel
+in the ASIS definition) and queries whose behavior is otherwise
+implementation specific. Such queries are presented below
+in their order of appearance in the ASIS Standard.
+The clause and subclause numbers shown are those from the ASIS Standard.
+</p>
+<p>The results returned by the ASIS <code>Debug_Image</code>
+<a name="index-Debug_005fImage-query"></a>
+queries are discussed in
+<a href="asis_rm_4.html#Interpreting-Debug-Images">Interpreting Debug Images</a>.
+</p>
+<a name="ASIS-8-package-Asis_002eAda_005fEnvironments"></a>
+<h3 class="subheading"><cite>ASIS 8</cite> <code>package Asis.Ada_Environments</code></h3>
+<a name="index-Asis_002eAda_005fEnvironments-implementation-permissions"></a>
+
+<p><cite>ASIS 8.1</cite> <code>function Default_Name</code>
+<a name="index-Default_005fName-function-_0028implementation-permissions_0029"></a>
+</p><ul>
+<li>
+Null string is returned.
+</li></ul>
+
+<p><cite>ASIS 8.2</cite>  <code>function Default_Parameters</code>
+<a name="index-Default_005fParameters-function-_0028implementation-permissions_0029"></a>
+</p><ul>
+<li>
+Null string is returned;.
+</li></ul>
+
+<p><cite>ASIS 8.4</cite>  <code>procedure Open</code>
+<a name="index-Open-procedure--_0028implementation-permissions_0029"></a>
+</p><ul>
+<li>
+For a <code>Context</code> associated with the &lsquo;<samp>-CA</samp>&rsquo; option:
+
+<ul>
+<li>
+If &lsquo;<samp>-FS</samp>&rsquo; is also set, nothing is done.
+
+</li><li>
+If the &lsquo;<samp>-FT</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; is set, all the tree files (that is,
+  files having &lsquo;<tt>.adt</tt>&rsquo; suffix) in the tree search path
+  associated with the <code>Context</code> are processed.
+  ASIS reads in each tree file and checks
+  that it was created with
+  the &lsquo;<samp>-gnatc</samp>&rsquo; option. Tree files that cannot be read in or
+  that were not created with the &lsquo;<samp>-gnatc</samp>&rsquo; option are ignored.
+  For each other tree ASIS collects some &ldquo;black-box&rdquo;
+  information about the <code>Compilation_Unit</code>s that it represents,
+  and performs a consistency check
+<a name="index-Consistency-checking-1"></a>
+  for every unit it encounters in the tree (see <cite>ASIS-for-GNAT
+  User&rsquo;s Guide</cite> for a discussion of the consistency
+  problem). If any consistency check fails, <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-5"></a>
+  is raised and the <code>Context</code> remains closed.
+</li></ul>
+
+</li><li>
+For a <code>Context</code> associated with a &lsquo;<samp>-C1</samp>&rsquo; or &lsquo;<samp>-CN</samp>&rsquo; option,
+ASIS processes all the tree files associated with the <code>Context</code>,
+  collecting &ldquo;black-box&rdquo; information and performing consistency
+  checks for all the encountered Compilation Units.
+  If for any reason a tree file cannot be
+  successfully read in for a <code>Context</code> associated with a &lsquo;<samp>-C1</samp>&rsquo;
+  option, <code>ASIS_Failed</code> is raised and the <code>Context</code> remains
+  closed.
+  If a tree read fails for a <code>Context</code> associated with a
+  &lsquo;<samp>-CN</samp>&rsquo; option, an ASIS warning
+<a name="index-Warning-messages-2"></a>
+  is generated and the <code>Context</code> opening process continues.
+  If any consistency check fails, <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-6"></a>
+  is raised and the <code>Context</code> remains closed.
+</li></ul>
+
+<a name="ASIS-9-package-Asis_002eAda_005fEnvironments_002eContainers"></a>
+<h3 class="subheading"><cite>ASIS 9</cite> <code>package Asis.Ada_Environments.Containers</code></h3>
+<a name="index-Asis_002eAda_005fEnvironments_002eContainers-implementation-permissions"></a>
+
+<ul>
+<li>
+ ASIS-for-GNAT supports the trivial <code>Container</code> model. Every
+<code>Context</code> contains exactly one <code>Container</code>, whose content and name
+ are the same as its enclosing <code>Context</code>
+</li></ul>
+
+<a name="ASIS-10-package-Asis_002eCompilation_005fUnits"></a>
+<h3 class="subheading"><cite>ASIS 10</cite> <code>package Asis.Compilation_Units</code></h3>
+<a name="index-Asis_002eCompilation_005fUnits-implementation-permissions"></a>
+
+<p><cite>ASIS 10.3</cite>  <code>function Unit_Origin</code>
+<a name="index-Unit_005fOrigin-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+<code>A_Predefined_Unit</code> origin is returned for those compilation units
+<a name="index-A_005fPredefined_005fUnit"></a>
+listed in RM95, Annex A(2), and only for these units.
+
+</li><li>
+<code>An_Implementation_Unit</code> origin is returned for compilation
+<a name="index-An_005fImplementation_005fUnit"></a>
+units that are the components of the GNAT Run-Time
+Library, but that are not listed in RM95, Annex A(2).
+
+</li><li>
+<code>An_Application_Unit</code> origin is returned for all other
+<a name="index-An_005fApplication_005fUnit"></a>
+compilation units.
+</li></ul>
+
+<p><cite>ASIS 10.6</cite> <code>function Library_Unit_Declaration</code> and <cite>ASIS 10.7</cite>
+<code>function Compilation_Unit_Body</code>
+<a name="index-Library_005fUnit_005fDeclaration-function-_0028implementation-permissions_0029"></a>
+<a name="index-Compilation_005fUnit_005fBody-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+When processing a <code>Context</code> associated with an &lsquo;<samp>-FS</samp>&rsquo; or
+&lsquo;<samp>-FM</samp>&rsquo; option, if ASIS cannot find a needed unit in the tree files
+that have been already processed, it tries to create the needed tree by
+locating the source of the unit and compiling it &ldquo;on the fly&rdquo;. If this
+attempt fails for any reason, <code>Nil_Compilation_Unit</code> is returned.
+</li></ul>
+
+<p><cite>ASIS 10.13</cite> <code>function Corresponding_Declaration</code>
+<a name="index-Corresponding_005fDeclaration-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+ASIS-for-GNAT does not make use of ASIS <code>Compilation_Unit</code>s
+of <code>An_Unknown_Unit</code> kind.
+<a name="index-An_005fUnknown_005fUnit"></a>
+
+</li><li>
+If an argument is of <code>A_Public_Declaration_And_Body</code> class,
+<code>Nil_Compilation_Unit</code> is returned.
+</li></ul>
+
+<p><cite>ASIS 10.14</cite> <code>function Corresponding_Body</code>
+<a name="index-Corresponding_005fBody-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+ASIS-for-GNAT does not make use of ASIS <code>Compilation_Unit</code>s
+of <code>An_Unknown_Unit</code> kind.
+</li></ul>
+
+<p><cite>ASIS 10.22</cite> <code>function Can_Be_Main_Program</code>
+<a name="index-Can_005fBe_005fMain_005fProgram-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+For GNAT, any parameterless library procedure and any
+parameterless library function returning a result of an integer type is
+classified by this  query as a (possible) main subprogram for a partition.
+
+</li><li>
+If for such a library subprogram both spec and body exist as ASIS
+<code>Compilation_Unit</code>s retrievable from a given ASIS <code>Context</code>, both
+are considered as  <code>Can_Be_Main_Program</code>.
+</li></ul>
+
+<p><cite>ASIS 10.24</cite> <code>function Text_Name</code>
+<a name="index-Text_005fName-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function returns the name of the source file containing the source of
+ <code>Compilation_Unit</code>. This name may or may not contain a prefix denoting
+the directory in the underlying file system.  If present, the directory may be
+ given in absolute or relative form, depending on the command line options
+ that were used for the call to GNAT that created the corresponding tree
+ file.
+
+</li><li>
+This function does not check the existence of the corresponding source file in
+ the underlying file system, it just reflects the situation which was in
+ effect when the corresponding tree file was created. Thus, if you delete or
+ move the corresponding source file after creating the tree, the full file
+ name returned by this function will be incorrect.
+
+</li><li>
+Use the query <code>Asis.Extensions.Source_File_Status</code> to get the information
+ about the current status of the source file for a <code>Compilation_Unit</code>.
+</li></ul>
+
+<p><cite>ASIS 10.25</cite> <code>function Text_Form</code>
+<a name="index-Text_005fForm-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+In the GNAT compilation model all source files are ordinary text files in the
+ underlying file system. Therefore this function always returns a
+ <code>Nil_Asis_String</code> to indicate that <code>Text_IO.Open</code> uses the default
+ options for manipulating Ada sources.
+</li></ul>
+
+<p><cite>ASIS 10.26</cite> <code>function Object_Name</code>
+<a name="index-Object_005fName-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Returns a null string. In the GNAT environment, creating an object file has
+no connection with creating trees for ASIS.
+</li></ul>
+
+<p><cite>ASIS 10.27</cite> <code>function Object_Form</code>
+<a name="index-Object_005fForm-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Returns a null string.
+</li></ul>
+
+<p><cite>ASIS 10.29</cite> <code>function Has_Attribute</code>
+<a name="index-Has_005fAttribute-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Returns <code>False</code>. ASIS-for-GNAT does not provide any additional attributes
+for Compilation Units.
+</li></ul>
+
+<p><cite>ASIS 10.30</cite> <code>function Attribute_Value_Delimiter</code>
+<a name="index-Attribute_005fValue_005fDelimiter-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+ Returns a wide string of length one containing the <code>LF</code> wide
+  character.
+</li></ul>
+
+<p><cite>ASIS 10.31</cite> <code>function Attribute_Values</code>
+<a name="index-Attribute_005fValues-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+A null string is returned.
+</li></ul>
+
+<a name="ASIS-11-package-Asis_002eCompilation_005fUnits_002eTimes"></a>
+<h3 class="subheading"><cite>ASIS 11</cite> <code>package Asis.Compilation_Units.Times</code></h3>
+<a name="index-Asis_002eCompilation_005fUnits_002eTimes-implementation-permissions"></a>
+
+<p><cite>ASIS 11.2</cite>  <code>function Time_Of_Last_Update</code>
+<a name="index-Time_005fOf_005fLast_005fUpdate-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function returns the time stamp (the time of the latest change)
+of the corresponding
+ source file. The corresponding source file is the source file whose name is
+ returned by <code>Asis.Compilation_Units.Text_Name</code>.
+</li></ul>
+
+<p><cite>ASIS 11.3</cite>  <code>function Compilation_CPU_Duration</code>
+<a name="index-Compilation_005fCPU_005fDuration-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function always returns zero duration, because the CPU compilation
+ duration concept does not apply to ASIS-for-GNAT
+</li></ul>
+
+<p><cite>ASIS 11.4</cite>  <code>function Attribute_Time</code>
+<a name="index-Attribute_005fTime-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function always returns <code>Nil_ASIS_Time</code> because
+ ASIS-for-GNAT does not provide any <code>Compilation_Unit</code> attributes
+</li></ul>
+
+
+<a name="ASIS-13-package-Asis_002eElements"></a>
+<h3 class="subheading"><cite>ASIS 13</cite> <code>package Asis.Elements</code></h3>
+<a name="index-Asis_002eElements-implementation-permissions"></a>
+
+<p><cite>ASIS 13.3</cite>  <code>function Context_Clause_Elements</code>
+<a name="index-Context_005fClause_005fElements-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function returns exactly those clauses and pragmas that are in the
+ source for the unit.
+
+</li><li>
+Returns <code>Nil_Element_List</code> if the argument unit is of
+<code>A_Nonexistent_Declaration</code>, <code>A_Nonexistent_Body</code> or
+<code>An_Unknown_Unit</code> kind
+
+</li><li>
+Returns <code>Nil_Element_List</code> for the predefined package <code>Standard</code>.
+ For all other predefined Ada compilation units, returns their context clauses
+ as they appear in the sources held in the GNAT Run-Time
+ Library.
+</li></ul>
+
+<p><cite>ASIS 13.4</cite>  <code>function Configuration_Pragmas</code>
+<a name="index-Configuration_005fPragmas-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+This function always returns <code>Nil_Element_List</code>, because in the GNAT
+compilation environment &ldquo;a list of pragmas that apply to all future
+ compilation_unit elements compiled into <code>The_Context</code>&rdquo; essentially
+ depends on the GNAT options set when compiling a unit (in particular the
+&lsquo;<samp>-gnatA</samp>&rsquo; and &lsquo;<samp>-gnatec</samp>&rsquo; options), and this cannot be determined
+from the content of the given <code>Context</code>.
+</li></ul>
+
+<p><cite>ASIS 13.5</cite>  <code>function Compilation_Pragmas</code>
+<a name="index-Compilation_005fPragmas-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+If the argument unit has been compiled on its own to produce a corresponding
+tree file, then the result contains the configuration pragmas from the
+GNAT configuration file(s) involved in this compilation. Otherwise  (that is,
+if the argument unit has been compiled only as an effect of compiling some
+other unit), the result contains only those pragmas that belong to
+the unit&rsquo;s source file.
+
+</li><li>
+A pragma that appears in the unit&rsquo;s context clause is included in the result
+ list only if it is a configuration pragma.
+
+</li><li>
+Returns <code>Nil_Element_List</code> for the predefined package <code>Standard</code>.
+</li></ul>
+
+<p><cite>ASIS 13.31</cite> <code>function Is_Equal</code>
+<a name="index-Is_005fEqual-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Two elements representing configuration pragmas belonging to
+<code>A_Configuration_Compilation</code> unit (or components thereof) are considered
+as being equal only if they are created by the same compilation (belong
+to the same tree).
+</li></ul>
+
+<p><cite>ASIS 13.36</cite> <code>function Enclosing_Element</code>
+<a name="index-Enclosing_005fElement-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+ASIS-for-GNAT does not require the <code>Element_Context</code> parameter.
+ The <code>Enclosing_Element</code> function with two parameters just calls the
+ <code>Enclosing_Element</code> function with one parameter for its <code>Element</code>
+ parameter.
+</li></ul>
+
+
+<a name="ASIS-15-package-Asis_002eDeclarations"></a>
+<h3 class="subheading"><cite>ASIS 15</cite> <code>package Asis.Declarations</code></h3>
+<a name="index-Asis_002eDeclarations-implementation-permissions"></a>
+
+<p><cite>ASIS 15.24</cite> <code>function Body_Block_Statement</code>
+<a name="index-Body_005fBlock_005fStatement-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+If the body passed as the actual parameter has no declarative items of its
+own,  <code>Asis.Statements.Is_Declare_Block</code> returns <code>False</code>.
+</li></ul>
+
+
+<a name="ASIS-18-package-Asis_002eStatements"></a>
+<h3 class="subheading"><cite>ASIS 18</cite> <code>package Asis.Statements</code></h3>
+<a name="index-Asis_002eStatements-implementation-permissions"></a>
+
+<p><cite>ASIS 18.14</cite> <code>function Is_Declare_Block</code>
+<a name="index-Is_005fDeclare_005fBlock-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+If the argument represents the dummy block statement created by
+ <code>Asis.Declarations.Body_Block_Statement</code> function, the result will be
+ <code>True</code> if and only if the corresponding body has declarative items.
+</li></ul>
+
+
+<a name="ASIS-20-package-Asis_002eText"></a>
+<h3 class="subheading"><cite>ASIS 20</cite> <code>package Asis.Text</code></h3>
+<a name="index-Asis_002eText-implementation-permissions"></a>
+
+<p><cite>ASIS 20.1</cite> <code>type Line</code>
+<a name="index-Line-type-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Lines in ASIS-for-GNAT do not contain any end-of-line characters
+ (see RM95, 2.2(2)).
+</li></ul>
+
+<p><cite>ASIS 20.22</cite> <code>function Delimiter_Image</code>
+<a name="index-Delimiter_005fImage-function-_0028implementation-permissions_0029"></a>
+</p>
+<ul>
+<li>
+Returns a wide string of length one, containing the <code>LF</code> wide character.
+</li></ul>
+
+
+<hr size="6">
+<a name="Dynamic-Context-Modes"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Queries-Having-Specific-Implementation-Permissions-or-Implementation_002dSpecific-Results" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Dynamic-Context-Modes-1"></a>
+<h2 class="section">3.4 Dynamic <code>Context</code> Modes</h2>
+<a name="index-Dynamic-Context-modes-1"></a>
+
+<p>If an ASIS <code>Context</code> is defined with an &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo;
+option, then ASIS may compile sources &ldquo;on the fly&rdquo; to obtain
+<code>Compilation_Unit</code>s.
+Thus the content of the <code>Context</code> will not necessarily remain frozen
+when the <code>Context</code> is open &mdash; when ASIS gets a new
+<code>Compilation_Unit</code>, it &ldquo;adds&rdquo; it to the <code>Context</code>.
+The &lsquo;<samp>-FS</samp>&rsquo; and &lsquo;<samp>-FM</samp>&rsquo; options
+are referred to as <em>dynamic Context modes</em>.
+</p>
+<p>The difference between the two modes is as follows:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>-FS</samp>&rsquo;</dt>
+<dd><p>ASIS does not take into account any existing tree file when opening a
+<code>Context</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>-FM</samp>&rsquo;</dt>
+<dd><p>ASIS first processes the tree files in the tree search
+path.  If a given <code>Compilation_Unit</code> is present in the existing set of
+tree files, these tree files are used; otherwise ASIS tries to locate the
+source of the unit and to compile it to produce a tree file.
+</p></dd>
+</dl>
+
+<p>For both &lsquo;<samp>-FS</samp>&rsquo; and
+&lsquo;<samp>-FM</samp>&rsquo; <code>Context</code>s, once a tree file
+<a name="index-Tree-file-1"></a>
+is created it is added to the set of tree
+files making up the <code>Context</code> and then it is reused (without recreating
+it from sources again) for the queries dealing with <code>Compilation_Unit</code>s
+represented by this tree.
+</p>
+<p>An advantage of these dynamic <code>Context</code> modes is that you do not have to
+create the tree files explicitly; to users of an ASIS application based on
+such <code>Context</code> modes the application appears to operate directly from
+source files. But there is also a
+drawback, a consequence of the fact that the content of a <code>Context</code> may
+change while the <code>Context</code> is open: some ASIS queries dealing
+with <code>Compilation_Unit</code>s or returning lists of <code>Compilation_Unit</code>s
+raise the <code>ASIS_Failed</code>
+<a name="index-ASIS_005fFailed-exception-7"></a>
+exception (with <code>Use_Error</code>
+<a name="index-Use_005fError-error-status"></a>
+status).
+These queries are as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">Asis.Compilation_Units:
+     Library_Unit_Declarations
+     Compilation_Unit_Bodies
+     Compilation_Units
+     Corresponding_Children
+</pre></td></tr></table>
+
+<p>Another limitation of the dynamic <code>Context</code> mode is that ASIS uses the
+standard GNAT naming scheme to compute the name of the source to be compiled
+from the name of the corresponding Ada compilation unit. That is, if the name
+of the source containing the code of some unit does not follow the GNAT
+naming scheme, then ASIS will not locate this source, and it will treat
+this unit as <code>Nil_Compilation_Unit</code>.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_4.html#Debugging-Information" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

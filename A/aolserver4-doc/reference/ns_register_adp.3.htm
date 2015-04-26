@@ -1,0 +1,259 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:45 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_register_proc</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_register_proc</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_register_adp,
+ns_register_proc, ns_unregister_adp, ns_unregister_proc
+&minus; Facilities to manage mappings for HTTP requests to
+Tcl procedures or ADP files</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_register_adp</b>
+?<i>-noinherit</i>? <i>method url file</i> <b><br>
+ns_register_proc</b> ?<i>-noinherit</i>? <i>method url
+proc</i> ?<i>arg</i>? <b><br>
+ns_unregister_adp</b> ?<i>-noinherit</i>? <i>method url</i>
+<b><br>
+ns_unregister_proc</b> ?<i>-noinherit</i>? <i>method url</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These commands
+manage mappings of HTTP request to Tcl procedures or ADP
+files. The server will invoke the given procedure or ADP
+file when the corresponding method/url combination is
+requested.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>method</i> is normally one of <i>GET</i> or <i>POST</i>
+although there is no restriction as internally method is
+always treated simply as a string. Specialized applications,
+for example, a WebDav file server, could register additional
+methods such as <i>PUT</i>, <i>DELETE</i>, or
+<i>BROWSE</i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The <i>url</i>
+parameter specifies the trailing, pathname portion of an
+url, for example, <i>/myapp/search</i>. Requests for the
+specified url or any url&rsquo;s with additional path
+elements which do not have more specific mappings will be
+handled by the given procedure or ADP file. This behavior
+can be changed with the optional <i>-noinherit</i> flag in
+which case only exact match url&rsquo;s will be handled.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In addition,
+for the final pathname component, a &quot;glob-style&quot;
+pattern may also be specified to further restrict the match.
+For example, <i>/myapp/*.adp</i> would handle requests for
+all url which start with <i>/myapp</i> and have a final
+pathname component which ends with the <i>.adp</i>
+extension. Note that the method cannot be specified as a
+glob pattern, i.e., attempting to map &quot;*&quot; will map
+the single character string &quot;*&quot; as the method, it
+will not map all possible methods.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Calls to
+<b>ns_register_proc</b> and <b>ns_register_adp</b> are
+normally placed in server initialization scripts. The
+<b>ns_unregister_proc</b> and <b>ns_unregister_adp</b>
+commands are rarely used, normally only in the context of
+development or debugging. <b><br>
+ns_register_adp</b> ?<i>-noinherit</i>? <i>method url
+file</i></p>
+
+<p style="margin-left:22%;">This command maps the given
+method/url combination to a specific ADP file. The
+<i>file</i> argument must be an absolute pathname and a
+regular file. When the server receives a matching request,
+it will allocate a Tcl interpreter and invoke the
+<b>ns_adp_include</b> command with the given file, returning
+the results of the output buffer to the client when the
+command returns.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Note it is also
+possible to provide mappings for ADP files in the config
+file as well although those mappings are intended to support
+mixing of ADP and static files in the server&rsquo;s basic
+page root. Using <b>ns_register_adp</b> can provide more
+general mappings, not requiring actual ADP files to exist at
+the corresponding location in the filesystem.</p>
+
+<p style="margin-left:11%;"><b>ns_register_proc</b>
+?<i>-noinherit</i>? <i>method url proc</i> ?<i>arg</i>?</p>
+
+<p style="margin-left:22%;">This command maps the given
+method/url combination to a Tcl procedure. When the server
+receives a matching request, it allocates a Tcl interpreter
+and calls <b>Tcl_Eval</b> with a script constructed of the
+procedure with zero, one, or two arguments depending on the
+arguments expected for the procedure. If the procedure
+accepts no arguments, none are passed and the <i>arg</i>
+parameter to <b>ns_register_proc</b>, if given, is ignored.
+If it takes one argument, the procedure is passed the
+optional <i>arg</i> parameter or a null string if no
+argument was given. If the procedure accepts two arguments,
+the first argument will be the &quot;connection id&quot;
+followed by the argument as described for the case of one
+argument. The connection id is a small string of the form
+&quot;cns#&quot; where # is a monotonically increasing
+integer value which will eventually wrap after the server
+has been running for a long time. This id is also returned
+via the the <b>ns_conn id</b> command. This connection id is
+for information purposes only and is is otherwise useless
+and not required to be passed to any other AOLserver Tcl
+command. See the <b>EXAMPLES</b> section for details on how
+various arguments are handled for request procedures.</p>
+
+<p style="margin-left:11%;"><b>ns_unregister_adp</b>
+?<i>-noinherit</i>? <i>method url</i> <b><br>
+ns_unregister_proc</b> ?<i>-noinherit</i>? <i>method
+url</i></p>
+
+<p style="margin-left:22%;">These commands are identical
+and can be used to remove any mapping for the given
+method/url. Note that no check is made to confirm the given
+mapping exists or was in fact a Tcl procedure, ADP file, or
+some other C-level mapping created with the
+<b>Ns_RegisterRequest</b> routine. The optional
+<i>-noinherit</i> flag, if specified, requests removal of
+mappings previously made with the <i>-noinherit</i> flag
+with the commands above or via the <i>NS_OP_NOINHERIT</i>
+bit set in a call to the <b>Ns_RegisterRequest</b>
+routine.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates the use of the <i>-noinherit</i> flag.
+Assume the following startup initializations code:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">ns_register_proc
+-noinherit GET /foo/bar Aproc <br>
+ns_register_proc GET /foo/bar Bproc <br>
+ns_register_proc GET /foo/bar/hmm Cproc</p>
+
+<p style="margin-left:11%; margin-top: 1em">In this case,
+<i>Aproc</i> will be called when the requested URL is
+exactly <i>/foo/bar</i> while <i>Bproc</i> will be called
+when the requested URL is anything below <i>/foo/bar</i>,
+provided there is not already another procedure registered
+to be called for that exact URL or for an URL with a closer
+match. <i>Cproc</i> (not Bproc) will be called when the
+requested URL is equal to or below /foo/bar/hmm.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates the multiple forms of which a Tcl
+procedure can be defined:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">ns_register_proc
+GET /zeroargs 0args myarg <br>
+ns_register_proc GET /onearg 1arg myarg <br>
+ns_register_proc GET /twoargs 2args myarg <br>
+ns_register_proc GET /twoargs 2args myarg</p>
+
+<p style="margin-left:22%; margin-top: 1em">proc 0args {} {
+<br>
+ns_returnnotice 200 &quot;no args&quot; <br>
+} ;# noargs</p>
+
+<p style="margin-left:22%; margin-top: 1em">proc 1arg {arg}
+{ <br>
+ns_returnnotice 200 &quot;arg: $arg&quot; <br>
+} ;# context</p>
+
+<p style="margin-left:22%; margin-top: 1em">proc 2args
+{conn arg} { <br>
+ns_returnnotice 200 &quot;connid: $conn, arg: $arg&quot;
+<br>
+} ;# conncontext</p>
+
+<p style="margin-left:11%;">When a request for the /twoargs
+URL is received, the <i>2args</i> procedure will be called
+with the value of the connection id as the <i>conn</i>
+variable and &quot;myarg&quot; as the value of the
+<i>arg</i> variable.</p>
+
+<p style="margin-left:11%; margin-top: 1em">When the server
+receives a request for <i>/onearg</i>, the server will
+invoke the <i>1arg</i> procedure with just &quot;myarg&quot;
+as the value for the <i>arg</i> procedure variable. The
+connection id, if needed, can be obtained with <b>ns_conn
+id</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Finally, when
+the server receives a request for <i>/zeroargs</i>, the
+<i>0args</i> procedure will be called with no options. The
+&quot;myarg&quot; value passed to <b>ns_register_proc</b> is
+ignored and the connection id, if needed, can be obtained
+with <b>ns_conn id</b>.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp(n),
+Ns_RegisterRequest(3), Ns_UrlSpecificGet(n),
+Ns_UrlSpecificSet(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">request
+callback, connection</p>
+<hr>
+</body>
+</html>

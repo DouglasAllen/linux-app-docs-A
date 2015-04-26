@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard System Access Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard System Access Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard System Access Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard System Access</em> module is an original implementation of various objects designed to provide a specialized access to the underlying system. Most of the system accesses are provided in the form of functions which have been designed to be portable as possible. One example of this, are the time and date management objects. </p>
+<div class="section">
+Interpreter information</div>
+<p class="text">
+ The interpreter provides a set reserved names that are related to the system platform. Example <tt class="file">0501.als</tt> demonstrates the available information. </p>
+<pre class="frame">
+<![CDATA[zsh> axi 0501.als
+program name           : afnix
+operating system name  : linux
+operating system type  : unix
+afnix official uri     : http://www.afnix.org
+
+]]></pre>
+<p class="subsect">
+Interpreter version</p>
+<p class="text">
+ The interpreter version is identified by 3 numbers called <em>major</em>, <em>minor</em> and <em>patch</em> numbers. A change in the major number represents a major change in the writing system. The minor number indicates a major change in the interface or libraries. A change in the patch number indicates bug fixes. All values are accessed via the interpreter itself. The <tt class="code">major-version</tt>, <tt class="code">minor-version</tt>, <tt class="code">patch-version</tt> symbols are bound to these values. </p>
+<pre class="frame">
+<![CDATA[println "major version number   : " 
+interp:major-version
+println "minor version number   : " 
+interp:minor-version
+println "patch version number   : " 
+interp:patch-version
+
+]]></pre>
+<p class="subsect">
+Operating system</p>
+<p class="text">
+ The operating system is uniquely identified by its name. The operating system type (or category) uniquely identifies the operating system flavor. </p>
+<pre class="frame">
+<![CDATA[println "operating system name  : " 
+interp:os-name
+println "operating system type  : " 
+interp:os-type
+
+]]></pre>
+<p class="subsect">
+Program information</p>
+<p class="text">
+ Program information are carried by two symbols that identifies the program name and the official uri. While the first might be useful, the second one is mostly used by demo programs. </p>
+<pre class="frame">
+<![CDATA[println "program name           : " 
+interp:program-name
+println "afnix official uri     : " 
+interp:afnix-uri
+
+]]></pre>
+<div class="section">
+System services</div>
+<p class="text">
+ The <em>system services</em> module provides various functions that cannot be classified into any particular category. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Function</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+exit</td>
+<td class="text">
+terminate with an exit code</td>
+</tr>
+<tr class="text">
+<td class="text">
+sleep</td>
+<td class="text">
+pause for a certain time</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-pid</td>
+<td class="text">
+get the process identifier</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-env</td>
+<td class="text">
+get an environment variable</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-host-name</td>
+<td class="text">
+get the host name</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-user-name</td>
+<td class="text">
+get the user name</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The <tt class="code">exit</tt> function terminates the program with an exit code specified as the argument. The <tt class="code">sleep</tt> function pause the specific thread for a certain time. The time argument is expressed in milliseconds. The <tt class="code">get-pid</tt> function returns the process identifier. The <tt class="code">get-env</tt> function returns the environment variable associated with the string argument. The <tt class="code">get-host-name</tt> function returns the host name. The host name can be either a simple name or a canonical name with its domain, depending on the system configuration. The <tt class="code">get-user-name</tt> function returns the current user name. </p>
+<div class="section">
+Time and date</div>
+<p class="text">
+ The <tt class="code">Time</tt> and <tt class="code">Date</tt> classes are classes designed to manipulate time and date. The writing system operates with a special coordinated time which uses the reference of Jan 1st 0000 in a modified proleptic Gregorian calendar. This proleptic feature means that the actual calendar (Gregorian) is extended beyond year 1582 (its introduction year) and modified in order to support the year 0. This kind of calendar is somehow similar to the astronomical Gregorian calendar except that the reference date is 0 for the writing system. This method presents the advantage to support negative time. It should be noted that the 0 reference does not means year 1BC since year 0 did not exist at that time (the concept of zero is fairly new) and more important, the date expressed in the form 1BC generally refers to the Julian calendar since the date is before 1582. Although, the class provides several methods to access the time and date fields, it is also possible to get a string representation that conforms to ISO-8601 or to RFC-2822. </p>
+<p class="subsect">
+Time and date construction</p>
+<p class="text">
+ By default, a time instance of current time is constructed. This time reference is obtained form the machine time and adjusted for the internal representation. One feature of this class is that the time instance does not have to be bounded with 24 hours. The time stored is the absolute time, which should be considered like a temporal reference -- or date -- those origin is 0 in some calendar representation. </p>
+<pre class="frame">
+<![CDATA[const  time (afnix:sys:Time)
+assert true (afnxi:sys:time-p time)
+
+]]></pre>
+<p class="text">
+ A simple time representation can also be built by hours, minutes and seconds. In this case, the time is a time definition at day 0 in the reference calendar. </p>
+<pre class="frame">
+<![CDATA[const  time (afnix:sys:Time 12 23 54)
+
+]]></pre>
+<p class="text">
+ By default a date instance of the current date is constructed. The current date is computed from the machine time and expressed in a particular calendar. By default, the engine uses a special Gregorian calendar as explained before. The important point here s that the date will show up like the user should expect. </p>
+<pre class="frame">
+<![CDATA[const  date (afnix:sys:Date)
+assert true (afnix:sys:date-p date)
+
+]]></pre>
+<p class="text">
+ A date instance can also be built with an absolute time expressed in seconds or with specific elements. with one argument, the date is expressed in seconds since the origin. Since the internal representation is 64 bits, the date room is quite large. For example, the absolute time to represent Jan 1st 1970 is 62167219200 seconds. This <em>epoch</em> is used to adjust the system time on some UNIX system. Another way to create a specific date is to use the date descriptor by year, month and day. With 6 arguments, the time components can also be given. This makes <tt class="code">Date</tt> one of the constructor that accept the largest number of arguments. </p>
+<pre class="frame">
+<![CDATA[const  date (afnix:sys:Date 1789 7 14 16 0 0)
+assert true (afnix:sys:date-p date)
+
+]]></pre>
+<p class="text">
+ In the previous example, at 17:00 local time, 16:00Z although the concept of time zone was not formalized, the Bastille surrenders on July 14 1789. This example shows that extreme care should be used when dealing with old dates. Note that a simpler form could have been used to set that date. With 3 argument, the date is set at time 00:00:00Z. </p>
+<pre class="frame">
+<![CDATA[const  date (afnix:sys:Date 1789 7 14)
+assert true (afnix:sys:date-p date)
+
+]]></pre>
+<p class="subsect">
+Time and date representation</p>
+<p class="text">
+ Except for some special applications -- like the cookie maximum age --, the date representation is quite standard and can be found either in the form of ISO-8601 or RFC-2822. </p>
+<pre class="frame">
+<![CDATA[const time (afnix:sys:Time 12 44 55)
+println    (time:format) # 12:44:55
+println    (time:to-iso) # 14:44:55
+println    (time:to-rfc) # 14:44:55 +0200
+
+]]></pre>
+<p class="text">
+ in the first form, the time is represented naturally by hour, minutes and seconds. By default, it is the local time that is given. With a flag set to true, the UTC time is displayed. In the second form, the time is displayed in the ISO-8601 form which is the same as before. In the third form, the time is displayed in the RFC-2822 form. This form is always expressed locally with the timezone difference associated with it. It shall be noted that the ISO-8601 mandate to use the suffix 'Z' for the zulu time. This is the difference when using the <tt class="code">true</tt> flag with the <tt class="code">format</tt> and <tt class="code">to-iso</tt> methods. </p>
+<pre class="frame">
+<![CDATA[println (time:format true) # 12:44:55
+println (time:to-iso true) # 12:44:55Z
+
+]]></pre>
+<p class="text">
+ The date representation also operates with 3 methods, namely <tt class="code">format</tt>, <tt class="code">to-iso</tt> and <tt class="code">to-rfc</tt>. For example, if the time is 12:00 in Paris on July 14th 2000, the date will be displayed like below. </p>
+<pre class="frame">
+<![CDATA[const date (afnix:sys:Date 2000 7 14 12 0 0)
+# Fri Jul 14 07:00:00 2000
+println (date:format)
+# 2000-07-14T07:00:00
+println (date:to-iso)
+# Fri, 14 Jul 2000 07:00:00 -0500	
+println (date:to-rfc)
+
+]]></pre>
+<p class="text">
+ The example show the local time. With UTC display, only the first two methods can be used. </p>
+<pre class="frame">
+<![CDATA[const date (afnix:sys:Date 2000 7 14 12 0 0)
+println (date:format true) # Fri Jul 14 12:00:00 2000
+println (date:to-iso true) # 2000-07-14T12:00:00Z
+
+]]></pre>
+<div class="section">
+Options parsing</div>
+<p class="text">
+ The <tt class="code">Options</tt> class provides a convenient mechanism to define a set of options and to parse them in a simple way. The object is constructed by specifying which option is valid and how it behaves. The arguments can be passed to the object for subsequent analysis. An option can be either a unique option or a string option. In this later case, multiple value for the same option can be accepted. In that case, the option is said to be a string vector option. An option can be also an option list. I that case, the option is defined with a set of valid string. A list option is associated with a boolean flag for each string defined with that option. </p>
+<p class="subsect">
+Option creation</p>
+<p class="text">
+ An <tt class="code">Options</tt> is created by invoking the constructor with or without a user message. The user message is used by the <tt class="code">usage</tt> method which display an information message. </p>
+<pre class="frame">
+<![CDATA[const options (
+  afnix:sys:Options "axi [options] [file [arguments]]")
+
+]]></pre>
+<p class="text">
+ Eventually, the <tt class="code">set-user-message</tt> method can be used to set the user message. </p>
+<p class="subsect">
+Options definition</p>
+<p class="text">
+ The process of defining options is done by specifying the option character, eventually an option string and an option message. </p>
+<pre class="frame">
+<![CDATA[options:add-unique-option 'h'
+"print this help message"
+options:add-unique-option 'v'
+"print system version"
+options:add-vector-option 'i'
+"add a resolver path"
+options:add-string-option 'e'
+"force the encoding mode"
+options:add-list-option   'f' "assert" 
+"enable assertion checks"
+options:add-list-option   'f' "nopath" 
+"do not set initial path"
+
+]]></pre>
+<p class="text">
+ The above example shows the option descriptors for the interpreter. Since <tt class="option">i</tt> is a vector option, multiple occurrences of that option is allowed. It shall be noted that the list option <tt class="option">f assert</tt> is a debug option. This means that this option is always set when the program is compiled in debug mode. </p>
+<p class="subsect">
+Options parsing and retrieval</p>
+<p class="text">
+ A string vector is parsed with the <tt class="code">parse</tt> method. Generally, the vector argument is the interpreter argument vector defined in the qualified name <tt class="code">interp:args</tt>. When the vector has been successfully parsed, it is possible to check the option that have been set. </p>
+<pre class="frame">
+<![CDATA[options:parse (Vector "-h")
+if (options:get-unique-option 'h') {
+  options:usage
+  afnix:sys:exit 0
+}
+
+]]></pre>
+<p class="text">
+ In the above example, the option vector is parsed with the <tt class="code">parse</tt> method. The <tt class="code">get-unique-option</tt> method returns true for the <tt class="option">h</tt> thus triggering the display of the usage message. </p>
+<pre class="frame">
+<![CDATA[usage: axi [options] [file [arguments]]
+[h]           print this help message
+[v]           print system version
+[i   path]    add a resolver path
+[e   mode]    force the encoding mode
+[f assert]    enable assertion checks
+[f nopath]    do not set initial path
+
+]]></pre>
+<p class="text">
+ If the option is a string option, the <tt class="code">get-string-option</tt> will return the string associated with that option. It shall be noted that the <tt class="code">get-unique-option</tt> method can be used to check if the option has been set during the parsing process. If the option is a vector option, the <tt class="code">get-vector-option</tt> method is more appropriate. In this case, a vector is returned with all strings matching this option. </p>
+<pre class="frame">
+<![CDATA[options:parse (
+  Vector "-i" "../" "-i" "../.." -e "UTF-08" "hello")
+
+]]></pre>
+<p class="text">
+ In the previous example, the vector option <tt class="option">i</tt> is set two times. The associated vector option has therefore a length of 2. The string option <tt class="option">e</tt> is set to <em>UTF-08</em>. For this option <tt class="option">e</tt>, the <tt class="code">get-unique-option</tt> method will return true. Finally, the vector argument is filled with one string argument. </p>
+<hr/>
+<div class="appendix">
+Standard System Access Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Time</div>
+<p class="text">
+ The <tt class="code">Time</tt> class is a simple class used to manipulate time. The AFNIX system operates with a special coordinated time which uses the reference of Jan 1st 0000 in a modified <em>proleptic gregorian calendar</em>. Note that the time can be negative. Although, the class provides several methods to access the time fields, it is also possible to get a string representation that conforms to ISO-8601 or to RFC-2822. The resolution is in seconds. With 1 argument, the object is initialized with the time clock specified as an integer argument. With 3 arguments, the time is expressed with its different elements. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>time-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Time</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Time constructor create a time object which is
+	  initialized with the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Time</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Time constructor create a time object which is
+	  initialized with the time argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Time</i><i> (Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Time constructor create a time object which is
+	  initialized with the time specific arguments, which are the
+	  hour, the minutes and the seconds.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add method adds the time argument in seconds to 
+	  the current time value This method is useful to compute a time
+	  in the future, in reference to the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-minutes</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add-minutes method adds one or several minutes to
+	  the current time value. This method is useful to compute a time
+	  in the future, in reference to the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-hours</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add-hour method adds one or several hours to
+	  the current time value. This method is useful to compute a time
+	  in the future, in reference to the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-days</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add-days method adds one or several days to
+	  the current time value. This method is useful to compute a time
+	  in the future, in reference to the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-time</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-time method set the absolute time in seconds.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-time</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The get-time method returns absolute time in
+	  seconds. Without argument, the absolute time is computed in
+	  reference to the UTC time. With a boolean argument set
+	  to true, the time is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>seconds</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The seconds method returns the number of
+	  seconds after the minute. Without argument, the number of
+	  seconds is computed in reference to the UTC time. With a
+	  boolean argument set to true, the number of seconds
+	  is computed in reference to the UTC time. If the argument is
+	  false, the local time is used. The returned value
+	  is the range 0 to 60.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>minutes</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The minutes method returns the number of
+	  minutes after the hour. Without argument, the number of
+	  minutes is computed in reference to the UTC time. With a
+	  boolean argument set to true, the number of minutes
+	  is computed in reference to the UTC time. If the argument is
+	  false, the local time is used. The returned value
+	  is the range 0 to 60.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>hours</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The hours method returns the number of hours
+	  since midnight. Without argument, the number of
+	  hours is computed in reference to the local time. With a
+	  boolean argument set to true, the number of hours
+	  is computed in reference to the UTC time. If the argument is
+	  false, the local time is used. The returned value
+	  is the range 0 to 23.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>format</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The format method returns a formatted representation
+	  of the time in the form of hh:mm:ss. Without argument,
+	  the time is computed in reference to the local time. With a
+	  boolean argument set to true, the time is computed
+	  in reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-iso</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-iso method returns a formatted representation
+	  of the time as specified by ISO-8601. Without argument, the time
+	  is computed in reference to the local time. With a boolean
+	  argument set to true, the time is computed in
+	  reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-rfc</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-rfc method returns a formatted representation
+	  of the time as specified by RFC-2822. Without argument, the time
+	  is computed in reference to the local time. With a boolean
+	  argument set to true, the time is computed in
+	  reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-base-day</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-base-day method returns the absolute time
+	  rounded to the beginning of the day.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Date</div>
+<p class="text">
+ The <tt class="code">Date</tt> is a derived class designed to manipulate dates. The date computation is based on an <em>modified proleptic
+      gregorian</em> calendar. This proleptic feature means that the actual calendar (gregorian) is extended beyond year 1582 (its introduction year) and modified in order to support the year 0. This kind of calendar is somehow similar to the astronomical gregorian calendar except that the reference date is 0 for special coordinated time. This method presents the advantage to support negative time. It should be noted that the 0 reference does not means year 1BC since year 0 did not exist at that time (the concept of zero is fairly new) and more important, the date expressed in the form 1BC generally refers to the Julian calendar since the date is before 1582. Although, the class provides several methods to access the individual fields, it is also possible to get a string representation that conforms to ISO-8601 or to RFC-2822. With 1 argument, the date is initialized with the time clock specified as an integer argument. With 3 or 6 arguments, the date is expressed with its different elements. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>date-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Time
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Date</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Date constructor creates a date object which is
+	  initialized with the current time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>date</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Date constructor creates a date object which is
+	  initialized with the time argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Date</i><i> (Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Date constructor creates a date object which is
+	  initialized with the date specific arguments, which are the
+	  year, the month and the day in the month.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Date</i><i> (Integer Integer Integer Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Date constructor creates a date object which is
+	  initialized with the date specific arguments, which are the
+	  year, the month, the day in the month, the hours, the minutes
+	  and the seconds.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>year</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The year method returns the date year. the returned
+	  value is an absolute year value which can be negative. Without
+	  argument, the number of years is computed in reference to the
+	  local time. With a boolean argument set to true,
+	  the number of years is computed in reference to the UTC time. If
+	  the argument is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>month</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The month method returns the month in the year. The
+	  returned value is the range 1 to 12. Without argument, the number of
+	  months is computed in reference to the local time. With a
+	  boolean argument set to true, the number of months
+	  is computed in reference to the UTC time. If the argument is
+	  false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>day</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The day method returns the day in the
+	  month. The returned value is the range 1 to 31. Without argument,
+	  the number of days is computed in reference to the local
+	  time. With a boolean argument set to true, the
+	  number of days is computed in reference to the UTC time. If the
+	  argument is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>week-day</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The week-day method returns the day in the
+	  week. The returned value is the range 0 to 6 in reference to
+	  Sunday. Without argument, the day is computed in
+	  reference to the local time. With a boolean argument set
+	  to true, the day is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>year-day</i><i> (&rarr; Integer)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The year-day method returns the day in the
+	  year. The returned value is the range 1 to 366 in reference to
+	  January 1st. Without argument, the day is computed in
+	  reference to the local time. With a boolean argument set
+	  to true, the day is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map-day</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The map-day method returns a formatted representation
+	  of the day. Without argument, the day is computed in
+	  reference to the local time. With a boolean argument set
+	  to true, the day is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map-month</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The map-month method returns a formatted representation
+	  of the month. Without argument, the month is computed in
+	  reference to the local time. With a boolean argument set
+	  to true, the month is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>format</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The format method returns a formatted representation
+	  of the date. Without argument, the time is computed in reference
+	  to the local time. With a boolean argument set to
+	  true, the time is computed in reference to the UTC
+	  time. If the argument is false, the local time is
+	  used. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-iso</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-iso method returns a formatted representation
+	  of the date as specified by ISO-8601. Without argument, the time
+	  is computed in reference to the local time. With a boolean
+	  argument set to true, the time is computed in
+	  reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-web</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-web method returns a formatted representation
+	  of the date as specified by RFC-1123.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-rfc</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-rfc method returns a formatted representation
+	  of the date as specified by RFC-2822. Without argument, the time
+	  is computed in reference to the local time. With a boolean
+	  argument set to true, the time is computed in
+	  reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-date</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-date method returns a formatted representation
+	  of the date only as specified by ISO-8601. With this method, the
+	  time value is not included in the representation. Without
+	  argument, the date is computed in reference to the local
+	  time. With a boolean argument set to true, the date
+	  is computed in reference to the UTC time. If the argument
+	  is false, the local time is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-time</i><i> (&rarr; String)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The to-time method returns a formatted representation
+	  of the time as returned by the Time format
+	  method. Without argument, the time is computed in reference to
+	  the local time. With a boolean argument set
+	  to true, the time is computed in reference to the
+	  UTC time. If the argument is false, the local time
+	  is used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-years</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add-years method add one or several years to the
+	  current date.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-months</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The add-months method add one or several months to the
+	  current date.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Options</div>
+<p class="text">
+ The <tt class="code">Options</tt> class is a simple class used to define and retrieve user options. The object is constructed by specifying which option is valid and how it behaves. The arguments can be passed to the object for subsequent analysis. An option can be either a unique option or a string option. In this later case, multiple value for the same option can be accepted. In that case, the option is said to be a string vector option. An option can be also an option list. I that case, the option is defined with a set of valid string. A list option is associated with a boolean flag for each string defined with that option. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>options-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Options</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Options constructor creates a default option
+	  object without a user message.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Options</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Options constructor creates an empty option object
+	  with a user message. The user message is used by the
+	  usage method.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the object data structure
+	  but do not remove the option descriptors. After a reset operation, the
+	  class is ready to parse another string vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>usage</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The usage method prints a usage message with a user
+	  message and a one line description per option.
+	  removing all messages.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>parse</i><i> (&rarr; Vector)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The parse method parse a vector and fill the option
+	  data structure. The parse method is generally called with the
+	  interpreter argument vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty- predicate returns true if the argument
+	  vector is empty. The argument vector is filled wit the string
+	  that are not options during the parsing process.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-list-option</i><i> (&rarr; none)</i><i> (Character String String)</i><hr/>
+<p class="text">
+
+	  The add-list-option method creates a new list
+	  option. The list option is defined by the option character and
+	  the option string. The first argument is the option
+	  character. The second argument is the option list string. The
+	  third argument is the option message. During the parsing
+	  process, the list option have a string argument which must match
+	  one string associated with the option character.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-unique-option</i><i> (&rarr; Character String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The add-unique-option method creates a new single
+	  option. The option is defined only by its character. The first
+	  argument is the option character. The second argument is the
+	  option message. During the parsing process, a unique option does
+	  not have an argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-string-option</i><i> (&rarr; none)</i><i> (Character String)</i><hr/>
+<p class="text">
+
+	  The add-string-option method creates a new string
+	  option. The option is defined only by its character. The first
+	  argument is the option character. The second argument is the
+	  option message. During the parsing process, a string option have
+	  a string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-vector-option</i><i> (&rarr; Character String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The add-vector-option method creates a new vector
+	  option. The option is defined only by its character. The first
+	  argument is the option character. The second argument is the
+	  option message. During the parsing process, a vector option have
+	  a string argument which is accumulated in a vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-user-message</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-user-message method sets the global
+	  option user message. The user message is used by the
+	  usage method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-user-message</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-user-message method returns the global
+	  option user message. The user message is used by the
+	  usage method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-unique-option</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The get-unique-option method returns the flag
+	  associated with an option. If the option has been detected
+	  during the parsing process, the method returns true. This method
+	  works also for string option or list option to indicate if the
+	  string has been set for that option. with a vector option, it is
+	  simpler to get the vector and check for the vector length. The
+	  first argument is the option character to use for testing.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-string-option</i><i> (&rarr; String)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The get-string-option method returns the string
+	  associated with a string option. In order to make sure that a
+	  string option has been properly set during the parsing process,
+	  it is recommended to use the get-unique-option
+	  method. The first argument is the option character to use for
+	  the string retrieval.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-vector-option</i><i> (&rarr; Vector)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The get-vector-option method returns the vector
+	  associated with a vector option. The first argument is the
+	  option character to use for the vector retrieval.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-vector-arguments</i><i> (&rarr; Vector)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-vector-arguments method returns the vector
+	  arguments built during the parsing process.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Functions</p>
+<div class="frame">
+<i>exit</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	The exit function terminates the executing program
+	with the exit code specified as the argument.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>sleep</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	The sleep function pause the specific thread for a
+	certain time. The time argument is expressed in milliseconds. This
+	function returns nil.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-option</i><i> (&rarr; String)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	The get-option function returns a formatted string
+	equivalent to the system option as specified by the character
+	argument.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-unique-id</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	The get-unique-id function returns an unique integer
+	number. The returned number is unique across the session.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-pid</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	The get-pid function returns the process identifier
+	(pid). The returned value is a positive integer.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-env</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The get-env function returns the environment variable
+	associated with the string argument. If the environment does not
+	exist an exception is raised.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-host-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	The get-host-name function returns the host name. The
+	host name can be either a simple name or a canonical name with its
+	domain, depending on the system configuration.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-user-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	The get-user-name function returns the current user
+	name.
+      </p>
+</div>
+<p/>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1>AOLserver Frequently-Asked Questions (FAQ)</h1>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/intro/faq.html,v 1.2 2002/03/08 19:34:02 kriston Exp $
+</small>
+<p>
+
+<p>
+
+
+<b>AOLserver Frequently-Asked Questions and Answers</b><br><br>
+<a href="#Getting_AOLserver">Getting AOLserver</a><br>
+<a href="#Building_AOLserver">Building AOLserver</a><br>
+<a href="#Obtaining_the_128bit_SSL_Module">Obtaining the 128-bit SSL Module (nsssl)</a><br>
+<a href="#Installing_AOLserver">Installing AOLserver</a><br>
+<a href="#Database_Access">Database Access</a><br>
+<a href="#Getting_Help">Getting Help</a><br>
+<a href="#Contributing_Software">Contributing Software</a><br>
+<a href="#Contributing_Patches">Contributing Patches</a><br>
+<br><b><a name="Getting_AOLserver"></a>Getting AOLserver</b><br><br>
+AOLserver binary builds for many platforms are at <a href="http://aolserver.com/">http://aolserver.com</a><br>
+<br>
+AOLserver is open-source. The source code is hosted at Source Forge and can
+
+ be found at the following locations:
+
+<ul>
+  <li><a href="http://aolserver.com/">http://aolserver.com</a></li>
+  <li>In CVS at <a href="http://sourceforge.net/projects/aolserver/">http://sourceforge.net/projects/aolserver</a></li>
+</ul>
+<b><a name="Building_AOLserver"></a>Building AOLserver</b><br><br>
+AOLserver builds very easily and the online documentation
+
+ describes the process.  We recommend that you use the defaults in include/Makefile.global
+
+ when building your module.  This file contains rules and knows how to build
+
+ modules properly for all platforms AOLserver has been ported to. To link
+
+ a shared object, we recommend the default which is:<br>
+    <tt>gcc -shared -nostartfiles</tt><br>
+<br>
+On some Solaris installations the Cygnus compiler is unable to build working
+
+ shared objects.  We're told that if you put the -Wl,-E option in the nsd/Makefile
+
+ when linking the executable, Cygnus works, but we have not verified this
+
+ successfully.  GCC from just about anywhere else <i>will</i> work. You can
+
+ get a pre-built copy of GCC from <a href="http://www.sunfreeware.com/">http://www.sunfreeware.com</a> or
+
+ build your own from <a href="ftp://ftp.gnu.org/">ftp://ftp.gnu.org</a>. Just install
+
+ it and put a link to the new gcc in /usr/local/bin (keep the broken Cygnus
+
+ in /usr/cygnus/bin in case you need it).  <br>
+<br>
+HINT: The magic option to GCC for the compiling step is "-fPIC", so if you're
+
+ using a third-party library, make sure "-fPIC" appears in the CFLAGS. And,
+
+ to eliminate the possibility of strange behavior, it's helpful but not necessary
+
+ to build everything with the same compiler and using the same options. 
+
+ If you're using a third-party library for which no source code is available,
+
+ you may run into problems if the vendor did not build it with the equivalent
+
+ of "-fPIC" on their compiler.  Shared objects must be position-independent.<br>
+
+<br><b><a name="Obtaining_the_128bit_SSL_Module"></a>Obtaining the 128-bit SSL Module</b><br><br>
+AOLserver supports two levels of SSL for "https" connections -- the export
+
+ version, which has a 40-bit secret key and a 512-bit public keypair, and
+
+ the domestic version, which has a 128-bit secret key and a 1024-bit public
+
+ key.<br>
+
+<br>
+
+The 40-bit/512-bit version can be found at <a
+href="http://aolserver.com/">http://aolserver.com</a> as
+ part of the regular AOLserver source and binary distributions. The
+ 128-bit/1024-bit domestic version is not available in binary form.
+ It can be built from the source code if you have the RSA BSAFE
+ library from <a href=www.rsasecurity.com>RSA Data Security</a>.  If
+ you do not wish to purchase RSA BSAFE, we highly recommend the
+nsopenssl module instead of the nsssl module.  It can be found on
+aolserver.com</a>.  The nsopenssl module supports several features
+that nsssl
+ does not including SSL v3, client-side certificates, and client-side
+ SSL.  It requires the OpenSSL library which may or may not be legal
+ to use in your situation.<br>
+
+<br><b><a name="Installing_AOLserver"></a>Installing AOLserver</b><br><br>
+Installing AOLserver is very straightforward and is covered in the online documentation.<br>
+<br><b><a name="Database_Access"></a>Database Access</b><br><br>
+AOLserver works with a great many databases including all the popular enterprise
+
+ systems.<br>
+<br>
+ <b>Sybase Proxy Daemon (nssybpd)</b><br>
+  <br>
+The nssybpd connects AOLserver to a Sybase database. America Online does 
+ not have a license to distribute the binary builds of this code externally 
+ (and neither does anyone else).  The source code is located in the "nssybpd/" 
+ directory of the AOLserver source tree at Source Forge and requires the 
+ Sybase Client Libraries to build.
+<br><br>
+<b><a name="Getting_Help"></a>Getting Help</b><br><br>
+AOLserver has an active developer community as well as a very active user
+
+ community.  Links to these areas are at <a href="http://aolserver.com/">http://aolserver.com/</a>.<br>
+
+<br><b><a name="Contributing_Software"></a>Contributing Software</b><br><br>
+AOLserver is extremely extensible and we host a great many community-contributed 
+ modules at <a href="http://aolserver.com/">http://aolserver.com/</a>.  You 
+ can contribute your software by following the guidelines on that
+ page.<br> <br><b><a name="Contributing_Patches"></a>Contributing
+ Patches</b><br><br> We accept any form of patches at the Source Forge
+ link on the left of this page.  We request that your
+ patch include a test case and, if possible, a context diff against a tagged
+ version of the AOLserver source code.  In lieu of a test case we can also
+ accept a narrative describing the problem in detail.<br>
+
+<p>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DStringExport</TITLE>
+<LINK rel=Previous href="c-ch170.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch172.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch170.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch172.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="119580">
+</a><h3>Ns_DStringExport</h3>
+<a name="119581">
+</a><h4>Overview</h4>
+Export the string of an Ns_DString
+<a name="43797">
+</a><a name="132877">
+</a><h4>Syntax</h4>
+<pre>    <a name="43798"></a>char *Ns_DStringExport(
+    <a name="43799"></a>Ns_DString *src
+    <a name="43800"></a>);
+</pre><p><a name="134220">
+</a><h4>Description</h4>
+<p><a name="43801">
+</a>The Ns_DStringExport function returns the current Ns_DString string and leaves the Ns_DString in the initialized state. The string returned needs to be freed eventually with Ns_Free.</p>
+<a name="230629">
+</a><h4>Examples</h4>
+<pre>    <a name="230630"></a>Ns_DString ds;
+    <a name="230641"></a>char *stringdest;
+    <a name="230631"></a>Ns_DStringInit(&amp;ds);
+    <a name="230632"></a>Ns_DStringAppend(&amp;ds, "foo");
+    <a name="230642"></a>stringdest = Ns_DStringExport(&amp;ds);
+    <a name="230633"></a>/* do something with `stringdest' */
+    <a name="230648"></a>Ns_Free(stringdest);
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch170.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch172.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

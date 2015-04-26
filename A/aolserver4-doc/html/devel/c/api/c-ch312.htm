@@ -1,0 +1,79 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ScheduleWeekly</TITLE>
+<LINK rel=Previous href="c-ch311.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch313.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch311.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch313.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="289925">
+</a><h3>Ns_ScheduleWeekly</h3>
+<a name="289926">
+</a><h4>Overview</h4>
+Schedule a procedure to run once a week
+<a name="289927">
+</a><a name="289928">
+</a><h4>Syntax</h4>
+<pre>    <a name="289929"></a>int Ns_ScheduleWeekly(
+    <a name="289930"></a>Ns_SchedProc *proc,
+    <a name="289931"></a>void *context,
+    <a name="289932"></a>int flags,
+    <a name="289933"></a>int day,
+    <a name="289934"></a>int hour,
+    <a name="289935"></a>int minute,
+    <a name="289936"></a>Ns_SchedProc *cleanup
+    <a name="289937"></a>);
+</pre><p><a name="289938">
+</a><h4>Description</h4>
+<p><a name="289939">
+</a>The Ns_ScheduleWeekly function schedules the procedure (<code>proc</code>) to be run once a week on the specified day (<code>day</code>) at the specified time (<code>hour</code> and <code>minute</code>).</p>
+<p><a name="289940">
+</a>The <code>proc</code> procedure is the scheduled procedure that will be run once a week. It is a function that takes the context and id of the schedule procedure. The <code>id</code> can be used in the Ns_UnscheduleProc procedure to stop the procedure from being called again.</p>
+<pre>    <a name="289941"></a>typedef void (Ns_SchedProc) (void *context, int id);
+</pre><p><p><a name="289942">
+</a>The <code>context</code> is the context to pass to the scheduled procedure.</p>
+<p><a name="289943">
+</a>The possible flags are NS_SCHED_ONCE and NS_SCHED_THREAD. If you specify NS_SCHED_ONCE, the procedure will only be executed once on the specified day and time, and it will not be re-scheduled to execute again the next week. By default, the procedure is re-scheduled after every time it is executed. </p>
+<p><a name="289944">
+</a>If you specify NS_SCHED_THREAD, the procedure will run detached in a separate thread instead of using the one scheduled procedure thread used by all other scheduled procedures. You should use NS_SCHED_THREAD if the procedure will not return immediately. Note that if you use NS_SCHED_THREAD, and the procedure is still active the next time to run occurs, the next run is skipped instead of just delayed.</p>
+<p><a name="289945">
+</a>The <code>day</code> can be an integer from 0 to 6, where 0 represents Sunday. The <code>hour</code> can be an integer from 0 to 23, and the <code>minute</code> an integer from 0 to 59.</p>
+<p><a name="289946">
+</a>The <code>cleanup</code> procedure will be run once when the <code>proc</code> procedure is unscheduled.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch311.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch313.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

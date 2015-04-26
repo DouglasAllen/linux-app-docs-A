@@ -1,0 +1,166 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:37 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_adp_puts</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_adp_puts</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp_append,
+ns_adp_close, ns_adp_dump, ns_adp_flush, ns_adp_puts,
+ns_adp_stream, ns_adp_tell, ns_adp_trunc, ns_puts &minus;
+ADP output commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_adp_append</b>
+<i>string</i> ?<i>string ...</i>? <b><br>
+ns_adp_close <br>
+ns_adp_dump <br>
+ns_adp_flush <br>
+ns_adp_puts</b> ?<i>-nonewline</i>? <i>string</i> <b><br>
+ns_adp_stream <br>
+ns_adp_tell <br>
+ns_adp_trunc</b> ?<i>length</i>? <b><br>
+ns_puts</b> ?<i>-nonewline</i>? <i>string</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These commands
+enable adding to and manipulation of the ADP output buffer.
+See <b>ns_adp</b> for an overview on ADP pages. <b><br>
+ns_adp_append</b> <i>string</i> ?<i>string ...</i>?</p>
+
+<p style="margin-left:22%;">This command appends one or
+more strings to the ADP output buffer. For the case of a
+single argument, it is equivalent to <b>ns_adp_puts
+-nonewline</b> <i>string</i>.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_close</b></p>
+
+<p style="margin-left:22%;">This command can be used to
+flush and close the underlying HTTP connection. ADP
+execution continues after the connection is closed; any text
+appended to the output buffer after the close is simply
+discarded when processing is complete.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_dump</b></p>
+
+<p style="margin-left:22%;">This command returns the text
+of the ADP buffer.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_flush</b></p>
+
+<p style="margin-left:22%;">This command flushes the
+contents of the ADP buffer to the current connection or file
+channel. It will raise a Tcl exception if the underlying
+flush failed, for example, if the HTTP connection is closed
+or the channel write failed. Flushed content is returned in
+&quot;chunked-encoding&quot; format if the HTTP protocol
+version is at least 1.1 (normally the case for all modern
+browsers). A call to <b>ns_adp_flush</b> is not normally
+needed except for specialized applications as all content is
+automatically flushed at the end of a connection or on
+buffer overflow. (see <b>ns_adp_ctl bufsize</b> for details
+on buffer mangement).</p>
+
+<p style="margin-left:11%;"><b>ns_adp_puts</b>
+?<i>-nonewline</i>? <i>string</i></p>
+
+<p style="margin-left:22%;">This function appends the
+specified <i>string</i> to the ADP buffer. Unless the
+optional <i>-nonewline</i> argument is used, a newline will
+be appended to the page after the string. Note that the
+argument to ns_adp_puts is a single string unlike
+<b>ns_adp_append</b> which takes a variable number of
+strings to append.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_stream</b></p>
+
+<p style="margin-left:22%;">This function begins streaming
+mode for the ADP. All data currently in the ADP output
+buffer is flushed and any subsequent data will be output
+directly to the connection. It is equivalent to an
+<b>ns_adp_flush</b> followed by an <b>ns_adp_ctl bufsize
+0</b>.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_tell</b></p>
+
+<p style="margin-left:22%;">This function returns the total
+number of bytes current in the ADP buffer. A buffer overflow
+or direct call to <b>ns_adp_flush</b> will reset this
+counter to zero so the result of <b>ns_adp_tell</b> may not
+return the total number of bytes eventually sent.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_trunc</b>
+?<i>length</i>?</p>
+
+<p style="margin-left:22%;">This function can be used to
+truncate output buffer to the requested size. This can be
+useful to trim unintended white space or to clear a result
+and generate an error message. Note that content already
+streamed to the client, if any, cannot be truncated.</p>
+
+<p style="margin-left:11%;"><b>ns_puts</b>
+?<i>-nonewline</i>? <i>string</i></p>
+
+<p style="margin-left:22%;">This command is a deprecated
+name for <b>ns_adp_puts</b>.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp(n),
+ns_adp_include(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ADP, dynamic
+pages</p>
+<hr>
+</body>
+</html>

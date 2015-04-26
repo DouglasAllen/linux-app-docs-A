@@ -1,0 +1,1238 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1>Database C Library Functions</h1>
+
+<p>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/c/index.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+<p>
+
+
+
+
+<h2><a name= href=./>Ns_Db0or1Row</a></h2>
+
+Execute an SQL statement that must return £ 1 row
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_Db0or1Row(
+    Ns_DbHandle *handle,
+    char *sql,
+    int *nrows
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_Db0or1Row function sends the given SQL statement to the
+   database and immediately processes the results. On zero rows, a newly
+   allocated Ns_Set with its keys set to the column names and values
+   uninitialized is returned and nrows is set to 0. On one row, a newly
+   allocated Ns_Set containing the values is returned and nrows is set to
+   1. You must eventually free this row using Ns_SetFree.
+
+<p>
+
+Note that an SQL select statement that does not return a row is
+   different from an SQL DML statement that does not return a row but
+   modifies the database. In the former case, Ns_Db0or1Row still returns
+   a newly allocated Ns_Set with the column names as the field key names
+   of the rows that would have been returned had any of the rows in the
+   database matched the select criteria. In the latter case, Ns_Db0or1Row
+   returns an error.
+
+<p>
+
+If the SQL statement returns more than one row or some database error
+   occurs, Ns_Db0or1Row returns NULL. Detailed error messages may have
+   accumulated in an internal buffer in the Ns_DbHandle.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *row;
+    int nrows;
+    Ns_DbHandle *handle;
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        row = Ns_Db0or1Row(handle, "select aName from aTable",
+                                                        &nrows);
+        if (row != NULL && nrows == 1) {
+                char *value;
+                value = Ns_SetGet(row, "aName");
+                /* use `value' here */
+                Ns_SetFree(row);
+        }
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_Db1Row</a></h2>
+
+Execute an SQL statement that must return one row
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_Db1Row(
+    Ns_DbHandle *handle,
+    char *sql
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_Db1Row function calls the Ns_Db0or1Row function with the given
+   SQL statement. If Ns_Db0or1Row returns 1 row, Ns_Db1Row returns the
+   newly allocated Ns_Set for the row. You must eventually free this row
+   using Ns_SetFree. If NsDb0or1Row returns zero rows, Ns_Db1Row returns
+   NULL.
+
+<p>
+
+If the SQL statement returns zero rows or a database error has
+   occurred, Ns_Db1Row returns NULL. Detailed error messages may have
+   accumulated in an internal buffer in the Ns_DbHandle.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_Set *row;
+    Ns_DbHandle *handle;
+
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        row = Ns_Db1Row(handle, "select aName from aTable");
+        if (row != NULL) {
+                char *value;
+                value = Ns_SetGet(row, "aName");
+                /* use `value' here */
+                Ns_SetFree(row);
+        }
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbBindRow</a></h2>
+
+Return an Ns_Set structure of column names to be returned by the
+   previously-executed SQL command
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_DbBindRow (
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbBindRow function returns an Ns_Set structure whose key names
+   are the column names of rows to be returned by the SQL command
+   previously-executed by Ns_DbExec. If the SQL command does not return
+   rows (i.e., the Ns_DbExec function did not return NS_ROWS), NS_ERROR
+   is returned.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbBouncePool</a></h2>
+
+Mark all database handles stale
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbBouncePool(
+    char *poolname
+    );
+</pre>
+
+<h3>Description</h3>
+
+All database handles for the specified database pool are marked stale.
+   When any database handle currently open is put back into the pool, its
+   connection to the database will be reset.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbCancel</a></h2>
+
+Cancel an active SQL select statement
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbCancel(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbCancel function is similar to the Ns_DbFlush function, but
+   instead of allowing the select statement to complete and send all
+   selected rows, Ns_DbCancel sends a cancels message to the database.
+   This can result in faster interruption of a long-running query.
+   Ns_DbCancel returns NS_OK on success and NS_ERROR on error.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbDML</a></h2>
+
+Execute an SQL DML statement
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbDML(
+    Ns_DbHandle *handle,
+    char *sql
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbDML function executes SQL that should be a data manipulation
+   language statement such as an insert or update, or data definition
+   language such as a create table. If the statement was executed
+   successfully, Ns_DbDML returns NS_OK. If the statement results in rows
+   being returned or a other database error, Ns_DbDML returns NS_ERROR.
+   Detailed error messages may have accumulated in an internal buffer in
+   the Ns_DbHandle.
+
+<h3>Examples</h3>
+
+<pre>
+
+    Ns_DbHandle *handle;
+    int status;
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        status = Ns_DbDML(handle,
+                "insert into aTable (colName1,colName2) values (1,2)");
+        if (status != NS_OK) {
+                /* handle error condition */
+        }
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbDriverDbType</a></h2>
+
+Get database type
+
+<h3>Syntax</h3>
+
+<pre>    
+    char* Ns_DbDriverDbType (
+    Ns_DbHandle* handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+Return the string name of the database type (e.g., "sybase").
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbDriverName</a></h2>
+
+Get driver for database
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DbDriverName(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbDriverName function returns the name of the database driver
+   associated with handle.
+
+<p>
+
+The storage for the string returned is owned by the database driver
+   and must not be freed or modified in any way.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbExec</a></h2>
+
+Execute an SQL command
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbExec (
+    Ns_DbHandle *handle,
+    char *sql
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbExec function executes the specified SQL command on the
+   specified database connection. Ns_DbExec returns one of the following
+   status codes:
+
+<p>
+
+NS_ERROR
+
+<p>
+
+if the SQL command fails
+
+<p>
+
+NS_DML
+
+<p>
+
+if the SQL command is DML (Data Manipulation Language) or DDL (Data
+   Definition Language)
+
+<p>
+
+NS_ROWS
+
+<p>
+
+if the SQL command will return rows (such as a SELECT command)
+
+<p>
+
+This function allows you to write a true ad hoc query tool and process
+   SQL statements without knowing ahead of time if they return rows or
+   are DDL or DML statements.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbFlush</a></h2>
+
+Flush any waiting rows
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbFlush(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbFlush function fetches and dumps any waiting rows after an
+   Ns_DbSelect. This function is useful when you have already fetched all
+   the rows you intend to process. Ns_DbFlush returns NS_OK after
+   successfully flushing the database or NS_ERROR on error.
+
+<p>
+
+Ns_DbFlush is called automatically when Ns_DbHandle's are returned to
+   their pools with the Ns_DbPutHandle function to make sure the handle
+   is ready the next time it is used.
+
+<p>
+
+Some database drivers will also cancel any active transactions when
+   Ns_DbFlush is called.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbGetRow</a></h2>
+
+Fetch the next waiting row after an Ns_DbSelect
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbGetRow(
+    Ns_DbHandle *handle,
+    Ns_Set *row
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbGetRow function fetches the next row waiting to be retrieved
+   after an Ns_DbSelect. The row Ns_Set must be the result of a previous
+   Ns_DbSelect. Ns_DbGetRow frees any existing values of the set and sets
+   the values to the next row fetched from the database. Possible return
+   values are:
+
+<p>
+
+NS_OK
+
+<p>
+
+A row has been fetched and more rows may be waiting.
+
+<p>
+
+NS_END_DATA
+
+<p>
+
+No row has been fetched and there are no more rows waiting.
+
+<p>
+
+NS_ERROR
+
+<p>
+
+A database error occurred, or the function has already returned
+   NS_END_DATA but has been called again anyway.
+
+<p>
+
+You cannot call Ns_DbDML, Ns_Db1Row, or Ns_Db0or1Row with the same
+   database handle while fetching rows from the database in an
+   Ns_DbGetRow loop. Doing so flushes any waiting rows and a subsequent
+   call to Ns_DbGetRow will fail. You can do so if you use separate
+   database handles.
+
+<h3>Examples</h3>
+
+<pre>
+        Ns_DbHandle *handle;
+        Ns_Set *row;
+        int             status;
+        handle = Ns_DbPoolGetHandle("mypool");
+        row = Ns_DbSelect(handle, "select * from mytable");
+        if (row == NULL) {
+                /*... handle select error ...*/
+        }
+        while ((status = Ns_DbGetRow(handle, row)) == NS_OK) {
+                /*... process the row fetched from the database ...*/
+        }
+        if (status != NS_END_DATA) {
+                /*... handle get row error ...*/
+        }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbInterpretSqlFile</a></h2>
+
+Parse DML statements and send to database
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbInterpretSqlFile (
+    Ns_DbHandle* handle,
+    char* filename
+    );
+</pre>
+
+<h3>Description</h3>
+
+Parse DML statements from an SQL file and send them to the database
+   for execution.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolAllowable</a></h2>
+
+Determine if pool is available
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbPoolAllowable(
+    char *hServer,
+    char *poolname
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolAllowable function returns NS_TRUE if the specified pool
+   poolname is available on the server hServer. It returns NS_FALSE if
+   the pool does not exist or if the server is not allowed to use this
+   pool. See the "ns/server/server-name/module/nscgi" section in the
+   AOLserver Administrator's Guide for information on setting allowable
+   pools for a server.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolDefault</a></h2>
+
+Get default pool
+
+<h3>Syntax</h3>
+
+<pre>    
+    char* Ns_DbPoolDefault (
+    char* server
+    );
+</pre>
+
+<h3>Description</h3>
+
+Return the string name of default pool or NULL if no default is
+   defined.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPool<h3>Description</h3>
+</a></h2>
+
+Get pool description
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DbPool<h3>Description</h3>
+(
+    char *poolname
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPool<h3>Description</h3>
+ function returns the description associated
+   with the specified pool in the AOLserver configuration file.
+
+<p>
+
+The storage for the string returned is located in the configuration
+   data memory. You must not deallocate or modify this string in any way.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolGetHandle</a></h2>
+
+Get database handle from pool
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_DbHandle *Ns_DbPoolGetHandle(
+    char *poolname
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolGetHandle function gets a database handle from the pool
+   specified by poolname. It returns NULL on error. Details relating to
+   error conditions are written to the server log. You must request all
+   the database handles you will need for a specific pool with one call
+   to Ns_DbPoolGetHandle (if you need only one handle) or
+   Ns_DbPoolGetMultipleHandles (if you need more than one handle).
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DbHandle *handle;
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        Ns_Set *row;
+        row = Ns_DbSelect(handle, "select * from aTable");
+        ...
+
+   }
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolGetMultipleHandles</a></h2>
+
+Get multiple database handles from pool
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbPoolGetMultipleHandles(
+    Ns_DbHandle **handles,
+    char *poolname,
+    int nhandles
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolGetMultipleHandles function gets a database handle from
+   the pool specified by poolname and returns an array of handles
+   (handles). If all of the specified number of handles (nhandles) are
+   not available, the function waits until they are. It returns NS_OK if
+   all requested handles are returned or NS_ERROR on an error condition.
+   You must request all the database handles you will need for a specific
+   pool with one call to Ns_DbPoolGetHandle (if you need only one handle)
+   or Ns_DbPoolGetMultipleHandles (if you need more than one handle). You
+   must release all your database handles explicitly (with
+   Ns_DbPoolPutHandle) before acquiring more.
+
+<h3>Examples</h3>
+
+<pre>
+    #define NUM_HANDLES 5
+    Ns_DbHandle **handles;
+
+    handles = Ns_Malloc(NUM_HANDLES * sizeof (Ns_DbHandle *));
+    if (Ns_DbPoolGetMultipleHandles(handles, "aPoolName",
+                                                                NUM_HANDLES) != NS_OK) {
+        Ns_Set *row;
+        row = Ns_DbSelect(handles[0], "select * from aTable");
+        ...
+    } else {
+        /* handle error condition */
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolList</a></h2>
+
+Get a list of available pools for a server
+
+<h3>Syntax</h3>
+
+<pre>    
+    char *Ns_DbPoolList(
+    char *hServer
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolList function returns a list of pools available on the
+   specified server. Upon completion, the returned pointer points to a
+   list of pools in the following format:
+    "pool1\0pool2\0pool3\0\0"
+
+    <h3>Examples</h3>
+
+    
+<pre>
+    char *pools;
+    pools = Ns_DbPoolList("serverName");
+    while (*pools != '\0') {
+      printf("%s\n", pools);
+      pools += strlen(pools) + 1;
+    }
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolPutHandle</a></h2>
+
+Release a database handle for a pool
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DbPoolPutHandle(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolPutHandle function releases the database handle handle
+   into the pool it was derived from. If the handle was not originally
+   obtained from a pool, an error message is written to the log.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DbHandle *handle;
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        Ns_Set *row;
+        row = Ns_DbSelect(handle, "select * from aTable");
+        ...
+        Ns_DbPoolPutHandle(handle); /* done with handle */
+
+   }
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolTimedGetHandle</a></h2>
+
+Get database handle from pool with timeout
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_DbHandle *Ns_DbPoolTimedGetHandle(
+    char *poolname,
+    int timeout
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolTimedGetHandle function gets a database handle from the
+   pool specified by poolname. If a timeout is not specified or timeout
+   is zero, it will wait indefinitely (perhaps forever) for the handle to
+   become available. If timeout is greater than zero, it will either
+   return with the handle within that time period, or return "" if the
+   time period was exceeded. If timeout is less than zero, it will not
+   block.
+
+<p>
+
+It returns NULL on error or if the attempt times out. Details relating
+   to error conditions are written to the server log. You must request
+   all the database handles you will need for a specific pool with one
+   call to Ns_DbPoolTimedGetHandle (if you need only one handle) or
+   Ns_DbPoolGetTimedMultipleHandles (if you need more than one handle).
+   You must release all your database handles explicitly (with
+   Ns_DbPoolPutHandle) before acquiring more.
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbPoolTimedGetMultipleHandles</a></h2>
+
+Get multiple database handles from pool with timeout
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbPoolTimedGetMultipleHandles(
+    Ns_DbHandle **handles,
+    char *poolname,
+    int nhandles,
+    int timeout
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbPoolTimedGetMultipleHandles function gets multiple database
+   handles from the pool specified by poolname and returns an array of
+   handles (handles). If all of the specified number of handles
+   (nhandles) are not available, the function waits until they are,
+   depending on timeout. If a timeout is not specified or timeout is
+   zero, it will wait indefinitely (perhaps forever) for the handles to
+   become available. If timeout is greater than zero, it will either
+   return with the handles within that time period, or return "" if the
+   time period was exceeded. If timeout is less than zero, it will not
+   block.
+
+<p>
+
+It returns NS_OK if all requested handles are returned, NS_TIMEOUT if
+   the attempt timed out, or NS_ERROR on an error condition. You must
+   request all the database handles you will need for a specific pool
+   with one call to Ns_DbPoolTimedGetHandle (if you need only one handle)
+   or Ns_DbPoolTimedGetMultipleHandles (if you need more than one
+   handle). You must release all your database handles explicitly (with
+   Ns_DbPoolPutHandle) before acquiring more.
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbQuoteValue</a></h2>
+
+Adds extra single quote to single quotes in string
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DbQuoteValue(
+    Ns_DString *pds,
+    char *string
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbQuoteValue function places an additional single quote (') in
+   front of all single quotes in the string. The result is then copied to
+   pds. This function is typically used to pre-process a string used in
+   an SQL statement.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbRegisterDriver</a></h2>
+
+Register database driver with the server
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbRegisterDriver(
+    char *hDriver,
+    Ns_DbProc *procs
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbRegisterDriver function registers a database driver with the
+   server. The procs argument specifies the functions that implement the
+   driver. For a complete example of a database driver for the Postgres95
+   DBMS, see the directory example/C/nspg under the AOLserver
+   installation directory. Ns_DbRegisterDriver returns a status of NS_OK
+   or NS_ERROR.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSelect</a></h2>
+
+Send a row-generating query to the database
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set *Ns_DbSelect(
+    Ns_DbHandle *handle,
+    char *sql
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbSelect function executes the given SQL statement. It returns
+   an Ns_Set where the field key names are the column names that were
+   returned by the select statement on success. The field values are NULL
+   until the first call to Ns_DbGetRow where they are replaced with the
+   values of the first row fetched from the database. The set is
+   statically allocated; do not free it with Ns_SetFree when your query
+   is complete.
+
+<p>
+
+On error, Ns_DbSelect returns NULL. Detailed error message may have
+   accumulated in an internal buffer in the Ns_DbHandle.
+
+<h3>Examples</h3>
+
+<pre>
+    Ns_DbHandle *handle;
+    if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+        Ns_Set *row;
+        row = Ns_DbSelect(handle, "select * from aTable");
+        if (row == NULL) {
+                /*... handle select error ...*/
+        }
+        while ((status = Ns_DbGetRow(handle, row)) == NS_OK) {
+                /*... process the row fetched from the database ...*/
+        }
+        if (status != NS_END_DATA) {
+                /*... handle get row error ...*/
+        }
+        Ns_DbPoolPutHandle(handle); /* done with handle */
+
+   }
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSetException</a></h2>
+
+Set last error message for database
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_DbSetException(
+    Ns_DbHandle *handle,
+    char *code,
+    char *msg
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_DbSetException function sets the last error message for the
+   database referenced by handle. The code argument cannot be larger than
+   5 characters.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSpExec</a></h2>
+
+Run a stored procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbSpExec(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+Run a stored procedure begun with Ns_DbSpStart. Returns NS_OK on
+   success, NS_ERROR on failure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSpGetParams</a></h2>
+
+Get output parameters from a stored procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    Ns_Set * Ns_DbSpGetParams(
+    Ns_DbHandle *handle
+    );
+</pre>
+
+<h3>Description</h3>
+
+Get output parameters after running a stored procedure with
+   Ns_DbSpExec. The returned set is allocated by this function and should
+   be freed by the caller.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSpReturnCode</a></h2>
+
+Get return code from a stored procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbSpReturnCode(
+    Ns_DbHandle *handle,
+    char *returnCode,
+    int bufsize
+    );
+</pre>
+
+<h3>Description</h3>
+
+Get the return code from a stored procedure after running Ns_DbSpExec.
+   Returns NS_OK on success, NS_ERROR on failure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSpSetParam</a></h2>
+
+Set input parameter for stored procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbSpSetParam(
+    Ns_DbHandle *handle,
+    char *paramname,
+    char *paramtype,
+    char *inout,
+    char *value
+    );
+</pre>
+
+<h3>Description</h3>
+
+In preparing to run stored procedure, this function sets a parameter
+   to pass to that stored procedure. You must have executed Ns_DbSpStart
+   first. The paramname is the name of the parameter, such as "@foo";
+   paramtype is the data type, such as "int" or "varchar". The inout
+   argument is either "in" or "out", depending on what kind of parameter
+   it is. The value argument is the value to pass to the stored proc,
+   such as "123" (it's always a string). Returns NS_OK on success,
+   NS_ERROR on failure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_DbSpStart</a></h2>
+
+Start execution of a stored procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_DbSpStart(
+    Ns_DbHandle *handle,
+    char *procname
+    );
+</pre>
+
+<h3>Description</h3>
+
+Start execution of a stored procedure. This must be run before any
+   other Ns_DbSp* call. Returns NS_OK on success, NS_ERROR on failure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+
+</body>
+</html>

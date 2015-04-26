@@ -1,0 +1,93 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_BeginThread</TITLE>
+<LINK rel=Previous href="c-ch13.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch15.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch13.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch15.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="201235">
+</a><h3>Ns_BeginThread</h3>
+<a name="132261">
+</a><h4>Overview</h4>
+Start a thread
+<a name="132262">
+</a><a name="132263">
+</a><h4>Syntax</h4>
+<pre>    <a name="65201"></a>int Ns_BeginThread(
+    <a name="65202"></a>Ns_ThreadProc *start_routine, 
+    <a name="65203"></a>void *arg, 
+    <a name="65204"></a>Ns_Thread *thread
+    <a name="65205"></a>);
+</pre><p><a name="133617">
+</a><h4>Description</h4>
+<p><a name="65207">
+</a>Ns_BeginThread starts a new thread running start_routine and passwd arg as its context. If thread is non-null it will be filled with the thread's id. (see Ns_WaitForThread.)</p>
+<p><a name="767551">
+</a>Ns_ThreadCreate is the preferred function to start a thread.</p>
+<a name="201350">
+</a><h4>Examples</h4>
+<pre>    <a name="201351"></a>static void
+    <a name="201352"></a>ThreadStart(void *arg)
+    <a name="201353"></a>{
+    <a name="201354"></a>	int n;
+    <a name="201355"></a>
+    <a name="201356"></a>	n = (int) arg;
+    <a name="201357"></a>	Ns_Log(Notice, "%d: %d", Ns_GetThreadId(), n);
+    <a name="201358"></a>}
+    <a name="201359"></a>
+    <a name="201360"></a>/*
+    <a name="201361"></a> &nbsp;* ManyThreadWait - Create 10 threads which all log a message
+    <a name="201379"></a> &nbsp;* and wait for all of them to exit.
+    <a name="201362"></a> &nbsp;*/
+    <a name="201363"></a>static void
+    <a name="201364"></a>ManyThreadWait(void)
+    <a name="201365"></a>{
+    <a name="201366"></a>	int i;
+    <a name="201374"></a>	Ns_Thread tids[10];
+    <a name="201367"></a>
+    <a name="201368"></a>	for (i = 0; i &lt; 10; ++i) {
+    <a name="201369"></a>		Ns_BeginThread(ThreadStart, (void *) i, &amp;tids[i]);
+    <a name="201370"></a>	}
+    <a name="201375"></a>
+    <a name="201376"></a>	for (i = 0; i &lt; 10; ++i) {
+    <a name="201377"></a>		Ns_WaitForThread(&amp;tids[i]);
+    <a name="201378"></a>	}
+    <a name="201371"></a>}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch13.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch15.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

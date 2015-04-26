@@ -1,0 +1,153 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<p>
+
+<h1>AOLserver C Overview</h1>
+
+<p>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/c/c-overview.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+<p>
+
+<p>
+
+<a href=#1>AOLserver Operations</a>
+
+<p>
+
+<a href=#2>C Interface</a>
+
+<p>
+
+<p>
+
+<h2><a name=1>AOLserver Operations</a></h2>
+
+<p>
+
+The most common way to extend AOLserver is to write a C function or
+Tcl script to handle a particular URL or hierarchy of URLs. These
+functions (or scripts) are called operations.
+
+<p>
+
+The AOLserver C and Tcl APIs allow you to register operations that
+handle a single URL, for example, /extend/myop, or an entire hierarchy
+of URLs. Registering a hierarchy of URLs is useful for common
+operations that need to service requests for multiple URLs rooted at
+the same base URL.
+
+<p>
+
+ Operation Arguments
+
+<p>
+
+One way to send an argument to an operation function is to append the
+argument as a URL query string, separated from the URL by a single
+question mark (?). For example, /ABC/accounts?employees. The query
+string is ignored for permission purposes.
+
+<p>
+
+ Operation Data
+
+<p>
+
+Some operations also require data other than arguments that can be
+encoded in the URL, typically as additional path elements or query
+string data. The two most common types are POST data, which includes
+encode key value pairs of strings that represent the data on an HTML
+form or PUT data that typically includes the contents of a file to be
+saved on the server.
+
+<p>
+
+In the case of POST data, the AOLserver automatically decodes the form
+data and stores the strings in an Ns_Set structure within the Ns_Conn
+structure for the current connection (the Ns_Set and Ns_Conn are
+described below). The set is accessible to your Tcl script through the
+ns_set and ns_conn functions.
+
+<p>
+
+Other content, such as PUT data, will be available to your operation
+function as a single block of memory in C that you may copy, modify,
+or save as you require. Within Tcl you can use the ns_writecontent
+function to copy the content to a file on disk. Because everything in
+Tcl is a string, you cannot modify binary content directly. The
+ns_writecontent function allows you to transfer the content to a disk
+file in a single operation without having to convert the data into a
+string format within your script.
+
+<p>
+
+ Operation Inheritance
+
+<p>
+
+When registering a C or Tcl procedure to handle a URL, one of the most
+important concepts is that of URL inheritance. Inheritance refers to
+whether your operation is registered to handle a single URL or if it
+is registered to be "inherited" by URLs lower in the URL hierarchy.
+For example, the AOLserver operation that gets and saves pages is an
+inherited operation because it is registered to handle URLs at the
+root of the AOLserver URL hierarchy ("/") and to handle any other URLs
+that are not registered to be handled by more specific URLs.
+
+<p>
+
+By default operations are inherited. To register operations that are
+not inherited, you can set a flag when calling the C API function
+Ns_RegisterRequest() or add the -noinherit flag to the Tcl function
+ns_register_proc .
+
+<p>
+
+ Trace, Shutdown, and Access Checking
+
+<p>
+
+The C API allows you to register trace, shutdown, and access checking
+procedures for each server. (These options are not currently supported
+through the Tcl API.) A trace function is a function that is run after
+each connection and is ideal for logging operations. A shutdown
+procedure is invoked just before the server shuts down and can be
+used, for example, to close a connection to remote server opened by
+your C API module initialization routine. A C module can also provide
+the AOLserver with an alternative URL access checking procedure. Your
+custom procedure may interface with an existing user authorization
+system.
+
+<p>
+
+<h2><a name=2>C Interface</a></h2>
+
+<p>
+
+To extend the AOLserver with a dynamically loadable C module, write or
+port C language code and compile it as a Unix shared library module.
+Typically, your C module will contain a single "initialization
+routine" that calls one or more AOLserver C API functions to register
+one or more operations, traces, and/or chores procedures your module
+will provide.
+
+<p>
+
+The C interface provides a powerful way to incorporate legacy code
+that is already in C form or for applications that require the highest
+possible performance. An example of the latter is the basic AOLserver
+page fetching module, which is designed for optimal performance.
+Although the module is statically linked into the AOLserver, it is
+structured in the same way as any other C module, including a single
+initialization function that calls AOLserver C API function to
+register itself. You can also add new Tcl commands using the C
+interface.
+
+<p>
+
+</body>
+</html>

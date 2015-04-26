@@ -1,0 +1,76 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_TclEval</TITLE>
+<LINK rel=Previous href="c-ch384.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch386.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch384.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch386.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="290233">
+</a><h3>Ns_TclEval</h3>
+<a name="290234">
+</a><h4>Overview</h4>
+Execute a Tcl script
+<a name="290235">
+</a><a name="290236">
+</a><h4>Syntax</h4>
+<pre>    <a name="290237"></a>int Ns_TclEval (
+    <a name="290238"></a>Ns_DString *pds,
+    <a name="290239"></a>char *hServer
+    <a name="290240"></a>char *script
+    <a name="290241"></a>);
+</pre><p><a name="290242">
+</a><h4>Description</h4>
+<p><a name="290243">
+</a>The Ns_TclEval function executes the Tcl function specified by <code>script</code> on the server specified by <code>hServer</code>. It writes the results to the passed-in <code>pds</code> variable.</p>
+<p><a name="290244">
+</a>Note that the string in <code>script</code> may be temporarily modified by Tcl, so it must be writable. For example, use:</p>
+<pre>    <a name="290245"></a>char script[*]="sometcl";
+</pre><p><p><a name="290246">
+</a>instead of:</p>
+<pre>    <a name="290247"></a>char *script="sometcl";
+</pre><p><a name="290249">
+</a><h4>Examples</h4>
+<p><a name="290250">
+</a>Use this code to call <b>ns_sendmail</b> from C:</p>
+<pre>    <a name="290251"></a>NS_DStringVarAppend(&amp;dsScript, "ns_sendmail", to, " ",
+    <a name="290252"></a>&emsp;&emsp;from, " ", subject, " ", body);
+    <a name="290253"></a>status=Ns_TclEval(&amp;dsResult, Ns_ConnServer(conn), 
+    <a name="290254"></a>&emsp;&emsp;dsScript.string)
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch384.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch386.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

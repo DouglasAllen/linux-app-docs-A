@@ -1,0 +1,73 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DStringPrintf</TITLE>
+<LINK rel=Previous href="c-ch175.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch177.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch175.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch177.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="120870">
+</a><h3>Ns_DStringPrintf</h3>
+<a name="120871">
+</a><h4>Overview</h4>
+Append a formatted string to an Ns_DString
+<a name="43848">
+</a><a name="132907">
+</a><h4>Syntax</h4>
+<pre>    <a name="43849"></a>char *Ns_DStringPrintf(
+    <a name="43850"></a>Ns_DString *dsPtr,
+    <a name="43851"></a>char *fmt,
+    <a name="43852"></a>...
+    <a name="43853"></a>);
+</pre><p><a name="134245">
+</a><h4>Description</h4>
+<p><a name="43855">
+</a>The Ns_DStringPrintf function appends a string that has been created by calling the sprintf function with the given format and optional arguments. This function currently uses a fixed length buffer of 1024 characters to sprintf() the data before appending to the Ns_DString.</p>
+<a name="230704">
+</a><h4>Examples</h4>
+<pre>    <a name="230705"></a>Ns_DString ds;
+    <a name="230717"></a>
+    <a name="230706"></a>Ns_DStringInit(&amp;ds);
+    <a name="230707"></a>Ns_DStringPrintf(&amp;ds, "/path%d", getpid());
+    <a name="230718"></a>/* do something with dstring */
+    <a name="230719"></a>printf ("%s\n", ds.string);
+    <a name="230716"></a>Ns_DStringFree(&amp;ds); /* finished with dstring */
+</pre><p><p><a name="230702">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch175.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch177.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

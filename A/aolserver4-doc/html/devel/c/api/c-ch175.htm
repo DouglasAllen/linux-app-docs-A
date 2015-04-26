@@ -1,0 +1,77 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DStringNAppend</TITLE>
+<LINK rel=Previous href="c-ch174.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch176.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch174.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch176.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="120616">
+</a><h3>Ns_DStringNAppend</h3>
+<a name="120617">
+</a><h4>Overview</h4>
+Append n-characters of a string to an Ns_DString
+<a name="43833">
+</a><a name="132902">
+</a><h4>Syntax</h4>
+<pre>    <a name="43834"></a>char *Ns_DStringNAppend(
+    <a name="43835"></a>Ns_DString *dsPtr,
+    <a name="43836"></a>char *string,
+    <a name="43837"></a>int length
+    <a name="43838"></a>);
+</pre><p><a name="134240">
+</a><h4>Description</h4>
+<p><a name="43840">
+</a>The Ns_DStringNAppend function appends a string up to the specified number of characters, plus a terminating null character.( Unlike the Tcl_DStringAppend function, which only works with string data, the AOLserver Ns_DStringNAppend function can append binary data.) The string may overflow from static space to the heap as a result of calling this function. It returns the string associated with the current Ns_DString.</p>
+<a name="230689">
+</a><h4>Examples</h4>
+<p><a name="435436">
+</a>The resulting Ns_DString in this example, <code>ds</code>, would contain "foo\0" and have a length of 3:</p>
+<pre>    <a name="230690"></a>Ns_DString ds;
+    <a name="230691"></a>Ns_DStringInit(&amp;ds);
+    <a name="230692"></a>Ns_DStringNAppend(&amp;ds, "fooasdf", 3);
+    <a name="230694"></a>printf("%s\n", ds.string);
+    <a name="230701"></a>Ns_DStringFree(&amp;ds); /* finished with dstring */
+</pre><p><p><a name="435424">
+</a>If you need a null-terminated list of null-terminated strings, such as "foo\0bar\0\0", you would add one to the length of the appended strings to get the extra terminating null character. For example:</p>
+<pre>    <a name="435431"></a>Ns_DString ds;
+    <a name="435432"></a>Ns_DStringInit(&amp;ds);
+    <a name="435433"></a>Ns_DStringNAppend(&amp;ds, "foo", 4);
+    <a name="435443"></a>Ns_DStringNAppend(&amp;ds, "bar", 4);
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch174.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch176.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

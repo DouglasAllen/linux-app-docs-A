@@ -1,0 +1,69 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DbPoolList</TITLE>
+<LINK rel=Previous href="c-ch147.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch149.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch147.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch149.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="115598">
+</a><h3>Ns_DbPoolList</h3>
+<a name="115599">
+</a><h4>Overview</h4>
+Get a list of available pools for a server
+<a name="78012">
+</a><a name="132769">
+</a><h4>Syntax</h4>
+<pre>    <a name="78014"></a>char *Ns_DbPoolList(
+    <a name="78015"></a>char *hServer
+    <a name="78016"></a>);
+</pre><p><a name="134130">
+</a><h4>Description</h4>
+<p><a name="78018">
+</a>The Ns_DbPoolList function returns a list of pools available on the specified server. Upon completion, the returned pointer points to a list of pools in the following format:</p>
+<pre>    <a name="78019"></a>"pool1\0pool2\0pool3\0\0"
+</pre><p><a name="224962">
+</a><h4>Examples</h4>
+<pre>    <a name="224963"></a>char *pools;
+    <a name="224965"></a>pools = Ns_DbPoolList("serverName");
+    <a name="224964"></a>while (*pools != '\0') {
+    <a name="78023"></a>  printf("%s\n", pools);
+    <a name="78024"></a>  pools += strlen(pools) + 1;
+    <a name="78025"></a>}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch147.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch149.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

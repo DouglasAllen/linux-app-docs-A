@@ -1,0 +1,272 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:18 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnRead</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnRead</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnGets,
+Ns_ConnRead, Ns_ConnFlushHeaders, Ns_ConnReadHeaders,
+Ns_ConnReadLine &minus; Routines to copy connection
+content</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnGets</b>(<i>buf, bufsize, conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnFlushContent</b>(<i>conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnRead</b>(<i>conn, vbuf, toread</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnReadHeaders</b>(<i>conn, set, nreadPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnReadLine</b>(<i>conn, dsPtr, nreadPtr</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p style="margin-top: 1em">char <i>*buf</i> (in)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p style="margin-top: 1em">Pointer to string buffer of
+length <i>bufsize</i>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>int <i>bufsize</i> (in)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Length of buffer pointer to by <i>buf</i>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>Ns_Conn <i>conn</i> (in)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Pointer to open connection.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>Ns_DString <i>dsPtr</i> (out)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Pointer to initialized dstring to receive copied
+line.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>int <i>*nreadPtr</i>(out)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Pointer to integer to receive number of bytes
+copied.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>Ns_Set <i>set</i> (in/out)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Pointer to initialized Ns_Set to copy headers.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>int <i>toread</i> (in)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Number of bytes to copy to location starting at
+<i>vbuf</i></p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="44%">
+
+
+<p>void <i>*vbuf</i> (in)</p></td>
+<td width="3%"></td>
+<td width="42%">
+
+
+<p>Pointer to memory location to copy content.</p></td></tr>
+</table>
+
+
+<p style="margin-left:58%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These routines
+support copying content from the connection. They all
+operate by copying from the content buffer returned by a
+call to <b>Ns_ConnContent</b>, maintaining a private, shared
+offset into the content. This means that these routines are
+not actually reading directly from the network and thus will
+not block waiting for input. See the man page on
+<b>Ns_ConnContent</b> for details on how the content is
+pre-read by the server and how resources are managed for
+small and large content requests. <br>
+char *<b>Ns_ConnGets</b>(<i>buf, bufsize, conn</i>)</p>
+
+<p style="margin-left:22%;">Copies the next available line
+of text from the content to the given <i>buf</i> string, up
+to the given <i>bufsize</i> less space for a trailing null
+(\0). The result is a pointer to <i>buf</i> or NULL if an
+underlying call to <b>Ns_ConnRead</b> fails.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnFlushContent</b>(<i>conn</i>)</p>
+
+<p style="margin-left:22%;">Performs a logical flush of the
+underlying content available to these routines. It simply
+moves the private offset to the end of the content. The
+result is NS_OK unless an underlying call to
+<b>Ns_ConnContent</b> failed in which case NS_ERROR is
+returned.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnRead</b>(<i>conn,
+vbuf, toread</i>)</p>
+
+<p style="margin-left:22%;">Copies up to <i>toread</i>
+bytes from the content to the memory location pointed to by
+<i>vbuf</i>. The result is the number of bytes copied which
+will match <i>toread</i> unless less bytes are available in
+the input or -1 if an underlying call to
+<b>Ns_ConnContent</b> failed.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnReadHeaders</b>(<i>conn, set, nreadPtr</i>)</p>
+
+<p style="margin-left:22%;">Copies lines up to the first
+blank line or end of content up to the maximum header read
+size specified with the communication driver
+&quot;maxheader&quot; parameter (default: 32k). Each line is
+parsed into &quot;key: value&quot; pairs into the given
+Ns_Set pointed to be the <i>set</i> argument using the
+<b>Ns_ParseHeader</b> routine with the
+<i>Ns_HeaderCaseDisposition</i> specified by the
+&quot;headercase&quot; server option (default: Preserve).
+The result is NS_OK if all lines were consumed or NS_ERROR
+on overflow beyond the max header limit or if there was an
+error with the underlying call to <b>Ns_ConnRead</b>
+(including an error of a single line beyond the max line
+limit as described below). The integer pointed to by the
+<i>nreadPtr</i> argument, if given, is updated with the
+total number of bytes consumed. This routine can be useful
+when parsing multipart/form-data content to collect headers
+for each part.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnReadLine</b>(<i>conn, dsPtr, nreadPtr</i>)</p>
+
+<p style="margin-left:22%;">Copies the next available line
+to the given <i>dsPtr</i> dstring. The integer pointed to by
+<i>nreadPtr</i>, if present, is updated with the number of
+bytes copied. The line will not include the trailing \r\n or
+\n if present. The function will return NS_OK unless an
+underlying call to <b>Ns_ConnContent</b> failed or the line
+exceeds the maximum line read size specified by the
+communication driver &quot;maxline&quot; parameter (default:
+4k). This routine differs from <b>Ns_ConnGets</b> in that it
+copies the result to a dstring instead of a character
+buffer, requires a full or end-of-content terminated line,
+and enforces the maxline limit.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnContent(3),
+Ns_ParseHeader(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection,
+read, content</p>
+<hr>
+</body>
+</html>

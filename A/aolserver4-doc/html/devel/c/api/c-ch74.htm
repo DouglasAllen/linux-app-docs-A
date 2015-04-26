@@ -1,0 +1,74 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ConnGetQuery</TITLE>
+<LINK rel=Previous href="c-ch73.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch75.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch73.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch75.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="95419">
+</a><h3>Ns_ConnGetQuery</h3>
+<a name="95420">
+</a><h4>Overview</h4>
+Construct Ns_Set representing query data
+<a name="58944">
+</a><a name="132394">
+</a><h4>Syntax</h4>
+<pre>    <a name="58946"></a>Ns_Set *Ns_ConnGetQuery(
+    <a name="58947"></a>Ns_Conn *conn
+    <a name="58948"></a>);
+</pre><p><a name="133724">
+</a><h4>Description</h4>
+<p><a name="58950">
+</a>The Ns_ConnGetQuery function constructs and returns an Ns_Set structure representing the query data associated with the connection. It reads the POST content or the query string. The POST content takes precedence over the query string.</p>
+<p><a name="857366">
+</a>Note that you must not call Ns_SetFree on the result of this function.</p>
+<a name="214033">
+</a><h4>Examples</h4>
+<pre>    <a name="214038"></a>	/* Get the value from an &lt;INPUT NAME="mydata"&gt; form tag. */
+    <a name="214039"></a>	Ns_Set *set;
+    <a name="214040"></a>	char *value;
+    <a name="214041"></a>
+    <a name="214042"></a>	set = Ns_ConnGetQuery(conn);
+    <a name="214043"></a>	if (set != NULL) {
+    <a name="214044"></a>		value = Ns_SetGetValue(set, "mydata");
+    <a name="214045"></a>	}
+</pre><p><p><a name="214031">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch73.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch75.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

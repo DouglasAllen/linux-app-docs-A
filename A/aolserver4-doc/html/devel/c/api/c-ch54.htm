@@ -1,0 +1,84 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ConfigGetPath</TITLE>
+<LINK rel=Previous href="c-ch53.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch55.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch53.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch55.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="88863">
+</a><h3>Ns_ConfigGetPath</h3>
+<a name="88864">
+</a><h4>Overview</h4>
+Return configuration file section name
+<a name="61764">
+</a><a name="132316">
+</a><h4>Syntax</h4>
+<pre>    <a name="61766"></a>char *Ns_ConfigGetPath(
+    <a name="61767"></a>char *hServer,
+    <a name="61768"></a>char *module,
+    <a name="61769"></a>...
+    <a name="61770"></a>);
+</pre><p><a name="133644">
+</a><h4>Description</h4>
+<p><a name="205671">
+</a>The Ns_ConfigGetPath function returns a pointer to a configuration file section name based on the server (hServer) and module specified. The hServer or module may be NULL. A variable number of additional path elements are appended. The list must end with NULL. For example, <code>Ns_ConfigGetPath("server1", NULL, "special", NULL)</code> will return "\NS\Server\server1\special" if such a section exists in the configuration file and NULL if it does not.</p>
+<p><a name="205672">
+</a>The space for the string returned is located in the configuration data. You do not need to deallocate the string and you must not alter it.</p>
+<a name="205673">
+</a><h4>Examples</h4>
+<pre>    <a name="205674"></a>
+    <a name="205640"></a>int 
+    <a name="205644"></a>Ns_ModuleInit(char *hServer, char *hModule)
+    <a name="205645"></a>{
+    <a name="205639"></a>	char *path;
+    <a name="205634"></a>	char *value;
+    <a name="205635"></a>
+    <a name="205662"></a>	/*
+    <a name="205663"></a>	 * Construct the MySub section name specific to this
+    <a name="205664"></a>	 * server and module. For example, if hServer = "vs1"
+    <a name="205665"></a>	 * and hModule = "mymod", path would be:
+    <a name="205666"></a>	 * [ns/server/vs1/module/mymod/MySudb]
+    <a name="205667"></a>	 */
+    <a name="205654"></a>	path = Ns_ConfigGetPath(hServer, hModule, "MySub", NULL);
+    <a name="205655"></a>	value = Ns_ConfigGetValue(path, "MyKey");
+    <a name="205658"></a>
+    <a name="205659"></a>	...
+    <a name="205626"></a>
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch53.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch55.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

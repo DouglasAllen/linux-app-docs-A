@@ -1,0 +1,884 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<a name=top><h1>Database Functions</h1></a>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/db.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+</small>
+<p>
+
+
+<h2><a href=./ name=ns_db>ns_db</a></h2>
+
+Access a database.
+
+<h3>Syntax</h3>
+
+ns_db bindrow dbhandle<br>
+
+ns_db bouncepool dbhandle<br>
+
+ns_db cancel dbhandle<br>
+
+ns_db close dbhandle<br>
+
+ns_db connected dbhandle<br>
+
+ns_db datasource dbhandle<br>
+
+ns_db dbtype dbhandle<br>
+
+ns_db dml dbhandle sql<br>
+
+ns_db driver dbhandle<br>
+
+ns_db exception dbhandle<br>
+
+ns_db exec dbhandle sqlcommand<br>
+
+ns_db flush dbhandle<br>
+
+ns_db gethandle ?-timeout timeout? [poolname] nhandles<br>
+
+ns_db getrow dbhandle setId<br>
+
+ns_db open driver datasource user password<br>
+
+ns_db poolname dbhandle<br>
+
+ns_db pools<br>
+
+ns_db releasehandle dbhandle<br>
+
+ns_db 1row dbhandle sql<br>
+
+ns_db 0or1row dbhandle sql<br>
+
+ns_db password dbhandle<br>
+
+ns_db select dbhandle sql<br>
+
+ns_db setexception dbhandle code message<br>
+
+ns_db sp_exec dbhandle<br>
+
+ns_db sp_getparams<br>
+
+ns_db sp_returncode dbhandle<br>
+
+ns_db sp_setparam dbhandle varname vartype inout value<br>
+
+ns_db sp_start dbhandle procname<br>
+
+ns_db user dbhandle<br>
+
+ns_db verbose dbhandle ?on | off?<br>
+
+
+<h3>Description</h3>
+
+ns_db bindrow returns an ns_set structure whose key names are the
+column names of the rows returned by the SQL command
+previously-executed with ns_db exec. If the database is not currently
+returning rows (i.e., a status other than NS_ROWS was returned by
+ns_db exec), an error is thrown. The dbhandle argument is a database
+handle (obtained with ns_db gethandle).
+
+<p>
+
+ns_db bouncepool marks all database handles for the specified database
+pool as stale. When any database handle currently open is put back
+into the pool, its connection to the database will be reset.
+
+<p>
+
+ns_db cancel cancels the current operation.
+
+<p>
+
+ns_db close closes the connection. Use this function only on handles
+that were obtained by the ns_db open function. However, the server
+automatically close handles when the operation is complete, so you
+don't normally have to call this function.
+
+<p>
+
+ns_db connected returns a boolean value indicating whether the
+connection to the database pool is made.
+
+<p>
+
+ns_db datasource returns the data source for the database pool (e.g.,
+default:mydb).
+
+<p>
+
+ns_db dbtype returns the database type of the database pool.
+
+<p>
+
+ns_db dml executes SQL that should be data manipulation language such
+as an insert or update, or data definition language such as a create
+table.
+
+<p>
+
+ns_db driver returns the name of the driver of the handle (e.g.,
+"SOLID").
+
+<p>
+
+ns_db exception returns the most recent exception for the database
+pool.
+
+<p>
+
+ns_db exec executes the specified SQL command. It returns either
+NS_DML (if the SQL command is a DML or DDL command) or NS_ROWS (if the
+SQL command returns rows, such as a SELECT). If an error occurs
+executing the SQL command, an error is thrown. The dbhandle argument
+is a database handle (obtained with ns_db gethandle). This function
+can be used for true ad hoc querying, where you don't know what kind
+of SQL command will be executed.
+
+<p>
+
+ns_db flush flushes the results of an SQL select so you do not need to
+use ns_db getrow to get all the rows and throw them away.
+
+<p>
+
+ns_db gethandle returns the specified number of handles from the
+specified pool. If poolname is not specified, the Defaultpool from the
+configuration file is used. If nhandles is not specified, 1 handle is
+returned. (Note that if you specify nhandles, you must also specify a
+poolname.) If not enough handles are available to fulfill the request,
+it waits until they are available. You must request all the handles
+you will need for a specific pool with one call to ns_db gethandle.
+You must release all your database handles explicitly (with ns_db
+releasehandle) before acquiring more. If you request multiple handles
+from the database, this function returns a Tcl list of database
+handles (space delimited). In this case, each handle must be released
+with a separate call to ns_db releasehandle.
+
+<p>
+
+If a timeout is not specified or timeout is zero, ns_db gethandle will
+wait indefinitely (perhaps forever) for the requested number of
+handles to become available. If timeout is greater than zero, ns_db
+gethandle will either return with the handles within that time period,
+or return "" if the time period was exceeded, or generate a Tcl error
+of the form "could not allocate n handle(s) from pool 'poolname'. If
+timeout is less than zero, ns_db gethandle will not block. It will
+either return with the handles, or generate the above Tcl error. See
+the examples for ns_db gethandle, below.
+
+<p>
+
+ns_db getrow fetches the next row waiting to be retrieved after an
+ns_db select. The data is dumped right into the set associated with
+SETID, which should be the set returned by the ns_db select. It
+returns "1" if there are more rows waiting and returns "0" otherwise.
+If you call ns_db getrow again after already receiving "0" on the
+previous call, an error is returned.
+
+<p>
+
+ns_db open returns a handle at a lower level, circumventing the pools.
+
+<p>
+
+ns_db poolname returns the database pool that this handle came from.
+
+<p>
+
+ns_db pools returns a list of all database pools.
+
+<p>
+
+ns_db releasehandle puts the handle back in the pool. When your
+operation has finished running, the server will automatically return
+any handles to their pools, so you don't normally have to call this
+function.
+
+<p>
+
+ns_db 1row expects the SQL to be a select statement that returns
+exactly one row and returns that row as an ns_set.
+
+<p>
+
+ns_db 0or1row expects the SQL to be a select statement that returns
+exactly zero or one row. On zero rows, a null string is returned. On
+one row, a newly allocated ns_set is returned.
+
+<p>
+
+ns_db password returns the password of the user for the database pool.
+
+<p>
+
+ns_db select executes the SQL statement on the database server. It
+returns an ns_set with the keys set to the column names that were
+selected. Use ns_db getrow to retrieve rows. You cannot perform nested
+select statements. Before you start a new select statement, you must
+first either retrieve all the rows from the first select or use the
+ns_db flush statement to flush any rows not yet retrieved.
+
+<p>
+
+ns_db setexception returns the specified status code and message to
+the client.
+
+<p>
+
+ns_db sp_exec executes a stored procedure that has been initialized
+with ns_db sp_start and ns_db sp_setparam. It returns "NS_DML" if the
+command was succsesfully executed but did not return rows, or it
+returns "NS_ROWS" if the command was successfully executed and did
+return rows (which can then be fetched with ns_db bindrow and ns_db
+getrow). It throws an error if the command failed. This function is
+implemented only for the Sybase database driver. See the Examples
+section, below, for an example of this function.
+
+<p>
+
+ns_db sp_getparams gets any output parameters set after executing a
+stored procedure with ns_db sp_exec. It returns an ns_set or throws an
+error on failure. This function is implemented only for the Sybase
+database driver. See the Examples section, below, for an example of
+this function.
+
+<p>
+
+ns_db sp_returncode gets the return code from a stored procedure. It
+must be called after ns_db sp_exec. This function is implemented only
+for the Sybase database driver. See the Examples section, below, for
+an example of this function.
+
+<p>
+
+ns_db sp_setparam sets a parameter for a call to a stored procedure.
+The varname is the name of the variable, for example "@name". The
+vartype is the data type of this parameter, for example "varchar". The
+inout argument indicates whether it's an input or output parameter. It
+must be set to either "in" or "out". The value is the paramter value
+to send. This function returns 1 on success and throws an error on
+failure. This function is implemented only for the Sybase database
+driver. See the Examples section, below, for an example of this
+function.
+
+<p>
+
+ns_db sp_start begins execution of the stored procedure called
+procname. It returns 0 on success and throws an error on failure. This
+function is implemented only for the Sybase database driver. See the
+Examples section, below, for an example of this function.
+
+<p>
+
+ns_db user returns the user (as specified for the User parameter of
+the configuration file) for the database pool.
+
+<p>
+
+ns_db verbose changes the verbose setting (the Verbose parameter in
+the configuration file) for the database pool.
+
+<p>
+
+<h3>Examples</h3>
+
+<p>
+
+ 1. Here's an example ADP that runs a stored procedure called
+    "p_TestProc" in a pool called "sybase":
+
+<pre>
+#
+# The new stored procedure commands that I've implemented are:
+#
+#   ns_db sp_start      $dbhandle $procname
+#   ns_db sp_setparam   $dbhandle $varname, $vartype, in|out, $value
+#   ns_db sp_exec       $dbhandle
+#   ns_db sp_returncode $dbhandle
+#   ns_db sp_getparams  $dbhandle
+#
+# Look for them and their usage below...
+#
+
+set formdata [ns_conn form $conn]
+#set pool  [ns_set get $formdata "pool"]
+#set pool  "sybdoug"
+set pool "sybase"
+
+if {$pool == ""} {
+    ns_puts "<P>No database pool specified.</P>"
+    ns_adp_break
+}
+
+set db         [ns_db gethandle  $pool]
+set datasource [ns_db datasource $db]
+set dbtype     [ns_db dbtype     $db]
+set driver     [ns_db driver     $db]
+set poolname   [ns_db poolname   $db]
+set user       [ns_db user       $db]
+set password   [ns_db password   $db]
+
+#
+# Show some information about this connection to the database.
+#
+ns_puts "datasource: $datasource"
+ns_puts "dbtype: $dbtype"
+ns_puts "driver: $driver"
+ns_puts "poolname: $poolname"
+ns_puts "user: $user"
+ns_puts "password: $password"
+
+#
+# Turn on server tracing for this handle -- only do this if you need
+# debug output on the server side.
+#
+ns_ext traceon $db "/tmp/sybtrace"
+
+#
+# Create a stored procedure.
+#
+set ret [ns_db sp_start $db "p_TestProc"]
+
+#
+# Set the parameters for this stored procedure.  The SQL definition of
+# this procedure is:
+
+#
+#  CREATE PROCEDURE p_TestProc(@x int, @y varchar(16) out, @z int out)
+#
+# The arguments to ns_db sp_setparam are like this:
+#
+#   ns_db setparam $dbhandle $varname, $vartype, in|out, $value
+#
+set ret [ns_db sp_setparam $db "@x" int in 4]
+set ret [ns_db sp_setparam $db "@y" varchar out "varchar val"]
+set ret [ns_db sp_setparam $db "@z" int out 231]
+
+#
+# Execute the stored procedure now
+#
+set ret [ns_db sp_exec $db]
+
+#
+# Bind an ns_set to the rows returned from this procedure
+#
+set row [ns_db bindrow $db]
+if {$row == ""} {
+    ns_puts "No row data returned from bindrow."
+    ns_adp_break
+}
+
+
+#
+# Display all of the rows returned in a generic way
+#
+set numcols [ns_set size $row]
+for {set i 0} {$i < $numcols} {incr i} {
+    ns_puts "[ns_set key $row $i]"
+}
+while {[ns_db getrow $db $row]} {
+    for {set i 0} {$i < $numcols} {incr i} {
+        ns_puts "[ns_set value $row $i]"
+    }
+}
+
+#
+# Show the return code
+#
+ns_puts "Return code: [ns_db sp_returncode $db]"
+
+
+# Process output parameters.  The output parameters are returned in an
+# ns_set with the keys set to the parameter names from the above
+# setparam calls.  All of the parameters that were specified as an
+# "out" parameter will be represented here if they were defined as
+# output values in the stored procedure itself.
+
+catch {
+    ns_puts "Output parameters: "
+    set paramset [ns_db sp_getparams $db]
+    if {$paramset == ""  || $paramset == 0} {
+        ns_puts "sp_getparams failed"
+    }
+} paramerr
+if {$paramerr != ""} {
+    ns_puts "getparams generated a database exception"
+    ns_adp_break;
+}
+
+#
+# Display the output parameters
+#
+set numparams [ns_set size $paramset]
+for {set i 0} {$i < $numcols} {incr i} {
+    set key [ns_set key $paramset $i]
+    ns_puts "Param $key: [ns_set get $paramset $key]"
+}
+%&gt;
+</pre>
+
+2. These are valid uses of ns_db gethandle:
+
+<pre>
+ns_db gethandle
+# 1 handle from default pool
+ns_db gethandle -timeout 23
+# 1 handle from default pool, 23 sec timeout
+ns_db gethandle -timeout -1 poolname
+# 1 handle from poolname, error if not available
+ns_db gethandle poolname
+# 1 handle from poolname
+ns_db gethandle -timeout 23 poolname
+# 1 handle from poolname, 23 sec timeout
+ns_db gethandle poolname 5
+# 5 handles from poolname
+ns_db gethandle -timeout 23 poolname 5
+# 5 handles from poolname, 23 sec timeout
+</pre>
+
+This is not valid, because nhandles is specified without a poolname:
+<pre>
+ns_db gethandle 5
+# it thinks 5 is the pool name
+</pre>
+
+<p>
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dbconfigpath>ns_dbconfigpath</a></h2>
+
+Get nsdb section name
+
+<h3>Syntax</h3>
+
+ns_dbconfigpath
+
+<h3>Description</h3>
+
+This function returns the section name in the configuration file for
+the nsdb module.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dberror>ns_dberror</a></h2>
+
+Return SQL error information
+
+<h3>Syntax</h3>
+
+ns_dberrorcode dbhandle<br>
+
+ns_dberrormsg dbhandle<br>
+
+ns_dbreturnerror conn dbhandle ?title? ?aftermsg?<br>
+
+<h3>Description</h3>
+
+ns_dberrorcode returns the 5-character SQL error code for the last
+database error.
+
+<p>
+
+ns_dberrormsg returns a text description of the last database error.
+
+<p>
+
+ns_dbreturnerror returns an HTML version of the last database error
+message to the client. The text in aftermsg is appended to the HTML
+after the error message.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dbformvalue>ns_dbformvalue</a></h2>
+
+Retrieve the value of a column specified by form data
+
+<h3>Syntax</h3>
+
+ns_dbformvalue formdata colname type valueVar
+
+<h3>Description</h3>
+
+ns_dbformvalue returns the value of a specified column (colname) in
+valueVar, given column values encoded as formdata (see page 32). The
+formdata is an ns_set structure that can be obtained by calling
+ns_conn form. Specify the datatype of the column in the type argument.
+Valid type values are text, integer, real, boolean, date, time, or
+timestamp.
+
+<p>
+
+If necessary, ns_dbformvalue combines multiple form elements to get
+the value, such as for dates.
+
+<p>
+
+Use this function for accessing data filled into an
+automatically-generated search, update, or entry form.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dbformvalueput>ns_dbformvalueput</a></h2>
+
+Set default values in an HTML form for accessing the database
+
+<h3>Syntax</h3>
+
+ns_dbformvalueput htmlform colname type value<br>
+
+<h3>Description</h3>
+
+ns_dbformvalueput sets the default value for the specified column
+(colname) in an HTML form (htmlform) equal to value. The HTML form
+does not need to be completely formed; it may be a partial form.
+Specify the type of the column as text, integer, real, boolean, date,
+time, or timestamp.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dbquotename>ns_dbquotename</a></h2>
+
+Surround a name by double quotes if it contains a space
+
+<h3>Syntax</h3>
+
+ns_dbquotename name
+
+<h3>Description</h3>
+
+ns_dbquotename surrounds name by double quotes if it contains a space.
+The resulting name can then be used in SQL statements for names of
+database objects such as tables or columns.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_dbquotevalue>ns_dbquotevalue</a></h2>
+
+Prepare a value string for inclusion in an SQL statement
+
+<h3>Syntax</h3>
+
+ns_dbquotevalue value {type text}<br>
+
+<h3>Description</h3>
+
+ns_dbquotevalue prepares a value string for inclusion in an SQL
+statement. The value is of type text by default. Values of a numeric
+type in the value string are left alone. A value string of "" is
+translated into NULL. All other values are surrounded by single
+quotes, and any single quotes included in the value are escaped
+(translated into two single quotes).
+
+<h3>Example</h3>
+
+<pre>
+set value "Charlie's Cheese Factory"
+ns_db dml $db \
+"insert into companies(name) values ([ns_dbquotevalue $value])"
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_deleterow>ns_deleterow</a></h2>
+
+Delete row in specified table corresponding to form data
+
+<h3>Syntax</h3>
+
+ns_deleterow dbhandle table formdata<br>
+
+<h3>Description</h3>
+
+ns_deleterow deletes the row encoded as formdata (see page 32) in the
+specified database and table. The values specifying the exact row to
+be deleted are encoded in the form data as RowID.columnname. The
+dbhandle argument is a database handle (obtained with ns_db
+gethandle).
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_ext>ns_ext</a></h2>
+
+Perform external database driver operations.
+
+<h3>Syntax</h3>
+
+ns_ext cpfrom dbhandle file1 file2<br>
+
+ns_ext cpto dbhandle file1 file2<br>
+
+ns_ext dbtype dbhandle<br>
+
+ns_ext gettypes dbhandle<br>
+
+ns_ext identify dbhandle<br>
+
+ns_ext isremote dbhandle<br>
+
+ns_ext mktemp dbhandle<br>
+
+ns_ext number dbhandle<br>
+
+ns_ext ping dbhandle<br>
+
+ns_ext resultid dbhandle<br>
+
+ns_ext resultrows dbhandle<br>
+
+ns_ext rm dbhandle file<br>
+
+ns_ext setmaxrows dbhandle limit<br>
+
+ns_ext traceoff dbhandle<br>
+
+ns_ext traceon dbhandle file<br>
+
+
+<h3>Description</h3>
+
+The ns_ext functions are described below. They are only available if
+an external database driver is loaded. The dbhandle argument for all
+of the functions is a database handle (obtained with ns_db gethandle
+poolname).
+
+<p>
+
+ns_ext cpfrom copies a local file (file1) from the remote proxy daemon
+file space (file2). This function (along with mktemp, rm, and cpto) is
+provided to support environments where the proxy daemon does not share
+a common file system with the server, allowing SQL statements to
+reference local temporary files, which can then be copied to the
+server's local file space.
+
+<p>
+
+ns_ext cpto copies a local file (file1) to the remote proxy daemon
+file space (file2). This function (along with mktemp, rm, and cpfrom)
+is provided to support environments where the proxy daemon does not
+share a common file system with the server, allowing SQL statements to
+reference local temporary files, which can then be copied to the
+server's local file space.
+
+<p>
+
+ns_ext dbtype returns the database type, such as "Sybase".
+
+<p>
+
+ns_ext gettypes returns a Tcl list containing the data types for the
+database.
+
+<p>
+
+ns_ext identify returns the proxy daemon identity and version string.
+
+<p>
+
+ns_ext isremote returns a boolean value indicating whether or not the
+database is remote.
+
+<p>
+
+ns_ext mktemp creates a unique temporary file in the proxy daemon's
+file space. This function (along with rm, cpto, and cpfrom) is
+provided to support environments where the proxy daemon does not share
+a common file system with the server, allowing SQL statements to
+reference local temporary files, which can then be copied to the
+server's local file space.
+
+<p>
+
+ns_ext number returns the connection number.
+
+<p>
+
+ns_ext ping verifies that the proxy daemon process is running.
+
+<p>
+
+ns_ext resultid returns the id of the last object affected by an exec
+command.
+
+<p>
+
+ns_ext resultrows returns the number of rows affected by the last exec
+command.
+
+<p>
+
+ns_ext rm removes a file (file) in the proxy daemon's file space. This
+function (along with mktemp, cpto, and cpfrom) is provided to support
+environments where the proxy daemon does not share a common file
+system with the server, allowing SQL statements to reference local
+temporary files, which can then be copied to the server's local file
+space.
+
+<p>
+
+ns_ext setmaxrows specifies the limit on the number of rows to be
+returned.
+
+<p>
+
+ns_ext traceoff disables message tracing in the proxy daemon.
+
+<p>
+
+ns_ext traceon enables message tracing in the proxy daemon. Trace
+output is written to the specified file path (file).
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_insertrow>ns_insertrow</a></h2>
+
+Insert form data into specified table as a new row.
+
+
+<h3>Syntax</h3>
+
+ns_insertrow dbhandle table formdata
+
+<h3>Description</h3>
+
+ns_insertrow inserts the row encoded as formdata (see page 32) in the
+specified database and table. The dbhandle argument is a database
+handle (obtained with ns_db gethandle).
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_pooldescription>ns_pooldescription</a></h2>
+
+Get database pool description
+
+<h3>Syntax</h3>
+
+ns_pooldescription poolname
+
+<h3>Description</h3>
+
+The function returns the descriptive comments assigned to the name of
+the specified pool in the [ns/db/pools] section in the configuration
+file.
+
+
+<p>
+
+<hr>
+
+<br>
+
+</body>
+</html>

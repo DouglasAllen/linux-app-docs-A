@@ -1,0 +1,1467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Network Working Group Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Network Working Group Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Network Working Group Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Network Working Group</em> module is an original implemtation of the recommendations proposed by the NWG and currently found in the form of <em>Request for Comments</em> (RFC). Most of the objects are used with networking application, with the most common one beeing the <em>Universal Resource Identifier</em> (URI) object. </p>
+<div class="section">
+The uri class</div>
+<p class="text">
+ The <tt class="code">Uri</tt> class is a base class that parses a <em>Uniform Resource Identifier</em> or uri string and provides methods to access individual component of that uri. The implementation conforms to RFC 3986. The URI components are the scheme, the authority, the path, the query and the fragment. The class also takes care of the character escaping. </p>
+<pre class="frame">
+<![CDATA[const uri (afnix:www:Uri "http://www.afnix.org")
+
+]]></pre>
+<p class="text">
+ An uri can be broken into several components called the <em>scheme</em>, the <em>authority</em>, the <em>path</em>, optionally the <em>query</em> and the <em>fragment</em>. The <tt class="code">Uri</tt> class provide a method to retrieve each component of the parsed uri. </p>
+<pre class="frame">
+<![CDATA[const uri (afnix:www:Uri "http://www.afnix.org/")
+println (uri:get-scheme)    # http
+println (uri:get-authority) # www.afnix.org
+println (uri:get-path)      # /
+
+]]></pre>
+<p class="subsect">
+Character conversion</p>
+<p class="text">
+ The <tt class="code">Uri</tt> class performs automatically the character conversion in the input uri. For example, the <em>+</em> character is replaced by a blank. The <em>%</em> character followed by two hexadecimal values is replaced by the corresponding ASCII character. Note that this conversion does now apply to the query string. </p>
+<p class="subsect">
+Query string</p>
+<p class="text">
+ The <tt class="code">get-query</tt> method returns the query string of the uri. The query string starts after the <em>?</em> character. The query string is a series of key-pair values separated by the <em>&amp;</em> character. </p>
+<pre class="frame">
+<![CDATA[const uri (afnix:www:Uri 
+  "http://www.afnix.org?name=hello&value=world")
+println (uri:get-query) # name=hello&value=world
+
+]]></pre>
+<p class="text">
+ The module also provides the <tt class="code">UriQuery</tt> class that parses the query string and store the result in the form of a property list. The query string parse is particularly useful when writing automated scripts. </p>
+<pre class="frame">
+<![CDATA[# create a query string object
+const qs (afnix:nwg:UriQuery (uri:get-query))
+# get the name value
+qs:get-value "name"
+
+]]></pre>
+<div class="section">
+Managing a cgi request</div>
+<p class="text">
+ Managing a cgi request involves primarily the parsing of the requesting uri. The uri generally contains the http referrer as well as parameter which are stored in the form of a query string. However, depending on the cgi method which can be of type <em>GET</em> or <em>POST</em>, the treatment is somewhat different. </p>
+<p class="subsect">
+Checking the protocol version</p>
+<p class="text">
+ In the presence of a cgi protocol, it is always a good idea to check the protocol version, or at least to put an assertion. The protocol version is normally <em>CGI/1.1</em> and is stored in the <em>GATEWAY_INTERFACE</em> environment variable. </p>
+<pre class="frame">
+<![CDATA[# check the cgi protocol
+assert "CGI/1.1" (
+  afnix:sys:get-env "GATEWAY_INTERFACE")
+
+]]></pre>
+<p class="subsect">
+Getting the query string</p>
+<p class="text">
+ If the request method is <em>GET</em>, then the query string is available in the environment variable <em>QUERY_STRING</em>. If the request method is <em>POST</em>, the query string is available in the input stream. The length of the query string is given by the <em>CONTENT_LENGTH</em> environment variable. The following example illustrates the extraction of the query string. </p>
+<pre class="frame">
+<![CDATA[# check the cgi protocol
+assert "CGI/.1" (
+  afnix:sys:get-env "GATEWAY_INTERFACE")
+# initialize the query string
+const query (afnix:sys:get-env "QUERY_STRING")
+# get the request method
+const rqm (afnix:sys:get-env "REQUEST_METHOD")
+# check for a post request and update the query string
+if (== rqm "POST") {
+  # create a buffer from the content length
+  const len (
+    Integer (afnix:sys:get-env "CONTENT_LENGTH"))
+  # get the standard input stream and read content
+  const is  (interp:get-input-stream)
+  const buf (is:read len)
+  # set the query string
+  query:= (buf:to-string)
+}
+
+]]></pre>
+<p class="subsect">
+Parsing the query string</p>
+<p class="text">
+ The <tt class="code">UriQuery</tt> class is designed to parse a cgi query string. Once the string has been parsed, it is possible to perform a query by key since the class operates with a property list. </p>
+<pre class="frame">
+<![CDATA[const query (
+  afnix:www:UriQuery "name=hello&value=world")
+query:length      # 2
+query:get-value "name"  # hello
+query:get-value "value" # world
+
+]]></pre>
+<p class="text">
+ The <tt class="code">UriQuery</tt> class is the foundation to build cgi script. When the library is combined with the <em>web
+	application management (wam)</em> service, powerful applications can be built easily. </p>
+<div class="section">
+Special functions</div>
+<p class="text">
+ Several dedicated functions are available in the library as a way to ease the object manipulations. Theses functions operate mostly on uri and files as described below. </p>
+<p class="subsect">
+Uri functions</p>
+<p class="text">
+ Several functions are designed to ease the uri manipulation. Most of them operate on the uri name or their associated system name. The <tt class="code">normalize-uri-name</tt> function normalizes a string argument by adding a uri scheme if missing in the original string. If the function detects that the name starts with a host name, the <em>http</em> scheme is added. If the function detects that the string starts with a path, the <em>file</em> scheme is added. otherwise, the name argument is left untouched. The <tt class="code">system-uri-name</tt> function normalizes the string argument by prioritizing the system name. The function attempts to find a file that match the sring argument and eventually build a uri file scheme. If the file is not fond, the normalization process occurs with the <tt class="code">normalize-uri-name</tt> function. </p>
+<pre class="frame">
+<![CDATA[# normalize a uri name
+trans  unm "http://www.afnix.org"
+assert unm (
+  afnix:nwg:normalize-uri-name unm)
+assert unm (
+  afnix:nwg:normalize-uri-name "www.afnix.org")
+assert unm (
+  afnix:nwg:normalize-uri-name "//www.afnix.org")
+
+]]></pre>
+<p class="subsect">
+Mime functions</p>
+<p class="text">
+ Mime functions are dedicated to easee the mainpulation of media types or mime. A media type is defined by a string in the form of a type and content value such as <em>text/plain</em>. The <tt class="code">mime-value-p</tt> predicate returns true if a string mime value is a valid media type. From a file perspective, the <tt class="code">mime-extension-p</tt> predicate returns true if the string extension has a valid media type associated to it. Finally, the <tt class="code">extension-to-mime</tt> function can be used to get the string mime value associated with a file extension. </p>
+<pre class="frame">
+<![CDATA[# check a media type
+assert true (afnix:nwg:mime-value-p "text/plain")
+# check the mime extension predicate
+assert true (afnix:nwg:mime-extension-p "txt")
+# check the extension to mime
+assert "text/plain" (
+  afnix:nwg:extension-to-mime "txt")
+
+]]></pre>
+<div class="section">
+HTTP transaction objects</div>
+<p class="text">
+ The concept of HTTP transactions is defined in RFC 2616. In the client/server approach, a client issues a request which is answered with a response. A special case arise when the server is asked to perform some extra works, such like executing a script. In this case, the answer is called a reply which is formatted into a response when the server does its job correctly. </p>
+<p class="text">
+ The nature of the HTTP objects determines how the associated stream behaves. With a HTTP request, the object is filled by reading an input stream when operating on the server side. On the other hand, the request is filled by data when operating on the client side. With a HTTP response, the opposite situation occurs. The HTTP response is filled by reading an input stream when operating on the client side and filled by data when operating on the server side. </p>
+<p class="subsect">
+HTTP protocol</p>
+<p class="text">
+ The <tt class="code">HttpProto</tt> class is a base class designed to handle a HTTP header that is found in both HTTP request and response. The class is built around a property list that is filled either by parsing an input stream or by processing specific methods. The <tt class="code">HttpProto</tt> defines also some methods which are often used with a HTTP request or response. </p>
+<div class="section">
+HTTP response</div>
+<p class="text">
+ The <tt class="code">HttpResponse</tt> class is a class designed to handle a HTTP response. When operating on the client side, the response object is built by reading an input stream. When operating on the server side, the response object is built by calling specific methods. </p>
+<p class="subsect">
+Creating a server response</p>
+<p class="text">
+ A server response is created by specifying the response status code. By default, a HTTP response is created with the default media type <em>text/html</em>. If the media type needs to be changed, it can be passed as the second argument to the response constructor. By default, the empty constructor creates an empty constructor with a valid status code. </p>
+<pre class="frame">
+<![CDATA[#create a valid response
+const hr (afnix:nwg:HttpResponse 200)
+
+]]></pre>
+<p class="text">
+ Once the server response is created, it can be augmented with some headed values. Typically, a server will add some information about the response, such like the content length, the modification time or a tag. The <tt class="code">HttpResponse</tt> provides several methods that ease the generation of these header values. </p>
+<p class="subsect">
+Creating a client response</p>
+<p class="text">
+ A client response is created by binding an input stream to a response object. During the construction, the input stream is read and the HTTP protocol header is filled. It is also during this phase that the status code is processed. It is therefore important to ensure that a response object is built correctly before attempting to access it. </p>
+<pre class="frame">
+<![CDATA[# create a client response by stream
+const hr (afnix:nwg:HttpResponse is)
+
+]]></pre>
+<p class="subsect">
+Reading a client response</p>
+<p class="text">
+ When the response has been created, it is important to check its status code. Most of the time, the response is valid and its content can be read directly. The <tt class="code">status-ok-p</tt> predicate returns true if the status code is valid. In such case, a HTTP stream can be built in order to read the response. </p>
+<pre class="frame">
+<![CDATA[# check that a response is valid
+if (hr:status-ok-p) {
+  # create a http stream
+  const rs (afnix:nwg:HttpStream ht is)
+  # read the response stream
+  while (rs:eos-p) (rs:read)
+}
+
+]]></pre>
+<p class="text">
+ Before reading a http stream, it is important to detect and verify the nature of the response content. The <tt class="code">media-type-p</tt> predicate returns true if the media type is defined and the <tt class="code">get-media-type</tt> method returns the response type in the form of a mime code such like <em>text/html</em>. Eventually, the character set associated with the media type can also be detected. The <tt class="code">encoding-mode-p</tt> predicate and the <tt class="code">get-encoding-mode</tt> method can be used to detect the content encoding mode. However, it is worth to note that the <tt class="code">HttpStream</tt> object is automatically sets with the proper encoding if it can be found in the response header. </p>
+<p class="subsect">
+Special client response</p>
+<p class="text">
+ Certain response can sometime contains special status codes that require a specific treatment. This is the case when the response corresponds to a http redirection. In this case, the new uri must be fetched to get the desired response. The <tt class="code">location-p</tt> predicate returns true if the response corresponds to a http redirect and the <tt class="code">get-location</tt> method can be used to get the new location uri. If this situation arises, it is up to the implementation to decide what to do with the new uri. In most cases, a new request will be sent to the server. </p>
+<div class="section">
+Cookie object</div>
+<p class="text">
+ The <tt class="code">Cookie</tt> object is a special object that can be used during a http session, to post data to the http client. The idea behind <em>cookies</em> is to be able to maintain some state, during the user session for some time. A cookie is a <em>name/value</em> pair and eventually an expiration time. By default, the cookie object are defined for one http client session, but this behavior can be changed. </p>
+<p class="subsect">
+Managing cookies</p>
+<p class="text">
+ A cookie is created with a <em>name/value</em> pair and eventually an expiration time. Such expiration time is called the <em>maximum-age</em> and is automatically formatted by the object. With two arguments a session cookie is created. With a third argument as an integer, the constructor set the maximum age in seconds. </p>
+<pre class="frame">
+<![CDATA[# create a cookie with name/value
+const cookie (afnix:nwg:Cookie "cartid" "123456789")
+
+]]></pre>
+<p class="text">
+ The cookie implementation follows the recommendation of the RFC-2965 for http state management. The most important point to remember is the interpretation of the maximum age that differs from one cookie version to another. With version 1, which is the default, the maximum age is defined relatively in seconds, while it is absolute with version 0.The maximum age is set either at construction or with the <tt class="code">set-max-age</tt> method. The <tt class="code">set-max-age</tt> method sets the cookie life time in seconds, in reference to the current time. A negative value is always reset to -1 and defined a session cookie. A 0 value tells the http client to remove the cookie. The <tt class="code">set-path</tt> method defines the path for which this cookie apply. </p>
+<p class="subsect">
+Adding a cookie</p>
+<p class="text">
+ Once the cookie is defined, the <tt class="code">set-cookie</tt> method of the <tt class="code">HttpResponse</tt> object can be used to install the cookie. Combined with the <tt class="code">write</tt> method, the cookie can be send to the http client. </p>
+<hr/>
+<div class="appendix">
+Standard Network Working Group Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Uri</div>
+<p class="text">
+ The <tt class="code">Uri</tt> class is a base object used to parse or build a uniform resource identifier as defined by RFC 3986. The URI can be built by specifying each component or by parsing a string. When a string is given in the constructor, the class parses the string and extract all components. The uri components are the scheme, the authority, the path, the query and the fragment. The class also takes care of the character escaping. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>uri-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Uri</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Uri constructor creates an empty uri object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Uri</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Uri constructor create a uri object by value.
+	  The string argument is the uri to parse at the object construction.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Uri</i><i> (String String Integer)</i><hr/>
+<p class="text">
+
+	  The Uri constructor create a uri object by scheme
+	  host and port. The first argument is the uri scheme. The second
+	  argument is the uri host name. The third argument is the uri
+	  port. The uri base name can be reconstructed from this information.      
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>parse</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The parse method reset the uri object, parse the
+	  string argument and fill the uri object with the result.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-scheme</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-scheme method returns the scheme of the
+	  parsed uri object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-authority</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-authority method returns the authority part
+	  of the parsed uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-path method returns the path of the parsed
+	  uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path-target</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-path-target method returns the path target
+	  of the parsed uri. The path target is the last element of the
+	  uri path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-query</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-query method returns the complete query
+	  string of the parsed uri. Note that characters are not escaped
+	  when getting the string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-fragment</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-fragment method returns the complete query
+	  string of the parsed uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-base</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-base method returns the combined uri scheme
+	  and authority.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-rname</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-rname method returns the reference uri name
+	  with the combined uri scheme, authority and path all percent encoded.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-hname</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-hname method returns the combined uri scheme,
+	  authority and path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-aname</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-aname method returns the almost combined
+	  uri name with the scheme, authority, path and query.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-path</i><i> (&rarr; Uri)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add-path method adds a path to the calling uri
+	  and returns a new uri with the new path added to the old one.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-href</i><i> (&rarr; Uri)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The get-href method returns a new uri by eventually
+	  combining the string argument. If the string argument correspond
+	  to an uri, the corresponding uri is built. Otherwise, the string
+	  argument is considered as a path to be added to the current uri
+	  in order to build a new uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-system-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-system-path method returns the system path
+	  representation of the uri path. This function works only if the
+	  scheme if a file scheme.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path-encoded</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-path-encoded method returns the uri in the
+	  encoded form. Normally the get-path removes the
+	  percent-encoded characters which might not be appropriate with
+	  some protocol such like the http protocol. The
+	  get-path-encoded returns the original path. Note
+	  that getting the path with getpath and doing a
+	  percent coding might result in a different result since the
+	  internal representation uses normalized string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-host</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-host method returns the authority or path
+	  host name if any can be found with respect to the scheme. With a
+	  ftp, http or https scheme, the host is extracted from the
+	  authority. With a mailto scheme, the host is extracted from the
+	  path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-port</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-port method returns the authority port if
+	  any can be found with respect to the scheme.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+UriQuery</div>
+<p class="text">
+ The <tt class="code">UriQuery</tt> class is a simple class that parses a uri query string and build property list. during the parsing process, a special transliteration process is done as specified by RFC 3986. This class is primarily used with <em>cgi</em> scripts. Note that the string to parse is exactly the one produced by the <tt class="code">get-query</tt> method of the <tt class="code">Uri</tt> class. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>uri-query-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Plist
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>UriQuery</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The UriQuery constructor creates an empty uri query
+	  object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>UriQuery</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The UriQuery constructor create a uri object by value.
+	  The string argument is the uri query string to parse at the
+	  object construction. The query string is the one obtained from
+	  the get-query method of the Uri class.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>parse</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The parse method reset the uri query object, parses the
+	  string argument and fill the property list object with the result.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-query</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-query method returns the original query string.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Functions</p>
+<div class="frame">
+<i>mime-extension-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The mime-extension-p predicates returns true if a
+	media type extension - mime extension - is defined. Most of the
+	time, media type extension can be seen as a file extension.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>mime-value-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The mime-value-p predicates returns true if a
+	media type - mime value - is defined.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>extension-to-mime</i><i> (&rarr; String)</i><i> (String [Boolean])</i><hr/>
+<p class="text">
+
+	The extension-to-mime function converts a media type
+	extension into a media type. In the first form, without a second
+	argument, if the media type extension does not exist, an exception
+	is raised. In the second form, with the second argument set to
+	true, if the media type extension does not exist, the default
+	media type is returned. If the flag is set to false, an exception
+	is raised like the first form.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>normalize-uri-name</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The normalize-uri-name function normalizes the string
+	argument by adding a uri scheme if missing in the original
+	string. If the function detects that the name starts with a host
+	name, the "http" scheme is added. If the function detects that the
+	string starts with a path, the "file" scheme is added. otherwise,
+	the name argument is left untouched.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>system-uri-name</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	The system-uri-name function normalizes the string
+	argument by prioritizing the system name. The function attempts to
+	find a file that match the string argument and eventually build a
+	uri file scheme. If the file is not fond, the normalization
+	process occurs with the normalize-uri-name function.
+      </p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+HttpProto</div>
+<p class="text">
+ The <tt class="code">HttpProto</tt> class is a base class that ease the deployment of the http protocol. The base class is built with a property list which is used to define the message header. The class also defines the write methods which are used to write a message either on an output stream or into a buffer. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>http-proto-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the http protocol object by
+	  clearing the protocol version and header.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>parse</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The parse method parse the input stream bound to
+	  the http protocol. In order to operate, an input stream must be
+	  associated with the protocol object or an exception is
+	  raised. After a stream has been parsed, the protocol version and
+	  the header are set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write</i><i> (&rarr; none)</i><i> (none|OutputStream|Buffer)</i><hr/>
+<p class="text">
+
+	  The write method formats and writes the http protocol
+	  object to an output stream or a buffer. Without argument, the
+	  default output stream is used. With an argument, an output
+	  stream or a buffer object can be used.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The header-length method returns the number of
+	  properties in the header.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The header-exists-p predicate returns true if the
+	  property exists in the header. The string argument is the
+	  property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-set</i><i> (&rarr; none)</i><i> (String Literal)</i><hr/>
+<p class="text">
+
+	  The header-set method sets a new property to the
+	  http header. The first argument is the property name. The second
+	  argument is a literal object which is internally converted to a
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-get</i><i> (&rarr; Property)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The header-get method returns a property object by
+	  index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-map</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The header-map method returns a property value by
+	  name. The string argument is the property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-find</i><i> (&rarr; Property)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The header-find method returns a property object by
+	  name. The string argument is the property name. If the property
+	  is not found, the nil object is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-lookup</i><i> (&rarr; Property)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The header-lookup method returns a property object by
+	  name. The string argument is the property name. If the property
+	  is not found, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>header-plist</i><i> (&rarr; Plist)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The header-plist method returns the header in the form
+	  of a property list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>content-length-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The content-length-p predicate returns true if the
+	  content length is defined in the protocol header.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-content-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-content-length method returns the content
+	  length defined in the protocol header. If the content length is
+	  not defined in the header, the null value is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>media-type-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The media-type-p predicate returns true if the
+	  content type is defined in the protocol header.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-media-type</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-media-type method returns the media type
+	  defined in the protocol header. If the media type is not defined
+	  in the header, the default media type is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>encoding-mode-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The encoding-mode-p predicate returns true if the encoding
+	  mode is defined in the protocol header.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-encoding-mode</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-encoding-mode method returns the protocol
+	  encoding mode. If the encoding mode is not defined in the
+	  protocol header, the default encoding mode is returned.      
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+HttpRequest</div>
+<p class="text">
+ The <tt class="code">HttpRequest</tt> class is a base class designed to handle a http request. The class operates with the protocol version 1.1 as defined by RFC 2616. For a server request, the request is built by reading an input stream and setting the request command with its associated header. For a client request, the request is formatted with a request command and a eventually a uri. In both cases, the header is filled automatically depending on the request side. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>http-request-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>HttpProto
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>HttpRequest</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a default http
+	  request. By default, the request object is built with
+	  the GET method and the request uri set to the root value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpRequest</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a http request
+	  object with a specific command. By default, the request uri is
+	  set to root, except for the OPTIONS method
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpRequest</i><i> (Uri)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a http request
+	  object with a uri. The default request method is GET.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpRequest</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a http request
+	  object with a specific input stream. At construction, the
+	  request header is cleared and the input stream is bound to the
+	  object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpRequest</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a http request
+	  object with a specific method and a uri name. The first string
+	  argument is the request method to use. The second string
+	  argument is the uri attached to the command. Note that the term
+	  uri should be understood as a request uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpRequest</i><i> (String Uri)</i><hr/>
+<p class="text">
+
+	  The HttpRequest constructor creates a http request
+	  object with a specific method and a uri. The first string
+	  argument is the request method to use. The second argument is
+	  the uri attached to the method. 
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-method</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-method method sets the request method.
+	  This method does not check that the command is a valid HTTP
+	  method and thus leaves plenty of room for server 
+	  development. As a matter of fact, RFC 2616 does not prohibit the
+	  existence of such extension.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-method</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-method method returns the request method
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-uri</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-uri method sets the request uri. The
+	  argument string does not have to be a valid uri string since
+	  some commands might accept special string such like "*" to
+	  indicate all applicable uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-uri</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-uri method returns the request uri string.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+HttpResponse</div>
+<p class="text">
+ The <tt class="code">HttpResponse</tt> class is a base class designed to handle a http response. The class operates with the protocol version 1.1 as defined by RFC 2616. For a client response, the response is built by reading an input stream and setting the response status code with its associated header. For a server response, the response is formatted with a response status and additional header information. In both cases, the header is filled automatically depending on the response side. On the other hand, trying to set some header with an input stream bound to the response object might render the response object unusable. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>http-response-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>HttpProto
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>HttpResponse</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The HttpResponse constructor creates a default http
+	  response object. The response is marked valid with a
+	  default text/plain media type.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpResponse</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The HttpResponse constructor creates a http
+	  response object with a status code. The response code is
+	  associated with the default text/plain media type.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpResponse</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The HttpResponse constructor creates a http response
+	  object with a specific input stream. At construction, the
+	  response header is cleared and the input stream is bound to the
+	  object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HttpResponse</i><i> (Integer String)</i><hr/>
+<p class="text">
+
+	  The HttpResponse constructor creates a http
+	  response object with a status code and a media type. The first
+	  argument is the status code. The second argument is the
+	  associated media type.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-status-code</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-status-code method sets the response
+	  status code.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-status-code</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-status-code method returns the response
+	  status code.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map-status-code</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The map-status-code method returns a string representation
+	  of the response status code.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>status-ok-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The status-ok-p predicate returns true if the response
+	  status code is valid (aka status 200).
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>status-error-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The status-error-p predicate returns true if the response
+	  status code is an error code.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>location-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The location-p predicate returns true is the response
+	  status code indicates that a request should be made at another
+	  location. The location can be found with the
+	  get-location method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-location</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-location method returns the location uri
+	  found in the response header. This method is equivalent to a
+	  header query.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-location</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-location method set the redirect location
+	  in the response header. The string argument is the location uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-cookie</i><i> (&rarr; none)</i><i> (Cookie)</i><hr/>
+<p class="text">
+
+	  The set-cookie method sets a cookie object to the
+	  http header. The cookie version is properly handled by the
+	  method.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Cookie</div>
+<p class="text">
+ The <tt class="code">Cookie</tt> class is a special class designed to handle cookie setting within a http transaction. A cookie is <em>name/value</em> pair that is set by the server and stored by the http client. Further connection with the client will result with the cookie value transmitted by the client to the server. A cookie has various parameters that controls its existence and behavior. The most important one is the <em>cookie maximum age</em> that is defined in seconds. A null value tells the client to discard the cookie. A cookie without maximum age is valid only during the http client session. A cookie can be added to the <tt class="code">HttpReply</tt> object with the <tt class="code">set-cookie</tt> method. A cookie can be constructed with a <em>name/value</em> pair. An optional third argument is the maximum age. The default cookie version is 1 as specified by RFC 2965. With a version 1, the maximum age is interpreted as the number of seconds before the cookie expires. With version 0, the maximum age is the absolute time. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>cookie-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Cookie</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Cookie constructor creates a cookie with a name
+	  value pair. The first argument is the cookie name. The second
+	  argument is the cookie value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Cookie</i><i> (String String Integer)</i><hr/>
+<p class="text">
+
+	  The Cookie constructor creates a cookie with a name
+	  value pair and a maximum age. The first argument is the cookie
+	  name. The second argument is the cookie value. The third
+	  argument is the cookie maximum age.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-version</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-version method returns the cookie version.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-version</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-version method sets the cookie version. The
+	  version number can only be 0 or 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the cookie name. This
+	  is the name store on the http client.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the cookie name. This is
+	  the name store on the http client.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-value</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-value method returns the cookie value. This
+	  is the value stored on the http client bounded by the cookie name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-value</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-value method sets the cookie value. This is
+	  the value store on the http client bounded by the cookie name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-maximum-age</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-maximum-age method returns the cookie
+	  maximum age. The default value is -1, that is, no maximum age is
+	  set and the cookie is valid only for the http client session.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-maximum-age</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-maximum-age method sets the cookie maximum
+	  age. A negative value is reset to -1. A 0 value tells the http
+	  client to discard the cookie. A positive value tells the http
+	  client to store the cookie for the remaining seconds.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-path method returns the cookie path
+	  value. The path determines for which http request the cookie is
+	  valid. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-path</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-path method sets the cookie path value. The
+	  path determines for which http request the cookie is valid.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-domain</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-domain method returns the cookie domain
+	  value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-domain</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-domain method sets the cookie domain
+	  value. It is string recommended to use the originator domain
+	  name since many http client can reject cookie those domain name
+	  does not match the originator name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-port</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-port method returns the cookie port number.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-port</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-port method sets the cookie port
+	  number. This value is not used with a cookie version 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-comment</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-comment method returns the cookie comment
+	  value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-comment</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-comment method sets the cookie comment value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-comment-url</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-comment-url method returns the cookie comment
+	  url value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-comment-url</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-comment-url method sets the cookie comment
+	  url value. This value is not used with cookie version 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-discard</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-discard method returns the cookie discard flag.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-discard</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-discard method sets the cookie discard
+	  flag. The discard flag the tells the user agent to destroy the
+	  cookie when it terminates. This value is not used with cookie
+	  version 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-secure</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-secure method returns the cookie secure flag.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-secure</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-secure method sets the cookie secure
+	  flag. When a cookie is secured, it is only returned by the http
+	  client if a connection has been secured (i.e use https).
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string formatted for
+	  the http reply header. Normally this method should not be
+	  called since the set-cookie method of the
+	  httpReply takes care of such thing. 
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Session</div>
+<p class="text">
+ The <tt class="code">Session</tt> class that defines a session to be associated with an http transaction. The session object is designed to be persistent so that its data information can be retrieved at any time. A session object has also the particularity to have a limited lifetime. A session object is created by name with an identifier. If a path is given, such path will be used as the session file name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>session-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Session</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Session constructor creates a session by name.
+	  The string argument is the session name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Session</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Session constructor creates a session with a name
+	  and a user. The first argument is the session name. The second
+	  argument is the user name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Session</i><i> (String String String)</i><hr/>
+<p class="text">
+
+	  The Session constructor creates a session with a name,
+	  a user and a path. The first argument is the session name. The
+	  second argument is the session user name. The third argument is
+	  the session path.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>expire-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The expire-p predicate returns true if the session
+	  has expired.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the session name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-hash-id</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-hash-id method sets the session hash
+	  identifier. The session hash id must be unique and secured
+	  enough so that the session name cannot be derived from it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-hash-id</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-hash-id method returns the session hash identifier.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-user</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-user method sets the session user name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-user</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-user method returns the session user name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-path</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-path method sets the session path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-path</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-path method returns the session path.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-maximum-age</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-max-age method sets the session maximum age.
+	  The maximum age is an integer in seconds relative to the current
+	  time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mark-expired</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The mark-expired method marks the session as
+	  expired. This is done by forcing the expiration time to the
+	  creation time.q
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-valid-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-valid-time method returns the remaining valid
+	  session time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-expire-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-expire-time method returns the session
+	  expiration time in seconds. The expiration time is an absolute
+	  time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-expire-time</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-expire-time method sets the session
+	  expiration time. The expiration time is an absolute time in seconds.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-creation-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-creation-time method returns the session
+	  creation time. The creation time is an absolute time in seconds.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-modification-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-modification-time method returns the session
+	  creation time. The modification time is an absolute time in seconds.
+	</p>
+</div>
+<p/>
+</body>
+</html>

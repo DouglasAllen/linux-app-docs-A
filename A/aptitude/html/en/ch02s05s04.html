@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Customizing the display layout</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s05.html" title="Customizing aptitude"><link rel="prev" href="ch02s05s03.html" title="Customizing text colors and styles"><link rel="next" href="ch02s05s05.html" title="Configuration file reference"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s05s04.html#idp4529184" title="Display elements"><link rel="subsection" href="ch02s05s04.html#secWidgetPlacement" title="Placement of display elements"><link rel="subsection" href="ch02s05s04.html#idp4564728" title="Display layout option reference"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Customizing the display layout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05s03.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Customizing <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s05s05.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Customizing the display layout"><div class="titlepage"><div><div><h3 class="title"><a name="secDisplayLayout"></a>Customizing the display layout</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s05s04.html#idp4529184">Display elements</a></span></dt><dt><span class="section"><a href="ch02s05s04.html#secWidgetPlacement">Placement of display elements</a></span></dt><dt><span class="section"><a href="ch02s05s04.html#idp4564728">Display layout option reference</a></span></dt></dl></div><p>
+	  It is possible to rearrange the <span class="command"><strong>aptitude</strong></span> package list by
+	  making suitable modifications to the <a class="link" href="ch02s05s05.html" title="Configuration file reference">configuration file</a>.
+	</p><div class="section" title="Display elements"><div class="titlepage"><div><div><h4 class="title"><a name="idp4529184"></a>Display elements</h4></div></div></div><p>
+	    The layout is stored in the configuration group
+	    <code class="literal">Aptitude::UI::Default-Package-View</code>, and
+	    consists of a list of display elements:
+	  </p><pre class="synopsis"><em class="replaceable"><code>Name</code></em> <em class="replaceable"><code>Type</code></em> {
+  Row <em class="replaceable"><code>row</code></em>;
+  Column <em class="replaceable"><code>column</code></em>;
+  Width <em class="replaceable"><code>width</code></em>;
+  Height <em class="replaceable"><code>height</code></em>;
+
+  <em class="replaceable"><code>additional options...</code></em>
+};</pre><p>
+	    This creates a display element named
+	    <em class="replaceable"><code>Name</code></em>; the type of element
+	    created is determined by <em class="replaceable"><code>Type</code></em>.
+	    The <code class="literal"><a class="link" href="ch02s05s04.html#layoutRow">Row</a></code>, <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumn">Column</a></code>,
+	    <code class="literal"><a class="link" href="ch02s05s04.html#layoutWidth">Width</a></code>, and
+	    <code class="literal"><a class="link" href="ch02s05s04.html#layoutHeight">Height</a></code>
+	    options must be present; they determine where the display
+	    element is placed.  (see <a class="link" href="ch02s05s04.html#secWidgetPlacement" title="Placement of display elements">below</a> for a detailed
+	    explanation of how display elements are arranged)
+	  </p><p>
+	    For examples of how to change the display layout, see the
+	    <a class="link" href="ch02s05s06.html" title="Themes">theme</a> definitions in the
+	    file
+	    <code class="filename">/usr/share/aptitude/aptitude-defaults</code>.
+	  </p><p>
+	    The following types of display elements are available:
+	  </p><div class="variablelist"><dl><dt><a name="layoutDescription"></a><span class="term"><code class="literal">Description</code></span></dt><dd><p>
+		  This display element will contain the
+		  <span class="quote">“<span class="quote">information area</span>”</span> (typically a
+		  description of the currently selected package).
+		</p><p>
+		  The option <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownKey">PopUpDownKey</a></code>
+		  gives the name of a keyboard command which will
+		  cause the display element to be shown or hidden.
+		  For instance, setting this to <code class="literal"><a class="link" href="ch02s05s02.html#keyShowHideDescription">ShowHideDescription</a></code>
+		  will give the current display element the same
+		  behavior as the default information area.  The
+		  option <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownKey">PopUpDownLinked</a></code>
+		  gives the name of another display element; the
+		  current element will be shown or hidden whenever the
+		  other element is.
+		</p></dd><dt><span class="term"><code class="literal">MainWidget</code></span></dt><dd><p>
+		  This is a placeholder for the <span class="quote">“<span class="quote">main</span>”</span>
+		  display element: typically this is the list of
+		  packages.  A display layout must contain exactly one
+		  <code class="literal">MainWidget</code> element: no more, no
+		  less.
+		</p></dd><dt><a name="layoutStatic"></a><span class="term"><code class="literal">Static</code></span></dt><dd><p>
+		  A region of the screen which displays some text,
+		  possibly containing formatting codes as described in
+		  <a class="xref" href="ch02s05s01.html#secDisplayFormat" title="Customizing how packages are displayed">the section called “Customizing how packages are displayed”</a>.  The text to
+		  display can be given in the <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumns">Columns</a></code>
+		  option, or it can be stored in another configuration
+		  variable specified by the <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumnsCfg">ColumnsCfg</a></code>
+		  option.  The color of the text is determined by the
+		  color named by the <code class="literal"><a class="link" href="ch02s05s04.html#layoutColor">Color</a></code> option.
+		</p><p>
+		  <code class="literal">Static</code> items can be displayed and
+		  hidden in the same way as <code class="literal"><a class="link" href="ch02s05s04.html#layoutDescription">Description</a></code>
+		  items, using the <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownKey">PopUpDownKey</a></code>
+		  and <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownLinked">PopUpDownLinked</a></code>
+		  options.
+		</p></dd></dl></div></div><div class="section" title="Placement of display elements"><div class="titlepage"><div><div><h4 class="title"><a name="secWidgetPlacement"></a>Placement of display elements</h4></div></div></div><p>
+	    The display elements are arranged in a
+	    <span class="quote">“<span class="quote">table</span>”</span>.  The upper-left corner of an element
+	    is in the cell given by its <code class="literal"><a class="link" href="ch02s05s04.html#layoutRow">Row</a></code> and
+	    <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumn">Column</a></code>
+	    options (typically starting from row 0 and column 0, but
+	    this is not required).  The width of an element in cells
+	    is given by its <code class="literal"><a class="link" href="ch02s05s04.html#layoutWidth">Width</a></code>
+	    option, and its height is given by its <code class="literal"><a class="link" href="ch02s05s04.html#layoutHeight">Height</a></code>
+	    option.
+	  </p><p>
+	    Once the display elements are arranged and have been given
+	    an initial amount of space on the screen, there is likely
+	    to be space left over.  If there is extra vertical space,
+	    each row containing a display element whose <code class="literal"><a class="link" href="ch02s05s04.html#layoutRowExpand">RowExpand</a></code>
+	    option is <code class="literal">true</code> will be allocated a share
+	    of the extra space; similarly, if there is extra
+	    horizontal space, each column containing a display element
+	    whose <code class="literal"><a class="link" href="ch02s05s04.html#layoutColExpand">ColExpand</a></code>
+	    option is <code class="literal">true</code> will be allocated a share
+	    of the extra space.
+	  </p><p>
+	    In the event that there is not enough space, every row and
+	    column whose widgets <span class="emphasis"><em>all</em></span> have their
+	    <code class="literal"><a class="link" href="ch02s05s04.html#layoutRowShrink">RowShrink</a></code> or
+	    <code class="literal"><a class="link" href="ch02s05s04.html#layoutColShrink">ColShrink</a></code>
+	    options set to <code class="literal">true</code> will be shrunk.  If
+	    this is not enough, all rows and columns are shrunk to fit
+	    into the available space.
+	  </p><p>
+	    If a display element is not expanded, but its row or
+	    column is, its alignment is determined by the <code class="literal"><a class="link" href="ch02s05s04.html#layoutRowAlign">RowAlign</a></code>
+	    and <code class="literal"><a class="link" href="ch02s05s04.html#layoutColAlign">ColAlign</a></code>
+	    options.  Setting them to <code class="literal">Left</code>,
+	    <code class="literal">Right</code>, <code class="literal">Top</code>,
+	    <code class="literal">Bottom</code>, or <code class="literal">Center</code>
+	    will tell <span class="command"><strong>aptitude</strong></span> where to place the element within the
+	    row or column.
+	  </p><p>
+	    For instance, the following configuration group creates a
+	    static element named
+	    <span class="quote">“<span class="quote"><code class="literal">Header</code></span>”</span>, which is three
+	    cells wide and will expand horizontally but not
+	    vertically.  It has the same color as other header lines
+	    and uses the standard display format for header lines:
+	  </p><pre class="screen">Header Static {
+  Row 0;
+  Column 0;
+  Width 3;
+  Height 1;
+
+  ColExpand true;
+  ColAlign Center;
+
+  RowAlign Center;
+
+  Color ScreenHeaderColor;
+  ColumnsCfg HEADER;
+};</pre></div><div class="section" title="Display layout option reference"><div class="titlepage"><div><div><h4 class="title"><a name="idp4564728"></a>Display layout option reference</h4></div></div></div><p>
+	    The following options are available for display elements:
+	  </p><div class="variablelist"><dl><dt><a name="layoutColAlign"></a><span class="term"><code class="literal">ColAlign</code>
+	      <em class="replaceable"><code>alignment</code></em><code class="literal">;</code></span></dt><dd><p>
+		  <em class="replaceable"><code>alignment</code></em> must be either
+		  <code class="literal">Left</code>, <code class="literal">Right</code>,
+		  or <code class="literal">Center</code>.  If the row containing
+		  the current display element is wider than the
+		  element itself and <code class="literal"><a class="link" href="ch02s05s04.html#layoutColExpand">ColExpand</a></code>
+		  is <code class="literal">false</code>, the element will be
+		  placed within the row according to the value of
+		  <em class="replaceable"><code>alignment</code></em>.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">Left</code>.
+		</p></dd><dt><a name="layoutColExpand"></a><span class="term"><code class="literal">ColExpand</code>
+	      <code class="literal">true</code>|<code class="literal">false;</code></span></dt><dd><p>
+		  If this option is set to <code class="literal">true</code>,
+		  the column containing this display element will be
+		  allocated a share of any extra horizontal space that
+		  is available.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">false</code>.
+		</p></dd><dt><a name="layoutColor"></a><span class="term"><code class="literal">Color</code>
+	      <em class="replaceable"><code>colorname</code></em><code class="literal">;</code></span></dt><dd><p>
+		  This option applies to <code class="literal"><a class="link" href="ch02s05s04.html#layoutStatic">Static</a></code>
+		  elements.  <em class="replaceable"><code>colorname</code></em> is
+		  the name of a color (for instance, <code class="literal"><a class="link" href="ch02s05s03.html#colorScreenStatusColor">ScreenStatusColor</a></code>)
+		  which should be used as the <span class="quote">“<span class="quote">default</span>”</span>
+		  color for this display element.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal"><a class="link" href="ch02s05s03.html#colorDefaultWidgetBackground">DefaultWidgetBackground</a></code>.
+		</p></dd><dt><a name="layoutColShrink"></a><span class="term"><code class="literal">ColShrink</code>
+	      <code class="literal">true</code>|<code class="literal">false;</code></span></dt><dd><p>
+		  If this option is set to <code class="literal">true</code> on
+		  each element in a column and there is not enough
+		  horizontal space, the column will be shrunk as
+		  necessary to fit the available space.  Note that a
+		  column may be shrunk even if
+		  <code class="literal">ColShrink</code> is
+		  <code class="literal">false</code>; it simply indicates that
+		  <span class="command"><strong>aptitude</strong></span> should try shrinking a particular column
+		  before shrinking other columns.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">false</code>.
+		</p></dd><dt><a name="layoutColumn"></a><span class="term"><code class="literal">Column</code> <em class="replaceable"><code>column</code></em><code class="literal">;</code></span></dt><dd><p>
+		  Specifies the leftmost
+		  <em class="replaceable"><code>column</code></em> containing this
+		  display element.
+		</p></dd><dt><a name="layoutColumns"></a><span class="term"><code class="literal">Columns</code> <em class="replaceable"><code>format</code></em><code class="literal">;</code></span></dt><dd><p>
+		  This option applies to <code class="literal"><a class="link" href="ch02s05s04.html#layoutStatic">Static</a></code>
+		  display elements for which the <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumnsCfg">ColumnsCfg</a></code>
+		  option is not set.  It sets the displayed contents
+		  of the status item; it is a format string as
+		  described in <a class="xref" href="ch02s05s01.html#secDisplayFormat" title="Customizing how packages are displayed">the section called “Customizing how packages are displayed”</a>.
+		</p></dd><dt><a name="layoutColumnsCfg"></a><span class="term"><code class="literal">ColumnsCfg</code> <code class="literal">HEADER</code>|<code class="literal">STATUS</code>|<em class="replaceable"><code>name</code></em><code class="literal">;</code></span></dt><dd><p>
+		  This option applies to <code class="literal"><a class="link" href="ch02s05s04.html#layoutStatic">Static</a></code>
+		  display elements.  It sets the display format of the
+		  current element to the value of another
+		  configuration variable: if it is
+		  <code class="literal">HEADER</code> or
+		  <code class="literal">STATUS</code>, the options
+		  <code class="literal"><a class="link" href="ch02s05s05.html#configPackage-Header-Format">Aptitude::UI::Package-Header-Format</a></code>
+		  and <code class="literal"><a class="link" href="ch02s05s05.html#configPackage-Status-Format">Aptitude::UI::Package-Status-Format</a></code>,
+		  repectively, are used; otherwise, the option
+		  <em class="replaceable"><code>name</code></em> is used.
+		</p><p>
+		  If this option is not present, the value of the
+		  <code class="literal"><a class="link" href="ch02s05s04.html#layoutColumns">Columns</a></code> option is
+		  used to control the contents of the static item.
+		</p></dd><dt><a name="layoutHeight"></a><span class="term"><code class="literal">Height</code>
+	      <em class="replaceable"><code>height</code></em><code class="literal">;</code></span></dt><dd><p>
+		  Specifies the <em class="replaceable"><code>height</code></em> of
+		  the current display element.
+		</p></dd><dt><a name="layoutPopUpDownKey"></a><span class="term"><code class="literal">PopUpDownKey</code>
+	      <em class="replaceable"><code>command</code></em><code class="literal">;</code></span></dt><dd><p>
+		  This option applies to <code class="literal"><a class="link" href="ch02s05s04.html#layoutDescription">Description</a></code>
+		  and <code class="literal"><a class="link" href="ch02s05s04.html#layoutStatic">Static</a></code>
+		  display elements.
+		</p><p>
+		  <em class="replaceable"><code>command</code></em> is the name of a
+		  keyboard command (for instance, <code class="literal"><a class="link" href="ch02s05s02.html#keyShowHideDescription">ShowHideDescription</a></code>).
+		  When this key is pressed, the display element will
+		  be hidden if it is visible, and displayed if it is
+		  hidden.
+		</p></dd><dt><a name="layoutPopUpDownLinked"></a><span class="term"><code class="literal">PopUpDownLinked
+	      <em class="replaceable"><code>element</code></em>;</code></span></dt><dd><p>
+		  This option applies to <code class="literal"><a class="link" href="ch02s05s04.html#layoutDescription">Description</a></code>
+		  and <code class="literal"><a class="link" href="ch02s05s04.html#layoutStatic">Static</a></code>
+		  display elements.
+		</p><p>
+		  <em class="replaceable"><code>element</code></em> is the name of a
+		  display element.  When
+		  <em class="replaceable"><code>element</code></em> is displayed, the
+		  current element will also be displayed; when
+		  <em class="replaceable"><code>element</code></em> is hidden, the
+		  current element will also be hidden.
+		</p></dd><dt><a name="layoutRow"></a><span class="term"><code class="literal">Row</code> <em class="replaceable"><code>row</code></em><code class="literal">;</code></span></dt><dd><p>
+		  Specifies the uppermost
+		  <em class="replaceable"><code>row</code></em> containing this
+		  display element.
+		</p></dd><dt><a name="layoutRowAlign"></a><span class="term"><code class="literal">RowAlign</code>
+	      <em class="replaceable"><code>alignment</code></em><code class="literal">;</code></span></dt><dd><p>
+		  <em class="replaceable"><code>alignment</code></em> must be either
+		  <code class="literal">Top</code>, <code class="literal">Bottom</code>,
+		  or <code class="literal">Center</code>.  If the row containing
+		  the current display element is taller than the
+		  element itself and <code class="literal"><a class="link" href="ch02s05s04.html#layoutRowExpand">RowExpand</a></code>
+		  is <code class="literal">false</code>, the element will be
+		  placed within the row according to the value of
+		  <em class="replaceable"><code>alignment</code></em>.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">Top</code>.
+		</p></dd><dt><a name="layoutRowExpand"></a><span class="term"><code class="literal">RowExpand</code>
+	      <code class="literal">true</code>|<code class="literal">false;</code></span></dt><dd><p>
+		  If this option is set to <code class="literal">true</code>,
+		  the row containing this display element will be
+		  allocated a share of any extra vertical space that
+		  is available.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">false</code>.
+		</p></dd><dt><a name="layoutRowShrink"></a><span class="term"><code class="literal">RowShrink</code>
+	      <code class="literal">true</code>|<code class="literal">false;</code></span></dt><dd><p>
+		  If this option is set to <code class="literal">true</code> on
+		  each element in a row and there is not enough
+		  vertical space, the row will be shrunk as necessary
+		  to fit the available space.  Note that a row may be
+		  shrunk even if <code class="literal">RowShrink</code> is
+		  <code class="literal">false</code>; it simply indicates that
+		  <span class="command"><strong>aptitude</strong></span> should try shrinking a particular row
+		  before shrinking other rows.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">false</code>.
+		</p></dd><dt><a name="layoutVisible"></a><span class="term"><code class="literal">Visible true|false;</code></span></dt><dd><p>
+		  If set to <code class="literal">false</code>, this display
+		  element will initially be hidden.  Presumably only
+		  useful in conjunction with <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownKey">PopUpDownKey</a></code>
+		  and/or <code class="literal"><a class="link" href="ch02s05s04.html#layoutPopUpDownLinked">PopUpDownLinked</a></code>.
+		</p><p>
+		  If this option is not present, it defaults to
+		  <code class="literal">true</code>.
+		</p></dd><dt><a name="layoutWidth"></a><span class="term"><code class="literal">Width</code>
+	      <em class="replaceable"><code>width</code></em><code class="literal">;</code></span></dt><dd><p>
+		  Specifies the <em class="replaceable"><code>width</code></em> of
+		  the current display element.
+		</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05s03.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s05s05.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Customizing text colors and styles </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Configuration file reference</td></tr></table></div></body></html>

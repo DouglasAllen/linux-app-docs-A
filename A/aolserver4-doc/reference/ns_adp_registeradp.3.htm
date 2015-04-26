@@ -1,0 +1,762 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:37 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_adp_registertag</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_adp_registertag</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp_registeradp,
+ns_adp_registerproc, ns_adp_registerscript,
+ns_adp_registertag, ns_register_adptag &minus; ADP
+registered tags</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_adp_registeradp</b>
+<i>tag</i> ?<i>endtag</i>? <i>adp</i> <b><br>
+ns_adp_registerproc</b> <i>tag</i> ?<i>endtag</i>?
+<i>proc</i> <b><br>
+ns_adp_registerscript</b> <i>tag</i> ?<i>endtag</i>?
+<i>script</i> <b><br>
+ns_adp_registertag</b> <i>tag</i> ?<i>endtag</i>? <i>adp</i>
+<b><br>
+ns_register_adptag</b> <i>tag</i> ?<i>endtag</i>?
+<i>script</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These commands
+enable definition of HTML tags within an ADP file which are
+expanded and evaluated by the server before returning output
+to the client. Tags are defined as eitehr a single tag with
+options, e.g., <i>&lt;mytag a=b c=d&gt;</i> or as an
+opening/closing tag pair, e.g., <i>&lt;mytag&gt; text
+&lt;/mytag&gt;</i>. This approach is an alternative to
+direct calls via the <i>&lt;% script %&gt;</i> syntax as
+described in the <b>ns_adp</b> man page. <b><br>
+ns_adp_registeradp</b> <i>tag</i> ?<i>endtag</i>? <i>adp</i>
+<b><br>
+ns_adp_registertag</b> <i>tag</i> ?<i>endtag</i>?
+<i>adp</i></p>
+
+<p style="margin-left:22%;">These commands are identical
+and register an ADP code fragment to be invoked when the
+specified tag is encountered while parsing an ADP. The
+<i>tag</i> argument specifies the tag that will trigger
+invocation of the ADP fragment, which is specified by the
+<i>adp</i> argument.</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the
+<i>endtag</i> argument is specified, then the ADP fragment
+will be invoked with two arguments: The first will be the
+enclosed content, and the second will be the name of an
+ns_set with any attributes specified in the tag. If no
+<i>endtag</i> argument is specified, the ADP fragment will
+only be passed the name of the ns_set. The arguments may be
+retrieved using <b>ns_adp_bindargs</b> or <b>ns_adp_argc</b>
+and <b>ns_adp_argv</b>.</p>
+
+<p style="margin-left:22%; margin-top: 1em">When the ADP
+fragment is invoked, its result is inserted in the output
+instead of the tag (or, if the <i>endtag</i> was specified,
+in place of the tag, end tag, and the enclosed content).</p>
+
+<p style="margin-left:22%; margin-top: 1em">Note: Care must
+be taken when using this function from inside an ADP,
+because the <i>adpstring</i> is likely to contain script
+delimiters (<b>&lt;% ... %&gt;</b>) which will prematurely
+terminate script fragments. It is probably easier to
+restrict use of this function to .tcl files.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_registerproc</b>
+<i>tag</i> ?<i>endtag</i>? <i>proc</i></p>
+
+<p style="margin-left:22%;">This commands register a Tcl
+procedure to be evaluated when the given tag is encountered.
+The <i>tag</i> argument specifies the tag that will trigger
+a call to the procedure specified by the <i>proc</i>
+argument.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The procedure
+will be called with a variable number of arguments, one for
+each of the attributes provided in the tag. If the
+<i>endtag</i> argument is specified, the procedure will also
+receive a final argument with the contents of the text
+enclosed between the tags. No evaluation of the content will
+be performed, it will be passed as a single text block.</p>
+
+<p style="margin-left:22%; margin-top: 1em">When the
+procedure is invoked, its result is inserted in the output
+instead of the tag (or, if the <i>endtag</i> was specified,
+in place of the tag, end tag, and the enclosed content).</p>
+
+<p style="margin-left:11%;"><b>ns_adp_registerscript</b>
+<i>tag</i> ?<i>endtag</i>? <i>script</i> <b><br>
+ns_register_adptag</b> <i>tag</i> ?<i>endtag</i>?
+<i>script</i></p>
+
+<p style="margin-left:22%;">These commands are identical
+and register a Tcl script to be evaluated when the given tag
+is encountered. The <i>tag</i> argument specifies the tag
+that will trigger evaluation of the script specified by the
+<i>script</i> argument.</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the
+<i>endtag</i> argument is specified, then the script will be
+modified with two arguments appended: The first will be the
+enclosed content, and the second will be the name of an
+ns_set with any attributes specified in the tag. If no
+<i>endtag</i> argument is specified, the script will be
+modified with just the name of the ns_set appended.</p>
+
+<p style="margin-left:22%; margin-top: 1em">When the script
+is evaluated, its result is inserted in the output instead
+of the tag (or, if the <i>endtag</i> was specified, in place
+of the tag, end tag, and the enclosed content).</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+is a simple way of handling conditional content in ADPs:</p>
+
+<p style="margin-left:22%; margin-top: 1em">proc remember
+{input tagset} {</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>global _adp_memory</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set tagname [ns_set iget $tagset name]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>if {[string match &quot;&quot; $tagname]} {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set _adp_memory($tagname) $input</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>return &quot;&quot;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>} else {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>return $input</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+</table>
+
+<p style="margin-left:22%;">} <br>
+proc recall {name} {</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>global _adp_memory</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>if {[info exists _adp_memory($name)]} {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set parsecommand [list ns_adp_parse -string]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>lappend parsecommand $_adp_memory($name)</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_puts -nonewline [uplevel $parsecommand]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>} else {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_log Error &quot;[ns_adp_argv 0]: Unable to recall</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+</table>
+
+<p style="margin-left:22%;">}</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the
+preceding Tcl has been executed (perhaps during server
+startup), then the following ADP fragment displays the
+results of a database query in a table, or shows &quot;No
+rows in result.&quot; if there are no rows:</p>
+
+<p style="margin-left:22%; margin-top: 1em">&lt;%</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set rows {}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set db [ns_db gethandle]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_db exec &quot;select somecolumn from
+sometable&quot;</p> </td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set row [ns_db bindargs $db]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>while {[ns_db getrow $db $row] &gt; 0} {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>lappend rows [ns_set get $row
+&quot;somecolumn&quot;]</p> </td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_db releasehandle $db</p></td></tr>
+</table>
+
+<p style="margin-left:22%;">%&gt; <br>
+&lt;remember name=&quot;hasrows_header&quot;&gt; <br>
+&lt;table&gt; <br>
+&lt;/remember&gt; <br>
+&lt;remember name=&quot;hasrows_rows&quot;&gt; <br>
+&lt;tr&gt;</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>&lt;td&gt;&lt;%=$column%&gt;&lt;/td&gt;</p></td></tr>
+</table>
+
+<p style="margin-left:22%;">&lt;/tr&gt; <br>
+&lt;/remember&gt; <br>
+&lt;remember name=&quot;hasrows_footer&quot;&gt; <br>
+&lt;/table&gt; <br>
+&lt;/remember&gt; <br>
+No rows in result. <br>
+&lt;remember name=&quot;norows&quot;&gt; <br>
+&lt;%</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>if {[llength $rows] &gt; 0} {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>recall &quot;hasrows_header&quot;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>foreach row $rows {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>set column $row</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>recall &quot;hasrows_rows&quot;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>recall &quot;hasrows_footer&quot;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>} else {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>recall &quot;norows&quot;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="4%"></td>
+<td width="85%">
+
+
+<p>}</p></td></tr>
+</table>
+
+<p style="margin-left:22%;">%&gt;</p>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates the use of
+<b>ns_adp_registertag</b>:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">ns_adp_registertag
+printdate {</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>The current date is: &lt;%=[ns_httptime
+[ns_time]]%&gt;</p> </td></tr>
+</table>
+
+<p style="margin-left:22%;">}</p>
+
+<p style="margin-left:11%;">Once defined, typically in a
+startup script, you could simple include the
+&quot;&lt;printdate&gt;&quot; tag to append the text with
+current date into the output buffer.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp(1),
+ns_adp_eval(n), ns_adp_safeeval(n), ns_adp_include(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ADP, dynamic
+pages, registered tag</p>
+<hr>
+</body>
+</html>

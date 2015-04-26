@@ -1,0 +1,2875 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- This manual is for GNU AutoGen version 5.12, updated July 2011.
+
+Copyright C 1992-2011 by Bruce Korb.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+
+ -->
+<!-- Created on July 10, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>GNU AutoGen - The Automated Program Generator: 8. Add-on packages for AutoGen</title>
+
+<meta name="description" content="GNU AutoGen - The Automated Program Generator: 8. Add-on packages for AutoGen">
+<meta name="keywords" content="GNU AutoGen - The Automated Program Generator: 8. Add-on packages for AutoGen">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Add_002dOns"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="autogen_6.html#Option-Define-Names" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#AutoFSM" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Add_002don-packages-for-AutoGen"></a>
+<h1 class="chapter">8. Add-on packages for AutoGen</h1>
+
+<p>This chapter includes several programs that either work closely
+with AutoGen (extracting definitions or providing special formatting
+functions), or leverage off of AutoGen technology.  There is also
+a formatting library that helps make AutoGen possible.
+</p>
+<p>AutoOpts ought to appear in this list as well, but since it is
+the primary reason why many people would even look into AutoGen
+at all, I decided to leave it in the list of chapters.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#AutoFSM">8.1 Automated Finite State Machine</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#AutoXDR">8.2 Combined RPC Marshalling</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#AutoEvents">8.3 Automated Event Management</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-Invocation">8.4 Invoking columns</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-Invocation">8.5 Invoking getdefs</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-Invocation">8.6 Invoking xml2ag</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#snprintfv">8.7 Replacement for Stdio Formatting Library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   The extensible format printing library.
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="AutoFSM"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Add_002dOns" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#AutoXDR" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Automated-Finite-State-Machine"></a>
+<h2 class="section">8.1 Automated Finite State Machine</h2>
+<a name="index-AutoFSM"></a>
+<a name="index-finite-state-machine"></a>
+
+<p>The templates to generate a finite state machine in C or C++ is included
+with AutoGen.  The documentation is not.  The documentation is in HTML
+format for <a href="http://www.gnu.org/software/autogen/autofsm.html">viewing</a>,
+or you can <a href="http://download.sourceforge.net/autogen/">download FSM</a>.
+</p>
+<hr size="6">
+<a name="AutoXDR"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#AutoFSM" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#AutoEvents" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Combined-RPC-Marshalling"></a>
+<h2 class="section">8.2 Combined RPC Marshalling</h2>
+<a name="index-RPC"></a>
+<a name="index-rpcgen"></a>
+<a name="index-remote-procedure-call"></a>
+<a name="index-AutoXDR"></a>
+<a name="index-XDR"></a>
+
+<p>The templates and NFSv4 definitions are not included with AutoGen in any way.
+The folks that designed NFSv4 noticed that much time and bandwidth was
+wasted sending queries and responses when many of them could be bundled.
+The protocol bundles the data, but there is no support for it in rpcgen.
+That means you have to write your own code to do that.  Until now.
+Download this and you will have a large, complex example of how to use
+<code>AutoXDR</code> for generating the marshaling and unmarshaling of combined
+RPC calls.  There is a brief example
+<a href="http://www.gnu.org/software/autogen/xdr/index.html">on the web</a>, but
+you should <a href="http://download.sourceforge.net/autogen/">download AutoXDR</a>.
+</p>
+
+<hr size="6">
+<a name="AutoEvents"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#AutoXDR" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Automated-Event-Management"></a>
+<h2 class="section">8.3 Automated Event Management</h2>
+<a name="index-AutoEvents"></a>
+
+<p>Large software development projects invariably have a need to manage
+the distribution and display of state information and state changes.
+In other words, they need to manage their software events.  Generally,
+each such project invents its own way of accomplishing this and then
+struggles to get all of its components to play the same way.  It is a
+difficult process and not always completely successful.  This project
+helps with that.
+</p>
+<p>AutoEvents completely separates the tasks of supplying the data
+needed for a particular event from the methods used to manage the
+distribution and display of that event.  Consequently, the programmer
+writing the code no longer has to worry about that part of the
+problem.  Likewise the persons responsible for designing the event
+management and distribution no longer have to worry about getting
+programmers to write conforming code.
+</p>
+<p>This is a work in progress.  See my
+<a href="http://www.gnu.org/software/autogen/autoevents.html">web page</a>
+on the subject, if you are interested.
+I have some useful things put together, but it is not ready
+to call a product.
+</p>
+
+<hr size="6">
+<a name="columns-Invocation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#AutoEvents" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-usage" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Invoking-columns"></a>
+<h2 class="section">8.4 Invoking columns</h2>
+<a name="index-columns"></a>
+<a name="index-Columnize-Input-Text"></a>
+<p>This program has no explanation.
+</p>
+<p>This program was designed for the purpose of generating compact,
+columnized tables.  It will read a list of text items from standard
+in or a specified input file and produce a columnized listing of
+all the non-blank lines.  Leading white space on each line is
+preserved, but trailing white space is stripped.  Methods of
+applying per-entry and per-line embellishments are provided.
+See the formatting and separation arguments below.
+</p>
+<p>This program is used by AutoGen to help clean up and organize
+its output.
+</p>
+<p>See &lsquo;<tt>autogen/agen5/fsm.tpl</tt>&rsquo; and the generated output
+&lsquo;<tt>pseudo-fsm.h</tt>&rsquo;.
+</p>
+<p>This function was not implemented as an expression function because
+either it would have to be many expression functions, or a provision
+would have to be added to provide options to expression functions.
+Maybe not a bad idea, but it is not being implemented at the moment.
+</p>
+<p>A side benefit is that you can use it outside of <code>autogen</code> to
+columnize input, a la the <code>ls</code> command.
+</p>
+<p>This section was generated by <strong>AutoGen</strong>,
+using the <code>agtexi-cmd</code> template and the option descriptions for the <code>columns</code> program.
+</p>
+<p>This software is released under the GNU General Public License.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#columns-usage">8.4.1 columns usage help (-?)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-by_002dcolumns">8.4.2 by-columns option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-col_002dwidth">8.4.3 col-width option (-w)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-columns">8.4.4 columns option (-c)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-ending">8.4.5 ending option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-fill">8.4.6 fill option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-first_002dindent">8.4.7 first-indent option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-format">8.4.8 format option (-f)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-indent">8.4.9 indent option (-I)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-input">8.4.10 input option (-i)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-line_002dseparation">8.4.11 line-separation option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-separation">8.4.12 separation option (-S)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-sort">8.4.13 sort option (-s)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-spread">8.4.14 spread option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-tab_002dwidth">8.4.15 tab-width option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-width">8.4.16 width option (-W)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-option-presets">8.4.17 presetting/configuring columns</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#columns-See-Also">8.4.19 columns See Also</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">               See Also
+</td></tr>
+<tr><td align="left" valign="top"><a href="#columns-exit-status">8.4.18 columns exit status</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">            exit status
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="columns-usage"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-Invocation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-by_002dcolumns" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="columns-usage-help-_0028_002d_003f_0029"></a>
+<h3 class="subsection">8.4.1 columns usage help (-?)</h3>
+<a name="index-columns-usage"></a>
+
+<p>This is the automatically generated usage text for columns:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">columns (GNU AutoGen) - Columnize Input Text - Ver. 1.2
+USAGE:  columns [ -&lt;flag&gt; [&lt;val&gt;] | --&lt;name&gt;[{=| }&lt;val&gt;] ]...
+  Flg Arg Option-Name    Description
+   -W Num width          Maximum Line Width
+                                - It must be in the range:
+                                  16 to 4095
+   -c Num columns        Desired number of columns
+                                - It must be in the range:
+                                  1 to 2048
+   -w Num col-width      Set width of each column
+                                - It must be in the range:
+                                  1 to 2048
+      Num spread         maximum spread added to column width
+                                - It must be in the range:
+                                  1 to 1024
+      no  fill           Fill lines with input
+                                - prohibits these options:
+                                spread
+                                col-width
+                                by-columns
+   -I Str indent         Line prefix or indentation
+      Str first-indent   First line prefix
+                                - requires these options:
+                                indent
+      Num tab-width      tab width
+   -s opt sort           Sort input text
+   -f Str format         Formatting string for each input
+   -S Str separation     Separation string - follows all but last
+      Str line-separation string at end of all lines but last
+      Str ending         string at end of last line
+      no  by-columns     Print entries in column order
+   -i Str input          Input file (if not stdin)
+   -v opt version        Output version information and exit
+   -? no  help           Display extended usage information and exit
+   -! no  more-help      Extended usage information passed thru pager
+   -&gt; opt save-opts      Save the option state to a config file
+   -&lt; Str load-opts      Load options from a config file
+                                - disabled as --no-load-opts
+                                - may appear multiple times
+
+Options are specified by doubled hyphens and their name or by a single
+hyphen and the flag character.
+
+The following option preset mechanisms are supported:
+ - reading file ./.columnsrc
+ - reading file $HOME
+ - examining environment variables named COLUMNS_*
+
+please send bug reports to:  autogen-users@lists.sourceforge.net
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="columns-by_002dcolumns"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-usage" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-col_002dwidth" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="by_002dcolumns-option"></a>
+<h3 class="subsection">8.4.2 by-columns option</h3>
+<a name="index-columns_002dby_002dcolumns"></a>
+
+<p>This is the &ldquo;print entries in column order&rdquo; option.
+Normally, the entries are printed out in order by rows and then columns.
+This option will cause the entries to be ordered within columns.
+The final column, instead of the final row, may be shorter than the
+others.
+</p>
+<hr size="6">
+<a name="columns-col_002dwidth"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-by_002dcolumns" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-columns" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="col_002dwidth-option-_0028_002dw_0029"></a>
+<h3 class="subsection">8.4.3 col-width option (-w)</h3>
+<a name="index-columns_002dcol_002dwidth"></a>
+
+<p>This is the &ldquo;set width of each column&rdquo; option.
+Use this option to specify exactly how many characters are to be
+allocated for each column.  If it is narrower than the widest entry,
+it will be over-ridden with the required width.
+</p>
+<hr size="6">
+<a name="columns-columns"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-col_002dwidth" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-ending" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="columns-option-_0028_002dc_0029"></a>
+<h3 class="subsection">8.4.4 columns option (-c)</h3>
+<a name="index-columns_002dcolumns"></a>
+
+<p>This is the &ldquo;desired number of columns&rdquo; option.
+Use this option to specify exactly how many columns to produce.
+If that many columns will not fit within <var>line_width</var>, then
+the count will be reduced to the number that fit.
+</p>
+<hr size="6">
+<a name="columns-ending"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-columns" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-fill" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ending-option"></a>
+<h3 class="subsection">8.4.5 ending option</h3>
+<a name="index-columns_002dending"></a>
+
+<p>This is the &ldquo;string at end of last line&rdquo; option.
+This option puts the specified string at the end of the output.
+</p>
+<hr size="6">
+<a name="columns-fill"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-ending" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-first_002dindent" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="fill-option"></a>
+<h3 class="subsection">8.4.6 fill option</h3>
+<a name="index-columns_002dfill"></a>
+
+<p>This is the &ldquo;fill lines with input&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+must not appear in combination with any of the following options:
+spread, col_width, by_columns.
+</li></ul>
+
+<p>Instead of columnizing the input text, fill the output lines
+with the input lines.  Blank lines on input will cause a
+blank line in the output, unless the output is sorted.
+With sorted output, blank lines are ignored.
+</p>
+<hr size="6">
+<a name="columns-first_002dindent"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-fill" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-format" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="first_002dindent-option"></a>
+<h3 class="subsection">8.4.7 first-indent option</h3>
+<a name="index-columns_002dfirst_002dindent"></a>
+
+<p>This is the &ldquo;first line prefix&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+must appear in combination with the following options:
+indent.
+</li></ul>
+
+<p>If a number, then this many spaces will be inserted at the start of
+the first line.  Otherwise, it is a line prefix that will be inserted
+at the start of that line.  If its length exceeds &quot;indent&quot;, then it
+will be emitted on a line by itself, suffixed by any line separation
+string.  For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">$ columns --first='#define TABLE' -c 2 -I4 --line=' \' &lt;&lt;_EOF_
+one
+two
+three
+four
+_EOF_
+#define TABLE \
+    one   two \
+    three four
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="columns-format"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-first_002dindent" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-indent" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="format-option-_0028_002df_0029"></a>
+<h3 class="subsection">8.4.8 format option (-f)</h3>
+<a name="index-columns_002dformat"></a>
+
+<p>This is the &ldquo;formatting string for each input&rdquo; option.
+If you need to reformat each input text, the argument to this
+option is interpreted as an <code>sprintf(3)</code> format that is used
+to produce each output entry.
+</p>
+<hr size="6">
+<a name="columns-indent"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-format" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-input" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="indent-option-_0028_002dI_0029"></a>
+<h3 class="subsection">8.4.9 indent option (-I)</h3>
+<a name="index-columns_002dindent"></a>
+
+<p>This is the &ldquo;line prefix or indentation&rdquo; option.
+If a number, then this many spaces will be inserted at the start of
+every line.  Otherwise, it is a line prefix that will be inserted
+at the start of every line.
+</p>
+<hr size="6">
+<a name="columns-input"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-indent" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-line_002dseparation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="input-option-_0028_002di_0029"></a>
+<h3 class="subsection">8.4.10 input option (-i)</h3>
+<a name="index-columns_002dinput"></a>
+
+<p>This is the &ldquo;input file (if not stdin)&rdquo; option.
+This program normally runs as a <code>filter</code>, reading from standard
+input, columnizing and writing to standard out.  This option redirects
+input to a file.
+</p>
+<hr size="6">
+<a name="columns-line_002dseparation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-input" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-separation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="line_002dseparation-option"></a>
+<h3 class="subsection">8.4.11 line-separation option</h3>
+<a name="index-columns_002dline_002dseparation"></a>
+
+<p>This is the &ldquo;string at end of all lines but last&rdquo; option.
+Use this option if, for example, you wish a backslash to appear at
+the end of every line, except the last.
+</p>
+<hr size="6">
+<a name="columns-separation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-line_002dseparation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-sort" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="separation-option-_0028_002dS_0029"></a>
+<h3 class="subsection">8.4.12 separation option (-S)</h3>
+<a name="index-columns_002dseparation"></a>
+
+<p>This is the &ldquo;separation string - follows all but last&rdquo; option.
+Use this option if, for example, you wish a comma to appear after
+each entry except the last.
+</p>
+<hr size="6">
+<a name="columns-sort"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-separation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-spread" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="sort-option-_0028_002ds_0029"></a>
+<h3 class="subsection">8.4.13 sort option (-s)</h3>
+<a name="index-columns_002dsort"></a>
+
+<p>This is the &ldquo;sort input text&rdquo; option.
+Causes the input text to be sorted.  If an argument is supplied,
+it is presumed to be a pattern and the sort is based upon the
+matched text.  If the pattern starts with or consists of
+an asterisk (<code>*</code>), then the sort is case insensitive.
+</p>
+<hr size="6">
+<a name="columns-spread"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-sort" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-tab_002dwidth" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="spread-option"></a>
+<h3 class="subsection">8.4.14 spread option</h3>
+<a name="index-columns_002dspread"></a>
+
+<p>This is the &ldquo;maximum spread added to column width&rdquo; option.
+Use this option to specify exactly how many characters may be
+added to each column.  It allows you to prevent columns from
+becoming too far apart.
+</p>
+<hr size="6">
+<a name="columns-tab_002dwidth"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-spread" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-width" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="tab_002dwidth-option"></a>
+<h3 class="subsection">8.4.15 tab-width option</h3>
+<a name="index-columns_002dtab_002dwidth"></a>
+
+<p>This is the &ldquo;tab width&rdquo; option.
+If an indentation string contains tabs, then this value is used to
+compute the ending column of the prefix string.
+</p>
+<hr size="6">
+<a name="columns-width"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-tab_002dwidth" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-option-presets" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="width-option-_0028_002dW_0029"></a>
+<h3 class="subsection">8.4.16 width option (-W)</h3>
+<a name="index-columns_002dwidth"></a>
+
+<p>This is the &ldquo;maximum line width&rdquo; option.
+This option specifies the full width of the output line,
+including any start-of-line indentation.  The output will fill
+each line as completely as possible, unless the column width has
+been explicitly specified.  If the maximum width is less than
+the length of the widest input, you will get a single column
+of output.
+</p>
+<hr size="6">
+<a name="columns-option-presets"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-width" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-exit-status" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="presetting_002fconfiguring-columns"></a>
+<h3 class="subsection">8.4.17 presetting/configuring columns</h3>
+
+<p>Any option that is not marked as <i>not presettable</i> may be preset by
+loading values from configuration (&quot;rc&quot; or &quot;ini&quot;) files, and values from environment variables named <code>COLUMNS</code> and <code>COLUMNS_&lt;OPTION_NAME&gt;</code>. &ldquo;<code>&lt;OPTION_NAME&gt;</code>&rdquo; must be one of
+the options listed above in upper case and segmented with underscores.
+The <code>COLUMNS</code> variable will be tokenized and parsed like
+the command line.  The remaining variables are tested for existence and their
+values are treated like option arguments.
+</p>
+
+<p><code>libopts</code> will search in 2 places for configuration files:
+</p><ul>
+<li>
+$PWD
+</li><li>
+$HOME
+</li></ul>
+<p>The environment variables <code>PWD</code>, and <code>HOME</code>
+are expanded and replaced when &lsquo;<tt>columns</tt>&rsquo; runs.
+For any of these that are plain files, they are simply processed.
+For any that are directories, then a file named &lsquo;<tt>.columnsrc</tt>&rsquo; is searched for
+within that directory and processed.
+</p>
+
+<p>Configuration files may be in a wide variety of formats.
+The basic format is an option name followed by a value (argument) on the
+same line.  Values may be separated from the option name with a colon,
+equal sign or simply white space.  Values may be continued across multiple
+lines by escaping the newline with a backslash.
+</p>
+<p>Multiple programs may also share the same initialization file.
+Common options are collected at the top, followed by program specific
+segments.  The segments are separated by lines like:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[COLUMNS]
+</pre></td></tr></table>
+<p>or by
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;?program columns&gt;
+</pre></td></tr></table>
+<p>Do not mix these within one configuration file.
+</p>
+<p>Compound values and carefully constructed string values may also be
+specified using XML syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;option-name&gt;
+   &lt;sub-opt&gt;...&amp;lt;...&amp;gt;...&lt;/sub-opt&gt;
+&lt;/option-name&gt;
+</pre></td></tr></table>
+<p>yielding an <code>option-name.sub-opt</code> string value of
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&quot;...&lt;...&gt;...&quot;
+</pre></td></tr></table>
+<p><code>AutoOpts</code> does not track suboptions.  You simply note that it is a
+hierarchicly valued option.  <code>AutoOpts</code> does provide a means for searching
+the associated name/value pair list (see: optionFindValue).
+</p>
+<hr size="6">
+<a name="columns-exit-status"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-option-presets" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-See-Also" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="columns-exit-status-1"></a>
+<h3 class="subsection">8.4.18 columns exit status</h3>
+
+<p>One of the following exit values will be returned:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>Successful program execution.
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>The operation failed or the command syntax was not valid.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="columns-See-Also"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-exit-status" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#columns-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="columns-See-Also-1"></a>
+<h3 class="subsection">8.4.19 columns See Also</h3>
+
+
+
+<hr size="6">
+<a name="getdefs-Invocation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#columns-See-Also" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-usage" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Invoking-getdefs"></a>
+<h2 class="section">8.5 Invoking getdefs</h2>
+<a name="index-getdefs"></a>
+<a name="index-AutoGen-Definition-Extraction-Tool"></a>
+<p>If no <code>input</code> argument is provided or is set to simply &quot;-&quot;, and if
+<code>stdin</code> is not a <code>tty</code>, then the list of input files will be
+read from <code>stdin</code>.
+This program extracts AutoGen definitions from a list of source files.
+Definitions are delimited by <code>/*=&lt;entry-type&gt; &lt;entry-name&gt;\n</code> and
+<code>=*/\n</code>.  From that, this program creates a definition of the following
+form:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">    #line nnn &quot;source-file-name&quot;
+    entry_type = {
+        name = entry_name;
+        ...
+    };
+</pre></td></tr></table>
+
+<ol>
+<li>
+The ellipsis <code>...</code> is filled in by text found between the two
+delimiters.  Each line of text is stripped of anything before the first
+asterisk, then leading asterisks, then any leading or trailing white space.
+
+</li><li>
+If what is left starts with what looks like a name followed by a colon, then
+it is interpreted as a name followed by a value.
+
+</li><li>
+If the first character of the value is either a single or double quote, then
+you are responsible for quoting the text as it gets inserted into the output
+definitions.  So, if you want whitespace at the beginnings of the lines of
+text, you must do something like this:
+
+<table><tr><td>&nbsp;</td><td><pre class="example"> * mumble:
+ * &quot;  this is some\n&quot;
+ * &quot;  indented text.&quot;
+</pre></td></tr></table>
+
+</li><li>
+If the <code>&lt;entry-name&gt;</code> is followed by a comma, the word <code>ifdef</code> (or
+<code>ifndef</code>) and a name <code>if_name</code>, then the above entry will be under
+<code>ifdef</code> control.
+
+<table><tr><td>&nbsp;</td><td><pre class="example">/*=group entry_name, ifdef FOO
+ * attr: attribute value
+=*/
+</pre></td></tr></table>
+
+<p>Will produce the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#ifdef FOO
+#line nnn &quot;source-file-name&quot;
+group = {
+    name = entry_name;
+    attr = 'attribute value';
+};
+#endif
+</pre></td></tr></table>
+
+</li><li>
+If you use of the <code>subblock</code> option, you can specify a nested
+value, See section <a href="#getdefs-subblock">subblock option</a>.  That is, this text:
+
+<table><tr><td>&nbsp;</td><td><pre class="example"> * arg:  int, this, what-it-is
+</pre></td></tr></table>
+
+<p>with the <code>--subblock=arg=type,name,doc</code> option would yield:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">arg = { type = int; name = this; doc = what-it-is; };
+</pre></td></tr></table>
+</li></ol>
+
+<p>This section was generated by <strong>AutoGen</strong>,
+using the <code>agtexi-cmd</code> template and the option descriptions for the <code>getdefs</code> program.
+</p>
+<p>This software is released under the GNU General Public License.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#getdefs-usage">8.5.1 getdefs usage help</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-agarg">8.5.2 agarg option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-assign">8.5.3 assign option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-autogen">8.5.4 autogen option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-base_002dname">8.5.5 base-name option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-common_002dassign">8.5.6 common-assign option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-copy">8.5.7 copy option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-defs_002dto_002dget">8.5.8 defs-to-get option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-filelist">8.5.9 filelist option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-first_002dindex">8.5.10 first-index option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-input">8.5.11 input option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-linenum">8.5.12 linenum option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-listattr">8.5.13 listattr option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-ordering">8.5.14 ordering option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-output">8.5.15 output option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-srcfile">8.5.16 srcfile option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-subblock">8.5.17 subblock option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-template">8.5.18 template option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-option-presets">8.5.19 presetting/configuring getdefs</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-See-Also">8.5.21 getdefs See Also</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">               See Also
+</td></tr>
+<tr><td align="left" valign="top"><a href="#getdefs-exit-status">8.5.20 getdefs exit status</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">            exit status
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="getdefs-usage"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-agarg" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="getdefs-usage-help"></a>
+<h3 class="subsection">8.5.1 getdefs usage help</h3>
+<a name="index-getdefs-usage"></a>
+
+<p>This is the automatically generated usage text for getdefs:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">getdefs (GNU AutoGen) - AutoGen Definition Extraction Tool - Ver. 1.5
+USAGE:  getdefs [ &lt;option-name&gt;[{=| }&lt;val&gt;] ]...
+   Arg Option-Name    Description
+   Str defs-to-get    Regexp to look for after the &quot;/*=&quot;
+   opt ordering       Alphabetize or use named file
+                                - disabled as --no-ordering
+                                - enabled by default
+   Num first-index    The first index to apply to groups
+   Str input          Input file to search for defs
+                                - may appear multiple times
+                                - default option for unnamed options
+   Str subblock       subblock definition names
+                                - may appear multiple times
+   Str listattr       attribute with list of values
+                                - may appear multiple times
+   opt filelist       Insert source file names into defs
+
+Definition insertion options
+
+   Arg Option-Name    Description
+   Str assign         Global assignments
+                                - may appear multiple times
+   Str common-assign  Assignments common to all blocks
+                                - may appear multiple times
+   Str copy           File(s) to copy into definitions
+                                - may appear multiple times
+   opt srcfile        Insert source file name into each def
+   opt linenum        Insert source line number into each def
+
+Definition output disposition options:
+
+   Arg Option-Name    Description
+   Str output         Output file to open
+                                - an alternate for autogen
+   opt autogen        Invoke AutoGen with defs
+                                - disabled as --no-autogen
+                                - enabled by default
+   Str template       Template Name
+   Str agarg          AutoGen Argument
+                                - prohibits these options:
+                                output
+                                - may appear multiple times
+   Str base-name      Base name for output file(s)
+                                - prohibits these options:
+                                output
+
+version and help options:
+
+   Arg Option-Name    Description
+   opt version        Output version information and exit
+   no  help           Display extended usage information and exit
+   no  more-help      Extended usage information passed thru pager
+   opt save-opts      Save the option state to a config file
+   Str load-opts      Load options from a config file
+                                - disabled as --no-load-opts
+                                - may appear multiple times
+
+All arguments are named options.
+
+If no ``input'' argument is provided or is set to simply &quot;-&quot;, and if
+``stdin'' is not a ``tty'', then the list of input files will be read from
+``stdin''.
+
+The following option preset mechanisms are supported:
+ - reading file /dev/null
+
+This program extracts AutoGen definitions from a list of source files.
+Definitions are delimited by ``/*=&lt;entry-type&gt; &lt;entry-name&gt;\n'' and
+``=*/\n''.
+
+please send bug reports to:  autogen-users@lists.sourceforge.net
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="getdefs-agarg"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-usage" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-assign" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="agarg-option"></a>
+<h3 class="subsection">8.5.2 agarg option</h3>
+<a name="index-getdefs_002dagarg"></a>
+
+<p>This is the &ldquo;autogen argument&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li><li>
+must not appear in combination with any of the following options:
+output.
+</li></ul>
+
+<p>This is a pass-through argument.  It allows you to specify any
+arbitrary argument to be passed to AutoGen.
+</p>
+<hr size="6">
+<a name="getdefs-assign"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-agarg" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-autogen" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="assign-option"></a>
+<h3 class="subsection">8.5.3 assign option</h3>
+<a name="index-getdefs_002dassign"></a>
+
+<p>This is the &ldquo;global assignments&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>The argument to each copy of this option will be inserted into
+the output definitions, with only a semicolon attached.
+</p>
+<hr size="6">
+<a name="getdefs-autogen"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-assign" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-base_002dname" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="autogen-option"></a>
+<h3 class="subsection">8.5.4 autogen option</h3>
+<a name="index-getdefs_002dautogen"></a>
+
+<p>This is the &ldquo;invoke autogen with defs&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+is enabled by default.
+</li><li>
+is a member of the autogen class of options.
+</li></ul>
+
+<p>This is the default output mode.  Specifying <code>no-autogen</code> is
+equivalent to <code>output=-</code>.  If you supply an argument to this
+option, that program will be started as if it were AutoGen and
+its standard in will be set to the output definitions of this program.
+</p>
+<hr size="6">
+<a name="getdefs-base_002dname"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-autogen" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-common_002dassign" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="base_002dname-option"></a>
+<h3 class="subsection">8.5.5 base-name option</h3>
+<a name="index-getdefs_002dbase_002dname"></a>
+
+<p>This is the &ldquo;base name for output file(s)&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+must not appear in combination with any of the following options:
+output.
+</li></ul>
+
+<p>When output is going to AutoGen, a base name must either be supplied
+or derived.  If this option is not supplied, then it is taken from
+the <code>template</code> option.  If that is not provided either, then
+it is set to the base name of the current directory.
+</p>
+<hr size="6">
+<a name="getdefs-common_002dassign"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-base_002dname" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-copy" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="common_002dassign-option"></a>
+<h3 class="subsection">8.5.6 common-assign option</h3>
+<a name="index-getdefs_002dcommon_002dassign"></a>
+
+<p>This is the &ldquo;assignments common to all blocks&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>The argument to each copy of this option will be inserted into
+each output definition, with only a semicolon attached.
+</p>
+<hr size="6">
+<a name="getdefs-copy"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-common_002dassign" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-defs_002dto_002dget" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="copy-option"></a>
+<h3 class="subsection">8.5.7 copy option</h3>
+<a name="index-getdefs_002dcopy"></a>
+
+<p>This is the &ldquo;file(s) to copy into definitions&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>The content of each file named by these options will be inserted into
+the output definitions.
+</p>
+<hr size="6">
+<a name="getdefs-defs_002dto_002dget"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-copy" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-filelist" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="defs_002dto_002dget-option"></a>
+<h3 class="subsection">8.5.8 defs-to-get option</h3>
+<a name="index-getdefs_002ddefs_002dto_002dget"></a>
+
+<p>This is the &ldquo;regexp to look for after the &quot;/*=&quot;&rdquo; option.
+If you want definitions only from a particular category, or even
+with names matching particular patterns, then specify this regular
+expression for the text that must follow the <code>/*=</code>.
+</p>
+<hr size="6">
+<a name="getdefs-filelist"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-defs_002dto_002dget" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-first_002dindex" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="filelist-option"></a>
+<h3 class="subsection">8.5.9 filelist option</h3>
+<a name="index-getdefs_002dfilelist"></a>
+
+<p>This is the &ldquo;insert source file names into defs&rdquo; option.
+Inserts the name of each input file into the output definitions.
+If no argument is supplied, the format will be:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">infile = '%s';
+</pre></td></tr></table>
+<p>If an argument is supplied, that string will be used for the entry
+name instead of <var>infile</var>.
+</p>
+<hr size="6">
+<a name="getdefs-first_002dindex"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-filelist" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-input" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="first_002dindex-option"></a>
+<h3 class="subsection">8.5.10 first-index option</h3>
+<a name="index-getdefs_002dfirst_002dindex"></a>
+
+<p>This is the &ldquo;the first index to apply to groups&rdquo; option.
+By default, the first occurrence of a named definition will have an
+index of zero.  Sometimes, that needs to be a reserved value.  Provide
+this option to specify a different starting point.
+</p>
+<hr size="6">
+<a name="getdefs-input"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-first_002dindex" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-linenum" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="input-option"></a>
+<h3 class="subsection">8.5.11 input option</h3>
+<a name="index-getdefs_002dinput"></a>
+
+<p>This is the &ldquo;input file to search for defs&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>All files that are to be searched for definitions must be named on
+the command line or read from <code>stdin</code>.  If there is only one
+<code>input</code> option and it is the string, &quot;-&quot;, then the input file
+list is read from <code>stdin</code>.  If a command line argument is not
+an option name and does not contain an assignment operator
+(<code>=</code>), then it defaults to being an input file name.
+At least one input file must be specified.
+</p>
+<hr size="6">
+<a name="getdefs-linenum"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-input" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-listattr" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="linenum-option"></a>
+<h3 class="subsection">8.5.12 linenum option</h3>
+<a name="index-getdefs_002dlinenum"></a>
+
+<p>This is the &ldquo;insert source line number into each def&rdquo; option.
+Inserts the line number in the input file where a definition
+was found into the output definition.
+If no argument is supplied, the format will be:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">linenum = '%s';
+</pre></td></tr></table>
+<p>If an argument is supplied, that string will be used for the entry
+name instead of <var>linenum</var>.
+</p>
+<hr size="6">
+<a name="getdefs-listattr"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-linenum" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-ordering" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="listattr-option"></a>
+<h3 class="subsection">8.5.13 listattr option</h3>
+<a name="index-getdefs_002dlistattr"></a>
+
+<p>This is the &ldquo;attribute with list of values&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>This option is used to create shorthand entries for definitions
+that generally appear several times.  That is, they tend to be
+a list of values.  For example, with:
+<br>
+<code>listattr=foo</code> defined, the text:
+<br>
+<code>foo: this, is, a, multi-list</code> will then expand to:
+<br>
+<code>foo = 'this', 'is', 'a', 'multi-list';</code>
+<br>
+The texts are separated by the commas, with the
+white space removed.  You may use characters other than commas by
+starting the value string with a punctuation character other than
+a single or double quote character.
+</p>
+<hr size="6">
+<a name="getdefs-ordering"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-listattr" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-output" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ordering-option"></a>
+<h3 class="subsection">8.5.14 ordering option</h3>
+<a name="index-getdefs_002dordering"></a>
+
+<p>This is the &ldquo;alphabetize or use named file&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+is enabled by default.
+</li></ul>
+
+<p>By default, ordering is alphabetical by the entry name.  Use,
+<code>no-ordering</code> if order is unimportant.  Use <code>ordering</code>
+with no argument to order without case sensitivity.  Use
+<code>ordering=&lt;file-name&gt;</code> if chronological order is important.
+getdefs will maintain the text content of <code>file-name</code>.
+<code>file-name</code> need not exist.
+</p>
+<hr size="6">
+<a name="getdefs-output"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-ordering" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-srcfile" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="output-option"></a>
+<h3 class="subsection">8.5.15 output option</h3>
+<a name="index-getdefs_002doutput"></a>
+
+<p>This is the &ldquo;output file to open&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+is a member of the autogen class of options.
+</li></ul>
+
+<p>If you are not sending the output to an AutoGen process,
+you may name an output file instead.
+</p>
+<hr size="6">
+<a name="getdefs-srcfile"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-output" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-subblock" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="srcfile-option"></a>
+<h3 class="subsection">8.5.16 srcfile option</h3>
+<a name="index-getdefs_002dsrcfile"></a>
+
+<p>This is the &ldquo;insert source file name into each def&rdquo; option.
+Inserts the name of the input file where a definition was found
+into the output definition.
+If no argument is supplied, the format will be:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">srcfile = '%s';
+</pre></td></tr></table>
+<p>If an argument is supplied, that string will be used for the entry
+name instead of <var>srcfile</var>.
+</p>
+<hr size="6">
+<a name="getdefs-subblock"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-srcfile" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-template" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="subblock-option"></a>
+<h3 class="subsection">8.5.17 subblock option</h3>
+<a name="index-getdefs_002dsubblock"></a>
+
+<p>This is the &ldquo;subblock definition names&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>This option is used to create shorthand entries for nested definitions.
+For example, with:
+</p><dl compact="compact">
+<dt> <span class="roman">using subblock thus</span></dt>
+<dd><p><code>--subblock=arg=argname,type,null</code>
+</p></dd>
+<dt> <span class="roman">and defining an <code>arg</code> thus</span></dt>
+<dd><p><code>arg: this, char *</code>
+</p></dd>
+<dt> <span class="roman">will then expand to:</span></dt>
+<dd><p><code>arg = { argname = this; type = &quot;char *&quot;; };</code>
+</p></dd>
+</dl>
+<p>The &quot;this, char *&quot; string is separated at the commas, with the
+white space removed.  You may use characters other than commas by
+starting the value string with a punctuation character other than
+a single or double quote character.  You may also omit intermediate
+values by placing the commas next to each other with no intervening
+white space.  For example, &quot;+mumble++yes+&quot; will expand to:
+<br>
+<code>arg = { argname = mumble; null = &quot;yes&quot;; };</code>.
+</p>
+<hr size="6">
+<a name="getdefs-template"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-subblock" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-option-presets" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="template-option"></a>
+<h3 class="subsection">8.5.18 template option</h3>
+<a name="index-getdefs_002dtemplate"></a>
+
+<p>This is the &ldquo;template name&rdquo; option.
+Specifies the template name to be used for generating the final output.
+</p>
+<hr size="6">
+<a name="getdefs-option-presets"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-template" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-exit-status" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="presetting_002fconfiguring-getdefs"></a>
+<h3 class="subsection">8.5.19 presetting/configuring getdefs</h3>
+
+<p>Any option that is not marked as <i>not presettable</i> may be preset by
+loading values from configuration (&quot;rc&quot; or &quot;ini&quot;) files.
+</p>
+
+<p><code>libopts</code> will search in &lsquo;<tt>/dev/null</tt>&rsquo; for configuration.
+If this is a plain file, it is simply processed.
+If it is a directory, then a file named &lsquo;<tt>.getdefsrc</tt>&rsquo; is searched for within that directory.
+</p>
+<p>Configuration files may be in a wide variety of formats.
+The basic format is an option name followed by a value (argument) on the
+same line.  Values may be separated from the option name with a colon,
+equal sign or simply white space.  Values may be continued across multiple
+lines by escaping the newline with a backslash.
+</p>
+<p>Multiple programs may also share the same initialization file.
+Common options are collected at the top, followed by program specific
+segments.  The segments are separated by lines like:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[GETDEFS]
+</pre></td></tr></table>
+<p>or by
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;?program getdefs&gt;
+</pre></td></tr></table>
+<p>Do not mix these within one configuration file.
+</p>
+<p>Compound values and carefully constructed string values may also be
+specified using XML syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;option-name&gt;
+   &lt;sub-opt&gt;...&amp;lt;...&amp;gt;...&lt;/sub-opt&gt;
+&lt;/option-name&gt;
+</pre></td></tr></table>
+<p>yielding an <code>option-name.sub-opt</code> string value of
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&quot;...&lt;...&gt;...&quot;
+</pre></td></tr></table>
+<p><code>AutoOpts</code> does not track suboptions.  You simply note that it is a
+hierarchicly valued option.  <code>AutoOpts</code> does provide a means for searching
+the associated name/value pair list (see: optionFindValue).
+</p>
+<hr size="6">
+<a name="getdefs-exit-status"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-option-presets" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-See-Also" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="getdefs-exit-status-1"></a>
+<h3 class="subsection">8.5.20 getdefs exit status</h3>
+
+<p>One of the following exit values will be returned:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>Successful program execution.
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>The operation failed or the command syntax was not valid.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="getdefs-See-Also"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-exit-status" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#getdefs-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="getdefs-See-Also-1"></a>
+<h3 class="subsection">8.5.21 getdefs See Also</h3>
+
+
+
+<hr size="6">
+<a name="xml2ag-Invocation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#getdefs-See-Also" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-usage" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Invoking-xml2ag"></a>
+<h2 class="section">8.6 Invoking xml2ag</h2>
+<a name="index-xml2ag"></a>
+<a name="index-XML-to-AutoGen-Definiton-Converter"></a>
+<p>This program will convert any arbitrary XML file into equivalent
+AutoGen definitions, and invoke AutoGen.
+The template will be derived from either:
+.br
+*  the \fB&ndash;override-tpl\fP command line option
+.br
+*  a top level XML attribute named, &quot;template&quot;
+.br
+One or the other \fBmust\fP be provided, or the program will
+exit with a failure message.
+.sp 1
+The &ldquo;base-name&rdquo; for the output will similarly be either:
+.br
+*  the \fB&ndash;base-name\fP command line option
+.br
+*  the base name of the .xml file
+</p>
+<p>This section was generated by <strong>AutoGen</strong>,
+using the <code>agtexi-cmd</code> template and the option descriptions for the <code>xml2ag</code> program.
+</p>
+<p>This software is released under the GNU General Public License.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#xml2ag-usage">8.6.1 xml2ag usage help (-?)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-base_002dname">8.6.2 base-name option (-b)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-core">8.6.3 core option (-C)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-define">8.6.4 define option (-D)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-definitions">8.6.5 definitions option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-equate">8.6.6 equate option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-lib_002dtemplate">8.6.7 lib-template option (-l)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-load_002dfunctions">8.6.8 load-functions option (-F)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-load_002dscheme">8.6.9 load-scheme option (-S)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-loop_002dlimit">8.6.10 loop-limit option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-make_002ddep">8.6.11 make-dep option (-M)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-no_002dfmemopen">8.6.12 no-fmemopen option (-m)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-output">8.6.13 output option (-O)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-override_002dtpl">8.6.14 override-tpl option (-T)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-select_002dsuffix">8.6.15 select-suffix option (-o)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-shell">8.6.16 shell option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-show_002ddefs">8.6.17 show-defs option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-skip_002dsuffix">8.6.18 skip-suffix option (-s)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-source_002dtime">8.6.19 source-time option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-templ_002ddirs">8.6.20 templ-dirs option (-L)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-timeout">8.6.21 timeout option (-t)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-trace">8.6.22 trace option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-trace_002dout">8.6.23 trace-out option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-undefine">8.6.24 undefine option (-U)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-used_002ddefines">8.6.25 used-defines option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-writable">8.6.26 writable option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#xml2ag-exit-status">8.6.27 xml2ag exit status</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">            exit status
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="xml2ag-usage"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-base_002dname" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="xml2ag-usage-help-_0028_002d_003f_0029"></a>
+<h3 class="subsection">8.6.1 xml2ag usage help (-?)</h3>
+<a name="index-xml2ag-usage"></a>
+
+<p>This is the automatically generated usage text for xml2ag:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">xml2ag (GNU AutoGen) - XML to AutoGen Definiton Converter - Ver. 5.12
+USAGE:  xml2ag [ -&lt;flag&gt; [&lt;val&gt;] | --&lt;name&gt;[{=| }&lt;val&gt;] ]... [ &lt;def-file&gt; ]
+  Flg Arg Option-Name    Description
+   -O Str output         Output file in lieu of AutoGen processing
+   -L Str templ-dirs     Template search directory list
+                                - may appear multiple times
+   -T Str override-tpl   Override template file
+   -l Str lib-template   Library template file
+                                - may appear multiple times
+   -b Str base-name      Base name for output file(s)
+      Str definitions    Definitions input file
+   -S Str load-scheme    Scheme code file to load
+   -F Str load-functions Load scheme function library
+   -s Str skip-suffix    Omit the file with this suffix
+                                - prohibits these options:
+                                select-suffix
+                                - may appear multiple times
+   -o opt select-suffix  specify this output suffix
+                                - may appear multiple times
+      no  source-time    set mod times to latest source
+   -m no  no-fmemopen    Do not use in-mem streams
+      Str equate         characters considered equivalent
+      no  writable       Allow output files to be writable
+                                - disabled as --not-writable
+      Num loop-limit     Limit on increment loops
+                                - is scalable with a suffix: k/K/m/M/g/G/t/T
+                                - It must lie in one of the ranges:
+                                  -1 exactly, or
+                                  1 to 16777216
+      Str shell          name or path name of shell to use
+   -t Num timeout        Time limit for server shell
+                                - It must be in the range:
+                                  0 to 3600
+      KWd trace          tracing level of detail
+      Str trace-out      tracing output file or filter
+      no  show-defs      Show the definition tree
+      no  used-defines   Show the definitions used
+   -D Str define         name to add to definition list
+                                - may appear multiple times
+   -U Str undefine       definition list removal pattern
+                                - an alternate for define
+   -M opt make-dep       emit make dependency file
+                                - may appear multiple times
+   -C no  core           Leave a core dump on a failure exit
+   -v opt version        Output version information and exit
+   -? no  help           Display extended usage information and exit
+   -! no  more-help      Extended usage information passed thru pager
+
+Options are specified by doubled hyphens and their name or by a single
+hyphen and the flag character.
+
+This program will convert any arbitrary XML file into equivalent AutoGen
+definitions, and invoke AutoGen.
+
+The valid &quot;trace&quot; option keywords are:
+  nothing       debug-message server-shell  templates     block-macros
+  expressions   everything
+  or an integer from 0 through 6
+
+The template will be derived from either: *  the ``--override-tpl''
+command line option *  a top level XML attribute named, &quot;template&quot;
+
+The ``base-name'' for the output will similarly be either: *  the
+``--base-name'' command line option *  the base name of the .xml file
+
+please send bug reports to:  autogen-users@lists.sourceforge.net
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="xml2ag-base_002dname"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-usage" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-core" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="base_002dname-option-_0028_002db_0029-1"></a>
+<h3 class="subsection">8.6.2 base-name option (-b)</h3>
+<a name="index-xml2ag_002dbase_002dname"></a>
+
+<p>This is the &ldquo;base name for output file(s)&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-core"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-base_002dname" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-define" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="core-option-_0028_002dC_0029-1"></a>
+<h3 class="subsection">8.6.3 core option (-C)</h3>
+<a name="index-xml2ag_002dcore"></a>
+
+<p>This is the &ldquo;leave a core dump on a failure exit&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+must be compiled in by defining <code>HAVE_SYS_RESOURCE_H</code> during the compilation.
+</li></ul>
+
+<p>Many systems default to a zero sized core limit.  If the system
+has the sys/resource.h header and if this option is supplied,
+then in the failure exit path, autogen will attempt to set the
+soft core limit to whatever the hard core limit is.  If that
+does not work, then an administrator must raise the hard core
+size limit.
+</p>
+<hr size="6">
+<a name="xml2ag-define"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-core" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-definitions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="define-option-_0028_002dD_0029-1"></a>
+<h3 class="subsection">8.6.4 define option (-D)</h3>
+<a name="index-xml2ag_002ddefine"></a>
+
+<p>This is the &ldquo;name to add to definition list&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-definitions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-define" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-equate" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="definitions-option"></a>
+<h3 class="subsection">8.6.5 definitions option</h3>
+<a name="index-xml2ag_002ddefinitions"></a>
+
+<p>This is the &ldquo;definitions input file&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-equate"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-definitions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-lib_002dtemplate" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="equate-option"></a>
+<h3 class="subsection">8.6.6 equate option</h3>
+<a name="index-xml2ag_002dequate"></a>
+
+<p>This is the &ldquo;characters considered equivalent&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-lib_002dtemplate"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-equate" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-load_002dfunctions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="lib_002dtemplate-option-_0028_002dl_0029"></a>
+<h3 class="subsection">8.6.7 lib-template option (-l)</h3>
+<a name="index-xml2ag_002dlib_002dtemplate"></a>
+
+<p>This is the &ldquo;library template file&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-load_002dfunctions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-lib_002dtemplate" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-load_002dscheme" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="load_002dfunctions-option-_0028_002dF_0029"></a>
+<h3 class="subsection">8.6.8 load-functions option (-F)</h3>
+<a name="index-xml2ag_002dload_002dfunctions"></a>
+
+<p>This is the &ldquo;load scheme function library&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+must be compiled in by defining <code>HAVE_DLOPEN</code> during the compilation.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-load_002dscheme"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-load_002dfunctions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-loop_002dlimit" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="load_002dscheme-option-_0028_002dS_0029-1"></a>
+<h3 class="subsection">8.6.9 load-scheme option (-S)</h3>
+<a name="index-xml2ag_002dload_002dscheme"></a>
+
+<p>This is the &ldquo;scheme code file to load&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-loop_002dlimit"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-load_002dscheme" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-make_002ddep" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="loop_002dlimit-option-1"></a>
+<h3 class="subsection">8.6.10 loop-limit option</h3>
+<a name="index-xml2ag_002dloop_002dlimit"></a>
+
+<p>This is the &ldquo;limit on increment loops&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-make_002ddep"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-loop_002dlimit" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-no_002dfmemopen" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="make_002ddep-option-_0028_002dM_0029"></a>
+<h3 class="subsection">8.6.11 make-dep option (-M)</h3>
+<a name="index-xml2ag_002dmake_002ddep"></a>
+
+<p>This is the &ldquo;emit make dependency file&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-no_002dfmemopen"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-make_002ddep" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-output" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="no_002dfmemopen-option-_0028_002dm_0029"></a>
+<h3 class="subsection">8.6.12 no-fmemopen option (-m)</h3>
+<a name="index-xml2ag_002dno_002dfmemopen"></a>
+
+<p>This is the &ldquo;do not use in-mem streams&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-output"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-no_002dfmemopen" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-override_002dtpl" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="output-option-_0028_002dO_0029"></a>
+<h3 class="subsection">8.6.13 output option (-O)</h3>
+<a name="index-xml2ag_002doutput"></a>
+
+<p>This is the &ldquo;output file in lieu of autogen processing&rdquo; option.
+By default, the output is handed to an AutoGen for processing.
+However, you may save the definitions to a file instead.
+</p>
+<hr size="6">
+<a name="xml2ag-override_002dtpl"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-output" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-select_002dsuffix" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="override_002dtpl-option-_0028_002dT_0029"></a>
+<h3 class="subsection">8.6.14 override-tpl option (-T)</h3>
+<a name="index-xml2ag_002doverride_002dtpl"></a>
+
+<p>This is the &ldquo;override template file&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-select_002dsuffix"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-override_002dtpl" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-shell" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="select_002dsuffix-option-_0028_002do_0029-1"></a>
+<h3 class="subsection">8.6.15 select-suffix option (-o)</h3>
+<a name="index-xml2ag_002dselect_002dsuffix"></a>
+
+<p>This is the &ldquo;specify this output suffix&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-shell"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-select_002dsuffix" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-show_002ddefs" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="shell-option-1"></a>
+<h3 class="subsection">8.6.16 shell option</h3>
+<a name="index-xml2ag_002dshell"></a>
+
+<p>This is the &ldquo;name or path name of shell to use&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-show_002ddefs"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-shell" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-skip_002dsuffix" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="show_002ddefs-option"></a>
+<h3 class="subsection">8.6.17 show-defs option</h3>
+<a name="index-xml2ag_002dshow_002ddefs"></a>
+
+<p>This is the &ldquo;show the definition tree&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-skip_002dsuffix"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-show_002ddefs" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-source_002dtime" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="skip_002dsuffix-option-_0028_002ds_0029"></a>
+<h3 class="subsection">8.6.18 skip-suffix option (-s)</h3>
+<a name="index-xml2ag_002dskip_002dsuffix"></a>
+
+<p>This is the &ldquo;omit the file with this suffix&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li><li>
+must not appear in combination with any of the following options:
+select-suffix.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-source_002dtime"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-skip_002dsuffix" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-templ_002ddirs" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="source_002dtime-option-1"></a>
+<h3 class="subsection">8.6.19 source-time option</h3>
+<a name="index-xml2ag_002dsource_002dtime"></a>
+
+<p>This is the &ldquo;set mod times to latest source&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-templ_002ddirs"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-source_002dtime" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-timeout" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="templ_002ddirs-option-_0028_002dL_0029"></a>
+<h3 class="subsection">8.6.20 templ-dirs option (-L)</h3>
+<a name="index-xml2ag_002dtempl_002ddirs"></a>
+
+<p>This is the &ldquo;template search directory list&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-timeout"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-templ_002ddirs" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-trace" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="timeout-option-_0028_002dt_0029-1"></a>
+<h3 class="subsection">8.6.21 timeout option (-t)</h3>
+<a name="index-xml2ag_002dtimeout"></a>
+
+<p>This is the &ldquo;time limit for server shell&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-trace"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-timeout" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-trace_002dout" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="trace-option-1"></a>
+<h3 class="subsection">8.6.22 trace option</h3>
+<a name="index-xml2ag_002dtrace"></a>
+
+<p>This is the &ldquo;tracing level of detail&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+This option takes a keyword as its argument.
+The argument sets an enumeration value that can be tested by comparing the option value macro (OPT_VALUE_TRACE).
+The available keywords are:
+<table><tr><td>&nbsp;</td><td><pre class="example">nothing       debug-message server-shell
+templates     block-macros  expressions
+everything
+</pre></td></tr></table>
+
+<p>or their numeric equivalent.</p></li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-trace_002dout"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-trace" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-undefine" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="trace_002dout-option-1"></a>
+<h3 class="subsection">8.6.23 trace-out option</h3>
+<a name="index-xml2ag_002dtrace_002dout"></a>
+
+<p>This is the &ldquo;tracing output file or filter&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-undefine"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-trace_002dout" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-used_002ddefines" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="undefine-option-_0028_002dU_0029-1"></a>
+<h3 class="subsection">8.6.24 undefine option (-U)</h3>
+<a name="index-xml2ag_002dundefine"></a>
+
+<p>This is the &ldquo;definition list removal pattern&rdquo; option.
+</p>
+<p>This option has some usage constraints.  It:
+</p><ul>
+<li>
+may appear an unlimited number of times.
+</li></ul>
+
+<p>Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-used_002ddefines"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-undefine" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-writable" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="used_002ddefines-option"></a>
+<h3 class="subsection">8.6.25 used-defines option</h3>
+<a name="index-xml2ag_002dused_002ddefines"></a>
+
+<p>This is the &ldquo;show the definitions used&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-writable"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-used_002ddefines" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-exit-status" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="writable-option"></a>
+<h3 class="subsection">8.6.26 writable option</h3>
+<a name="index-xml2ag_002dwritable"></a>
+
+<p>This is the &ldquo;allow output files to be writable&rdquo; option.
+Pass-through AutoGen argument
+</p>
+<hr size="6">
+<a name="xml2ag-exit-status"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-writable" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#snprintfv" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#xml2ag-Invocation" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="xml2ag-exit-status-1"></a>
+<h3 class="subsection">8.6.27 xml2ag exit status</h3>
+
+<p>One of the following exit values will be returned:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>Successful program execution.
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>The command options were misconfigured.
+</p></dd>
+<dt> &lsquo;<samp>2</samp>&rsquo;</dt>
+<dd><p>An error was encountered processing the template.
+</p></dd>
+<dt> &lsquo;<samp>3</samp>&rsquo;</dt>
+<dd><p>The definitions could not be deciphered.
+</p></dd>
+<dt> &lsquo;<samp>4</samp>&rsquo;</dt>
+<dd><p>An error was encountered during the load phase.
+</p></dd>
+<dt> &lsquo;<samp>5</samp>&rsquo;</dt>
+<dd><p>Program exited due to catching a signal.
+If your template includes string formatting, a number argument
+to a &quot;%s&quot; formatting element will trigger a segmentation fault.
+Autogen will catch the seg fault signal and exit with code 5.
+</p></dd>
+</dl>
+
+
+
+<hr size="6">
+<a name="snprintfv"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#xml2ag-exit-status" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Add_002dOns" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Replacement-for-Stdio-Formatting-Library"></a>
+<h2 class="section">8.7 Replacement for Stdio Formatting Library</h2>
+
+<p>   Using the &lsquo;printf&rsquo; formatting routines in a portable fashion has
+always been a pain, and this package has been way more pain than anyone
+ever imagined.  Hopefully, with this release of snprintfv, the pain is
+now over for all time.
+</p>
+<p>   The issues with portable usage are these:
+</p>
+<ol>
+<li>
+Argument number specifiers are often either not implemented or are
+buggy.  Even GNU libc, version 1 got it wrong.
+
+</li><li>
+ANSI/ISO &quot;forgot&quot; to provide a mechanism for computing argument
+lists for vararg procedures.
+
+</li><li>
+The argument array version of printf (&lsquo;printfv()&rsquo;) is not
+generally available, does not work with the native printf, and
+does not have a working argument number specifier in the format
+specification.  (Last I knew, anyway.)
+
+</li><li>
+You cannot fake varargs by calling &lsquo;vprintf()&rsquo; with an array of
+arguments, because ANSI does not require such an implementation
+and some vendors play funny tricks because they are allowed to.
+</li></ol>
+
+<p>   These four issues made it impossible for AutoGen to ship without its
+own implementation of the &lsquo;printf&rsquo; formatting routines.  Since we were
+forced to do this, we decided to make the formatting routines both
+better and more complete :-).  We addressed these issues and added the
+following features to the common printf API:
+</p>
+<ol>
+<li>
+The formatted output can be written to
+
+<ul>
+<li>
+a string allocated by the formatting function (&lsquo;asprintf()&rsquo;).
+</li><li>
+a file descriptor instead of a file stream (&lsquo;dprintf()&rsquo;).
+</li><li>
+a user specified stream (&lsquo;stream_printf()&rsquo;).
+</li></ul>
+
+</li><li>
+The formatting functions can be augmented with your own functions.
+These functions are allowed to consume more than one character
+from the format, but must commence with a unique character.  For
+example,
+
+<table><tr><td>&nbsp;</td><td><pre class="example">&quot;%{struct stat}\n&quot;
+</pre></td></tr></table>
+
+<p>might be used with &rsquo;{&rsquo; registered to a procedure that would look
+up &quot;struct stat&quot; in a symbol table and do appropriate things,
+consuming the format string through the &rsquo;}&rsquo; character.
+</p></li></ol>
+
+<p>   Gary V. Vaughan was generous enough to supply this implementation.
+Many thanks!!
+</p>
+<p>   For further details, the reader is referred to the snprintfv
+documentation.  These functions are also available in the template
+processing as  &lsquo;sprintf&rsquo; (see section <a href="autogen_2.html#SCM-sprintf">&lsquo;<tt>sprintf</tt>&rsquo; - format a string</a>), &lsquo;printf&rsquo;
+(see section <a href="autogen_2.html#SCM-printf">&lsquo;<tt>printf</tt>&rsquo; - format to stdout</a>), &lsquo;fprintf&rsquo; (see section <a href="autogen_2.html#SCM-fprintf">&lsquo;<tt>fprintf</tt>&rsquo; - format to a file</a>), and &lsquo;shellf&rsquo;
+(see section <a href="autogen_2.html#SCM-shellf">&lsquo;<tt>shellf</tt>&rsquo; - format a string, run shell</a>).
+</p>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Add_002dOns" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_8.html#Future" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon</em> on <em>July 10, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

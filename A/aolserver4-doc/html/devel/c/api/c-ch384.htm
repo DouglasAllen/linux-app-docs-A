@@ -1,0 +1,86 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_TclEnterSet</TITLE>
+<LINK rel=Previous href="c-ch383.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch385.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch383.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch385.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="290202">
+</a><h3>Ns_TclEnterSet</h3>
+<a name="290203">
+</a><h4>Overview</h4>
+Make an Ns_Set accessible through Tcl
+<a name="290204">
+</a><a name="290205">
+</a><h4>Syntax</h4>
+<pre>    <a name="290206"></a>int Ns_TclEnterSet(
+    <a name="290207"></a>Tcl_Interp *interp,
+    <a name="290208"></a>Ns_Set *set,
+    <a name="290209"></a>int flags
+    <a name="290210"></a>);
+</pre><p><a name="290211">
+</a><h4>Description</h4>
+<p><a name="290212">
+</a>Ns_TclEnterSet makes an Ns_Set accessible through Tcl. The new set ID is sprintf'ed directly into interp-&gt;result. It returns either NS_OK or NS_ERROR. The flags can be one or more of the following:<Table Border = "3">
+<tr><td><p><a name="290215">
+</a>NS_TCL_SET_TEMPORARY:</p>
+<td><p><a name="290217">
+</a>The set is temporary and private to the Tcl interpreter. The set ID will be automatically deleted by Ns_TclDeAllocateInterp().</p>
+
+<tr><td><p><a name="290219">
+</a>NS_TCL_SET_PERSISTENT:</p>
+<td><p><a name="290221">
+</a>The set can be accessed by any Tcl interpreter in the server and the set ID will persist beyond the interpreter's next call to Ns_TclDeAllocateInterp().</p>
+
+<tr><td><p><a name="290223">
+</a>NS_TCL_SET_DYNAMIC:</p>
+<td><p><a name="290225">
+</a>The set was dynamically allocated for use by Tcl and will be garbage-collected when the cooresponding set ID is deleted through either Ns_TclFreeSet() or Ns_TclDeAllocateInterp().</p>
+
+
+</Table></p>
+<p><a name="290226">
+</a>Sets created by Tcl are normally DYNAMIC and TEMPORARY unless the -persist option is used in the Tcl function when creating the set.</p>
+<a name="290227">
+</a><h4>Examples</h4>
+<pre>    <a name="290228"></a>set = Ns_SetCreate(name);
+    <a name="290229"></a>return Ns_TclEnterSet(interp, set,
+    <a name="290230"></a>	NS_TCL_SET_TEMPORARY | NS_TCL_SET_DYNAMIC);
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch383.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch385.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

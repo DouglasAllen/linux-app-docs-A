@@ -1,0 +1,6512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+AFNIX Reference Manual</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+AFNIX Reference Manual</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Reserved keywords</div>
+<hr/>
+<p class="text">
+ Reserved keyword are, with symbols and literals, the basic constituents of the writing system. With couple of exception, reserved keywords are in fact special forms. During the execution, a special </p>
+<div class="elem">
+assert [reserved]</div>
+<p class="text">
+ The <tt class="code">assert</tt> special form check for equality between two operands. Both objects must be of the same type. If the equality test fails, the special form print a message and abort the execution. By default, the assertion checking is turned off. The interpreter option <tt class="option">-f assert</tt> enables the assertion checking. When the interpreter is compiled in debug mode, the assertion checking is turned on by default. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[assert "form 1" "form 2"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[assert true (== 1 1)
+assert 3    (+  2 1)
+
+]]></pre>
+<div class="elem">
+block [reserved]</div>
+<p class="text">
+ The <tt class="code">block</tt> special form defines a new nameset for sequential execution of regular form or implicit form. When the block form is evaluated, the block nameset is linked to its parent nameset. When all forms have been executed, the block nameset is destroyed and the result of the last evaluation in the block is considered to be the result of the block evaluation. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[block "regular form"
+block "block form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[trans a 1
+block {
+  assert    a 1
+  trans     a (+ 1 1)
+  assert    a 2
+  assert ..:a 1
+}
+assert 1 a
+
+]]></pre>
+<div class="elem">
+class [reserved]</div>
+<p class="text">
+ The <tt class="code">class</tt> special form creates a new class object. Without argument, an instance of that class is created without data members. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[class
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const Color (class)
+trans Color:preset (red green blue) {
+  const this:red   red
+  const this:green green
+  const this:blue  blue
+}
+const red   (Color 255   0   0)
+const green (Color   0 255   0)
+const blue  (Color   0   0 255)
+
+]]></pre>
+<div class="elem">
+const [reserved]</div>
+<p class="text">
+ The <tt class="code">const</tt> special form binds a symbol with an object and marks it as a constant symbol. When used with three or four argument, a gamma expression is automatically created. <tt class="code">const</tt> can also be used to bind class or instance members. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[const symbol "object"
+const symbol "argument" "body"
+const symbol "argument" "closed variables" "body"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const number 123
+const max (x y) (if (> x y) x y)
+
+]]></pre>
+<div class="elem">
+delay [reserved]</div>
+<p class="text">
+ The <tt class="code">delay</tt> special form delays the evaluation of the form argument by creating a <tt class="code">Promise</tt> object. The promise evaluate to itself until a call to force the evaluation has been made. When the promise has been forced, the evaluation result is stored. Further call to force will produce the same result. Without argument, the delayed evaluation is nil. With one argument, a <tt class="code">Promise</tt> object is created directly. With several argument, a cons cell is created with the first argument left unevaluated and the other evaluated. This permit to delay a form while evaluatin the calling arguments. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[delay "form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[trans  y 3
+const  l ((lambda (x) (+ x y)) 1)
+assert 4 (force l)
+trans  y 0
+assert 4 (force l)
+trans  y 1
+trans  d (delay (lambda (x) (+ x 1)) y)
+assert 2 (force d)
+
+]]></pre>
+<div class="elem">
+do [reserved]</div>
+<p class="text">
+ The <tt class="code">do</tt> special form is used to build loop with forward condition. The loop construct accepts either 2 or 3 arguments. With 2 argument, the first argument is the loop body and the second argument is the loop condition which must evaluates to a boolean object. With 3 arguments, the first argument is the initial condition that is executed only once. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[do "body" "condition"
+do "initial" "body" "condition"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const number-of-digits (s) {
+  const len (s:length) 
+  trans index 0
+  trans count 0
+  do {
+    trans c (s:get index)
+    if (c:digit-p) (count:++)
+  } (< (index:++) len)
+  eval count
+}
+
+]]></pre>
+<div class="elem">
+enum [reserved]</div>
+<p class="text">
+ The <tt class="code">enum</tt> special form creates an enumeration from a list of literal. The result object is an <tt class="code">Enum</tt> object that holds the enumerated items. An item evaluation results with an <tt class="code">Item</tt> object that is bound to the enumeration object. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[enum "literal" ...
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const e (enum E1 E2 E3)
+
+]]></pre>
+<div class="elem">
+errorln [reserved]</div>
+<p class="text">
+ The <tt class="code">errorln</tt> special form prints on the interpreter error stream a set of arguments. Each arguments have to be a literal which are converted to a string. When all arguments have been printed a new line character is printed. The <tt class="code">error</tt> special form behaves like <tt class="code">errorln</tt> excepts that a new line character is not printed at the end of the arguments. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[errorln
+errorln "nil"
+errorln "literal list"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[errorln
+errorln "hello millennium" ' ' 2000
+
+]]></pre>
+<div class="elem">
+eval [reserved]</div>
+<p class="text">
+ The <tt class="code">eval</tt> special form simply evaluates the object argument. The form is useful when returning an argument from a lambda or gamma expression using an implicit form. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[eval "object"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const ret (x) (eval x)
+eval (protect (+ 1 2))
+
+]]></pre>
+<div class="elem">
+for [reserved]</div>
+<p class="text">
+ The <tt class="code">for</tt> special form provides a facility to iterate on iterable objects. The <tt class="code">Cons</tt>, <tt class="code">List</tt> and <tt class="code">Vector</tt> objects are typical iterable objects. For each iterable objects, a symbol is set after each iteration. Each object symbol value can be used for further computation. The iteration stops when one of the objects iterator is at the end position. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[for "symbol list" "iterable object list" "body"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[# compute the scalar product of two vectors
+const scalar-product (u v) {
+  trans result 0
+  for (x y) (u v) (result:+= (* x y))
+  eval result
+}
+
+]]></pre>
+<div class="elem">
+force [reserved]</div>
+<p class="text">
+ The <tt class="code">force</tt> special form forces the evaluation of its argument. If the argument evaluates to a promise object, the promise evaluation is forced. If the argument is not a promise, <tt class="code">force</tt> keyword behaves like <tt class="code">eval</tt>. When a promise has been forced, further call to force will not change the evaluation result. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[force "object"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[trans  y 3
+const  l ((lambda (x) (+ x y)) 1)
+assert 4 (force l)
+trans  y 0
+assert 4 (force l)
+
+]]></pre>
+<div class="elem">
+if [reserved]</div>
+<p class="text">
+ The <tt class="code">if</tt> special form executes a form based on the evaluation of a boolean expression. In its first representation, <tt class="code">if</tt> executes a form if the condition is evaluated to true. An alternate form can be specified and is executed if the boolean expression evaluates to false. It is an error to use a conditional form which does not evaluate to a boolean object. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[if "condition" "true form"
+if "condition" "true form" "else form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const max (x y) (if (> x y) x y)
+
+]]></pre>
+<div class="elem">
+lambda [reserved]</div>
+<p class="text">
+ The <tt class="code">lambda</tt> special form creates a new closure object with eventually a set of arguments and a set of closed variables. In its first form, the closure is declared with a set of arguments or nil to indicate no argument. In its second form, the closure is declared with a set of arguments and a set of closed variables. The closed variables are evaluated at the construction of the closure and become part of the closure object. When the closure is called, a new nameset is created and linked with the parent nameset. The set of calling arguments are bounded in that nameset with the formal argument list to become the actual arguments. The set of closed variables is linked at runtime to the closure nameset. A lambda or gamma expression can have its argument declared as <tt class="code">const</tt> argument. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[lambda "nil" "body"
+lambda "argument list" "body"
+lambda "argument list" "closed variables list" "body"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const no-args (lambda nil (+ 1 1))
+const add     (lambda ((const x) (const y)) (+ x y))
+const closed  (lambda (x) (y) (+ x y))
+
+]]></pre>
+<div class="elem">
+launch [reserved]</div>
+<p class="text">
+ The <tt class="code">launch</tt> special form creates a new thread by executing the form argument in a normal thread. The created thread is added in the normal thread list by creating a clone of the interpreter and starting immediately the execution of the form with the cloned interpreter. The command returns the thread object in the calling thread. When the thread terminates, the thread object holds the result of the last executed form. The main thread is suspended until all normal threads have completed their execution. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[launch "form"
+launch "thread" "form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[launch (println "hello world")
+
+]]></pre>
+<div class="elem">
+loop [reserved]</div>
+<p class="text">
+ The <tt class="code">loop</tt> special form executes a loop based on an initial condition, an exit condition and a step form. The initial condition is only executed one time. The exit condition is tested at each loop iteration. The <tt class="code">loop</tt> special form creates its own nameset since the initial condition generally binds symbol locally for the loop. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[loop "init form" "exit form" "step" "form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[loop (trans i 0) (< i 10) (i:++) (println i)
+
+]]></pre>
+<div class="elem">
+nameset [reserved]</div>
+<p class="text">
+ The <tt class="code">nameset</tt> special form creates a new nameset. With no argument, a new nameset is created and no parent is binded to this nameset. With one argument, the argument must evaluate to a nameset and that nameset is used as the parent one. If a nameset has to be created with the global nameset as the parent, the symbol <tt class="code">...</tt> can be used to reference the top level nameset. The symbol <tt class="code">.</tt> references the current nameset. The symbol <tt class="code">..</tt> references the parent nameset of the current nameset. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[nameset
+nameset "parent nameset"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const local-nameset-not-bound (nameset)
+const local-nameset-bounded   (nameset ...)
+const ...:global-nameset      (nameset)
+
+]]></pre>
+<div class="elem">
+println [reserved]</div>
+<p class="text">
+ The <tt class="code">println</tt> special form prints on the interpreter output stream a set of arguments. Each arguments have to be a literal which is converted to a string. When all arguments have been printed a new line character is printed. The <tt class="code">print</tt> special form behaves like <tt class="code">println</tt> excepts that a new line character is not printed at the end of the arguments. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[println
+println "nil"
+println "literal list"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[println
+println "hello millennium" ' ' 2000
+
+]]></pre>
+<div class="elem">
+protect [reserved]</div>
+<p class="text">
+ The <tt class="code">protect</tt> special form take a single argument and returns it without evaluation. Protect is mainly use to get a symbol or form object. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[protect "object"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const cons (protect (+ 1 2))
+
+]]></pre>
+<div class="elem">
+return [reserved]</div>
+<p class="text">
+ The <tt class="code">return</tt> special form causes the current expression to stop its evaluation and returns the argument or nil. The <tt class="code">return</tt> keyword is primarily used in lambda or gamma expressions. If used in a top level block, the block execution is stopped and the control is transferred to the top level. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[return "object"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[return (+ 1 2)
+
+]]></pre>
+<div class="elem">
+sync [reserved]</div>
+<p class="text">
+ The <tt class="code">sync</tt> special form is a form synchronizer. Within a multi-threaded environment, the engine guarantees that only one thread will execute the form. The other threads are suspended until the form has been completed. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[sync "form"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const print-message (code mesg) (
+  sync {
+    errorln "error  : " code
+    errorln "message: " mesg
+  }
+)
+
+]]></pre>
+<div class="elem">
+switch [reserved]</div>
+<p class="text">
+ The <tt class="code">switch</tt> special form is a form selector. The first argument is the object to switch. The second argument is a list of forms with an object matcher and an execution form. The <tt class="code">else</tt> special form can be used as default matcher. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[switch "selector" "list of conditions"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const get-primary-color (color value) (
+  switch color (
+    ("red"   (return (value:substr 0 2))
+      ("green" (return (value:substr 2 4))
+        ("blue"  (return (value:substr 4 6))
+        )
+      )
+
+]]></pre>
+<div class="elem">
+throw [reserved]</div>
+<p class="text">
+ The <tt class="code">throw</tt> special form throws an exception. Without argument, an exception of type user-exception is thrown. With one argument, the exception id is set. With two arguments, the exception id and exception reason are set. With three arguments, the exception id, exception reason and exception object are set. An exception object represented by the symbol <tt class="code">what</tt> can also be thrown. This is the method used to re-throw an exception. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[throw
+throw what
+throw "id"
+throw "id" "reason"
+throw "id" "reason" "object"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[throw              
+throw "type-error" 
+throw "type-error" "invalid argument"
+
+]]></pre>
+<div class="elem">
+trans [reserved]</div>
+<p class="text">
+ The <tt class="code">trans</tt> special form creates or sets a symbol with an object. <tt class="code">trans</tt> searches in the current nameset only. If a symbol is found, it is set with the object. If the symbol is not found, it is created in the current nameset. The <tt class="code">trans</tt> keyword can also be used with qualified names. With 3 or 4 arguments, <tt class="code">trans</tt> creates automatically a lambda expression. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[trans symbol "object"
+trans symbol "argument" "body"
+trans symbol "argument" "closed variables" "body"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[trans a 1
+trans fact (n) (if (< n 1) 1 (* n (fact (- n 1))))
+
+]]></pre>
+<div class="elem">
+try [reserved]</div>
+<p class="text">
+ The <tt class="code">try</tt> special form catch an exception in the current execution nameset. The first argument is a form to execute. The optional second argument is the exception handler to be called in case of exception. If there is no exception handler, all exceptions are caught. The result of execution is either the result of the form execution, or the exception object in case of exception, or nil if the exception is a native one. If there is an exception handler, the handler is executed with a new nameset and the special symbol <tt class="code">what</tt> is bound to the exception. If the exception is nil, the symbol <tt class="code">what</tt> is undefined. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[try "form"
+try "form" " exception handler"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[try (+ 1 2)
+try (throw)
+try (throw "hello")
+try (throw "hello" "world")
+try (throw "hello" "world" "folks")
+
+]]></pre>
+<div class="elem">
+unref [reserved]</div>
+<p class="text">
+ The <tt class="code">unref</tt> special form unreference a symbol. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[unref symbol
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const number 123
+unref number
+
+]]></pre>
+<div class="elem">
+while [reserved]</div>
+<p class="text">
+ The <tt class="code">while</tt> special form is used to build loop with backward condition. The loop construct accepts either 2 or 3 arguments. With 2 argument, the first argument is the loop condition and the second argument is the loop body that must evaluate to a boolean. With 3 arguments, the first argument is the initial condition that is executed only once. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[while "condition" "body"
+while "initial" "condition" "body"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[const gcd (u v) {
+  while (!= v 0) {
+    trans r (u:mod v)
+    u:= v
+    v:= r
+  }
+  eval u
+}
+
+]]></pre>
+<hr/>
+<div class="chapter">
+Reserved objects</div>
+<hr/>
+<p class="text">
+ This chapter is a reference of the reserved objects with their respective builtin methods. The reserved objects are those objects defined in the global interpreter nameset and bind as reserved names. All literal have a string representation. The <tt class="code">to-string</tt> method is always available for these reserved objects. A literal object has a default constructor. Generally, it can also be constructed by a same type object or by a string object. </p>
+<p/>
+<div class="elem">
+Literal</div>
+<p class="text">
+ The <tt class="code">Literal</tt> object is a base object for all literal object. The sole purpose of a literal object is to provide to methods named <tt class="code">to-string</tt> and <tt class="code">to-literal</tt> that return a string representation of the literal object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>literal-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string
+	  representation of the literal. The string is expected to
+	  represent at best the literal.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-literal</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-literal method returns a string
+	  representation of the literal. The string differs from the
+	  to-string method in the sense that the string is a
+	  literal representation. For example the literal representation of a
+	  string is the quoted string. 
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Nameable</div>
+<p class="text">
+ The <tt class="code">Nameable</tt> object is a base object that support name definition. The sole purpose of a literal object is to provide to method named <tt class="code">get-name</tt> that returns the object name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>nameable-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the associated object name.
+	  The object name defined here is a name that the class wishes to
+	  associate with the object. For example, the InputFile
+	  is a nameable class and the name is the file name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Item</div>
+<p class="text">
+ The <tt class="code">Item</tt> reserved object is an enumeration item. The item is bound to an enumeration object. An item object is created during the evaluation of an enumeration object. An enumeration item cannot be constructed directly. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>item-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the boolean argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is not equal to the boolean argument.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-enum</i><i> (&rarr; Enum)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-enum method returns the enumeration object
+	  bound to the item. The item must be a dynamic item or an exception
+	  is thrown.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Boolean</div>
+<p class="text">
+ The <tt class="code">Boolean</tt> reserved object implements the behavior of a native boolean type. Two builtin symbols, namely true and false are used to represent the value of a boolean instance. The <tt class="code">Boolean</tt> type is primarily used for test expression. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>boolean-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Boolean</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Boolean constructor create a boolean object those
+	  default value is false.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Boolean</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The Boolean constructor create a boolean object with
+	  the boolean object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Boolean</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Boolean constructor create a boolean object with
+	  the string object argument. The string "true" denotes
+	  the true value while the string "false" denotes the
+	  false value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object is
+	  equal to the boolean argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object is
+	  not equal to the boolean argument.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Number</div>
+<p class="text">
+ The <tt class="code">Number</tt> reserved objectis a base class for all number objects. The number base object is used by the <tt class="code">Integer</tt>, <tt class="code">Real</tt> and <tt class="code">Relatif</tt> objects. The class provides essentially the methods needed to format a number. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>number-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>format</i><i> (&rarr; String)</i><i> (none|Integer)</i><hr/>
+<p class="text">
+
+	  The format method format the calling number instance with
+	  a certain number of digits after the decimal point. In the first
+	  form without argument, the default formating representation is
+	  performed with a null precision. In the second format, a number
+	  is represented with a certain precision given by the calling argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-hexa</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-hexa method returns a signed hexadecimal
+	  representation of a number. This method works well with 
+	  Integer and Relatif objects.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-hexa-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-hexa-string method returns a hexadecimal
+	  representation of a number without a prefix. The number is always
+	  considered positive. This method works well with Integer 
+	  and Relatif objects.  
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Integer</div>
+<p class="text">
+ The <tt class="code">Integer</tt> reserved object implements the behavior of a native 64 bits signed integer type. Standard decimal notation is used to construct integer object from a literal. The integer object can also be constructed from a string. Standard operators are provided for this class. The <tt class="code">Integer</tt> object is a literal object derived from the <tt class="code">Number</tt> object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>integer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Number
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Integer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Integer constructor create an integer object
+	  those default value is 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Integer</i><i> (Real)</i><hr/>
+<p class="text">
+
+	  The Integer constructor create an integer object
+	  with the real object argument those value is truncated to an
+	  integer value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Integer</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Integer constructor create an integer object
+	  with the integer object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Integer</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The Integer constructor create an integer object
+	  with the character object argument. The character encoding value
+	  is used as the integer value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the integer or real argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the calling object is
+	  not equal to the integer or real argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The + operator returns the sum of the calling integer
+	  with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The - operator returns the subtraction of the
+	  calling integer with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The * operator returns the multiplication of the
+	  calling integer with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The / operator returns the division of the calling
+	  integer with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling
+	  integer is less than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  integer is less equal than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling integer
+	  is greater than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling
+	  integer is greater equal than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling integer by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>--</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The -- operator decrements the calling integer by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The += operator add and assign the calling integer
+	  with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-=</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The -= operator subtracts and assign the calling
+	  integer with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*=</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The *= operator multiply and assign the calling
+	  integer with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/=</i><i> (&rarr; Integer)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The /= operator divide and assign the calling
+	  integer with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>or</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The or method returns the binary or between the integer
+	  and the integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>abs</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The abs method returns the absolute value of the
+	  calling integer instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>not</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The not method returns the binary negation of the
+	  calling integer instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shl</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The shl method returns a new integer corresponding
+	  to the calling integer instance shifted left by the integer
+	  argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shr</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The shr method returns a new integer corresponding to
+	  the calling integer instance shifted right by the integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>and</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The and method returns a new integer corresponding
+	  to the binary and between the calling integer instance and the
+	  integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>xor</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The xor method returns a new integer corresponding
+	  to the binary xor between the calling integer instance and the
+	  integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mod</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The mod method returns the modulo between the
+	  integer instance and the integer argument. A
+	  type-error exception is raised if the argument is
+	  not an argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>odd-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The odd-p method returns true if the integer
+	  instance is odd, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>even-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The even-p method returns true if the integer
+	  instance is even, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>zero-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The zero-p method returns true if the integer
+	  instance is null, false otherwise.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Relatif</div>
+<p class="text">
+ The <tt class="code">Relatif</tt> reserved object implements the behavior of an unlimited signed integer type. Standard decimal notation followed by the 'r' or 'R' character is used to construct relatif object from a literal. The relatif object can also be constructed from a string. This class is similar to the <tt class="code">Integer</tt> class. The <tt class="code">Relatif</tt> is a literal object derived from the <tt class="code">Number</tt> object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>relatif-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Number
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Relatif</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Relatif constructor create a relatif object
+	  those default value is 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Relatif</i><i> (Real)</i><hr/>
+<p class="text">
+
+	  The Relatif constructor create an relatif object
+	  with the real object argument those value is truncated to an
+	  integer value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Relatif</i><i> (Relatif)</i><hr/>
+<p class="text">
+
+	  The Relatif constructor create an relatif object
+	  with the relatif object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Relatif</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Relatif constructor create an relatif object
+	  with the integer object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Relatif</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The Relatif constructor create an relatif object
+	  with the character object argument. The character encoding value
+	  is used as the relatif value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the relatif or integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is not equal to the relatif or integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The + operator returns the sum of the calling
+	  relatif with an relatif or a integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The - operator returns the subtraction of the
+	  calling relatif 
+	  with an relatif or a integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The * operator returns the multiplication of the
+	  calling relatif with an relatif or a integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The / operator returns the division of the calling
+	  relatif with an relatif or a integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling
+	  relatif is less than the relatif or integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  relatif is less equal than the relatif or integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling
+	  relatif is greater than the relatif or integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling
+	  relatif is greater equal than the relatif or integer object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling relatif by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>--</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The -- operator decrements the calling relatif by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The += operator add and assign the calling relatif
+	  with an relatif or integer argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-=</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The -= operator subtracts and assign the calling
+	  relatif with an relatif or integer argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*=</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The *= operator multiply and assign the calling
+	  relatif with an relatif or integer argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/=</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The /= operator divide and assign the calling
+	  relatif with an relatif or integer argument object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>or</i><i> (&rarr; Relatif)</i><i> (Relatif)</i><hr/>
+<p class="text">
+
+	  The or method returns the binary or between the
+	  relatif and the relatif argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>abs</i><i> (&rarr; Relatif)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The abs method returns the absolute value of the
+	  calling relatif instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>not</i><i> (&rarr; Relatif)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The not method returns the binary negation of the
+	  calling relatif instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shl</i><i> (&rarr; Relatif)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The shl method returns a new relatif corresponding
+	  to the calling relatif instance shifted left by the integer
+	  argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shr</i><i> (&rarr; Relatif)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The shr method returns a new relatif corresponding
+	  to the calling relatif instance shifted right by the integer
+	  argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pow</i><i> (&rarr; Relatif)</i><i> (Integer|Relatif|Integer Integer|Relatif Relatif)</i><hr/>
+<p class="text">
+
+	  The pow method returns a new relatif corresponding
+	  to the power of the calling relatif instance with the integer or relatif 
+	  argument. With one argument, the power is computed directly. With two
+	  arguments, a fast modular exponentiation is performed with the second 
+	  argument as the modulus.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mmi</i><i> (&rarr; Relatif)</i><i> (Integer|Relatif)</i><hr/>
+<p class="text">
+
+	  The mmi method returns the multiplicative modular
+	  inverse of the calling relatif. The argument is the modulus to
+	  use for the inverse calculation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>and</i><i> (&rarr; Relatif)</i><i> (Relatif)</i><hr/>
+<p class="text">
+
+	  The and method returns a new relatif corresponding to
+	  the binary and between the calling relatif instance and the relatif
+	  argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>xor</i><i> (&rarr; Relatif)</i><i> (Relatif)</i><hr/>
+<p class="text">
+
+	  The xor method returns a new relatif corresponding
+	  to the binary xor between the calling relatif instance and the
+	  relatif argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mod</i><i> (&rarr; Relatif)</i><i> (Relatif|Integer)</i><hr/>
+<p class="text">
+
+	  The mod method returns the modulo between the
+	  relatif instance and the relatif or integer argument. A
+	  type-error exception is raised if the argument is
+	  invalid.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>odd-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The odd-p method returns true if the relatif
+	  instance is odd, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>even-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The even-p method returns true if the relatif
+	  instance is even, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>zero-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The zero-p method returns true if the relatif
+	  instance is null, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-msb</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-msb method returns the most significnd bit position
+	  for the calling relatif. If the number is null, 0 is returned. The msb
+	  position is thus counted from 1.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Real</div>
+<p class="text">
+ The <tt class="code">Real</tt> reserved object implements the behavior of a double floating point number type. Standard decimal dot notation or scientific notation is used to construct real object from a literal. The real object can also be constructed from an integer, a character or a string. The <tt class="code">Real</tt> object is a literal object derived from the <tt class="code">Number</tt> object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>real-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Number
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Real</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Real constructor create an real object those
+	  default value is 0.0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Real</i><i> (Real)</i><hr/>
+<p class="text">
+
+	  The Real constructor create an real object with
+	  the real object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Real</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Real constructor create an real object with
+	  the integer object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Real</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The Real constructor create an real object with the
+	  character object argument. The character encoding value is used
+	  as the integer value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object is
+	  equal to the integer or real argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object is
+	  not equal to the integer or real argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The + operator returns the sum of the calling real
+	  with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The - operator returns the subtraction of the
+	  calling real with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The * operator returns the multiplication of the
+	  calling real with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The / operator returns the division of the calling
+	  real with an integer or a real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling real
+	  is less than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling real
+	  is less equal than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling real
+	  is greater than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling real
+	  is greater equal than the integer or real object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling real by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>--</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The -- operator decrements the calling real by 1.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The += operator add and assign the calling real with
+	  an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-=</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The -= operator subtracts and assign the calling
+	  real with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>*=</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The *= operator multiply and assign the calling
+	  real with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>/=</i><i> (&rarr; Real)</i><i> (Integer|Real)</i><hr/>
+<p class="text">
+
+	  The += operator divide and assign the calling real
+	  with an integer or real argument object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>nan-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The nan-p method returns true if the calling real
+	  number instance is not-a-number (nan).
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>ceiling</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The ceiling method returns the ceiling of the calling
+	  real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>floor</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The floor method returns the floor of the calling
+	  real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>abs</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The abs method returns the absolute value of the
+	  calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pow</i><i> (&rarr; Real)</i><i> (Real|Integer)</i><hr/>
+<p class="text">
+
+	  The pow method returns the power of the calling 
+	  real with the argument. The exponent argument can be either an
+	  integer or a real number.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sqrt</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The sqrt method returns the square root of the calling
+	  real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>log</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The log method returns the natural logarithm of the
+	  calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exp</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The exp method returns the exponential of the calling
+	  real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sin</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The sin method returns the sine of the calling floating
+	  point instance. The angle is expressed in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>cos</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The cos method returns the cosine of the calling
+	  floating point instance. The angle is expressed in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tan</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The tan method returns the tangent of the calling
+	  floating point instance. The angle is expressed in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>asin</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The asin method returns the arc sine of the calling
+	  floating point instance. The result is in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>acos</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The acos method returns the arc cosine of the
+	  calling floating point instance. The result is in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>atan</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The atan method returns the arc tangent of the
+	  calling floating point instance. The result is in radian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sinh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The sinh method returns the hyperbolic sine of the
+	  calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>cosh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The cosh method returns the hyperbolic cosine of the
+	  calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tanh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The atan method returns the hyperbolic tangent of the
+	  calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>asinh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The asinh method returns the hyperbolic arc sine of
+	  the calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>acosh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The acosh method returns the hyperbolic arc cosine
+	  of the calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>atanh</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The atanh method returns the hyperbolic arc tangent of
+	  the calling real number instance.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>zero-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The zero-p method returns true if the calling real
+	  instance is null, false otherwise.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Character</div>
+<p class="text">
+ The <tt class="code">Character</tt> reserved object implements the behavior of an Unicode character type. A character can be constructed from a literal quoted notation, with a string or with the <tt class="code">U+</tt> hexadecimal notation. The character class is designed to handle the full range of the Unicode character space by using an internal 32 bit quad representation with 31 bit valid. The <tt class="code">Character</tt> class conform also with the ISO 10646 character representation. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>character-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Character</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Character constructor create a character
+	  object those default value is the null character.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Character</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Character constructor create a character
+	  object with the string object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Character</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Character constructor create a character
+	  object with the integer object argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Character</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The Character constructor create a character
+	  object with the character object argument.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the character argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the calling object
+	  is not equal to the character argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling
+	  character is less than the character object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  character is less equal than the character object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling
+	  character is greater than the character object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling
+	  character is greater equal than the character object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Character)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling character
+	  by the next one in lexicographic order.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>--</i><i> (&rarr; Character)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The -- operator decrements the calling character by
+	  the previous one in lexicographic order.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; Character)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The += operator add the integer argument to the calling
+	  character.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-=</i><i> (&rarr; Character)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The -= operator subtracts the integer argument to the
+	  calling character.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>letter-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The letter-p predicate returns true if the character is a
+	  letter character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>digit-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The digit-p predicate returns true if the character is a
+	  digit character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>alpha-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The alpha-p predicate returns true if the character is an
+	  alphanumeric character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>blank-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The blank-p predicate returns true if the character is a
+	  blank or tab character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>eol-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The eol-p predicate returns true if the character is an
+	  end-of-line character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>eos-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The eos-p predicate returns true if the character is an
+	  end-of-stream character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>nil-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The nil-p predicate returns true if the character is the
+	  nil character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-integer</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-integer method returns an integer representation
+	  of the characters.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Byte</div>
+<p class="text">
+ The <tt class="code">Byte</tt> reserved object implements the behavior of an 8 bit character type. A byte can be constructed from a integer or from another byte. The <tt class="code">Byte</tt> class is similar to the <tt class="code">Character</tt> class but is not a literal object because it does not have a literal representation. Most of the time, a byte object is created by another object like a stream, when using the <tt class="code">read</tt> method for example. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>byte-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Byte</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Byte constructor create a byte object those
+	  default value is the null byte.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Byte</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Byte constructor create a byte object with the
+	  integer object argument. The integer value must be in the range
+	  of 0x00 to 0xFF.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Byte</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The Byte constructor create a byte object with the
+	  byte object argument.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the byte argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the calling object
+	  is not equal to the byte argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling
+	  byte is less than the byte object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  byte is less equal than the byte object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling
+	  byte is greater than the byte object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling
+	  byte is greater equal than the byte object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Byte)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling byte by one.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>--</i><i> (&rarr; Byte)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The -- operator decrements the calling byte by one.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; Byte)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The += operator adds the integer argument to the calling
+	  byte.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>-=</i><i> (&rarr; Byte)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The -= operator subtracts the integer argument to
+	  the calling byte.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>eos-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The eos-p predicate returns true if the character is an
+	  end-of-stream character, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>nil-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The nil-p predicate returns true if the byte is the
+	  nil byte, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-integer</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-integer method returns an integer representation
+	  of the byte.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-char</i><i> (&rarr; Character)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-char method returns a character representing
+	  the byte.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+String</div>
+<p class="text">
+ The <tt class="code">String</tt> reserved object implements the behavior of an internal character array. The double quote notation is the literal notation for a string. A string can also be constructed from the standard objects. Strings can be compared, transformed or extracted with the help of the methods listed below. Internally, the string is represented as an array of Unicode characters. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>string-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>String</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The String constructor create a string object those
+	  default value is the null string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>String</i><i> (Literal)</i><hr/>
+<p class="text">
+
+	  The String constructor create a string object with
+	  the literal object argument.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object is
+	  equal to the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the calling object is
+	  not equal to the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling string
+	  is less than the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling string
+	  is less equal than the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling string
+	  is greater than the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The &gt;= operator returns true if the calling string
+	  is greater equal than the string argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The + operator returns the sum of the calling string
+	  with an string object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>+=</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The += operator add and assign the calling string with
+	  the string argument.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>first</i><i> (&rarr; Character)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The first method returns the first character in the
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>last</i><i> (&rarr; Character)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The last method returns the last character in the
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>strip-left</i><i> (&rarr; String)</i><i> (none|String)</i><hr/>
+<p class="text">
+
+	  The strip-left method removes the leading blanks and
+	  tabs and returns a new string. With a string argument, each
+	  character in the string is taken as a character separator that
+	  should be stripped.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>strip-right</i><i> (&rarr; String)</i><i> (none|String)</i><hr/>
+<p class="text">
+
+	  The strip-right method removes the trailing blanks
+	  and tabs and returns a new string.With a string argument, each
+	  character in the string is taken as a character separator that
+	  should be stripped.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>strip</i><i> (&rarr; String)</i><i> (none|String)</i><hr/>
+<p class="text">
+
+	  The strip method removes the leading, trailing
+	  blanks and tabs and returns a new string. With a string
+	  argument, each character in the string is taken as a character
+	  separator that should be stripped.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>split</i><i> (&rarr; Vector)</i><i> (none|String)</i><hr/>
+<p class="text">
+
+	  The split method split the string into one or more
+	  string according to break sequence. If no argument is passed to the
+	  call, the break sequence is assumed to be a blank, tab and eol
+	  characters.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>extract</i><i> (&rarr; Vector)</i><i> (Character)</i><hr/>
+<p class="text">
+
+	  The extract method extracts one or more string
+	  which are enclosed by a control character passed as an
+	  argument. The method returns a vector of strings.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-upper</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-upper converts all string characters to
+	  upper case and returns a new string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-lower</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-lower method converts all string characters
+	  to lower case and returns a new string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Character)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a the string character at
+	  the position given by the argument. If the index is invalid, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sub-left</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The sub-left method returns the left sub string of
+	  the calling string up-to the argument index. If the index is out
+	  of range, the string is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sub-right</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The sub-right method returns the right sub string
+	  of the calling string starting at the argument index. If the
+	  index is out of range, the string is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>fill-left</i><i> (&rarr; String)</i><i> (Character Integer)</i><hr/>
+<p class="text">
+
+	  The fill-left method returns a string filled on the
+	  left with the character argument. The second argument is the
+	  desired length of the resulting string. If the calling is too
+	  long, the string is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>fill-right</i><i> (&rarr; String)</i><i> (Character Integer)</i><hr/>
+<p class="text">
+
+	  The fill-left method returns a string filled on the
+	  right with the character argument. The second argument is the
+	  desired length of the resulting string. If the calling is too
+	  long, the string is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>substr</i><i> (&rarr; String)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The substr method returns a string starting at the
+	  first argument index and ending at the second argument index. If the
+	  indexes are out of range, an exception is raised.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Regex</div>
+<p class="text">
+ The <tt class="code">Regex</tt> object is a special object which is automatically instantiated by the interpreter when using the delimiter character <tt class="code">[</tt> and <tt class="code">]</tt>. The regex syntax involves the use of standard characters, meta characters and control characters. Additionally, a string can be use to specify a series of characters. In its first form, the <tt class="code">[</tt> and <tt class="code">]</tt> characters are used as syntax delimiters. The lexical analyzer automatically recognizes this token as a regex and built the equivalent <tt class="code">Regex</tt> object. The second form is the explicit construction of the <tt class="code">Regex</tt> object. Note also that the <tt class="code">[</tt> and <tt class="code">]</tt> characters are also used as regex block delimiters. Any character, except the one used as operators can be used in a regex. The <tt class="code">$</tt> character is used as a meta-character -- or control character -- to represent a particular set of characters. For example, <tt class="code">[hello world]</tt> is a regex which match only the <tt class="code">"hello world"</tt> string. The <tt class="code">[$d+]</tt> regex matches one or more digits. The following control characters are builtin in the regex engine. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Character</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+$a</td>
+<td class="text">
+matches any letter or digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$b</td>
+<td class="text">
+matches any blank characters</td>
+</tr>
+<tr class="text">
+<td class="text">
+$c</td>
+<td class="text">
+matches any combining characters</td>
+</tr>
+<tr class="text">
+<td class="text">
+$d</td>
+<td class="text">
+matches any digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$e</td>
+<td class="text">
+matches eol, cr and eos</td>
+</tr>
+<tr class="text">
+<td class="text">
+$l</td>
+<td class="text">
+matches any lower case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$n</td>
+<td class="text">
+matches eol or cr</td>
+</tr>
+<tr class="text">
+<td class="text">
+$s</td>
+<td class="text">
+matches any letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$u</td>
+<td class="text">
+matches any upper case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$v</td>
+<td class="text">
+matches any valid constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$w</td>
+<td class="text">
+matches any word constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$x</td>
+<td class="text">
+matches any hexadecimal characters</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The uppercase version is the complement of the corresponding lowercase character set. A character which follows a <tt class="code">$</tt> character and that is not a meta character is treated as a normal character. For example <tt class="code">$[</tt> is the <tt class="code">[</tt> character. A quoted string can be used to define character matching which could otherwise be interpreted as control characters or operator. A quoted string also interprets standard escaped sequences but not meta characters. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Character</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+$A</td>
+<td class="text">
+any character except letter or digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$B</td>
+<td class="text">
+any character except blank characters</td>
+</tr>
+<tr class="text">
+<td class="text">
+$C</td>
+<td class="text">
+any character except combining characters</td>
+</tr>
+<tr class="text">
+<td class="text">
+$D</td>
+<td class="text">
+any character except digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$E</td>
+<td class="text">
+any character except eol, cr and eos</td>
+</tr>
+<tr class="text">
+<td class="text">
+$L</td>
+<td class="text">
+any character except lower case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$N</td>
+<td class="text">
+any character except eol or cr</td>
+</tr>
+<tr class="text">
+<td class="text">
+$S</td>
+<td class="text">
+any character except letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$U</td>
+<td class="text">
+any character except upper case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$V</td>
+<td class="text">
+any character except constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$W</td>
+<td class="text">
+any character except word constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$X</td>
+<td class="text">
+any character except hex characters</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ A character set is defined with the <tt class="code">&lt;</tt> and <tt class="code">&gt;</tt> characters. Any enclosed character defines a character set. Note that meta characters are also interpreted inside a character set. For example, <tt class="code">&lt;$d+-&gt;</tt> represents any digit or a plus or minus. If the first character is the <tt class="code">^</tt> character in the character set, the character set is complemented with regards to its definition. The following unary operators can be used with single character, control characters and sub-expressions. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Operator</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+*</td>
+<td class="text">
+match 0 or more times</td>
+</tr>
+<tr class="text">
+<td class="text">
++</td>
+<td class="text">
+match 1 or more times</td>
+</tr>
+<tr class="text">
+<td class="text">
+?</td>
+<td class="text">
+match 0 or 1 time</td>
+</tr>
+<tr class="text">
+<td class="text">
+|</td>
+<td class="text">
+alternation</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ Alternation is an operator which work with a secondary expression. Care should be taken when writing the right sub-expression. For example the following regex <tt class="code">[$d|hello]</tt> is equivalent to <tt class="code">[[$d|h]ello]</tt>. In other word, the minimal first sub-expression is used when compiling the regex. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>regex-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Regex</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Regex constructor create a regex object those
+	  default value is the null regex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Regex</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Regex constructor create a regex object with
+	  the string object argument. The string argument is the regex
+	  specification.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the argument is
+	  matched by the regex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the argument is not
+	  matched by the regex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the argument is
+	  partially matched by the regex.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the group
+	  vector when a regex match has been successful.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns by index the group sub-string
+	  when a regex match has been successful.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>match</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The match method returns the first matching string of the
+	  argument string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>replace</i><i> (&rarr; String)</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The replace method returns a string constructed by
+	  replacing all matching sub-string -- from the first argument --
+	  with the second argument string.
+	</p>
+</div>
+<p/>
+<hr/>
+<div class="chapter">
+Container objects</div>
+<hr/>
+<p class="text">
+ This chapter is a reference of the reserved container objects with their respective builtin methods. Some of these container objects are <em>iterable objects</em>. When an object is iterable, an iterator constructor constructor is provided. The <tt class="code">iterable-p</tt> predicate returns true if the container is an iterable object. The <tt class="code">get-iterator</tt> method can be used to construct an object iterator. For a given iterator, the predicates <tt class="code">end-p</tt> and <tt class="code">valid-p</tt> can be used to check for the end or a valid iterator position. The <tt class="code">next</tt> method move the iterator to its next position. The <tt class="code">prev</tt> method move the iterator -- if possible -- to its previous position. The <tt class="code">get-object</tt> method returns the object at the current iterator position. </p>
+<p/>
+<div class="elem">
+Cons</div>
+<p class="text">
+ A <tt class="code">Cons</tt> instance or simply a <em>cons cell</em> is a simple element used to build linked list. The cons cell holds an object and a pointer to the next cons cell. The cons cell object is called <em>car</em> and the next cons cell is called the <em>cdr</em>. Historically, <em>car</em> means <em>Current Address
+      Register</em> and <em>cdr</em> means <em>Current Data
+      Register</em>. This notation is still present here for the sake of tradition. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>cons-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i><i>Iterable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Cons</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Cons constructor create a default cons cell with
+	  the car and cdr set to nil. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Cons</i><i> (Objects...)</i><hr/>
+<p class="text">
+
+	  The Cons constructor create a list of cons cells with
+	  the object arguments. Each argument object is assigned to the
+	  car of the cons cell while the cdr is used to link
+	  the cell together.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-car</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-car method returns the car of the calling
+	  cons cell.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-cdr</i><i> (&rarr; Cons)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-cdr method returns the cdr of the calling cons
+	  cell.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-cadr</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-cadr method returns the car of the cdr of the
+	  calling cons cell or nil if the cdr is nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-caddr</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-caddr method returns the car of the cdr of the
+	  cdr of the calling cons cell or nil if the cdr is nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-cadddr</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-cadddr method returns the car of the cdr of the
+	  cdr of the cdr of the calling cons cell or nil if the cdr is nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the cons
+	  cell. The minimum length returned is always 1. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>nil-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The nil-p predicate returns true if the car of the
+	  calling cons cell is nil, false otherwise. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>block-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The block-p predicate returns true if the cons cell
+	  is of type block, false otherwise. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-iterator</i><i> (&rarr; Iterator)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-iterator returns a forward iterator for this
+	  cons cell. No backward methods are supported for this object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-car</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-car set the car of the calling cons cell. The
+	  object argument is returned by the method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-cdr</i><i> (&rarr; Cons)</i><i> (Cons)</i><hr/>
+<p class="text">
+
+	  The set-cdr set the cdr of the calling cons cell. The
+	  cons cell argument is returned by the method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The add method appends an object at the end of the
+	  cons cell chain by creating a new cons cell and linking it with the
+	  last cdr. The object argument is returned by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the car of the cons cell chain
+	  at a certain position specified by the integer index argument.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Enum</div>
+<p class="text">
+ The <tt class="code">Enum</tt> builtin object is an enumeration object. The enumeration is constructed with the reserved keyword <tt class="code">enum</tt> and a list of literals or by string name with a constructor. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>enum-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Enum</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Enum constructor create an empty enumeration.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Enum</i><i> (String...)</i><hr/>
+<p class="text">
+
+	  The Enum constructor create an enumeration from a
+	  list of string arguments.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the enumeration and makes
+	  it empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of items in
+	  the enumeration.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p predicate returns true if the name
+	  argument exists as an item. The name argument must be a lexical
+	  name or an exception is thrown.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add method adds a new item to the enumeration by
+	  name. This method returns nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns an item string
+	  representation by index. The integer argument is the item index.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+List</div>
+<p class="text">
+ The <tt class="code">List</tt> builtin object provides the facility of a double-link list. The <tt class="code">List</tt> object is another example of <em>iterable object</em>. The <tt class="code">List</tt> object provides support for forward and backward iteration. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>list-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Iterable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>List</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The List constructor create an empty list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>List</i><i> (Object...)</i><hr/>
+<p class="text">
+
+	  The List constructor create a list from a list of
+	  object arguments.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the
+	  list. The minimum length is 0 for an empty list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-iterator</i><i> (&rarr; Iterator)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-iterator returns a forward/backward iterator
+	  for this list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The add method appends an object at the end of the
+	  list. The object argument is returned by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>insert</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The insert method inserts an object at the beginning of
+	  the list. The object argument is returned by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the object in the list at a
+	  certain position specified by the integer index argument. 
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Strvec</div>
+<p class="text">
+ The <tt class="code">Strvec</tt> builtin object provides the facility of an index array of strings. The <tt class="code">Strvec</tt> object is serializable object that stores strings. The strings can be added with an optional preference for a unique string value. The class is similar to the general purpose <tt class="code">Vector</tt> class. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>strvec-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Strvec</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Strvec constructor create an empty string vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Strvec</i><i> (Integer|Boolean)</i><hr/>
+<p class="text">
+
+	  The Strvec constructor create a string vector with
+	  a predefined size or with a uniq flag. In the first form, the
+	  preferred vector size is given as an argument. In the second
+	  form, the string unicity flag is given as an argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Strvec</i><i> (Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The Strvec constructor create a string vector with
+	  a predefined size and a uniq flag. The first argument is the
+	  preferred vector size. The second argument is the string unicity flag.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the string vector. When
+	  the method is complete, the string vector is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the string
+	  vector. The minimum length is 0 for an empty vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>min-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The min-length method returns the minimum string
+	  length of the string vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>max-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The max-length method returns the maximum string
+	  length of the string vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p predicate returns true if the vector is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>active-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The active-p predicate returns true if the vector
+	  is not empty. This predicate is the negation of
+	  the empty-p predicate.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the string in the vector at a
+	  certain position specified by the integer index argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer String)</i><hr/>
+<p class="text">
+
+	  The set method set a vector position with a string.
+	  The first argument is the vector index. The second argument
+	  is the string to set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>first</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The first method returns the first string in the
+	  vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>last</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+ 
+	  The last method returns the last string in the
+	  vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pop</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The pop method removes the first element in the
+	  string vector and returns it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pop-last</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The pop-last method removes the last element in the
+	  string vector and returns it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find method try to find a string in the vector. If
+	  the string is found, the vector index is returned else the -1
+	  value is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method try to find a string in the vector. If
+	  the string is found, the vector index is returned else an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add method adds an object at the end of
+	  the vector. If the uniq flag is active, the string argument is
+	  not added if it already exists.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p method returns true if the string
+	  argument exists in the vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>remove</i><i> (&rarr; none)</i><i> (Integer|String)</i><hr/>
+<p class="text">
+
+	  The remove method removes a string from the vector
+	  by index or value. In the first form, the vector index is used
+	  as the place to remove. In the second form, the string argument
+	  is used as a key for removal. This method repacks the vector
+	  when the string has been removed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-unique</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-unique method set the string vector unique
+	  flag. When the unique flag is set, there is only no string
+	  duplicate in the vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-unique</i><i> (&rarr; Boolean)</i><i> ()</i><hr/>
+<p class="text">
+
+	  The get-unique method returns the string vector
+	  unique flag value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>concat</i><i> (&rarr; String)</i><i> (none | Character)</i><hr/>
+<p class="text">
+
+	  The concat method concatenates the string vector
+	  elements with a character separator. In the first form, with a
+	  separator character, the resulting string is the concatenation
+	  of the string vector elements. In the second form, the resulting
+	  string is the concatenation of the vector elements with a
+	  character separator. If the character separator
+	  is nil then no separator is placed.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Vector</div>
+<p class="text">
+ The <tt class="code">Vector</tt> builtin object provides the facility of an index array of objects. The <tt class="code">Vector</tt> object is another example of <em>iterable object</em>. The <tt class="code">Vector</tt> object provides support for forward and backward iteration. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>vector-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i><i>Iterable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Vector</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Vector constructor create an empty vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Vector</i><i> (Object...)</i><hr/>
+<p class="text">
+
+	  The Vector constructor create a vector from a list of
+	  object arguments.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the vector. When the method is
+	  complete, the vector is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the vector. The
+	  minimum length is 0 for an empty vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p predicate returns true if the vector is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the object in the vector at a
+	  certain position specified by the integer index argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; Object)</i><i> (Integer Object)</i><hr/>
+<p class="text">
+
+	  The set method set a vector position with an
+	  object. The first argument is the vector index. The second argument
+	  is the object to set. The method returns the object to set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>first</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The first method returns the first element in the
+	  vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>last</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The last method returns the last element in the
+	  vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pop</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The pop method removes the first element in the
+	  vector and returns it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pop-last</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The pop-last method removes the last element in the
+	  vector and returns it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find</i><i> (&rarr; Integer)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The find method try to find an object in the vector. If
+	  the object is found, the vector index is returned as an Integer
+	  object, else nilp is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Object)</i><i> (Object|Integer Object)</i><hr/>
+<p class="text">
+
+	  The add method appends an object at the end of
+	  the vector or at a certain index. In the first form, the object
+	  argument is added at the end of the vector. In the second form,
+	  the object argument is inserted in the vector at the specified
+	  index. In both cases, the object argument is returned by this
+	  method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The exists-p method returns true if the object
+	  argument exists in the vector. This method is useful to make
+	  sure that only one occurrence of an object is added to a vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>clean</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The clean method removes an object from the vector
+	  by index and repack the vector.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>remove</i><i> (&rarr; none)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The remove method removes an object from the vector
+	  and repack the vector. If duplicate exists in the file, only one
+	  is removed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-iterator</i><i> (&rarr; Iterator)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-iterator returns a forward/backward iterator
+	  for this vector.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+HashTable</div>
+<p class="text">
+ The <tt class="code">HashTable</tt> builtin object is a container object which maps an object with a name. The hash table is dynamic and get resized automatically when needed. The lookup method throw an exception if the name is not found. The get method returns nilp if the object is not found. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>hashtable-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>HashTable</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The HashTable constructor create an empty table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HashTable</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The HashTable constructor create a table with a specific
+	  size.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String Object)</i><hr/>
+<p class="text">
+
+	  The add method adds a new object in the table by
+	  key. The first argument is the key used to associate the object
+	  in the table. The second argument is the object to add.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length returns the number of objects in the table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p predicate returns true if the table is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the table so that it becomes empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Object)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The get method returns the object associated with
+	  a key. If the key is not found, nil is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Object)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method returns the object associated with
+	  a key. If the key is not found, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-key</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-key method returns the key associated with
+	  an entry in the table by index. If the index is out of range, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-object</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-object method returns the object associated with
+	  an entry in the table by index. If the index is out of range, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Set</div>
+<p class="text">
+ The <tt class="code">Set</tt> builtin object provides the facility of a uniform set of objects. The <tt class="code">Set</tt> object is another example of <em>iterable object</em>. The <tt class="code">Set</tt> object provides support for forward and backward iteration. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>set-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i><i>Iterable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Set</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Set constructor create an empty set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Set</i><i> (Object...)</i><hr/>
+<p class="text">
+
+	  The Set constructor create a set from a list of
+	  object arguments.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the set. When the method is
+	  complete, the set is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of elements in
+	  the set. The minimum length is 0 for an empty set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The add method appends an object in the set. If
+	  the object already exists in the set, it is not added
+	  twice. This is the main difference between a set and a vector.
+	  The object argument is returned by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method return object by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The empty-p predicate returns true if the set
+	  is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The exists predicate returns true if the object
+	  argument exists in the set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>merge</i><i> (&rarr; none)</i><i> (Set)</i><hr/>
+<p class="text">
+
+	  The merge method merges the set argument into the
+	  calling set. If an element already exists in the set, it is not
+	  added.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>remix</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The remix method mixes the set by randomly swapping
+	  all the elements. This method is useful when the set has been
+	  filled with a certain order by the access must be done randomly.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>remove</i><i> (&rarr; Boolean)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The remove method removes the object argument from
+	  the set. if the object is removed, the method returns true. If
+	  the object is not in the set, the method returns false.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-random-subset</i><i> (&rarr; Set)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-random-subset method returns a subset those
+	  cardinal is at least the size argument with a set of randomly
+	  chosen elements. The result set might have a cardinal less than
+	  the requested size if the calling set cardinal is less than the
+	  requested size.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-iterator</i><i> (&rarr; Iterator)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-iterator returns an iterator for
+	  this set. The iterator supports forward and backward iteration.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Queue</div>
+<p class="text">
+ The <tt class="code">Queue</tt> builtin object is a container used to queue and dequeue objects. The order of entry in the queue defines the order of exit from the queue. The queue is constructed either empty or with a set of objects. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>queue-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Queue</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Queue constructor create an empty queue.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Queue</i><i> (Object...)</i><hr/>
+<p class="text">
+
+	  The Queue constructor create a queue with a list of
+	  object arguments
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>enqueue</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The enqueue adds an object in the queue and returns the
+	  queued object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>dequeue</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The dequeue dequeue an object in the order it was
+	  queued.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length returns the number of queued objects.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p method returns true if the queue is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>flush</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The flush method flushes the queue so that it is empty.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Heap</div>
+<p class="text">
+ The <tt class="code">Heap</tt> builtin object is an object based heap class that organizes object with respect to a key. The heap is organized as a binary tree those root element is either the object with the highest or the lowest key. A flag controls whether the heap is operating in ascending or descending mode. By default, the heap operates in ascending mode, which means that the root node is the lowest one. The heap is self-resizable. The object insertion is also controlled by a minimum and maximum key. if the key is below the minimum key or above the maximum key, the object is not inserted. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>heap-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Heap</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Heap constructor create an empty heap. By
+	  default the heap operates in ascending mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Heap</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Heap constructor create a heap with a specific
+	  size. By default the heap operates in ascending mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Heap</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The Heap constructor create a heap with a specific
+	  mode. If the mode is true, the heap operates in ascending
+	  order. If the mode is false, the heap operates in descending
+	  order. In ascending order, the first object is the object with
+	  the lowest key.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Heap</i><i> (Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The Heap constructor create a heap with a specific
+	  size and mode. The first argument is the heap size. The second
+	  argument is the heap mode. If the mode is true, the heap
+	  operates in ascending order. If the mode is false, the heap
+	  operates in descending order. In ascending order, the first
+	  object is the object with the lowest key.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Integer Object)</i><hr/>
+<p class="text">
+
+	  The add method adds a new object in the heap by
+	  key. The first argument is the key used to set the object
+	  position in the heap. The second argument is the object to add.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pop</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The pop pops the first available in the heap. If
+	  the heap is empty, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length returns the number of objects in the heap.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p method returns true if the heap is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the heap so that it becomes empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-key</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-key method returns the key associated with
+	  an entry in the heap by index. If the index is out of range, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-object</i><i> (&rarr; Object)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-object method returns the object associated with
+	  an entry in the heap by index. If the index is out of range, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-mode</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-mode method returns the heap operating
+	  mode. If the mode is true, the heap operates in ascending
+	  order. If the mode is false, the heap operates in descending
+	  order. In ascending order, the first object is the object with
+	  the lowest key.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>min-key-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The min-key-p predicate returns true if a minimum
+	  key has been set. The get-min-key method can be
+	  used to retrieve the minimum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>max-key-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The max-key-p predicate returns true if a maximum
+	  key has been set. The get-max-key method can be
+	  used to retrieve the maximum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset-min-key</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset-min-key method resets the minimum key
+	  flag and value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset-max-key</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset-max-key method resets the maximum key
+	  flag and value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-min-key</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-min-key method sets the minimum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-min-key</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-min-key method returns the minimum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-max-key</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-max-key method sets the maximum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-max-key</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-max-key method returns the maximum key value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>resize</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The resize method resize the heap with a new
+	  size. if the size is lower than the number of elements, the
+	  procedure does nothing.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Bitset</div>
+<p class="text">
+ The <tt class="code">Bitset</tt> builtin object is a container for multi bit storage. The size of the bitset is determined at construction. With the use of an index, a particular bit can be set, cleared and tested. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>bitset-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Bitset</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The BitSet constructor create an empty bitset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Bitset</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Bitset constructor create a bitset those size is
+	  given by the integer argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Bitset</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Bitset constructor create a bitset by parsing
+	  the string argument. The string can be either in the normal
+	  binary form with or without the 0b prefix or in
+	  hexadecimal form with the 0x prefix.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Bitset</i><i> (Buffer Boolean)</i><hr/>
+<p class="text">
+
+	  The Bitset constructor create a bitset from a
+	  buffer content. Each byte in the buffer is to be placed in the
+	  bitset. The boolean argument is the ascending
+	  flag. When true the buffer bytes are used in ascending
+	  index order, thus making the fist byte in the buffer to be used
+	  as the first right byte in the bitset. When false, the buffer
+	  bytes are used in descending index order, thus making the last
+	  byte in the buffer to be used as the first byte in the bitset.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the bitset and force the initial
+	  size to 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>marked-p</i><i> (&rarr; Boolean)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The marked-p predicate returns true if the bit is
+	  set at the index argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>clear</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The clear method clears a bit by the index argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mark</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The mark method marks a bit by the index argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mark</i><i> (&rarr; none)</i><i> (Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The mark method set the bit value by the index argument
+	  with the boolean second argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The add method add a bit in the bitset at the given
+	  position. The first argument is the bit position and the second
+	  argument is the bit value. The add method is the only method
+	  that resize a bitset.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer|String)</i><hr/>
+<p class="text">
+
+	  The set method set a bitset with an integer
+	  value. In the first form with an integer argument, the bitset is
+	  completely reset to a 64 bits bitset and the value set as an
+	  unsigned integer. In the second form with a string argument, the
+	  bitset is reset and the string argument is parsed as a binary
+	  string with or without binary prefix or as a hexadecimal string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>clamp</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The clamp method clamp a bitset by boolean value. The
+	  bitset size is determined by finding the upper bit index that
+	  match the boolean argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the bitset
+	  in bits.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-byte</i><i> (&rarr; Integer)</i><i> (Byte)</i><hr/>
+<p class="text">
+
+	  The to-byte method maps a portion of the bitset to
+	  a byte at a specific position. The integer argument is the bit
+	  position that is mapped to the byte lsb.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>subset</i><i> (&rarr; Integer)</i><i> (Bitset)</i><hr/>
+<p class="text">
+
+	  The subset method returns a sub bitset by size.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>subset</i><i> (&rarr; Integer Integer)</i><i> (Bitset)</i><hr/>
+<p class="text">
+
+	  The subset method returns a sub bitset by size and
+	  position. The first integer argument is the sub bitset size. The
+	  second argument is the bitset position where the sub bitset is
+	  extracted.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Buffer</div>
+<p class="text">
+ The <tt class="code">Buffer</tt> builtin object is a byte buffer that is widely used with i/o operations. The buffer can be constructed with or without literal arguments. The standard methods to add or push-back byte or characters are available. One attractive method is the write method which can write a complete buffer to an output stream specified as an argument. By default, the buffer operates in resize mode. If the buffer is configured to operate in non-resize mode, an exception is raised when trying to add a character when the buffer is full. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>buffer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Buffer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Buffer constructor create an empty buffer. The
+	  buffer is configured to operate in resize mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Buffer</i><i> (Literal...)</i><hr/>
+<p class="text">
+
+	  The Buffer constructor create a buffer with a list
+	  of literal object arguments. Each literal argument is used to
+	  produce a byte representation which is added into the buffer.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; Integer)</i><i> (Byte|Literal|Buffer)</i><hr/>
+<p class="text">
+
+	  The add method adds a byte, a literal object or a buffer to
+	  the calling buffer. The object argument is automatically converted to a
+	  sequence of bytes. For a buffer, the entire content is copied
+	  into the buffer. The method returns the number of bytes added
+	  into the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get method returns the next available byte in
+	  the buffer but do not remove it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>read</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The read method returns the next available character
+	  and remove it from the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the entire buffer and destroy
+	  its contents.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>full-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The full-p predicate return true if the buffer is
+	  full. If the buffer is re-sizeable, the method always return false.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The empty-p predicate return true if the buffer is
+	  empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>resize-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The resize-p predicate return true if the buffer is
+	  re-sizeable.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-string</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The to-string method returns a string representation of
+	  the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>format</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The format method returns an octet string representation of
+	  the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pushback</i><i> (&rarr; Integer)</i><i> (Byte|Literal|Buffer)</i><hr/>
+<p class="text">
+
+	  The pushback method push back a byte, a literal
+	  object or a buffer in the calling buffer. The object argument is
+	  automatically converted to a sequence of bytes. For a buffer,
+	  the entire content is copied into the buffer. The method returns
+	  the number of byte pushbacked.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-host-word</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-host-word method reads a word from the buffer and
+	  convert it to an integer. The word is assumed to be in network byte
+	  order and is converted into the host byte order before becoming an
+	  integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-host-quad</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-host-quad method reads a quad from the buffer and
+	  convert it to an integer. The quad is assumed to be in network byte
+	  order and is converted into the host byte order before becoming an
+	  integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-host-octa</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-host-octa method reads an octa from the buffer and
+	  convert it to an integer. The octa is assumed to be in network byte
+	  order and is converted into the host byte order before becoming an
+	  integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-resize</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-resize method set the resize flag for a
+	  particular buffer. This method can be used at any time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shl</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The shl method shift left the buffer by a certain
+	  number of characters. The integer argument is the number of
+	  characters to shift.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+BlockBuffer</div>
+<p class="text">
+ The <tt class="code">BlockBuffer</tt> builtin object is a special buffer class designed to hold bytes in a bound or unbound way. In the bound mode, the buffer size is know and the buffer cannot be resized. In the unbound mode, the buffer size is unknown and the buffer can be resized as needed. The block buffer is designed to be loaded by various means, including data, buffer or stream. Additionaly, the block buffer can be used to write into another buffer or a stream by block. By default the read and write block size is the system block size and the default mode is the bound mode, which can be changed by setting the buffer resize flag. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>block-buffer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Buffer
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>BlockBuffer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The BlockBuffer constructor create a non-resizable
+	  empty block buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>BlockBuffer</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The BlockBuffer constructor create a non-resizable
+	  block buffer. The integer argument is the block buffer size.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>read-count</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The read-count method returns the number of
+	  characters read by the buffer. The read counter is increased
+	  during any read operation that might decrease the buffer length.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write-count</i><i> (&rarr; Byte)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The write-count method returns the number of
+	  characters writen into the buffer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>copy</i><i> (&rarr; Integer)</i><i> (String|Buffer|InputStream|OutputStream)</i><hr/>
+<p class="text">
+
+	  The copy method copies an object into or from the
+	  block buffer. Inthe first form, a string, a buffer or an input
+	  stream is isued to fill the buffer. If the buffer is resizable,
+	  the whole contents of the objects are copied into the block
+	  buffer. If the buffer is not resizable, the copy operation stops
+	  when the buffer is full. The copy method consumes characters
+	  with a buffer or an input stream object. With an output stream
+	  object, the block buffer characters are consumed while beeing
+	  written to the output stream. The total number of characters
+	  copied is returned by this method. When using a multiple types
+	  object that implements both the input and output stream model,
+	  the priority is given to the input stream type.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>copy-input-stream</i><i> (&rarr; Integer)</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The copy-input-stream method copies an input stream
+	  into the block buffer. This method is similar to
+	  the copy method except that it operates only with
+	  an input stream. Such method is usefull when using object that
+	  implements multiple stream types.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>copy-output-stream</i><i> (&rarr; Integer)</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The copy-output-stream method copies an output stream
+	  into the block buffer. This method is similar to
+	  the copy method except that it operates only with
+	  an output stream. Such method is usefull when using object that
+	  implements multiple stream types.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Property</div>
+<p class="text">
+ The <tt class="code">Property</tt> builtin object is container for a name/value pair. Generally, the property object is used within a property list. An optional information field can be inserted into the property. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>property-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Property</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Property constructor create an empty property.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Property</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Property constructor create a property by
+	  name. The first argument is the property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Property</i><i> (String Literal)</i><hr/>
+<p class="text">
+
+	  The Property constructor create a property by
+	  name and value. The first argument is the property name. The
+	  second argument is the property value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Property</i><i> (String String Literal)</i><hr/>
+<p class="text">
+
+	  The Property constructor create a property by
+	  name, info and value. The first argument is the property name. The
+	  second argument is the property info. The third argument is the 
+	  property value.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (String Literal)</i><hr/>
+<p class="text">
+
+	  The set method sets the property name and
+	  value. The first argument is the property name. The second
+	  argument is the property value, which is a literal 
+	  converted to its string representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-info</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-info method sets the property information.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the property information.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-value</i><i> (&rarr; none)</i><i> (Literal)</i><hr/>
+<p class="text">
+
+	  The set-value method sets the property value. The
+	  literal argument is converted to its string representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-value</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-value method returns the property string value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-boolean-value</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-boolean-value method returns the property boolean
+	  value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-integer-value</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-integer-value method returns the property
+	  integer value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-real-value</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-real-value method returns the property
+	  real value.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Plist</div>
+<p class="text">
+ The <tt class="code">Plist</tt> builtin object is a base container class used to manage property objects in an ordered way. The property list operates by maintaining a vector of property object along with a hash table that permits to find the object quickly. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>plist-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Serial
+</i><i>Iterable
+</i><i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Plist</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Plist constructor create an empty property list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Plist</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Plist constructor create a property list by name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Plist</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Plist constructor create a property list by name
+	  and info.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the property list name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-info</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-info method sets the property list info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the property list info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Property | String Literal | String String Literal)</i><hr/>
+<p class="text">
+
+	  The add method add a property by object or name and
+	  value in the property list. In its first form the object is a
+	  property object. In the second form, the first argument is the
+	  property name and the second argument is the property value. In the
+	  the third form the first argument is the property name, the second
+	  argument is the property info and the this argument is the property
+	  value. if the property already exists an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (String Literal)</i><hr/>
+<p class="text">
+
+	  The set method add or sets the property name and
+	  value in the property list. The first argument is the property
+	  name. The second argument is the property value. If the property
+	  already exists, the property value is changed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Property)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a property by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the property lists
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>empty-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The emptyp- predicate returns true if the property
+	  list is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of properties
+	  in the property list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p method returns true if a property
+	  exists. The string argument is the property name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find</i><i> (&rarr; Property)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find method  finds a property by name. The string
+	  argument is the property name. If the property does not exists,
+	  nil is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Property)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method finds a property by name. The string
+	  argument is the property name. If the property does not exists,
+	  an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-value</i><i> (&rarr; String)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The get-value method returns the property
+	  value. The string argument is the property name. If the property
+	  does not exist, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>to-print-table</i><i> (&rarr; PrintTable)</i><i> (none | Boolean | Boolean Boolean)</i><hr/>
+<p class="text">
+
+	  The to-print-table method converts the property list
+	  into a print table. The print table can be formated with the
+	  property info and value. In the first form, the print table is
+	  formated without the info field in normal value. In the second
+	  form, the boolean flag controls whther or not the info field is 
+	  added in the table. In the third form, the second boolean value
+	  controls whther or not the real property value are converted in
+	  scientific notation.
+	</p>
+</div>
+<p/>
+<hr/>
+<div class="chapter">
+Special objects</div>
+<hr/>
+<p class="text">
+ This chapter is a reference of the reserved special objects with their respective built-in methods. Special objects are those objects which interact with the interpreter. </p>
+<p/>
+<div class="elem">
+Object</div>
+<p class="text">
+ The base object <tt class="code">Object</tt> provides several methods which are common to all objects. </p>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>repr</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The repr method returns the object name in the form of
+	  a string. The result string is called the representation
+	  string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>rdlock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The rdlock method try to acquire the object in
+	  read-lock mode. If the object is currently locked in write mode by
+	  another thread, the calling thread is suspended until the lock is
+	  released.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wrlock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The wrlock method try to acquire the object in
+	  write-lock mode. If the object is currently locked by another
+	  thread, the calling thread is suspended until the lock is released.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>unlock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The unlock method try to unlock an object. An object
+	  will be unlocked if and only if the calling thread is the one who
+	  acquired the lock.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>clone</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The clone method returns a clone of the calling
+	  object. If the object cannot be cloned, an exception is raised.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Interp</div>
+<p class="text">
+ The <tt class="code">Interp</tt> is the interpreter object which is automatically bounded for each executable program. There is no constructor for this object. The current interpreter is bounded to the <tt class="code">interp</tt> reserved symbol. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>interp-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Runnable
+</i>
+</pre>
+<p class="elem">
+Constants</p>
+<div class="frame">
+<i>argv</i><hr/>
+<p class="text">
+
+	  The argv data member holds the interpreter argument vector.
+	  The vector is initialized when the interpreter is created. Each
+	  argument is stored as a string object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>os-name</i><hr/>
+<p class="text">
+
+	  The os-name data member holds the operating system
+	  name. The data member evaluates as a string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>os-type</i><hr/>
+<p class="text">
+
+	  The os-type data member holds the operating system
+	  type. The data member evaluates as a string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>version</i><hr/>
+<p class="text">
+
+	  The version data member holds the full engine version.
+	  The data member evaluates as a string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>program-name</i><hr/>
+<p class="text">
+
+	  The program-name data member holds the interpreter
+	  program name. The data member evaluates as a string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>major-version</i><hr/>
+<p class="text">
+
+	  The major-version data member holds the interpreter
+	  major revision number. The data member evaluates as an integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>minor-version</i><hr/>
+<p class="text">
+
+	  The minor-version data member holds the interpreter
+	  minor revision number. The data member evaluates as an integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>patch-version</i><hr/>
+<p class="text">
+
+	  The patch-version data member holds the interpreter
+	  patch revision number. The data member evaluates as an integer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>afnix-uri</i><hr/>
+<p class="text">
+
+	  The afnix-uri data member holds the official
+	  uri. The data member evaluates as a string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>machine-size</i><hr/>
+<p class="text">
+
+	  The machine-size data member holds the interpreter
+	  machine size expressed in bits. Most of the time, the machine
+	  size is either 32 or 64 bits. If something else is returned, it
+	  certainly reflects an exotic platform.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>loader</i><hr/>
+<p class="text">
+
+	  The loader data member holds the interpreter
+	  library loader. Under normal circumstances, the library loader
+	  should not be used and the standard interp:library
+	  form should be used.      
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>resolver</i><hr/>
+<p class="text">
+
+	  The resolver data member holds the interpreter
+	  resolver. The resolver can be used to add dynamically a librarian
+	  or a directory to the interpreter module resolver.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>load</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The load method opens a file those name is the method
+	  argument and executes each form in the file by doing a read-eval
+	  loop. When all forms have been executed, the file is closed and the
+	  method returns true. In case of exception, the file is closed and the
+	  method returns false. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>library</i><i> (&rarr; Library)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The library method opens a shared library and a returns
+	  a shared library object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>launch</i><i> (&rarr; Thread)</i><i> (form|thread form)</i><hr/>
+<p class="text">
+
+	  The launch method executes the form argument in a
+	  normal thread. The normal thread is created by cloning the current
+	  interpreter. In the first form, a thread object is created by
+	  the method and return when the thread as been launched. In the
+	  second form, a thread is started by binding a form to the thread
+	  object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-epsilon</i><i> (&rarr; none)</i><i> (Real)</i><hr/>
+<p class="text">
+
+	  The set-epsilon method sets the interpreter epsilon
+	  which corresponds to the real precision. The real precision
+	  is used by the ?= operator to compare real values.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-epsilon</i><i> (&rarr; Real)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-real precision method returns the interpreter
+	  epsilon which correspond to the real precision. The
+	  real-precision is used by the ?= operator to
+	  compare real values.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>dup</i><i> (&rarr; Interp)</i><i> (none|Terminal)</i><hr/>
+<p class="text">
+
+	  The dup method returns a clone of the current
+	  interpreter by binding the terminal steam argument. Without
+	  argument, a new terminal object is automatically created and
+	  bound to the newly created interpreter.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>loop</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The loop method executes the interpreter main loop
+	  by reading the interpreter input stream. The loop is finished
+	  when the end-of-stream is reached with the input stream. The
+	  method returns a boolean flag to indicate whether or not the
+	  loop was successful.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-primary-prompt</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-primary-prompt method sets the interpreter
+	  terminal primary prompt which is used during the interpreter
+	  main loop.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-secondary-prompt</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-secondary-prompt method sets the
+	  interpreter terminal secondary prompt which is used during the
+	  interpreter main loop.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-primary-prompt</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-primary-prompt method returns the
+	  interpreter terminal primary prompt.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-secondary</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-secondary-prompt method returns the
+	  interpreter terminal secondary prompt.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Thread</div>
+<p class="text">
+ The <tt class="code">Thread</tt> object is a special object which acts as a thread descriptor. Such object is created with the <tt class="code">launch</tt> reserved keyword. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>thread-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Thread</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Thread constructor create a default thread
+	  object without any form bound to it. The object can be later
+	  used with the launch command.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>end-p</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The end-p predicate returns true if the thread
+	  argument has finished. This predicate indicates that the thread
+	  result is a valid one.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wait</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The wait method suspends the calling thread until the
+	  thread argument as completed. The wait method is the
+	  primary mechanism to detect a thread completion.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>result</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The result method returns the thread result. If the
+	  thread is not completed, the nil value is
+	  returned. However, this method should not be used to check if a
+	  thread has completed and the wait method must be
+	  used because a thread result might be nil.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Condvar</div>
+<p class="text">
+ The condition variable <tt class="code">Condvar</tt> object is a special object which provides a mean of synchronization between one and several threads. The condition is said to be false unless it has been marked. When a condition is marked, all threads waiting for that condition to become true are notified and one thread is activated with that condition. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>condvar-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Condvar</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Condvar constructor creates a default condition
+	  variable.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>lock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The lock method locks the condition variable mutex. If
+	  the mutex is already locked, the calling thread is suspended until
+	  the lock is released. When the method returns, the resumed thread
+	  owns the condition variable lock. It is the thread responsibility to
+	  reset the condition variable and unlock it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>mark</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The mark method marks the condition variable and notify
+	  all pending threads of such change. The mark method is the basic
+	  notification mechanism.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wait</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The wait method waits for a condition variable to be
+	  marked. When such condition occurs, the suspended thread is
+	  run. When the method returns, the resumed thread owns the condition
+	  variable lock. It is the thread responsibility to reset the
+	  condition variable and unlock it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method acquires the condition variable mutex,
+	  reset the mark, and unlock it. If the lock has been taken, the
+	  calling thread is suspended.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>unlock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The unlock method unlock the condition variable
+	  mutex. This method should be used after a call to lock
+	  or wait.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>wait-unlock</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The wait-unlock method wait until a condition variable
+	  is marked.  When such condition occurs, the suspended thread is
+	  run. Before the method returns, the condition variable is reset and
+	  the mutex unlocked. With two threads to synchronize, this is the
+	  preferred method compared to wait. 
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Lexical</div>
+<p class="text">
+ The <tt class="code">Lexical</tt> object is a special object built by the reader. A lexical name is also a literal object. Although the best way to create a lexical name is with a form, the lexical object can also be constructed with a string name. A lexical name can be mapped to a symbol by using the <tt class="code">map</tt> method. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>lexical-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Lexical</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Lexical constructor create an empty lexical object
+	  which evaluates to nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Lexical</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Lexical constructor create a lexical object using
+	  the string argument as the lexical name.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>map</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The map method returns the object that is mapped by the
+	  lexical name. Most of the time, a symbol object is returned since it
+	  is the kind of object stored in a nameset. Eventually the mapping
+	  might returns an argument object if used inside a closure.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Qualified</div>
+<p class="text">
+ The <tt class="code">Qualified</tt> object is a special object built by the reader. A qualified object is similar to a lexical object. It is also a literal object. Like a lexical name, a qualified name can be created with a form or by direct construction with a name. Like a lexical name, the <tt class="code">map</tt> method can be used to retrieve the symbol associated with that name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>qualified-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Qualified</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Qualifed constructor create an empty qualified name
+	  object which evaluates to nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Qualified</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Qualified constructor create a qualified name
+	  object using the string argument as the qualified name. The name is
+	  parse for qualified name syntax adherence.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>map</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The map method returns the object that is mapped by the
+	  qualified name. Most of the time, a symbol object is returned since
+	  it is the kind of object stored in a nameset. Eventually the mapping
+	  might returns an argument object if used inside a closure.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Symbol</div>
+<p class="text">
+ The <tt class="code">Symbol</tt> object is a special object used by nameset to map a name with an object. Generally a symbol is obtained by mapping a lexical or qualified name. As an object, the symbol holds a name, an object and a <em>constant flag</em>. The symbol name cannot be changed since it might introduce inconsistencies in the containing nameset. On the other hand, the <em>constant flag</em> and the object can be changed. A symbol is a literal object. A symbol that is not bounded to a nameset can be constructed dynamically. Such symbol is said to be <em>not interned</em>. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>symbol-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Symbol</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Symbol constructor create a symbol by name. The
+	  associated object is marked as nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Symbol</i><i> (String Object)</i><hr/>
+<p class="text">
+
+	  The Symbol constructor create a symbol by name and bind
+	  the object argument to the symbol.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-const</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-const method returns the symbol const flag. If
+	  the flag is true, the symbol object cannot be changed unless that
+	  flags is reset with the set-const method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-const</i><i> (&rarr; none)</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The set-const method set the symbol const flag. This
+	  method is useful to mark a symbol as const or to make a const symbol
+	  mutable.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-object</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-object method returns the symbol object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-object</i><i> (&rarr; none)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-object method set the symbol object. The object
+	  can be obtained by evaluating the symbol.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Closure</div>
+<p class="text">
+ The <tt class="code">Closure</tt> object is a special object that represents a lambda or gamma expression. A closure is represented by a set of arguments, a set of closed variables and a form to execute. A boolean flag determines the type of closure. The closure predicate <tt class="code">lambda-p</tt> returns true if the closure is a lambda expression. Closed variables can be defines and evaluated with the use of the qualified name mechanism. Closure mutation is achieved with the <tt class="code">add-argument</tt> and <tt class="code">set-form</tt> method. An empty closure can be defined at construction as well. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>closure-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Closure</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Closure constructor create a default closure. When
+	  the closure is created, a local set of arguments and closed
+	  variables is generated. Note that such local set is dynamic. There
+	  is no restriction to reconfigure a particular lambda at
+	  run-time. The difference between a lambda and a gamma expression
+	  resides in the nameset binding when the closure is called. With a
+	  lambda, the closure nameset parent is the calling nameset. With a
+	  gamma expression, the parent nameset is always the top-level
+	  interpreter nameset. Note also, that the symbol self is
+	  automatically bounded for this closure.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Closure</i><i> (Boolean)</i><hr/>
+<p class="text">
+
+	  The Closure constructor create a closure which acts as
+	  lambda expression if the boolean argument is true. If the boolean
+	  argument is false, the closure will behave like a gamma expression.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>gamma-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The gamma-p predicate returns true if the closure is a
+	  gamma expression. The predicate returns true for a lambda expression.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lambda-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The lambda-p predicate returns true if the closure is a
+	  lambda expression. The predicate returns false for a gamma expression.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-form</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-form method returns the closure form object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-form</i><i> (&rarr; none)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-form method sets the closure form object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-argument</i><i> (&rarr; none)</i><i> (String|Lexical|form)</i><hr/>
+<p class="text">
+
+	  The add-argument method adds an argument to the
+	  closure. The argument object can be either a string, a lexical
+	  object of a simple form that defines a constant lexical name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Librarian</div>
+<p class="text">
+ The <tt class="code">Librarian</tt> object is a special object that read or write a librarian. Without argument, a librarian is created for writing purpose. With one file name argument, the librarian is created for reading. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>librarian-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Librarian</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Librarian constructor creates a librarian for
+	  writing. Initially, the librarian is empty and files must be added
+	  with the add method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Librarian</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Librarian constructor creates a librarian for
+	  reading using the name as the librarian file name.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add method adds a file into the librarian. The
+	  librarian must have been opened in write mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>write</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The write method writes a librarian to a file those
+	  name is the argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of file in the
+	  librarian. This method work, no matter how the librarian has been
+	  opened.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p predicate returns true if the file
+	  argument exists in the librarian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>extract</i><i> (&rarr; InputMapped)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The extract method returns an input stream mapped to
+	  the file name argument.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Resolver</div>
+<p class="text">
+ The <tt class="code">Resolver</tt> object is a special object that gives the ability to open a file based on a file path resolver. The resolver maintains a list of valid path and returns an input stream for a file on demand. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>resolver-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Resolver</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Resolver constructor creates a default
+	  resolver. Once created, the add method can be used to
+	  add path to the resolver.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The add method adds a path into the resolver. The path
+	  can points either to a directory or a librarian.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; InputStream)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method resolves the file name argument and
+	  returns an input stream for that file.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>valid-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The valid-p predicate returns true if the file name
+	  argument can be resolved. If the file name can be resolved, the
+	  lookup method can be called to get an input stream.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+PrintTable</div>
+<p class="text">
+ The PrintTable class is a formatting class for tables. The table is constructed with the number of columns -- default to 1 -- and eventually the number of rows. Once the table is created, element are added to the table with the <tt class="code">add</tt> method. Specific table element can be set with the <tt class="code">set</tt> method. The class provide a <tt class="code">format</tt> method those default is to print the table on the interpreter standard output. With an output stream argument or a buffer, the table is formatted to these objects. The table formatting includes an optional column width, a filling character and a filling direction flag. By default, the column width is 0. This means that the column width is computed as the maximum length of all column elements. If the column width is set with the <tt class="code">set-column-size</tt> method, the string element might be truncated to the left or right -- depending on the filling flag -- to fit the column width. Each table element can also be associated with a tag. The <tt class="code">tag-p</tt> method can be used to test for the presence of a tag, while the <tt class="code">set-tag</tt> and <tt class="code">get-tag</tt> methods can be used to set or get the tag by row and column coordinates. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>print-table-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>PrintTable</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The PrintTable constructor creates a default
+	  table with one column.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>PrintTable</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The PrintTable constructor creates a table with a
+	  pre-defined number of columns specified in the constructor argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>PrintTable</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The PrintTable constructor creates a table with a
+	  pre-defined number of columns and rows specified in the constructor
+	  arguments. 
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>head-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The head-p predicate returns true if the table
+	  header is defined.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-head</i><i> (&rarr; none)</i><i> ([String+])</i><hr/>
+<p class="text">
+
+	  The add-head method add to the table header the
+	  string arguments. The number of arguments must be equal to the
+	  number of columns.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-head</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-head method returns a table header element by
+	  column index. The integer argument is the header row index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-head</i><i> (&rarr; none)</i><i> (Integer String)</i><hr/>
+<p class="text">
+
+	  The set-head method sets a table header element by
+	  column index. The first argument is the header column index and
+	  the second is the header string value to set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Integer)</i><i> (none|[Literal...])</i><hr/>
+<p class="text">
+
+	  The add method serves several purposes. Without
+	  argument, a new row is added and the row index is returned. The
+	  row index can be later used with the set method to
+	  set a particular table element. With one or several literal
+	  arguments, those length must match the number of columns, a new
+	  row is created and those arguments added to the table. The row
+	  number is also returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; String)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a particular table element by
+	  row and column. The first argument is the table row index and the
+	  second is the table column index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set method sets a particular table element by row
+	  and column. The first argument is the table row index and the second
+	  is the table column index. The last argument is a literal object
+	  that is converted to a string prior its insertion.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tag-p</i><i> (&rarr; Boolean)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The tag-p predicate returns true if a tag is present
+	  at a particular table element. The first argument is the table row
+	  index and the second is the table column index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-tag</i><i> (&rarr; none)</i><i> (Integer Integer String)</i><hr/>
+<p class="text">
+
+	  The set-tag method sets a particular table tag by row
+	  and column. The first argument is the table row index and the second
+	  is the table column index. The last argument is the tag value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tag</i><i> (&rarr; String)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The get-tag method returns a particular table tag by
+	  row and column. The first argument is the table row index and the
+	  second is the table column index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>dump</i><i> (&rarr; none|String)</i><i> (none|Integer|OutputStream|Buffer)</i><hr/>
+<p class="text">
+
+	  The dump method dumps the table to an output stream
+	  or a buffer. Without argument, the default interpreter output
+	  stream is used. With an integer argument, the specified row is
+	  used and a string is returned. With a buffer or an output
+	  stream, the whole table is written and nothing is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>format</i><i> (&rarr; none|String)</i><i> (none|Integer|OutputStream|Buffer)</i><hr/>
+<p class="text">
+
+	  The format method writes the formatted table to an
+	  output stream or a buffer. Without argument, the default interpreter
+	  output stream is used. With an integer argument, the specified row is
+	  used and a string is returned. With a buffer or an output
+	  stream, the whole table is written and nothing is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-rows</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-rows method returns the number of rows in the
+	  table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-columns</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-columns method returns the number of columns in
+	  the table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-column-size</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-column-size method sets the desired width for a
+	  particular column. The first argument is the column index and the
+	  second argument is the column width.If 0 is given, the column width
+	  is computed as the maximum of the column elements.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-column-size</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-column-size method returns the desired width
+	  for a particular column.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-column-fill</i><i> (&rarr; none)</i><i> (Integer Character)</i><hr/>
+<p class="text">
+
+	  The set-column-fill method sets the filling character
+	  for a particular column. The first argument is the column index and
+	  the second argument is a character to use when filling a particular
+	  column element. The default filling character is the blank
+	  character.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-column-fill</i><i> (&rarr; Character)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-column-fill method returns the filling
+	  character for a particular column.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-column-direction</i><i> (&rarr; none)</i><i> (Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The set-column-direction method sets the direction flag
+	  for a particular column. The first argument is the column index and
+	  the second argument is a boolean. A false value indicates a filling
+	  by the left while a true value indicates a filling by the right. The
+	  column filling character is used for this operation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-column-direction</i><i> (&rarr; Boolean)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-column-direction method returns the direction
+	  flag for a particular column.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Logger</div>
+<p class="text">
+ The Looger class is a message logger that stores messages in a buffer with a level. The default level is the level 0. A negative level generally indicates a warning or an error message but this is just a convention which is not enforced by the class. A high level generally indicates a less important message. The messages are stored in a circular buffer. When the logger is full, a new message replace the oldest one. By default, the logger is initialized with a 256 messages capacity that can be resized. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>logger-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Logger</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Logger constructor creates a default logger.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logger</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Logger constructor creates a logger with a
+	  specific size specified as the constructor argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logger</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Logger constructor creates a logger with an
+	  information argument. The information string is later used to
+	  format the logged messages.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Logger</i><i> (Integer String)</i><hr/>
+<p class="text">
+
+	  The Logger constructor creates a logger with a
+	  specific size and an information argument. The first argument is
+	  the logger size. The second argument is the information
+	  string. The information string is later used to format the
+	  logged messages.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String|String Integer)</i><hr/>
+<p class="text">
+
+	  The add method adds a message in the logger. With
+	  one argument, the method take a single string message. with two
+	  arguments, the first arguments is the message and the second
+	  argument is the message level.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the logger class by 
+	  removing all messages.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of messages
+	  stored in the logger object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>resize</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The resize method resize the logger class by
+	  increasing the size of the message buffer. The old messages are
+	  kept during the resizing operation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-info</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-info method sets the logger information
+	  string. The information string is used by the derived classes
+	  when a message is printed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the logger information
+	  string. The information string is used by the derived classes
+	  when a message is printed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-default-level</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-default-level method sets the default level
+	  use for storing message. This parameter is used with the
+	  add method in conjunction with the message
+	  argument. When the message level is specified, the default
+	  message level is ignored.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-default-level</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-default-level method returns the default
+	  message level used by the logger. The default message level is
+	  used by the add method when the message level is
+	  not specified directly.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-message</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-message method returns a logger message by
+	  index. The integer argument is the message index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-full-message</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-full-message method returns a fully
+	  formatted logger message by index. The integer argument is the
+	  message index. The message includes the time and contents.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-message-time</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-message-time method returns the logger
+	  message time by index. The integer argument is the message
+	  index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-message-level</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-message-level method returns the logger
+	  message level by index. The integer argument is the message
+	  index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-output-stream</i><i> (&rarr; none)</i><i> (OutputStream|String)</i><hr/>
+<p class="text">
+
+	  The set-output-stream method set the logger output
+	  stream. The output stream can be either an output stream or an
+	  output file name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Counter</div>
+<p class="text">
+ The Counter class is a mechanism designed to count integer both upward or downward. The counter is initialized with a start and end value. With a single value, the start value is set to 0 and the counter direction determined by the end value. The counter object is also a literal object, meaning that it can be directly printed. The object is also designed to be used directly in a loop. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>counter-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Literal
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Counter</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Counter constructor creates a default
+	  counter. Since, both start and end values are initialized to 0,
+	  this object will never count.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Counter</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Counter constructor creates an upward
+	  counter. If the argument value, the initial counter value is the
+	  argument value and the counter will counter from the value to
+	  0. If the argument value is positive, the final counter value is
+	  the argument value and the counter will count from 0 to this value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Counter</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Counter constructor creates a counter with an
+	  initial and final values. Depending on the initial and final
+	  value the counter might be an upward or a downward counter.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the counter to its start value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>step-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The step-p predicate checks if the counter can be moved
+	  by one position. If the test is successful, the counter is moved
+	  upward or downward. the method returns the result of the test.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>valid-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The valid-p predicate returns true if the counter
+	  can be moved by one position.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Lexer</div>
+<p class="text">
+ The <tt class="code">Lexer</tt> class is the lexical analyzer for the writing system. The lexical analyzer consumes characters from an input stream and produces tokens. From a token, it is possible to derive an object in the form of a constant object which can be evaluated to a literal or to another object in the presence of a lexical or qualified object. The lexical analyzer is integrated inside the form reader. As an object it is possible to use it when it becomes necesary to parse strings. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>lexer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-token</i><i> (&rarr; Token)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-token method returns the next available token.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-object</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-object method returns the next available object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-line-number</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-line-number method returns the token line
+	  number which is the current line number under processing.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Former</div>
+<p class="text">
+ The <tt class="code">Former</tt> class is an abstract class used to derive form reader. The class defines only a method <tt class="code">parse</tt> which returns a form. The method <tt class="code">getlnum</tt> returns the form line number. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>former-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>parse</i><i> (&rarr; Form)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The parse method returns the next available form.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-line-number</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-line-number method returns the form line
+	  number which is the current line number under processing.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Reader</div>
+<p class="text">
+ The <tt class="code">Reader</tt> class is the general purpose form reader which supports the writing system syntax. The reader is primarily used to parse file or be run interactively. The reader consumes tokens until a complete form can be built. The form does not have any particular meaning and must be post processed by the application. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>reader-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Former
+</i><i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Reader</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Reader constructor creates a default reader.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Reader</i><i> (String|InputStream)</i><hr/>
+<p class="text">
+
+	  The Reader constructor creates a reader by string
+	  or input stream. In the first form, a string is mapped into a
+	  string stream which is used by the reader to parse form. In the
+	  second form, an input stream is bound to the reader to parse forms.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Loader</div>
+<p class="text">
+ The <tt class="code">Loader</tt> class is a library loader. The loader keep a list of loaded libraries. This class is bound to the interpreter and cannot be constructed. Use the <tt class="code">interp:loader</tt> to access the interpreter loader. for safety reason, it is not possible to add a libray to the loader. The interpreter method <tt class="code">interp:library</tt> is the prefered method to access the loader. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>loader-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the number of loaded libraries.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Library)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a library object by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p predicate returns true if a library is
+	  already loaded in the interpreter.
+	</p>
+</div>
+<p/>
+</body>
+</html>

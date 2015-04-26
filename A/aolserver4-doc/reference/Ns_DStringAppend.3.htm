@@ -1,0 +1,415 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:21 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_DString</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_DString</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_DStringAppend,
+Ns_DStringAppendArg, Ns_DStringAppendElement,
+Ns_DStringExport, Ns_DStringFree, Ns_DStringInit,
+Ns_DStringLength, Ns_DStringNAppend, Ns_DStringPop,
+Ns_DStringPrintf, Ns_DStringPush, Ns_DStringSetLength,
+Ns_DStringTrunc, Ns_DStringValue, Ns_DStringVarAppend
+&minus; library procedures</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringAppend</b>(<i>Ns_DString *dsPtr, char
+*string</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringAppendArg</b>(<i>Ns_DString *dsPtr, char
+*string</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringAppendElement</b>(<i>Ns_DString *dsPtr, char
+*string</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringExport</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_DStringFree</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_DStringInit</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_DStringLength</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringNAppend</b>(<i>Ns_DString *dsPtr, char *string,
+int length</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Ns_DString *
+<b><br>
+Ns_DStringPop</b>(<i>void</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringPrintf</b>(<i>Ns_DString *dsPtr, char
+*fmt,...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_DStringPush</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_DStringSetLength</b>(<i>Ns_DString *dsPtr, int
+length</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_DStringTrunc</b>(<i>Ns_DString *dsPtr, int
+length</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringValue</b>(<i>Ns_DString *dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_DStringVarAppend</b>(<i>Ns_DString *dsPtr, ...</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+create, manipulate and destroy Ns_DStrings. Ns_DStrings are
+structures that store strings and information about the
+string length. These dynamic strings grow as need to fit the
+strings placed in them or appended to them. If the
+Ns_DString plus the appended string are larger than the size
+of original string within the Ns_DString, for example, the
+Ns_DString will be automatically extended by allocating more
+memory to it.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Many functions
+return string pointers that point directly to the string
+within an Ns_DString structure. You must not free these
+returned string pointers with Ns_Free or any other freeing
+function, but must instead use Ns_DStringFree to free memory
+associated with the Ns_DString. <b><br>
+Ns_DStringAppend</b>(<i>dsPtr, string</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append the
+specified string plus a terminating null character to the
+end of the Ns_DString. Returns the string associated with
+the current Ns_DString.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The Ns_DString
+ds of the following code would contain &quot;foo &quot; and
+have a length of 3:</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringAppend(&amp;ds, &quot;foo&quot;); <br>
+/* do something with the dstring */ <br>
+printf(&quot;%s0, ds.string); <br>
+/* finished with dstring */ <br>
+Ns_DStringFree(&amp;ds);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringAppendArg</b>(<i>dsPtr,
+string</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append the
+specified argument plus a terminating null character to the
+end of the Ns_DString. It is useful for making strings like
+&quot;foo bar baz &quot;. The string pointer associated with
+the current Ns_DString is returned.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringAppendElement</b>(<i>dsPtr,
+string</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append a list
+element to the current value of a dynamic string. The string
+argument is reformatted as a list element and added to the
+current value of the Ns_DString. The return value is a
+pointer to the dynamic string&rsquo;s new value.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringExport</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Returns the
+current Ns_DString string and leaves the Ns_DString in the
+initialized state. In this case, the string returned needs
+to be freed eventually with <b>Ns_Free</b> because the
+string pointer returned is not a part of the Ns_DString any
+longer.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+char *stringdest; <br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringAppend(&amp;ds, &quot;foo&quot;); <br>
+stringdest = Ns_DStringExport(&amp;ds); <br>
+/* do something with .stringdest. */ <br>
+Ns_Free(stringdest);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringFree</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Free any
+allocated memory used by an Ns_DString.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringInit</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Initialize an
+Ns_DString. Before using an Ns_DString, you must initialize
+it with Ns_DStringInit. Storage for an Ns_DString is often
+on the stack in the calling function. The example below
+shows a typical usage.</p>
+
+<p style="margin-left:22%; margin-top: 1em">int
+MyFunctions(int a, int b) <br>
+{ <br>
+Ns_DString ds; <br>
+Ns_DStringInit(&amp;ds); <br>
+/* <br>
+* ds is now initialized and ready to <br>
+* pass to another function <br>
+*/ <br>
+... <br>
+}</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringLength</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Return the
+current length of the string value that is contained within
+an Ns_DString.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringAppend(&amp;ds,
+&quot;&lt;html&gt;&lt;/html&gt;&quot;); <br>
+printf(&quot;len=%d0, Ns_DStringLength(&amp;ds)); <br>
+/* finished with dstring */ <br>
+Ns_DStringFree(&amp;ds);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringNAppend</b>(<i>dsPtr,
+string, length</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append
+n-characters of string to Ns_DString dsPtr. The function
+appends a string up to the specified number of characters,
+plus a terminating null character. Unlike the
+Tcl_DStringAppend function, which only works with string
+data, the AOLserver Ns_DStringNAppend function can append
+binary data. Returns the string associated with the current
+Ns_DString.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The resulting
+Ns_DString in this example, ds would <br>
+contain &quot;foo &quot; and have a length of 3:</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringNAppend(&amp;ds, &quot;fooasdf&quot;, 3); <br>
+printf(&quot;%s0, ds.string); <br>
+Ns_DStringFree(&amp;ds); /* finished with dstring */</p>
+
+<p style="margin-left:22%; margin-top: 1em">If you need a
+null-terminated list of null-terminated <br>
+strings, such as &quot;foo bar &quot;, you would add one to
+<br>
+the length of the appended strings to get the extra <br>
+terminating null character. For example:</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringNAppend(&amp;ds, &quot;foo&quot;, 4); <br>
+Ns_DStringNAppend(&amp;ds, &quot;bar&quot;, 4);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringPop</b>(<i>void</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Pop an
+Ns_DString from the per-thread cache, allocating the space
+for the Ns_DString if necessary. This will initialize Thread
+Local Storage (TLS) and configure parameters on first use.
+TLS is a means of storing data associated with a particular
+thread within the thread&rsquo;s context, so that it is
+always available to that thread. A pointer to the
+initialized Ns_DString is returned.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringPrintf</b>(<i>dsPtr,
+fmt, ...</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append a
+formatted string to an Ns_DString. The Ns_DStringPrintf
+function appends a string that has been created by calling
+the sprintf function with the given format and optional
+arguments. This function currently uses a fixed length
+buffer of 1024 characters to sprintf() the data before
+appending to the Ns_DString.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString
+ds;</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DStringInit(&amp;ds);
+<br>
+Ns_DStringPrintf(&amp;ds, &quot;/path%d&quot;, getpid());
+<br>
+/* do something with dstring */ <br>
+printf (&quot;%s0, ds.string); <br>
+/* finished with dstring */ <br>
+Ns_DStringFree(&amp;ds);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringPush</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Push an
+Ns_DString onto the per-thread cache. The Ns_DString will be
+free&rsquo;d if the maximum number of entries or the maximum
+size parameters have been exceeded. The contents held by the
+Ns_DString are destroyed.</p>
+
+<p style="margin-left:22%; margin-top: 1em">This is a
+performance function. Creating Ns_DStrings is a more
+expensive operation than cleaning out an already-existing
+Ns_DString and storing it for later use by the same
+thread.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringSetLength</b>(<i>dsPtr,
+length</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">The length of
+dsPtr is changed to length and a null byte is stored at that
+position in the string. If length is larger than the space
+allocated for dsPtr, then a panic occurs.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringTrunc</b>(<i>dsPtr,
+length</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Truncate an
+Ns_DString. The Ns_DStringTrunc function truncates an
+Ns_DString to the given length. Unlike Ns_DStringFree, which
+truncates the Ns_DString to length 0 and frees any memory
+that may have been allocated on the heap, Ns_DStringTrunc
+allows you to truncate the string to any length. It
+maintains any memory allocated on the heap. This function is
+useful in a loop where the Ns_DString is likely to overflow
+the static space each time through. Using Ns_DStringTrunc
+instead of Ns_DStringFree will avoid having the Ns_DString
+call malloc to obtain the addition space in each iteration.
+You will need to call Ns_DStringFree eventually to free any
+space that may have been allocated for the Ns_DString.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+int i; <br>
+Ns_DStringInit(&amp;ds);</p>
+
+<p style="margin-left:22%; margin-top: 1em">for (i=0; i
+&lt; 50; i++) { <br>
+Ns_DStringPrintf(&amp;ds, &quot;%s%d&quot;,
+&quot;aBigString&quot;, i); <br>
+/* do something with the dstring constructed above */ <br>
+Ns_DStringTrunc(&amp;ds, 0); <br>
+}</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringValue</b>(<i>dsPtr</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Return the
+current value of an Ns_DString. The Ns_DStringValue macro
+returns a pointer to the current value of an Ns_DString.
+This may be a pointer to the Ns_DString.s static space or to
+a string allocated on the heap if the static space has
+overflowed. It is not safe to use the value returned by this
+macro after an intervening call to Ns_DStringAppend because
+the Ns_DString string could overflow to or move within the
+heap.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringAppend(&amp;ds, &quot;foo&quot;); <br>
+/* do something with the dstring */ <br>
+printf (&quot;%s0, Ns_DStringValue(&amp;ds)); <br>
+Ns_DStringFree(&amp;ds);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_DStringVarAppend</b>(<i>dsPtr,
+...</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Append a
+variable number of strings to an Ns_DString. The
+Ns_DStringVarAppend function appends a variable number of
+strings to an Ns_DString. The list must end with NULL.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Ns_DString ds;
+<br>
+Ns_DStringInit(&amp;ds); <br>
+Ns_DStringVarAppend(&amp;ds, &quot;foo&quot;,
+&quot;bar&quot;, NULL); <br>
+/* do something with the dstring */ <br>
+printf (&quot;%s0, ds.string); <br>
+Ns_DStringFree(&amp;ds);</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

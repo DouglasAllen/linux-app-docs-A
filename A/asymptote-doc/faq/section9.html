@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head><title>
+Asymptote FAQ - Section 9
+</title>
+<link rev="made" href="mailto:">
+<link rel="Contents" href="index.html">
+<link rel="Start" href="index.html">
+<link rel="Previous" href="section8.html"><link rel="Bookmark" title="Asymptote FAQ" href="index.html">
+</head><body text="#000000" bgcolor="#FFFFFF"><h1>
+Asymptote FAQ - Section 9 <br>
+Questions about output
+</h1>
+
+<ul>
+<li><a href="#psviewer" rel=subdocument>Q9.1. How can I disable automatic invocation of the PS viewer after an asy
+file is done processing?</a>
+<li><a href="#jpeg" rel=subdocument>Q9.2. How do I output jpeg images?</a>
+<li><a href="#embedbitmaps" rel=subdocument>Q9.3. Can I embed bitmaps (photos) into my drawings and position and scale
+them? </a>
+<li><a href="#directpdf" rel=subdocument>Q9.4. Does Asymptote support direct PDF output?</a>
+<li><a href="#bigpictures" rel=subdocument>Q9.5. How to I produce large pictures of high quality in raster format (e.g.
+png, giff etc). </a>
+<li><a href="#multipage" rel=subdocument>Q9.6. Is it possible to produce multi-page documents with asymptote?
+</a>
+</ul><hr>
+
+<h2><A name="psviewer">
+Question 9.1.  How can I disable automatic invocation of the PS viewer
+after an asy file is done processing?
+</A></h2>
+
+It's actually not on by default, unless you happen to be using
+Microsoft Windows (because that is what most Microsoft Windows users
+expect). Microsoft Windows users can turn this feature off with the
+command-line option -noV or by putting  
+<pre>
+import settings;
+interactiveView=false;
+batchView=false;
+</pre>
+in their <code>config.asy</code> file. See <A href="http://asymptote.sourceforge.net/doc/Options.html">http://asymptote.sourceforge.net/doc/Options.html</A>.  
+<h2><A name="jpeg">
+Question 9.2.  How do I output jpeg images?
+</A></h2>
+
+If you have the ImageMagick convert program installed, simply type
+<pre>
+asy -f jpg test.asy 
+</pre>
+
+<h2><A name="embedbitmaps">
+Question 9.3.  Can I embed bitmaps (photos) into my drawings and
+position and scale them? 
+</A></h2>
+
+Convert them to eps format and use the graphic(string) function just
+like a Label: <pre>
+label(graphic(&quot;file&quot;),(0,0));
+</pre>
+See the example <A href="http://asymptote.sourceforge.net/gallery/orthocenter.asy">http://asymptote.sourceforge.net/gallery/orthocenter.asy</A> and <A href="http://asymptote.sourceforge.net/doc/label.html">http://asymptote.sourceforge.net/doc/label.html</A>.  
+<h2><A name="directpdf">
+Question 9.4.  Does Asymptote support direct PDF
+output?
+</A></h2>
+
+Yes, PDF output can be produced by the -f pdf option or -tex pdflatex
+option.  This supports transparency, annotations, embedded movies, and U3D/PRC
+content.  
+<h2><A name="bigpictures">
+Question 9.5.  How to I produce large pictures of high quality in
+raster format (e.g. png, giff etc). 
+</A></h2>
+
+Try using some of the options to convert, mainly -geometry and
+-density. For example:  <pre>
+convert -geometry 1000x3000 example.eps example.png 
+</pre>
+You can also change the default resolution of the image with: 
+<pre>
+convert -geometry 1000x3000 -density 300 -units PixelsPerInch example.eps example.png 
+</pre>
+This does not change the number of pixels in the image, but just gives
+a hint  as to how large each pixel should be displayed. 
+
+<p>
+If you include the -density option without the -geometry option,
+convert will  keep the image size constant (so a 4cm x 3cm eps figure will generate
+a 4cm x 3cm png  image).  
+<h2><A name="multipage">
+Question 9.6.  Is it possible to produce multi-page documents with
+asymptote? 
+</A></h2>
+
+Yes, simply call the newpage() function. This is used by the
+<code>slide.asy</code> package to produce high-quality slide presentations
+(easier to use than Prosper).  <hr>
+Back: <a href="section8.html" rev=precedes>Questions about differences between Asymptote and MetaPost</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+<A href="http://asymptote.sourceforge.net">Asymptote</A> 
+- 26 August 2012
+</address><br>
+Extracted from Asymptote Frequently Asked Questions,
+Copyright &copy; 2012 .
+</body></html>

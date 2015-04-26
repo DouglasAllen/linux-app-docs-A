@@ -1,0 +1,255 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:35 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_UrlSpecific</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_UrlSpecific</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_UrlSpecificAlloc,
+Ns_UrlSpecificDestroy, Ns_UrlSpecificGet,
+Ns_UrlSpecificGetExact, Ns_UrlSpecificGetFast,
+Ns_UrlSpecificSet &minus; Store and retrieve URL-specific
+data</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_UrlSpecificAlloc</b>(<i>void</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void * <b><br>
+Ns_UrlSpecificDestroy</b>(<i>char *server, char *method,
+char *url, <br>
+int id, int flags</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void * <b><br>
+Ns_UrlSpecificGet</b>(<i>char *server, char *method, char
+*url, <br>
+int id</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void * <b><br>
+Ns_UrlSpecificGetExact</b>(<i>char *server, char *method,
+char *url, <br>
+int id, int flags</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void * <b><br>
+Ns_UrlSpecificGetFast</b>(<i>char *server, char *method,
+char *url, <br>
+int id</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_UrlSpecificSet</b>(<i>char *server, char *method, char
+*url, <br>
+int id, void *data, int flags, void (*deletefunc) (void
+*)</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+allow you to store URL-specific data in memory for later
+retrieval. They are used when registering procedures for
+example. <b><br>
+Ns_UrlSpecificAlloc</b>()</p>
+
+<p style="margin-left:22%; margin-top: 1em">Return a unique
+ID used to identify a unique virtual URL-space that is then
+used with the Ns_UrlSpecific storage functions. You should
+only call this function at server startup, and not after.
+Here is an example:</p>
+
+<p style="margin-left:22%; margin-top: 1em">static int
+myId;</p>
+
+<p style="margin-left:22%; margin-top: 1em">void <br>
+Init(void) <br>
+{ <br>
+/* Allocate the id once at startup. */ <br>
+myId = Ns_UrlSpecificAlloc(); <br>
+}</p>
+
+<p style="margin-left:22%; margin-top: 1em">void <br>
+Store(char *server, char *method, char *url, char *data)
+<br>
+{ <br>
+Ns_UrlSpecificSet(server, method, url, myId, <br>
+data, 0, NULL); <br>
+}</p>
+
+<p style="margin-left:22%; margin-top: 1em">char * <br>
+Fetch(char *server, char *method, char *url) <br>
+{ <br>
+char *data;</p>
+
+<p style="margin-left:22%; margin-top: 1em">data =
+Ns_UrlSpecificGet(server, method, url, myId); <br>
+return (char *) data; <br>
+}</p>
+
+
+<p style="margin-left:11%;"><b>Ns_UrlSpecificDestroy</b>(<i>server,
+method, url, id, flags</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">The
+Ns_UrlSpecificDestroy function deletes URL-specific data
+previously stored with Ns_UrlSpecificSet with the same
+method/URL combination and the same inheritance setting.</p>
+
+<p style="margin-left:22%; margin-top: 1em">An id of -1
+matches all ids. For example,
+Ns_UrlSpecificDestroy(&quot;myserver&quot;, &quot;GET&quot;,
+&quot;/&quot;, -1, NS_OP_RECURSE) removes all data for the
+method GET for server &quot;myserver&quot;.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The flags
+argument can be:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="22%"></td>
+<td width="78%">
+
+
+<p>NS_OP_NODELETE - If set, the deletefunc specified in
+Ns_UrlSpeciciSet is run.</p></td></tr>
+</table>
+
+<p style="margin-left:22%; margin-top: 1em">NS_OP_RECURSE -
+If set, then data for all URLs more specific than the
+passed-in URL are also destroyed.</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">NS_OP_NOINHERIT
+- If set, data that was stored with this flag in
+Ns_UrlSpecificSet will be deleted. If not set, the data
+stored without this flag will be deleted.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_UrlSpecificGet</b>(<i>server,
+method, url, id</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">The
+Ns_UrlSpecificGet function retrieves the best match that it
+can find for in the URL subspace identified by id that the
+passed-in URL matches. For instance, suppose you had
+previously registered a handle/method/url/id combination of
+{myserver, GET, /, 1} and {myserver, GET, /inventory, 1}.
+The following call would match the data registered at
+{myserver, GET, /inventory, 1}:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">Ns_UrlSpecificGet(&quot;myserver&quot;,
+&quot;GET&quot;, &quot;/inventory/RJ45&quot;, 1)</p>
+
+
+<p style="margin-left:11%;"><b>Ns_UrlSpecificGetExact</b>(<i>server,
+method, url, id, flags</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Retrieves
+stored data for the exact method/URL/id combination
+specified that was stored with the same inheritance
+setting.</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the flags
+argument is set to NS_OP_NOINHERIT, the data stored with
+NS_OP_NOINHERIT will be retrieved. If the flags argument is
+set to 0, the data stored without NS_OP_NOINHERIT will be
+retrieved.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_UrlSpecificGetFast</b>(<i>server,
+method, url, id</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Same as
+Ns_UrlSpecificGet but does not support wildcards, making it
+much faster.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_UrlSpecificSet</b>(<i>server,
+method, url, id, data, flags, deletefunc</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">The
+Ns_UrlSpecificSet function stores data in memory, allowing
+subsequent retrieval using handle, method, url, id, and
+inheritance flag.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The flags
+argument can be NS_OP_NOINHERIT or NS_OP_NODELETE. You can
+store two sets of data based on the same handle, method,
+url, and id combination-- one set with inheritance on and
+one set with inheritance off. If the NS_OP_NOINHERIT flag is
+set, the data is stored based on the exact URL. If
+NS_OP_NOINHERIT is omitted, the data is stored based on the
+specified URL and any URL below it. In this case,
+Ns_UrlSpecificGetExact will match to the closest URL when
+retrieving the data.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The deletefunc
+argument is called with data as an argument when this
+handle/url/method/id combination is re-registered or
+deleted, or when this server shuts down. unless
+NS_OP_NODELETE is set.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Normally,
+calling Ns_UrlSpecificSet on a handle/url/method/id
+combination which already has an operation registered for it
+causes the previous operation&rsquo;s delete procedure to be
+called. You can override this behavior by adding the
+NS_OP_NODELETE flag.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

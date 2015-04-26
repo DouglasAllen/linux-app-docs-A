@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>s3 - idempotent S3 module putting a file into S3. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="virt - Manages virtual machines supported by libvirt" href="virt_module.html" />
+    <link rel="prev" title="route53 - add or delete entries in Amazons Route53 DNS service" href="route53_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="virt_module.html" title="virt - Manages virtual machines supported by libvirt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="route53_module.html" title="route53 - add or delete entries in Amazons Route53 DNS service"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="s3-idempotent-s3-module-putting-a-file-into-s3">
+<span id="s3"></span><h1>s3 - idempotent S3 module putting a file into S3.<a class="headerlink" href="#s3-idempotent-s3-module-putting-a-file-into-s3" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Lester Wade, Ralph Tice</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+<p>This module allows the user to dictate the presence of a given file in an S3 bucket. If or once the key (file) exists in the bucket, it returns a time-expired download URL. This module has a dependency on python-boto.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>aws_access_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>aws_secret_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>bucket</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Bucket name.</td>
+</tr>
+        <tr>
+<td>dest</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The destination file path when downloading an object/key with a GET operation. (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>expiration</td>
+<td>no</td>
+<td>600</td>
+    <td><ul></ul></td>
+    <td>Time limit (in seconds) for the URL generated and returned by S3/Walrus when performing a mode=put or mode=geturl operation.</td>
+</tr>
+        <tr>
+<td>metadata</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Metadata for PUT operation, as a dictionary of 'key=value' and 'key=value,key=value'. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>mode</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Switches the module behaviour between put (upload), get (download), geturl (return download url (Ansible 1.3+), getstr (download object as string (1.3+)), create (bucket) and delete (bucket).</td>
+</tr>
+        <tr>
+<td>object</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Keyname of the object inside the bucket. Can be used to create "virtual directories", see examples. (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>overwrite</td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td>Force overwrite either locally on the filesystem or remotely with the object/key. Used with PUT and GET operations. (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>s3_url</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>S3 URL endpoint. If not specified then the S3_URL environment variable is used, if that variable is defined. Ansible tries to guess if fakes3 (https://github.com/jubos/fake-s3) or Eucalyptus Walrus (https://github.com/eucalyptus/eucalyptus/wiki/Walrus) is used and configure connection accordingly. Current heuristic is: everything with scheme fakes3:// is fakes3, everything else not ending with amazonaws.com is Walrus.</td>
+</tr>
+        <tr>
+<td>src</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The source file path when performing a PUT operation. (added in Ansible 1.3)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Simple PUT operation
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=put
+# Simple GET operation
+- s3: bucket=mybucket object=/my/desired/key.txt dest=/usr/local/myfile.txt mode=get
+# GET/download and overwrite local file (trust remote)
+- s3: bucket=mybucket object=/my/desired/key.txt dest=/usr/local/myfile.txt mode=get
+# GET/download and do not overwrite local file (trust remote)
+- s3: bucket=mybucket object=/my/desired/key.txt dest=/usr/local/myfile.txt mode=get force=false
+# PUT/upload and overwrite remote file (trust local)
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=put
+# PUT/upload with metadata
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=put metadata='Content-Encoding=gzip'
+# PUT/upload with multiple metadata
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=put metadata='Content-Encoding=gzip,Cache-Control=no-cache'
+# PUT/upload and do not overwrite remote file (trust local)
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=put force=false
+# Download an object as a string to use else where in your playbook
+- s3: bucket=mybucket object=/my/desired/key.txt src=/usr/local/myfile.txt mode=getstr
+# Create an empty bucket
+- s3: bucket=mybucket mode=create
+# Create a bucket with key as directory
+- s3: bucket=mybucket object=/my/directory/path mode=create
+# Delete a bucket and all contents
+- s3: bucket=mybucket mode=delete</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">s3 - idempotent S3 module putting a file into S3.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="route53_module.html"
+                        title="previous chapter">route53 - add or delete entries in Amazons Route53 DNS service</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virt_module.html"
+                        title="next chapter">virt - Manages virtual machines supported by libvirt</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="virt_module.html" title="virt - Manages virtual machines supported by libvirt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="route53_module.html" title="route53 - add or delete entries in Amazons Route53 DNS service"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

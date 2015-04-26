@@ -1,0 +1,208 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:39 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_file</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_file</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_chmod,
+ns_cp, ns_cpfp, ns_ftruncate, ns_link, ns_mkdir, ns_rename,
+ns_rmdir, ns_symlink, ns_truncate, ns_unlink &minus; File
+manipulation commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_chmod</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_cp</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_cpfp</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_ftruncate</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_link</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_mkdir</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_rename</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_rmdir</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_symlink</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_truncate</b>
+<i>option</i> ?<i>arg arg ...</i>?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_unlink</b>
+<i>option</i> ?<i>arg arg ...</i>?
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_chmod</b>
+<i>filename mode</i></p>
+
+<p style="margin-left:22%;">Change a file&rsquo;s access
+permissions. ns_chmod changes the specified file&rsquo;s
+permissions to mode, in the same manner as the Unix chmod(1)
+command-line utility.</p>
+
+<p style="margin-left:11%;"><b>ns_cp</b> <i>-preserve file1
+file2</i></p>
+
+<p style="margin-left:22%;">Copy one file to another. ns_cp
+copies the contents of file1 to file2, just like the Unix
+&quot;cp&quot; command. The default directory is the home
+directory for the server. If -preserve is specified, the
+copied file will retain the creation time, modification
+time, owner, and mode of the original file, just like the
+Unix &quot;cp -p&quot; command.</p>
+
+<p style="margin-left:11%;"><b>ns_cpfp</b> <i>fileid1
+fileid2 ?nbytes?</i></p>
+
+<p style="margin-left:22%;">Copy a specified number of
+bytes from one file to another. ns_cpfp copies information
+from one file (fileid1) to another (fileid2). If you specify
+a number of bytes in the nbytes argument, only the specified
+number of bytes will be copied. By default, the entire file
+is copied.</p>
+
+<p style="margin-left:11%;"><b>ns_ftruncate</b> <i>fileid
+?length?</i></p>
+
+<p style="margin-left:22%;">Truncate an open file to a
+specified length. ns_ftruncate causes the open file
+specified by fileid to have a size of length bytes. If
+length is not specified, it causes the file to have a size
+of zero bytes. The file must be open and be a regular
+file.</p>
+
+<p style="margin-left:11%;"><b>ns_link</b> <i>?-nocomplain?
+filename1 filename2</i></p>
+
+<p style="margin-left:22%;">Create a link. ns_link creates
+a link named filename2 that points to the file specified by
+filename1. If the link fails, a Tcl error is generated,
+unless -nocomplain is specified.</p>
+
+<p style="margin-left:11%;"><b>ns_mkdir</b> <i>path</i></p>
+
+<p style="margin-left:22%;">Create a directory. ns_mkdir
+creates the directory named PATH, just like the Unix mkdir
+command. By default, under Unix the directory is created
+with the file permissions set to 0755 (rwxr-xr-x.). These
+permissions can be modified by setting the umask parameter
+for the server.</p>
+
+<p style="margin-left:11%;"><b>ns_rename</b> <i>file1
+file2</i></p>
+
+<p style="margin-left:22%;">Rename a file. ns_rename
+renames the first file (file1) to the file name specified by
+file2. Make sure that the files and the directories in which
+the files exist are read/write accessible to the username
+that&rsquo;s running the AOLserver.</p>
+
+<p style="margin-left:11%;"><b>ns_rmdir</b> <i>path</i></p>
+
+<p style="margin-left:22%;">Remove a directory. ns_rmdir
+removes the directory named path, just like the Unix rmdir
+command. The directory must already be empty.</p>
+
+<p style="margin-left:11%;"><b>ns_unlink</b>
+<i>[-nocomplain] filename</i></p>
+
+<p style="margin-left:22%;">Remove a file. ns_unlink
+attempts to remove the file filename. If -nocomplain is not
+passed in and the removal fails, a Tcl error is
+generated.</p>
+
+<p style="margin-left:11%;"><b>ns_truncate</b> <i>filename
+?length?</i></p>
+
+<p style="margin-left:22%;">Truncate a file to a specified
+length. ns_truncate causes the file specified by filename to
+have a size of length bytes. If length is not specified, it
+causes filename to have a size of zero bytes. The file must
+exist and be a regular file.</p>
+
+<p style="margin-left:11%;"><b>ns_unlink</b>
+<i>[-nocomplain] filename</i></p>
+
+<p style="margin-left:22%;">Remove a file. ns_unlink
+attempts to remove the file filename. If -nocomplain is not
+passed in and the removal fails, a Tcl error is
+generated.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_chmod,
+ns_cp, ns_cpfp, ns_ftruncate, ns_link, ns_mkdir, ns_rename,
+ns_rmdir, ns_symlink, ns_truncate, ns_unlink</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<a name=top><h1>Administration Functions</h1></a>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/admin.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+</small>
+<p>
+
+
+<h2><a href=./ name=ns_config>ns_config</a></h2>
+
+   Extract information from the configuration file.
+
+<h3>Syntax</h3>
+
+   ns_config ?-exact | -bool | -int? section key ?default?
+
+<h3>Description</h3>
+
+   The ns_config function returns the value associated with the key in
+   the specified section of the configuration file. If the default
+   argument is specified, and the specified section and key aren't found
+   in the configuration file, the specified default is returned. If the
+   default argument is not specified in this situation, "" is returned.
+
+<p>
+
+   If -exact is specified, matching on key is case-sensitive. By default
+   matching is case-insensitive.
+
+<p>
+
+   If -bool is specified, ns_config will perform the conversion of a
+   boolean value from "on", "1", "y", "yes", "t", and "true" to "1", and
+   it will convert a boolean value of "off", "0", "n", "no", "f", and
+   "false" to "0". If a boolean contains any other value, a warning is
+   written to the log file and an empty string {"") is returned. If no
+   value is specified in the configuration file for the specified key, an
+   empty string ("") is returned.
+
+<p>
+
+   If -int is specified, ns_config will return the integer value of the
+   specified key. If there is a non-integer value in the configuration
+   file, a warning is written to the log file and an empty string ("") is
+   returned.
+
+<h3>Example</h3>
+
+    set path ns/server/myserver
+    set xyz [ns_config -bool $path Verbose 1]
+
+<p>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_configsection>ns_configsection</a></h2>
+
+   Return values of a configuration file section
+
+<h3>Syntax</h3>
+
+   ns_configsection section
+
+<h3>Description</h3>
+
+   This function returns an ns_set of all the parameter values for the
+   specified configuration file section. The ns_set contains key/value
+   pairs for each parameter.
+
+<h3>Example</h3>
+
+    ns_configsection "ns/server/server1/tcl"
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_configsections>ns_configsections</a></h2>
+
+   Return values of all configuration file sections
+
+<h3>Syntax</h3>
+
+   ns_configsections
+
+<h3>Description</h3>
+
+   This function returns a tcl list of ns_sets of all the parameter
+   values for all of the configuration file sections. There is one item
+   in the list for each configuration file section, and the corresponding
+   ns_set contains key/value pairs for each parameter in the section.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2>ns_eval</h2>
+
+Evaluate Tcl.
+
+<h3>Syntax</h3>
+
+ns_eval arg ?arg? ?arg?
+
+<h3>Description</h3>
+
+ns_eval evaluates the Tcl passed in to this function. The Tcl is
+evaluated in all the Tcl interpreters for this virtual server. You can
+use this command to maintain global variables. For example, if you
+execute:
+
+<pre>
+ns_eval set g 1
+</pre>
+
+<p>
+
+in one interpreter, later operations will see $g equal to 1 no matter
+what interpreter they are assigned to.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_info>ns_info</a></h2>
+
+   Find information about AOLserver
+
+<h3>Syntax</h3>
+
+   ns_info boottime
+
+<p>
+
+   ns_info config
+
+<p>
+
+   ns_info home
+
+<p>
+
+   ns_info host
+
+<p>
+
+   ns_info hostname
+
+<p>
+
+   ns_info interp
+
+<p>
+
+   ns_info label
+
+<p>
+
+   ns_info location
+
+<p>
+
+   ns_info log
+
+<p>
+
+   ns_info name
+
+<p>
+
+   ns_info pageroot
+
+<p>
+
+   ns_info platform
+
+<p>
+
+   ns_info port
+
+<p>
+
+   ns_info server
+
+<p>
+
+   ns_info tcllib
+
+<p>
+
+   ns_info uptime
+
+<p>
+
+   ns_info version
+
+<h3>Description</h3>
+
+   ns_info boottime returns the system time in seconds when the server
+   booted up.
+
+<p>
+
+   ns_info config returns the file name of the configuration file.
+
+<p>
+
+   ns_info home returns the directory where the AOLserver was installed.
+
+<p>
+
+   ns_info host is no longer available. Use ns_conn location.
+
+<p>
+
+   ns_info hostname returns the name of the host that the server is
+   running on (e.g., www.myhost.com).
+
+<p>
+
+   ns_info interp returns the number of the Tcl interpreter currently
+   being used.
+
+<p>
+
+   ns_info label returns the source code label for the server. If no
+   label was used, "unlabeled" is returned. You can use this function to
+   provide the source code label when you report problems with the
+   server. Also, the /NS/About page for the server reports the source
+   code label along with the other server information.
+
+<p>
+
+   ns_info location is obsolete. Use ns_conn location instead.
+
+<p>
+
+   ns_info log returns the location of the server log file (e.g.,
+   /home/myserver/log/server.log).
+
+<p>
+
+   ns_info name returns the name of the AOLserver. It's usually
+   "AOLserver."
+
+<p>
+
+   ns_info pageroot returns the directory containing the HTML pages for
+   this virtual server.
+
+<p>
+
+   ns_info platform returns the name of the platform that the server is
+   running on (e.g., Solaris).
+
+<p>
+
+   ns_info port is no longer available. Use ns_conn location.
+
+<p>
+
+   ns_info server returns the name of this virtual server.
+
+<p>
+
+   ns_info tcllib returns the directory where the AOLserver Tcl source
+   code resides for this virtual server.
+
+<p>
+
+   ns_info uptime returns the time in seconds that the server has been
+   up.
+
+<p>
+
+   ns_info version returns the version of the AOLserver.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_kill>ns_kill</a></h2>
+
+   Send a signal to a process
+
+<h3>Syntax</h3>
+
+   ns_kill ?-nocomplain? pid signal
+
+<h3>Description</h3>
+
+   This function spends the specified signal to the specified process ID
+   (pid). If -nocomplain is specified, no error will be returned on
+   failure.
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_library>ns_library</a></h2>
+
+   Return directory for a server's Tcl library
+
+<h3>Syntax</h3>
+
+   ns_library 
+
+<h3>Description</h3>
+
+   ns_library returns the directory where the server-specific Tcl source
+   code resides. This directory location can be specified with the
+   Library configuration parameter.
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_log>ns_log</a></h2>
+
+   Write messages to the error log
+
+<h3>Syntax</h3>
+
+   ns_log severity message
+
+<h3>Description</h3>
+
+   While the AOLserver is running it logs various events from Notices to
+   Fatal errors. Usually the AOLserver is running in the background, in
+   which case these messages are placed in the server log. In absence of
+   an ServerLog key in the AOLserver nsd.ini file, this file is the
+   /log/error.log under the AOLserver installation directory. When the
+   AOLserver is running in the foreground the messages are redirected to
+   stderr.
+
+<p>
+
+   ns_log writes the message to the server error log file. Allowable
+   values for severity are:
+
+<p>
+
+   Notice
+
+<p>
+
+   Something interesting occurred.
+
+<p>
+
+   Warning
+
+<p>
+
+   Something that could mean something bad occurred.
+
+<p>
+
+   Error
+
+<p>
+
+   Something bad occurred.
+
+<p>
+
+   Fatal
+
+<p>
+
+   Something extremely bad occurred. The server will shut down after
+   logging the message.
+
+<p>
+
+   Bug
+
+<p>
+
+   Something occurred that implies that there is a bug in the code.
+
+<p>
+
+   Debug
+
+<p>
+
+   If the server is in Debug mode, the message is printed. Debug mode is
+   specified in the [ns/parameters] section of the configuration file.
+   Otherwise, the message is not printed.
+
+<h3>Example</h3>
+
+   This is an excerpt from an AOLserver error.log:
+    [12/Jul/1995:18:10:13 -0700][1103] Notice: starting servers.
+
+<p>
+
+    See Also
+
+<p>
+
+   Ns_Log(), Ns_LogRaw() (C API)
+
+<p>
+
+   nsd.ini (AOLserver Configuration File)
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_logroll>ns_logroll</a></h2>
+
+   Roll server log
+
+<h3>Syntax</h3>
+
+   ns_logroll
+
+<h3>Description</h3>
+
+   This function forces a roll of the server log.
+
+<p>
+
+   
+
+<p>
+
+                
+                  
+
+<p>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_modulepath>ns_modulepath</a></h2>
+
+   Return server directory path
+
+<h3>Syntax</h3>
+
+   ns_modulepath server
+
+<h3>Description</h3>
+
+   This function returns the path of the specified server's directory.
+   The result will be of the form: path_beginning/servers/server.
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_param>ns_param</a></h2>
+
+   Define a parameter in the configuration file
+
+<h3>Syntax</h3>
+
+   ns_param key value
+
+<h3>Description</h3>
+
+   This function can only be used in the configuration file. It defines a
+   parameter by specifying its name (key) and its value.
+
+<h3>Example</h3>
+
+    ns_param Port 8000
+
+<p>
+
+   
+
+<p>
+
+                
+                  
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_passwordcheck>ns_passwordcheck</a></h2>
+
+   Verify a user/password combination
+
+<h3>Syntax</h3>
+
+   ns_passwordcheck ?-server servername? user password
+
+<h3>Description</h3>
+
+   This function returns 1 (one) if the user and password combination is
+   legitimate. It returns 0 (zero) if either the user does not exist or
+   the password is incorrect. If no servername is specified, the current
+   virtual server is used.
+
+<p>
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_perm>ns_perm</a></h2>
+
+   Add users, groups, and permissions
+
+<h3>Syntax</h3>
+
+   ns_perm adduser name encpass userfield ?-allow | -deny host ...?
+
+<p>
+
+   ns_perm addgroup name user ?user ...?
+
+<p>
+
+   ns_perm allowuser ?-noinherit? method url user
+
+<p>
+
+   ns_perm denyuser ?-noinherit? method url user
+
+<p>
+
+   ns_perm allowgroup ?-noinherit? method url group
+
+<p>
+
+   ns_perm denygroup ?-noinherit? method url group
+
+<p>
+
+   ns_perm checkpass user passwd
+
+<p>
+
+   ns_perm setpass user encpass
+
+<h3>Description</h3>
+
+   Note: To use this function after server startup, the SkipLocks
+   parameter (see page 69 in the AOLserver Administrator's Guide) must be
+   set to On.
+
+<p>
+
+   ns_perm adduser adds the user with the specified name and the
+   encrypted password (encpass) and the specified user text (userfield)
+   into the users database.
+
+<p>
+
+   If -allow and hostnames are specified, the user will be allowed on the
+   specified hostnames. If -deny and hostnames are specified, the user
+   will be denied on the specified hostnames. The hostname must be
+   specified as ipaddress/netmask or dnshostname. For example:
+   128.2.142.0/255.255.255.0 or www.microsoft.com or .microsoft.com.
+
+<p>
+
+   ns_perm addgroup creates a new group with the specified name that
+   includes the users listed after the name.
+
+<p>
+
+   ns_perm allowuser allows the specified user access to the specified
+   method and URL combination. If -noinherit is specified, only access to
+   the exact URL is allowed; otherwise, URLs under that URL are allowed
+   as well.
+
+<p>
+
+   ns_perm denyuser denies the specified user access to the specified
+   method and URL combination. If -noinherit is specified, only access to
+   the exact URL is denied; otherwise, URLs under that URL are denied as
+   well.
+
+<p>
+
+   ns_perm allowgroup allows the specified group access to the specified
+   method and URL combination. If -noinherit is specified, only access to
+   the exact URL is allowed; otherwise, URLs under that URL are allowed
+   as well.
+
+<p>
+
+   ns_perm denygroup denies the specified group access to the specified
+   method and URL combination. If -noinherit is specified, only access to
+   the exact URL is denied; otherwise, URLs under that URL are denied as
+   well.
+
+<p>
+
+   ns_perm checkpass checks that the specified plain-text password is
+   correct for the specified user. A Tcl error is thrown if it does not
+   match.
+
+<p>
+
+   ns_perm setpass updates the specified user's password to the encrypted
+   password encpass. The password should be encrypted using ns_encrypt.
+
+
+     
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_permpasswd>ns_permpasswd</a></h2>
+
+   Update existing password
+
+<h3>Syntax</h3>
+
+   ns_permpasswd user oldpass newpass
+
+<h3>Description</h3>
+
+   ns_permpasswd updates an existing user's password, both in the running
+   server's memory as well as in the passwd file on disk. The user is the
+   name of the user whose password is to be updated. The oldpass argument
+   is the user's old password, or the nsadmin password, in plain text.
+   The newpass argument is the new password in plain text.
+
+<p>
+
+   
+
+<p>
+
+                
+                  
+
+<p>
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_section>ns_section</a></h2>
+
+   Define a section in the configuration file
+
+<h3>Syntax</h3>
+
+   ns_section section
+
+<h3>Description</h3>
+
+   This function can only be used in the configuration file. It defines a
+   section in the configuration file. It is followed by a series of
+   ns_param function calls to define the parameters in the section.
+
+<h3>Example</h3>
+
+    ns_section "ns/server/server1/adp"
+
+<p>
+
+   
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_server>ns_server</a></h2>
+
+   Get information about the virtual server
+
+<h3>Syntax</h3>
+
+   ns_server ?-server servername? active
+
+<p>
+
+   ns_server ?-server servername? all
+
+<p>
+
+   ns_server ?-server servername? connections
+
+<p>
+
+   ns_server ?-server servername? queued
+
+<p>
+
+   ns_server ?-server servername? threads
+
+<p>
+
+   ns_server ?-server servername? verbose ?on/off?
+
+<p>
+
+   ns_server ?-server servername? waiting
+
+<h3>Description</h3>
+
+   ns_server active returns a list of lists containing information about
+   the currently-active connections for the specified virtual server, or
+   the current virtual server if none is specified. For each active
+   connection, the following information is returned:
+
+<p>
+
+   id:
+
+<p>
+
+   An ever-increasing number that identifies the connection.
+
+<p>
+
+   peer: 
+
+<p>
+
+   The remote address.
+
+<p>
+
+   state: 
+
+<p>
+
+   The state of the connection, one of the following:
+
+<p>
+
+   queued: waiting for a thread
+
+<p>
+
+   init: thread is initializing a connection
+
+<p>
+
+   request: reading the request
+
+<p>
+
+   authorize: authorizing the request
+
+<p>
+
+   running: running the request
+
+<p>
+
+   tcl: in a Tcl script
+
+<p>
+
+   traces: running all trace procedures
+
+<p>
+
+   method:
+
+<p>
+
+   The request method. If the state is before request, an asterisk "*" is
+   shown.
+
+<p>
+
+   url:
+
+<p>
+
+   The request URL. If the state is before request, an asterisk "*" is
+   shown.
+
+<p>
+
+   time:
+
+<p>
+
+   The number of seconds since the connection started.
+
+<p>
+
+   bytes:
+
+<p>
+
+   The number of bytes sent through the connection.
+
+<p>
+
+   For example:
+
+<p>
+
+   id
+
+<p>
+
+   peer
+
+<p>
+
+   state
+
+<p>
+
+   method
+
+<p>
+
+   url
+
+<p>
+
+   time
+
+<p>
+
+   bytes
+
+<p>
+
+   3
+
+<p>
+
+   128.111.100.50
+
+<p>
+
+   traces
+
+<p>
+
+   GET
+
+<p>
+
+   /some/page.htm
+
+<p>
+
+   5
+
+<p>
+
+   1134
+
+<p>
+
+   ns_server all returns the same information as ns_server active about
+   both active and waiting connections for the specified virtual server,
+   or the current virtual server if none is specified.
+
+<p>
+
+   ns_server connections returns the total number of connections for the
+   specified virtual server, or the current virtual server if none is
+   specified.
+
+<p>
+
+   ns_server queued returns the same information as ns_server active
+   about the waiting connections for the specified virtual server, or the
+   current virtual server if none is specified.
+
+<p>
+
+   ns_server threads returns a Tcl list containing the minimum number of
+   threads, the maximum number of threads, the number of currently active
+   threads, the number of idle threads, and the number of stopping
+   threads for the specified virtual server, or the current virtual
+   server if none is specified. For example:
+    {min 0} {max 50} {current 2} {idle 1} {stopping 0}
+
+<p>
+
+   ns_server verbose returns 1 if the server is in verbose mode and 0 if
+   it is not for the specified virtual server, or the current virtual
+   server if none is specified. If "on" is specified, sets verbose mode
+   on. If "off" is specified, sets verbose mode off.
+
+<p>
+
+   ns_server waiting returns the number of waiting connections for the
+   specified virtual server, or the current virtual server if none is
+   specified.
+
+<p>
+
+   
+
+<p>
+
+                
+                  
+
+<p>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_set_precision>ns_set_precision</a></h2>
+
+   Set precision for floating-point to string conversions
+
+<h3>Syntax</h3>
+
+   ns_set_precision precision
+
+<h3>Description</h3>
+
+   The precision argument is a decimal number specifying the number of
+   significant digits to include when converting floating-point numbers
+   to strings.  The default number of significant digits used is 6
+   digits. You can set precision to 17 for conversions with IEEE
+   floating-point numbers to allow double-precision values to be
+   converted to strings and back to binary with no loss of precision.
+
+<p>
+
+    Notes
+
+<p>
+
+   This function replaces the tcl_precision variable, which is not
+   recognized by expr.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_shutdown>ns_shutdown</a></h2>
+
+   Shut down the server
+
+<h3>Syntax</h3>
+
+   ns_shutdown ?nseconds?
+
+<h3>Description</h3>
+
+   ns_shutdown shuts down the server. The nseconds argument specifies a
+   time limit in which the server is to shut down. If the server hasn't
+   stopped within the time limit, it is immediately stopped, aborting any
+   active connections. The default value of nseconds is 0.
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_Db0or1Row</TITLE>
+<LINK rel=Previous href="c-ch130.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch132.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch130.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch132.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="107820">
+</a><h3>Ns_Db0or1Row</h3>
+<a name="107821">
+</a><h4>Overview</h4>
+Execute an SQL statement that must return &#163; 1 row
+<a name="77741">
+</a><a name="132636">
+</a><h4>Syntax</h4>
+<pre>    <a name="77743"></a>Ns_Set *Ns_Db0or1Row(
+    <a name="77744"></a>Ns_DbHandle *handle,
+    <a name="77745"></a>char *sql,
+    <a name="77746"></a>int *nrows
+    <a name="77747"></a>);
+</pre><p><a name="133983">
+</a><h4>Description</h4>
+<p><a name="77749">
+</a>The Ns_Db0or1Row function sends the given SQL statement to the database and immediately processes the results. On zero rows, a newly allocated Ns_Set with its keys set to the column names and values uninitialized is returned and nrows is set to 0. On one row, a newly allocated Ns_Set containing the values is returned and nrows is set to 1. You must eventually free this row using Ns_SetFree.</p>
+<p><a name="77750">
+</a>Note that an SQL select statement that does not return a row is different from an SQL DML statement that does not return a row but modifies the database. In the former case, Ns_Db0or1Row still returns a newly allocated Ns_Set with the column names as the field key names of the rows that would have been returned had any of the rows in the database matched the select criteria. In the latter case, Ns_Db0or1Row returns an error.</p>
+<p><a name="77751">
+</a>If the SQL statement returns more than one row or some database error occurs, Ns_Db0or1Row returns NULL. Detailed error messages may have accumulated in an internal buffer in the Ns_DbHandle.</p>
+<a name="215580">
+</a><h4>Examples</h4>
+<pre>    <a name="215586"></a>Ns_Set *row;
+    <a name="215584"></a>int nrows;
+    <a name="215585"></a>Ns_DbHandle *handle;
+    <a name="215590"></a>if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+    <a name="215593"></a>	row = Ns_Db0or1Row(handle, "select aName from aTable",
+    <a name="215596"></a>							&amp;nrows);
+    <a name="215602"></a>	if (row != NULL &amp;&amp; nrows == 1) {
+    <a name="215604"></a>		char *value;
+    <a name="215687"></a>		value = Ns_SetGet(row, "aName");
+    <a name="218787"></a>		/* use `value' here */
+    <a name="218786"></a>		Ns_SetFree(row);
+    <a name="215603"></a>	}
+    <a name="215597"></a>} 
+    <a name="215595"></a>
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch130.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch132.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

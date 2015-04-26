@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Arithmetic &amp; logical - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Operators.html#Operators" title="Operators">
+<link rel="next" href="Self-_0026-prefix-operators.html#Self-_0026-prefix-operators" title="Self &amp; prefix operators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Arithmetic-%26-logical"></a>
+<a name="Arithmetic-_0026-logical"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Self-_0026-prefix-operators.html#Self-_0026-prefix-operators">Self &amp; prefix operators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Operators.html#Operators">Operators</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.9.1 Arithmetic &amp; logical operators</h4>
+
+<p><a name="index-arithmetic-operators-582"></a><a name="index-binary-operators-583"></a><a name="index-boolean-operators-584"></a><a name="index-logical-operators-585"></a><a name="index-integer-division-586"></a><a name="index-g_t_0040code_007bquotient_007d-587"></a>
+<code>Asymptote</code> uses the standard binary arithmetic operators. 
+However, when one integer is divided by another, both arguments are
+converted to real values before dividing and a real quotient is
+returned (since this is usually what is intended). The function
+<code>int quotient(int x, int y)</code> returns the greatest integer less
+than or equal to <code>x/y</code>. In all other cases both operands are
+promoted to the same type, which will also be the type of the result:
+     
+<a name="index-g_t_0040code_007b_002b_007d-588"></a>
+<dl><dt><code>+</code><dd>addition
+<a name="index-g_t_0040code_007b_002d_007d-589"></a><br><dt><code>-</code><dd>subtraction
+<a name="index-g_t_0040code_007b_002a_007d-590"></a><br><dt><code>*</code><dd>multiplication
+<a name="index-g_t_0040code_007b_002f_007d-591"></a><br><dt><code>/</code><dd>division
+<a name="index-g_t_0040code_007b_0025_007d-592"></a><br><dt><code>%</code><dd>modulo; the result always has the same sign as the divisor. 
+In particular, this makes <code>q*quotient(p,q)+p%q == p</code> for all
+integers <code>p</code> and nonzero integers <code>q</code>. 
+<a name="index-g_t_0040code_007b_005e_007d-593"></a><br><dt><code>^</code><dd><a name="index-g_t_0040code_007b_002a_002a_007d-594"></a>power; if the exponent (second argument) is an int, recursive
+multiplication is used; otherwise, logarithms and exponentials are used
+(<code>**</code> is a synonym for <code>^</code>).
+
+   </dl>
+
+   <p>The usual boolean operators are also defined:
+     
+<a name="index-g_t_0040code_007b_003d_003d_007d-595"></a>
+<dl><dt><code>==</code><dd>equals
+<a name="index-g_t_0040code_007b_0021_003d_007d-596"></a><br><dt><code>!=</code><dd>not equals
+<a name="index-g_t_0040code_007b_003c_007d-597"></a><br><dt><code>&lt;</code><dd>less than
+<a name="index-g_t_0040code_007b_003c_003d_007d-598"></a><br><dt><code>&lt;=</code><dd>less than or equals
+<a name="index-g_t_0040code_007b_003e_003d_007d-599"></a><br><dt><code>&gt;=</code><dd>greater than or equals
+<a name="index-g_t_0040code_007b_003e_007d-600"></a><br><dt><code>&gt;</code><dd>greater than
+<a name="index-g_t_0040code_007b_0026_0026_007d-601"></a><br><dt><code>&amp;&amp;</code><dd>and (with conditional evaluation of right-hand argument)
+<a name="index-g_t_0040code_007b_0026_007d-602"></a><br><dt><code>&amp;</code><dd>and
+<a name="index-g_t_0040code_007b_007c_007c_007d-603"></a><br><dt><code>||</code><dd>or (with conditional evaluation of right-hand argument)
+<a name="index-g_t_0040code_007b_007c_007d-604"></a><br><dt><code>|</code><dd>or
+<a name="index-g_t_0040code_007b_005e_007d-605"></a><br><dt><code>^</code><dd>xor
+<a name="index-g_t_0040code_007b_0021_007d-606"></a><br><dt><code>!</code><dd>not
+</dl>
+
+   <p><code>Asymptote</code> also supports the C-like conditional syntax:
+<a name="index-g_t_0040code_007b_003a_007d-607"></a><a name="index-g_t_0040code_007b_003f_007d-608"></a><a name="index-conditional-609"></a>
+<pre class="verbatim">bool positive=(pi >= 0) ? true : false;
+</pre>
+
+   <p><a name="index-g_t_0040code_007binterp_007d-610"></a>The function <code>T interp(T a, T b, real t)</code> returns <code>(1-t)*a+t*b</code>
+for nonintegral built-in arithmetic types <code>T</code>. If <code>a</code> and
+<code>b</code> are pens, they are first promoted to the same color space.
+
+   <p><a name="index-g_t_0040code_007bAND_007d-611"></a><a name="index-g_t_0040code_007bOR_007d-612"></a><a name="index-g_t_0040code_007bXOR_007d-613"></a><a name="index-g_t_0040code_007bNOT_007d-614"></a><a name="index-g_t_0040code_007bCLZ_007d-615"></a><a name="index-g_t_0040code_007bCTZ_007d-616"></a><code>Asymptote</code> also defines bitwise functions <code>int AND(int,int)</code>,
+<code>int OR(int,int)</code>, <code>int XOR(int,int)</code>, <code>int NOT(int)</code>,
+<code>int CLZ(int)</code> (count leading zeros), and <code>int CTZ(int)</code>
+(count trailing zeros).
+
+   </body></html>
+

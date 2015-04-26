@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+<title>Import - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Casts.html#Casts" title="Casts">
+<link rel="next" href="Static.html#Static" title="Static">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Import"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Static.html#Static">Static</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Casts.html#Casts">Casts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">6.14 Import</h3>
+
+<p><a name="index-g_t_0040code_007baccess_007d-809"></a>While <code>Asymptote</code> provides many features by default,
+some applications require specialized features contained in
+external <code>Asymptote</code> modules. For instance, the lines
+<pre class="verbatim">access graph;
+graph.axes();
+</pre>
+draw x and y axes on a two-dimensional graph.  Here, the
+command looks up the module under the name <code>graph</code> in a global dictionary
+of modules and puts it in a new variable named <code>graph</code>. 
+The module is a structure, and we can refer to its fields as we usually
+would with a structure.
+
+   <p><a name="index-g_t_0040code_007bfrom_007d-810"></a>Often, one wants to use module functions without having to specify
+the module name.  The code
+<pre class="verbatim">from graph access axes;
+</pre>
+adds the <code>axes</code> field of <code>graph</code> into the local name space,
+so that subsequently, one can just write <code>axes()</code>.  If the given name
+is overloaded, all types and variables of that name are added.  To add
+more than one name, just use a comma-separated list:
+<pre class="verbatim">from graph access axes, xaxis, yaxis;
+</pre>
+Wild card notation can be used to add all non-private fields and types of a
+module to the local name space:
+
+<pre class="verbatim">from graph access *;
+</pre>
+
+   <p><a name="index-g_t_0040code_007bunravel_007d-811"></a>Similarly, one can add the non-private fields and types of a structure
+to the local environment with the <code>unravel</code> keyword:
+<pre class="verbatim">struct matrix { 
+  real a,b,c,d; 
+} 
+ 
+real det(matrix m) { 
+  unravel m; 
+  return a*d-b*c; 
+} 
+</pre>
+Alternatively, one can unravel selective fields:
+<pre class="verbatim">real det(matrix m) { 
+  from m unravel a,b,c as C,d;
+  return a*d-b*C; 
+} 
+</pre>
+
+   <p><a name="index-g_t_0040code_007bimport_007d-812"></a>The command
+<pre class="verbatim">import graph;
+</pre>
+is a convenient abbreviation for the commands
+<pre class="verbatim">access graph;
+unravel graph;
+</pre>
+That is, <code>import graph</code> first loads a module into a structure called
+<code>graph</code> and then adds its non-private fields and types to the
+local environment. This way, if a member variable (or function) is
+overwritten with a local variable (or function of the same signature),
+the original one can still be accessed by qualifying it with the
+module name.
+
+   <p>Wild card importing will work fine in most cases, but one does not usually know
+all of the internal types and variables of a module, which can also
+change as the module writer adds or changes features of the module. 
+As such, it is prudent to add <code>import</code> commands at the start of an
+<code>Asymptote</code> file, so that imported names won't shadow locally
+defined functions.  Still, imported names may shadow other imported
+names, depending on the order in which they were imported, and
+imported functions may cause overloading resolution problems if they
+have the same name as local functions defined later.
+
+   <p><a name="index-g_t_0040code_007bas_007d-813"></a>To rename modules or fields when adding them to the local environment, use
+<code>as</code>:
+<pre class="verbatim">access graph as graph2d;
+from graph access xaxis as xline, yaxis as yline;
+</pre>
+
+   <p>The command
+<pre class="verbatim">import graph as graph2d;
+</pre>
+is a convenient abbreviation for the commands
+<pre class="verbatim">access graph as graph2d;
+unravel graph2d;
+</pre>
+
+   <p>Except for a few built-in modules, such as <code>settings</code>, all modules
+are implemented as <code>Asymptote</code> files.  When looking up a module
+that has not yet been loaded, <code>Asymptote</code> searches the standard
+search paths (see <a href="Search-paths.html#Search-paths">Search paths</a>) for the matching file.  The file
+corresponding to that name is read and the code within it is interpreted
+as the body of a structure defining the module.
+
+   <p>If the file name contains
+nonalphanumeric characters, enclose it with quotation marks:
+
+<p class="noindent"><code>access "/usr/share/asymptote/graph.asy" as graph;</code>
+
+<p class="noindent"><code>from "/usr/share/asymptote/graph.asy" access axes;</code>
+
+<p class="noindent"><code>import "/usr/share/asymptote/graph.asy" as graph;</code>
+
+   <p>It is an error if modules import themselves (or each other in a cycle). 
+The module name to be imported must be known at compile time.
+
+   <p><a name="index-runtime-imports-814"></a><a name="index-g_t_0040code_007beval_007d-815"></a>However, you can import an <code>Asymptote</code> module determined by the
+string <code>s</code> at runtime like this:
+<pre class="verbatim">eval("import "+s,true);
+</pre>
+
+   <p><a name="index-g_t_0040code_007basy_007d-816"></a>To conditionally execute an array of asy files, use
+<pre class="verbatim">void asy(string format, bool overwrite ... string[] s);
+</pre>
+The file will only be processed, using output format <code>format</code>, if
+overwrite is <code>true</code> or the output file is missing.
+
+   <p>One can evaluate an <code>Asymptote</code> expression (without any return
+value, however) contained in the string <code>s</code> with:
+<a name="index-g_t_0040code_007beval_007d-817"></a>
+<pre class="verbatim">void eval(string s, bool embedded=false);
+</pre>
+It is not necessary to terminate the string <code>s</code> with a semicolon. 
+If <code>embedded</code> is <code>true</code>, the string will be evaluated
+at the top level of the current environment. 
+If <code>embedded</code> is <code>false</code> (the default), the string
+will be evaluated in an independent environment, sharing the same
+<code>settings</code> module (see <a href="settings.html#settings">settings</a>).
+
+   <p><a name="index-g_t_0040code_007bquote_007d-818"></a>One can evaluate arbitrary <code>Asymptote</code> code (which may
+contain unescaped quotation marks) with the command
+<pre class="verbatim">void eval(code s, bool embedded=false);
+</pre>
+Here <code>code</code> is a special type used with <code>quote {}</code>
+to enclose <code>Asymptote code</code> like this:
+<pre class="verbatim">real a=1;
+code s=quote {
+  write(a);
+};
+eval(s,true);        // Outputs 1
+</pre>
+
+   <p><a name="index-g_t_0040code_007binclude_007d-819"></a>To include the contents of an existing file <code>graph</code> verbatim (as if the
+contents of the file were inserted at that point), use one of the forms:
+<pre class="verbatim">include graph;
+</pre>
+
+<p class="noindent"><code>include "/usr/share/asymptote/graph.asy";</code>
+
+   <p>To list all global functions and variables defined in a module named
+by the contents of the string <code>s</code>, use the function
+<pre class="verbatim">void list(string s, bool imports=false);
+</pre>
+Imported global functions and variables are also listed if
+<code>imports</code> is <code>true</code>.
+
+   </body></html>
+

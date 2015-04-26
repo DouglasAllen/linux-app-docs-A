@@ -1,0 +1,669 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+    <TITLE>Interfacing with COBOL</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <META NAME="Author" CONTENT="JTC1/SC22/WG9/ARG, by Randall Brukardt, ARG Editor">
+    <META NAME="GENERATOR" CONTENT="Arm_Form.Exe, Ada Reference Manual generator">
+    <STYLE type="text/css">
+    H4.centered {text-align: center}
+    SPAN.swiss {font-family: Arial, Helvetica, sans-serif; font-size: 92%}
+    SPAN.roman {font-family: "Times New Roman", Times, serif}
+    DIV.paranum {float: left; font-family: Arial, Helvetica, sans-serif; font-size: 64%; width: 2.8em; margin-left: -0.4em; margin-right: -3.0em; margin-top: 0.2em}
+    TT {font-family: "Courier New", monospace}
+    DT {display: compact}
+    DIV.Normal {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 1.2em; margin-bottom: 0.6em}
+    DIV.Indented2 {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 5.2em; margin-bottom: 0.6em}
+    DIV.Notes {font-family: "Times New Roman", Times, serif; font-size: 80%; line-height: 122%; margin-left: 3.7em; margin-bottom: 0.6em}
+    DIV.Annotations {font-family: "Times New Roman", Times, serif; font-size: 80%; line-height: 122%; margin-left: 6.2em; margin-bottom: 0.6em}
+    DIV.NotesHeader {font-family: "Times New Roman", Times, serif; font-size: 80%; line-height: 122%; margin-left: 3.7em}
+    DIV.Examples {font-family: "Courier New", monospace; font-size: 90%; line-height: 122%; margin-left: 3.4em; margin-bottom: 0.6em}
+    DIV.Bulleted-NoPrefix {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 3.2em; margin-right: 2.0em; margin-top: 0em; margin-bottom: 0.5em}
+    DIV.Bulleted {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 3.2em; margin-right: 2.0em; margin-top: 0em; margin-bottom: 0.5em; display: list-item; list-style-type: disc}
+    DIV.Indented3Bulleted-NoPrefix {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 7.2em; margin-right: 2.0em; margin-top: 0em; margin-bottom: 0.5em}
+    DIV.Indented3Bulleted {font-family: "Times New Roman", Times, serif; line-height: 122%; margin-left: 7.2em; margin-right: 2.0em; margin-top: 0em; margin-bottom: 0.5em; display: list-item; list-style-type: disc}
+    DIV.SmallBulleted-NoPrefix {font-family: "Times New Roman", Times, serif; font-size: 80%; line-height: 122%; margin-left: 8.7em; margin-right: 2.5em; margin-top: 0em; margin-bottom: 0.5em}
+    DIV.SmallBulleted {font-family: "Times New Roman", Times, serif; font-size: 80%; line-height: 122%; margin-left: 8.7em; margin-right: 2.5em; margin-top: 0em; margin-bottom: 0.5em; display: list-item; list-style-type: disc}
+    </STYLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFF0" LINK="#000080" VLINK="#330033" ALINK="#0000FF">
+<DIV><B><SPAN Style="font-size:200%; color: rgb(0,51,153)">Annotated</SPAN><SPAN Style="font-size:200%; color: rgb(0,0,102)">&nbsp;Ada Reference Manual</SPAN></B> &mdash; <A HREF="AA-TTL.html"><B>Legal Information</B></A></DIV>
+<div style="margin-top: 0.6em; margin-bottom: 0.0em"><A HREF="AA-TOC.html"><IMG SRC="cont.gif" ALT="Contents" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-0-4.html"><IMG SRC="index.gif" ALT="Index" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-STDS.html"><IMG SRC="lib.gif" ALT="References" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-SRCH.html"><IMG SRC="find.gif" ALT="Search" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-B-3-3.html"><IMG SRC="prev.gif" ALT="Previous" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-B-5.html"><IMG SRC="next.gif" ALT="Next" BORDER=0></A>&nbsp;
+</div>
+<HR>
+<H1>B.4 Interfacing with COBOL</H1>
+<div class="paranum">1/3</div>
+<div class="Normal">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+<A NAME="I8102"></A><A NAME="I8103"></A>The facilities relevant to interfacing 
+with the COBOL language are the package Interfaces.COBOL and support 
+for specifying the Convention aspect with <I>convention_</I><SPAN Class="swiss"><A HREF="AA-2-3.html#S0002">identifier</A></SPAN> 
+COBOL.</div>
+<div class="paranum">2</div>
+<div class="Normal" style="margin-bottom: 0.4em">The COBOL interface 
+package supplies several sets of facilities:&nbsp;</div>
+<div class="paranum">3</div>
+<div class="Bulleted">A set of types corresponding to the native COBOL 
+types of the supported COBOL implementation (so-called &ldquo;internal 
+COBOL representations&rdquo;), allowing Ada data to be passed as parameters 
+to COBOL programs</div>
+<div class="paranum">4</div>
+<div class="Bulleted">A set of types and constants reflecting external 
+data representations such as might be found in files or databases, allowing 
+COBOL-generated data to be read by an Ada program, and Ada-generated 
+data to be read by COBOL programs</div>
+<div class="paranum">5</div>
+<div class="Bulleted">A generic package for converting between an Ada 
+decimal type value and either an internal or external COBOL representation 
+</div>
+
+<H4 Class="centered">Static Semantics</H4>
+<div class="paranum">6</div>
+<div class="Normal" style="margin-bottom: 0.4em">The library package 
+Interfaces.COBOL has the following declaration:&nbsp;</div>
+<div class="paranum">7</div>
+<div class="Examples"><B>package</B>&nbsp;Interfaces.COBOL&nbsp;<B>is</B><A NAME="I8104"></A><BR>
+&nbsp;&nbsp;&nbsp;<B>pragma</B>&nbsp;Preelaborate(COBOL);</div>
+<div class="paranum">8</div>
+<div class="Examples"><SPAN Class="roman"><I>--&nbsp;Types&nbsp;and&nbsp;operations&nbsp;for&nbsp;internal&nbsp;data&nbsp;representations</I></SPAN></div>
+<div class="paranum">9</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8105"></A>Floating&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>is</B>&nbsp;<B>digits</B>&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;<BR>
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8106"></A>Long_Floating&nbsp;<B>is</B>&nbsp;<B>digits</B>&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;</div>
+<div class="paranum">10</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8107"></A>Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>is</B>&nbsp;<B>range</B>&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;<BR>
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8108"></A>Long_Binary&nbsp;<B>is</B>&nbsp;<B>range</B>&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;</div>
+<div class="paranum">11</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8109"></A>Max_Digits_Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;:=&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8110"></A>Max_Digits_Long_Binary&nbsp;:&nbsp;<B>constant</B>&nbsp;:=&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;</div>
+<div class="paranum">12/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8111"></A>Decimal_Element&nbsp;&nbsp;<B>is</B>&nbsp;<B>mod</B>&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;<BR>
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8112"></A>Packed_Decimal&nbsp;<B>is</B>&nbsp;<B>array</B>&nbsp;(Positive&nbsp;<B>range</B>&nbsp;&lt;&gt;)&nbsp;<B>of</B>&nbsp;Decimal_Element<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Pack;</div>
+<div class="paranum">13</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8113"></A>COBOL_Character&nbsp;<B>is</B>&nbsp;<SPAN Class="roman"><I>implementation-defined&nbsp;character&nbsp;type</I></SPAN>;</div>
+<div class="paranum">14</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8114"></A>Ada_To_COBOL&nbsp;:&nbsp;<B>array</B>&nbsp;(Character)&nbsp;<B>of</B>&nbsp;COBOL_Character&nbsp;:=&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;</div>
+<div class="paranum">15</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8115"></A>COBOL_To_Ada&nbsp;:&nbsp;<B>array</B>&nbsp;(COBOL_Character)&nbsp;<B>of</B>&nbsp;Character&nbsp;:=&nbsp;<SPAN Class="roman"><I>implementation-defined</I></SPAN>;</div>
+<div class="paranum">16/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8116"></A>Alphanumeric&nbsp;<B>is</B>&nbsp;<B>array</B>&nbsp;(Positive&nbsp;range&nbsp;&lt;&gt;)&nbsp;<B>of</B>&nbsp;COBOL_Character<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Pack;</div>
+<div class="paranum">17</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8117"></A>To_COBOL&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;String)&nbsp;<B>return</B>&nbsp;Alphanumeric;<BR>
+&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8118"></A>To_Ada&nbsp;&nbsp;&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Alphanumeric)&nbsp;<B>return</B>&nbsp;String;</div>
+<div class="paranum">18</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>procedure</B>&nbsp;<A NAME="I8119"></A>To_COBOL&nbsp;(Item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;String;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Target&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>out</B>&nbsp;Alphanumeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Last&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>out</B>&nbsp;Natural);</div>
+<div class="paranum">19</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>procedure</B>&nbsp;<A NAME="I8120"></A>To_Ada&nbsp;(Item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Alphanumeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Target&nbsp;&nbsp;&nbsp;:&nbsp;<B>out</B>&nbsp;String;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Last&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>out</B>&nbsp;Natural);</div>
+<div class="paranum">20/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8121"></A>Numeric&nbsp;<B>is</B>&nbsp;<B>array</B>&nbsp;(Positive&nbsp;<B>range</B>&nbsp;&lt;&gt;)&nbsp;<B>of</B>&nbsp;COBOL_Character<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Pack;</div>
+<div class="paranum">21</div>
+<div class="Examples"><SPAN Class="roman"><I>--&nbsp;Formats&nbsp;for&nbsp;COBOL&nbsp;data&nbsp;representations</I></SPAN></div>
+<div class="paranum">22</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8122"></A>Display_Format&nbsp;<B>is</B>&nbsp;<B>private</B>;</div>
+<div class="paranum">23</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8123"></A>Unsigned&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Display_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8124"></A>Leading_Separate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Display_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8125"></A>Trailing_Separate&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Display_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8126"></A>Leading_Nonseparate&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Display_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8127"></A>Trailing_Nonseparate&nbsp;:&nbsp;<B>constant</B>&nbsp;Display_Format;</div>
+<div class="paranum">24</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8128"></A>Binary_Format&nbsp;<B>is</B>&nbsp;<B>private</B>;</div>
+<div class="paranum">25</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8129"></A>High_Order_First&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Binary_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8130"></A>Low_Order_First&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Binary_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8131"></A>Native_Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Binary_Format;</div>
+<div class="paranum">26</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8132"></A>Packed_Format&nbsp;<B>is</B>&nbsp;<B>private</B>;</div>
+<div class="paranum">27</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8133"></A>Packed_Unsigned&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Packed_Format;<BR>
+&nbsp;&nbsp;&nbsp;<A NAME="I8134"></A>Packed_Signed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<B>constant</B>&nbsp;Packed_Format;</div>
+<div class="paranum">28</div>
+<div class="Examples"><SPAN Class="roman"><I>--&nbsp;Types&nbsp;for&nbsp;external&nbsp;representation&nbsp;of&nbsp;COBOL&nbsp;binary&nbsp;data</I></SPAN></div>
+<div class="paranum">29/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8135"></A>Byte&nbsp;<B>is</B>&nbsp;<B>mod</B>&nbsp;2**COBOL_Character'Size;<BR>
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;<A NAME="I8136"></A>Byte_Array&nbsp;<B>is</B>&nbsp;<B>array</B>&nbsp;(Positive&nbsp;<B>range</B>&nbsp;&lt;&gt;)&nbsp;<B>of</B>&nbsp;Byte<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Pack;</div>
+<div class="paranum">30</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<A NAME="I8137"></A>Conversion_Error&nbsp;:&nbsp;<B>exception</B>;</div>
+<div class="paranum">31</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>generic</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;Num&nbsp;<B>is</B>&nbsp;<B>delta</B>&nbsp;&lt;&gt;&nbsp;<B>digits</B>&nbsp;&lt;&gt;;<BR>
+&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;<A NAME="I8138"></A>Decimal_Conversions&nbsp;<B>is</B></div>
+<div class="paranum">32</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Display&nbsp;Formats:&nbsp;data&nbsp;values&nbsp;are&nbsp;represented&nbsp;as&nbsp;Numeric</I></SPAN></div>
+<div class="paranum">33</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8139"></A>Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Numeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">34</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8140"></A>Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Natural;</div>
+<div class="paranum">35</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8141"></A>To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Numeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">36</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8142"></A>To_Display&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Numeric;</div>
+<div class="paranum">37</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Packed&nbsp;Formats:&nbsp;data&nbsp;values&nbsp;are&nbsp;represented&nbsp;as&nbsp;Packed_Decimal</I></SPAN></div>
+<div class="paranum">38</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8143"></A>Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Decimal;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">39</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8144"></A>Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Natural;</div>
+<div class="paranum">40</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8145"></A>To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Decimal;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">41</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8146"></A>To_Packed&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Packed_Decimal;</div>
+<div class="paranum">42</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Binary&nbsp;Formats:&nbsp;external&nbsp;data&nbsp;values&nbsp;are&nbsp;represented&nbsp;as&nbsp;Byte_Array</I></SPAN></div>
+<div class="paranum">43</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8147"></A>Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Byte_Array;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">44</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8148"></A>Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Natural;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8149"></A>To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Byte_Array;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">45</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8150"></A>To_Binary&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Byte_Array;</div>
+<div class="paranum">46</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Internal&nbsp;Binary&nbsp;formats:&nbsp;data&nbsp;values&nbsp;are&nbsp;of&nbsp;type&nbsp;Binary&nbsp;or&nbsp;Long_Binary</I></SPAN></div>
+<div class="paranum">47</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8151"></A>To_Decimal&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Binary)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>return</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8152"></A>To_Decimal&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Long_Binary)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">48</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8153"></A>To_Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Num)&nbsp;&nbsp;<B>return</B>&nbsp;Binary;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>function</B>&nbsp;<A NAME="I8154"></A>To_Long_Binary&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Num)&nbsp;&nbsp;<B>return</B>&nbsp;Long_Binary;</div>
+<div class="paranum">49</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>end</B>&nbsp;Decimal_Conversions;</div>
+<div class="paranum">50</div>
+<div class="Examples"><B>private</B><BR>
+&nbsp;&nbsp;&nbsp;...&nbsp;--&nbsp;<SPAN Class="roman"><I>not&nbsp;specified&nbsp;by&nbsp;the&nbsp;language</I></SPAN><BR>
+<B>end</B>&nbsp;Interfaces.COBOL;</div>
+<div class="paranum">50.a/1</div>
+<div class="Annotations"><B>Implementation defined:&nbsp;</B>The types Floating, 
+Long_Floating, Binary, Long_Binary, Decimal_Element, and COBOL_Character; 
+and the initializations of the variables Ada_To_COBOL and COBOL_To_Ada, 
+in Interfaces.COBOL.</div>
+<div class="paranum">51</div>
+<div class="Normal">Each of the types in Interfaces.COBOL is COBOL-compatible.</div>
+<div class="paranum">52</div>
+<div class="Normal">The types Floating and Long_Floating correspond to 
+the native types in COBOL for data items with computational usage implemented 
+by floating point. The types Binary and Long_Binary correspond to the 
+native types in COBOL for data items with binary usage, or with computational 
+usage implemented by binary.</div>
+<div class="paranum">53</div>
+<div class="Normal">Max_Digits_Binary is the largest number of decimal 
+digits in a numeric value that is represented as Binary. Max_Digits_Long_Binary 
+is the largest number of decimal digits in a numeric value that is represented 
+as Long_Binary.</div>
+<div class="paranum">54</div>
+<div class="Normal">The type Packed_Decimal corresponds to COBOL's packed-decimal 
+usage.</div>
+<div class="paranum">55</div>
+<div class="Normal">The type COBOL_Character defines the run-time character 
+set used in the COBOL implementation. Ada_To_COBOL and COBOL_To_Ada are 
+the mappings between the Ada and COBOL run-time character sets.&nbsp;</div>
+<div class="paranum">55.a</div>
+<div class="Annotations"><B>Reason:&nbsp;</B>The character mappings are visible 
+variables, since the user needs the ability to modify them at run time. 
+</div>
+<div class="paranum">56</div>
+<div class="Normal">Type Alphanumeric corresponds to COBOL's alphanumeric 
+data category.</div>
+<div class="paranum">57</div>
+<div class="Normal">Each of the functions To_COBOL and To_Ada converts 
+its parameter based on the mappings Ada_To_COBOL and COBOL_To_Ada, respectively. 
+The length of the result for each is the length of the parameter, and 
+the lower bound of the result is 1. Each component of the result is obtained 
+by applying the relevant mapping to the corresponding component of the 
+parameter.</div>
+<div class="paranum">58</div>
+<div class="Normal">Each of the procedures To_COBOL and To_Ada copies 
+converted elements from Item to Target, using the appropriate mapping 
+(Ada_To_COBOL or COBOL_To_Ada, respectively). The index in Target of 
+the last element assigned is returned in Last (0 if Item is a null array). 
+<A NAME="I8155"></A>If Item'Length exceeds Target'Length, Constraint_Error 
+is propagated.</div>
+<div class="paranum">59</div>
+<div class="Normal">Type Numeric corresponds to COBOL's numeric data 
+category with display usage.</div>
+<div class="paranum">60</div>
+<div class="Normal" style="margin-bottom: 0.9em">The types Display_Format, 
+Binary_Format, and Packed_Format are used in conversions between Ada 
+decimal type values and COBOL internal or external data representations. 
+The value of the constant Native_Binary is either High_Order_First or 
+Low_Order_First, depending on the implementation.&nbsp;</div>
+<div class="paranum">61</div>
+<div class="Examples"><B>function</B>&nbsp;Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Numeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">62</div>
+<div class="Indented2" style="margin-bottom: 0.4em">The function Valid 
+checks that the Item parameter has a value consistent with the value 
+of Format. If the value of Format is other than Unsigned, Leading_Separate, 
+and Trailing_Separate, the effect is implementation defined. If Format 
+does have one of these values, the following rules apply:&nbsp;</div>
+<div class="paranum">63/3</div>
+<div class="Indented3Bulleted">{<I><A HREF="defect1.html#8652/0066">8652/0066</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00071.TXT">AI95-00071-01</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0264-1.TXT">AI05-0264-1</A></I>} 
+Format=Unsigned: if Item comprises one or more decimal digit characters, 
+then Valid returns True, else it returns False.</div>
+<div class="paranum">64/1</div>
+<div class="Indented3Bulleted">{<I><A HREF="defect1.html#8652/0066">8652/0066</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00071.TXT">AI95-00071-01</A></I>} 
+Format=Leading_Separate: if Item comprises a single occurrence of the 
+plus or minus sign character, and then one or more decimal digit characters, 
+then Valid returns True, else it returns False.</div>
+<div class="paranum">65/1</div>
+<div class="Indented3Bulleted" style="margin-bottom: 0.7em">{<I><A HREF="defect1.html#8652/0066">8652/0066</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00071.TXT">AI95-00071-01</A></I>} 
+Format=Trailing_Separate: if Item comprises one or more decimal digit 
+characters and finally a plus or minus sign character, then Valid returns 
+True, else it returns False.&nbsp;</div>
+<div class="paranum">66</div>
+<div class="Examples"><B>function</B>&nbsp;Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Natural;</div>
+<div class="paranum">67</div>
+<div class="Indented2" style="margin-bottom: 0.9em">The Length function 
+returns the minimal length of a Numeric value sufficient to hold any 
+value of type Num when represented as Format.</div>
+<div class="paranum">68</div>
+<div class="Examples"><B>function</B>&nbsp;To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Numeric;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">69</div>
+<div class="Indented2" style="margin-bottom: 0.9em">Produces a value 
+of type Num corresponding to Item as represented by Format. The number 
+of digits after the assumed radix point in Item is Num'Scale. Conversion_Error 
+is propagated if the value represented by Item is outside the range of 
+Num.&nbsp;</div>
+<div class="paranum">69.a</div>
+<div class="Annotations"><B>Discussion:&nbsp;</B>There is no issue of truncation 
+versus rounding, since the number of decimal places is established by 
+Num'Scale.</div>
+<div class="paranum">70</div>
+<div class="Examples"><B>function</B>&nbsp;To_Display&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Display_Format)&nbsp;<B>return</B>&nbsp;Numeric;</div>
+<div class="paranum">71/1</div>
+<div class="Indented2" style="margin-bottom: 0.9em">{<I><A HREF="defect1.html#8652/0067">8652/0067</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00072.TXT">AI95-00072-01</A></I>} 
+This function returns the Numeric value for Item, represented in accordance 
+with Format. The length of the returned value is Length(Format), and 
+the lower bound is 1. Conversion_Error is propagated if Num is negative 
+and Format is Unsigned.</div>
+<div class="paranum">72</div>
+<div class="Examples"><B>function</B>&nbsp;Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Decimal;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">73</div>
+<div class="Indented2" style="margin-bottom: 0.9em">This function returns 
+True if Item has a value consistent with Format, and False otherwise. 
+The rules for the formation of Packed_Decimal values are implementation 
+defined.</div>
+<div class="paranum">74</div>
+<div class="Examples"><B>function</B>&nbsp;Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Natural;</div>
+<div class="paranum">75</div>
+<div class="Indented2" style="margin-bottom: 0.9em">This function returns 
+the minimal length of a Packed_Decimal value sufficient to hold any value 
+of type Num when represented as Format.</div>
+<div class="paranum">76</div>
+<div class="Examples"><B>function</B>&nbsp;To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Decimal;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">77</div>
+<div class="Indented2" style="margin-bottom: 0.9em">Produces a value 
+of type Num corresponding to Item as represented by Format. Num'Scale 
+is the number of digits after the assumed radix point in Item. Conversion_Error 
+is propagated if the value represented by Item is outside the range of 
+Num.</div>
+<div class="paranum">78</div>
+<div class="Examples"><B>function</B>&nbsp;To_Packed&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Packed_Format)&nbsp;<B>return</B>&nbsp;Packed_Decimal;</div>
+<div class="paranum">79/1</div>
+<div class="Indented2" style="margin-bottom: 0.9em">{<I><A HREF="defect1.html#8652/0067">8652/0067</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00072.TXT">AI95-00072-01</A></I>} 
+This function returns the Packed_Decimal value for Item, represented 
+in accordance with Format. The length of the returned value is Length(Format), 
+and the lower bound is 1. Conversion_Error is propagated if Num is negative 
+and Format is Packed_Unsigned.</div>
+<div class="paranum">80</div>
+<div class="Examples"><B>function</B>&nbsp;Valid&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Byte_Array;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Boolean;</div>
+<div class="paranum">81</div>
+<div class="Indented2" style="margin-bottom: 0.9em">This function returns 
+True if Item has a value consistent with Format, and False otherwise. 
+</div>
+<div class="paranum">81.a</div>
+<div class="Annotations"><B>Ramification:&nbsp;</B>This function returns False 
+only when the represented value is outside the range of Num.</div>
+<div class="paranum">82</div>
+<div class="Examples"><B>function</B>&nbsp;Length&nbsp;(Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Natural;</div>
+<div class="paranum">83</div>
+<div class="Indented2" style="margin-bottom: 0.9em">This function returns 
+the minimal length of a Byte_Array value sufficient to hold any value 
+of type Num when represented as Format.</div>
+<div class="paranum">84</div>
+<div class="Examples"><B>function</B>&nbsp;To_Decimal&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Byte_Array;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">85</div>
+<div class="Indented2" style="margin-bottom: 0.9em">Produces a value 
+of type Num corresponding to Item as represented by Format. Num'Scale 
+is the number of digits after the assumed radix point in Item. Conversion_Error 
+is propagated if the value represented by Item is outside the range of 
+Num.</div>
+<div class="paranum">86</div>
+<div class="Examples"><B>function</B>&nbsp;To_Binary&nbsp;(Item&nbsp;&nbsp;&nbsp;:&nbsp;<B>in</B>&nbsp;Num;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;:&nbsp;<B>in</B>&nbsp;Binary_Format)&nbsp;<B>return</B>&nbsp;Byte_Array;</div>
+<div class="paranum">87/1</div>
+<div class="Indented2" style="margin-bottom: 0.9em">{<I><A HREF="defect1.html#8652/0067">8652/0067</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00072.TXT">AI95-00072-01</A></I>} 
+This function returns the Byte_Array value for Item, represented in accordance 
+with Format. The length of the returned value is Length(Format), and 
+the lower bound is 1.</div>
+<div class="paranum">88</div>
+<div class="Examples"><B>function</B>&nbsp;To_Decimal&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Binary)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>return</B>&nbsp;Num;<BR>
+<BR>
+<B>function</B>&nbsp;To_Decimal&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Long_Binary)&nbsp;<B>return</B>&nbsp;Num;</div>
+<div class="paranum">89</div>
+<div class="Indented2" style="margin-bottom: 0.9em">These functions 
+convert from COBOL binary format to a corresponding value of the decimal 
+type Num. Conversion_Error is propagated if Item is too large for Num. 
+</div>
+<div class="paranum">89.a</div>
+<div class="Annotations"><B>Ramification:&nbsp;</B>There is no rescaling performed 
+on the conversion. That is, the returned value in each case is a &ldquo;bit 
+copy&rdquo; if Num has a binary radix. The programmer is responsible 
+for maintaining the correct scale.&nbsp;</div>
+<div class="paranum">90</div>
+<div class="Examples"><B>function</B>&nbsp;To_Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Num)&nbsp;&nbsp;<B>return</B>&nbsp;Binary;<BR>
+<BR>
+<B>function</B>&nbsp;To_Long_Binary&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;Num)&nbsp;&nbsp;<B>return</B>&nbsp;Long_Binary;</div>
+<div class="paranum">91</div>
+<div class="Indented2">These functions convert from Ada decimal to COBOL 
+binary format. Conversion_Error is propagated if the value of Item is 
+too large to be represented in the result type.&nbsp;</div>
+<div class="paranum">91.a</div>
+<div class="Annotations"><B>Discussion:&nbsp;</B>One style of interface supported 
+for COBOL, similar to what is provided for C, is the ability to call 
+and pass parameters to an existing COBOL program. Thus the interface 
+package supplies types that can be used in an Ada program as parameters 
+to subprograms whose bodies will be in COBOL. These types map to COBOL's 
+alphanumeric and numeric data categories.</div>
+<div class="paranum">91.b</div>
+<div class="Annotations">Several types are provided for support of alphanumeric 
+data. Since COBOL's run-time character set is not necessarily the same 
+as Ada's, Interfaces.COBOL declares an implementation-defined character 
+type COBOL_Character, and mappings between Character and COBOL_Character. 
+These mappings are visible variables (rather than, say, functions or 
+constant arrays), since in the situation where COBOL_Character is EBCDIC, 
+the flexibility of dynamically modifying the mappings is needed. Corresponding 
+to COBOL's alphanumeric data is the string type Alphanumeric.</div>
+<div class="paranum">91.c</div>
+<div class="Annotations">Numeric data may have either a &ldquo;display&rdquo; 
+or &ldquo;computational&rdquo; representation in COBOL. On the Ada side, 
+the data is of a decimal fixed point type. Passing an Ada decimal data 
+item to a COBOL program requires conversion from the Ada decimal type 
+to some type that reflects the representation expected on the COBOL side. 
+</div>
+<div class="paranum">91.d</div>
+<div class="SmallBulleted">Computational Representation</div>
+<div class="paranum">91.e</div>
+<div class="SmallBulleted-NoPrefix">Floating point representation is 
+modeled by Ada floating point types, Floating and Long_Floating. Conversion 
+between these types and Ada decimal types is obtained directly, since 
+the type name serves as a conversion function.</div>
+<div class="paranum">91.f</div>
+<div class="SmallBulleted-NoPrefix">Binary representation is modeled 
+by an Ada integer type, Binary, and possibly other types such as Long_Binary. 
+Conversion between, say, Binary and a decimal type is through functions 
+from an instantiation of the generic package Decimal_Conversions.</div>
+<div class="paranum">91.g</div>
+<div class="SmallBulleted-NoPrefix">Packed decimal representation is 
+modeled by the Ada array type Packed_Decimal. Conversion between packed 
+decimal and a decimal type is through functions from an instantiation 
+of the generic package Decimal_Conversions.</div>
+<div class="paranum">91.h</div>
+<div class="SmallBulleted">Display Representation</div>
+<div class="paranum">91.i</div>
+<div class="SmallBulleted-NoPrefix">Display representation for numeric 
+data is modeled by the array type Numeric. Conversion between display 
+representation and a decimal type is through functions from an instantiation 
+of the generic package Decimal_Conversions. A parameter to the conversion 
+function indicates the desired interpretation of the data (e.g., signed 
+leading separate, etc.)&nbsp;</div>
+<div class="paranum">91.j/3</div>
+<div class="Annotations">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+The Convention of a record type may be specified as COBOL to direct the 
+compiler to choose a COBOL-compatible representation for objects of the 
+type.</div>
+<div class="paranum">91.k</div>
+<div class="Annotations">The package Interfaces.COBOL allows the Ada 
+programmer to deal with data from files (or databases) created by a COBOL 
+program. For data that is alphanumeric, or in display or packed decimal 
+format, the approach is the same as for passing parameters (instantiate 
+Decimal_Conversions to obtain the needed conversion functions). For binary 
+data, the external representation is treated as a Byte array, and an 
+instantiation of Decimal_IO produces a package that declares the needed 
+conversion functions. A parameter to the conversion function indicates 
+the desired interpretation of the data (e.g., high- versus low-order 
+byte first).&nbsp;</div>
+
+<H4 Class="centered">Implementation Requirements</H4>
+<div class="paranum">92/3</div>
+<div class="Normal">&nbsp;{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+An implementation shall support specifying aspect Convention with a COBOL 
+<I>convention</I>_<SPAN Class="swiss"><A HREF="AA-2-3.html#S0002">identifier</A></SPAN> 
+for a COBOL-eligible type (see <A HREF="AA-B-1.html">B.1</A>).&nbsp;</div>
+<div class="paranum">92.a</div>
+<div class="Annotations"><B>Ramification:&nbsp;</B>An implementation supporting 
+this package shall ensure that if the bounds of a Packed_Decimal, Alphanumeric, 
+or Numeric variable are static, then the representation of the object 
+comprises solely the array components (that is, there is no implicit 
+run-time &ldquo;descriptor&rdquo; that is part of the object).&nbsp;</div>
+
+<H4 Class="centered">Implementation Permissions</H4>
+<div class="paranum">93</div>
+<div class="Normal">An implementation may provide additional constants 
+of the private types Display_Format, Binary_Format, or Packed_Format. 
+</div>
+<div class="paranum">93.a</div>
+<div class="Annotations"><B>Reason:&nbsp;</B>This is to allow exploitation 
+of other external formats that may be available in the COBOL implementation.</div>
+<div class="paranum">94</div>
+<div class="Normal">An implementation may provide further floating point 
+and integer types in Interfaces.COBOL to match additional native COBOL 
+types, and may also supply corresponding conversion functions in the 
+generic package Decimal_Conversions.&nbsp;</div>
+
+<H4 Class="centered">Implementation Advice</H4>
+<div class="paranum">95</div>
+<div class="Normal">An Ada implementation should support the following 
+interface correspondences between Ada and COBOL.&nbsp;</div>
+<div class="paranum">96</div>
+<div class="Bulleted">An Ada <B>access</B> T parameter is passed as a 
+&ldquo;BY REFERENCE&rdquo; data item of the COBOL type corresponding 
+to T.</div>
+<div class="paranum">97</div>
+<div class="Bulleted">An Ada <B>in</B> scalar parameter is passed as 
+a &ldquo;BY CONTENT&rdquo; data item of the corresponding COBOL type.</div>
+<div class="paranum">98</div>
+<div class="Bulleted">Any other Ada parameter is passed as a &ldquo;BY 
+REFERENCE&rdquo; data item of the COBOL type corresponding to the Ada 
+parameter type; for scalars, a local copy is used if necessary to ensure 
+by-copy semantics.&nbsp;</div>
+<div class="paranum">98.a/2</div>
+<div class="Annotations"><B>Implementation Advice:&nbsp;</B>If COBOL interfacing 
+is supported, the interface correspondences between Ada and COBOL should 
+be supported.</div>
+<div class="NotesHeader">NOTES</div>
+<div class="paranum">99/3</div>
+<div class="Notes">12&nbsp;&nbsp;{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+An implementation is not required to support specifying aspect Convention 
+for access types, nor is it required to support specifying aspects Import, 
+Export, or Convention for functions.&nbsp;</div>
+<div class="paranum">99.a</div>
+<div class="Annotations"><B>Reason:&nbsp;</B>COBOL does not have a pointer 
+facility, and a COBOL program does not return a value.</div>
+<div class="paranum">100</div>
+<div class="Notes">13&nbsp;&nbsp;If an Ada subprogram is exported to 
+COBOL, then a call from COBOL call may specify either &ldquo;BY CONTENT&rdquo; 
+or &ldquo;BY REFERENCE&rdquo;.&nbsp;</div>
+
+<H4 Class="centered">Examples</H4>
+<div class="paranum">101</div>
+<div class="Normal" style="margin-bottom: 0.4em"><I>Examples of Interfaces.COBOL:</I> 
+</div>
+<div class="paranum">102</div>
+<div class="Examples"><B>with</B>&nbsp;Interfaces.COBOL;<BR>
+<B>procedure</B>&nbsp;Test_Call&nbsp;<B>is</B></div>
+<div class="paranum">103</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Calling&nbsp;a&nbsp;foreign&nbsp;COBOL&nbsp;program</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Assume&nbsp;that&nbsp;a&nbsp;COBOL&nbsp;program&nbsp;PROG&nbsp;has&nbsp;the&nbsp;following&nbsp;declaration</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;in&nbsp;its&nbsp;LINKAGE&nbsp;section:</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;01&nbsp;Parameter-Area</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;NAME&nbsp;&nbsp;&nbsp;PIC&nbsp;X(20).</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;PIC&nbsp;X(9).</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;SALARY&nbsp;PIC&nbsp;99999V99&nbsp;USAGE&nbsp;COMP.</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;The&nbsp;effect&nbsp;of&nbsp;PROG&nbsp;is&nbsp;to&nbsp;update&nbsp;SALARY&nbsp;based&nbsp;on&nbsp;some&nbsp;algorithm</I></SPAN></div>
+<div class="paranum">104</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;COBOL&nbsp;<B>renames</B>&nbsp;Interfaces.COBOL;</div>
+<div class="paranum">105</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;Salary_Type&nbsp;<B>is</B>&nbsp;<B>delta</B>&nbsp;0.01&nbsp;<B>digits</B>&nbsp;7;</div>
+<div class="paranum">106/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;COBOL_Record&nbsp;<B>is</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>record</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;:&nbsp;COBOL.Numeric(1..20);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;COBOL.Numeric(1..9);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salary&nbsp;:&nbsp;COBOL.Binary;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Assume&nbsp;Binary&nbsp;=&nbsp;32&nbsp;bits</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>end</B>&nbsp;<B>record</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Convention&nbsp;=&gt;&nbsp;COBOL;</div>
+<div class="paranum">107/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>procedure</B>&nbsp;Prog&nbsp;(Item&nbsp;:&nbsp;<B>in</B>&nbsp;<B>out</B>&nbsp;COBOL_Record)<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Import&nbsp;=&gt;&nbsp;True,&nbsp;Convention&nbsp;=&gt;&nbsp;COBOL;</div>
+<div class="paranum">108</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;Salary_Conversions&nbsp;<B>is</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>new</B>&nbsp;COBOL.Decimal_Conversions(Salary_Type);</div>
+<div class="paranum">109</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;Some_Salary&nbsp;:&nbsp;Salary_Type&nbsp;:=&nbsp;12_345.67;<BR>
+&nbsp;&nbsp;&nbsp;Some_Record&nbsp;:&nbsp;COBOL_Record&nbsp;:=<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Name&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&quot;Johnson,&nbsp;John&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;,<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&quot;111223333&quot;,<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salary&nbsp;=&gt;&nbsp;Salary_Conversions.To_Binary(Some_Salary));</div>
+<div class="paranum">110</div>
+<div class="Examples"><B>begin</B><BR>
+&nbsp;&nbsp;&nbsp;Prog&nbsp;(Some_Record);<BR>
+&nbsp;&nbsp;&nbsp;...<BR>
+<B>end</B>&nbsp;Test_Call;</div>
+<div class="paranum">111</div>
+<div class="Examples"><B>with</B>&nbsp;Interfaces.COBOL;<BR>
+<B>with</B>&nbsp;COBOL_Sequential_IO;&nbsp;<SPAN Class="roman"><I>--&nbsp;Assumed&nbsp;to&nbsp;be&nbsp;supplied&nbsp;by&nbsp;implementation</I></SPAN><BR>
+<B>procedure</B>&nbsp;Test_External_Formats&nbsp;<B>is</B></div>
+<div class="paranum">112</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Using&nbsp;data&nbsp;created&nbsp;by&nbsp;a&nbsp;COBOL&nbsp;program</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Assume&nbsp;that&nbsp;a&nbsp;COBOL&nbsp;program&nbsp;has&nbsp;created&nbsp;a&nbsp;sequential&nbsp;file&nbsp;with</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;the&nbsp;following&nbsp;record&nbsp;structure,&nbsp;and&nbsp;that&nbsp;we&nbsp;need&nbsp;to</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;process&nbsp;the&nbsp;records&nbsp;in&nbsp;an&nbsp;Ada&nbsp;program</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;01&nbsp;EMPLOYEE-RECORD</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;NAME&nbsp;&nbsp;&nbsp;&nbsp;PIC&nbsp;X(20).</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PIC&nbsp;X(9).</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;SALARY&nbsp;&nbsp;PIC&nbsp;99999V99&nbsp;USAGE&nbsp;COMP.</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05&nbsp;ADJUST&nbsp;&nbsp;PIC&nbsp;S999V999&nbsp;SIGN&nbsp;LEADING&nbsp;SEPARATE.</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;The&nbsp;COMP&nbsp;data&nbsp;is&nbsp;binary&nbsp;(32&nbsp;bits),&nbsp;high-order&nbsp;byte&nbsp;first</I></SPAN></div>
+<div class="paranum">113</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;COBOL&nbsp;<B>renames</B>&nbsp;Interfaces.COBOL;</div>
+<div class="paranum">114</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;Salary_Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>is</B>&nbsp;<B>delta</B>&nbsp;0.01&nbsp;&nbsp;<B>digits</B>&nbsp;7;<BR>
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;Adjustments_Type&nbsp;<B>is</B>&nbsp;<B>delta</B>&nbsp;0.001&nbsp;<B>digits</B>&nbsp;6;</div>
+<div class="paranum">115/3</div>
+<div class="Examples">{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AI05s/AI05-0229-1.TXT">AI05-0229-1</A></I>} 
+&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;COBOL_Employee_Record_Type&nbsp;<B>is</B>&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;External&nbsp;representation</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>record</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;COBOL.Alphanumeric(1..20);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;COBOL.Alphanumeric(1..9);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salary&nbsp;&nbsp;:&nbsp;COBOL.Byte_Array(1..4);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adjust&nbsp;&nbsp;:&nbsp;COBOL.Numeric(1..7);&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Sign&nbsp;and&nbsp;6&nbsp;digits</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>end</B>&nbsp;<B>record</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>with</B>&nbsp;Convention&nbsp;=&gt;&nbsp;COBOL;</div>
+<div class="paranum">116</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;COBOL_Employee_IO&nbsp;<B>is</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>new</B>&nbsp;COBOL_Sequential_IO(COBOL_Employee_Record_Type);<BR>
+&nbsp;&nbsp;&nbsp;<B>use</B>&nbsp;COBOL_Employee_IO;</div>
+<div class="paranum">117</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;COBOL_File&nbsp;:&nbsp;File_Type;</div>
+<div class="paranum">118</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>type</B>&nbsp;Ada_Employee_Record_Type&nbsp;<B>is</B>&nbsp;&nbsp;<SPAN Class="roman"><I>--&nbsp;Internal&nbsp;representation</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>record</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;String(1..20);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SSN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;String(1..9);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salary&nbsp;&nbsp;:&nbsp;Salary_Type;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adjust&nbsp;&nbsp;:&nbsp;Adjustments_Type;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>end</B>&nbsp;<B>record</B>;</div>
+<div class="paranum">119</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;COBOL_Record&nbsp;:&nbsp;COBOL_Employee_Record_Type;<BR>
+&nbsp;&nbsp;&nbsp;Ada_Record&nbsp;&nbsp;&nbsp;:&nbsp;Ada_Employee_Record_Type;</div>
+<div class="paranum">120</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;Salary_Conversions&nbsp;<B>is</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>new</B>&nbsp;COBOL.Decimal_Conversions(Salary_Type);<BR>
+&nbsp;&nbsp;&nbsp;<B>use</B>&nbsp;Salary_Conversions;</div>
+<div class="paranum">121</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>package</B>&nbsp;Adjustments_Conversions&nbsp;<B>is</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>new</B>&nbsp;COBOL.Decimal_Conversions(Adjustments_Type);<BR>
+&nbsp;&nbsp;&nbsp;<B>use</B>&nbsp;Adjustments_Conversions;</div>
+<div class="paranum">122</div>
+<div class="Examples"><B>begin</B><BR>
+&nbsp;&nbsp;&nbsp;Open&nbsp;(COBOL_File,&nbsp;Name&nbsp;=&gt;&nbsp;&quot;Some_File&quot;);</div>
+<div class="paranum">123</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;<B>loop</B><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Read&nbsp;(COBOL_File,&nbsp;COBOL_Record);</div>
+<div class="paranum">124</div>
+<div class="Examples">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ada_Record.Name&nbsp;:=&nbsp;To_Ada(COBOL_Record.Name);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ada_Record.SSN&nbsp;&nbsp;:=&nbsp;To_Ada(COBOL_Record.SSN);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ada_Record.Salary&nbsp;:=<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To_Decimal(COBOL_Record.Salary,&nbsp;COBOL.High_Order_First);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ada_Record.Adjust&nbsp;:=<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To_Decimal(COBOL_Record.Adjust,&nbsp;COBOL.Leading_Separate);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;<SPAN Class="roman"><I>--&nbsp;Process&nbsp;Ada_Record</I></SPAN><BR>
+&nbsp;&nbsp;&nbsp;<B>end</B>&nbsp;<B>loop</B>;<BR>
+<B>exception</B><BR>
+&nbsp;&nbsp;&nbsp;<B>when</B>&nbsp;End_Error&nbsp;=&gt;&nbsp;...<BR>
+<B>end</B>&nbsp;Test_External_Formats;</div>
+
+<H4 Class="centered">Wording Changes from Ada 95</H4>
+<div class="paranum">124.a/2</div>
+<div class="Annotations">{<I><A HREF="defect1.html#8652/0066">8652/0066</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00071.TXT">AI95-00071-01</A></I>} 
+<B>Corrigendum:</B> Corrected the definition of Valid to match COBOL.</div>
+<div class="paranum">124.b/2</div>
+<div class="Annotations">{<I><A HREF="defect1.html#8652/0067">8652/0067</A></I>} 
+{<I><A HREF="http://www.ada-auth.org/cgi-bin/cvsweb.cgi/AIs/AI-00072.TXT">AI95-00072-01</A></I>} 
+<B>Corrigendum:</B> Specified the bounds of the results of To_Display, 
+To_Packed, and To_Binary.&nbsp;</div>
+
+<HR>
+<div style="margin-top: 0.0em; margin-bottom: 0.6em"><A HREF="AA-TOC.html"><IMG SRC="cont.gif" ALT="Contents" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-0-4.html"><IMG SRC="index.gif" ALT="Index" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-STDS.html"><IMG SRC="lib.gif" ALT="References" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-SRCH.html"><IMG SRC="find.gif" ALT="Search" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-B-3-3.html"><IMG SRC="prev.gif" ALT="Previous" BORDER=0></A>&nbsp;
+&nbsp;<A HREF="AA-B-5.html"><IMG SRC="next.gif" ALT="Next" BORDER=0></A>&nbsp;
+</div>
+<DIV Style="margin-top:0.0em"><IMG SRC="AE_logo.gif" height=100 width=113 align=right ALT="Ada-Europe">
+<SPAN Style="vertical-align: middle; font-size:120%">Ada 2005 and 2012 Editions sponsored in part by <SPAN Style="font-size: 125%"><A HREF="http://www.ada-europe.org/"><B>Ada-Europe</B></A></SPAN></SPAN></DIV>
+</BODY>
+</HTML>

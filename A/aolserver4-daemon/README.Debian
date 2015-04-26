@@ -1,0 +1,36 @@
+AOLserver for Debian
+--------------------
+
+This is the once well-known AOL web server. It is somewhat similar in functionality
+to Zope (except based on Tcl).  You might be interested in this package if you 
+are interested in creating your own collaborative or e-commerce website.
+This is the same engine that America On-Line used to run for years until very recent
+times, and should be more than adequate for most uses.
+AOLserver is a joint effort of America On-Line and MIT.  I highly recommend
+that you install the companion "acs-pg" package to get the most out of it.
+
+The basic post-install configuration script creates an /etc/aolserver4/aolserver4.tcl 
+configuration Tcl snippeti, whose settings can be partially changed by modifying
+an usual /etc/default/aolserver4 file. Additional instances of the server
+can be run by adding /etc/aolserver4/conf.d/<name>.sh files and a corresponding
+/etc/aolserver4/conf.d/<name>.tcl Tcl script. Variables that can be set
+in <name>sh are:
+
+AOL_ADDRESS = IP address (default: main instance address)
+AOL_PORT = port number (default: main port + 1)
+AOL_USER = user-id (default: www-data)
+AOL_GROUP = group-id (default: www-data)
+RUN_DAEMON = yes | no (default: yes)
+
+Note that the special address 0.0.0.0 can be used to bind the server to all
+active ip addresses on all network interfaces.
+
+All instances are loaded by the main init script when RUN_DAEMON is set to 'yes'
+or can be disabled by setting to 'no' the same shell variable. AOLserver 
+pplications that use this approach are dotlrn or openacs.
+
+See http://aolserver.com/ for the official home page and
+http://panoptic.com/wiki/aolserver/AOLserver_Wiki for a useful Wiki.
+
+ -- Francesco Paolo Lovergine <frankie@debian.org>  Wed, 14 Oct 2009 00:42:18 +0200
+

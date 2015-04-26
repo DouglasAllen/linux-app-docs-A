@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Utilisation d'APT hors ligne - Utilisation d'APT et wget</title>
+
+<link href="index.html" rel="start">
+<link href="ch2.html" rel="prev">
+<link href="index.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Introduction">
+<link href="ch2.html" rel="chapter" title="2 Utilisation d'APT sur les deux machines">
+<link href="ch3.html" rel="chapter" title="3 Utilisation d'APT et wget">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Aperçu">
+<link href="ch2.html#s2.1" rel="section" title="2.1 Aperçu">
+<link href="ch2.html#s2.2" rel="section" title="2.2 Le fichier de configuration">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Aperçu">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Fonctionnement">
+
+</head>
+
+<body>
+
+<p><a name="ch3"></a></p>
+<hr>
+
+<p>
+[ <a href="ch2.html">précédent</a> ]
+[ <a href="index.html#contents">Table des matières</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ 3 ]
+[ <a href="index.html">suivant</a> ]
+</p>
+
+<hr>
+
+<h1>
+Utilisation d'APT hors ligne
+<br>Chapitre 3 - Utilisation d'APT et wget
+</h1>
+
+<hr>
+
+<h2><a name="s3.1"></a>3.1 Aperçu</h2>
+
+<p>
+<em>wget</em> est un outil classique de téléchargement qui peut être
+exécuté sur à peu près tout type de machine.  À la différence de la
+méthode précédente, cela impose que la machine Debian a déjà une liste des
+paquets disponibles.
+</p>
+
+<p>
+L'idée de base est de créer un disque qui ne comporte que les fichiers
+archive téléchargés depuis le site distant.  Cela peut être effectué avec
+l'option --print-uris d'apt-get puis de la préparation d'un script wget
+permettant de récupérer les paquets/
+</p>
+
+<hr>
+
+<h2><a name="s3.2"></a>3.2 Fonctionnement</h2>
+
+<p>
+À la différence de la méthode précédente, aucun fichier de configuration
+spécifique n'est nécessaire.  Seules les commandes standard d'APT seront
+utilisées pour créer la liste de ficheirs.
+</p>
+
+<pre>
+      # apt-get dist-upgrade 
+      [ Répondre négativement à la question, pour être sûr(e) que les actions vous conviennent ]
+      # apt-get -qq --print-uris dist-upgrade &gt; uris
+      # awk '{print &quot;wget -O &quot; $2 &quot; &quot; $1}' &lt; uris &gt; /disc/wget-script
+</pre>
+
+<p>
+Toute autre commande que dist-upgrade peut être utilisée, y compris
+dselect-upgrade.
+</p>
+
+<p>
+Le fichier /disc/wget-script contiendra alors la liste des commandes wget à
+exécuter afin de récupérer les fichiers nécessaires.  Ce script doit être
+exécuté depuis le point de montage du disque afin que les fichiers soient
+écrits sur le disque.
+</p>
+
+<p>
+Sur la machine distante, il faudra alors exécuter l'équivalent de&nbsp;:
+</p>
+
+<pre>
+       # cd /disc
+       # sh -x ./wget-script
+       [ attendre.. ]
+</pre>
+
+<p>
+Une fois les fichiers téléchargés et le disque reconnecté à la machine
+Debian, l'installation peut se poursuivre avec&nbsp;:
+</p>
+
+<pre>
+       # apt-get -o dir::cache::archives=&quot;/disc/&quot; dist-upgrade
+</pre>
+
+<p>
+Cette commande utilisera les fichiers récupérés sur le disque.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch2.html">précédent</a> ]
+[ <a href="index.html#contents">Table des matières</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ 3 ]
+[ <a href="index.html">suivant</a> ]
+</p>
+
+<hr>
+
+<p>
+Utilisation d'APT hors ligne
+</p>
+
+<address>
+$Id: offline.sgml,v 1.8 2003/02/12 15:06:41 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

@@ -1,0 +1,179 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Inter-type declarations</title><link rel="stylesheet" type="text/css" href="aspectj-docs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The AspectJTM Programming Guide"><link rel="up" href="language.html" title="Chapter 2. The AspectJ Language"><link rel="prev" href="language-advice.html" title="Advice"><link rel="next" href="language-thisJoinPoint.html" title="thisJoinPoint"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Inter-type declarations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="language-advice.html">Prev</a> </td><th width="60%" align="center">Chapter 2. The AspectJ Language</th><td width="20%" align="right"> <a accesskey="n" href="language-thisJoinPoint.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Inter-type declarations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="language-interType"></a>Inter-type declarations</h2></div></div></div><p>
+      Aspects can declare members (fields, methods, and constructors) that
+      are owned by other types.  These are called inter-type members.
+      Aspects can also declare that other types implement new interfaces or
+      extend a new class.  Here are examples of some such inter-type
+      declarations:
+    </p><p>
+      This declares that each <code class="literal">Server</code> has a
+      <code class="literal">boolean</code> field named <code class="literal">disabled</code>,
+      initialized to <code class="literal">false</code>:
+
+</p><pre class="programlisting">
+  private boolean Server.disabled = false;
+</pre><p>
+
+      It is declared <code class="literal">private</code>, which means that it is
+      private <span class="emphasis"><em>to the aspect</em></span>: only code in the aspect
+      can see the field.  And even if <code class="literal">Server</code> has
+      another private field named <code class="literal">disabled</code> (declared in
+      <code class="literal">Server</code> or in another aspect) there won't be a name
+      collision, since no reference to <code class="literal">disabled</code> will be
+      ambiguous.
+    </p><p>
+      This declares that each <code class="literal">Point</code> has an
+      <code class="literal">int</code> method named <code class="literal">getX</code> with no
+      arguments that returns whatever <code class="literal">this.x</code> is:
+
+</p><pre class="programlisting">
+  public int Point.getX() { return this.x; }
+</pre><p>
+
+      Inside the body, <code class="literal">this</code> is the
+      <code class="literal">Point</code> object currently executing.  Because the
+      method is publically declared any code can call it, but if there is
+      some other <code class="literal">Point.getX()</code> declared there will be a
+      compile-time conflict.
+    </p><p>
+      This publically declares a two-argument constructor for
+      <code class="literal">Point</code>:
+
+</p><pre class="programlisting">
+  public Point.new(int x, int y) { this.x = x; this.y = y; }
+</pre><p>
+
+    </p><p>
+      This publicly declares that each <code class="literal">Point</code> has an
+      <code class="literal">int</code> field named <code class="literal">x</code>, initialized
+      to zero:
+
+</p><pre class="programlisting">
+  public int Point.x = 0;
+</pre><p>
+
+      Because this is publically declared, it is an error if
+      <code class="literal">Point</code> already has a field named
+      <code class="literal">x</code> (defined by <code class="literal">Point</code> or by
+      another aspect).
+    </p><p>
+      This declares that the <code class="literal">Point</code> class implements the
+      <code class="literal">Comparable</code> interface:
+
+</p><pre class="programlisting">
+  declare parents: Point implements Comparable;
+</pre><p>
+
+      Of course, this will be an error unless <code class="literal">Point</code>
+      defines the methods required by <code class="literal">Comparable</code>.
+    </p><p>
+      This declares that the <code class="literal">Point</code> class extends the
+      <code class="literal">GeometricObject</code> class.
+
+</p><pre class="programlisting">
+  declare parents: Point extends GeometricObject;
+</pre><p>
+    </p><p>
+      An aspect can have several inter-type declarations.  For example, the
+      following declarations
+
+</p><pre class="programlisting">
+  public String Point.name;
+  public void Point.setName(String name) { this.name = name; }
+</pre><p>
+
+      publicly declare that Point has both a String field
+      <code class="literal">name</code> and a <code class="literal">void</code> method
+      <code class="literal">setName(String)</code> (which refers to the
+      <code class="literal">name</code> field declared by the aspect).
+    </p><p>
+      An inter-type member can only have one target type, but often you may
+      wish to declare the same member on more than one type.  This can be
+      done by using an inter-type member in combination with a private
+      interface:
+
+</p><pre class="programlisting">
+  aspect A {
+    private interface HasName {}
+    declare parents: (Point || Line || Square) implements HasName;
+
+    private String HasName.name;
+    public  String HasName.getName()  { return name; }
+  }
+</pre><p>
+
+      This declares a marker interface <code class="literal">HasName</code>, and also declares that any
+      type that is either <code class="literal">Point</code>,
+      <code class="literal">Line</code>, or <code class="literal">Square</code> implements that
+      interface.  It also privately declares that all <code class="literal">HasName</code>
+      object have a <code class="literal">String</code> field called
+      <code class="literal">name</code>, and publically declares that all
+      <code class="literal">HasName</code> objects have a <code class="literal">String</code>
+      method <code class="literal">getName()</code> (which refers to the privately
+      declared <code class="literal">name</code> field).
+    </p><p>
+      As you can see from the above example, an aspect can declare that
+      interfaces have fields and methods, even non-constant fields and
+      methods with bodies.
+    </p><div class="sect2" title="Inter-type Scope"><div class="titlepage"><div><div><h3 class="title"><a name="inter-type-scope"></a>Inter-type Scope</h3></div></div></div><p>
+        AspectJ allows private and package-protected (default) inter-type declarations in
+        addition to public inter-type declarations. Private means private in
+        relation to the aspect, not necessarily the target type. So, if an
+        aspect makes a private inter-type declaration of a field
+
+</p><pre class="programlisting">
+  private int Foo.x;
+</pre><p>
+
+        Then code in the aspect can refer to <code class="literal">Foo</code>'s
+        <code class="literal">x</code> field, but nobody else can. Similarly, if an
+        aspect makes a package-protected introduction,
+      </p><pre class="programlisting">
+  int Foo.x;
+</pre><p>
+        then everything in the aspect's package (which may or may not be
+        <code class="literal">Foo</code>'s package) can access <code class="literal">x</code>.
+      </p></div><div class="sect2" title="Example: PointAssertions"><div class="titlepage"><div><div><h3 class="title"><a name="example-pointassertions"></a>Example: <code class="literal">PointAssertions</code></h3></div></div></div><p>
+        The example below consists of one class and one aspect. The aspect
+        privately declares the assertion methods of
+        <code class="literal">Point</code>, <code class="literal">assertX</code> and
+        <code class="literal">assertY</code>. It also guards calls to
+        <code class="literal">setX</code> and <code class="literal">setY</code> with calls to
+        these assertion methods.  The assertion methods are declared
+        privately because other parts of the program (including the code in
+        <code class="literal">Point</code>) have no business accessing the assert
+        methods.  Only the code inside of the aspect can call those
+        methods.
+      </p><pre class="programlisting">
+  class Point  {
+      int x, y;
+
+      public void setX(int x) { this.x = x; }
+      public void setY(int y) { this.y = y; }
+
+      public static void main(String[] args) {
+          Point p = new Point();
+          p.setX(3); p.setY(333);
+      }
+  }
+
+  aspect PointAssertions {
+
+      private boolean Point.assertX(int x) {
+          return (x &lt;= 100 &amp;&amp; x &gt;= 0);
+      }
+      private boolean Point.assertY(int y) {
+          return (y &lt;= 100 &amp;&amp; y &gt;= 0);
+      }
+
+      before(Point p, int x): target(p) &amp;&amp; args(x) &amp;&amp; call(void setX(int)) {
+          if (!p.assertX(x)) {
+              System.out.println("Illegal value for x"); return;
+          }
+      }
+      before(Point p, int y): target(p) &amp;&amp; args(y) &amp;&amp; call(void setY(int)) {
+          if (!p.assertY(y)) {
+              System.out.println("Illegal value for y"); return;
+          }
+      }
+  }
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="language-advice.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="language.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="language-thisJoinPoint.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Advice </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> thisJoinPoint</td></tr></table></div></body></html>

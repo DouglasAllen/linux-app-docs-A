@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Static - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Import.html#Import" title="Import">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Static"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Import.html#Import">Import</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">6.15 Static</h3>
+
+<p><a name="index-g_t_0040code_007bstatic_007d-820"></a>
+Static qualifiers allocate the memory address of a variable in a higher
+enclosing level.
+
+   <p>For a function body, the variable is allocated in the block where the
+function is defined; so in the code
+<pre class="verbatim">struct s {
+  int count() {
+    static int c=0;
+    ++c;
+    return c;
+  }
+}
+</pre>
+
+<p class="noindent">there is one instance of the variable <code>c</code> for each
+object <code>s</code> (as opposed to each call of <code>count</code>).
+
+   <p>Similarly, in
+<pre class="verbatim">int factorial(int n) {
+  int helper(int k) {
+    static int x=1;
+    x *= k;
+    return k == 1 ? x : helper(k-1);
+  }
+  return helper(n);
+}
+</pre>
+
+<p class="noindent">there is one instance of <code>x</code> for every call to
+<code>factorial</code> (and not for every call to <code>helper</code>), so this is
+a correct, but ugly, implementation of factorial.
+
+   <p>Similarly, a static variable declared within a structure is allocated in
+the block where the structure is defined. Thus,
+<pre class="verbatim">struct A {
+  struct B {
+    static pair z;
+  }
+}
+</pre>
+
+<p class="noindent">creates one object <code>z</code> for each object of type <code>A</code> created.
+
+   <p>In this example,
+<pre class="verbatim">int pow(int n, int k) {
+  struct A {
+    static int x=1;
+    void helper() {
+      x *= n;
+    }
+  }
+  for(int i=0; i &lt; k; ++i) {
+    A a;
+    a.helper();
+  }
+  return A.x;
+}
+</pre>
+
+<p class="noindent">there is one instance of <code>x</code> for each call to <code>pow</code>, so this
+is an ugly implementation of exponentiation.
+
+   <p>Loop constructs allocate a new frame in every iteration.  This is so that
+higher-order functions can refer to variables of a specific iteration of a
+loop:
+<pre class="verbatim">void f();
+for(int i=0; i &lt; 10; ++i) {
+  int x=i;
+  if(x==5) {
+    f=new void () { write(x); }
+  }
+}
+f();
+</pre>
+
+   <p>Here, every iteration of the loop has its own variable <code>x</code>, so <code>f()</code>
+will write <code>5</code>.  If a variable in a loop is declared static, it will be
+allocated where the enclosing function or structure was defined (just as if it
+were declared static outside of the loop).  For instance, in:
+<pre class="verbatim">void f() {
+  static int x;
+  for(int i=0; i &lt; 10; ++i) {
+    static int y;
+  }
+}
+</pre>
+both <code>x</code> and <code>y</code> will be allocated in the same place, which is
+also where <code>f</code> is also allocated.
+
+   <p>Statements may also be declared static, in which case they are run at the place
+where the enclosing function or structure is defined. 
+Declarations or statements not enclosed in a function or structure definition
+are already at the top level, so static modifiers are meaningless.  A warning is
+given in such a case.
+
+   <p>Since structures can have static fields, it is not always clear for a qualified
+name whether the qualifier is a variable or a type.  For instance, in:
+
+<pre class="verbatim">struct A {
+  static int x;
+}
+pair A;
+
+int y=A.x;
+</pre>
+does the <code>A</code> in <code>A.x</code> refer to the structure or to the pair variable. 
+It is the convention in Asymptote that, if there is a non-function variable with
+the same name as the qualifier, the qualifier refers to that variable, and not
+to the type.  This is regardless of what fields the variable actually possesses.
+
+   </body></html>
+

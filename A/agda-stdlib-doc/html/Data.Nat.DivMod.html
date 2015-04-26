@@ -1,0 +1,3138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Data.Nat.DivMod</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Integer division</a
+      ><a name="125"
+      >
+</a
+      ><a name="126" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="198"
+      >
+
+</a
+      ><a name="200" class="Keyword"
+      >module</a
+      ><a name="206"
+      > </a
+      ><a name="207" href="Data.Nat.DivMod.html#1" class="Module"
+      >Data</a
+      ><a name="211"
+      >.</a
+      ><a name="212" href="Data.Nat.DivMod.html#1" class="Module"
+      >Nat</a
+      ><a name="215"
+      >.</a
+      ><a name="216" href="Data.Nat.DivMod.html#1" class="Module"
+      >DivMod</a
+      ><a name="222"
+      > </a
+      ><a name="223" class="Keyword"
+      >where</a
+      ><a name="228"
+      >
+
+</a
+      ><a name="230" class="Keyword"
+      >open</a
+      ><a name="234"
+      > </a
+      ><a name="235" class="Keyword"
+      >import</a
+      ><a name="241"
+      > </a
+      ><a name="242" href="Data.Nat.html#1" class="Module"
+      >Data</a
+      ><a name="246"
+      >.</a
+      ><a name="247" href="Data.Nat.html#1" class="Module"
+      >Nat</a
+      ><a name="250"
+      > </a
+      ><a name="251" class="Symbol"
+      >as</a
+      ><a name="253"
+      > </a
+      ><a name="254" class="Module"
+      >Nat</a
+      ><a name="257"
+      >
+</a
+      ><a name="258" class="Keyword"
+      >open</a
+      ><a name="262"
+      > </a
+      ><a name="263" class="Keyword"
+      >import</a
+      ><a name="269"
+      > </a
+      ><a name="270" href="Data.Nat.Properties.html#1" class="Module"
+      >Data</a
+      ><a name="274"
+      >.</a
+      ><a name="275" href="Data.Nat.Properties.html#1" class="Module"
+      >Nat</a
+      ><a name="278"
+      >.</a
+      ><a name="279" href="Data.Nat.Properties.html#1" class="Module"
+      >Properties</a
+      ><a name="289"
+      >
+</a
+      ><a name="290" class="Keyword"
+      >open</a
+      ><a name="294"
+      > </a
+      ><a name="295" href="Data.Nat.Properties.html#4551" class="Module"
+      >SemiringSolver</a
+      ><a name="309"
+      >
+</a
+      ><a name="310" class="Keyword"
+      >open</a
+      ><a name="314"
+      > </a
+      ><a name="315" class="Keyword"
+      >import</a
+      ><a name="321"
+      > </a
+      ><a name="322" href="Data.Fin.html#1" class="Module"
+      >Data</a
+      ><a name="326"
+      >.</a
+      ><a name="327" href="Data.Fin.html#1" class="Module"
+      >Fin</a
+      ><a name="330"
+      > </a
+      ><a name="331" class="Symbol"
+      >as</a
+      ><a name="333"
+      > </a
+      ><a name="334" class="Module"
+      >Fin</a
+      ><a name="337"
+      > </a
+      ><a name="338" class="Keyword"
+      >using</a
+      ><a name="343"
+      > </a
+      ><a name="344" class="Symbol"
+      >(</a
+      ><a name="345"
+      >Fin</a
+      ><a name="348" class="Symbol"
+      >;</a
+      ><a name="349"
+      > zero</a
+      ><a name="354" class="Symbol"
+      >;</a
+      ><a name="355"
+      > suc</a
+      ><a name="359" class="Symbol"
+      >;</a
+      ><a name="360"
+      > to&#8469;</a
+      ><a name="364" class="Symbol"
+      >;</a
+      ><a name="365"
+      > from&#8469;</a
+      ><a name="371" class="Symbol"
+      >)</a
+      ><a name="372"
+      >
+</a
+      ><a name="373" class="Keyword"
+      >import</a
+      ><a name="379"
+      > </a
+      ><a name="380" href="Data.Fin.Props.html#1" class="Module"
+      >Data</a
+      ><a name="384"
+      >.</a
+      ><a name="385" href="Data.Fin.Props.html#1" class="Module"
+      >Fin</a
+      ><a name="388"
+      >.</a
+      ><a name="389" href="Data.Fin.Props.html#1" class="Module"
+      >Props</a
+      ><a name="394"
+      > </a
+      ><a name="395" class="Symbol"
+      >as</a
+      ><a name="397"
+      > </a
+      ><a name="398" class="Module"
+      >Fin</a
+      ><a name="401"
+      >
+</a
+      ><a name="402" class="Keyword"
+      >open</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Keyword"
+      >import</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Induction.Nat.html#1" class="Module"
+      >Induction</a
+      ><a name="423"
+      >.</a
+      ><a name="424" href="Induction.Nat.html#1" class="Module"
+      >Nat</a
+      ><a name="427"
+      >
+</a
+      ><a name="428" class="Keyword"
+      >open</a
+      ><a name="432"
+      > </a
+      ><a name="433" class="Keyword"
+      >import</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Relation</a
+      ><a name="448"
+      >.</a
+      ><a name="449" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Nullary</a
+      ><a name="456"
+      >.</a
+      ><a name="457" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Decidable</a
+      ><a name="466"
+      >
+</a
+      ><a name="467" class="Keyword"
+      >open</a
+      ><a name="471"
+      > </a
+      ><a name="472" class="Keyword"
+      >import</a
+      ><a name="478"
+      > </a
+      ><a name="479" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation</a
+      ><a name="487"
+      >.</a
+      ><a name="488" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Binary</a
+      ><a name="494"
+      >.</a
+      ><a name="495" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >PropositionalEquality</a
+      ><a name="516"
+      >
+</a
+      ><a name="517" class="Keyword"
+      >open</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Relation.Binary.PropositionalEquality.html#4717" class="Module"
+      >&#8801;-Reasoning</a
+      ><a name="533"
+      >
+</a
+      ><a name="534" class="Keyword"
+      >open</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="Keyword"
+      >import</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="554"
+      >
+
+</a
+      ><a name="556" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="628"
+      >
+</a
+      ><a name="629" class="Comment"
+      >-- Some boring lemmas</a
+      ><a name="650"
+      >
+
+</a
+      ><a name="652" class="Keyword"
+      >private</a
+      ><a name="659"
+      >
+
+  </a
+      ><a name="663" href="Data.Nat.DivMod.html#663" class="Function"
+      >lem&#8321;</a
+      ><a name="667"
+      > </a
+      ><a name="668" class="Symbol"
+      >:</a
+      ><a name="669"
+      > </a
+      ><a name="670" class="Symbol"
+      >(</a
+      ><a name="671" href="Data.Nat.DivMod.html#671" class="Bound"
+      >m</a
+      ><a name="672"
+      > </a
+      ><a name="673" href="Data.Nat.DivMod.html#673" class="Bound"
+      >k</a
+      ><a name="674"
+      > </a
+      ><a name="675" class="Symbol"
+      >:</a
+      ><a name="676"
+      > </a
+      ><a name="677" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="678" class="Symbol"
+      >)</a
+      ><a name="679"
+      > </a
+      ><a name="680" class="Symbol"
+      >&#8594;</a
+      ><a name="681"
+      >
+         </a
+      ><a name="691" href="Data.Nat.html#710" class="InductiveConstructor"
+      >Nat</a
+      ><a name="694"
+      >.</a
+      ><a name="695" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Data.Nat.DivMod.html#671" class="Bound"
+      >m</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="706"
+      > </a
+      ><a name="707" class="Symbol"
+      >(</a
+      ><a name="708" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="711"
+      > </a
+      ><a name="712" class="Symbol"
+      >(</a
+      ><a name="713" href="Data.Fin.html#2260" class="Function"
+      >Fin</a
+      ><a name="716"
+      >.</a
+      ><a name="717" href="Data.Fin.html#2260" class="Function"
+      >inject+</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Data.Nat.DivMod.html#673" class="Bound"
+      >k</a
+      ><a name="726"
+      > </a
+      ><a name="727" class="Symbol"
+      >(</a
+      ><a name="728" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Data.Nat.DivMod.html#671" class="Bound"
+      >m</a
+      ><a name="735" class="Symbol"
+      >))</a
+      ><a name="737"
+      > </a
+      ><a name="738" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Number"
+      >0</a
+      ><a name="741" class="Symbol"
+      >)</a
+      ><a name="742"
+      >
+  </a
+      ><a name="745" href="Data.Nat.DivMod.html#663" class="Function"
+      >lem&#8321;</a
+      ><a name="749"
+      > </a
+      ><a name="750" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Data.Nat.DivMod.html#752" class="Bound"
+      >k</a
+      ><a name="753"
+      > </a
+      ><a name="754" class="Symbol"
+      >=</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="760"
+      > </a
+      ><a name="761" class="InductiveConstructor"
+      >suc</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Function.html#1840" class="Function Operator"
+      >$</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Relation.Binary.PreorderReasoning.html#1148" class="Function Operator"
+      >begin</a
+      ><a name="772"
+      >
+    </a
+      ><a name="777" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="778"
+      >
+      </a
+      ><a name="785" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Relation.Binary.PropositionalEquality.Core.html#565" class="Function"
+      >sym</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Function.html#1840" class="Function Operator"
+      >$</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Data.Fin.Props.html#2222" class="Function"
+      >Fin</a
+      ><a name="797"
+      >.</a
+      ><a name="798" href="Data.Fin.Props.html#2222" class="Function"
+      >to-from</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="809"
+      >
+    </a
+      ><a name="814" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="817"
+      > </a
+      ><a name="818" class="Symbol"
+      >(</a
+      ><a name="819" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="826" class="Symbol"
+      >)</a
+      ><a name="827"
+      >
+      </a
+      ><a name="834" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Data.Fin.Props.html#3003" class="Function"
+      >Fin</a
+      ><a name="840"
+      >.</a
+      ><a name="841" href="Data.Fin.Props.html#3003" class="Function"
+      >inject+-lemma</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Data.Nat.DivMod.html#752" class="Bound"
+      >k</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >(</a
+      ><a name="858" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="865" class="Symbol"
+      >)</a
+      ><a name="866"
+      > </a
+      ><a name="867" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="868"
+      >
+    </a
+      ><a name="873" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="Symbol"
+      >(</a
+      ><a name="878" href="Data.Fin.html#2260" class="Function"
+      >Fin</a
+      ><a name="881"
+      >.</a
+      ><a name="882" href="Data.Fin.html#2260" class="Function"
+      >inject+</a
+      ><a name="889"
+      > </a
+      ><a name="890" href="Data.Nat.DivMod.html#752" class="Bound"
+      >k</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >(</a
+      ><a name="893" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="900" class="Symbol"
+      >))</a
+      ><a name="902"
+      >
+      </a
+      ><a name="909" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="911"
+      > </a
+      ><a name="912" href="Relation.Binary.Reflection.html#2382" class="Function"
+      >solve</a
+      ><a name="917"
+      > </a
+      ><a name="918" class="Number"
+      >1</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >(&#955;</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Data.Nat.DivMod.html#923" class="Bound"
+      >x</a
+      ><a name="924"
+      > </a
+      ><a name="925" class="Symbol"
+      >&#8594;</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Data.Nat.DivMod.html#923" class="Bound"
+      >x</a
+      ><a name="928"
+      > </a
+      ><a name="929" href="Relation.Binary.Reflection.html#3491" class="Function Operator"
+      >:=</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Data.Nat.DivMod.html#923" class="Bound"
+      >x</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="936"
+      > </a
+      ><a name="937" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="940"
+      > </a
+      ><a name="941" class="Number"
+      >0</a
+      ><a name="942" class="Symbol"
+      >)</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >_</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="952"
+      >
+    </a
+      ><a name="957" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >(</a
+      ><a name="962" href="Data.Fin.html#2260" class="Function"
+      >Fin</a
+      ><a name="965"
+      >.</a
+      ><a name="966" href="Data.Fin.html#2260" class="Function"
+      >inject+</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="Data.Nat.DivMod.html#752" class="Bound"
+      >k</a
+      ><a name="975"
+      > </a
+      ><a name="976" class="Symbol"
+      >(</a
+      ><a name="977" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="982"
+      > </a
+      ><a name="983" href="Data.Nat.DivMod.html#750" class="Bound"
+      >m</a
+      ><a name="984" class="Symbol"
+      >))</a
+      ><a name="986"
+      > </a
+      ><a name="987" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="988"
+      > </a
+      ><a name="989" class="Number"
+      >0</a
+      ><a name="990"
+      >
+      </a
+      ><a name="997" href="Relation.Binary.PreorderReasoning.html#1444" class="Function Operator"
+      >&#8718;</a
+      ><a name="998"
+      >
+
+  </a
+      ><a name="1002" href="Data.Nat.DivMod.html#1002" class="Function"
+      >lem&#8322;</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" class="Symbol"
+      >:</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" class="Symbol"
+      >&#8704;</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Data.Nat.DivMod.html#1011" class="Bound"
+      >n</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" class="Symbol"
+      >&#8594;</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" class="Symbol"
+      >_</a
+      ><a name="1016"
+      >
+  </a
+      ><a name="1019" href="Data.Nat.DivMod.html#1002" class="Function"
+      >lem&#8322;</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >=</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Relation.Binary.Reflection.html#2382" class="Function"
+      >solve</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" class="Number"
+      >1</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" class="Symbol"
+      >(&#955;</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="Data.Nat.DivMod.html#1037" class="Bound"
+      >n</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >&#8594;</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" class="Number"
+      >1</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Data.Nat.DivMod.html#1037" class="Bound"
+      >n</a
+      ><a name="1051"
+      >  </a
+      ><a name="1053" href="Relation.Binary.Reflection.html#3491" class="Function Operator"
+      >:=</a
+      ><a name="1055"
+      >  </a
+      ><a name="1057" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" class="Number"
+      >1</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" class="Symbol"
+      >(</a
+      ><a name="1067" href="Data.Nat.DivMod.html#1037" class="Bound"
+      >n</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" class="Number"
+      >0</a
+      ><a name="1077" class="Symbol"
+      >))</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1084"
+      >
+
+  </a
+      ><a name="1088" href="Data.Nat.DivMod.html#1088" class="Function"
+      >lem&#8323;</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" class="Symbol"
+      >:</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" class="Symbol"
+      >&#8704;</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" href="Data.Nat.DivMod.html#1097" class="Bound"
+      >n</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Data.Nat.DivMod.html#1099" class="Bound"
+      >k</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Data.Nat.DivMod.html#1101" class="Bound"
+      >q</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" class="Symbol"
+      >(</a
+      ><a name="1104" href="Data.Nat.DivMod.html#1104" class="Bound"
+      >r</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" class="Symbol"
+      >:</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Data.Nat.DivMod.html#1097" class="Bound"
+      >n</a
+      ><a name="1113" class="Symbol"
+      >)</a
+      ><a name="1114"
+      > </a
+      ><a name="1115" href="Data.Nat.DivMod.html#1115" class="Bound"
+      >eq</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" class="Symbol"
+      >&#8594;</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" href="Data.Nat.DivMod.html#1097" class="Bound"
+      >n</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Data.Nat.DivMod.html#1099" class="Bound"
+      >k</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Data.Nat.DivMod.html#1104" class="Bound"
+      >r</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Data.Nat.DivMod.html#1101" class="Bound"
+      >q</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" href="Data.Nat.DivMod.html#1097" class="Bound"
+      >n</a
+      ><a name="1149"
+      >
+  </a
+      ><a name="1152" href="Data.Nat.DivMod.html#1088" class="Function"
+      >lem&#8323;</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Data.Nat.DivMod.html#1159" class="Bound"
+      >k</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Data.Nat.DivMod.html#1161" class="Bound"
+      >q</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Data.Nat.DivMod.html#1163" class="Bound"
+      >r</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Data.Nat.DivMod.html#1165" class="Bound"
+      >eq</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" class="Symbol"
+      >=</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="Relation.Binary.PreorderReasoning.html#1148" class="Function Operator"
+      >begin</a
+      ><a name="1175"
+      >
+      </a
+      ><a name="1182" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1185"
+      > </a
+      ><a name="1186" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1187"
+      > </a
+      ><a name="1188" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Data.Nat.DivMod.html#1159" class="Bound"
+      >k</a
+      ><a name="1191"
+      >
+        </a
+      ><a name="1200" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Relation.Binary.Reflection.html#2382" class="Function"
+      >solve</a
+      ><a name="1208"
+      > </a
+      ><a name="1209" class="Number"
+      >2</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" class="Symbol"
+      >(&#955;</a
+      ><a name="1213"
+      > </a
+      ><a name="1214" href="Data.Nat.DivMod.html#1214" class="Bound"
+      >n</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" href="Data.Nat.DivMod.html#1216" class="Bound"
+      >k</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" class="Symbol"
+      >&#8594;</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" class="Number"
+      >1</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" href="Data.Nat.DivMod.html#1214" class="Bound"
+      >n</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" href="Data.Nat.DivMod.html#1216" class="Bound"
+      >k</a
+      ><a name="1235"
+      >  </a
+      ><a name="1237" href="Relation.Binary.Reflection.html#3491" class="Function Operator"
+      >:=</a
+      ><a name="1239"
+      >  </a
+      ><a name="1241" href="Data.Nat.DivMod.html#1214" class="Bound"
+      >n</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1245"
+      > </a
+      ><a name="1246" class="Symbol"
+      >(</a
+      ><a name="1247" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" class="Number"
+      >1</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Data.Nat.DivMod.html#1216" class="Bound"
+      >k</a
+      ><a name="1257" class="Symbol"
+      >))</a
+      ><a name="1259"
+      >
+                   </a
+      ><a name="1279" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" href="Data.Nat.DivMod.html#1159" class="Bound"
+      >k</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="1289"
+      >
+      </a
+      ><a name="1296" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" href="Data.Nat.DivMod.html#1159" class="Bound"
+      >k</a
+      ><a name="1305"
+      >
+        </a
+      ><a name="1314" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" class="Symbol"
+      >(</a
+      ><a name="1323" href="Data.Nat.html#2224" class="Primitive Operator"
+      >_+_</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1328" class="Symbol"
+      >)</a
+      ><a name="1329"
+      > </a
+      ><a name="1330" href="Data.Nat.DivMod.html#1165" class="Bound"
+      >eq</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="1334"
+      >
+      </a
+      ><a name="1341" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1344"
+      > </a
+      ><a name="1345" class="Symbol"
+      >(</a
+      ><a name="1346" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Data.Nat.DivMod.html#1163" class="Bound"
+      >r</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="Data.Nat.DivMod.html#1161" class="Bound"
+      >q</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1359" class="Symbol"
+      >)</a
+      ><a name="1360"
+      >
+        </a
+      ><a name="1369" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="Relation.Binary.Reflection.html#2382" class="Function"
+      >solve</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" class="Number"
+      >3</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="Symbol"
+      >(&#955;</a
+      ><a name="1382"
+      > </a
+      ><a name="1383" href="Data.Nat.DivMod.html#1383" class="Bound"
+      >n</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" href="Data.Nat.DivMod.html#1385" class="Bound"
+      >r</a
+      ><a name="1386"
+      > </a
+      ><a name="1387" href="Data.Nat.DivMod.html#1387" class="Bound"
+      >q</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" class="Symbol"
+      >&#8594;</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" href="Data.Nat.DivMod.html#1383" class="Bound"
+      >n</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" class="Symbol"
+      >(</a
+      ><a name="1397" href="Data.Nat.DivMod.html#1385" class="Bound"
+      >r</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1401"
+      > </a
+      ><a name="1402" href="Data.Nat.DivMod.html#1387" class="Bound"
+      >q</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Algebra.RingSolver.html#2100" class="Function Operator"
+      >:*</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" href="Data.Nat.DivMod.html#1383" class="Bound"
+      >n</a
+      ><a name="1408" class="Symbol"
+      >)</a
+      ><a name="1409"
+      >  </a
+      ><a name="1411" href="Relation.Binary.Reflection.html#3491" class="Function Operator"
+      >:=</a
+      ><a name="1413"
+      >
+                              </a
+      ><a name="1444" href="Data.Nat.DivMod.html#1385" class="Bound"
+      >r</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" class="Symbol"
+      >(</a
+      ><a name="1450" href="Algebra.RingSolver.html#1833" class="InductiveConstructor"
+      >con</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" class="Number"
+      >1</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" href="Algebra.RingSolver.html#2027" class="Function Operator"
+      >:+</a
+      ><a name="1458"
+      > </a
+      ><a name="1459" href="Data.Nat.DivMod.html#1387" class="Bound"
+      >q</a
+      ><a name="1460" class="Symbol"
+      >)</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" href="Algebra.RingSolver.html#2100" class="Function Operator"
+      >:*</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Data.Nat.DivMod.html#1383" class="Bound"
+      >n</a
+      ><a name="1466" class="Symbol"
+      >)</a
+      ><a name="1467"
+      >
+                   </a
+      ><a name="1487" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" class="Symbol"
+      >(</a
+      ><a name="1495" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="Data.Nat.DivMod.html#1163" class="Bound"
+      >r</a
+      ><a name="1500" class="Symbol"
+      >)</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Data.Nat.DivMod.html#1161" class="Bound"
+      >q</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="1505"
+      >
+      </a
+      ><a name="1512" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Data.Nat.DivMod.html#1163" class="Bound"
+      >r</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Data.Nat.DivMod.html#1161" class="Bound"
+      >q</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="1527"
+      > </a
+      ><a name="1528" href="Data.Nat.DivMod.html#1157" class="Bound"
+      >n</a
+      ><a name="1529"
+      >
+        </a
+      ><a name="1538" href="Relation.Binary.PreorderReasoning.html#1444" class="Function Operator"
+      >&#8718;</a
+      ><a name="1539"
+      >
+
+</a
+      ><a name="1541" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="1613"
+      >
+</a
+      ><a name="1614" class="Comment"
+      >-- Division</a
+      ><a name="1625"
+      >
+
+</a
+      ><a name="1627" class="Comment"
+      >-- A specification of integer division.</a
+      ><a name="1666"
+      >
+
+</a
+      ><a name="1668" class="Keyword"
+      >data</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Data.Nat.DivMod.html#1673" class="Datatype"
+      >DivMod</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" class="Symbol"
+      >:</a
+      ><a name="1681"
+      > </a
+      ><a name="1682" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1683"
+      > </a
+      ><a name="1684" class="Symbol"
+      >&#8594;</a
+      ><a name="1685"
+      > </a
+      ><a name="1686" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" class="Symbol"
+      >&#8594;</a
+      ><a name="1689"
+      > </a
+      ><a name="1690" class="PrimitiveType"
+      >Set</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" class="Keyword"
+      >where</a
+      ><a name="1699"
+      >
+  </a
+      ><a name="1702" href="Data.Nat.DivMod.html#1702" class="InductiveConstructor"
+      >result</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" class="Symbol"
+      >:</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" class="Symbol"
+      >{</a
+      ><a name="1712" href="Data.Nat.DivMod.html#1712" class="Bound"
+      >divisor</a
+      ><a name="1719"
+      > </a
+      ><a name="1720" class="Symbol"
+      >:</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1723" class="Symbol"
+      >}</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" class="Symbol"
+      >(</a
+      ><a name="1726" href="Data.Nat.DivMod.html#1726" class="Bound"
+      >q</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" class="Symbol"
+      >:</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1731" class="Symbol"
+      >)</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" class="Symbol"
+      >(</a
+      ><a name="1734" href="Data.Nat.DivMod.html#1734" class="Bound"
+      >r</a
+      ><a name="1735"
+      > </a
+      ><a name="1736" class="Symbol"
+      >:</a
+      ><a name="1737"
+      > </a
+      ><a name="1738" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="1741"
+      > </a
+      ><a name="1742" href="Data.Nat.DivMod.html#1712" class="Bound"
+      >divisor</a
+      ><a name="1749" class="Symbol"
+      >)</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" class="Symbol"
+      >&#8594;</a
+      ><a name="1752"
+      >
+           </a
+      ><a name="1764" href="Data.Nat.DivMod.html#1673" class="Datatype"
+      >DivMod</a
+      ><a name="1770"
+      > </a
+      ><a name="1771" class="Symbol"
+      >(</a
+      ><a name="1772" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" href="Data.Nat.DivMod.html#1734" class="Bound"
+      >r</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" href="Data.Nat.DivMod.html#1726" class="Bound"
+      >q</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" href="Data.Nat.DivMod.html#1712" class="Bound"
+      >divisor</a
+      ><a name="1791" class="Symbol"
+      >)</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" href="Data.Nat.DivMod.html#1712" class="Bound"
+      >divisor</a
+      ><a name="1800"
+      >
+
+</a
+      ><a name="1802" class="Comment"
+      >-- Sometimes the following type is more usable; functions in indices</a
+      ><a name="1870"
+      >
+</a
+      ><a name="1871" class="Comment"
+      >-- can be inconvenient.</a
+      ><a name="1894"
+      >
+
+</a
+      ><a name="1896" class="Keyword"
+      >data</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" class="Symbol"
+      >(</a
+      ><a name="1910" href="Data.Nat.DivMod.html#1910" class="Bound"
+      >dividend</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Data.Nat.DivMod.html#1919" class="Bound"
+      >divisor</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" class="Symbol"
+      >:</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1930" class="Symbol"
+      >)</a
+      ><a name="1931"
+      > </a
+      ><a name="1932" class="Symbol"
+      >:</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" class="PrimitiveType"
+      >Set</a
+      ><a name="1937"
+      > </a
+      ><a name="1938" class="Keyword"
+      >where</a
+      ><a name="1943"
+      >
+  </a
+      ><a name="1946" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="1952"
+      > </a
+      ><a name="1953" class="Symbol"
+      >:</a
+      ><a name="1954"
+      > </a
+      ><a name="1955" class="Symbol"
+      >(</a
+      ><a name="1956" href="Data.Nat.DivMod.html#1956" class="Bound"
+      >q</a
+      ><a name="1957"
+      > </a
+      ><a name="1958" class="Symbol"
+      >:</a
+      ><a name="1959"
+      > </a
+      ><a name="1960" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="1961" class="Symbol"
+      >)</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" class="Symbol"
+      >(</a
+      ><a name="1964" href="Data.Nat.DivMod.html#1964" class="Bound"
+      >r</a
+      ><a name="1965"
+      > </a
+      ><a name="1966" class="Symbol"
+      >:</a
+      ><a name="1967"
+      > </a
+      ><a name="1968" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="Data.Nat.DivMod.html#1919" class="Bound"
+      >divisor</a
+      ><a name="1979" class="Symbol"
+      >)</a
+      ><a name="1980"
+      >
+           </a
+      ><a name="1992" class="Symbol"
+      >(</a
+      ><a name="1993" href="Data.Nat.DivMod.html#1993" class="Bound"
+      >eq</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >:</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Data.Nat.DivMod.html#1910" class="Bound"
+      >dividend</a
+      ><a name="2006"
+      > </a
+      ><a name="2007" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="2012"
+      > </a
+      ><a name="2013" href="Data.Nat.DivMod.html#1964" class="Bound"
+      >r</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="2016"
+      > </a
+      ><a name="2017" href="Data.Nat.DivMod.html#1956" class="Bound"
+      >q</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="2020"
+      > </a
+      ><a name="2021" href="Data.Nat.DivMod.html#1919" class="Bound"
+      >divisor</a
+      ><a name="2028" class="Symbol"
+      >)</a
+      ><a name="2029"
+      > </a
+      ><a name="2030" class="Symbol"
+      >&#8594;</a
+      ><a name="2031"
+      >
+           </a
+      ><a name="2043" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" href="Data.Nat.DivMod.html#1910" class="Bound"
+      >dividend</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Data.Nat.DivMod.html#1919" class="Bound"
+      >divisor</a
+      ><a name="2067"
+      >
+
+</a
+      ><a name="2069" class="Comment"
+      >-- Integer division with remainder.</a
+      ><a name="2104"
+      >
+
+</a
+      ><a name="2106" class="Comment"
+      >-- Note that Induction.Nat.&lt;-rec is used to establish termination of</a
+      ><a name="2174"
+      >
+</a
+      ><a name="2175" class="Comment"
+      >-- division. The run-time complexity of this implementation of integer</a
+      ><a name="2245"
+      >
+</a
+      ><a name="2246" class="Comment"
+      >-- division should be linear in the size of the dividend, assuming</a
+      ><a name="2312"
+      >
+</a
+      ><a name="2313" class="Comment"
+      >-- that well-founded recursion and the equality type are optimised</a
+      ><a name="2379"
+      >
+</a
+      ><a name="2380" class="Comment"
+      >-- properly (see &quot;Inductive Families Need Not Store Their Indices&quot;</a
+      ><a name="2446"
+      >
+</a
+      ><a name="2447" class="Comment"
+      >-- (Brady, McBride, McKinna, TYPES 2003)).</a
+      ><a name="2489"
+      >
+
+</a
+      ><a name="2491" href="Data.Nat.DivMod.html#2491" class="Function Operator"
+      >_divMod'_</a
+      ><a name="2500"
+      > </a
+      ><a name="2501" class="Symbol"
+      >:</a
+      ><a name="2502"
+      > </a
+      ><a name="2503" class="Symbol"
+      >(</a
+      ><a name="2504" href="Data.Nat.DivMod.html#2504" class="Bound"
+      >dividend</a
+      ><a name="2512"
+      > </a
+      ><a name="2513" href="Data.Nat.DivMod.html#2513" class="Bound"
+      >divisor</a
+      ><a name="2520"
+      > </a
+      ><a name="2521" class="Symbol"
+      >:</a
+      ><a name="2522"
+      > </a
+      ><a name="2523" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2524" class="Symbol"
+      >)</a
+      ><a name="2525"
+      > </a
+      ><a name="2526" class="Symbol"
+      >{</a
+      ><a name="2527" href="Data.Nat.DivMod.html#2527" class="Bound"
+      >&#8802;0</a
+      ><a name="2529"
+      > </a
+      ><a name="2530" class="Symbol"
+      >:</a
+      ><a name="2531"
+      > </a
+      ><a name="2532" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="2537"
+      > </a
+      ><a name="2538" class="Symbol"
+      >(</a
+      ><a name="2539" href="Data.Nat.DivMod.html#2513" class="Bound"
+      >divisor</a
+      ><a name="2546"
+      > </a
+      ><a name="2547" href="Data.Nat.html#3105" class="Function Operator"
+      >&#8799;</a
+      ><a name="2548"
+      > </a
+      ><a name="2549" class="Number"
+      >0</a
+      ><a name="2550" class="Symbol"
+      >)}</a
+      ><a name="2552"
+      > </a
+      ><a name="2553" class="Symbol"
+      >&#8594;</a
+      ><a name="2554"
+      >
+            </a
+      ><a name="2567" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="2574"
+      > </a
+      ><a name="2575" href="Data.Nat.DivMod.html#2504" class="Bound"
+      >dividend</a
+      ><a name="2583"
+      > </a
+      ><a name="2584" href="Data.Nat.DivMod.html#2513" class="Bound"
+      >divisor</a
+      ><a name="2591"
+      >
+</a
+      ><a name="2592" href="Data.Nat.DivMod.html#2491" class="Function Operator"
+      >_divMod'_</a
+      ><a name="2601"
+      > </a
+      ><a name="2602" href="Data.Nat.DivMod.html#2602" class="Bound"
+      >m</a
+      ><a name="2603"
+      > </a
+      ><a name="2604" href="Data.Nat.DivMod.html#2604" class="Bound"
+      >n</a
+      ><a name="2605"
+      > </a
+      ><a name="2606" class="Symbol"
+      >{</a
+      ><a name="2607" href="Data.Nat.DivMod.html#2607" class="Bound"
+      >&#8802;0</a
+      ><a name="2609" class="Symbol"
+      >}</a
+      ><a name="2610"
+      > </a
+      ><a name="2611" class="Symbol"
+      >=</a
+      ><a name="2612"
+      > </a
+      ><a name="2613" href="Induction.WellFounded.html#1679" class="Function"
+      >&lt;-rec</a
+      ><a name="2618"
+      > </a
+      ><a name="2619" href="Data.Nat.DivMod.html#2646" class="Function"
+      >Pred</a
+      ><a name="2623"
+      > </a
+      ><a name="2624" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="2626"
+      > </a
+      ><a name="2627" href="Data.Nat.DivMod.html#2602" class="Bound"
+      >m</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="Data.Nat.DivMod.html#2604" class="Bound"
+      >n</a
+      ><a name="2630"
+      > </a
+      ><a name="2631" class="Symbol"
+      >{</a
+      ><a name="2632" href="Data.Nat.DivMod.html#2607" class="Bound"
+      >&#8802;0</a
+      ><a name="2634" class="Symbol"
+      >}</a
+      ><a name="2635"
+      >
+  </a
+      ><a name="2638" class="Keyword"
+      >where</a
+      ><a name="2643"
+      >
+  </a
+      ><a name="2646" href="Data.Nat.DivMod.html#2646" class="Function"
+      >Pred</a
+      ><a name="2650"
+      > </a
+      ><a name="2651" class="Symbol"
+      >:</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" class="Symbol"
+      >&#8594;</a
+      ><a name="2656"
+      > </a
+      ><a name="2657" class="PrimitiveType"
+      >Set</a
+      ><a name="2660"
+      >
+  </a
+      ><a name="2663" href="Data.Nat.DivMod.html#2646" class="Function"
+      >Pred</a
+      ><a name="2667"
+      > </a
+      ><a name="2668" href="Data.Nat.DivMod.html#2668" class="Bound"
+      >dividend</a
+      ><a name="2676"
+      > </a
+      ><a name="2677" class="Symbol"
+      >=</a
+      ><a name="2678"
+      > </a
+      ><a name="2679" class="Symbol"
+      >(</a
+      ><a name="2680" href="Data.Nat.DivMod.html#2680" class="Bound"
+      >divisor</a
+      ><a name="2687"
+      > </a
+      ><a name="2688" class="Symbol"
+      >:</a
+      ><a name="2689"
+      > </a
+      ><a name="2690" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2691" class="Symbol"
+      >)</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" class="Symbol"
+      >{</a
+      ><a name="2694" href="Data.Nat.DivMod.html#2694" class="Bound"
+      >&#8802;0</a
+      ><a name="2696"
+      > </a
+      ><a name="2697" class="Symbol"
+      >:</a
+      ><a name="2698"
+      > </a
+      ><a name="2699" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="2704"
+      > </a
+      ><a name="2705" class="Symbol"
+      >(</a
+      ><a name="2706" href="Data.Nat.DivMod.html#2680" class="Bound"
+      >divisor</a
+      ><a name="2713"
+      > </a
+      ><a name="2714" href="Data.Nat.html#3105" class="Function Operator"
+      >&#8799;</a
+      ><a name="2715"
+      > </a
+      ><a name="2716" class="Number"
+      >0</a
+      ><a name="2717" class="Symbol"
+      >)}</a
+      ><a name="2719"
+      > </a
+      ><a name="2720" class="Symbol"
+      >&#8594;</a
+      ><a name="2721"
+      >
+                  </a
+      ><a name="2740" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="Data.Nat.DivMod.html#2668" class="Bound"
+      >dividend</a
+      ><a name="2756"
+      > </a
+      ><a name="2757" href="Data.Nat.DivMod.html#2680" class="Bound"
+      >divisor</a
+      ><a name="2764"
+      >
+
+  </a
+      ><a name="2768" href="Data.Nat.DivMod.html#2768" class="Function Operator"
+      >1+_</a
+      ><a name="2771"
+      > </a
+      ><a name="2772" class="Symbol"
+      >:</a
+      ><a name="2773"
+      > </a
+      ><a name="2774" class="Symbol"
+      >&#8704;</a
+      ><a name="2775"
+      > </a
+      ><a name="2776" class="Symbol"
+      >{</a
+      ><a name="2777" href="Data.Nat.DivMod.html#2777" class="Bound"
+      >k</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Data.Nat.DivMod.html#2779" class="Bound"
+      >n</a
+      ><a name="2780" class="Symbol"
+      >}</a
+      ><a name="2781"
+      > </a
+      ><a name="2782" class="Symbol"
+      >&#8594;</a
+      ><a name="2783"
+      > </a
+      ><a name="2784" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="2791"
+      > </a
+      ><a name="2792" class="Symbol"
+      >(</a
+      ><a name="2793" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="2796"
+      > </a
+      ><a name="2797" href="Data.Nat.DivMod.html#2777" class="Bound"
+      >k</a
+      ><a name="2798" class="Symbol"
+      >)</a
+      ><a name="2799"
+      > </a
+      ><a name="2800" href="Data.Nat.DivMod.html#2779" class="Bound"
+      >n</a
+      ><a name="2801"
+      > </a
+      ><a name="2802" class="Symbol"
+      >&#8594;</a
+      ><a name="2803"
+      > </a
+      ><a name="2804" href="Data.Nat.DivMod.html#1901" class="Datatype"
+      >DivMod'</a
+      ><a name="2811"
+      > </a
+      ><a name="2812" class="Symbol"
+      >(</a
+      ><a name="2813" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="2816"
+      > </a
+      ><a name="2817" href="Data.Nat.DivMod.html#2779" class="Bound"
+      >n</a
+      ><a name="2818"
+      > </a
+      ><a name="2819" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="2820"
+      > </a
+      ><a name="2821" href="Data.Nat.DivMod.html#2777" class="Bound"
+      >k</a
+      ><a name="2822" class="Symbol"
+      >)</a
+      ><a name="2823"
+      > </a
+      ><a name="2824" href="Data.Nat.DivMod.html#2779" class="Bound"
+      >n</a
+      ><a name="2825"
+      >
+  </a
+      ><a name="2828" href="Data.Nat.DivMod.html#2768" class="Function Operator"
+      >1+_</a
+      ><a name="2831"
+      > </a
+      ><a name="2832" class="Symbol"
+      >{</a
+      ><a name="2833" href="Data.Nat.DivMod.html#2833" class="Bound"
+      >k</a
+      ><a name="2834" class="Symbol"
+      >}</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" class="Symbol"
+      >{</a
+      ><a name="2837" href="Data.Nat.DivMod.html#2837" class="Bound"
+      >n</a
+      ><a name="2838" class="Symbol"
+      >}</a
+      ><a name="2839"
+      > </a
+      ><a name="2840" class="Symbol"
+      >(</a
+      ><a name="2841" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="2847"
+      > </a
+      ><a name="2848" href="Data.Nat.DivMod.html#2848" class="Bound"
+      >q</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="Data.Nat.DivMod.html#2850" class="Bound"
+      >r</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="Data.Nat.DivMod.html#2852" class="Bound"
+      >eq</a
+      ><a name="2854" class="Symbol"
+      >)</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" class="Symbol"
+      >=</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="2864"
+      > </a
+      ><a name="2865" class="Symbol"
+      >(</a
+      ><a name="2866" class="Number"
+      >1</a
+      ><a name="2867"
+      > </a
+      ><a name="2868" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="2869"
+      > </a
+      ><a name="2870" href="Data.Nat.DivMod.html#2848" class="Bound"
+      >q</a
+      ><a name="2871" class="Symbol"
+      >)</a
+      ><a name="2872"
+      > </a
+      ><a name="2873" href="Data.Nat.DivMod.html#2850" class="Bound"
+      >r</a
+      ><a name="2874"
+      > </a
+      ><a name="2875" class="Symbol"
+      >(</a
+      ><a name="2876" href="Data.Nat.DivMod.html#1088" class="Function"
+      >lem&#8323;</a
+      ><a name="2880"
+      > </a
+      ><a name="2881" href="Data.Nat.DivMod.html#2837" class="Bound"
+      >n</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" href="Data.Nat.DivMod.html#2833" class="Bound"
+      >k</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Data.Nat.DivMod.html#2848" class="Bound"
+      >q</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Data.Nat.DivMod.html#2850" class="Bound"
+      >r</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Data.Nat.DivMod.html#2852" class="Bound"
+      >eq</a
+      ><a name="2891" class="Symbol"
+      >)</a
+      ><a name="2892"
+      >
+
+  </a
+      ><a name="2896" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="2898"
+      > </a
+      ><a name="2899" class="Symbol"
+      >:</a
+      ><a name="2900"
+      > </a
+      ><a name="2901" class="Symbol"
+      >(</a
+      ><a name="2902" href="Data.Nat.DivMod.html#2902" class="Bound"
+      >dividend</a
+      ><a name="2910"
+      > </a
+      ><a name="2911" class="Symbol"
+      >:</a
+      ><a name="2912"
+      > </a
+      ><a name="2913" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="2914" class="Symbol"
+      >)</a
+      ><a name="2915"
+      > </a
+      ><a name="2916" class="Symbol"
+      >&#8594;</a
+      ><a name="2917"
+      > </a
+      ><a name="2918" href="Induction.Nat.html#1309" class="Function"
+      >&lt;-Rec</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Data.Nat.DivMod.html#2646" class="Function"
+      >Pred</a
+      ><a name="2928"
+      > </a
+      ><a name="2929" href="Data.Nat.DivMod.html#2902" class="Bound"
+      >dividend</a
+      ><a name="2937"
+      > </a
+      ><a name="2938" class="Symbol"
+      >&#8594;</a
+      ><a name="2939"
+      > </a
+      ><a name="2940" href="Data.Nat.DivMod.html#2646" class="Function"
+      >Pred</a
+      ><a name="2944"
+      > </a
+      ><a name="2945" href="Data.Nat.DivMod.html#2902" class="Bound"
+      >dividend</a
+      ><a name="2953"
+      >
+  </a
+      ><a name="2956" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Data.Nat.DivMod.html#2959" class="Bound"
+      >m</a
+      ><a name="2960"
+      >       </a
+      ><a name="2967" href="Data.Nat.DivMod.html#2967" class="Bound"
+      >rec</a
+      ><a name="2970"
+      > </a
+      ><a name="2971" href="Data.Nat.html#699" class="InductiveConstructor"
+      >zero</a
+      ><a name="2975"
+      >    </a
+      ><a name="2979" class="Symbol"
+      >{</a
+      ><a name="2980"
+      >&#8802;0 </a
+      ><a name="2983" class="Symbol"
+      >=</a
+      ><a name="2984"
+      > </a
+      ><a name="2985" class="Symbol"
+      >()}</a
+      ><a name="2988"
+      >
+  </a
+      ><a name="2991" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="2993"
+      > </a
+      ><a name="2994" href="Data.Nat.html#699" class="InductiveConstructor"
+      >zero</a
+      ><a name="2998"
+      >    </a
+      ><a name="3002" href="Data.Nat.DivMod.html#3002" class="Bound"
+      >rec</a
+      ><a name="3005"
+      > </a
+      ><a name="3006" class="Symbol"
+      >(</a
+      ><a name="3007" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="3010"
+      > </a
+      ><a name="3011" href="Data.Nat.DivMod.html#3011" class="Bound"
+      >n</a
+      ><a name="3012" class="Symbol"
+      >)</a
+      ><a name="3013"
+      >            </a
+      ><a name="3025" class="Symbol"
+      >=</a
+      ><a name="3026"
+      > </a
+      ><a name="3027" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="3033"
+      > </a
+      ><a name="3034" class="Number"
+      >0</a
+      ><a name="3035"
+      > </a
+      ><a name="3036" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="3040"
+      > </a
+      ><a name="3041" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="3045"
+      >
+  </a
+      ><a name="3048" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="3050"
+      > </a
+      ><a name="3051" class="Symbol"
+      >(</a
+      ><a name="3052" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="3055"
+      > </a
+      ><a name="3056" href="Data.Nat.DivMod.html#3056" class="Bound"
+      >m</a
+      ><a name="3057" class="Symbol"
+      >)</a
+      ><a name="3058"
+      > </a
+      ><a name="3059" href="Data.Nat.DivMod.html#3059" class="Bound"
+      >rec</a
+      ><a name="3062"
+      > </a
+      ><a name="3063" class="Symbol"
+      >(</a
+      ><a name="3064" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="3067"
+      > </a
+      ><a name="3068" href="Data.Nat.DivMod.html#3068" class="Bound"
+      >n</a
+      ><a name="3069" class="Symbol"
+      >)</a
+      ><a name="3070"
+      >            </a
+      ><a name="3082" class="Keyword"
+      >with</a
+      ><a name="3086"
+      > </a
+      ><a name="3087" href="Data.Nat.html#3837" class="Function"
+      >compare</a
+      ><a name="3094"
+      > </a
+      ><a name="3095" href="Data.Nat.DivMod.html#3056" class="Bound"
+      >m</a
+      ><a name="3096"
+      > </a
+      ><a name="3097" href="Data.Nat.DivMod.html#3068" class="Bound"
+      >n</a
+      ><a name="3098"
+      >
+  </a
+      ><a name="3101" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="3103"
+      > </a
+      ><a name="3104" class="Symbol"
+      >(</a
+      ><a name="3105" class="InductiveConstructor"
+      >suc</a
+      ><a name="3108"
+      > </a
+      ><a name="3109" href="Data.Nat.DivMod.html#3109" class="Bound"
+      >m</a
+      ><a name="3110" class="Symbol"
+      >)</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" href="Data.Nat.DivMod.html#3112" class="Bound"
+      >rec</a
+      ><a name="3115"
+      > </a
+      ><a name="3116" class="Symbol"
+      >(</a
+      ><a name="3117" class="InductiveConstructor"
+      >suc</a
+      ><a name="3120"
+      > </a
+      ><a name="3121" class="DottedPattern Symbol"
+      >.(</a
+      ><a name="3123" class="InductiveConstructor"
+      >suc</a
+      ><a name="3126"
+      > </a
+      ><a name="3127" href="Data.Nat.DivMod.html#3109" class="Bound"
+      >m</a
+      ><a name="3128"
+      > </a
+      ><a name="3129" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="3130"
+      > </a
+      ><a name="3131" href="Data.Nat.DivMod.html#3145" class="Bound"
+      >k</a
+      ><a name="3132" class="DottedPattern Symbol"
+      >)</a
+      ><a name="3133" class="Symbol"
+      >)</a
+      ><a name="3134"
+      > </a
+      ><a name="3135" class="Symbol"
+      >|</a
+      ><a name="3136"
+      > </a
+      ><a name="3137" href="Data.Nat.html#3715" class="InductiveConstructor"
+      >less</a
+      ><a name="3141"
+      > </a
+      ><a name="3142" class="DottedPattern Symbol"
+      >.</a
+      ><a name="3143" href="Data.Nat.DivMod.html#3109" class="DottedPattern Bound"
+      >m</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" href="Data.Nat.DivMod.html#3145" class="Bound"
+      >k</a
+      ><a name="3146"
+      >    </a
+      ><a name="3150" class="Symbol"
+      >=</a
+      ><a name="3151"
+      > </a
+      ><a name="3152" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="3158"
+      > </a
+      ><a name="3159" class="Number"
+      >0</a
+      ><a name="3160"
+      > </a
+      ><a name="3161" href="Data.Nat.DivMod.html#3220" class="Function"
+      >r</a
+      ><a name="3162"
+      > </a
+      ><a name="3163" class="Symbol"
+      >(</a
+      ><a name="3164" href="Data.Nat.DivMod.html#663" class="Function"
+      >lem&#8321;</a
+      ><a name="3168"
+      > </a
+      ><a name="3169" href="Data.Nat.DivMod.html#3109" class="Bound"
+      >m</a
+      ><a name="3170"
+      > </a
+      ><a name="3171" href="Data.Nat.DivMod.html#3145" class="Bound"
+      >k</a
+      ><a name="3172" class="Symbol"
+      >)</a
+      ><a name="3173"
+      >
+                                        </a
+      ><a name="3214" class="Keyword"
+      >where</a
+      ><a name="3219"
+      > </a
+      ><a name="3220" href="Data.Nat.DivMod.html#3220" class="Function"
+      >r</a
+      ><a name="3221"
+      > </a
+      ><a name="3222" class="Symbol"
+      >=</a
+      ><a name="3223"
+      > </a
+      ><a name="3224" class="InductiveConstructor"
+      >suc</a
+      ><a name="3227"
+      > </a
+      ><a name="3228" class="Symbol"
+      >(</a
+      ><a name="3229" href="Data.Fin.html#2260" class="Function"
+      >Fin</a
+      ><a name="3232"
+      >.</a
+      ><a name="3233" href="Data.Fin.html#2260" class="Function"
+      >inject+</a
+      ><a name="3240"
+      > </a
+      ><a name="3241" href="Data.Nat.DivMod.html#3145" class="Bound"
+      >k</a
+      ><a name="3242"
+      > </a
+      ><a name="3243" class="Symbol"
+      >(</a
+      ><a name="3244" href="Data.Fin.html#1185" class="Function"
+      >from&#8469;</a
+      ><a name="3249"
+      > </a
+      ><a name="3250" href="Data.Nat.DivMod.html#3109" class="Bound"
+      >m</a
+      ><a name="3251" class="Symbol"
+      >))</a
+      ><a name="3253"
+      >
+  </a
+      ><a name="3256" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="3258"
+      > </a
+      ><a name="3259" class="Symbol"
+      >(</a
+      ><a name="3260" class="InductiveConstructor"
+      >suc</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" href="Data.Nat.DivMod.html#3264" class="Bound"
+      >m</a
+      ><a name="3265" class="Symbol"
+      >)</a
+      ><a name="3266"
+      > </a
+      ><a name="3267" href="Data.Nat.DivMod.html#3267" class="Bound"
+      >rec</a
+      ><a name="3270"
+      > </a
+      ><a name="3271" class="Symbol"
+      >(</a
+      ><a name="3272" class="InductiveConstructor"
+      >suc</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" class="DottedPattern Symbol"
+      >.</a
+      ><a name="3277" href="Data.Nat.DivMod.html#3264" class="DottedPattern Bound"
+      >m</a
+      ><a name="3278" class="Symbol"
+      >)</a
+      ><a name="3279"
+      >           </a
+      ><a name="3290" class="Symbol"
+      >|</a
+      ><a name="3291"
+      > </a
+      ><a name="3292" href="Data.Nat.html#3760" class="InductiveConstructor"
+      >equal</a
+      ><a name="3297"
+      > </a
+      ><a name="3298" class="DottedPattern Symbol"
+      >.</a
+      ><a name="3299" href="Data.Nat.DivMod.html#3264" class="DottedPattern Bound"
+      >m</a
+      ><a name="3300"
+      >     </a
+      ><a name="3305" class="Symbol"
+      >=</a
+      ><a name="3306"
+      > </a
+      ><a name="3307" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="3313"
+      > </a
+      ><a name="3314" class="Number"
+      >1</a
+      ><a name="3315"
+      > </a
+      ><a name="3316" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="3320"
+      > </a
+      ><a name="3321" class="Symbol"
+      >(</a
+      ><a name="3322" href="Data.Nat.DivMod.html#1002" class="Function"
+      >lem&#8322;</a
+      ><a name="3326"
+      > </a
+      ><a name="3327" href="Data.Nat.DivMod.html#3264" class="Bound"
+      >m</a
+      ><a name="3328" class="Symbol"
+      >)</a
+      ><a name="3329"
+      >
+  </a
+      ><a name="3332" href="Data.Nat.DivMod.html#2896" class="Function"
+      >dm</a
+      ><a name="3334"
+      > </a
+      ><a name="3335" class="Symbol"
+      >(</a
+      ><a name="3336" class="InductiveConstructor"
+      >suc</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" class="DottedPattern Symbol"
+      >.(</a
+      ><a name="3342" class="InductiveConstructor"
+      >suc</a
+      ><a name="3345"
+      > </a
+      ><a name="3346" href="Data.Nat.DivMod.html#3363" class="Bound"
+      >n</a
+      ><a name="3347"
+      > </a
+      ><a name="3348" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="3349"
+      > </a
+      ><a name="3350" href="Data.Nat.DivMod.html#3379" class="Bound"
+      >k</a
+      ><a name="3351" class="DottedPattern Symbol"
+      >)</a
+      ><a name="3352" class="Symbol"
+      >)</a
+      ><a name="3353"
+      > </a
+      ><a name="3354" href="Data.Nat.DivMod.html#3354" class="Bound"
+      >rec</a
+      ><a name="3357"
+      > </a
+      ><a name="3358" class="Symbol"
+      >(</a
+      ><a name="3359" class="InductiveConstructor"
+      >suc</a
+      ><a name="3362"
+      > </a
+      ><a name="3363" href="Data.Nat.DivMod.html#3363" class="Bound"
+      >n</a
+      ><a name="3364" class="Symbol"
+      >)</a
+      ><a name="3365"
+      > </a
+      ><a name="3366" class="Symbol"
+      >|</a
+      ><a name="3367"
+      > </a
+      ><a name="3368" href="Data.Nat.html#3793" class="InductiveConstructor"
+      >greater</a
+      ><a name="3375"
+      > </a
+      ><a name="3376" class="DottedPattern Symbol"
+      >.</a
+      ><a name="3377" href="Data.Nat.DivMod.html#3363" class="DottedPattern Bound"
+      >n</a
+      ><a name="3378"
+      > </a
+      ><a name="3379" href="Data.Nat.DivMod.html#3379" class="Bound"
+      >k</a
+      ><a name="3380"
+      > </a
+      ><a name="3381" class="Symbol"
+      >=</a
+      ><a name="3382"
+      >
+    </a
+      ><a name="3387" href="Data.Nat.DivMod.html#2768" class="Function Operator"
+      >1+</a
+      ><a name="3389"
+      > </a
+      ><a name="3390" href="Data.Nat.DivMod.html#3354" class="Bound"
+      >rec</a
+      ><a name="3393"
+      > </a
+      ><a name="3394" class="Symbol"
+      >(</a
+      ><a name="3395" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="3398"
+      > </a
+      ><a name="3399" href="Data.Nat.DivMod.html#3379" class="Bound"
+      >k</a
+      ><a name="3400" class="Symbol"
+      >)</a
+      ><a name="3401"
+      > </a
+      ><a name="3402" href="Data.Nat.DivMod.html#3423" class="Function"
+      >le</a
+      ><a name="3404"
+      > </a
+      ><a name="3405" class="Symbol"
+      >(</a
+      ><a name="3406" href="Data.Nat.html#710" class="InductiveConstructor"
+      >suc</a
+      ><a name="3409"
+      > </a
+      ><a name="3410" href="Data.Nat.DivMod.html#3363" class="Bound"
+      >n</a
+      ><a name="3411" class="Symbol"
+      >)</a
+      ><a name="3412"
+      >
+    </a
+      ><a name="3417" class="Keyword"
+      >where</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" href="Data.Nat.DivMod.html#3423" class="Function"
+      >le</a
+      ><a name="3425"
+      > </a
+      ><a name="3426" class="Symbol"
+      >=</a
+      ><a name="3427"
+      > </a
+      ><a name="3428" href="Data.Nat.Properties.html#9530" class="Function"
+      >s&#8804;&#8242;s</a
+      ><a name="3432"
+      > </a
+      ><a name="3433" class="Symbol"
+      >(</a
+      ><a name="3434" href="Data.Nat.Properties.html#9530" class="Function"
+      >s&#8804;&#8242;s</a
+      ><a name="3438"
+      > </a
+      ><a name="3439" class="Symbol"
+      >(</a
+      ><a name="3440" href="Data.Nat.Properties.html#10082" class="Function"
+      >n&#8804;&#8242;m+n</a
+      ><a name="3446"
+      > </a
+      ><a name="3447" href="Data.Nat.DivMod.html#3363" class="Bound"
+      >n</a
+      ><a name="3448"
+      > </a
+      ><a name="3449" href="Data.Nat.DivMod.html#3379" class="Bound"
+      >k</a
+      ><a name="3450" class="Symbol"
+      >))</a
+      ><a name="3452"
+      >
+
+</a
+      ><a name="3454" class="Comment"
+      >-- A variant.</a
+      ><a name="3467"
+      >
+
+</a
+      ><a name="3469" href="Data.Nat.DivMod.html#3469" class="Function Operator"
+      >_divMod_</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" class="Symbol"
+      >:</a
+      ><a name="3479"
+      > </a
+      ><a name="3480" class="Symbol"
+      >(</a
+      ><a name="3481" href="Data.Nat.DivMod.html#3481" class="Bound"
+      >dividend</a
+      ><a name="3489"
+      > </a
+      ><a name="3490" href="Data.Nat.DivMod.html#3490" class="Bound"
+      >divisor</a
+      ><a name="3497"
+      > </a
+      ><a name="3498" class="Symbol"
+      >:</a
+      ><a name="3499"
+      > </a
+      ><a name="3500" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="3501" class="Symbol"
+      >)</a
+      ><a name="3502"
+      > </a
+      ><a name="3503" class="Symbol"
+      >{</a
+      ><a name="3504" href="Data.Nat.DivMod.html#3504" class="Bound"
+      >&#8802;0</a
+      ><a name="3506"
+      > </a
+      ><a name="3507" class="Symbol"
+      >:</a
+      ><a name="3508"
+      > </a
+      ><a name="3509" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="3514"
+      > </a
+      ><a name="3515" class="Symbol"
+      >(</a
+      ><a name="3516" href="Data.Nat.DivMod.html#3490" class="Bound"
+      >divisor</a
+      ><a name="3523"
+      > </a
+      ><a name="3524" href="Data.Nat.html#3105" class="Function Operator"
+      >&#8799;</a
+      ><a name="3525"
+      > </a
+      ><a name="3526" class="Number"
+      >0</a
+      ><a name="3527" class="Symbol"
+      >)}</a
+      ><a name="3529"
+      > </a
+      ><a name="3530" class="Symbol"
+      >&#8594;</a
+      ><a name="3531"
+      >
+           </a
+      ><a name="3543" href="Data.Nat.DivMod.html#1673" class="Datatype"
+      >DivMod</a
+      ><a name="3549"
+      > </a
+      ><a name="3550" href="Data.Nat.DivMod.html#3481" class="Bound"
+      >dividend</a
+      ><a name="3558"
+      > </a
+      ><a name="3559" href="Data.Nat.DivMod.html#3490" class="Bound"
+      >divisor</a
+      ><a name="3566"
+      >
+</a
+      ><a name="3567" href="Data.Nat.DivMod.html#3469" class="Function Operator"
+      >_divMod_</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" href="Data.Nat.DivMod.html#3576" class="Bound"
+      >m</a
+      ><a name="3577"
+      > </a
+      ><a name="3578" href="Data.Nat.DivMod.html#3578" class="Bound"
+      >n</a
+      ><a name="3579"
+      > </a
+      ><a name="3580" class="Symbol"
+      >{</a
+      ><a name="3581" href="Data.Nat.DivMod.html#3581" class="Bound"
+      >&#8802;0</a
+      ><a name="3583" class="Symbol"
+      >}</a
+      ><a name="3584"
+      > </a
+      ><a name="3585" class="Keyword"
+      >with</a
+      ><a name="3589"
+      > </a
+      ><a name="3590" href="Data.Nat.DivMod.html#2491" class="Function Operator"
+      >_divMod'_</a
+      ><a name="3599"
+      > </a
+      ><a name="3600" href="Data.Nat.DivMod.html#3576" class="Bound"
+      >m</a
+      ><a name="3601"
+      > </a
+      ><a name="3602" href="Data.Nat.DivMod.html#3578" class="Bound"
+      >n</a
+      ><a name="3603"
+      > </a
+      ><a name="3604" class="Symbol"
+      >{</a
+      ><a name="3605" href="Data.Nat.DivMod.html#3581" class="Bound"
+      >&#8802;0</a
+      ><a name="3607" class="Symbol"
+      >}</a
+      ><a name="3608"
+      >
+</a
+      ><a name="3609" class="DottedPattern Symbol"
+      >.(</a
+      ><a name="3611" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="3614"
+      > </a
+      ><a name="3615" href="Data.Nat.DivMod.html#3646" class="Bound"
+      >r</a
+      ><a name="3616"
+      > </a
+      ><a name="3617" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="3618"
+      > </a
+      ><a name="3619" href="Data.Nat.DivMod.html#3644" class="Bound"
+      >q</a
+      ><a name="3620"
+      > </a
+      ><a name="3621" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="3622"
+      > </a
+      ><a name="3623" href="Data.Nat.DivMod.html#3633" class="Bound"
+      >n</a
+      ><a name="3624" class="DottedPattern Symbol"
+      >)</a
+      ><a name="3625"
+      > </a
+      ><a name="3626" href="Data.Nat.DivMod.html#3469" class="Function Operator"
+      >divMod</a
+      ><a name="3632"
+      > </a
+      ><a name="3633" href="Data.Nat.DivMod.html#3633" class="Bound"
+      >n</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" class="Symbol"
+      >|</a
+      ><a name="3636"
+      > </a
+      ><a name="3637" href="Data.Nat.DivMod.html#1946" class="InductiveConstructor"
+      >result</a
+      ><a name="3643"
+      > </a
+      ><a name="3644" href="Data.Nat.DivMod.html#3644" class="Bound"
+      >q</a
+      ><a name="3645"
+      > </a
+      ><a name="3646" href="Data.Nat.DivMod.html#3646" class="Bound"
+      >r</a
+      ><a name="3647"
+      > </a
+      ><a name="3648" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="3652"
+      > </a
+      ><a name="3653" class="Symbol"
+      >=</a
+      ><a name="3654"
+      > </a
+      ><a name="3655" href="Data.Nat.DivMod.html#1702" class="InductiveConstructor"
+      >result</a
+      ><a name="3661"
+      > </a
+      ><a name="3662" href="Data.Nat.DivMod.html#3644" class="Bound"
+      >q</a
+      ><a name="3663"
+      > </a
+      ><a name="3664" href="Data.Nat.DivMod.html#3646" class="Bound"
+      >r</a
+      ><a name="3665"
+      >
+
+</a
+      ><a name="3667" class="Comment"
+      >-- Integer division.</a
+      ><a name="3687"
+      >
+
+</a
+      ><a name="3689" href="Data.Nat.DivMod.html#3689" class="Function Operator"
+      >_div_</a
+      ><a name="3694"
+      > </a
+      ><a name="3695" class="Symbol"
+      >:</a
+      ><a name="3696"
+      > </a
+      ><a name="3697" class="Symbol"
+      >(</a
+      ><a name="3698" href="Data.Nat.DivMod.html#3698" class="Bound"
+      >dividend</a
+      ><a name="3706"
+      > </a
+      ><a name="3707" href="Data.Nat.DivMod.html#3707" class="Bound"
+      >divisor</a
+      ><a name="3714"
+      > </a
+      ><a name="3715" class="Symbol"
+      >:</a
+      ><a name="3716"
+      > </a
+      ><a name="3717" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="3718" class="Symbol"
+      >)</a
+      ><a name="3719"
+      > </a
+      ><a name="3720" class="Symbol"
+      >{</a
+      ><a name="3721" href="Data.Nat.DivMod.html#3721" class="Bound"
+      >&#8802;0</a
+      ><a name="3723"
+      > </a
+      ><a name="3724" class="Symbol"
+      >:</a
+      ><a name="3725"
+      > </a
+      ><a name="3726" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="3731"
+      > </a
+      ><a name="3732" class="Symbol"
+      >(</a
+      ><a name="3733" href="Data.Nat.DivMod.html#3707" class="Bound"
+      >divisor</a
+      ><a name="3740"
+      > </a
+      ><a name="3741" href="Data.Nat.html#3105" class="Function Operator"
+      >&#8799;</a
+      ><a name="3742"
+      > </a
+      ><a name="3743" class="Number"
+      >0</a
+      ><a name="3744" class="Symbol"
+      >)}</a
+      ><a name="3746"
+      > </a
+      ><a name="3747" class="Symbol"
+      >&#8594;</a
+      ><a name="3748"
+      > </a
+      ><a name="3749" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="3750"
+      >
+</a
+      ><a name="3751" href="Data.Nat.DivMod.html#3689" class="Function Operator"
+      >_div_</a
+      ><a name="3756"
+      > </a
+      ><a name="3757" href="Data.Nat.DivMod.html#3757" class="Bound"
+      >m</a
+      ><a name="3758"
+      > </a
+      ><a name="3759" href="Data.Nat.DivMod.html#3759" class="Bound"
+      >n</a
+      ><a name="3760"
+      > </a
+      ><a name="3761" class="Symbol"
+      >{</a
+      ><a name="3762" href="Data.Nat.DivMod.html#3762" class="Bound"
+      >&#8802;0</a
+      ><a name="3764" class="Symbol"
+      >}</a
+      ><a name="3765"
+      > </a
+      ><a name="3766" class="Keyword"
+      >with</a
+      ><a name="3770"
+      > </a
+      ><a name="3771" href="Data.Nat.DivMod.html#3469" class="Function Operator"
+      >_divMod_</a
+      ><a name="3779"
+      > </a
+      ><a name="3780" href="Data.Nat.DivMod.html#3757" class="Bound"
+      >m</a
+      ><a name="3781"
+      > </a
+      ><a name="3782" href="Data.Nat.DivMod.html#3759" class="Bound"
+      >n</a
+      ><a name="3783"
+      > </a
+      ><a name="3784" class="Symbol"
+      >{</a
+      ><a name="3785" href="Data.Nat.DivMod.html#3762" class="Bound"
+      >&#8802;0</a
+      ><a name="3787" class="Symbol"
+      >}</a
+      ><a name="3788"
+      >
+</a
+      ><a name="3789" class="DottedPattern Symbol"
+      >.(</a
+      ><a name="3791" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="3794"
+      > </a
+      ><a name="3795" href="Data.Nat.DivMod.html#3823" class="Bound"
+      >r</a
+      ><a name="3796"
+      > </a
+      ><a name="3797" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="3798"
+      > </a
+      ><a name="3799" href="Data.Nat.DivMod.html#3821" class="Bound"
+      >q</a
+      ><a name="3800"
+      > </a
+      ><a name="3801" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="3802"
+      > </a
+      ><a name="3803" href="Data.Nat.DivMod.html#3810" class="Bound"
+      >n</a
+      ><a name="3804" class="DottedPattern Symbol"
+      >)</a
+      ><a name="3805"
+      > </a
+      ><a name="3806" href="Data.Nat.DivMod.html#3689" class="Function Operator"
+      >div</a
+      ><a name="3809"
+      > </a
+      ><a name="3810" href="Data.Nat.DivMod.html#3810" class="Bound"
+      >n</a
+      ><a name="3811"
+      > </a
+      ><a name="3812" class="Symbol"
+      >|</a
+      ><a name="3813"
+      > </a
+      ><a name="3814" href="Data.Nat.DivMod.html#1702" class="InductiveConstructor"
+      >result</a
+      ><a name="3820"
+      > </a
+      ><a name="3821" href="Data.Nat.DivMod.html#3821" class="Bound"
+      >q</a
+      ><a name="3822"
+      > </a
+      ><a name="3823" href="Data.Nat.DivMod.html#3823" class="Bound"
+      >r</a
+      ><a name="3824"
+      > </a
+      ><a name="3825" class="Symbol"
+      >=</a
+      ><a name="3826"
+      > </a
+      ><a name="3827" href="Data.Nat.DivMod.html#3821" class="Bound"
+      >q</a
+      ><a name="3828"
+      >
+
+</a
+      ><a name="3830" class="Comment"
+      >-- The remainder after integer division.</a
+      ><a name="3870"
+      >
+
+</a
+      ><a name="3872" href="Data.Nat.DivMod.html#3872" class="Function Operator"
+      >_mod_</a
+      ><a name="3877"
+      > </a
+      ><a name="3878" class="Symbol"
+      >:</a
+      ><a name="3879"
+      > </a
+      ><a name="3880" class="Symbol"
+      >(</a
+      ><a name="3881" href="Data.Nat.DivMod.html#3881" class="Bound"
+      >dividend</a
+      ><a name="3889"
+      > </a
+      ><a name="3890" href="Data.Nat.DivMod.html#3890" class="Bound"
+      >divisor</a
+      ><a name="3897"
+      > </a
+      ><a name="3898" class="Symbol"
+      >:</a
+      ><a name="3899"
+      > </a
+      ><a name="3900" href="Data.Nat.html#683" class="Datatype"
+      >&#8469;</a
+      ><a name="3901" class="Symbol"
+      >)</a
+      ><a name="3902"
+      > </a
+      ><a name="3903" class="Symbol"
+      >{</a
+      ><a name="3904" href="Data.Nat.DivMod.html#3904" class="Bound"
+      >&#8802;0</a
+      ><a name="3906"
+      > </a
+      ><a name="3907" class="Symbol"
+      >:</a
+      ><a name="3908"
+      > </a
+      ><a name="3909" href="Relation.Nullary.Decidable.html#769" class="Function"
+      >False</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" class="Symbol"
+      >(</a
+      ><a name="3916" href="Data.Nat.DivMod.html#3890" class="Bound"
+      >divisor</a
+      ><a name="3923"
+      > </a
+      ><a name="3924" href="Data.Nat.html#3105" class="Function Operator"
+      >&#8799;</a
+      ><a name="3925"
+      > </a
+      ><a name="3926" class="Number"
+      >0</a
+      ><a name="3927" class="Symbol"
+      >)}</a
+      ><a name="3929"
+      > </a
+      ><a name="3930" class="Symbol"
+      >&#8594;</a
+      ><a name="3931"
+      > </a
+      ><a name="3932" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="3935"
+      > </a
+      ><a name="3936" href="Data.Nat.DivMod.html#3890" class="Bound"
+      >divisor</a
+      ><a name="3943"
+      >
+</a
+      ><a name="3944" href="Data.Nat.DivMod.html#3872" class="Function Operator"
+      >_mod_</a
+      ><a name="3949"
+      > </a
+      ><a name="3950" href="Data.Nat.DivMod.html#3950" class="Bound"
+      >m</a
+      ><a name="3951"
+      > </a
+      ><a name="3952" href="Data.Nat.DivMod.html#3952" class="Bound"
+      >n</a
+      ><a name="3953"
+      > </a
+      ><a name="3954" class="Symbol"
+      >{</a
+      ><a name="3955" href="Data.Nat.DivMod.html#3955" class="Bound"
+      >&#8802;0</a
+      ><a name="3957" class="Symbol"
+      >}</a
+      ><a name="3958"
+      > </a
+      ><a name="3959" class="Keyword"
+      >with</a
+      ><a name="3963"
+      > </a
+      ><a name="3964" href="Data.Nat.DivMod.html#3469" class="Function Operator"
+      >_divMod_</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" href="Data.Nat.DivMod.html#3950" class="Bound"
+      >m</a
+      ><a name="3974"
+      > </a
+      ><a name="3975" href="Data.Nat.DivMod.html#3952" class="Bound"
+      >n</a
+      ><a name="3976"
+      > </a
+      ><a name="3977" class="Symbol"
+      >{</a
+      ><a name="3978" href="Data.Nat.DivMod.html#3955" class="Bound"
+      >&#8802;0</a
+      ><a name="3980" class="Symbol"
+      >}</a
+      ><a name="3981"
+      >
+</a
+      ><a name="3982" class="DottedPattern Symbol"
+      >.(</a
+      ><a name="3984" href="Data.Fin.html#901" class="Function"
+      >to&#8469;</a
+      ><a name="3987"
+      > </a
+      ><a name="3988" href="Data.Nat.DivMod.html#4016" class="Bound"
+      >r</a
+      ><a name="3989"
+      > </a
+      ><a name="3990" href="Data.Nat.html#2224" class="Primitive Operator"
+      >+</a
+      ><a name="3991"
+      > </a
+      ><a name="3992" href="Data.Nat.DivMod.html#4014" class="Bound"
+      >q</a
+      ><a name="3993"
+      > </a
+      ><a name="3994" href="Data.Nat.html#2529" class="Primitive Operator"
+      >*</a
+      ><a name="3995"
+      > </a
+      ><a name="3996" href="Data.Nat.DivMod.html#4003" class="Bound"
+      >n</a
+      ><a name="3997" class="DottedPattern Symbol"
+      >)</a
+      ><a name="3998"
+      > </a
+      ><a name="3999" href="Data.Nat.DivMod.html#3872" class="Function Operator"
+      >mod</a
+      ><a name="4002"
+      > </a
+      ><a name="4003" href="Data.Nat.DivMod.html#4003" class="Bound"
+      >n</a
+      ><a name="4004"
+      > </a
+      ><a name="4005" class="Symbol"
+      >|</a
+      ><a name="4006"
+      > </a
+      ><a name="4007" href="Data.Nat.DivMod.html#1702" class="InductiveConstructor"
+      >result</a
+      ><a name="4013"
+      > </a
+      ><a name="4014" href="Data.Nat.DivMod.html#4014" class="Bound"
+      >q</a
+      ><a name="4015"
+      > </a
+      ><a name="4016" href="Data.Nat.DivMod.html#4016" class="Bound"
+      >r</a
+      ><a name="4017"
+      > </a
+      ><a name="4018" class="Symbol"
+      >=</a
+      ><a name="4019"
+      > </a
+      ><a name="4020" href="Data.Nat.DivMod.html#4016" class="Bound"
+      >r</a
+      ><a name="4021"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

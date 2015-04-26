@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Relation.Binary.StrictPartialOrderReasoning</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Convenient syntax for &quot;equational reasoning&quot; using a strict partial</a
+      ><a name="176"
+      >
+</a
+      ><a name="177" class="Comment"
+      >-- order</a
+      ><a name="185"
+      >
+</a
+      ><a name="186" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="258"
+      >
+
+</a
+      ><a name="260" class="Keyword"
+      >open</a
+      ><a name="264"
+      > </a
+      ><a name="265" class="Keyword"
+      >import</a
+      ><a name="271"
+      > </a
+      ><a name="272" href="Relation.Binary.html#1" class="Module"
+      >Relation</a
+      ><a name="280"
+      >.</a
+      ><a name="281" href="Relation.Binary.html#1" class="Module"
+      >Binary</a
+      ><a name="287"
+      >
+
+</a
+      ><a name="289" class="Keyword"
+      >module</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="Relation.Binary.StrictPartialOrderReasoning.html#1" class="Module"
+      >Relation</a
+      ><a name="304"
+      >.</a
+      ><a name="305" href="Relation.Binary.StrictPartialOrderReasoning.html#1" class="Module"
+      >Binary</a
+      ><a name="311"
+      >.</a
+      ><a name="312" href="Relation.Binary.StrictPartialOrderReasoning.html#1" class="Module"
+      >StrictPartialOrderReasoning</a
+      ><a name="339"
+      >
+         </a
+      ><a name="349" class="Symbol"
+      >{</a
+      ><a name="350" href="Relation.Binary.StrictPartialOrderReasoning.html#350" class="Bound"
+      >p&#8321;</a
+      ><a name="352"
+      > </a
+      ><a name="353" href="Relation.Binary.StrictPartialOrderReasoning.html#353" class="Bound"
+      >p&#8322;</a
+      ><a name="355"
+      > </a
+      ><a name="356" href="Relation.Binary.StrictPartialOrderReasoning.html#356" class="Bound"
+      >p&#8323;</a
+      ><a name="358" class="Symbol"
+      >}</a
+      ><a name="359"
+      > </a
+      ><a name="360" class="Symbol"
+      >(</a
+      ><a name="361" href="Relation.Binary.StrictPartialOrderReasoning.html#361" class="Bound"
+      >S</a
+      ><a name="362"
+      > </a
+      ><a name="363" class="Symbol"
+      >:</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="Relation.Binary.html#5826" class="Record"
+      >StrictPartialOrder</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Relation.Binary.StrictPartialOrderReasoning.html#350" class="Bound"
+      >p&#8321;</a
+      ><a name="386"
+      > </a
+      ><a name="387" href="Relation.Binary.StrictPartialOrderReasoning.html#353" class="Bound"
+      >p&#8322;</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="Relation.Binary.StrictPartialOrderReasoning.html#356" class="Bound"
+      >p&#8323;</a
+      ><a name="392" class="Symbol"
+      >)</a
+      ><a name="393"
+      > </a
+      ><a name="394" class="Keyword"
+      >where</a
+      ><a name="399"
+      >
+
+</a
+      ><a name="401" class="Keyword"
+      >import</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Relation.Binary.PreorderReasoning.html#1" class="Module"
+      >Relation</a
+      ><a name="416"
+      >.</a
+      ><a name="417" href="Relation.Binary.PreorderReasoning.html#1" class="Module"
+      >Binary</a
+      ><a name="423"
+      >.</a
+      ><a name="424" href="Relation.Binary.PreorderReasoning.html#1" class="Module"
+      >PreorderReasoning</a
+      ><a name="441"
+      > </a
+      ><a name="442" class="Symbol"
+      >as</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="Module"
+      >PreR</a
+      ><a name="449"
+      >
+</a
+      ><a name="450" class="Keyword"
+      >import</a
+      ><a name="456"
+      > </a
+      ><a name="457" href="Relation.Binary.Props.StrictPartialOrder.html#1" class="Module"
+      >Relation</a
+      ><a name="465"
+      >.</a
+      ><a name="466" href="Relation.Binary.Props.StrictPartialOrder.html#1" class="Module"
+      >Binary</a
+      ><a name="472"
+      >.</a
+      ><a name="473" href="Relation.Binary.Props.StrictPartialOrder.html#1" class="Module"
+      >Props</a
+      ><a name="478"
+      >.</a
+      ><a name="479" href="Relation.Binary.Props.StrictPartialOrder.html#1" class="Module"
+      >StrictPartialOrder</a
+      ><a name="497"
+      > </a
+      ><a name="498" class="Symbol"
+      >as</a
+      ><a name="500"
+      > </a
+      ><a name="501" class="Module"
+      >SPO</a
+      ><a name="504"
+      >
+</a
+      ><a name="505" class="Keyword"
+      >open</a
+      ><a name="509"
+      > </a
+      ><a name="510" href="Relation.Binary.PreorderReasoning.html#1" class="Module"
+      >PreR</a
+      ><a name="514"
+      > </a
+      ><a name="515" class="Symbol"
+      >(</a
+      ><a name="516" href="Relation.Binary.html#3936" class="Function"
+      >SPO</a
+      ><a name="519"
+      >.</a
+      ><a name="520" href="Relation.Binary.html#3936" class="Function"
+      >preorder</a
+      ><a name="528"
+      > </a
+      ><a name="529" href="Relation.Binary.StrictPartialOrderReasoning.html#361" class="Bound"
+      >S</a
+      ><a name="530" class="Symbol"
+      >)</a
+      ><a name="531"
+      > </a
+      ><a name="532" class="Keyword"
+      >public</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="Keyword"
+      >renaming</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Symbol"
+      >(</a
+      ><a name="549"
+      >_&#8764;&#10216;_&#10217;_ </a
+      ><a name="556" class="Symbol"
+      >to</a
+      ><a name="558"
+      > _&lt;&#10216;_&#10217;_</a
+      ><a name="565" class="Symbol"
+      >)</a
+      ><a name="566"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

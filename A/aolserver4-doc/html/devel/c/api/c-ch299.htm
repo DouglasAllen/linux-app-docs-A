@@ -1,0 +1,64 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_RegisterServerTrace</TITLE>
+<LINK rel=Previous href="c-ch298.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch300.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch298.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch300.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="127304">
+</a><h3>Ns_RegisterServerTrace</h3>
+<a name="127305">
+</a><h4>Overview</h4>
+Register a trace procedure for a server.
+<a name="45165">
+</a><a name="133182">
+</a><h4>Syntax</h4>
+<pre>    <a name="45166"></a>typedef void (Ns_TraceProc) (void *context, Ns_Conn *conn);
+    <a name="45167"></a>
+    <a name="45168"></a>Ns_ProcHandle Ns_RegisterServerTrace(
+    <a name="45169"></a>char *hServer,
+    <a name="45170"></a>Ns_TraceProc *proc,
+    <a name="45171"></a>void *context
+    <a name="45172"></a>);
+</pre><p><a name="134614">
+</a><h4>Description</h4>
+<p><a name="45174">
+</a>The Ns_RegisterServerTrace function registers <code>proc</code> as a trace for the specified server. The server calls all trace procedures after every HTTP connection with the context and the Ns_Conn for that connection. The procedures are run in last-registered first-run order. A trace procedure is often used for logging.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch298.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch300.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

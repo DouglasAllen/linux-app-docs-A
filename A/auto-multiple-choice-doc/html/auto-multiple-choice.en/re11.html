@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>AMC-mailing</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="commands.html" title="Commands manual" /><link rel="prev" href="AMC-regroupe.html" title="AMC-regroupe" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AMC-mailing</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AMC-regroupe.html">Prev</a> </td><th width="60%" align="center">Commands manual</th><td width="20%" align="right"> </td></tr></table><hr /></div><div class="refentry" title="AMC-mailing"><a id="idp6848608"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>AMC-mailing — mail PDF annotated completed answer sheets to
+        students</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   mailing  [--xmlargs <em class="replaceable"><code>args.xml</code></em>]  --projet
+          <em class="replaceable"><code>project-dir</code></em>   --students-list
+          <em class="replaceable"><code>students-list.csv</code></em>  [--list-encoding <em class="replaceable"><code>encoding</code></em>]  --email-column
+          <em class="replaceable"><code>col</code></em>   --sender
+          <em class="replaceable"><code>sender-email</code></em>   --subject
+          <em class="replaceable"><code>subject</code></em>   --text
+          <em class="replaceable"><code>email-body</code></em>  [--debug <em class="replaceable"><code>file.log</code></em>] [<em class="replaceable"><code>transport
+          arguments</code></em>...]</p></div></div><div class="refsect1" title="Description"><a id="idp6866064"></a><h2>Description</h2><p>The command <span class="command"><strong>AMC-mailing.pl</strong></span> sends by email the
+        PDF annotated completed answer sheets to the students. Email addresses
+        are taken from the students list file.</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--projet
+            <em class="replaceable"><code>project-dir</code></em></code></span></dt><dd><p>Gives the project directory.</p></dd><dt><span class="term"><code class="option">--students-list
+            <em class="replaceable"><code>students-list.csv</code></em></code></span></dt><dd><p>sets the students list file name.</p></dd><dt><span class="term"><code class="option">--list-encoding
+            <em class="replaceable"><code>encoding</code></em></code></span></dt><dd><p>selects an encoding for file
+              <em class="replaceable"><code>students-list.csv</code></em> (default is
+              utf-8).</p></dd><dt><span class="term"><code class="option">--email-column
+            <em class="replaceable"><code>col</code></em></code></span></dt><dd><p>sets the name of the column containing the email addresses
+              of the students in the students list file.</p></dd><dt><span class="term"><code class="option">--sender
+            <em class="replaceable"><code>sender-email</code></em></code></span></dt><dd><p>sets the sender email.</p></dd><dt><span class="term"><code class="option">--subject
+            <em class="replaceable"><code>subject</code></em></code></span></dt><dd><p>sets the subject of the emails to send.</p></dd><dt><span class="term"><code class="option">--text
+            <em class="replaceable"><code>email-body</code></em></code></span></dt><dd><p>sets the body text of the emails to send.</p></dd><dt><span class="term"><code class="option">--transport
+            <em class="replaceable"><code>transport</code></em></code></span></dt><dd><p>sets the transport to use.
+              <em class="replaceable"><code>transport</code></em> may be
+              <code class="constant">sendmail</code> or
+              <code class="constant">SMTP</code>.</p></dd><dt><span class="term"><code class="option">--debug
+            <em class="replaceable"><code>file.log</code></em></code></span></dt><dd><p>gives a file to fill with debugging information.</p></dd></dl></div></div><div class="refsect1" title="Transport arguments"><a id="idp6887328"></a><h2>Transport arguments</h2><p>Depending on the value used for argument
+        <em class="replaceable"><code>transport</code></em>, the following arguments can be
+        added:</p><div class="refsect2" title="Transport sendmail"><a id="idp6888736"></a><h3>Transport sendmail</h3><div class="variablelist"><dl><dt><span class="term"><code class="option">--sendmail-path
+              <em class="replaceable"><code>path</code></em></code></span></dt><dd><p>sets the path to the <span class="command"><strong>sendmail</strong></span> command
+                (defaults to <code class="filename">/usr/sbin/sendmail</code>).</p></dd></dl></div></div><div class="refsect2" title="Transport SMTP"><a id="idp6893056"></a><h3>Transport SMTP</h3><div class="variablelist"><dl><dt><span class="term"><code class="option">--smtp-host
+              <em class="replaceable"><code>host</code></em></code></span></dt><dd><p>sets the SMTP hostname (defaults to
+                <code class="constant">smtp</code>).</p></dd><dt><span class="term"><code class="option">--smtp-port
+              <em class="replaceable"><code>port</code></em></code></span></dt><dd><p>sets the port to use (default value is 25).</p></dd></dl></div></div></div><div class="refsect1" title="Arguments in a XML file"><a id="idp6898560"></a><h2>Arguments in a XML file</h2><p>To avoid encoding problems, one can place some arguments in a
+        XML file and use the <code class="option">--xmlargs
+        <em class="replaceable"><code>file.xml</code></em></code> argument as the first
+        command argument. Here is an exemple of such a file:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;arguments&gt;
+  &lt;arg&gt;--sender&lt;/arg&gt;&lt;arg&gt;Bienvenüe &amp;lt;paamc@passoire.fr&amp;gt;&lt;/arg&gt;
+  &lt;arg&gt;--text&lt;/arg&gt;&lt;arg&gt;Voilà votre copie corrigée&lt;/arg&gt;
+  &lt;arg&gt;--subject&lt;/arg&gt;&lt;arg&gt;QCM&lt;/arg&gt;
+&lt;/arguments&gt;</pre></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AMC-regroupe.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="commands.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top">AMC-regroupe </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

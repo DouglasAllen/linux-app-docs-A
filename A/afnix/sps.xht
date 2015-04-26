@@ -1,0 +1,1389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Spreadsheet Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Spreadsheet Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Spreadsheet Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Spreadsheet</em> module is an original implementation that provides the necessary objects for designing a spreadsheet. A spreasheet acts a great interface which structure data in the form of record and sheets. Once structured, these data can be indexed, manipulated and exported into various formats. </p>
+<div class="section">
+Spreadsheet concepts</div>
+<p class="text">
+ The sole purpose of using a spreadsheet is to collect various data and store them in such a way that they can be accessed later. Unlike standard spreadsheet system, the standard spreadsheet module does not place restrictions on the data organization. The spreadsheet module stores data in a hierarchical fashion. The basic data element is called a <em>cell</em>. A set of cells is a <em>record</em>. A set of records is a <em>sheet</em>. A set of sheets and records is a <em>folio</em>. </p>
+<p class="subsect">
+Cell and data</p>
+<p class="text">
+ A <em>cell</em> is a data container. There is only one data element per cell. Eventually a name can be associated with a cell. The cell data can be any kind of literals. Such literals are integer, real, boolean, character or strings. </p>
+<p class="subsect">
+Record</p>
+<p class="text">
+ A <em>record</em> is a vector of cells. A record can be created by adding cell or simply by adding data. If the record has a predefined size, the cell or data can be set by indexing. </p>
+<p class="subsect">
+Sheet</p>
+<p class="text">
+ A <em>sheet</em> is a vector of records. A sheet can be created by adding record. Similarly, if the sheet has a predefined size, record cell or data can be added by indexing. A sheet can also be seen as a 2 dimensional array of cells. For the purpose of managing extra information, the sheet carry also several extra records, namely, the <em>marker record</em>, the <em>header
+	record</em> and <em>footer record</em> as well as the <em>tag
+	vector</em> and the <em>signature</em>. </p>
+<p class="subsect">
+Folio</p>
+<p class="text">
+ A <em>folio</em> is a set of sheets and/or records. A folio of sheets permits to structure data in the form of tables. Since cell, record and table can have a name, it is possible to create link between various elements, thus creating a collection of structured data. </p>
+<div class="section">
+Storage model</div>
+<p class="text">
+ There are several ways to integrate data. In the simplest form, data are integrated in a record list. A complex model can be built with a sheet. More complex models can also be designed by using a folio. </p>
+<p class="subsect">
+Single record model</p>
+<p class="text">
+ With a single record model, the data are accumulated in a single array. This kind of data storing is particularly adapted for single list recording. As a single record, the basic search and sorting algorithm can be applied. For instance, a list name can be stored as a single record. With this view, there is no difference between a list, a vector and a record. The record can also be named. </p>
+<p class="subsect">
+Record importation</p>
+<p class="text">
+ Data are imported into the record, either by construction, list or stream. Since the record object is a serializeable object, the importation process is also performed automatically in the collection. The base record importation class implements a simple importation model based on blank separated literals. Complex importation models can be devised by derivation. A special case with a cons cell is also supported where the <em>car</em> is the cell name and the <em>cadr</em> is the cell object. </p>
+<pre class="frame">
+<![CDATA[# an example of file importation
+1   "a string" 'a'
+'b' ("cell name" 2) 123
+
+]]></pre>
+<p class="text">
+ The previous example shows the file structure that can be used to import cell data. The fist line defines a record with 3 cells. The second line defines also a record with 3 cells. The second cell is a named cell. </p>
+<p class="subsect">
+Record exportation</p>
+<p class="text">
+ A record is an object that can be serialized. It can therefore be exported easily. However, in the serialized form, the record is in a binary form. It is also possible to walk through the record and exports, for each cell its literal form. </p>
+<div class="section">
+Folio indexation</div>
+<p class="text">
+ There are various ways to access a folio by reference. Since a folio can contain several sheets, it seems natural to access them by tag. The other method is to index the cells in a cross-reference album in order to access rapidly. </p>
+<p class="subsect">
+Sheet access model</p>
+<p class="text">
+ The sheet access model uses a tag to access one or several sheets in a folio. A tag is a string attached to a sheet. It is possible in a folio to have several sheet with the same tag. It is also possible to attach several tags to a sheet. When a folio is searched by tag, the first sheet that matches the tag is said to be the valid one. If all sheets that match the requested tag are needed, it is possible to create a derived folio with all sheets that match the requested tag. </p>
+<p class="subsect">
+Cell access model</p>
+<p class="text">
+ The cell access model operates with a cross-reference table built with an index. An index is a multiple entry record that stores the cell location. A cell coordinate comprises the cell index in the record, the record index in the sheet and the sheet index in the folio. If an index contains multiple entries, this indicates that several cells are indexed. A cell cross-reference table is a collection of index. Generally the index name is the cell name. When the cross-reference table is built, all cell of interests are scanned and if a cell name exists, the cell is indexed in the cross-reference table. If there are several cells with the same name, the index length associated with the name is the number of cells with that name. </p>
+<p class="subsect">
+Search and access</p>
+<p class="text">
+ The methodology for searching is to decide whether a sheet or a cell should be accessible. If a sheet access is desired, the search by tag method is the preferred way. This method assumes that the requested sheet is structured in a particular way, known to the user. If a cell access seems more appropriate, a cross-reference table should be built first, and the search done from it. In the case of search by tag, the method is dynamic and operates well when sheets are added in a folio. When a cross-reference table is used, proper care should be taken to rebuild the cross-reference table when some sheets are added unless the user knows that there is no need for it. </p>
+<div class="section">
+Folio object</div>
+<p class="text">
+ The <tt class="code">Folio</tt> object is the primary object used for storing data. Although, a folio is a collection of sheets, it the primary object that should be created when manipulating such collection. </p>
+<p class="subsect">
+Creating a folio</p>
+<p class="text">
+ The <tt class="code">Folio</tt> object is built without argument. In this case, the folio is empty. A predicate is available for testing the <tt class="code">Folio</tt> object. </p>
+<pre class="frame">
+<![CDATA[const sps (afnix:sps:Folio)
+afnix:sps:folio-p sps # true
+
+]]></pre>
+<p class="text">
+ The constructor can operate also by name or by input stream. With a string, a new folio those name is the argument is created. By stream, a new folio is created and loaded with the input stream data. Eventually, the folio name can be set with the <tt class="code">set-name</tt> command and retrieved with the <tt class="code">get-name</tt> command. </p>
+<pre class="frame">
+<![CDATA[const sps (afnix:sps:Folio)
+sps:set-name "planets"
+
+]]></pre>
+<div class="section">
+Sheet object</div>
+<p class="text">
+ The <tt class="code">Sheet</tt> object is the primary object used to store data in a folio. Since a <tt class="code">Folio</tt> object is a collection of sheets, a sheet can be manipulated either by getting getting it from the folio or by creating it independently and adding it into the folio. </p>
+<p class="subsect">
+Creating a sheet</p>
+<p class="text">
+ An empty sheet can be created simply with or without name. Without argument, an unnamed sheet is created. Similar to the <tt class="code">Folio</tt> class, the sheet name can be passed at construction or set with the <tt class="code">set-name</tt> method. As usual a predicate is provided. </p>
+<pre class="frame">
+<![CDATA[const sht (afnix:sps:Sheet)
+afnix:sps:sheet-p sht # true
+
+]]></pre>
+<p class="text">
+ When the sheet is created, it can be added to the folio spreadsheet with the <tt class="code">add</tt> method. </p>
+<pre class="frame">
+<![CDATA[const sht (afnix:sps:Sheet "data")
+sps:add sht
+
+]]></pre>
+<p class="subsect">
+Adding data to the sheet</p>
+<p class="text">
+ The process of adding data to a sheet is a straightforward operation with the <tt class="code">add-data</tt> method or the <tt class="code">add</tt> method. With the <tt class="code">add-data</tt> method, data are added as literals. With the <tt class="code">add</tt> method, data are added with the help of a record object. </p>
+<pre class="frame">
+<![CDATA[sht:add-data "Mercury"   4840 "1407:36"
+sht:add-data "Venus"    12400 "5819:51"
+sht:add-data "Earth"    12756 "23:56"
+sht:add-data "Mars"      6800 "24:37"
+sht:add-data "Jupiter" 142800 "9:50"
+sht:add-data "Saturn"  120800 "10:14"
+sht:add-data "Uranus"   47600 "10:49"
+sht:add-data "Neptune"  44600 "15:40"
+sht:add-data "Pluto"     5850 "153:17"
+sht:add-data "Sedna"     1800 "960:00"
+
+]]></pre>
+<p class="text">
+ Data can be imported in a sheet by importation with an input stream. During the importation, the serialized data are decoded and placed sequentially in the stream. </p>
+<p class="subsect">
+Sheet sorting</p>
+<p class="text">
+ A sheet can be sorted with the <tt class="code">sort</tt> method. The <tt class="code">sort</tt> method uses the first integer argument as the column number. The second optional argument is a boolean argument that selects the sorting method which can be ascending (by default) or descending if the flag is false. </p>
+<pre class="frame">
+<![CDATA[sht:sort 0
+sht:sort 1 false
+
+]]></pre>
+<div class="section">
+Record object</div>
+<p class="text">
+ The <tt class="code">Record</tt> object is an alternative to the sheet data filling. With the help of the <tt class="code">add</tt> method, a record can be added to a sheet. </p>
+<p class="subsect">
+Creating a record</p>
+<p class="text">
+ A record is a named object that acts as a vector of cells. The record name can be set either by construction or with the <tt class="code">set-name</tt> method. As usual a predicate is provided. </p>
+<pre class="frame">
+<![CDATA[const rcd (afnix:sps:Record)
+afnix:sps:record-p # true
+
+]]></pre>
+<p class="subsect">
+Filling a record</p>
+<p class="text">
+ A record can be filled either with literal data or <tt class="code">Cell</tt> objects. In the first case, the cell is automatically created for each literal added to the record. The <tt class="code">add</tt> method add a cell or literal to the record. </p>
+<pre class="frame">
+<![CDATA[const rcd (Record)
+rcd:add "Mercury" 4840 "1407:36"
+
+]]></pre>
+<p class="text">
+ For data extraction, the <tt class="code">length</tt> method returns the record length. Data can be extracted by index with either the <tt class="code">get</tt> or <tt class="code">map</tt> method. The <tt class="code">get</tt> method returns the record cell while the <tt class="code">map</tt> method returns the cell literal. </p>
+<div class="section">
+Object search</div>
+<p class="text">
+ The search methodology is divided either by sheet or cells. In a folio, the search is done in terms of sheets while the construction of a cross-reference table is required for searching cells. </p>
+<p class="subsect">
+Searching in a folio</p>
+<p class="text">
+ The <tt class="code">Folio</tt> object provides the primary mean to search for sheet. The <tt class="code">find</tt> and <tt class="code">lookup</tt> methods return a sheet by tag. The first sheet that matches the tag is returned by these methods. The <tt class="code">find</tt> method returns nil if the sheet cannot be found while the <tt class="code">lookup</tt> method throws an exception. </p>
+<pre class="frame">
+<![CDATA[# get a sheet by tag
+const sheet (folio:lookup "the tag")
+
+]]></pre>
+<p class="text">
+ If there are several sheets that matched the tag, the <tt class="code">filter</tt> method is more appropriate. The <tt class="code">filter</tt> method returns a new folio that contains the sheet that matches the requested tag. </p>
+<pre class="frame">
+<![CDATA[# get a sub-folio by tag
+const sf (folio:filter "the tag")
+
+]]></pre>
+<p class="subsect">
+Searching for a cell</p>
+<p class="text">
+ The <tt class="code">Folio</tt> object also provides the method for building a cross-reference table. The cross-reference table is represented by the <tt class="code">Xref</tt> object. By default, a complete <tt class="code">Xref</tt> object table is built with the <tt class="code">getxref</tt> folio method. Such method, scan all cells in the folio and add them in the cross-reference table if the cell has a name. </p>
+<pre class="frame">
+<![CDATA[# get a default xref table 
+const xref (folio:getxref)
+
+]]></pre>
+<p class="text">
+ The cross-reference table can also be built by searching for sheet tags. With a string argument, the <tt class="code">getxref</tt> search for all sheets that matches the tag and then build a cross-reference table. This method is equivalent to the operation of building a new folio by tag with the <tt class="code">filter</tt> method and then building the cross-reference table. </p>
+<pre class="frame">
+<![CDATA[# get a xref table by tag
+const xref (folio:getxref "the tag")
+# another method
+const sf   (folio:filter "the tag")
+const xref (sf:getxref)
+
+]]></pre>
+<p class="text">
+ A cross-reference table can also be built by cell index and/or record index. With a cell index, the cross-reference table is built by indexing the sheet column. With both the cell and record indexes, the cross-reference table is built by indexing all cells at the coordinate for all sheets. </p>
+<pre class="frame">
+<![CDATA[# get a xref table by cell index
+const xref (folio:getxref 0)
+# get a xref table by cell and record index
+const xref (folio:getxref 0 1)
+
+]]></pre>
+<hr/>
+<div class="appendix">
+Standard Spreadsheet Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Cell</div>
+<p class="text">
+ The <tt class="code">Cell</tt> class is a data container. There is only one data element per cell. Eventually a name can be associated with a cell. The cell data can be any kind of literals. Such literals are integer, real, boolean, character or strings. A cell is the basic block used to build a spreadsheet. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>cell-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Nameable
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Cell</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Cell constructor create a default cell with no
+	  name and no value. When evaluated, the cell returns nil.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Cell</i><i> (Literal)</i><hr/>
+<p class="text">
+
+	  The Cell constructor create a default cell by value.
+	  The argument is a literal object which can be viewed with its
+	  string representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Cell</i><i> (String Literal)</i><hr/>
+<p class="text">
+
+	  The Cell constructor create a default cell by name
+	  and value. The first argument is the cell name. The second
+	  argument is a literal object which can be viewed with its 
+	  string representation.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get</i><i> (&rarr; Literal)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get method returns the cell literal value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Literal)</i><hr/>
+<p class="text">
+
+	  The set method sets the cell literal value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the cell name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the cell name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Persist</div>
+<p class="text">
+ The <tt class="code">Persist</tt> class is a base class for the AFNIX spreadsheet module. The class defines the methods that are used to read of write a particular persistent object. When saving, the object name is retreived with the get name method. The saveas method does the same as save but takes a file name argument. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>persist-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Nameable
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>save</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The save method saves the current object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>saveas</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The saveas method saves the current object into the
+	  file those name is the string argument.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Record</div>
+<p class="text">
+ The <tt class="code">Record</tt> class is a cell container. A record can be created by adding cell or simply by adding data. If the record has a predefined size, the cell or data can be set by indexing. A name can be attached to the record. Facilities are provided to access directly the cell associated with the record. A record can also be created by name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>record-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Persist
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Record</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Record constructor create an empty record with no
+	  name and no cell.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Record</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Record constructor create an empty record by name
+	  name. The argument is the record name to use.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Cell|Literal...)</i><hr/>
+<p class="text">
+
+	  The add method adds one or several cell objects to
+	  the record. In the first form, the argument is a cell that is
+	  added in the record. In the second form, the argument is a
+	  literal that is used to create a cell by value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Cell)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a record cell by index. The
+	  index must be within the record range or an exception is
+	  raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map</i><i> (&rarr; Literal)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The map method map a record cell by index. The
+	  index must be within the record range or an exception is
+	  raised. The cell is mapped to a literal object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer Cell|Literal)</i><hr/>
+<p class="text">
+
+	  The set method sets the record cell by index. The
+	  record index must be valid in order to succeed. A new cell is
+	  created prior the record update. The previous cell data is lost
+	  including its name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sort</i><i> (&rarr; none)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The sort method sorts a record in place. Without
+	  argument, the record is sorted in ascending order. The optional
+	  boolean argument specifies the sorting mode. If true, the record
+	  is sorting in ascending order and in descending order if false.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find</i><i> (&rarr; Cell)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find method finds a cell by name. If the cell
+	  is not found, the nil object is returned. This method is similar
+	  to the lookup method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-index</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The get-index method finds a cell index by name. If
+	  the cell is not found, an exception is raised. The index is the
+	  cell position in the record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Cell)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method finds a cell by name. If the cell
+	  is not found, an exception is raised. This method is similar to
+	  the find method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the record length.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the record name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method rest the record. The record name
+	  is not changed but all record cells are removed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the record name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Sheet</div>
+<p class="text">
+ The <tt class="code">Sheet</tt> class is a record container. A sheet can be created by adding records. Similarly, if the sheet has a predefined size, record cell or data can be added by indexing. A sheet can be also seen as a 2 dimensional array of cells. Like a record, a sheet can be named. Without argument, a default sheet is created. With a string argument, the sheet is created with an initial name. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>sheet-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Persist
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Sheet</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Sheet constructor create an empty sheet with no
+	  name and no cell.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Sheet</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Sheet constructor create an empty sheet by name.
+	  The argument is the sheet name to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Sheet</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Sheet constructor create an empty sheet by name
+	  and info. The first argument is the sheet name to use. The
+	  second argument is the sheet information string.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Record)</i><hr/>
+<p class="text">
+
+	  The add method adds a record to the sheet.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Record)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a sheet record by index. The
+	  index must be within the sheet range or an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer Record)</i><hr/>
+<p class="text">
+
+	  The set method sets the sheet record by index. The
+	  sheet index must be valid in order to succeed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>sort</i><i> (&rarr; none)</i><i> (none|Integer|Boolean|Integer Boolean)</i><hr/>
+<p class="text">
+
+	  The sort method sorts the sheet in place. By
+	  default, the sheet is sorted in ascending order with column
+	  0. With one argument, the argument can be either the sorting
+	  mode or the column number. If the mode is true, the sheet is
+	  sorted in ascending mode. If the mode is false, the sheet is
+	  sorted in descending mode. With two arguments, the first
+	  argument is the column number and the second is the sorting
+	  mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the sheet length.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>convert</i><i> (&rarr; PrintTable)</i><i> ([Integer [Integer [Boolean]]])</i><hr/>
+<p class="text">
+
+	  The convert method converts the sheet into a
+	  print-table representation. Without argument, the whole sheet is
+	  converted. With one argument, the sheet is converted unto a
+	  maximum of rows. The second optional argument is the start index
+	  that default to 0. The third optional argument is the literal
+	  format. By default, the literal is formatted as a string. If the
+	  flag is true, the literal is formatted as a literal string
+	  representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-data</i><i> (&rarr; none)</i><i> ([Cell|Literal]+)</i><hr/>
+<p class="text">
+
+	  The add-data method adds one or several cell object
+	  to a sheet record. The sheet record is initially created and the
+	  object elements are added sequentially to the record. In the
+	  first form, the argument is a cell that is added in the
+	  record. In the second form, the argument is a literal that is
+	  used to create a cell by value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-marker</i><i> (&rarr; none)</i><i> ([Literal]+)</i><hr/>
+<p class="text">
+
+	  The add-marker method adds one or several literal objects
+	  to a sheet marker record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>marker-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The marker-length method returns the number of markers
+	  defined for this sheet.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-marker</i><i> (&rarr; Cell)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-marker method returns a marker cell by
+	  index from the sheet marker record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-marker</i><i> (&rarr; none)</i><i> (Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set-marker method set the sheet marker record by
+	  index and literal.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find-marker</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find-marker method find the marker index. The
+	  argument is the marker string value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-sign</i><i> (&rarr; none)</i><i> ([Literal]+)</i><hr/>
+<p class="text">
+
+	  The add-sign method adds one or several literal objects
+	  to a sheet sign record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>signature-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The signature-length method returns the number of signs
+	  defined for this sheet.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-sign</i><i> (&rarr; Cell)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-sign method returns a sign cell by
+	  index from the sheet sign record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-sign</i><i> (&rarr; none)</i><i> (Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set-sign method set the sheet sign record by
+	  index and literal.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find-sign</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find-sign method find the sign index. The
+	  argument is the sign string value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-header</i><i> (&rarr; none)</i><i> (Cell|Literal...)</i><hr/>
+<p class="text">
+
+	  The add-header method adds one or several cell
+	  object to a sheet header record. In the first form, the argument
+	  is a cell that is added in the record. In the second form, the
+	  argument is a literal that is used to create a cell by value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-header</i><i> (&rarr; Cell)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-header method returns a header cell by
+	  index from the sheet header record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map-header</i><i> (&rarr; Literal)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The map-header method maps to a literal object a
+	  header cell by index from the sheet header record. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-header</i><i> (&rarr; none)</i><i> (Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set-header method set the header record by
+	  index and literal. The cell associated with the header record is
+	  updated with the literal value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-footer</i><i> (&rarr; none)</i><i> ([Cell|Literal]+)</i><hr/>
+<p class="text">
+
+	  The add-footer method adds one or several cell
+	  object to a sheet footer record. In the first form, the argument
+	  is a cell that is added in the record. In the second form, the
+	  argument is a literal that is used to create a cell by value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-footer</i><i> (&rarr; Cell)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-footer method returns a footer cell by
+	  index from the sheet footer record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>map-footer</i><i> (&rarr; Literal)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The map-footer method maps to a literal object an
+	  footer cell by index from the sheet footer record.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-footer</i><i> (&rarr; none)</i><i> (Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set-footer method set the footer record by
+	  index and literal. The cell associated with the footer record is
+	  updated with the literal value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the sheet name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the sheet name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the sheet info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-info</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-info method sets the sheet info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-tag</i><i> (&rarr; none)</i><i> ([String]+)</i><hr/>
+<p class="text">
+
+	  The add-tag method adds a tag into the tags
+	  vector. The tag can be used to mark a sheet in a folio.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tag-p</i><i> (&rarr; Boolean)</i><i> (string)</i><hr/>
+<p class="text">
+
+	  The tag-p method returns true if the given tag is
+	  defined for this sheet.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tag-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The tag-length method returns the number of tags
+	  defined for this sheet.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tag</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-tag method returns a tag by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-tag</i><i> (&rarr; none)</i><i> (Integer Literal)</i><hr/>
+<p class="text">
+
+	  The set-tag method set the sheet tag record by
+	  index and literal.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find-tag</i><i> (&rarr; Integer)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find-tag method find the tag index. The
+	  argument is the tag string value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the sheet. The name and
+	  information is unchanged during this operation.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Folio</div>
+<p class="text">
+ The <tt class="code">Folio</tt> class is a sheet container. A folio of sheets can be structured to handle various data organization. Since all objects are named, it is possible to index them for fast data search. An empty folio can be created by name or filled with an input stream. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>folio-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Persist
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Folio</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Folio constructor create an empty folio with no
+	  name and no cell.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Folio</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Folio constructor create an empty folio by name.
+	  The argument is the folio name to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Folio</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Folio constructor create an empty folio by name
+	  and info. The first argument is the folio name to use. The
+	  second argument is the folio information string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Folio</i><i> (InputStream)</i><hr/>
+<p class="text">
+
+	  The Folio constructor create an empty folio and
+	  fill it by reading the data from the input stream. The input
+	  stream must have the data in a serialized form.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>write</i><i> (&rarr; none)</i><i> (OutputStream)</i><hr/>
+<p class="text">
+
+	  The write method write the folio contents to an
+	  output stream. The written form is a serialized form.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Sheet)</i><hr/>
+<p class="text">
+
+	  The add method adds a sheet to the folio.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Sheet)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns a sheet by index. The index
+	  must be within the folio range or an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set</i><i> (&rarr; none)</i><i> (Integer Sheet)</i><hr/>
+<p class="text">
+
+	  The set method sets the folio by index and
+	  sheet. The index must be within the folio range or an exception
+	  is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>tag-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The tag-p method returns true if a sheet with the
+	  tag argument exists in the folio.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>find</i><i> (&rarr; Sheet)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The find method finds a sheet by tag. The first
+	  found sheet those tag is matched is returned. In the case that
+	  multiple sheet share the same tag, the filter
+	  should be used. If no sheet is found the method return the nil object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Sheet)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method finds a sheet by tag. The first
+	  found sheet those tag is matched is returned. In the case that
+	  multiple sheet share the same tag, the filter
+	  should be used. If no sheet is found the method throws an
+	  exception. This method is similar to the find
+	  method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>filter</i><i> (&rarr; Folio)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The filter method return a new folio with sheets
+	  that match the argument tag. If no sheet is found, the folio is empty.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the folio. The name and
+	  information is unchanged during this operation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the folio length.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the folio name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-name</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-name method sets the folio name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the folio info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-info</i><i> (&rarr; none)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The set-info method sets the folio info.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-xref</i><i> (&rarr; Xref)</i><i> (none|Integer|String|Integer Integer)</i><hr/>
+<p class="text">
+
+	  The get-xref method returns a cross-reference table
+	  from the folio. Without argument, the whole folio is scanned and
+	  all named cells are added in the cross-reference table. With an
+	  integer argument, all cells that matches the cell index argument
+	  are added in the cross-reference table. With a string argument,
+	  all cells that have the same name are added in the
+	  table. Finally, with two arguments that represents the cell
+	  index and the record index are used, all cells are added in the
+	  table with these two coordinates.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Index</div>
+<p class="text">
+ The <tt class="code">Index</tt> class is a class that maintain a cell index at the folio level. A cell index is composed of the sheet index, the record index and the cell index. The index object can be used to access in a generic way a particular cell. Additionally, the folio name can also be stored in the index. It is possible to have multiple records that represents the same cell. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>index-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Index</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Index constructor creates an empty index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Index</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Index constructor creates an index with a
+	  cell index as its coordinate.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Index</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Integer constructor creates an index with a
+	  cell and record indexes as its coordinate. The first argument is
+	  the cell index. The second argument is the record index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Index</i><i> (Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Index constructor creates an index with a
+	  cell, record  and sheet indexes as its coordinate. The first
+	  argument is the cell index. The second argument is the record
+	  index. The third argument is the sheet index.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (Integer|Integer Integer|Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The add method adds a new index coordinate in the
+	  index object. In the first form, the cell index is used as the
+	  coordinate. In the second form, the cell and record indexes are
+	  used as the coordinate. In the third form, the cell, record and
+	  sheet indexes are used as the coordinate.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the index by removing all
+	  attached coordinates.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the index length. The
+	  index length is the number of coordinate entries in the index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (Integer|Integer Integer|Integer Integer Integer)</i><hr/>
+<p class="text">
+
+	  The exists-p predicate returns true if a coordinate
+	  entry exists in the index. In the first form, the cell index is
+	  used as the coordinate. In the second form, the cell and record
+	  indexes are used as the coordinate. In the third form, the cell,
+	  record and sheet indexes are used as the coordinate.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-index-cell</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-index-cell method sets the cell index by
+	  position. The first argument is the coordinate position. The
+	  second argument is the cell index to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>update-index-cell</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The update-index-cell method updates the cell index
+	  for all entries in the index. The argument is the new cell index
+	  to use for the update process.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-index-cell</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-index-cell method returns the cell index
+	  for a particular entry. The argument is the entry position.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-index-record</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-index-record method sets the record index by
+	  position. The first argument is the coordinate position. The
+	  second argument is the record index to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>update-index-record</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The update-index-record method updates the record index
+	  for all entries in the index. The argument is the new record index
+	  to use for the update process.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-index-record</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-index-record method returns the record index
+	  for a particular entry. The argument is the entry position.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-index-sheet</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-index-sheet method sets the sheet index by
+	  position. The first argument is the coordinate position. The
+	  second argument is the cell sheet to use.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>update-index-sheet</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The update-index-sheet method updates the sheet index
+	  for all entries in the index. The argument is the new sheet index
+	  to use for the update process.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-index-sheet</i><i> (&rarr; Integer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-index-sheet method returns the sheet index
+	  for a particular entry. The argument is the entry position.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Xref</div>
+<p class="text">
+ The <tt class="code">Xref</tt> class is a cross-reference class. The class maintains the association between a name and an index. with a particular name, an index entry is created if it does not exists. Such entry can be later used to access the cell content by index. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>xref-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Xref</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Xref constructor creates an empty
+	  cross-reference object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>add</i><i> (&rarr; none)</i><i> (String [Integer|Integer Integer|Integer Integer Integer])</i><hr/>
+<p class="text">
+
+	  The add method adds a new reference in the
+	  table. The first argument is always the index name. In the first
+	  form, the cell index is used as the coordinate. In the second
+	  form, the cell and record indexes are used as the coordinate. In
+	  the third form, the cell, record and sheet indexes are used as
+	  the coordinate.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Index)</i><i> (Integer|String)</i><hr/>
+<p class="text">
+
+	  The get method returns an Index object
+	  either by name or position. With an integer argument, the index
+	  is obtained by position. With a string argument, the index with
+	  the matching name is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method resets the cross-reference table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length method returns the length of the
+	  cross-reference table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>lookup</i><i> (&rarr; Index)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The lookup method returns an index those name is
+	  the matching argument. If the index cannot be found, an
+	  exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists-p</i><i> (&rarr; Boolean)</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The exists-p predicate returns true if an index
+	  those name is the matching argument exists in the
+	  cross-reference table.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the index name by position.
+	</p>
+</div>
+<p/>
+</body>
+</html>

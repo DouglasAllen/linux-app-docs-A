@@ -1,0 +1,79 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_UrlIsFile</TITLE>
+<LINK rel=Previous href="c-ch420.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch422.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch420.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch422.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="131999">
+</a><h3>Ns_UrlIsFile</h3>
+<a name="132000">
+</a><h4>Overview</h4>
+Check if a file that corresponds to a URL exists
+<a name="45794">
+</a><a name="133525">
+</a><h4>Syntax</h4>
+<pre>    <a name="45796"></a>int Ns_UrlIsFile(
+    <a name="45797"></a>char *hServer,
+    <a name="45798"></a>char *URL
+    <a name="45799"></a>);
+</pre><p><a name="134905">
+</a><h4>Description</h4>
+<p><a name="45801">
+</a>The Ns_UrlIsFile function constructs a file name by appending the URL to the current AOLserver pages directory for the specified server. It returns 1 if the file exists and is a regular file.</p>
+<a name="214506">
+</a><h4>Examples</h4>
+<pre>    <a name="214512"></a>/* IsFile - Simple request to determine if an URL is a file. */
+    <a name="214531"></a>int
+    <a name="214514"></a>IsFile(Ns_Conn *conn, void *ctx)
+    <a name="214515"></a>{
+    <a name="214516"></a>	int isfile;
+    <a name="214519"></a>	char *server;
+    <a name="214520"></a>
+    <a name="214521"></a>	server = Ns_ConnServer(conn);
+    <a name="214518"></a>	isfile = Ns_UrlIsFile(server, conn-&gt;request-&gt;url);
+    <a name="214524"></a>	if (isfile) {
+    <a name="214525"></a>		Ns_ConnReturnNotice(conn, 200, "File", NULL);
+    <a name="214526"></a>	} else {
+    <a name="214527"></a>		Ns_ConnReturnNotice(conn, 200, "Not a File", NULL);
+    <a name="214528"></a>	}
+    <a name="214529"></a>	return NS_OK;
+    <a name="214530"></a>}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch420.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch422.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

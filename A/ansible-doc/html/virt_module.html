@@ -1,0 +1,213 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>virt - Manages virtual machines supported by libvirt &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="vsphere_guest - Create/delete/manage a guest VM through VMware vSphere." href="vsphere_guest_module.html" />
+    <link rel="prev" title="s3 - idempotent S3 module putting a file into S3." href="s3_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="vsphere_guest_module.html" title="vsphere_guest - Create/delete/manage a guest VM through VMware vSphere."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="s3_module.html" title="s3 - idempotent S3 module putting a file into S3."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="virt-manages-virtual-machines-supported-by-libvirt">
+<span id="virt"></span><h1>virt - Manages virtual machines supported by libvirt<a class="headerlink" href="#virt-manages-virtual-machines-supported-by-libvirt" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Michael DeHaan, Seth Vidal</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Manages virtual machines supported by <em>libvirt</em>.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>command</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>create</li><li>status</li><li>start</li><li>stop</li><li>pause</li><li>unpause</li><li>shutdown</li><li>undefine</li><li>destroy</li><li>get_xml</li><li>autostart</li><li>freemem</li><li>list_vms</li><li>info</li><li>nodeinfo</li><li>virttype</li><li>define</li></ul></td>
+    <td>in addition to state management, various non-idempotent commands are available. See examples</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>name of the guest VM being managed. Note that VM must be previously defined with xml.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>running</li><li>shutdown</li><li>destroyed</li><li>paused</li></ul></td>
+    <td>Note that there may be some lag for state requests like <code>shutdown</code> since these refer only to VM states. After starting a guest, it may not be immediately accessible.</td>
+</tr>
+        <tr>
+<td>uri</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>libvirt connection uri</td>
+</tr>
+        <tr>
+<td>xml</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>XML document used with the define command</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires libvirt</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># a playbook task line:
+- virt: name=alpha state=running
+
+# /usr/bin/ansible invocations
+ansible host -m virt -a "name=alpha command=status"
+ansible host -m virt -a "name=alpha command=get_xml"
+ansible host -m virt -a "name=alpha command=create uri=lxc:///"
+
+# a playbook example of defining and launching an LXC guest
+tasks:
+  - name: define vm
+    virt: name=foo
+          command=define
+          xml="{{ lookup('template', 'container-template.xml.j2') }}"
+          uri=lxc:///
+  - name: start vm
+    virt: name=foo state=running uri=lxc:///</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virt - Manages virtual machines supported by libvirt</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="s3_module.html"
+                        title="previous chapter">s3 - idempotent S3 module putting a file into S3.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="vsphere_guest_module.html"
+                        title="next chapter">vsphere_guest - Create/delete/manage a guest VM through VMware vSphere.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="vsphere_guest_module.html" title="vsphere_guest - Create/delete/manage a guest VM through VMware vSphere."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="s3_module.html" title="s3 - idempotent S3 module putting a file into S3."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

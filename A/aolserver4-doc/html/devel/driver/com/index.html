@@ -1,0 +1,331 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1>Communications Driver Development Guide</h1>
+
+<p>
+
+<p>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/driver/com/index.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+<p>
+
+<font color=red><b>NOTICE: This document is under review for
+formatting and correctness.  Please check back at a later date to see
+if the new version is ready to view.</b></font>
+
+<p>
+
+<a href=#1>Background</a>
+
+<p>
+
+<a href=#2>Technical Details</a>
+
+<p>
+
+<a href=#3>Interface</a>
+
+<p>
+
+<a href=#4>Communications Driver Functions</a>
+
+<p>
+
+<h2><a name=1>Background</a></h2>
+
+<font color=red><b>NOTICE: This document is under review for
+formatting and correctness.  Please check back at a later date to see
+if the new version is ready to view.</b></font>
+
+<p>
+
+The AOLserver is modular/extensible with respect to its basic
+communications interface. This is accomplished by defining a set of
+functions that the server calls for all communications operations. So,
+an AOLserver communications "driver" is just a server module that
+implements these special functions. The communications driver
+framework is intended to support technical AOLserver users who must
+create their own communications drivers to meet their customization
+requirements--no matter how bizarre. Note that there are also
+architecturally similar, but functionally independent "database
+drivers" that we will not discuss here.
+
+<p>
+
+The standard AOLserver distribution includes socket, SSL, and file
+communications drivers. The socket driver implements the basic
+socket-based communications. The ssl driver is the same code as the
+socket driver, recompiled with #ifdefs that include ssl-specific code.
+In this document, we'll outline the basic communications driver
+mechanism and show how these 3 communications drivers fit into the
+framework. Access to AOLserver source code for existing drivers is
+assumed.
+
+<p>
+
+
+<h2><a name=2>Technical Details</a></h2>
+
+<font color=red><b>NOTICE: This document is under review for
+formatting and correctness.  Please check back at a later date to see
+if the new version is ready to view.</b></font>
+
+<p>
+
+
+Initialization
+
+<p>
+
+A communications driver module identifies itself to the server by
+calling Ns_RegisterDriver in its module init function. The
+Ns_RegisterDriver call tells the server everything it needs to know
+about the communications driver, including pointers to all special
+functions via the Ns_DrvProc structure pointer that is passed in, and
+a driver-specific context for future reference. The functions that are
+identified via the Ns_DrvProc structure are listed and explained in
+the Communications Driver Functions section.
+
+<p>
+
+<h2><a name=3>Interface</a></h2>
+
+<font color=red><b>NOTICE: This document is under review for
+formatting and correctness.  Please check back at a later date to see
+if the new version is ready to view.</b></font>
+
+<p>
+
+Typical calling sequence from comm driver's perspective:
+<br>
+1. Ns_ModuleInit
+<br>
+2. Start - driver initialization
+<br>
+3. Accept - wait for connection
+<br>
+4. Init - connection initialization
+<br>
+5. Read/Write - connection I/O occurs
+<br>
+6. Close
+<br>
+7. Free
+<br>
+8. goto step 3
+<br>
+
+<p>
+
+Notes on existing drivers:
+
+<p>
+
+socket
+
+<p>
+
+Notice that the socket driver, by default, does not register the
+Start, Accept, or Init functions. It makes the socket, bind, and
+listen calls in its ModuleInit function, and sets up a callback which
+actually does the accept and queues the connection. If, however, you
+configure the nssock module via ListenThread=on (this was
+undocumented), the driver will register an Accept function which will
+be run in a separate thread by the server.
+
+<p>
+
+SSL
+<p>
+Unlike the socket driver, the SSL driver registers an Init
+function. This is where the SSL driver does all of the
+per-connection SSL session setup (see ssl_init_server() is
+nssock/ssl.c). After this Init function has completed for a
+connection, the SSL driver simply uses symmetric encryption in
+the Read/Write routines.
+
+<p>
+
+file
+<p>
+The file module is unique in that it doesn't really talk to a
+stateful peer. It simply reads and writes files. Because of
+this simplicity, the file module is a good place to start when
+studying communications drivers.
+
+<p>
+
+Driver Developer Guidelines
+
+<p>
+
+If feel the urge to create a new communications driver, first review
+the following: For a socket-based driver, consider modifying/extending
+the current socket driver to meet your needs. If modification of the
+existing socket driver doesn't seem appropriate, you may be able to
+reuse much existing code by adding #ifdefs to the existing socket code
+to produce a new module--analogous to the SSL approach that is
+currently in place. For a non-socket-based driver, you'll need to
+create a new driver, modeling your code after the existing socket or
+file driver. Review the Communications Driver Functions section and
+the existing drivers to determine which function points you'll need to
+create.
+
+<p>
+
+Important Files
+
+<p>
+
+The code that implements the framework discussed here can be found in:
+<p>
+<br>
+* inc/nsdriver.h
+<br>
+* nsd/drv.c
+<br>
+* nsd/conn.c
+<br>
+* nssock/socket.c
+<br>
+* nsfile/file.c
+<br>
+
+<p>
+
+
+<h2><a name=4>Communications Driver Functions</a></h2>
+
+<font color=red><b>NOTICE: This document is under review for
+formatting and correctness.  Please check back at a later date to see
+if the new version is ready to view.</b></font>
+
+<p>
+
+All communications driver functions that can be specified via the
+Ns_DrvProc structure are listed below. Note that the actual
+enumeration type for each function name (Ns_DrvId) can be derived by
+prepending Ns_DrvId to each name, e.g. DrvIdName, DrvIdStart, etc.
+
+<p>
+
+These functions are generic, and some may not make sense for certain
+drivers, so it's typically a subset that needs to be implemented for a
+particular driver. If you examine how the Ns_DrvProc structure is
+initialized in existing drivers, you'll notice a NULL-terminated array
+of ID/functionPointer pairs, where each pair identifies an implemented
+function. Mandatory functions are shown in bold.
+
+<p>
+
+Format of this reference: Name; Description; PreConditions;
+PostConditions
+
+<p>
+
+Preconditions and postconditions reflect the contract that a driver
+has with the server.  Preconditions represent the driver developer's
+assumptions before the function is called.  Postconditions represent
+the server's assumptions after the function has completed.
+
+<p>
+
+Name; Returns a (char *) that identifies the driver, e.g. "nssock",
+"nsssl", "nsfile".
+
+<p>
+
+Start; Called at driver initialization time (not to be confused with
+Init which is called when a connection is initialized); ModuleInit has
+already executed; All driver initialization is complete;
+
+<p>
+
+Accept Called when a driver can begin accepting connections; this may
+block; Start function has completed (if defined); Driver has
+established a connection with peer;
+
+<p>
+
+Stop Called at driver shutdown time; Driver has terminated connections
+with peer;
+
+<p>
+
+Init Called when a connection is to be initialized; A connection has
+been established via Accept Per connection initialization is complete;
+
+<p>
+
+Read Called to read data from a peer; Server is ready to receive data;
+Driver has received data from peer;
+
+<p>
+
+Write Called to write data to a peer; Server has data to transmit;
+Driver has transmitted data to peer;
+
+<p>
+
+Close Called to close a connection; A connection has been established;
+connection info is contained in the context; Driver has closed
+connection with peer;
+
+<p>
+
+Free Called to close a connection and free the context; A connection
+has been established; connection info is contained in the context;
+
+<p>
+
+Driver has closed connection and freed resources associated with the
+context;
+
+<p>
+
+Peer Returns the (char *) identifier of the peer (IP address in the
+case of socket-based drivers)
+
+<p>
+
+Location Returns the (char *) complete location that identifies the
+driver, e;g; https://www;docs-R-us;com:81
+
+<p>
+
+Host Returns the (char *) hostname that identifies the driver
+
+<p>
+
+Port Returns the (int) port number associated with the driver
+
+<p>
+
+SendFd Called to send an open file File descriptor is open/valid;
+
+<p>
+
+Driver has transmitted entire file;
+
+<p>
+
+SendFile Called to send a named file (currently unused by all provided
+drivers) Filename is valid/readable; Driver has transmitted entire
+file;
+
+<p>
+
+Detach Called to support socket KEEPALIVE function; In socket driver
+case: creates a new connection context that is marked as requeued;
+Returns a (void *) pointer to a new connection context, or NULL if
+existing context is NULL; Connection info is contained in the context,
+or the context is NULL; Driver has created a new connection context to
+represent the detached state;
+
+<p>
+
+</body>
+</html>

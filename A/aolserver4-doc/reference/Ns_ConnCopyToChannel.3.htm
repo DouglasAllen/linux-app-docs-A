@@ -1,0 +1,251 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:17 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnCopy</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnCopy</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnCopyToChannel,
+Ns_ConnCopyToDString, Ns_ConnCopyToFd, Ns_ConnCopyToFile
+&minus; Copy request content to open file or dstring</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnCopyToChannel</b>(<i>conn, ncopy, chan</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnCopyToDString</b>(<i>conn, ncopy, dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnCopyToFd</b>(<i>conn, ncopy, fd</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnCopyToFile</b>(<i>conn, ncopy, fp</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p style="margin-top: 1em">Ns_Channel <i>chan</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p style="margin-top: 1em">Pointer to Tcl channel open for
+write.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p>Ns_Conn <i>conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p>Pointer to open connection.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p>Ns_DString <i>dsPtr</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p>Initialized dstring.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p>int <i>fd</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p>File descriptor open for write.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p>FILE <i>fp</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p>Stdio FILE pointer open for write.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="37%">
+
+
+<p>int <i>ncopy</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p>Number of bytes to copy.</p></td></tr>
+</table>
+
+
+<p style="margin-left:57%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+copy content from an open connection request to the given
+open file descriptor, FILE, dstring, or Tcl_Channel. The
+routines work by copying from the content buffer; see the
+man page on <b>Ns_ConnContent</b> for how this buffer is
+managed for both small and large requests.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The functions
+all return the number of bytes copied which will match the
+requested <i>ncopy</i> argument unless there is an error
+writing the content or the requested bytes is greater than
+the number of bytes still available to be read. An internal
+offset into the connection is maintained and is shared with
+routines such as <b>Ns_ConnRead</b> which also consume
+content from the same buffer. Note that routines which
+access the entire content, e.g., <b>Ns_ConnContent</b>,
+<b>Ns_ConnContentFd</b>, or <b>Ns_ConnGetQuery</b> will
+continue to provide access to the entire request regardless
+if one of the <b>Ns_ConnCopy</b> or <b>Ns_ConnRead</b>
+functions have been used.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates copying user data to a temp file:</p>
+
+<p style="margin-left:22%; margin-top: 1em">fd =
+open(&quot;myfile.out&quot;, O_WRONLY|O_BINARY);</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>len = Ns_ConnContentLength(conn);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>if (Ns_ConnCopyToFd(conn, len, fd) != len) {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>... error writing content or content already consumed
+...</p> </td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnRead(3),
+Ns_ConnReadLine(3), Ns_ConnContent(3),
+Ns_ConnContentFd(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection,
+content, read</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_BeginDetachedThread</TITLE>
+<LINK rel=Previous href="c-ch12.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch14.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch12.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch14.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="65191">
+</a><h3>Ns_BeginDetachedThread</h3>
+<a name="132251">
+</a><h4>Overview</h4>
+Create a detached thread
+<a name="132256">
+</a><a name="132253">
+</a><h4>Syntax</h4>
+<pre>    <a name="65193"></a>int Ns_BeginDetachedThread(
+    <a name="65194"></a>Ns_ThreadProc *start_routine, 
+    <a name="65195"></a>void *arg
+    <a name="65196"></a>);
+</pre><p><a name="133607">
+</a><h4>Description</h4>
+<p><a name="201233">
+</a>Ns_BeginDetachedThread creates a thread which cleans up its data as soon as it ends. Note that detached threads' ids can be reused immediately by the system, and they cannot be waited on.</p>
+<a name="201317">
+</a><h4>Examples</h4>
+<pre>    <a name="201319"></a>static void
+    <a name="201321"></a>ThreadStart(void *arg)
+    <a name="201322"></a>{
+    <a name="201323"></a>	int n;
+    <a name="201324"></a>
+    <a name="201325"></a>	n = (int) arg;
+    <a name="201326"></a>	Ns_Log(Notice, "%d: %d", Ns_GetThreadId(), n);
+    <a name="201327"></a>}
+    <a name="201328"></a>
+    <a name="201329"></a>/*
+    <a name="201346"></a> &nbsp;* ManyThreads - Create 10 threads which all log a message.
+    <a name="201347"></a> &nbsp;*/
+    <a name="201345"></a>static void
+    <a name="201330"></a>ManyThreads(void)
+    <a name="201331"></a>{
+    <a name="201332"></a>	int i;
+    <a name="201340"></a>
+    <a name="201341"></a>	for (i = 0; i &lt; 10; ++i) {
+    <a name="201342"></a>		Ns_BeginDetachedThread(ThreadStart, (void *) i);
+    <a name="201343"></a>	}
+    <a name="201344"></a>}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch12.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch14.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

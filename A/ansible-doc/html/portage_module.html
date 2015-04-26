@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>portage - Package manager for Gentoo &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="portinstall - Installing packages from FreeBSD’s ports system" href="portinstall_module.html" />
+    <link rel="prev" title="pkgutil - Manage CSW-Packages on Solaris" href="pkgutil_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="portinstall_module.html" title="portinstall - Installing packages from FreeBSD’s ports system"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pkgutil_module.html" title="pkgutil - Manage CSW-Packages on Solaris"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="portage-package-manager-for-gentoo">
+<span id="portage"></span><h1>portage - Package manager for Gentoo<a class="headerlink" href="#portage-package-manager-for-gentoo" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Yap Sok Ann</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+<p>Manages Gentoo packages</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>deep</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Consider the entire dependency tree of packages (--deep)</td>
+</tr>
+        <tr>
+<td>depclean</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Remove packages not needed by explicitly merged packages (--depclean)If no package is specified, clean up the world's dependenciesOtherwise, --depclean serves as a dependency aware version of --unmerge</td>
+</tr>
+        <tr>
+<td>newuse</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Include installed packages where USE flags have changed (--newuse)</td>
+</tr>
+        <tr>
+<td>nodeps</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Only merge packages but not their dependencies (--nodeps)</td>
+</tr>
+        <tr>
+<td>noreplace</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Do not re-emerge installed packages (--noreplace)</td>
+</tr>
+        <tr>
+<td>oneshot</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Do not add the packages to the world file (--oneshot)</td>
+</tr>
+        <tr>
+<td>onlydeps</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Only merge packages' dependencies but not the packages (--onlydeps)</td>
+</tr>
+        <tr>
+<td>package</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Package atom or set, e.g. <code>sys-apps/foo</code> or <code>&gt;foo-2.13</code> or <code>@world</code></td>
+</tr>
+        <tr>
+<td>quiet</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Run emerge in quiet mode (--quiet)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>installed</li><li>emerged</li><li>absent</li><li>removed</li><li>unmerged</li></ul></td>
+    <td>State of the package atom</td>
+</tr>
+        <tr>
+<td>sync</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li><li>web</li></ul></td>
+    <td>Sync package repositories firstIf yes, perform "emerge --sync"If web, perform "emerge-webrsync"</td>
+</tr>
+        <tr>
+<td>update</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Update packages to the best version available (--update)</td>
+</tr>
+        <tr>
+<td>verbose</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li></ul></td>
+    <td>Run emerge in verbose mode (--verbose)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gentoolkit</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Make sure package foo is installed
+- portage: package=foo state=present
+
+# Make sure package foo is not installed
+- portage: package=foo state=absent
+
+# Update package foo to the "best" version
+- portage: package=foo update=yes
+
+# Sync repositories and update world
+- portage: package=@world update=yes deep=yes sync=yes
+
+# Remove unneeded packages
+- portage: depclean=yes
+
+# Remove package foo if it is not explicitly needed
+- portage: package=foo state=absent depclean=yes</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">portage - Package manager for Gentoo</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pkgutil_module.html"
+                        title="previous chapter">pkgutil - Manage CSW-Packages on Solaris</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="portinstall_module.html"
+                        title="next chapter">portinstall - Installing packages from FreeBSD&#8217;s ports system</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="portinstall_module.html" title="portinstall - Installing packages from FreeBSD’s ports system"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pkgutil_module.html" title="pkgutil - Manage CSW-Packages on Solaris"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

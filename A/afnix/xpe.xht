@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+XML Processing Environment Service</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+XML Processing Environment Service</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+XML Processing Environment Service</div>
+<hr/>
+<p class="text">
+ The <em>XML Processing Environment</em> service is an original implementation that provides the support for processing xml document that could be accessed locally or remotely. In particular, the processing environment supports the <em>XML include</em> facility. </p>
+<div class="section">
+XML content</div>
+<p class="text">
+ The <tt class="code">XmlContent</tt> class is an extension of the XML document object that provides the service for loading a XML document locally or from the Internet. The class operates with an uri, which permits to selects the appropriate loader from the uri scheme. </p>
+<p class="subsect">
+Content creation</p>
+<p class="text">
+ The <tt class="code">XmlContent</tt> operates with an uri that permits to select the appropriate loader. If the uri scheme is a file scheme, the content is retrieved locally. If the uri scheme is http, the content is retrieved by establishing a http connection over the Internet. </p>
+<pre class="frame">
+<![CDATA[# create a document from a local file
+const xdoc (
+  afnix:xpe:XmlContent "file:///home/afnix/file.xml")
+
+]]></pre>
+<p class="text">
+ When the uri scheme is a file, the uri authority is empty (hence the double //) and the path indicates the file to parse. The XmlContent object is derived from the <tt class="code">XmlDocument</tt> object which contains the parsed tree with the <tt class="code">XmlRoot</tt> object. </p>
+<pre class="frame">
+<![CDATA[# create a document from a http connection
+const xdoc (
+  afnix:xpe:XmlContent 
+  "http://www.afnix.org/index.xht")
+
+]]></pre>
+<p class="text">
+ When the uri scheme is a http scheme, the document is downloaded by establishing an http connection with the uri authority. When the http header is received, the content is parsed to create a valid xml document. If the http response header indicates that the page has moved and a new location is provided, the object manages automatically to follow such location. </p>
+<p class="subsect">
+Content and document name</p>
+<p class="text">
+ Since the <tt class="code">XmlContent</tt> object is derived from the <tt class="code">XmlContent</tt> object, the content object is defined with a uri name and a document name. Under normal circumstances, the document name is derived from the content name by normalizing it. The content name is the object constructor name, while the document name is the normalized document name. The <tt class="code">get-name</tt> method returns the content name while the <tt class="code">get-document-name</tt> method returns the document name. </p>
+<pre class="frame">
+<![CDATA[# create a document by name
+const xdoc (afnix:xpe:XmlContent "file" "file.xml")
+
+]]></pre>
+<p class="text">
+ In the previous example, a xml content object is created by name with a document name. It is the document name that gets normalized. Therefore in the previous example, the <em>file.xml</em> document name is normalized into a file uri. The normalization rule always favor the file scheme. This means that without a scheme, the file scheme is automatically added. </p>
+<p class="subsect">
+Content type</p>
+<p class="text">
+ Many times, the content type cannot be detected from the uri name. Once opened, if the content header provides a clue about the content type, the opened input stream get adjusted automatically to reflect this fact. However, this situation does not occurs often and with http scheme, the content type header response does not often provides the character encoding associated with the stream. For this reason, the <tt class="code">XmlContent</tt> constructor provides a mechanism to accept the encoding mode. </p>
+<pre class="frame">
+<![CDATA[# create a new content by name and encoding mode
+const xdoc (
+  afnix:xpe:XmlContent "file" "file.xml" "UTF-8")
+
+]]></pre>
+<hr/>
+<div class="appendix">
+XML Processing Environment Service Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+XmlContent</div>
+<p class="text">
+ The <tt class="code">XmlContent</tt> class is an extension of the xml document class that operates at the uri level. If the uri is a local file the xml document is created from an input file stream. If the uri is an url, the content is fetched automatically. The class constructors permit to separate the content name from the document name and also to specify the content encoding. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>xml-content-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>XmlDocument
+</i><i>Mime
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>XmlContent</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The XmlContent constructor creates a xml document
+	  by name. The document name is the normalized uri name that
+	  always favor a file scheme in the absence of it.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>XmlContent</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The XmlContent constructor creates a xml document
+	  by name. The first argument is the content name. The second
+	  argument is the document name which is normalized to form the
+	  uri name used to load the document.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>XmlContent</i><i> (String String String)</i><hr/>
+<p class="text">
+
+	  The XmlContent constructor creates a xml document
+	  by name and encoding mode. The first argument is the content
+	  name. The second argument is the document name which is
+	  normalized to form the uri name used to load the document. The
+	  third argument is the content character encoding.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-document-uri</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-document-uri method returns the document
+	  normalized uri.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-document-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-document-name method returns the object
+	  document name. This method complements the get-name
+	  method which returns the object name.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+XmlFeature</div>
+<p class="text">
+ The <tt class="code">XmlFeature</tt> class is a xml processor base class that defines a processing feature. A processing feature is defined by name and information with a processing level. The default processing level is null. When the processor is called, it calls sequentially and in ascending order all features. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>xhtml-feature-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Nameable
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the xml feature
+	  information string. The feature name is available from the
+	  get-name provided by the Nameable base
+	  class.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-processing-level</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-processing-level method sets the feature
+	  processing level. The integer argument is the level to set.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-processing-level</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-processing-level method returns the feature
+	  processing level.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>processing-level-p</i><i> (&rarr; Boolean)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The processing-level-p predicate returns true if
+	  the integer argument equal the feature processing level.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>process</i><i> (&rarr; XmlContent)</i><i> (XmlContent)</i><hr/>
+<p class="text">
+
+	  The process method process the input xml content
+	  and returns a new xml content. The method is automatically
+	  called by the xml processor.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+XmlProcessor</div>
+<p class="text">
+ The <tt class="code">XmlProcessor</tt> class is a global class designed to operate on a xml content. The xml processor provides several features that can be enabled prior the document processor. Once the features are defined, the 'process' method can be called and a new xml content can be produced. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>xml-processor-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>XmlProcessor</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The XmlProcessor constructor creates a default xml
+	  processor without any feature.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>feature-length</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The feature-length method returns the number of
+	  features defined in the xml processor.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-feature</i><i> (&rarr; none)</i><i> (XmlFeature)</i><hr/>
+<p class="text">
+
+	  The add-feature method adds a feature object to the
+	  processor. The feature processing level does not have to be
+	  sorted prior the insertion. Adding multiple feature creates a
+	  processor chain.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-feature</i><i> (&rarr; XmlFeature)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-feature method return a processor feature
+	  by index.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>process</i><i> (&rarr; XmlFeature)</i><i> (XmlFeature)</i><hr/>
+<p class="text">
+
+	  The process method create a new xml content by
+	  calling processing feature chain. The feature chain consists of
+	  feature object sorted in ascending order. If the processor
+	  contains only one feature, calling the process
+	  method is equivalent to call the XmlFeature same
+	  method.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+XmlInclude</div>
+<p class="text">
+ The <tt class="code">XmlInclude</tt> class is a xml processor feature class designed to handle the "XInclude" schema that permits to include xml document. The feature operates recursively by scanning the document for a "xi:include" tag and replacing the content by the appropriate tree. The feature operates recursively unless specified otherwise. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>xml-include-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>XmlFeature
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>XmlInclude</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The XmlInclude constructor creates a default xml
+	  include feature. The default feature processing level is 10.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>XmlInclude</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The XmlInclude constructor creates a xml
+	  include feature with a processing level. The integer argument is
+	  the feature processing level to set.
+	</p>
+</div>
+<p/>
+</body>
+</html>

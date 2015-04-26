@@ -1,0 +1,375 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:16 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_Conn</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_Conn</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#THE NS_CONN STRUCTURE">THE NS_CONN STRUCTURE</a><br>
+<a href="#CONNECTION ACCESS ROUTINES">CONNECTION ACCESS ROUTINES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnAuthPasswd,
+Ns_ConnAuthUser, Ns_ConnHeaders, Ns_ConnHost, Ns_ConnId,
+Ns_ConnLocation, Ns_ConnOutputHeaders, Ns_ConnPeer,
+Ns_ConnPeerPort, Ns_ConnPort, Ns_ConnResponseLength,
+Ns_ConnResponseStatus, Ns_ConnServer, Ns_ConnSock &minus;
+Routines to access data about a connection</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnAuthPasswd</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnAuthUser</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Ns_Set *
+<b><br>
+Ns_ConnHeaders</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnHost</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnId</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnLocation</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Ns_Set *
+<b><br>
+Ns_ConnOutputHeaders</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnPeer</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnPeerPort</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnPort</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnResponseLength</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnResponseStatus</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnServer</b>(<i>Ns_Conn *conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSock</b>(<i>Ns_Conn *conn</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="34%">
+
+
+<p style="margin-top: 1em">Ns_Conn <i>*conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="43%">
+
+
+<p style="margin-top: 1em">Pointer to given connection.</p></td>
+<td width="3%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:54%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These routines
+provide access to data stored within an active connection.
+All routines take as an argument a pointer to an
+<b>Ns_Conn</b> structure which is setup by the server and
+passed to request handling procedures.</p>
+
+<h2>THE NS_CONN STRUCTURE
+<a name="THE NS_CONN STRUCTURE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>Ns_Conn</b> structure includes the following fields:</p>
+
+<p style="margin-left:22%; margin-top: 1em">typedef struct
+Ns_Conn { <br>
+Ns_Request *request; <br>
+Ns_Set *headers; <br>
+Ns_Set *outputheaders; <br>
+char *authUser; <br>
+char *authPasswd; <br>
+int contentLength; <br>
+int flags; <br>
+} Ns_Conn;</p>
+
+<p style="margin-left:11%; margin-top: 1em">All fields of
+an <i>Ns_Conn</i> structure should be considered read-only.
+The <i>request</i> field contains a pointer to the parsed
+HTTP request. See the manual page for <b>Ns_ParseRequest</b>
+for details on what it contains.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>headers</i> and <i>outputHeaders</i> fields point to
+<b>Ns_Set</b> structures for the input and output headers,
+respectively. The <i>outputHeaders</i> set will generally
+not contain any fields until after the request has been
+processed. See the manual page on <b>Ns_Set</b> for details
+on the fields of the structure and routines to access and
+manipulate them.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>authUser</i> and <i>authPasswd</i> fields point to the
+decoded username and password for the request or <i>NULL</i>
+if no authorization was sent.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>contentLength</i> field is the length of the content, if
+any, sent with the request. See the man page on
+<b>Ns_ConnContent</b> for details on accessing the
+content.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>flags</i> field is a bitmask with one or more
+<i>NS_CONN</i> bits: <b><br>
+NS_CONN_CLOSED</b></p>
+
+<p style="margin-left:22%;">Connection is closed.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_SKIPHDRS</b></p>
+
+<p style="margin-left:22%;">Pre-HTTP/1.0 connection which
+will not return headers.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_SKIPBODY</b></p>
+
+<p style="margin-left:22%;">HTTP HEAD request which will
+return no content.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_READHDRS</b></p>
+
+<p style="margin-left:22%;">Headers have been read
+(noramlly set).</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_SENTHDRS</b></p>
+
+<p style="margin-left:22%;">Result headers have been
+sent.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_KEEPALIVE</b></p>
+
+<p style="margin-left:22%;">Connection should be kept alive
+for another request if possible.</p>
+
+
+<p style="margin-left:11%;"><b>NS_CONN_WRITE_ENCODED</b></p>
+
+<p style="margin-left:22%;">Output could be encoded when
+directly sent.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_FILECONTENT</b></p>
+
+<p style="margin-left:22%;">Connection contains content
+originally in a temp file.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_RUNNING</b></p>
+
+<p style="margin-left:22%;">Connection is currently active
+in a request thread.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_OVERFLOW</b></p>
+
+<p style="margin-left:22%;">Connection is being rejected
+due to overflow of a limit.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_TIMEOUT</b></p>
+
+<p style="margin-left:22%;">Connection has timed out
+waiting for service.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_GZIP</b></p>
+
+<p style="margin-left:22%;">Connection content will be
+compressed if possible.</p>
+
+<p style="margin-left:11%;"><b>NS_CONN_CHUNK</b></p>
+
+<p style="margin-left:22%;">Content is being sent in
+chunked encoding mode.</p>
+
+<p style="margin-left:11%; margin-top: 1em">These flags
+should be considered read-only. Use the corresponding
+routines, e.g., <b>Ns_ConnSetKeepAlive</b>, to set the flags
+if necessary.</p>
+
+<h2>CONNECTION ACCESS ROUTINES
+<a name="CONNECTION ACCESS ROUTINES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">In addition to
+the public fields, the routines above can be used to access
+data contained in the private components of the connection
+(in retrospect, all fields should have been private). <br>
+char *<b>Ns_ConnAuthPasswd</b></p>
+
+<p style="margin-left:22%;">Returns the <i>authPassword</i>
+field for the <i>Ns_Conn</i> stucture.</p>
+
+<p style="margin-left:11%;">char
+*<b>Ns_ConnAuthUser</b></p>
+
+<p style="margin-left:22%;">Returns the <i>authUser</i>
+field for the <i>Ns_Conn</i> stucture.</p>
+
+<p style="margin-left:11%;">Ns_Set
+*<b>Ns_ConnHeaders</b></p>
+
+<p style="margin-left:22%;">Returns the <i>headers</i>
+field for the <i>Ns_Conn</i> stucture.</p>
+
+<p style="margin-left:11%;">char *<b>Ns_ConnHost</b></p>
+
+<p style="margin-left:22%;">Returns the IP address as a
+string that the communications driver is listening on, e.g.,
+<i>127.0.0.1</i> for a server listening for connectionsn on
+<i>localhost</i>.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnId</b></p>
+
+<p style="margin-left:22%;">Returns a unique integer ID for
+the connection. The ids start at zero and increase
+monotonically with each new connection accepted by the
+server.</p>
+
+<p style="margin-left:11%;">char
+*<b>Ns_ConnLocation</b></p>
+
+<p style="margin-left:22%;">Returns a pointer to a string
+which is the HTTP location for the connection, e.g.,
+<i>http://www.mysite.com</i>. The string can be helpful to
+construct redirect messages.</p>
+
+<p style="margin-left:11%;">Ns_Set
+*<b>Ns_ConnOutputHeaders</b></p>
+
+<p style="margin-left:22%;">Returns the
+<i>outputHeaders</i> field for the <i>Ns_Conn</i>
+stucture.</p>
+
+<p style="margin-left:11%;">char *<b>Ns_ConnPeer</b></p>
+
+<p style="margin-left:22%;">Returns a string with an IP
+address for the remote end of the connection (e.g., the
+users browser). Note this could also be the IP address of a
+proxy server.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnPeerPort</b></p>
+
+<p style="margin-left:22%;">Returns the port of the remote
+end of the connection.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnPort</b></p>
+
+<p style="margin-left:22%;">Returns the port for the server
+end point of the connection, by default port 80.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnResponseLength</b></p>
+
+<p style="margin-left:22%;">Returns the length of content
+sent to the client. The result will be zero until a result
+has been generated.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnResponseStatus</b></p>
+
+<p style="margin-left:22%;">Returns the HTTP status code of
+the responses sent to the client, 200 for normal
+responses.</p>
+
+<p style="margin-left:11%;">char *<b>Ns_ConnServer</b></p>
+
+<p style="margin-left:22%;">Returns a pointer to the string
+name of the virtual server used for the connection. This
+string can then be passed to other virtual server specific
+routines, e.g., <b>Ns_TclAllocateInterp</b>.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnSock</b></p>
+
+<p style="margin-left:22%;">Returns the underlying socket
+file descriptor for the connection. This can be useful for
+diagnostic or introspection routines (e.g., getpeername). It
+should otherwise not be manipulated or closed.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_Set(3),
+Ns_ConnContent(3), Ns_ConnGetQuery(3), Ns_ParseRequest(3),
+ns_conn(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection,
+location, headers</p>
+<hr>
+</body>
+</html>

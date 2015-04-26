@@ -1,0 +1,1748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Data.List.NonEmpty.Properties</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Properties of non-empty lists</a
+      ><a name="138"
+      >
+</a
+      ><a name="139" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="211"
+      >
+
+</a
+      ><a name="213" class="Keyword"
+      >module</a
+      ><a name="219"
+      > </a
+      ><a name="220" href="Data.List.NonEmpty.Properties.html#1" class="Module"
+      >Data</a
+      ><a name="224"
+      >.</a
+      ><a name="225" href="Data.List.NonEmpty.Properties.html#1" class="Module"
+      >List</a
+      ><a name="229"
+      >.</a
+      ><a name="230" href="Data.List.NonEmpty.Properties.html#1" class="Module"
+      >NonEmpty</a
+      ><a name="238"
+      >.</a
+      ><a name="239" href="Data.List.NonEmpty.Properties.html#1" class="Module"
+      >Properties</a
+      ><a name="249"
+      > </a
+      ><a name="250" class="Keyword"
+      >where</a
+      ><a name="255"
+      >
+
+</a
+      ><a name="257" class="Keyword"
+      >open</a
+      ><a name="261"
+      > </a
+      ><a name="262" class="Keyword"
+      >import</a
+      ><a name="268"
+      > </a
+      ><a name="269" href="Algebra.html#1" class="Module"
+      >Algebra</a
+      ><a name="276"
+      >
+</a
+      ><a name="277" class="Keyword"
+      >open</a
+      ><a name="281"
+      > </a
+      ><a name="282" class="Keyword"
+      >import</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Category.Monad.html#1" class="Module"
+      >Category</a
+      ><a name="297"
+      >.</a
+      ><a name="298" href="Category.Monad.html#1" class="Module"
+      >Monad</a
+      ><a name="303"
+      >
+</a
+      ><a name="304" class="Keyword"
+      >open</a
+      ><a name="308"
+      > </a
+      ><a name="309" class="Keyword"
+      >import</a
+      ><a name="315"
+      > </a
+      ><a name="316" href="Data.List.html#1" class="Module"
+      >Data</a
+      ><a name="320"
+      >.</a
+      ><a name="321" href="Data.List.html#1" class="Module"
+      >List</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Symbol"
+      >as</a
+      ><a name="328"
+      > </a
+      ><a name="329" class="Module"
+      >List</a
+      ><a name="333"
+      > </a
+      ><a name="334" class="Keyword"
+      >using</a
+      ><a name="339"
+      > </a
+      ><a name="340" class="Symbol"
+      >(</a
+      ><a name="341"
+      >List</a
+      ><a name="345" class="Symbol"
+      >;</a
+      ><a name="346"
+      > []</a
+      ><a name="349" class="Symbol"
+      >;</a
+      ><a name="350"
+      > _&#8759;_</a
+      ><a name="354" class="Symbol"
+      >;</a
+      ><a name="355"
+      > _++_</a
+      ><a name="360" class="Symbol"
+      >)</a
+      ><a name="361"
+      >
+</a
+      ><a name="362" class="Keyword"
+      >open</a
+      ><a name="366"
+      > </a
+      ><a name="367" class="Keyword"
+      >import</a
+      ><a name="373"
+      > </a
+      ><a name="374" href="Data.List.NonEmpty.html#1" class="Module"
+      >Data</a
+      ><a name="378"
+      >.</a
+      ><a name="379" href="Data.List.NonEmpty.html#1" class="Module"
+      >List</a
+      ><a name="383"
+      >.</a
+      ><a name="384" href="Data.List.NonEmpty.html#1" class="Module"
+      >NonEmpty</a
+      ><a name="392"
+      > </a
+      ><a name="393" class="Symbol"
+      >as</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Module"
+      >List&#8314;</a
+      ><a name="401"
+      >
+</a
+      ><a name="402" class="Keyword"
+      >open</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Keyword"
+      >import</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="418"
+      >.</a
+      ><a name="419" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="426"
+      >
+</a
+      ><a name="427" class="Keyword"
+      >open</a
+      ><a name="431"
+      > </a
+      ><a name="432" class="Keyword"
+      >import</a
+      ><a name="438"
+      > </a
+      ><a name="439" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="447"
+      >
+</a
+      ><a name="448" class="Keyword"
+      >open</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="Keyword"
+      >import</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation</a
+      ><a name="468"
+      >.</a
+      ><a name="469" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Binary</a
+      ><a name="475"
+      >.</a
+      ><a name="476" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >PropositionalEquality</a
+      ><a name="497"
+      >
+
+</a
+      ><a name="499" class="Keyword"
+      >open</a
+      ><a name="503"
+      > </a
+      ><a name="504" href="Relation.Binary.PropositionalEquality.html#4717" class="Module"
+      >&#8801;-Reasoning</a
+      ><a name="515"
+      >
+</a
+      ><a name="516" class="Keyword"
+      >private</a
+      ><a name="523"
+      >
+  </a
+      ><a name="526" class="Keyword"
+      >module</a
+      ><a name="532"
+      > </a
+      ><a name="533" href="Data.List.NonEmpty.Properties.html#533" class="Module"
+      >LM</a
+      ><a name="535"
+      > </a
+      ><a name="536" class="Symbol"
+      >{</a
+      ><a name="537" href="Data.List.NonEmpty.Properties.html#537" class="Bound"
+      >a</a
+      ><a name="538" class="Symbol"
+      >}</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="Symbol"
+      >{</a
+      ><a name="541" href="Data.List.NonEmpty.Properties.html#541" class="Bound"
+      >A</a
+      ><a name="542"
+      > </a
+      ><a name="543" class="Symbol"
+      >:</a
+      ><a name="544"
+      > </a
+      ><a name="545" class="PrimitiveType"
+      >Set</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Data.List.NonEmpty.Properties.html#537" class="Bound"
+      >a</a
+      ><a name="550" class="Symbol"
+      >}</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >=</a
+      ><a name="553"
+      > </a
+      ><a name="554" href="Algebra.html#1154" class="Module"
+      >Monoid</a
+      ><a name="560"
+      > </a
+      ><a name="561" class="Symbol"
+      >(</a
+      ><a name="562" href="Data.List.html#6744" class="Function"
+      >List</a
+      ><a name="566"
+      >.</a
+      ><a name="567" href="Data.List.html#6744" class="Function"
+      >monoid</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Data.List.NonEmpty.Properties.html#541" class="Bound"
+      >A</a
+      ><a name="575" class="Symbol"
+      >)</a
+      ><a name="576"
+      >
+  </a
+      ><a name="579" class="Keyword"
+      >open</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Keyword"
+      >module</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="Data.List.NonEmpty.Properties.html#591" class="Module"
+      >LMo</a
+      ><a name="594"
+      > </a
+      ><a name="595" class="Symbol"
+      >{</a
+      ><a name="596" href="Data.List.NonEmpty.Properties.html#596" class="Bound"
+      >a</a
+      ><a name="597" class="Symbol"
+      >}</a
+      ><a name="598"
+      > </a
+      ><a name="599" class="Symbol"
+      >=</a
+      ><a name="600"
+      >
+         </a
+      ><a name="610" href="Category.Monad.html#652" class="Module"
+      >RawMonad</a
+      ><a name="618"
+      > </a
+      ><a name="619" class="Symbol"
+      >{</a
+      ><a name="620"
+      >f </a
+      ><a name="622" class="Symbol"
+      >=</a
+      ><a name="623"
+      > </a
+      ><a name="624" href="Data.List.NonEmpty.Properties.html#596" class="Bound"
+      >a</a
+      ><a name="625" class="Symbol"
+      >}</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Data.List.html#7480" class="Function"
+      >List</a
+      ><a name="631"
+      >.</a
+      ><a name="632" href="Data.List.html#7480" class="Function"
+      >monad</a
+      ><a name="637"
+      >
+           </a
+      ><a name="649" class="Keyword"
+      >using</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >()</a
+      ><a name="657"
+      > </a
+      ><a name="658" class="Keyword"
+      >renaming</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="Symbol"
+      >(</a
+      ><a name="668"
+      >_&gt;&gt;=_ </a
+      ><a name="674" class="Symbol"
+      >to</a
+      ><a name="676"
+      > _&#8902;&gt;&gt;=_</a
+      ><a name="683" class="Symbol"
+      >)</a
+      ><a name="684"
+      >
+  </a
+      ><a name="687" class="Keyword"
+      >open</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Keyword"
+      >module</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Data.List.NonEmpty.Properties.html#699" class="Module"
+      >L&#8314;Mo</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >{</a
+      ><a name="705" href="Data.List.NonEmpty.Properties.html#705" class="Bound"
+      >a</a
+      ><a name="706" class="Symbol"
+      >}</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >=</a
+      ><a name="709"
+      >
+         </a
+      ><a name="719" href="Category.Monad.html#652" class="Module"
+      >RawMonad</a
+      ><a name="727"
+      > </a
+      ><a name="728" class="Symbol"
+      >{</a
+      ><a name="729"
+      >f </a
+      ><a name="731" class="Symbol"
+      >=</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Data.List.NonEmpty.Properties.html#705" class="Bound"
+      >a</a
+      ><a name="734" class="Symbol"
+      >}</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Data.List.NonEmpty.html#2739" class="Function"
+      >List&#8314;</a
+      ><a name="741"
+      >.</a
+      ><a name="742" href="Data.List.NonEmpty.html#2739" class="Function"
+      >monad</a
+      ><a name="747"
+      >
+
+</a
+      ><a name="749" href="Data.List.NonEmpty.Properties.html#749" class="Function"
+      >&#951;</a
+      ><a name="750"
+      > </a
+      ><a name="751" class="Symbol"
+      >:</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >&#8704;</a
+      ><a name="754"
+      > </a
+      ><a name="755" class="Symbol"
+      >{</a
+      ><a name="756" href="Data.List.NonEmpty.Properties.html#756" class="Bound"
+      >a</a
+      ><a name="757" class="Symbol"
+      >}</a
+      ><a name="758"
+      > </a
+      ><a name="759" class="Symbol"
+      >{</a
+      ><a name="760" href="Data.List.NonEmpty.Properties.html#760" class="Bound"
+      >A</a
+      ><a name="761"
+      > </a
+      ><a name="762" class="Symbol"
+      >:</a
+      ><a name="763"
+      > </a
+      ><a name="764" class="PrimitiveType"
+      >Set</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Data.List.NonEmpty.Properties.html#756" class="Bound"
+      >a</a
+      ><a name="769" class="Symbol"
+      >}</a
+      ><a name="770"
+      >
+    </a
+      ><a name="775" class="Symbol"
+      >(</a
+      ><a name="776" href="Data.List.NonEmpty.Properties.html#776" class="Bound"
+      >xs</a
+      ><a name="778"
+      > </a
+      ><a name="779" class="Symbol"
+      >:</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Data.List.NonEmpty.html#534" class="Datatype"
+      >List&#8314;</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Data.List.NonEmpty.Properties.html#760" class="Bound"
+      >A</a
+      ><a name="788" class="Symbol"
+      >)</a
+      ><a name="789"
+      > </a
+      ><a name="790" class="Symbol"
+      >&#8594;</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Data.List.NonEmpty.html#1533" class="Function"
+      >head</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Data.List.NonEmpty.Properties.html#776" class="Bound"
+      >xs</a
+      ><a name="799"
+      > </a
+      ><a name="800" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="Data.List.NonEmpty.html#1605" class="Function"
+      >tail</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Data.List.NonEmpty.Properties.html#776" class="Bound"
+      >xs</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="817"
+      >.</a
+      ><a name="818" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Data.List.NonEmpty.Properties.html#776" class="Bound"
+      >xs</a
+      ><a name="827"
+      >
+</a
+      ><a name="828" href="Data.List.NonEmpty.Properties.html#749" class="Function"
+      >&#951;</a
+      ><a name="829"
+      > </a
+      ><a name="830" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="831"
+      > </a
+      ><a name="832" href="Data.List.NonEmpty.Properties.html#832" class="Bound"
+      >x</a
+      ><a name="833"
+      > </a
+      ><a name="834" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="835"
+      >    </a
+      ><a name="839" class="Symbol"
+      >=</a
+      ><a name="840"
+      > </a
+      ><a name="841" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="845"
+      >
+</a
+      ><a name="846" href="Data.List.NonEmpty.Properties.html#749" class="Function"
+      >&#951;</a
+      ><a name="847"
+      > </a
+      ><a name="848" class="Symbol"
+      >(</a
+      ><a name="849" href="Data.List.NonEmpty.Properties.html#849" class="Bound"
+      >x</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Data.List.NonEmpty.html#598" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Data.List.NonEmpty.Properties.html#853" class="Bound"
+      >xs</a
+      ><a name="855" class="Symbol"
+      >)</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >=</a
+      ><a name="858"
+      > </a
+      ><a name="859" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="863"
+      >
+
+</a
+      ><a name="865" href="Data.List.NonEmpty.Properties.html#865" class="Function"
+      >toList-fromList</a
+      ><a name="880"
+      > </a
+      ><a name="881" class="Symbol"
+      >:</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >&#8704;</a
+      ><a name="884"
+      > </a
+      ><a name="885" class="Symbol"
+      >{</a
+      ><a name="886" href="Data.List.NonEmpty.Properties.html#886" class="Bound"
+      >a</a
+      ><a name="887" class="Symbol"
+      >}</a
+      ><a name="888"
+      > </a
+      ><a name="889" class="Symbol"
+      >{</a
+      ><a name="890" href="Data.List.NonEmpty.Properties.html#890" class="Bound"
+      >A</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >:</a
+      ><a name="893"
+      > </a
+      ><a name="894" class="PrimitiveType"
+      >Set</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Data.List.NonEmpty.Properties.html#886" class="Bound"
+      >a</a
+      ><a name="899" class="Symbol"
+      >}</a
+      ><a name="900"
+      > </a
+      ><a name="901" href="Data.List.NonEmpty.Properties.html#901" class="Bound"
+      >x</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >(</a
+      ><a name="904" href="Data.List.NonEmpty.Properties.html#904" class="Bound"
+      >xs</a
+      ><a name="906"
+      > </a
+      ><a name="907" class="Symbol"
+      >:</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Data.List.NonEmpty.Properties.html#890" class="Bound"
+      >A</a
+      ><a name="915" class="Symbol"
+      >)</a
+      ><a name="916"
+      > </a
+      ><a name="917" class="Symbol"
+      >&#8594;</a
+      ><a name="918"
+      >
+                  </a
+      ><a name="937" href="Data.List.NonEmpty.Properties.html#901" class="Bound"
+      >x</a
+      ><a name="938"
+      > </a
+      ><a name="939" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Data.List.NonEmpty.Properties.html#904" class="Bound"
+      >xs</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="945"
+      > </a
+      ><a name="946" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="951"
+      >.</a
+      ><a name="952" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="958"
+      > </a
+      ><a name="959" class="Symbol"
+      >(</a
+      ><a name="960" href="Data.List.NonEmpty.html#1255" class="Function"
+      >List&#8314;</a
+      ><a name="965"
+      >.</a
+      ><a name="966" href="Data.List.NonEmpty.html#1255" class="Function"
+      >fromList</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Data.List.NonEmpty.Properties.html#901" class="Bound"
+      >x</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Data.List.NonEmpty.Properties.html#904" class="Bound"
+      >xs</a
+      ><a name="979" class="Symbol"
+      >)</a
+      ><a name="980"
+      >
+</a
+      ><a name="981" href="Data.List.NonEmpty.Properties.html#865" class="Function"
+      >toList-fromList</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="Data.List.NonEmpty.Properties.html#997" class="Bound"
+      >x</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Data.List.html#696" class="InductiveConstructor"
+      >[]</a
+      ><a name="1001"
+      >       </a
+      ><a name="1008" class="Symbol"
+      >=</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1014"
+      >
+</a
+      ><a name="1015" href="Data.List.NonEmpty.Properties.html#865" class="Function"
+      >toList-fromList</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Data.List.NonEmpty.Properties.html#1031" class="Bound"
+      >x</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" class="Symbol"
+      >(</a
+      ><a name="1034" href="Data.List.NonEmpty.Properties.html#1034" class="Bound"
+      >y</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Data.List.html#711" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Data.List.NonEmpty.Properties.html#1038" class="Bound"
+      >xs</a
+      ><a name="1040" class="Symbol"
+      >)</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >=</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="Symbol"
+      >(</a
+      ><a name="1050" class="InductiveConstructor Operator"
+      >_&#8759;_</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Data.List.NonEmpty.Properties.html#1031" class="Bound"
+      >x</a
+      ><a name="1055" class="Symbol"
+      >)</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" class="Symbol"
+      >(</a
+      ><a name="1058" href="Data.List.NonEmpty.Properties.html#865" class="Function"
+      >toList-fromList</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Data.List.NonEmpty.Properties.html#1034" class="Bound"
+      >y</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Data.List.NonEmpty.Properties.html#1038" class="Bound"
+      >xs</a
+      ><a name="1078" class="Symbol"
+      >)</a
+      ><a name="1079"
+      >
+
+</a
+      ><a name="1081" href="Data.List.NonEmpty.Properties.html#1081" class="Function"
+      >toList-&#8314;++</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >:</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" class="Symbol"
+      >&#8704;</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" class="Symbol"
+      >{</a
+      ><a name="1097" href="Data.List.NonEmpty.Properties.html#1097" class="Bound"
+      >a</a
+      ><a name="1098" class="Symbol"
+      >}</a
+      ><a name="1099"
+      > </a
+      ><a name="1100" class="Symbol"
+      >{</a
+      ><a name="1101" href="Data.List.NonEmpty.Properties.html#1101" class="Bound"
+      >A</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" class="Symbol"
+      >:</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" class="PrimitiveType"
+      >Set</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Data.List.NonEmpty.Properties.html#1097" class="Bound"
+      >a</a
+      ><a name="1110" class="Symbol"
+      >}</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" class="Symbol"
+      >(</a
+      ><a name="1113" href="Data.List.NonEmpty.Properties.html#1113" class="Bound"
+      >xs</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >:</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Data.List.NonEmpty.html#534" class="Datatype"
+      >List&#8314;</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" href="Data.List.NonEmpty.Properties.html#1101" class="Bound"
+      >A</a
+      ><a name="1125" class="Symbol"
+      >)</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" href="Data.List.NonEmpty.Properties.html#1127" class="Bound"
+      >ys</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" class="Symbol"
+      >&#8594;</a
+      ><a name="1131"
+      >
+             </a
+      ><a name="1145" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1150"
+      >.</a
+      ><a name="1151" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" href="Data.List.NonEmpty.Properties.html#1113" class="Bound"
+      >xs</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" href="Data.List.NonEmpty.Properties.html#1127" class="Bound"
+      >ys</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1168"
+      >
+             </a
+      ><a name="1182" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1187"
+      >.</a
+      ><a name="1188" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1194"
+      > </a
+      ><a name="1195" class="Symbol"
+      >(</a
+      ><a name="1196" href="Data.List.NonEmpty.Properties.html#1113" class="Bound"
+      >xs</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Data.List.NonEmpty.html#2429" class="Function Operator"
+      >&#8314;++</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Data.List.NonEmpty.Properties.html#1127" class="Bound"
+      >ys</a
+      ><a name="1205" class="Symbol"
+      >)</a
+      ><a name="1206"
+      >
+</a
+      ><a name="1207" href="Data.List.NonEmpty.Properties.html#1081" class="Function"
+      >toList-&#8314;++</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Data.List.NonEmpty.Properties.html#1220" class="Bound"
+      >x</a
+      ><a name="1221"
+      > </a
+      ><a name="1222" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1223"
+      >    </a
+      ><a name="1227" href="Data.List.NonEmpty.Properties.html#1227" class="Bound"
+      >ys</a
+      ><a name="1229"
+      > </a
+      ><a name="1230" class="Symbol"
+      >=</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Data.List.NonEmpty.Properties.html#865" class="Function"
+      >toList-fromList</a
+      ><a name="1247"
+      > </a
+      ><a name="1248" href="Data.List.NonEmpty.Properties.html#1220" class="Bound"
+      >x</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" href="Data.List.NonEmpty.Properties.html#1227" class="Bound"
+      >ys</a
+      ><a name="1252"
+      >
+</a
+      ><a name="1253" href="Data.List.NonEmpty.Properties.html#1081" class="Function"
+      >toList-&#8314;++</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >(</a
+      ><a name="1265" href="Data.List.NonEmpty.Properties.html#1265" class="Bound"
+      >x</a
+      ><a name="1266"
+      > </a
+      ><a name="1267" href="Data.List.NonEmpty.html#598" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" href="Data.List.NonEmpty.Properties.html#1269" class="Bound"
+      >xs</a
+      ><a name="1271" class="Symbol"
+      >)</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" href="Data.List.NonEmpty.Properties.html#1273" class="Bound"
+      >ys</a
+      ><a name="1275"
+      > </a
+      ><a name="1276" class="Symbol"
+      >=</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >(</a
+      ><a name="1284" class="InductiveConstructor Operator"
+      >_&#8759;_</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Data.List.NonEmpty.Properties.html#1265" class="Bound"
+      >x</a
+      ><a name="1289" class="Symbol"
+      >)</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" class="Symbol"
+      >(</a
+      ><a name="1292" href="Data.List.NonEmpty.Properties.html#1081" class="Function"
+      >toList-&#8314;++</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" href="Data.List.NonEmpty.Properties.html#1269" class="Bound"
+      >xs</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" href="Data.List.NonEmpty.Properties.html#1273" class="Bound"
+      >ys</a
+      ><a name="1308" class="Symbol"
+      >)</a
+      ><a name="1309"
+      >
+
+</a
+      ><a name="1311" href="Data.List.NonEmpty.Properties.html#1311" class="Function"
+      >toList-&#8314;++&#8314;</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" class="Symbol"
+      >:</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >&#8704;</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" class="Symbol"
+      >{</a
+      ><a name="1328" href="Data.List.NonEmpty.Properties.html#1328" class="Bound"
+      >a</a
+      ><a name="1329" class="Symbol"
+      >}</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" class="Symbol"
+      >{</a
+      ><a name="1332" href="Data.List.NonEmpty.Properties.html#1332" class="Bound"
+      >A</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" class="Symbol"
+      >:</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" class="PrimitiveType"
+      >Set</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" href="Data.List.NonEmpty.Properties.html#1328" class="Bound"
+      >a</a
+      ><a name="1341" class="Symbol"
+      >}</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" class="Symbol"
+      >(</a
+      ><a name="1344" href="Data.List.NonEmpty.Properties.html#1344" class="Bound"
+      >xs</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Data.List.NonEmpty.Properties.html#1347" class="Bound"
+      >ys</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" class="Symbol"
+      >:</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Data.List.NonEmpty.html#534" class="Datatype"
+      >List&#8314;</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="Data.List.NonEmpty.Properties.html#1332" class="Bound"
+      >A</a
+      ><a name="1359" class="Symbol"
+      >)</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Symbol"
+      >&#8594;</a
+      ><a name="1362"
+      >
+              </a
+      ><a name="1377" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1382"
+      >.</a
+      ><a name="1383" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" href="Data.List.NonEmpty.Properties.html#1344" class="Bound"
+      >xs</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1401"
+      >.</a
+      ><a name="1402" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" href="Data.List.NonEmpty.Properties.html#1347" class="Bound"
+      >ys</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1413"
+      >
+              </a
+      ><a name="1428" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1433"
+      >.</a
+      ><a name="1434" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" class="Symbol"
+      >(</a
+      ><a name="1442" href="Data.List.NonEmpty.Properties.html#1344" class="Bound"
+      >xs</a
+      ><a name="1444"
+      > </a
+      ><a name="1445" href="Data.List.NonEmpty.html#2330" class="Function Operator"
+      >&#8314;++&#8314;</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" href="Data.List.NonEmpty.Properties.html#1347" class="Bound"
+      >ys</a
+      ><a name="1452" class="Symbol"
+      >)</a
+      ><a name="1453"
+      >
+</a
+      ><a name="1454" href="Data.List.NonEmpty.Properties.html#1311" class="Function"
+      >toList-&#8314;++&#8314;</a
+      ><a name="1465"
+      > </a
+      ><a name="1466" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" href="Data.List.NonEmpty.Properties.html#1468" class="Bound"
+      >x</a
+      ><a name="1469"
+      > </a
+      ><a name="1470" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1471"
+      >    </a
+      ><a name="1475" href="Data.List.NonEmpty.Properties.html#1475" class="Bound"
+      >ys</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" class="Symbol"
+      >=</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1484"
+      >
+</a
+      ><a name="1485" href="Data.List.NonEmpty.Properties.html#1311" class="Function"
+      >toList-&#8314;++&#8314;</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" class="Symbol"
+      >(</a
+      ><a name="1498" href="Data.List.NonEmpty.Properties.html#1498" class="Bound"
+      >x</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Data.List.NonEmpty.html#598" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Data.List.NonEmpty.Properties.html#1502" class="Bound"
+      >xs</a
+      ><a name="1504" class="Symbol"
+      >)</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Data.List.NonEmpty.Properties.html#1506" class="Bound"
+      >ys</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" class="Symbol"
+      >=</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" class="Symbol"
+      >(</a
+      ><a name="1517" class="InductiveConstructor Operator"
+      >_&#8759;_</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" href="Data.List.NonEmpty.Properties.html#1498" class="Bound"
+      >x</a
+      ><a name="1522" class="Symbol"
+      >)</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" class="Symbol"
+      >(</a
+      ><a name="1525" href="Data.List.NonEmpty.Properties.html#1311" class="Function"
+      >toList-&#8314;++&#8314;</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" href="Data.List.NonEmpty.Properties.html#1502" class="Bound"
+      >xs</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="Data.List.NonEmpty.Properties.html#1506" class="Bound"
+      >ys</a
+      ><a name="1542" class="Symbol"
+      >)</a
+      ><a name="1543"
+      >
+
+</a
+      ><a name="1545" href="Data.List.NonEmpty.Properties.html#1545" class="Function"
+      >toList-&gt;&gt;=</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" class="Symbol"
+      >:</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" class="Symbol"
+      >&#8704;</a
+      ><a name="1559"
+      > </a
+      ><a name="1560" class="Symbol"
+      >{</a
+      ><a name="1561" href="Data.List.NonEmpty.Properties.html#1561" class="Bound"
+      >&#8467;</a
+      ><a name="1562" class="Symbol"
+      >}</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" class="Symbol"
+      >{</a
+      ><a name="1565" href="Data.List.NonEmpty.Properties.html#1565" class="Bound"
+      >A</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" href="Data.List.NonEmpty.Properties.html#1567" class="Bound"
+      >B</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" class="Symbol"
+      >:</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" class="PrimitiveType"
+      >Set</a
+      ><a name="1574"
+      > </a
+      ><a name="1575" href="Data.List.NonEmpty.Properties.html#1561" class="Bound"
+      >&#8467;</a
+      ><a name="1576" class="Symbol"
+      >}</a
+      ><a name="1577"
+      >
+             </a
+      ><a name="1591" class="Symbol"
+      >(</a
+      ><a name="1592" href="Data.List.NonEmpty.Properties.html#1592" class="Bound"
+      >f</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" class="Symbol"
+      >:</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" href="Data.List.NonEmpty.Properties.html#1565" class="Bound"
+      >A</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="Symbol"
+      >&#8594;</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" href="Data.List.NonEmpty.html#534" class="Datatype"
+      >List&#8314;</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" href="Data.List.NonEmpty.Properties.html#1567" class="Bound"
+      >B</a
+      ><a name="1607" class="Symbol"
+      >)</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" class="Symbol"
+      >(</a
+      ><a name="1610" href="Data.List.NonEmpty.Properties.html#1610" class="Bound"
+      >xs</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" class="Symbol"
+      >:</a
+      ><a name="1614"
+      > </a
+      ><a name="1615" href="Data.List.NonEmpty.html#534" class="Datatype"
+      >List&#8314;</a
+      ><a name="1620"
+      > </a
+      ><a name="1621" href="Data.List.NonEmpty.Properties.html#1565" class="Bound"
+      >A</a
+      ><a name="1622" class="Symbol"
+      >)</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" class="Symbol"
+      >&#8594;</a
+      ><a name="1625"
+      >
+             </a
+      ><a name="1639" class="Symbol"
+      >(</a
+      ><a name="1640" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1645"
+      >.</a
+      ><a name="1646" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" href="Data.List.NonEmpty.Properties.html#1610" class="Bound"
+      >xs</a
+      ><a name="1655"
+      > </a
+      ><a name="1656" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&#8902;&gt;&gt;=</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1666"
+      >.</a
+      ><a name="1667" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="1675"
+      > </a
+      ><a name="1676" href="Data.List.NonEmpty.Properties.html#1592" class="Bound"
+      >f</a
+      ><a name="1677" class="Symbol"
+      >)</a
+      ><a name="1678"
+      > </a
+      ><a name="1679" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1680"
+      >
+             </a
+      ><a name="1694" class="Symbol"
+      >(</a
+      ><a name="1695" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1700"
+      >.</a
+      ><a name="1701" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" class="Symbol"
+      >(</a
+      ><a name="1709" href="Data.List.NonEmpty.Properties.html#1610" class="Bound"
+      >xs</a
+      ><a name="1711"
+      > </a
+      ><a name="1712" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&gt;&gt;=</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Data.List.NonEmpty.Properties.html#1592" class="Bound"
+      >f</a
+      ><a name="1717" class="Symbol"
+      >))</a
+      ><a name="1719"
+      >
+</a
+      ><a name="1720" href="Data.List.NonEmpty.Properties.html#1545" class="Function"
+      >toList-&gt;&gt;=</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" class="Symbol"
+      >{</a
+      ><a name="1732" href="Data.List.NonEmpty.Properties.html#1732" class="Bound"
+      >&#8467;</a
+      ><a name="1733" class="Symbol"
+      >}</a
+      ><a name="1734"
+      > </a
+      ><a name="1735" href="Data.List.NonEmpty.Properties.html#1735" class="Bound"
+      >f</a
+      ><a name="1736"
+      > </a
+      ><a name="1737" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Data.List.NonEmpty.Properties.html#1739" class="Bound"
+      >x</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" href="Data.List.NonEmpty.html#572" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" class="Symbol"
+      >=</a
+      ><a name="1744"
+      >
+  </a
+      ><a name="1747" href="Data.Product.html#539" class="Function"
+      >proj&#8322;</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" class="Symbol"
+      >{</a
+      ><a name="1754"
+      >a </a
+      ><a name="1756" class="Symbol"
+      >=</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Data.List.NonEmpty.Properties.html#1732" class="Bound"
+      >&#8467;</a
+      ><a name="1759" class="Symbol"
+      >}</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" class="Symbol"
+      >{</a
+      ><a name="1762"
+      >b </a
+      ><a name="1764" class="Symbol"
+      >=</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" href="Data.List.NonEmpty.Properties.html#1732" class="Bound"
+      >&#8467;</a
+      ><a name="1767" class="Symbol"
+      >}</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" href="Algebra.Structures.html#1106" class="Function"
+      >LM</a
+      ><a name="1771"
+      >.</a
+      ><a name="1772" href="Algebra.Structures.html#1106" class="Function"
+      >identity</a
+      ><a name="1780"
+      > </a
+      ><a name="1781" class="Symbol"
+      >_</a
+      ><a name="1782"
+      >
+</a
+      ><a name="1783" href="Data.List.NonEmpty.Properties.html#1545" class="Function"
+      >toList-&gt;&gt;=</a
+      ><a name="1793"
+      > </a
+      ><a name="1794" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" class="Symbol"
+      >(</a
+      ><a name="1797" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="1798"
+      > </a
+      ><a name="1799" href="Data.List.NonEmpty.html#598" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="1803" class="Symbol"
+      >)</a
+      ><a name="1804"
+      > </a
+      ><a name="1805" class="Symbol"
+      >=</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Relation.Binary.PreorderReasoning.html#1148" class="Function Operator"
+      >begin</a
+      ><a name="1812"
+      >
+  </a
+      ><a name="1815" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1820"
+      >.</a
+      ><a name="1821" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" class="Symbol"
+      >(</a
+      ><a name="1829" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="1832" class="Symbol"
+      >)</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" class="Symbol"
+      >(</a
+      ><a name="1838" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1843"
+      >.</a
+      ><a name="1844" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&#8902;&gt;&gt;=</a
+      ><a name="1858"
+      > </a
+      ><a name="1859" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1864"
+      >.</a
+      ><a name="1865" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1871"
+      > </a
+      ><a name="1872" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="1873"
+      > </a
+      ><a name="1874" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1875" class="Symbol"
+      >)</a
+      ><a name="1876"
+      > </a
+      ><a name="1877" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1884"
+      > </a
+      ><a name="1885" class="Symbol"
+      >(</a
+      ><a name="1886" href="Data.List.html#1073" class="Function Operator"
+      >_++_</a
+      ><a name="1890"
+      > </a
+      ><a name="1891" class="Symbol"
+      >(</a
+      ><a name="1892" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1897"
+      >.</a
+      ><a name="1898" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1904"
+      > </a
+      ><a name="1905" class="Symbol"
+      >(</a
+      ><a name="1906" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="1909" class="Symbol"
+      >)))</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" class="Symbol"
+      >(</a
+      ><a name="1914" href="Data.List.NonEmpty.Properties.html#1545" class="Function"
+      >toList-&gt;&gt;=</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="1929" class="Symbol"
+      >)</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="1932"
+      >
+  </a
+      ><a name="1935" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1940"
+      >.</a
+      ><a name="1941" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1947"
+      > </a
+      ><a name="1948" class="Symbol"
+      >(</a
+      ><a name="1949" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1950"
+      > </a
+      ><a name="1951" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="1952" class="Symbol"
+      >)</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" href="Data.List.html#1073" class="Function Operator"
+      >++</a
+      ><a name="1956"
+      > </a
+      ><a name="1957" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="1962"
+      >.</a
+      ><a name="1963" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" class="Symbol"
+      >(</a
+      ><a name="1971" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&gt;&gt;=</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="1979" class="Symbol"
+      >)</a
+      ><a name="1980"
+      >                 </a
+      ><a name="1997" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#8801;&#10216;</a
+      ><a name="1999"
+      > </a
+      ><a name="2000" href="Data.List.NonEmpty.Properties.html#1311" class="Function"
+      >toList-&#8314;++&#8314;</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" class="Symbol"
+      >(</a
+      ><a name="2013" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="2016" class="Symbol"
+      >)</a
+      ><a name="2017"
+      > </a
+      ><a name="2018" class="Symbol"
+      >(</a
+      ><a name="2019" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&gt;&gt;=</a
+      ><a name="2025"
+      > </a
+      ><a name="2026" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="2027" class="Symbol"
+      >)</a
+      ><a name="2028"
+      > </a
+      ><a name="2029" href="Relation.Binary.PreorderReasoning.html#1214" class="Function Operator"
+      >&#10217;</a
+      ><a name="2030"
+      >
+  </a
+      ><a name="2033" href="Data.List.NonEmpty.html#1356" class="Function"
+      >List&#8314;</a
+      ><a name="2038"
+      >.</a
+      ><a name="2039" href="Data.List.NonEmpty.html#1356" class="Function"
+      >toList</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" class="Symbol"
+      >(</a
+      ><a name="2047" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="Data.List.NonEmpty.Properties.html#1797" class="Bound"
+      >x</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" href="Data.List.NonEmpty.html#2330" class="Function Operator"
+      >&#8314;++&#8314;</a
+      ><a name="2055"
+      > </a
+      ><a name="2056" class="Symbol"
+      >(</a
+      ><a name="2057" href="Data.List.NonEmpty.Properties.html#1801" class="Bound"
+      >xs</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Category.Monad.Indexed.html#556" class="Function Operator"
+      >&gt;&gt;=</a
+      ><a name="2063"
+      > </a
+      ><a name="2064" href="Data.List.NonEmpty.Properties.html#1794" class="Bound"
+      >f</a
+      ><a name="2065" class="Symbol"
+      >))</a
+      ><a name="2067"
+      >                            </a
+      ><a name="2095" href="Relation.Binary.PreorderReasoning.html#1444" class="Function Operator"
+      >&#8718;</a
+      ><a name="2096"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rabbitmq_user - Adds or removes users to RabbitMQ &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Messaging Modules" href="list_of_messaging_modules.html" />
+    <link rel="next" title="rabbitmq_vhost - Manage the state of a virtual host in RabbitMQ" href="rabbitmq_vhost_module.html" />
+    <link rel="prev" title="rabbitmq_policy - Manage the state of policies in RabbitMQ." href="rabbitmq_policy_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rabbitmq_vhost_module.html" title="rabbitmq_vhost - Manage the state of a virtual host in RabbitMQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rabbitmq_policy_module.html" title="rabbitmq_policy - Manage the state of policies in RabbitMQ."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_messaging_modules.html" accesskey="U">Messaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rabbitmq-user-adds-or-removes-users-to-rabbitmq">
+<span id="rabbitmq-user"></span><h1>rabbitmq_user - Adds or removes users to RabbitMQ<a class="headerlink" href="#rabbitmq-user-adds-or-removes-users-to-rabbitmq" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Chris Hoffman</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+<p>Add or remove users to RabbitMQ and assign permissions</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>configure_priv</td>
+<td>no</td>
+<td>^$</td>
+    <td><ul></ul></td>
+    <td>Regular expression to restrict configure actions on a resource for the specified vhost.By default all actions are restricted.</td>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Deletes and recreates the user.</td>
+</tr>
+        <tr>
+<td>node</td>
+<td>no</td>
+<td>rabbit</td>
+    <td><ul></ul></td>
+    <td>erlang node name of the rabbit we wish to configure (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Password of user to add.To change the password of an existing user, you must also specify <code>force=yes</code>.</td>
+</tr>
+        <tr>
+<td>read_priv</td>
+<td>no</td>
+<td>^$</td>
+    <td><ul></ul></td>
+    <td>Regular expression to restrict configure actions on a resource for the specified vhost.By default all actions are restricted.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Specify if user is to be added or removed</td>
+</tr>
+        <tr>
+<td>tags</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>User tags specified as comma delimited</td>
+</tr>
+        <tr>
+<td>user</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name of user to add</td>
+</tr>
+        <tr>
+<td>vhost</td>
+<td>no</td>
+<td>/</td>
+    <td><ul></ul></td>
+    <td>vhost to apply access privileges.</td>
+</tr>
+        <tr>
+<td>write_priv</td>
+<td>no</td>
+<td>^$</td>
+    <td><ul></ul></td>
+    <td>Regular expression to restrict configure actions on a resource for the specified vhost.By default all actions are restricted.</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Add user to server and assign full access control
+- rabbitmq_user: user=joe
+                 password=changeme
+                 vhost=/
+                 configure_priv=.*
+                 read_priv=.*
+                 write_priv=.*
+                 state=present</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rabbitmq_user - Adds or removes users to RabbitMQ</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rabbitmq_policy_module.html"
+                        title="previous chapter">rabbitmq_policy - Manage the state of policies in RabbitMQ.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rabbitmq_vhost_module.html"
+                        title="next chapter">rabbitmq_vhost - Manage the state of a virtual host in RabbitMQ</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rabbitmq_vhost_module.html" title="rabbitmq_vhost - Manage the state of a virtual host in RabbitMQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rabbitmq_policy_module.html" title="rabbitmq_policy - Manage the state of policies in RabbitMQ."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_messaging_modules.html" >Messaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

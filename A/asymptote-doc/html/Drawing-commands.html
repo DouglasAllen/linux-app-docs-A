@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Drawing commands - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Tutorial.html#Tutorial" title="Tutorial">
+<link rel="next" href="Bezier-curves.html#Bezier-curves" title="Bezier curves">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Drawing-commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bezier-curves.html#Bezier-curves">Bezier curves</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tutorial.html#Tutorial">Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Drawing commands</h2>
+
+<p><a name="index-drawing-commands-90"></a>
+All of <code>Asymptote</code>'s graphical capabilities are based on four primitive
+commands. The three <code>PostScript</code> drawing commands <code>draw</code>,
+<code>fill</code>, and <code>clip</code> add objects to a picture in the order in
+which they are executed, with the most recently drawn object appearing on top. 
+The labeling command <code>label</code> can be used to add text
+labels and external <acronym>EPS</acronym> images, which will appear on top of the
+<code>PostScript</code> objects (since this is normally what one wants), but
+again in the relative order in which they were executed. After drawing
+objects on a picture, the picture can be output with the
+<code>shipout</code> function (see <a href="shipout.html#shipout">shipout</a>).
+
+   <p><a name="index-g_t_0040code_007blayer_007d-91"></a>If you wish to draw <code>PostScript</code> objects on top of labels (or verbatim
+<code>tex</code> commands; see <a href="tex.html#tex">tex</a>), the <code>layer</code> command may be
+used to start a
+new <code>PostScript/LaTeX</code> layer:
+<pre class="verbatim">void layer(picture pic=currentpicture);
+</pre>
+
+   <p>The <code>layer</code> function gives one full control over the order in which
+objects are drawn. Layers are drawn sequentially, with the most recent
+layer appearing on top. Within each layer, labels, images, and
+verbatim <code>tex</code> commands are always drawn after the
+<code>PostScript</code> objects in that layer.
+
+   <p>While some of these drawing commands take many options, they all have sensible
+default values (for example, the picture argument defaults to
+currentpicture).
+
+   <p><a name="index-legend-92"></a><a name="index-g_t_0040code_007bdraw_007d-93"></a><a name="index-g_t_0040code_007barrow_007d-94"></a>
+
+<ul class="menu">
+<li><a accesskey="1" href="draw.html#draw">draw</a>:                         Draw a path on a picture or frame
+<li><a accesskey="2" href="fill.html#fill">fill</a>:                         Fill a cyclic path on a picture or frame
+<li><a accesskey="3" href="clip.html#clip">clip</a>:                         Clip a picture or frame to a cyclic path
+<li><a accesskey="4" href="label.html#label">label</a>:                        Label a point on a picture
+</ul>
+
+   </body></html>
+

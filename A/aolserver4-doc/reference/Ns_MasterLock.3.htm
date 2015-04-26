@@ -1,0 +1,115 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:26 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_Master</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_Master</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_MasterLock,
+Ns_MasterUnlock &minus; Enter and leave the single master
+critical section lock</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_MasterLock</b>(<i>void</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">void <b><br>
+Ns_MasterUnlock</b>(<i>void</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The single
+master critical section lock is used throughout the core
+server to protect portions of code from being run by more
+than one thread at a time. These are convenience functions
+which actually make calls to <b>Ns_CsEnter</b> and
+<b>Ns_CsLeave</b> to perform the locking and unlocking
+function.</p>
+
+<p style="margin-left:11%; margin-top: 1em">You should not
+use these functions in your modules. To protect critical
+sections in your modules you should create and initialize
+your own named locks, then wrap your critical sections with
+calls to <b>Ns_CsEnter</b> and <b>Ns_CsLeave</b>. <b><br>
+Ns_MasterLock</b>()</p>
+
+<p style="margin-left:22%; margin-top: 1em">Enter the
+single master lock. The thread that holds this lock is
+guaranteed exclusive access to the section of code that
+follows the call to <b>Ns_MasterLock</b>. Other threads that
+attempt to enter the master critical section while another
+thread owns the master lock will block until the owning
+thread releases the master lock.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Be extremely
+careful with code you place within the master critical
+section. If the thread that owns the master lock blocks for
+any reason while in the master critical section, other
+threads that need to enter that section of code will block
+until the master lock is released.</p>
+
+<p style="margin-left:11%;"><b>Ns_MasterUnlock</b>()</p>
+
+<p style="margin-left:22%; margin-top: 1em">Leave the
+single master critical section. The thread that owns the
+lock must release it after the critical section of code has
+completed so that other threads may execute the critical
+section code.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n), Ns_CsEnter(3), Ns_CsLeave(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

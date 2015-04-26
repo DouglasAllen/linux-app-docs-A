@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using Lookups &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Playbooks: Special Topics" href="playbooks_special_topics.html" />
+    <link rel="next" title="Prompts" href="playbooks_prompts.html" />
+    <link rel="prev" title="Error Handling In Playbooks" href="playbooks_error_handling.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="playbooks_prompts.html" title="Prompts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_error_handling.html" title="Error Handling In Playbooks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" accesskey="U">Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-lookups">
+<h1><a class="toc-backref" href="#id2">Using Lookups</a><a class="headerlink" href="#using-lookups" title="Permalink to this headline">¶</a></h1>
+<p>Lookup plugins allow access of data in Ansible from outside sources.  These plugins are evaluated on the Ansible control
+machine, and can include reading the filesystem but also contacting external datastores and services.
+These values are then made available using the standard templating system
+in Ansible, and are typically used to load variables or templates with information from those systems.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is considered an advanced feature, and many users will probably not rely on these features.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Lookups occur on the local computer, not on the remote computer.</p>
+</div>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#using-lookups" id="id2">Using Lookups</a><ul>
+<li><a class="reference internal" href="#intro-to-lookups-getting-file-contents" id="id3">Intro to Lookups: Getting File Contents</a></li>
+<li><a class="reference internal" href="#the-password-lookup" id="id4">The Password Lookup</a></li>
+<li><a class="reference internal" href="#more-lookups" id="id5">More Lookups</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="intro-to-lookups-getting-file-contents">
+<span id="getting-file-contents"></span><h2><a class="toc-backref" href="#id3">Intro to Lookups: Getting File Contents</a><a class="headerlink" href="#intro-to-lookups-getting-file-contents" title="Permalink to this headline">¶</a></h2>
+<p>The file lookup is the most basic lookup type.</p>
+<p>Contents can be read off the filesystem as follows:</p>
+<div class="highlight-python"><pre>- hosts: all
+  vars:
+     contents: "{{ lookup('file', '/etc/foo.txt') }}"
+
+  tasks:
+
+     - debug: msg="the value of foo.txt is {{ contents }}"</pre>
+</div>
+</div>
+<div class="section" id="the-password-lookup">
+<span id="password-lookup"></span><h2><a class="toc-backref" href="#id4">The Password Lookup</a><a class="headerlink" href="#the-password-lookup" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A great alternative to the password lookup plugin, if you don&#8217;t need to generate random passwords on a per-host basis, would be to use <a class="reference internal" href="playbooks_vault.html"><em>Vault</em></a>.  Read the documentation there and consider using it first, it will be more desirable for most applications.</p>
+</div>
+<p><tt class="docutils literal"><span class="pre">password</span></tt> generates a random plaintext password and stores it in
+a file at a given filepath.</p>
+<p>(Docs about crypted save modes are pending)</p>
+<p>If the file exists previously, it will retrieve its contents, behaving just like with_file. Usage of variables like &#8220;{{ inventory_hostname }}&#8221; in the filepath can be used to set
+up random passwords per host (what simplifies password management in &#8216;host_vars&#8217; variables).</p>
+<p>Generated passwords contain a random mix of upper and lowercase ASCII letters, the
+numbers 0-9 and punctuation (&#8221;. , : - _&#8221;). The default length of a generated password is 20 characters.
+This length can be changed by passing an extra parameter:</p>
+<div class="highlight-python"><pre>---
+- hosts: all
+
+  tasks:
+
+    # create a mysql user with a random password:
+    - mysql_user: name={{ client }}
+                  password="{{ lookup('password', 'credentials/' + client + '/' + tier + '/' + role + '/mysqlpassword length=15') }}"
+                  priv={{ client }}_{{ tier }}_{{ role }}.*:ALL
+
+    (...)</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the file already exists, no data will be written to it. If the file has contents, those contents will be read in as the password. Empty files cause the password to return as an empty string</p>
+</div>
+<p>Starting in version 1.4, password accepts a &#8220;chars&#8221; parameter to allow defining a custom character set in the generated passwords. It accepts comma separated list of names that are either string module attributes (ascii_letters,digits, etc) or are used literally:</p>
+<div class="highlight-python"><pre>---
+- hosts: all
+
+  tasks:
+
+    # create a mysql user with a random password using only ascii letters:
+    - mysql_user: name={{ client }}
+                  password="{{ lookup('password', '/tmp/passwordfile chars=ascii_letters') }}"
+                  priv={{ client }}_{{ tier }}_{{ role }}.*:ALL
+
+    # create a mysql user with a random password using only digits:
+    - mysql_user: name={{ client }}
+                  password="{{ lookup('password', '/tmp/passwordfile chars=digits') }}"
+                  priv={{ client }}_{{ tier }}_{{ role }}.*:ALL
+
+    # create a mysql user with a random password using many different char sets:
+    - mysql_user: name={{ client }}
+                  password="{{ lookup('password', '/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation') }}"
+                  priv={{ client }}_{{ tier }}_{{ role }}.*:ALL
+
+    (...)</pre>
+</div>
+<p>To enter comma use two commas &#8216;,,&#8217; somewhere - preferably at the end. Quotes and double quotes are not supported.</p>
+</div>
+<div class="section" id="more-lookups">
+<span id="id1"></span><h2><a class="toc-backref" href="#id5">More Lookups</a><a class="headerlink" href="#more-lookups" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This feature is very infrequently used in Ansible.  You may wish to skip this section.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.8.</span></p>
+<p>Various <em>lookup plugins</em> allow additional ways to iterate over data.  In <a class="reference internal" href="playbooks_loops.html"><em>Loops</em></a> you will learn
+how to use them to walk over collections of numerous types.  However, they can also be used to pull in data
+from remote sources, such as shell commands or even key value stores. This section will cover lookup
+plugins in this capacity.</p>
+<p>Here are some examples:</p>
+<div class="highlight-python"><pre>---
+- hosts: all
+
+  tasks:
+
+     - debug: msg="{{ lookup('env','HOME') }} is an environment variable"
+
+     - debug: msg="{{ item }} is a line from the result of this command"
+       with_lines:
+         - cat /etc/motd
+
+     - debug: msg="{{ lookup('pipe','date') }} is the raw result of running this command"
+
+     - debug: msg="{{ lookup('redis_kv', 'redis://localhost:6379,somekey') }} is value in Redis for somekey"
+
+     - debug: msg="{{ lookup('dnstxt', 'example.com') }} is a DNS TXT record for example.com"
+
+     - debug: msg="{{ lookup('template', './some_template.j2') }} is a value from evaluation of this template"</pre>
+</div>
+<p>As an alternative you can also assign lookup plugins to variables or use them
+elsewhere.  This macros are evaluated each time they are used in a task (or
+template):</p>
+<div class="highlight-python"><pre>vars:
+  motd_value: "{{ lookup('file', '/etc/motd') }}"
+
+tasks:
+
+  - debug: msg="motd value is {{ motd_value }}"</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>An introduction to playbooks</dd>
+<dt><a class="reference internal" href="playbooks_conditionals.html"><em>Conditionals</em></a></dt>
+<dd>Conditional statements in playbooks</dd>
+<dt><a class="reference internal" href="playbooks_variables.html"><em>Variables</em></a></dt>
+<dd>All about variables</dd>
+<dt><a class="reference internal" href="playbooks_loops.html"><em>Loops</em></a></dt>
+<dd>Looping in playbooks</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-devel">User Mailing List</a></dt>
+<dd>Have a question?  Stop by the google group!</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using Lookups</a><ul>
+<li><a class="reference internal" href="#intro-to-lookups-getting-file-contents">Intro to Lookups: Getting File Contents</a></li>
+<li><a class="reference internal" href="#the-password-lookup">The Password Lookup</a></li>
+<li><a class="reference internal" href="#more-lookups">More Lookups</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="playbooks_error_handling.html"
+                        title="previous chapter">Error Handling In Playbooks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="playbooks_prompts.html"
+                        title="next chapter">Prompts</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="playbooks_prompts.html" title="Prompts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_error_handling.html" title="Error Handling In Playbooks"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" >Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

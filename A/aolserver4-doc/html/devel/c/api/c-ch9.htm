@@ -1,0 +1,87 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_AllocThreadLocalStorage</TITLE>
+<LINK rel=Previous href="c-ch8.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch10.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch8.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch10.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="879729">
+</a><h3>Ns_AllocThreadLocalStorage</h3>
+<a name="132236">
+</a><h4>Overview</h4>
+Initialize a local thread storage variable.
+<a name="132241">
+</a><a name="132238">
+</a><h4>Syntax</h4>
+<pre>    <a name="65695"></a>int Ns_AllocThreadLocalStorage(
+    <a name="65696"></a>Ns_ThreadLocalStorage * tls, 
+    <a name="65697"></a>void (*destructor) (void *)
+    <a name="65698"></a>);
+</pre><p><a name="133597">
+</a><h4>Description</h4>
+<p><a name="65700">
+</a>Initializes a thread local storage variable and sets its destructor function. The <code>tls</code>'s value is initially NULL in all existing threads and any new threads which are later created. If the <code>destructor</code> function pointer is non-null and the <code>tls</code> is non-null in a particular thread when it exits, the destructor will be called for that thread.</p>
+<p><a name="184324">
+</a>Thread local storage is often used to store data which must be shared between unrelated functions much like global variables are used in a single threaded program. Thread local storage is also often used to provide buffer space unique to each thread when making older code thread safe.</p>
+<a name="184326">
+</a><h4>Examples</h4>
+<pre>    <a name="184332"></a>static Ns_ThreadLocalStorage tls;
+    <a name="184336"></a>
+    <a name="184337"></a>void
+    <a name="184338"></a>Init(void)
+    <a name="184342"></a>{
+    <a name="184343"></a>	/* This function is called once at startup. */
+    <a name="184346"></a>	Ns_AllocThreadLocalStorage(&amp;tls, Ns_Free);
+    <a name="184347"></a>}
+    <a name="184348"></a>
+    <a name="184349"></a>char *
+    <a name="184350"></a>GetBuffer
+    <a name="184351"></a>{
+    <a name="184352"></a>	void *ptr;
+    <a name="184353"></a>
+    <a name="184368"></a>	Ns_GetThreadLocalStorage(&amp;tls, &amp;ptr);
+    <a name="192881"></a>	if (ptr == NULL) {
+    <a name="192882"></a>		/* Allocate a buffer for this thread. */
+    <a name="192883"></a>		ptr = Ns_Malloc(BUFFER_SIZE);
+    <a name="184363"></a>		Ns_SetThreadLocalStorage(&amp;tls, ptr);
+    <a name="184364"></a>	}
+    <a name="184365"></a>	return (char *) ptr;
+    <a name="184366"></a>}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch8.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch10.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

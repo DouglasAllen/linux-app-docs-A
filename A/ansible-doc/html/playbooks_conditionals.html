@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Conditionals &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Playbooks" href="playbooks.html" />
+    <link rel="next" title="Loops" href="playbooks_loops.html" />
+    <link rel="prev" title="Variables" href="playbooks_variables.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="playbooks_loops.html" title="Loops"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_variables.html" title="Variables"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks.html" accesskey="U">Playbooks</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="conditionals">
+<h1><a class="toc-backref" href="#id1">Conditionals</a><a class="headerlink" href="#conditionals" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#conditionals" id="id1">Conditionals</a><ul>
+<li><a class="reference internal" href="#the-when-statement" id="id2">The When Statement</a></li>
+<li><a class="reference internal" href="#loading-in-custom-facts" id="id3">Loading in Custom Facts</a></li>
+<li><a class="reference internal" href="#applying-when-to-roles-and-includes" id="id4">Applying &#8216;when&#8217; to roles and includes</a></li>
+<li><a class="reference internal" href="#conditional-imports" id="id5">Conditional Imports</a></li>
+<li><a class="reference internal" href="#selecting-files-and-templates-based-on-variables" id="id6">Selecting Files And Templates Based On Variables</a></li>
+<li><a class="reference internal" href="#register-variables" id="id7">Register Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Often the result of a play may depend on the value of a variable, fact (something learned about the remote system),
+or previous task result.  In some cases, the values of variables may depend on other variables.
+Further, additional groups can be created to manage hosts based on
+whether the hosts match other criteria.   There are many options to control execution flow in Ansible.</p>
+<p>Let&#8217;s dig into what they are.</p>
+<div class="section" id="the-when-statement">
+<h2><a class="toc-backref" href="#id2">The When Statement</a><a class="headerlink" href="#the-when-statement" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you will want to skip a particular step on a particular host.  This could be something
+as simple as not installing a certain package if the operating system is a particular version,
+or it could be something like performing some cleanup steps if a filesystem is getting full.</p>
+<p>This is easy to do in Ansible, with the <cite>when</cite> clause, which contains a Jinja2 expression (see <a class="reference internal" href="playbooks_variables.html"><em>Variables</em></a>).
+It&#8217;s actually pretty simple:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: "shutdown Debian flavored systems"
+    command: /sbin/shutdown -t now
+    when: ansible_os_family == "Debian"</pre>
+</div>
+<p>A number of Jinja2 &#8220;filters&#8221; can also be used in when statements, some of which are unique
+and provided by Ansible.  Suppose we want to ignore the error of one statement and then
+decide to do something conditionally based on success or failure:</p>
+<div class="highlight-python"><pre>tasks:
+  - command: /bin/false
+    register: result
+    ignore_errors: True
+  - command: /bin/something
+    when: result|failed
+  - command: /bin/something_else
+    when: result|success
+  - command: /bin/still/something_else
+    when: result|skipped</pre>
+</div>
+<p>Note that was a little bit of foreshadowing on the &#8216;register&#8217; statement.  We&#8217;ll get to it a bit later in this chapter.</p>
+<p>As a reminder, to see what facts are available on a particular system, you can do:</p>
+<div class="highlight-python"><pre>ansible hostname.example.com -m setup</pre>
+</div>
+<p>Tip: Sometimes you&#8217;ll get back a variable that&#8217;s a string and you&#8217;ll want to do a math operation comparison on it.  You can do this like so:</p>
+<div class="highlight-python"><pre>tasks:
+  - shell: echo "only on Red Hat 6, derivatives, and later"
+    when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int &gt;= 6</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the above example requires the lsb_release package on the target host in order to return the ansible_lsb.major_release fact.</p>
+</div>
+<p>Variables defined in the playbooks or inventory can also be used.  An example may be the execution of a task based on a variable&#8217;s boolean value:</p>
+<div class="highlight-python"><pre>vars:
+  epic: true</pre>
+</div>
+<p>Then a conditional execution might look like:</p>
+<div class="highlight-python"><pre>tasks:
+    - shell: echo "This certainly is epic!"
+      when: epic</pre>
+</div>
+<p>or:</p>
+<div class="highlight-python"><pre>tasks:
+    - shell: echo "This certainly isn't epic!"
+      when: not epic</pre>
+</div>
+<p>If a required variable has not been set, you can skip or fail using Jinja2&#8217;s
+<cite>defined</cite> test. For example:</p>
+<div class="highlight-python"><pre>tasks:
+    - shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
+      when: foo is defined
+
+    - fail: msg="Bailing out. this play requires 'bar'"
+      when: bar is not defined</pre>
+</div>
+<p>This is especially useful in combination with the conditional import of vars
+files (see below).</p>
+<p>Note that when combining <cite>when</cite> with <cite>with_items</cite> (see <a class="reference internal" href="playbooks_loops.html"><em>Loops</em></a>), be aware that the <cite>when</cite> statement is processed separately for each item. This is by design:</p>
+<div class="highlight-python"><pre>tasks:
+    - command: echo {{ item }}
+      with_items: [ 0, 2, 4, 6, 8, 10 ]
+      when: item &gt; 5</pre>
+</div>
+</div>
+<div class="section" id="loading-in-custom-facts">
+<h2><a class="toc-backref" href="#id3">Loading in Custom Facts</a><a class="headerlink" href="#loading-in-custom-facts" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s also easy to provide your own facts if you want, which is covered in <a class="reference internal" href="developing_modules.html"><em>Developing Modules</em></a>.  To run them, just
+make a call to your own custom fact gathering module at the top of your list of tasks, and variables returned
+there will be accessible to future tasks:</p>
+<div class="highlight-python"><pre>tasks:
+    - name: gather site specific fact data
+      action: site_facts
+    - command: /usr/bin/thingy
+      when: my_custom_fact_just_retrieved_from_the_remote_system == '1234'</pre>
+</div>
+</div>
+<div class="section" id="applying-when-to-roles-and-includes">
+<h2><a class="toc-backref" href="#id4">Applying &#8216;when&#8217; to roles and includes</a><a class="headerlink" href="#applying-when-to-roles-and-includes" title="Permalink to this headline">¶</a></h2>
+<p>Note that if you have several tasks that all share the same conditional statement, you can affix the conditional
+to a task include statement as below.  Note this does not work with playbook includes, just task includes.  All the tasks
+get evaluated, but the conditional is applied to each and every task:</p>
+<div class="highlight-python"><pre>- include: tasks/sometasks.yml
+  when: "'reticulating splines' in output"</pre>
+</div>
+<p>Or with a role:</p>
+<div class="highlight-python"><pre>- hosts: webservers
+  roles:
+     - { role: debian_stock_config, when: ansible_os_family == 'Debian' }</pre>
+</div>
+<p>You will note a lot of &#8216;skipped&#8217; output by default in Ansible when using this approach on systems that don&#8217;t match the criteria.
+Read up on the &#8216;group_by&#8217; module in the <a class="reference internal" href="modules.html"><em>About Modules</em></a> docs for a more streamlined way to accomplish the same thing.</p>
+</div>
+<div class="section" id="conditional-imports">
+<h2><a class="toc-backref" href="#id5">Conditional Imports</a><a class="headerlink" href="#conditional-imports" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an advanced topic that is infrequently used.  You can probably skip this section.</p>
+</div>
+<p>Sometimes you will want to do certain things differently in a playbook based on certain criteria.
+Having one playbook that works on multiple platforms and OS versions is a good example.</p>
+<p>As an example, the name of the Apache package may be different between CentOS and Debian,
+but it is easily handled with a minimum of syntax in an Ansible Playbook:</p>
+<div class="highlight-python"><pre>---
+- hosts: all
+  remote_user: root
+  vars_files:
+    - "vars/common.yml"
+    - [ "vars/{{ ansible_os_family }}.yml", "vars/os_defaults.yml" ]
+  tasks:
+  - name: make sure apache is running
+    service: name={{ apache }} state=running</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The variable &#8216;ansible_os_family&#8217; is being interpolated into
+the list of filenames being defined for vars_files.</p>
+</div>
+<p>As a reminder, the various YAML files contain just keys and values:</p>
+<div class="highlight-python"><pre>---
+# for vars/CentOS.yml
+apache: httpd
+somethingelse: 42</pre>
+</div>
+<p>How does this work?  If the operating system was &#8216;CentOS&#8217;, the first file Ansible would try to import
+would be &#8216;vars/CentOS.yml&#8217;, followed by &#8216;/vars/os_defaults.yml&#8217; if that file
+did not exist.   If no files in the list were found, an error would be raised.
+On Debian, it would instead first look towards &#8216;vars/Debian.yml&#8217; instead of &#8216;vars/CentOS.yml&#8217;, before
+falling back on &#8216;vars/os_defaults.yml&#8217;. Pretty simple.</p>
+<p>To use this conditional import feature, you&#8217;ll need facter or ohai installed prior to running the playbook, but
+you can of course push this out with Ansible if you like:</p>
+<div class="highlight-python"><pre># for facter
+ansible -m yum -a "pkg=facter ensure=installed"
+ansible -m yum -a "pkg=ruby-json ensure=installed"
+
+# for ohai
+ansible -m yum -a "pkg=ohai ensure=installed"</pre>
+</div>
+<p>Ansible&#8217;s approach to configuration &#8211; separating variables from tasks, keeps your playbooks
+from turning into arbitrary code with ugly nested ifs, conditionals, and so on - and results
+in more streamlined &amp; auditable configuration rules &#8211; especially because there are a
+minimum of decision points to track.</p>
+</div>
+<div class="section" id="selecting-files-and-templates-based-on-variables">
+<h2><a class="toc-backref" href="#id6">Selecting Files And Templates Based On Variables</a><a class="headerlink" href="#selecting-files-and-templates-based-on-variables" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an advanced topic that is infrequently used.  You can probably skip this section.</p>
+</div>
+<p>Sometimes a configuration file you want to copy, or a template you will use may depend on a variable.
+The following construct selects the first available file appropriate for the variables of a given host, which is often much cleaner than putting a lot of if conditionals in a template.</p>
+<p>The following example shows how to template out a configuration file that was very different between, say, CentOS and Debian:</p>
+<div class="highlight-python"><pre>- name: template a file
+  template: src={{ item }} dest=/etc/myapp/foo.conf
+  with_first_found:
+    - files:
+       - {{ ansible_distribution }}.conf
+       - default.conf
+      paths:
+       - search_location_one/somedir/
+       - /opt/other_location/somedir/</pre>
+</div>
+</div>
+<div class="section" id="register-variables">
+<h2><a class="toc-backref" href="#id7">Register Variables</a><a class="headerlink" href="#register-variables" title="Permalink to this headline">¶</a></h2>
+<p>Often in a playbook it may be useful to store the result of a given command in a variable and access
+it later.  Use of the command module in this way can in many ways eliminate the need to write site specific facts, for
+instance, you could test for the existence of a particular program.</p>
+<p>The &#8216;register&#8217; keyword decides what variable to save a result in.  The resulting variables can be used in templates, action lines, or <em>when</em> statements.  It looks like this (in an obviously trivial example):</p>
+<div class="highlight-python"><pre>- name: test play
+  hosts: all
+
+  tasks:
+
+      - shell: cat /etc/motd
+        register: motd_contents
+
+      - shell: echo "motd contains the word hi"
+        when: motd_contents.stdout.find('hi') != -1</pre>
+</div>
+<p>As shown previously, the registered variable&#8217;s string contents are accessible with the &#8216;stdout&#8217; value.
+The registered result can be used in the &#8220;with_items&#8221; of a task if it is converted into
+a list (or already is a list) as shown below.  &#8220;stdout_lines&#8221; is already available on the object as
+well though you could also call &#8220;home_dirs.stdout.split()&#8221; if you wanted, and could split by other
+fields:</p>
+<div class="highlight-python"><pre>- name: registered variable usage as a with_items list
+  hosts: all
+
+  tasks:
+
+      - name: retrieve the list of home directories
+        command: ls /home
+        register: home_dirs
+
+      - name: add home dirs to the backup spooler
+        file: path=/mnt/bkspool/{{ item }} src=/home/{{ item }} state=link
+        with_items: home_dirs.stdout_lines
+        # same as with_items: home_dirs.stdout.split()</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>An introduction to playbooks</dd>
+<dt><a class="reference internal" href="playbooks_roles.html"><em>Playbook Roles and Include Statements</em></a></dt>
+<dd>Playbook organization by roles</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html"><em>Best Practices</em></a></dt>
+<dd>Best practices in playbooks</dd>
+<dt><a class="reference internal" href=""><em>Conditionals</em></a></dt>
+<dd>Conditional statements in playbooks</dd>
+<dt><a class="reference internal" href="playbooks_variables.html"><em>Variables</em></a></dt>
+<dd>All about variables</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-devel">User Mailing List</a></dt>
+<dd>Have a question?  Stop by the google group!</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Conditionals</a><ul>
+<li><a class="reference internal" href="#the-when-statement">The When Statement</a></li>
+<li><a class="reference internal" href="#loading-in-custom-facts">Loading in Custom Facts</a></li>
+<li><a class="reference internal" href="#applying-when-to-roles-and-includes">Applying &#8216;when&#8217; to roles and includes</a></li>
+<li><a class="reference internal" href="#conditional-imports">Conditional Imports</a></li>
+<li><a class="reference internal" href="#selecting-files-and-templates-based-on-variables">Selecting Files And Templates Based On Variables</a></li>
+<li><a class="reference internal" href="#register-variables">Register Variables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="playbooks_variables.html"
+                        title="previous chapter">Variables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="playbooks_loops.html"
+                        title="next chapter">Loops</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="playbooks_loops.html" title="Loops"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_variables.html" title="Variables"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks.html" >Playbooks</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

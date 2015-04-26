@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Windows Support &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Introduction" href="intro.html" />
+    <link rel="next" title="Quickstart Video" href="quickstart.html" />
+    <link rel="prev" title="The Ansible Configuration File" href="intro_configuration.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quickstart Video"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro_configuration.html" title="The Ansible Configuration File"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" accesskey="U">Introduction</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="windows-support">
+<h1><a class="toc-backref" href="#id5">Windows Support</a><a class="headerlink" href="#windows-support" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#windows-support" id="id5">Windows Support</a><ul>
+<li><a class="reference internal" href="#windows-how-does-it-work" id="id6">Windows: How Does It Work</a></li>
+<li><a class="reference internal" href="#installing-on-the-control-machine" id="id7">Installing on the Control Machine</a></li>
+<li><a class="reference internal" href="#inventory" id="id8">Inventory</a></li>
+<li><a class="reference internal" href="#windows-system-prep" id="id9">Windows System Prep</a></li>
+<li><a class="reference internal" href="#getting-to-powershell-3-0-or-higher" id="id10">Getting to Powershell 3.0 or higher</a></li>
+<li><a class="reference internal" href="#what-modules-are-available" id="id11">What modules are available</a></li>
+<li><a class="reference internal" href="#developers-supported-modules-and-how-it-works" id="id12">Developers: Supported modules and how it works</a></li>
+<li><a class="reference internal" href="#reminder-you-must-have-a-linux-control-machine" id="id13">Reminder: You Must Have a Linux Control Machine</a></li>
+<li><a class="reference internal" href="#windows-facts" id="id14">Windows Facts</a></li>
+<li><a class="reference internal" href="#windows-playbook-examples" id="id15">Windows Playbook Examples</a></li>
+<li><a class="reference internal" href="#windows-contributions" id="id16">Windows Contributions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="windows-how-does-it-work">
+<span id="id1"></span><h2><a class="toc-backref" href="#id6">Windows: How Does It Work</a><a class="headerlink" href="#windows-how-does-it-work" title="Permalink to this headline">¶</a></h2>
+<p>As you may have already read, Ansible manages Linux/Unix machines using SSH by default.</p>
+<p>Starting in version 1.7, Ansible also contains support for managing Windows machines.  This uses
+native powershell remoting, rather than SSH.</p>
+<p>Ansible will still be run from a Linux control machine, and uses the &#8220;winrm&#8221; Python module to talk to remote hosts.</p>
+<p>No additional software needs to be installed on the remote machines for Ansible to manage them, it still maintains the agentless properties that make it popular on Linux/Unix.</p>
+<p>Note that it is expected you have a basic understanding of Ansible prior to jumping into this section, so if you haven&#8217;t written a Linux playbook first, it might be worthwhile to dig in there first.</p>
+</div>
+<div class="section" id="installing-on-the-control-machine">
+<span id="windows-installing"></span><h2><a class="toc-backref" href="#id7">Installing on the Control Machine</a><a class="headerlink" href="#installing-on-the-control-machine" title="Permalink to this headline">¶</a></h2>
+<p>On a Linux control machine:</p>
+<div class="highlight-python"><pre>pip install http://github.com/diyan/pywinrm/archive/master.zip#egg=pywinrm</pre>
+</div>
+</div>
+<div class="section" id="inventory">
+<span id="windows-inventory"></span><h2><a class="toc-backref" href="#id8">Inventory</a><a class="headerlink" href="#inventory" title="Permalink to this headline">¶</a></h2>
+<p>Ansible&#8217;s windows support relies on a few standard variables to indicate the username, password, and connection type (windows) of the remote hosts.  These variables are most easily set up in inventory.  This is used instead of SSH-keys or passwords as normally fed into Ansible:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">windows</span><span class="p">]</span>
+<span class="n">winserver1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="n">winserver2</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>In group_vars/windows.yml, define the following inventory variables:</p>
+<div class="highlight-python"><pre># it is suggested that these be encrypted with ansible-vault:
+# ansible-vault edit group_vars/windows.yml
+
+ansible_ssh_user: Administrator
+ansible_ssh_pass: SekritPasswordGoesHere
+ansible_ssh_port: 5986
+ansible_connection: winrm</pre>
+</div>
+<p>Notice that the ssh_port is not actually for SSH, but this is a holdover variable name from how Ansible is mostly an SSH-oriented system.  Again, Windows management will not happen over SSH.</p>
+<p>When using your playbook, don&#8217;t forget to specify &#8211;ask-vault-pass to provide the password to unlock the file.</p>
+<p>Test your configuration like so, by trying to contact your Windows nodes.  Note this is not an ICMP ping, but tests the Ansible
+communication channel that leverages Windows remoting:</p>
+<div class="highlight-python"><pre>ansible windows [-i inventory] -m win_ping --ask-vault-pass</pre>
+</div>
+<p>If you haven&#8217;t done anything to prep your systems yet, this won&#8217;t work yet.  This is covered in a later
+section about how to enable powershell remoting - and if neccessary - how to upgrade powershell to
+a version that is 3 or higher.</p>
+<p>You&#8217;ll run this command again later though, to make sure everything is working.</p>
+</div>
+<div class="section" id="windows-system-prep">
+<span id="id2"></span><h2><a class="toc-backref" href="#id9">Windows System Prep</a><a class="headerlink" href="#windows-system-prep" title="Permalink to this headline">¶</a></h2>
+<p>In order for Ansible to manage your windows machines, you will have to enable Powershell remoting configured.</p>
+<p>To automate setup of WinRM, you can run <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1">this powershell script</a> on the remote machine.</p>
+<p>Admins may wish to modify this setup slightly, for instance to increase the timeframe of
+the certificate.</p>
+</div>
+<div class="section" id="getting-to-powershell-3-0-or-higher">
+<span id="getting-to-powershell-three-or-higher"></span><h2><a class="toc-backref" href="#id10">Getting to Powershell 3.0 or higher</a><a class="headerlink" href="#getting-to-powershell-3-0-or-higher" title="Permalink to this headline">¶</a></h2>
+<p>Powershell 3.0 or higher is needed for most provided Ansible modules for Windows, and is also required to run the above setup script.</p>
+<p>Looking at an ansible checkout, copy the <a class="reference external" href="https://github.com/cchurch/ansible/blob/devel/examples/scripts/upgrade_to_ps3.ps1">examples/scripts/upgrade_to_ps3.ps1</a> script onto the remote host and run a powershell console as an administrator.  You will now be running Powershell 3 and can try connectivity again using the win_ping technique referenced above.</p>
+</div>
+<div class="section" id="what-modules-are-available">
+<span id="what-windows-modules-are-available"></span><h2><a class="toc-backref" href="#id11">What modules are available</a><a class="headerlink" href="#what-modules-are-available" title="Permalink to this headline">¶</a></h2>
+<p>Most of the Ansible modules in core Ansible are written for a combination of Linux/Unix machines and arbitrary web services, though there are various
+Windows modules as listed in the <a class="reference external" href="http://docs.ansible.com/list_of_windows_modules.html">&#8220;windows&#8221; subcategory of the Ansible module index</a>.</p>
+<p>Browse this index to see what is available.</p>
+<p>In many cases, it may not be neccessary to even write or use an Ansible module.</p>
+<p>In particular, the &#8220;script&#8221; module can be used to run arbitrary powershell scripts, allowing Windows administrators familiar with powershell a very native way to do things, as in the following playbook:</p>
+<div class="highlight-python"><pre>- hosts: windows
+  tasks:
+    - script: foo.ps1 --argument --other-argument</pre>
+</div>
+<p>Note there are a few other Ansible modules that don&#8217;t start with &#8220;win&#8221; that also function, including &#8220;slurp&#8221;, &#8220;raw&#8221;, and &#8220;setup&#8221; (which is how fact gathering works).</p>
+</div>
+<div class="section" id="developers-supported-modules-and-how-it-works">
+<span id="developers-developers-developers"></span><h2><a class="toc-backref" href="#id12">Developers: Supported modules and how it works</a><a class="headerlink" href="#developers-supported-modules-and-how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>Developing ansible modules are covered in a <a class="reference external" href="http://developing_modules.html">later section of the documentation</a>, with a focus on Linux/Unix.
+What if you want to write Windows modules for ansible though?</p>
+<p>For Windows, ansible modules are implemented in Powershell.  Skim those Linux/Unix module development chapters before proceeding.</p>
+<p>Windows modules live in a &#8220;windows/&#8221; subfolder in the Ansible &#8220;library/&#8221; subtree.  For example, if a module is named
+&#8220;library/windows/win_ping&#8221;, there will be embedded documentation in the &#8220;win_ping&#8221; file, and the actual powershell code will live in a &#8220;win_ping.ps1&#8221; file.  Take a look at the sources and this will make more sense.</p>
+<p>Modules (ps1 files) should start as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!powershell</span>
+<span class="c"># &lt;license&gt;</span>
+
+<span class="c"># WANT_JSON</span>
+<span class="c"># POWERSHELL_COMMON</span>
+
+<span class="c"># code goes here, reading in stdin as JSON and outputting JSON</span>
+</pre></div>
+</div>
+<p>The above magic is neccessary to tell Ansible to mix in some common code and also know how to push modules out.  The common code contains some nice wrappers around working with hash data structures and emitting JSON results, and possibly a few mpmore useful things.  Regular Ansible has this same concept for reusing Python code - this is just the windows equivalent.</p>
+<p>What modules you see in windows/ are just a start.  Additional modules may be submitted as pull requests to github.</p>
+</div>
+<div class="section" id="reminder-you-must-have-a-linux-control-machine">
+<span id="windows-and-linux-control-machine"></span><h2><a class="toc-backref" href="#id13">Reminder: You Must Have a Linux Control Machine</a><a class="headerlink" href="#reminder-you-must-have-a-linux-control-machine" title="Permalink to this headline">¶</a></h2>
+<p>Note running Ansible from a Windows control machine is NOT a goal of the project.  Refrain from asking for this feature,
+as it limits what technologies, features, and code we can use in the main project in the future.  A Linux control machine
+will be required to manage Windows hosts.</p>
+<p>Cygwin is not supported, so please do not ask questions about Ansible running from Cygwin.</p>
+</div>
+<div class="section" id="windows-facts">
+<span id="id3"></span><h2><a class="toc-backref" href="#id14">Windows Facts</a><a class="headerlink" href="#windows-facts" title="Permalink to this headline">¶</a></h2>
+<p>Just as with Linux/Unix, facts can be gathered for windows hosts, which will return things such as the operating system version.  To see what variables are available about a windows host, run the following:</p>
+<div class="highlight-python"><pre>ansible winhost.example.com -m setup</pre>
+</div>
+<p>Note that this command invocation is exactly the same as the Linux/Unix equivalent.</p>
+</div>
+<div class="section" id="windows-playbook-examples">
+<span id="windows-playbook-example"></span><h2><a class="toc-backref" href="#id15">Windows Playbook Examples</a><a class="headerlink" href="#windows-playbook-examples" title="Permalink to this headline">¶</a></h2>
+<p>Look to the list of windows modules for most of what is possible, though also some modules like &#8220;raw&#8221; and &#8220;script&#8221; also work on Windows, as do &#8220;fetch&#8221; and &#8220;slurp&#8221;.</p>
+<p>Here is an example of pushing and running a powershell script:</p>
+<div class="highlight-python"><pre>- name: test script module
+  hosts: windows
+  tasks:
+    - name: run test script
+      script: files/test_script.ps1</pre>
+</div>
+<p>Running individual commands uses the &#8216;raw&#8217; module, as opposed to the shell or command module as is common on Linux/Unix operating systems:</p>
+<div class="highlight-python"><pre>- name: test raw module
+  hosts: windows
+  tasks:
+    - name: run ipconfig
+      raw: ipconfig
+      register: ipconfig
+    - debug: var=ipconfig</pre>
+</div>
+<p>And for a final example, here&#8217;s how to use the win_stat module to test for file existance.  Note that the data returned byt he win_stat module is slightly different than what is provided by the Linux equivalent:</p>
+<div class="highlight-python"><pre>- name: test stat module
+  hosts: windows
+  tasks:
+    - name: test stat module on file
+      win_stat: path="C:/Windows/win.ini"
+      register: stat_file
+
+    - debug: var=stat_file
+
+    - name: check stat_file result
+      assert:
+          that:
+             - "stat_file.stat.exists"
+             - "not stat_file.stat.isdir"
+             - "stat_file.stat.size &gt; 0"
+             - "stat_file.stat.md5"</pre>
+</div>
+<p>Again, recall that the Windows modules are all listed in the Windows category of modules, with the exception that the &#8220;raw&#8221;, &#8220;script&#8221;, and &#8220;fetch&#8221; modules are also available.  These modules do not start with a &#8220;win&#8221; prefix.</p>
+</div>
+<div class="section" id="windows-contributions">
+<span id="id4"></span><h2><a class="toc-backref" href="#id16">Windows Contributions</a><a class="headerlink" href="#windows-contributions" title="Permalink to this headline">¶</a></h2>
+<p>Windows support in Ansible is still very new, and contributions are quite welcome, whether this is in the
+form of new modules, tweaks to existing modules, documentation, or something else.  Please stop by the ansible-devel mailing list if you would like to get involved and say hi.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="developing_modules.html"><em>Developing Modules</em></a></dt>
+<dd>How to write modules</dd>
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>Learning ansible&#8217;s configuration management language</dd>
+<dt><a class="reference external" href="http://docs.ansible.com/list_of_windows_modules.html">List of Windows Modules</a></dt>
+<dd>Windows specific module list, all implemented in powershell</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-project">Mailing List</a></dt>
+<dd>Questions? Help? Ideas?  Stop by the list on Google Groups</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Windows Support</a><ul>
+<li><a class="reference internal" href="#windows-how-does-it-work">Windows: How Does It Work</a></li>
+<li><a class="reference internal" href="#installing-on-the-control-machine">Installing on the Control Machine</a></li>
+<li><a class="reference internal" href="#inventory">Inventory</a></li>
+<li><a class="reference internal" href="#windows-system-prep">Windows System Prep</a></li>
+<li><a class="reference internal" href="#getting-to-powershell-3-0-or-higher">Getting to Powershell 3.0 or higher</a></li>
+<li><a class="reference internal" href="#what-modules-are-available">What modules are available</a></li>
+<li><a class="reference internal" href="#developers-supported-modules-and-how-it-works">Developers: Supported modules and how it works</a></li>
+<li><a class="reference internal" href="#reminder-you-must-have-a-linux-control-machine">Reminder: You Must Have a Linux Control Machine</a></li>
+<li><a class="reference internal" href="#windows-facts">Windows Facts</a></li>
+<li><a class="reference internal" href="#windows-playbook-examples">Windows Playbook Examples</a></li>
+<li><a class="reference internal" href="#windows-contributions">Windows Contributions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro_configuration.html"
+                        title="previous chapter">The Ansible Configuration File</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Quickstart Video</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quickstart Video"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro_configuration.html" title="The Ansible Configuration File"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" >Introduction</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

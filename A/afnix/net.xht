@@ -1,0 +1,1326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Networking Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Networking Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Networking Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Networking</em> module is an original implementation of networking facilities for the Internet Protocol. The module features standard TCP and UDP sockets for point to point communication as well as multicast socket. Numerous functions and objects for address manipulation are also included in this module. This module is also designed to support IP version 6 with certain platforms. </p>
+<div class="section">
+IP address</div>
+<p class="text">
+ The IP based communication uses a standard address to reference a particular peer. With IP version 4, the standard dot notation is with 4 bytes. With IP version 6, the standard semicolon notation is with 16 bytes. The current implementation supports both versions. </p>
+<pre class="frame">
+<![CDATA[127.0.0.1       # ipv4 localhost
+0:0:0:0:0:0:0:1 # ipv6 localhost
+
+]]></pre>
+<p class="text">
+ IP address architecture and behavior are described in various documents as listed in the bibliography. </p>
+<p class="subsect">
+Domain name system</p>
+<p class="text">
+ The translation between a host name and an IP address is performed by a <em>resolver</em> which uses the <em>Domain Name
+	System</em> or DNS. Access to the DNS is automatic with the implementation. Depending on the machine resolver configuration, a particular domain name translation might result in an IP version 4 or IP version 6 address. Most of the time, an IP version 4 address is returned. </p>
+<p class="text">
+ The mapping between an IP address and a host name returns the associated <em>canonical name</em> for that IP address. This is the reverse of the preceding operation. </p>
+<div class="section">
+The Address class</div>
+<p class="text">
+ The <tt class="code">Address</tt> class allows manipulation of IP address. The constructor takes a string as its arguments. The argument string can be either an IP address or a host name which can be qualified or not. When the address is constructed with a host name, the IP address resolution is done immediately. </p>
+<p class="subsect">
+Name to address translation</p>
+<p class="text">
+ The most common operation is to translate a host name to its equivalent IP address. Once the <tt class="code">Address</tt> object is constructed, the <tt class="code">get-address</tt> method returns a string representation of the internal IP address. The following example prints the IP address of the localhost, that is <em>127.0.0.1</em> with IP version 4. </p>
+<pre class="frame">
+<![CDATA[# load network module
+interp:library "afnix-net"
+# get the localhost address
+const addr (afnix:net:Address "localhost")
+# print the ip address
+println (addr:get-address)
+
+]]></pre>
+<p class="text">
+ As another example, the <tt class="code">get-host-name</tt> function returns the host name of the running machine. The previous example can be used to query its IP address. </p>
+<p class="subsect">
+Address to name translation</p>
+<p class="text">
+ The reverse operation of name translation maps an IP address to a <em>canonical name</em>. It shall be noted that the reverse lookup is not done automatically, unless the <em>reverse
+	flag</em> is set in the constructoor. The <tt class="code">get-canonical-name</tt> method of the <tt class="code">Address</tt> class returns such name. Example <tt class="file">XNET001.als</tt> is a demonstration program which prints the address original name, the IP address and the canonical name. Fell free to use it with your favorite site to check the equivalence between the original name and the canonical name. </p>
+<pre class="frame">
+<![CDATA[# print the ip address information of the arguments
+# usage: axi XNET001.als [hosts ...]
+# get the network module
+interp:library "afnix-net"
+# print the ip address
+const ip-address-info (host) {
+  try {
+    const addr (afnix:net:Address host true)
+    println "host name        : " (addr:get-name)
+    println "  ip address     : " (addr:get-address)
+    println "  canonical name : " (
+      addr:get-canonical-name)
+    # get aliases
+    const size (addr:get-alias-size)
+    loop (trans i 0) (< i size) (i:++) {
+      println "  alias address  : " (
+        addr:get-alias-address i)
+      println "  alias name     : " (
+        addr:get-alias-name i)
+    }      
+  } (errorln "error: " what:reason)
+}
+# get the hosts 
+for (s) (interp:argv) (ip-address-info s)
+zsh> axi net-0001.als localhost
+host name        : localhost
+ip address     : 127.0.0.1
+canonical name : localhost
+
+]]></pre>
+<p class="subsect">
+Address operations</p>
+<p class="text">
+ The <tt class="code">Address</tt> class provides several methods and operators that ease the address manipulation in a protocol indepedant way. For example, the <tt class="code">==</tt> operator compares two addresses. The <tt class="code">++</tt> operator can also be used to get the next IP address. </p>
+<div class="section">
+Transport layers</div>
+<p class="text">
+ The two transport layer protocols supported by the Internet protocol is the TCP, a full-duplex oriented protocol, and UDP, a datagram protocol. TCP is a reliable protocol while UDP is not. By reliable, we mean that the protocol provides automatically some mechanisms for error recovery, message delivery, acknowledgment of reception, etc... The use of TCP vs. UDP is dictated mostly by the reliability concerns, while UDP reduces the traffic congestion. </p>
+<p class="subsect">
+Service port</p>
+<p class="text">
+ In the client-server model, a connection is established between two hosts. The connections is made via the IP address and the port number. For a given service, a port identifies that service at a particular address. This means that multiple services can exist at the same address. More precisely, the transport layer protocol is also used to distinguish a particular service. The network module provides a simple mechanism to retrieve the port number, given its name and protocol. The function <tt class="code">get-tcp-service</tt> and <tt class="code">get-udp-service</tt> returns the port number for a given service by name. For example, the <em>daytime</em> server is located at port number 13. </p>
+<pre class="frame">
+<![CDATA[assert 13 (afnix:net:get-tcp-service "daytime")
+assert 13 (afnix:net:get-udp-service "daytime")
+
+]]></pre>
+<p class="subsect">
+Host and peer</p>
+<p class="text">
+ With the client server model, the only information needed to identify a particular client or server is the address and the port number. When a client connects to a server, it specify the port number the server is operating. The client uses a random port number for itself. When a server is created, the port number is used to bind the server to that particular port. If the port is already in use, that binding will fail. From a reporting point of view, a connection is therefore identified by the running host address and port, and the peer address and port. For a client, the peer is the server. For a server, the peer is the client. </p>
+<div class="section">
+TCP client socket</div>
+<p class="text">
+ The <tt class="code">TcpClient</tt> class creates an TCP client object by address and port. The address can be either a string or an <tt class="code">Address</tt> object. During the object construction, the connection is established with the server. Once the connection is established, the client can use the <tt class="code">read</tt> and <tt class="code">write</tt> method to communicate with the server. The <tt class="code">TcpClient</tt> class is derived from the <tt class="code">Socket</tt> class which is derived from the <tt class="code">InputStream</tt> and <tt class="code">OutputStream</tt> classes. </p>
+<p class="subsect">
+Day time client</p>
+<p class="text">
+ The simplest example is a client socket which communicates with the daytime server. The server is normally running on all machines and is located at port 13. </p>
+<pre class="frame">
+<![CDATA[# get the network module
+interp:library "afnix-net"
+# get the daytime server port
+const port (afnix:net:get-tcp-service "daytime")
+# create a tcp client socket
+const s (afnix:net:TcpClient "localhost" port)
+# read the data - the server close the connection
+while (s:valid-p) (println (s:readln))
+
+]]></pre>
+<p class="text">
+ Example <tt class="file">3201.als</tt> in the example directory prints the day time of the local host without argument or the day time of the argument. Feel free to use it with <em>www.afnix.org</em>. If the server you are trying to contact does not have a day time server, an exception will be raised and the program terminates. </p>
+<pre class="frame">
+<![CDATA[zsh> axi 3201.als www.afnix.org
+
+]]></pre>
+<p class="subsect">
+HTTP request example</p>
+<p class="text">
+ Another example which illustrates the use of the <tt class="code">TcpClient</tt> object is a simple client which download a web page. At this stage we are not concern with the URL but rather the mechanics involved. The request is made by opening a TCP client socket on port 80 (the HTTP server port) and sending a request by writing some HTTP commands. When the commands have been sent, the data sent by the server are read and printed on the standard output. Note that this example is not concerned by error detection. </p>
+<pre class="frame">
+<![CDATA[# fetch an html page by host and page
+# usage: axi 3203.als [host] [page]
+# get the network module
+interp:library "afnix-net"
+interp:library "afnix-sys"
+# connect to the http server and issue a request
+const send-http-request (host page) {
+  # create a client sock on port 80
+  const s     (afnix:net:TcpClient host 80)
+  const saddr (s:get-socket-address)
+  # format the request
+  s:writeln "GET " page " HTTP/1.1"
+  s:writeln "Host: " (saddr:get-canonical-name)
+  s:writeln "Connection: close"
+  s:writeln "User-Agent: afnix tcp client example"
+  s:newline
+  # write the result
+  while (s:valid-p) (println (s:readln))
+}
+# get the argument
+if (!= (interp:argv:length) 2) (afnix:sys:exit 1)
+const host (interp:argv:get 0)
+const page (interp:argv:get 1)
+# send request
+send-http-request host page
+
+]]></pre>
+<div class="section">
+UDP client socket</div>
+<p class="text">
+ UDP client socket is similar to TCP client socket. However, due to the unreliable nature of UDP, UDP clients are somehow more difficult to manage. Since there is no flow control, it becomes more difficult to assess whether or not a datagram has reached its destination. The same apply for a server, where a reply datagram might be lost. The <tt class="code">UdpClient</tt> class is the class which creates a UDP client object. Its usage is similar to the <tt class="code">TcpClient</tt>. </p>
+<p class="subsect">
+The time client</p>
+<p class="text">
+ The UDP time server normally runs on port 37 is the best place to enable it. A UDP client is created with the <tt class="code">UdpClient</tt> class. Once the object is created, the client sends an empty datagram to the server. The server send a reply datagram with 4 bytes, in network byte order, corresponding to the date as of January 1st 1900. Example <tt class="file">3204.als</tt> prints date information after contacting the local host time server or the host specified as the first argument. </p>
+<pre class="frame">
+<![CDATA[# get the libraries
+interp:library "afnix-net"
+interp:library "afnix-sys"
+# get the daytime server port
+const port (afnix:net:get-udp-service "time")
+# create a client socket and read the data
+const print-time (host) {
+  # create a udp client socket
+  const s (afnix:net:UdpClient host port)
+  # send an empty datagram
+  s:write
+  # read the 4 bytes data and adjust to epoch
+  const buf (s:read 4)
+  const val (- (buf:get-quad) 2208988800)
+  # format the date
+  const time (afnix:sys:Time val)
+  println (time:format-date) ' ' (time:format-time)
+}
+# check for one argument or use localhost
+const host (if (== (interp:argv:length) 0) 
+  "localhost" (interp:argv:get 0))
+print-time host
+
+]]></pre>
+<p class="text">
+ This example calls for several comments. First the <tt class="code">write</tt> method without argument sends an empty datagram. It is the datagram which trigger the server. The <tt class="code">read</tt> method reads 4 bytes from the reply datagram and places them in a <tt class="code">Buffer</tt> object. Since the bytes are in network byte order, the conversion into an integer value is done with the <tt class="code">get-quad</tt> method. Finally, in order to use the <tt class="code">Time</tt> class those epoch is January 1st 1970, the constant <tt class="code">2208988800</tt> is subtracted from the result. Remember that the time server sends the date in reference to January 1st 1900. More information about the time server can be found in RFC738. </p>
+<p class="subsect">
+More on reliability</p>
+<p class="text">
+ The previous example has some inherent problems due to the unreliability of UDP. If the first datagram is lost, the <tt class="code">read</tt> method will block indefinitely. Another scenario which causes the <tt class="code">read</tt> method to block is the loss of the server reply datagram. Both problem can generally be fixed by checking the socket with a timeout using the <tt class="code">valid-p</tt> method. With one argument, the method timeout and return false. In this case, a new datagram can be send to the server. Example <tt class="file">3205.als</tt> illustrates this point. We print below the extract of code. </p>
+<pre class="frame">
+<![CDATA[# create a client socket and read the data
+const print-time (host) {
+  # create a udp client socket
+  const s (afnix:net:UdpClient host port)
+  # send an empty datagram until the socket is valid
+  s:write
+  # retransmit datagram each second
+  while (not (s:valid-p 1000)) (s:write)
+  # read the 4 bytes data and adjust to epoch
+  const buf (s:read 4)
+  const val (- (buf:get-quad) 2208988800)
+  # format the date
+  const time (afnix:sys:Time val)
+  println (time:format-date) ' ' (time:format-time)
+}
+
+]]></pre>
+<p class="text">
+ Note that this solution is a naive one. In the case of multiple datagrams, a sequence number must be placed because there is no clue about the lost datagram. A simple rule of thumb is to use TCP as soon as reliability is a concern, but this choice might not so easy. </p>
+<p class="subsect">
+Error detection</p>
+<p class="text">
+ Since UDP is not reliable, there is no simple solution to detect when a datagram has been lost. Even worse, if the server is not running, it is not easy to detect that the client datagram has been lost. In such situation, the client might indefinitely send datagram without getting an answer. One solution to this problem is again to count the number of datagram re-transmit and eventually give up after a certain time. </p>
+<div class="section">
+Socket class</div>
+<p class="text">
+ The <tt class="code">Socket</tt> class is the base class for both <tt class="code">TcpClient</tt> and <tt class="code">UdpClient</tt>. The class provides methods to query the socket port and address as well as the peer port and address. Note at this point that the UDP socket is a connected socket. Therefore, these methods will work fine. The <tt class="code">get-socket-address</tt> and <tt class="code">get-socket-port</tt> returns respectively the address and port of the connected socket. The <tt class="code">get-peer-address</tt> and <tt class="code">get-peer-port</tt> returns respectively the address and port of the connected socket's peer. Example <tt class="file">3206.als</tt> illustrates the use of these methods. </p>
+<pre class="frame">
+<![CDATA[# create a client socket and read the data
+const print-socket-info (host) {
+  # create a tcp client socket
+  const s (afnix:net:TcpClient host port)
+  # print socket address and port
+  const saddr (s:get-socket-address)
+  const sport (s:get-socket-port)
+  println "socket ip address     : " (
+    saddr:get-address)
+  println "socket canonical name : " (
+    saddr:get-canonical-name)
+  println "socket port           : " sport
+  # print peer address and port
+  const paddr (s:get-peer-address)
+  const pport (s:get-peer-port)
+  println "peer ip address       : " (
+    paddr:get-address)
+  println "peer canonical name   : " (
+    paddr:get-canonical-name)
+  println "peer port             : " pport
+}
+
+]]></pre>
+<p class="subsect">
+Socket predicates</p>
+<p class="text">
+ The <tt class="code">Socket</tt> class is associated with the <tt class="code">socket-p</tt> predicate. The respective client objects have the <tt class="code">tcp-client-p</tt> predicate and <tt class="code">udp-client-p</tt> predicate. </p>
+<div class="section">
+TCP server socket</div>
+<p class="text">
+ The <tt class="code">TcpServer</tt> class creates an TCP server object. There are several constructors for the TCP server. In its simplest form, without port, a TCP server is created on the <tt class="code">localhost</tt> with an ephemeral port number (i.e port 0 during the call). With a port number, the TCP server is created on the <tt class="code">localhost</tt>. For a multi-homed host, the address to use to run the server can be specified as the first argument. The address can be either a string or an <tt class="code">Address</tt> object. In both cases, the port is specified as the second argument. Finally, a third argument called the <tt class="code">backlog</tt> can be specified to set the number of acceptable incoming connection. That is the maximum number of pending connection while processing a connection. The following example shows various ways to create a TCP server. </p>
+<pre class="frame">
+<![CDATA[trans s (afnix:net:TcpServer)
+trans s (afnix:net:TcpServer 8000)
+trans s (afnix:net:TcpServer 8000 5)
+trans s (afnix:net:TcpServer "localhost" 8000)
+trans s (afnix:net:TcpServer "localhost" 8000 5)
+trans s (afnix:net:TcpServer (
+    Address "localhost") 8000)
+trans s (afnix:net:TcpServer (
+    Address "localhost") 8000 5)
+
+]]></pre>
+<p class="subsect">
+Echo server example</p>
+<p class="text">
+ A simple <em>echo server</em> can be built and tested with the standard <tt class="command">telnet</tt> application. The application will echo all lines that are typed with the <tt class="command">telnet</tt> client. The server is bound on the port 8000, since ports 0 to 1024 are privileged ports. </p>
+<pre class="frame">
+<![CDATA[# get the network module
+interp:library "afnix-net"
+# create a tcp server on port 8000
+const srv (afnix:net:TcpServer 8000)
+# wait for a connection
+const s (srv:accept)
+# echo the line until the end
+while (s:valid-p) (s:writeln (s:readln))
+
+]]></pre>
+<p class="text">
+ The <tt class="command">telnet</tt> session is then quite simple. The line <em>hello world</em> is echoed by the server. </p>
+<pre class="frame">
+<![CDATA[zsh> telnet localhost 8000
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+hello world
+^D
+
+]]></pre>
+<p class="subsect">
+The accept method</p>
+<p class="text">
+ The previous example illustrates the mechanics of a server. When the server is created, the server is ready to accept connection. The <tt class="code">accept</tt> method blocks until a client connect with the server. When the connection is established, the <tt class="code">accept</tt> method returns a socket object which can be used to read and write data. </p>
+<p class="subsect">
+Multiple connections</p>
+<p class="text">
+ One problem with the previous example is that the server accepts only one connection. In order to accept multiple connection, the <tt class="code">accept</tt> method must be placed in a loop, and the server operation in a thread (There are some situations where a new process might be more appropriate than a thread). Example <tt class="file">3302.als</tt> illustrates such point. </p>
+<pre class="frame">
+<![CDATA[# get the network module
+interp:library "afnix-net"
+# this function echo a line from the client
+const echo-server (s) {
+  while (s:valid-p) (s:writeln (s:readln))
+}
+# create a tcp server on port 8000
+const srv (afnix:net:TcpServer 8000)
+# wait for a connection
+while true {
+  trans s (srv:accept)
+  launch  (echo-server s)
+}
+
+]]></pre>
+<div class="section">
+UDP server socket</div>
+<p class="text">
+ The <tt class="code">UdpServer</tt> class is similar to the <tt class="code">TcpServer</tt> object, except that there is no backlog parameters. In its simplest form, the UDP server is created on the <tt class="code">localhost</tt> with an ephemeral port (i.e port 0). With a port number, the server is created on the <tt class="code">localhost</tt>. For a multi-homed host, the address used to run the server can be specified as the first argument. The address can be either a string or an <tt class="code">Address</tt> object. In both cases, the port is specified as the second argument. </p>
+<pre class="frame">
+<![CDATA[trans s (afnix:net:UdpServer)
+trans s (afnix:net:UdpServer 8000)
+trans s (afnix:net:UdpServer "localhost" 8000)
+trans s (afnix:net:UdpServer (
+    Address "localhost") 8000)
+
+]]></pre>
+<p class="subsect">
+Echo server example</p>
+<p class="text">
+ The <em>echo server</em> can be revisited to work with udp datagram. The only difference is the use of the <tt class="code">accept</tt> method. For a UDP server, the method return a <tt class="code">Datagram</tt> object which can be used to read and write data. </p>
+<pre class="frame">
+<![CDATA[# get the network module
+interp:library "afnix-net"
+# create a udp server on port 8000
+const srv (afnix:net:UdpServer 8000)
+# wait for a connection
+while true {
+  trans dg   (srv:accept)
+  dg:writeln (dg:readln)
+}
+
+]]></pre>
+<p class="subsect">
+Datagram object</p>
+<p class="text">
+ With a UDP server, the <tt class="code">accept</tt> method returns a <tt class="code">Datagram</tt> object. Because a UDP is connection-less, the server has no idea from whom the datagram is coming until that one has been received. When a datagram arrives, the <tt class="code">Datagram</tt> object is constructed with the peer address being the source address. Standard i/o methods can be used to read or write. When a write method is used, the data are sent back to the peer in a form of another datagram. </p>
+<pre class="frame">
+<![CDATA[# wait for a datagram
+trans dg (s:accept)
+# assert datagram type
+assert true (datagram-p dg)
+# get contents length
+println "datagram buffer size : " (dg:get-buffer-length)
+# read a line from this datagram
+trans line (dg:readln)
+# send it back to the sender
+s:writeln line
+
+]]></pre>
+<p class="subsect">
+Input data buffer</p>
+<p class="text">
+ For a datagram, and generally speaking, for a UDP socket, all input operations are buffered. This means that when a datagram is received, the <tt class="code">accept</tt> method places all data in an input buffer. This means that a read operation does not necessarily flush the whole buffer but rather consumes only the requested character. For example, if one datagram contains the string <em>hello world</em>. A call to <tt class="code">readln</tt> will return the entire string. A call to read will return only the character 'h'. Subsequent call will return the next available characters. A call like <tt class="code">read 5</tt> will return a buffer with 5 characters. Subsequent calls will return the remaining string. In any case, the <tt class="code">get-buffer-length</tt> will return the number of available characters in the buffer. A call to <tt class="code">valid-p</tt> will return true if there are some characters in the buffer or if a new datagram has arrived. Care should be taken with the <tt class="code">read</tt> method. For example if there is only 4 characters in the input buffer and a call to read for 10 characters is made, the method will block until a new datagram is received which can fill the remaining 6 characters. Such situation can be avoided by using the <tt class="code">get-buffer-length</tt> and the <tt class="code">valid-p</tt> methods. Note also that a timeout can be specified with the <tt class="code">valid-p</tt> method. </p>
+<div class="section">
+Low level socket methods</div>
+<p class="text">
+ Some folks always prefer to do everything by themselves. Most of the time for good reasons. If this is your case, you might have to use the low level socket methods. Instead of using a client or server class, the implementation let's you create a <tt class="code">TcpSocket</tt> or <tt class="code">UdpSocket</tt>. Once this done, the <tt class="code">bind</tt>, <tt class="code">connect</tt> and other methods can be used to create the desired connection. </p>
+<p class="subsect">
+A socket client</p>
+<p class="text">
+ A simple TCP socket client is created with the <tt class="code">TcpSocket</tt> class. Then the <tt class="code">connect</tt> method is called to establish the connection. </p>
+<pre class="frame">
+<![CDATA[# create an address and a tcp socket
+const addr (afnix:net:Address "localhost")
+const sid  (afnix:net:TcpSocket)
+# connect the socket
+sid:connect 13 addr
+
+]]></pre>
+<p class="text">
+ Once the socket is connected, normal read and write operations can be performed. After the socket is created, it is possible to set some options. A typical one is <tt class="code">NO-DELAY</tt> which disable the Naggle algorithm. </p>
+<pre class="frame">
+<![CDATA[# create an address and a tcp socket
+const addr (afnix:net:Address "localhost")
+const sid  (afnix:net:TcpSocket)
+# disable the naggle algorithm
+sid:set-option sid:NO-DELAY true
+# connect the socket
+sid:connect 13 addr
+
+]]></pre>
+<hr/>
+<div class="appendix">
+Networking reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Address</div>
+<p class="text">
+ The <tt class="code">Address</tt> class is the Internet address manipulation class. The class can be used to perform the conversion between a host name and an IP address. The opposite is also possible. Finally, the class supports both IP version 4 and IP version 6 address formats. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>address-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Address</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Address constructor create an IP address object
+	  by name. The name argument is a string of a host name or a valid
+	  IP address representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Address</i><i> (String Boolean)</i><hr/>
+<p class="text">
+
+	  The Address constructor create an IP address object
+	  by name and force the reverse lookup resolution depending on the
+	  boolean flag value. The first argument is a string of a host name
+	  or a valid IP address representation. The second argument is a
+	  boolean flag that indicates whether or not reverse lookup must
+	  occur during the construction.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Operators</p>
+<div class="frame">
+<i>==</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The == operator returns true if the calling object
+	  is equal to the address argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>!=</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The != operator returns true if the calling object is
+	  not equal to the address argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The &lt; operator returns true if the calling
+	  address is less than the address object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&lt;=</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  address is less equal than the address object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The &gt; operator returns true if the calling
+	  address is greater than the address object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>&gt;=</i><i> (&rarr; Boolean)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The &lt;= operator returns true if the calling
+	  address is greater equal than the address object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>++</i><i> (&rarr; Address)</i><i> (Address)</i><hr/>
+<p class="text">
+
+	  The ++ operator increments the calling address by
+	  one position.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>resolve</i><i> (&rarr; String Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The resolve method resolves an host name and
+	  eventually performs a reverse lookup. The first argument is a
+	  string of a host name or a valid IP address representation. The
+	  second argument is a boolean flag that indicates whether or not
+	  reverse lookup must occur during the resolution.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the original name used
+	  during the object construction.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-address</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-address method returns a string
+	  representation of the IP address. The string representation 
+	  follows the IP version 4 or IP version 6 preferred formats,
+	  depending on the internal representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-vector</i><i> (&rarr; Vector)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-vector method returns a vector
+	  representation of the IP address. The vector result follows the
+	  IP version 4 or IP version 6 preferred format, depending on the
+	  internal representation.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-canonical-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-canonical-name method returns a fully
+	  qualified name of the address. The resulting name is obtained by
+	  performing a reverse lookup. Note that the name can be different
+	  from the original name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-alias-size</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-alias-size method returns the number of
+	  aliases for the address. The number of aliases includes as well
+	  the primary resolved name which is located at index 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-alias-name</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-alias-name method returns a fully
+	  qualified name of the address alias by index. The first argument
+	  is the alias index number which must be in the alias index
+	  range. The resulting name is obtained by performing a reverse
+	  lookup. Note that the name can be different from the original
+	  name. Using index 0 is equivalent to call
+	  get-canonical-name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-alias-address</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-alias-address method returns a string
+	  representation of the IP address alias by index. The first argument
+	  is the alias index number which must be in the alias index
+	  range. The string representation follows the IP version 4 or IP
+	  version 6 preferred formats, depending on the internal
+	  representation. Using index 0 is equivalent to call
+	  get-address.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-alias-vector</i><i> (&rarr; Vector)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-alias-vector method returns a vector
+	  representation of the IP address alias by index. The first
+	  argument is the alias index number which must be in the alias
+	  index range. The vector result follows the IP version 4 or IP
+	  version 6 preferred format, depending on the internal
+	  representation. Using index 0 is equivalent to call
+	  get-vector.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Functions</p>
+<div class="frame">
+<i>get-loopback</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	The get-loopback function returns the name of the
+	machine loopback. On a UNIX system, that name is localhost. 
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-tcp-service</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	The get-tcp-service function returns the name of the
+	tcp service given its port number. For example, the tcp service at
+	port 13 is the daytime server.
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>get-udp-service</i><i> (&rarr; String)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	The get-udp-service function returns the name of the
+	udp service given its port number. For example, the udp service at
+	port 19 is the chargen server.
+      </p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Socket</div>
+<p class="text">
+ The <tt class="code">Socket</tt> class is a base class for the AFNIX network services. The class is automatically constructed by a derived class and provide some common methods for all socket objects. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>socket-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>InputStream
+</i><i>OutputStream
+</i>
+</pre>
+<p class="elem">
+Constants</p>
+<div class="frame">
+<i>REUSE-ADDRESS</i><hr/>
+<p class="text">
+
+	  The REUSE-ADDRESS constant is used by the
+	  set-option method to enable socket address
+	  reuse. This option changes the rules that validates the address
+	  used by bind. It is not recommended to use that option as it
+	  decreases TCP reliability.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>BROADCAST</i><hr/>
+<p class="text">
+
+	  The BROADCAST constant is used by the
+	  set-option method to enable broadcast of
+	  packets. This options only works with IP version 4 address. The
+	  argument is a boolean flag only. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>DONT-ROUTE</i><hr/>
+<p class="text">
+
+	  The DONT-ROUTE constant is used by the
+	  set-option method to control if a packet is to be
+	  sent via the routing table. This option is rarely used with
+	  . The argument is a boolean flag only. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>KEEP-ALIVE</i><hr/>
+<p class="text">
+
+	  The KEEP-ALIVE constant is used by the
+	  set-option method to check periodically if the
+	  connection is still alive. This option is rarely used with
+	  . The argument is a boolean flag only. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>LINGER</i><hr/>
+<p class="text">
+
+	  The LINGER constant is used by the
+	  set-option method to turn on or off the lingering
+	  on close. If the first argument is true, the second argument is
+	  the linger time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>RCV-SIZE</i><hr/>
+<p class="text">
+
+	  The RCV-SIZE constant is used by the
+	  set-option method to set the receive buffer size. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>SND-SIZE</i><hr/>
+<p class="text">
+
+	  The SND-SIZE constant is used by the
+	  set-option method to set the send buffer size.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>HOP-LIMIT</i><hr/>
+<p class="text">
+
+	  The HOP-LIMIT constant is used by the
+	  set-option method to set packet hop limit.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>MULTICAST-LOOPBACK</i><hr/>
+<p class="text">
+
+	  The MULTICAST-LOOPBACK constant is used by the
+	  set-option method to control whether or not
+	  multicast packets are copied to the loopback. The argument is a
+	  boolean flag only.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>MULTICAST-HOP-LIMIT</i><hr/>
+<p class="text">
+
+	  The MULTICAST-HOP-LIMIT constant is used by the
+	  set-option method to set the hop limit for
+	  multicast packets.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>MAX-SEGMENT-SIZE</i><hr/>
+<p class="text">
+
+	  The MAX-SEGMENT-SIZE constant is used by the
+	  set-option method to set the TCP maximum segment size.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>NO-DELAY</i><hr/>
+<p class="text">
+
+	  The NO-DELAY constant is used by the
+	  set-option method to enable or disable the Naggle
+	  algorithm.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>bind</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The bind method binds this socket to the port
+	  specified as the argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>bind</i><i> (&rarr; none)</i><i> (Integer Address)</i><hr/>
+<p class="text">
+
+	  The bind method binds this socket to the port
+	  specified as the first argument and the address specified as the
+	  second argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>connect</i><i> (&rarr; none)</i><i> (Integer Address [Boolean])</i><hr/>
+<p class="text">
+
+	  The connect method connects this socket to the port
+	  specified as the first argument and the address specified as the
+	  second argument. A connected socket is useful with udp client
+	  that talks only with one fixed server. The optional third
+	  argument is a boolean flag that permits to select whether or not
+	  the alias addressing scheme should be used. If the flag is false,
+	  the default address is used. If the flag is true, an attempt is
+	  made to connect to the first successful address that is part
+	  of the alias list.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>open-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The open-p predicate returns true if the socket is
+	  open. The method checks that a descriptor is attached to the
+	  object. This does not mean that the descriptor is valid in the
+	  sense that one can read or write on it. This method is useful to
+	  check if a socket has not been closed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>shutdown</i><i> (&rarr; Boolean)</i><i> (none|Boolean)</i><hr/>
+<p class="text">
+
+	  The shutdown method shutdowns or close the
+	  connection. Without argument, the connection is closed without
+	  consideration for those symbols attached to the object. With one
+	  argument, the connection is closed in one direction only. If the
+	  mode argument is false, further receive is disallowed. If the
+	  mode argument is true, further send is disallowed. The method
+	  returns true on success, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>ipv6-p</i><i> (&rarr; Boolean)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The ipv6-p predicate returns true if the socket
+	  address is an IP version 6 address, false otherwise.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-socket-address</i><i> (&rarr; Address)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-socket-address method returns an address
+	  object of the socket. The returned object can be later used to
+	  query the canonical name and the ip address.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-socket-port</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-socket-port method returns the port
+	  number of the socket.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-socket-authority</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-socket-authority method returns the authority
+	  string in the form of an address and port pair of the socket.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-peer-address</i><i> (&rarr; Address)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-peer-address method returns an address
+	  object of the socket's peer. The returned object can be later
+	  used to query the canonical name and the ip address.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-peer-port</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-peer-port method returns the port
+	  number of the socket's peer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-peer-authority</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-peer-authority method returns the authority
+	  string in the form of an address and port pair of the socket's peer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-option</i><i> (&rarr; Boolean)</i><i> (constant [Boolean|Integer] [Integer])</i><hr/>
+<p class="text">
+
+	  The set-option method set a socket option. The
+	  first argument is the option to set. The second argument is a
+	  boolean value which turn on or off the option. The optional
+	  third argument is an integer needed for some options.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-encoding-mode</i><i> (&rarr; none)</i><i> (Item|String)</i><hr/>
+<p class="text">
+
+	  The set-encoding-mode method sets the input and
+	  output encoding mode. In the first form, with an item, the
+	  stream encoding mode is set directly. In the second form, the
+	  encoding mode is set with a string and might also alter the
+	  stream transcoing mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-input-encoding-mode</i><i> (&rarr; none)</i><i> (Item|String)</i><hr/>
+<p class="text">
+
+	  The set-input-encoding-mode method sets the input
+	  encoding mode. In the first form, with an item, the
+	  stream encoding mode is set directly. In the second form, the
+	  encoding mode is set with a string and might also alter the
+	  stream transcoing mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-input-encoding-mode</i><i> (&rarr; Item)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-input-encoding-mode method return the input
+	  encoding mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-output-encoding-mode</i><i> (&rarr; none)</i><i> (Item|String)</i><hr/>
+<p class="text">
+
+	  The set-output-encoding-mode method sets the output
+	  encoding mode. In the first form, with an item, the
+	  stream encoding mode is set directly. In the second form, the
+	  encoding mode is set with a string and might also alter the
+	  stream transcoing mode.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-output-encoding-mode</i><i> (&rarr; Item)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-output-encoding-mode method return the output
+	  encoding mode.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+TcpSocket</div>
+<p class="text">
+ The <tt class="code">TcpSocket</tt> class is a base class for all tcp socket objects. The class is derived from the <tt class="code">Socket</tt> class and provides some specific tcp methods. If a <tt class="code">TcpSocket</tt> is created, the user is responsible to connect it to the proper address and port. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>tcp-socket-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Socket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>TcpSocket</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The TcpSocket constructor creates a new tcp socket.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>accept</i><i> (&rarr; TcpSocket)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The accept method waits for incoming connection and
+	  returns a TcpSocket object initialized with the
+	  connected peer. The result socket can be used to perform i/o
+	  operations. This method is used by tcp server.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>listen</i><i> (&rarr; Boolean)</i><i> (none|Integer)</i><hr/>
+<p class="text">
+
+	  The listen method initialize a socket to accept
+	  incoming connection. Without argument, the default number of
+	  incoming connection is 5. The integer argument can be used to
+	  specify the number of incoming connection that socket is willing
+	  to queue. This method is used by tcp server.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+TcpClient</div>
+<p class="text">
+ The <tt class="code">TcpClient</tt> class creates a tcp client by host and port. The host argument can be either a name or an address object. The port argument is the server port to contact. The <tt class="code">TcpClient</tt> class is derived from the <tt class="code">TcpSocket</tt> class. This class has no specific methods. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>tcp-client-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>TcpSocket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>TcpClient</i><i> (String Integer)</i><hr/>
+<p class="text">
+
+	  The TcpClient constructor creates a new tcp client
+	  socket by host name and port number.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+TcpServer</div>
+<p class="text">
+ The <tt class="code">TcpServer</tt> class creates a tcp server by port. An optional host argument can be either a name or an address object. The port argument is the server port to bind. The <tt class="code">TcpServer</tt> class is derived from the <tt class="code">TcpSocket</tt> class. This class has no specific methods. With one argument, the server bind the port argument on the local host. The backlog can be specified as the last argument. The host name can also be specified as the first argument, the port as second argument and eventually the backlog. Note that the host can be either a string or an address object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>tcp-server-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>TcpSocket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>TcpServer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The TcpServer constructor creates a default tcp
+	  server.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>TcpServer</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The TcpServer constructor creates a default tcp
+	  server which is bound on the specified port argument.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>TcpServer</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The TcpServer constructor creates a default tcp
+	  server which is bound on the specified port argument. The second
+	  argument is the backlog value.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>TcpServer</i><i> (String Integer)</i><hr/>
+<p class="text">
+
+	  The TcpServer constructor creates a tcp server by
+	  host name and port number. The first argument is the host
+	  name. The second argument is the port number.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>TcpServer</i><i> (String Integer Integer)</i><hr/>
+<p class="text">
+
+	  The TcpServer constructor creates a tcp server by
+	  host name and port number. The first argument is the host
+	  name. The second argument is the port number. The third argument
+	  is the backlog.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Datagram</div>
+<p class="text">
+ The <tt class="code">Datagram</tt> class is a socket class used by udp socket. A datagram is constructed by the <tt class="code">UdpSocket</tt><tt class="code">accept</tt> method. The purpose of a datagram is to store the peer information so one can reply to the sender. The datagram also stores in a buffer the data sent by the peer. This class does not have any constructor nor any specific method. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>datagram-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Socket
+</i>
+</pre>
+<p/>
+<div class="elem">
+UdpSocket</div>
+<p class="text">
+ The <tt class="code">UdpSocket</tt> class is a base class for all udp socket objects. The class is derived from the <tt class="code">Socket</tt> class and provides some specific udp methods. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>udp-socket-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Socket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>UdpSocket</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The UdpSocket constructor creates a new udp socket.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>accept</i><i> (&rarr; Datagram)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The accept method waits for an incoming datagram
+	  and returns a Datagram object. The datagram is
+	  initialized with the peer address and port as well as the
+	  incoming data.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+UdpClient</div>
+<p class="text">
+ The <tt class="code">UdpClient</tt> class creates a udp client by host and port. The host argument can be either a name or an address object. The port argument is the server port to contact. The <tt class="code">UdpClient</tt> class is derived from the <tt class="code">UdpSocket</tt> class. This class has no specific methods. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>udp-client-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>UdpSocket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>UdpClient</i><i> (String Integer)</i><hr/>
+<p class="text">
+
+	  The UdpClient constructor creates a new udp client
+	  by host and port. The first argument is the host name. The
+	  second argument is the port number.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+UdpServer</div>
+<p class="text">
+ The <tt class="code">UdpServer</tt> class creates a udp server by port. An optional host argument can be either a name or an address object. The port argument is the server port to bind. The <tt class="code">UdpServer</tt> class is derived from the <tt class="code">UdpSocket</tt> class. This class has no specific methods. With one argument, the server bind the port argument on the local host. The host name can also be specified as the first argument, the port as second argument. Note that the host can be either a string or an address object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>udp-server-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>UdpSocket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>UdpServer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The UdpServer constructor creates a default udp
+	  server object.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>UdpServer</i><i> (String|Address)</i><hr/>
+<p class="text">
+
+	  The UdpServer constructor creates a udp server
+	  object by host. The first argument is the host name or host address.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>UdpServer</i><i> (String|Address Integer)</i><hr/>
+<p class="text">
+
+	  The UdpServer constructor creates a udp server
+	  object by host and port. The first argument is the host name or
+	  host address. The second argument is the port number.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Multicast</div>
+<p class="text">
+ The <tt class="code">Multicast</tt> class creates a udp multicast socket by port. An optional host argument can be either a name or an address object. The port argument is the server port to bind. The <tt class="code">Multicast</tt> class is derived from the <tt class="code">UdpSocket</tt> class. This class has no specific methods. With one argument, the server bind the port argument on the local host. The host name can also be specified as the first argument, the port as second argument. Note that the host can be either a string or an address object. This class is similar to the <tt class="code">UdpServer</tt> class, except that the socket join the multicast group at construction and leave it at destruction. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>multicast-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>UdpSocket
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Multicast</i><i> (String|Address)</i><hr/>
+<p class="text">
+
+	  The Multicast constructor creates a multicast socket
+	  object by host. The first argument is the host name or host address.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Multicast</i><i> (String|Address Integer)</i><hr/>
+<p class="text">
+
+	  The Multicast constructor creates a multicast socket
+	  object by host and port. The first argument is the host name or
+	  host address. The second argument is the port number.
+	</p>
+</div>
+<p/>
+</body>
+</html>

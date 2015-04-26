@@ -1,0 +1,535 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:05 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_proxy</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_proxy</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#ERROR HANDLING">ERROR HANDLING</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_proxy
+&minus; Proxy-process Tcl interface</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_proxy
+active</b> <i>pool</i> <b><br>
+ns_proxy cleanup <br>
+ns_proxy config</b> <i>pool ?-opt val -opt val ...</i>
+<b><br>
+ns_proxy eval</b> <i>handle script ?timeout?</i> <b><br>
+ns_proxy get</b> <i>pool ?-handle n -timeout ms?</i> <b><br>
+ns_proxy ping</b> <i>handle</i> <b><br>
+ns_proxy release</b> <i>handle</i> <b><br>
+ns_proxy recv</b> <i>handle</i> <b><br>
+ns_proxy send</b> <i>handle script</i> <b><br>
+ns_proxy wait</b> <i>handle ?timeout?</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+provides a simple, robust proxy mechanism to evaluate Tcl
+scripts in a separate, pipe-connected process. This approach
+can be useful both to isolate potentially thread-unsafe code
+outside the address space of a multithreaded process such as
+AOLserver or to enable separation and timeout of potentially
+misbehaving, long running scripts.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The command is
+provided by the <i>nsproxy</i> dynamic library which can be
+loaded into an interpreter via the Tcl <b>load</b> command,
+for example:</p>
+
+<p style="margin-left:22%; margin-top: 1em">load
+/usr/local/lib/libnsproxy.so <br>
+ns_proxy ...</p>
+
+<p style="margin-left:11%; margin-top: 1em">It can also
+possible to load the library into all interpreters of an
+AOLserver virutal server by specifying an <i>nsproxy.so</i>
+entry in the server&rsquo;s module config entry, for
+example:</p>
+
+<p style="margin-left:22%; margin-top: 1em">ns_section
+ns/server/server1/modules <br>
+ns_param nsproxy nsproxy.so</p>
+
+<p style="margin-left:11%; margin-top: 1em">When loaded,
+the library adds the single <b>ns_proxy</b> command with
+takes multiple options as described below. Proxies are
+normally created on demand when requested and connected to
+the parent process via pipes used to send scripts and
+receive response. The processes remain active until the
+parent process exits, effectively closing all pipes to the
+slave processes. <b><br>
+ns_proxy active</b> <i>pool</i></p>
+
+<p style="margin-left:22%;">Returns a list of all currently
+evaluating scripts in proxies for the given <i>pool</i>. The
+output is a list which includes two elements, the string
+name of the proxy handle and the string for the script being
+executed. It is also possible to view the currently
+evaluating scripts with the Unix <i>ps</i> command as the
+proxy slave process re-writes it&rsquo;s command argument
+space with the request script before evaluation and clears
+it after sending the result.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy cleanup</b></p>
+
+<p style="margin-left:22%;">Releases any handles from any
+pools currently owned by a thread. This command is intended
+to be used as part of a garbage collection step at the end
+of a transaction. Calling this command within AOLserver is
+not necessary as the module registers a trace to release all
+handles via the <b>Ns_TclRegisterTrace</b> facility when
+interpreters are deallocated after a transaction, for
+example, at the end of a connection.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy config</b> <i>pool
+?-opt val -opt val ...</i></p>
+
+<p style="margin-left:22%;">Configures options for the pool
+specified by <i>pool</i>. The pool is created with default
+options if it does not already exist. The result of
+<b>ns_proxy config</b> is a list of the current options in
+the form <i>-opt val -opt val ...</i>. Configurable options
+include:</p>
+
+<p style="margin-left:11%;">-init script</p>
+
+<p style="margin-left:22%;">Specifies a script to evaluate
+when proxies are started. This can be used to load
+additional libraries and/or source script files. The default
+is no script.</p>
+
+<p style="margin-left:11%;">-reinit script</p>
+
+<p style="margin-left:22%;">Specifies a script to evaluate
+after being allocated and before being returned to the
+caller. This can be used to re-initalizes shared state. The
+default is no script.</p>
+
+<p style="margin-left:11%;">-min n</p>
+
+<p style="margin-left:22%;">Sets the minimum number of
+proxy slave processes to pre-start before any allocations.
+This defaults to 0 which results in on-demand start the
+first time proxies are requested. Setting it to a higher
+number can be useful if initialization takes a significant
+amount of time.</p>
+
+<p style="margin-left:11%;">-max n</p>
+
+<p style="margin-left:22%;">Sets the maximum number of
+proxy slave processes. Requests for proxies beyond the
+maximum will result in requesting threads waiting for
+existing proxies to be available instead of creating new
+proxy processes. Setting this value to 0 disables the pool,
+causing all subsequent allocation requests to fail
+immediately (currently allocated proxies, if any, remain
+valid).</p>
+
+<p style="margin-left:11%;">-exec program</p>
+
+<p style="margin-left:22%;">Specifies the filename of a
+slave proxy program. This defaults to <i>nsproxy</i> in the
+<i>bin</i> subdirectory of the AOLserver process. It is
+possible to create a custom program and enter the proxy
+event loop with the <b>Ns_ProxyMain</b> application startup
+routine; see the source code for details.</p>
+
+<p style="margin-left:11%;">-getimeout ms</p>
+
+<p style="margin-left:22%;">Specifies the maximum time to
+wait to allocate handles from the pool. The default is 500
+milliseconds, i.e., 1/2 of a second.</p>
+
+<p style="margin-left:11%;">-evaltimeout ms</p>
+
+<p style="margin-left:22%;">Specifies the maximum time to
+wait for a script to be evaluated in a proxy. This parameter
+can be overridden on a per-call basis with the optional
+<i>timeout</i> parameter to <b>ns_proxy eval</b>. The
+default is 100 milliseconds, i.e., 1/10 of a second which
+assumes scripts are evaluated with minimal delay.</p>
+
+<p style="margin-left:11%;">-sendtimeout ms <br>
+-recvtimeout ms</p>
+
+<p style="margin-left:22%;">Specifies the maximium time to
+wait to send a script and receive a result from a proxy. The
+default is 100 milliseconds, i.e., 1/10 of a second which
+assumes minimal delay sending and receiving reasonably sized
+scripts and results over the connecting pipe.</p>
+
+<p style="margin-left:11%;">-waittimeout ms</p>
+
+<p style="margin-left:22%;">Specifies the maximum time to
+wait for a proxy to exit. The wait is performed in a
+dedicated reaper thread. The reaper will close the
+connection pipe and wait the given timeout. If the timeout
+is exceeded, the reaper will send a SIGTERM signal and
+finally a SIGKILL signal to ensure the process eventually
+exits. The default is 100 milliseconds which should be ample
+time for a graceful exit unless the process is hung
+executing a very long, misbehaving script, resulting in a
+more disruptive SIGTERM or SIGKILL.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy eval</b> <i>handle
+script ?timeout?</i></p>
+
+<p style="margin-left:22%;">Evalutes <i>script</i> in the
+proxy specified by <i>handle</i>. The optional
+<i>timeout</i> argument specifies a maximum number of
+milliseconds to wait for the command to complete before
+raising an error (see <b>ERROR HANDLING</b> below for
+details on handling errors).</p>
+
+<p style="margin-left:11%;"><b>ns_proxy send</b> <i>handle
+script</i></p>
+
+<p style="margin-left:22%;">Sends <i>script</i> in the
+proxy specified by <i>handle</i>. Unlike with <b>ns_proxy
+eval</b>, this option will return immediately while the
+script continues to execute in the proxy process. A later
+<b>ns_proxy wait</b> followed by an <b>ns_proxy recv</b> is
+expected.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy wait</b> <i>handle
+?timeout?</i></p>
+
+<p style="margin-left:22%;">Waits for a script sent via
+<b>ns_proxy send</b> in the proxy specified by the
+<i>handle</i> argument to complete. The optional
+<i>timeout</i> parameter specifies the number of
+milliseconds to wait for the script to complete, the default
+is an indefinite wait.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy recv</b>
+<i>handle</i></p>
+
+<p style="margin-left:22%;">Receives a response from a
+script that was sent via <b>ns_proxy send</b> and waited on
+via <b>ns_proxy wait</b>.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy get</b> <i>pool
+?-handle n -timeout ms? Returns one or</i></p>
+
+<p style="margin-left:22%;">more handles to proxies from
+the specified <i>pool</i>. The pool will be created with
+default options if it does not already exist. The optional
+<i>-handle n</i> arguments can be used to specify the number
+of handles to allocate, the default being 1. The optional
+<i>-timeout ms</i> arguments specifies the maximum amount of
+time in milliseconds to wait for the handles to become
+availale before raising an error (see <b>ERROR HANDLING</b>
+below for details on handling errors). Requesting more than
+one handle in a single call if more than one handle is
+required is necessary as it is an error to request handles
+from a pool from which handles are already owned in the
+thread. This restriction is to avoid a possible deadlock
+condition and is similar to the manner in which the <b>ns_db
+gethandles</b> command operates.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy ping</b>
+<i>handle</i></p>
+
+<p style="margin-left:22%;">This command sends a null
+request to the proxy specified by the <i>handle</i>
+argument. The proxy will be verified alive and restarted if
+necessary. This command is not normally required as the
+<b>ns_proxy eval</b> command will also verify and restart
+proxies as needed.</p>
+
+<p style="margin-left:11%;"><b>ns_proxy release</b>
+<i>handle</i></p>
+
+<p style="margin-left:22%;">This command can be used to
+release a single proxy specified by the <i>handle</i>
+argument. All handles owned by a thread to the cooresponding
+pool must be returned before any handles can be allocated
+again. Within AOLserver, a call to this routine is
+recommended for clarity but not stricting necessary. As
+described above, AOLserver installs a trace to release all
+handles at the end of every connection during interprepter
+deallocation.</p>
+
+<h2>ERROR HANDLING
+<a name="ERROR HANDLING"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Errors
+generated by a script evaluated in a proxy interpreter are
+completely returned to the calling interpreter, including
+mapping the <i>errorInfo</i> and <i>errorInfo</i> global
+variables from the proxy to the parent if present and
+raising a Tcl exception. This enables proxy code to look
+very similar to that which may use the internal <b>eval</b>
+command.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Errors raised
+by a failure to communicate with the proxy process due to a
+timeout or unexpected process exit are also communicated
+back to the parent interpreter as Tcl exceptions. To
+distinguish between these cases, communication related
+errors set the <i>errorCode</i> global variable with the
+first element <b>NSPROXY</b>. The second element is one of
+the following: <b><br>
+EDeadlock</b></p>
+
+<p style="margin-left:22%;">The interpreter attempted to
+allocate handles from a pool from which it already owns one
+or more handles.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>EExec</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>The slave program specified by the <i>-exec program</i>
+option could not be started.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>ERange</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Insufficient handles available in pool.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>ERecv</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>There was an error receiving the result from the slave
+process.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>ESend</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>There was an error sending the script to the slave
+process.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>ETimeout</b></p>
+
+<p style="margin-left:22%;">The timeout specified for the
+pool by the <i>-evaltimeout</i> option or as the optional
+argument to the current call to <b>ns_proxy eval</b> was
+exceeded.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+demonstrates sending a script to a remote proxy:</p>
+
+<p style="margin-left:22%; margin-top: 1em">set handle
+[ns_proxy get myproxy]</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>ns_proxy eval $handle {info patchlevel}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>ns_proxy release $handle</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+demonstrates an asyncronous request:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>set handle [ns_proxy get myproxy]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>ns_proxy send $handle {long running script}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>... continue other work ...</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>ns_proxy wait $handle</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>set result [ns_proxy recv $handle]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="97%">
+
+
+<p>ns_proxy release $handle</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+demonstrates using multiple proxies:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_proxy config myproxy -max 10</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>set handles [ns_proxy get myproxy -handle 10]</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>foreach h $handles {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_proxy eval $h {puts &quot;alive: [pid]&quot;}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>ns_proxy cleanup</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">eval(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">threads,
+interpreters, proxy, initialization</p>
+<hr>
+</body>
+</html>

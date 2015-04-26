@@ -1,0 +1,108 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:48 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_tmp</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_tmp</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_mktemp,
+ns_tmpnam &minus; commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_mktemp</b>
+<i>template</i></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_tmpnam
+_________________________________________________________________</b></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_mktemp</b>
+returns a unique filename based on the <i>template</i> you
+specify. <b>ns_tmpnam</b> returns a filename that can safely
+be used for a temporary file.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>template</i> for <b>ns_mktemp</b> should contain a string
+with six trailing Xs, which will be replaced with an
+alpha-numeric string of six characters chosen to make the
+filename unique. If <i>template</i> does not end with six
+trailing Xs the empty string will be returned.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_tmpnam</b>
+calls the tmpnam() C library function, and the results will
+depend on your operating system. On Irix, for example,
+tmpnam() always generate a file name using the path-prefix
+defined as P_tmpdir in the header file which is
+&quot;/var/tmp/&quot;.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_tmpnam ;# On Linux <br>
+/tmp/filevuLwaE</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_mktemp /tmp/foobar.XXXXXX <br>
+/tmp/foobar.p6SlaC</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+mktemp(3), tmpnam(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

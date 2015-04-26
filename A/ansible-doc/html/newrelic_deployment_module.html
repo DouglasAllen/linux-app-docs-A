@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>newrelic_deployment - Notify newrelic about app deployments &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Monitoring Modules" href="list_of_monitoring_modules.html" />
+    <link rel="next" title="pagerduty - Create PagerDuty maintenance windows" href="pagerduty_module.html" />
+    <link rel="prev" title="nagios - Perform common tasks in Nagios related to downtime and notifications." href="nagios_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pagerduty_module.html" title="pagerduty - Create PagerDuty maintenance windows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nagios_module.html" title="nagios - Perform common tasks in Nagios related to downtime and notifications."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_monitoring_modules.html" accesskey="U">Monitoring Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="newrelic-deployment-notify-newrelic-about-app-deployments">
+<span id="newrelic-deployment"></span><h1>newrelic_deployment - Notify newrelic about app deployments<a class="headerlink" href="#newrelic-deployment-notify-newrelic-about-app-deployments" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matt Coddington</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.2.</span></p>
+<p>Notify newrelic about app deployments (see <a class="reference external" href="http://newrelic.github.io/newrelic_api/NewRelicApi/Deployment.html">http://newrelic.github.io/newrelic_api/NewRelicApi/Deployment.html</a>)</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>app_name</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>(one of app_name or application_id are required) The value of app_name in the newrelic.yml file used by the application</td>
+</tr>
+        <tr>
+<td>application_id</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>(one of app_name or application_id are required) The application id, found in the URL when viewing the application in RPM</td>
+</tr>
+        <tr>
+<td>appname</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name of the application</td>
+</tr>
+        <tr>
+<td>changelog</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A list of changes for this deployment</td>
+</tr>
+        <tr>
+<td>description</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Text annotation for the deployment - notes for you</td>
+</tr>
+        <tr>
+<td>environment</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The environment for this deployment</td>
+</tr>
+        <tr>
+<td>revision</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A revision number (e.g., git commit SHA)</td>
+</tr>
+        <tr>
+<td>token</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>API token.</td>
+</tr>
+        <tr>
+<td>user</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The name of the user/process that triggered this deployment</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates. (added in Ansible 1.5.1)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires urllib</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires urllib2</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- newrelic_deployment: token=AAAAAA
+                       app_name=myapp
+                       user='ansible deployment'
+                       revision=1.0</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">newrelic_deployment - Notify newrelic about app deployments</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nagios_module.html"
+                        title="previous chapter">nagios - Perform common tasks in Nagios related to downtime and notifications.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pagerduty_module.html"
+                        title="next chapter">pagerduty - Create PagerDuty maintenance windows</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="pagerduty_module.html" title="pagerduty - Create PagerDuty maintenance windows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nagios_module.html" title="nagios - Perform common tasks in Nagios related to downtime and notifications."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_monitoring_modules.html" >Monitoring Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

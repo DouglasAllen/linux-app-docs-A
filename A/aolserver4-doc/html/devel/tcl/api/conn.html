@@ -1,0 +1,1777 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<a name=top><h1>Connection and Socket Functions</h1></a>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/conn.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+</small>
+<p>
+
+
+<h2><a href=./ name=ns_checkurl>ns_checkurl</a></h2>
+
+
+Authorize a request using basic HTTP authentication.
+
+<h3>Syntax</h3>
+
+ns_checkurl method url authuser authpasswd ?ipaddr?
+
+<h3>Description</h3>
+
+This function does the same permission check that the AOLserver does
+before serving a URL. If the nsperm module is loaded, the algorithm is
+as follows.
+
+<pre>
+1. If the authuser is "nsadmin", the password is correct, and the IP
+   address of the client is allowed nsadmin access, then access is
+   authorized.
+2. Find the relevant permission record. If an exact match for the
+   method and URL combination is not found, the end of the URL is
+   pared down until a match is found. For example, if there is no
+   match for `/products/cereals/raisin_bran.html,' then the server
+   looks for a permission record for the URL `/products/cereals.' If
+   that permission record is specified as "Exact URL match is NOT
+   required", then that permission record is used.
+</pre>
+
+By default, the server comes with a row that says GET on `/' is open
+to the world.
+
+<p>
+
+If no relevant permission record is found, access is denied
+(forbidden).
+
+<pre>
+1. If the authuser is in the "Allow Users" list, access is permitted.
+   If the authuser is a member of a group in the "Allow Groups" list
+   and not in the "Deny Users' list, access is permitted.
+2. If the host is in the "Hosts to allow" list, access is permitted.
+   If the host is in the "Hosts to deny" list, access is denied.
+3. If the request does not come in with authorization data, access is
+   denied.
+4. The user and password are verified. If there is no password
+   specified in the database, any password is accepted.
+5. Otherwise, access is denied.
+</pre>
+
+
+<h3>Return Values</h3>
+
+The following values can be returned by ns_checkurl.
+
+<p>
+
+OK<br>
+
+The user has permission to execute this URL and method.<br>
+
+DENIED<br>
+
+The user does not have permission to execute this URL and method.<br>
+
+FORBIDDEN<br>
+
+There is no possible user/password/IP Address combination that would
+give authorization.<br>
+
+ERROR<br>
+
+There was an error.
+
+<p>
+
+If the permissions module is not loaded, an error is returned.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_conn>ns_conn</a></h2>
+
+
+Find information about the current HTTP connection.
+
+<h3>Syntax</h3>
+
+<table>
+<tr>
+<td valign=top align=left>
+ns_conn authpassword<br>
+
+ns_conn authuser<br>
+
+ns_conn close<br>
+
+ns_conn contentlength<br>
+
+ns_conn driver<br>
+
+ns_conn form<br>
+
+ns_conn headers<br>
+
+ns_conn host<br>
+
+ns_conn isconnected<br>
+
+ns_conn location<br>
+
+ns_conn method<br>
+
+</td>
+<td valign=top align=left>
+ns_conn outputheaders<br>
+
+ns_conn peeraddr<br>
+
+ns_conn port<br>
+
+ns_conn protocol<br>
+
+ns_conn query<br>
+
+ns_conn request<br>
+
+ns_conn url<br>
+
+ns_conn urlc<br>
+
+ns_conn urlv<br>
+
+ns_conn version<br>
+
+</td>
+</tr>
+</table>
+
+<h3>Description</h3>
+
+ns_conn authpassword returns the decoded user password from the
+authorization data.
+
+<p>
+
+ns_conn authuser returns the decoded user name from the authorization
+data.
+
+<p>
+
+ns_conn close closes the connection so the script (or ADP) can do any
+time-consuming processing without making the client wait. If you use
+ns_conn close in an ADP, streaming should be turned on before closing
+the connection (i.e. &lt;SCRIPT RUNAT=SERVER STREAM=ON&gt;) or nothing
+will get sent out at all.
+
+<p>
+
+ns_conn contentlength returns the number of bytes in the content
+passed in.
+
+<p>
+
+ns_conn driver returns the name of the module (nssock or nsssl) that
+is acting as the communications driver for this connection.
+
+<p>
+
+ns_conn form returns any submitted form data as an ns_set. This form
+data may have been submitted with a POST or appended to the URL in a
+GET request.  Note: ns_conn form is not suitable for multipart
+formdata file upload widgets.
+
+<p>
+
+ns_conn headers returns all the header data as an ns_set.  The keys of
+the ns_set represent the field names. The case of the returned field
+names depends on the HeaderCase configuration parameter. By default,
+HeaderCase is "Preserve", which means case is preserved.
+
+<p>
+
+ns_conn host returns the host part of the URL in the HTTP request.
+
+<p>
+
+ns_conn isconnected returns 1 if you're in a connection thread, and
+you are therefore allowed to make calls to ns_conn. It returns 0 if
+you're not in a connection thread (such as when you're in a schedule
+procedure) and you are not allowed to make calls to ns_conn.
+
+<p>
+
+ns_conn location returns the location string for this virtual server
+in the form: <tt>protocol://hostname[:port]</tt>.
+
+<p>
+
+ns_conn method returns the HTTP method, e.g. <tt>GET</tt>.
+
+<p>
+
+ns_conn outputheaders returns an ns_set containing the headers that
+will be sent out when a result is returned to the client.  This ns_set
+can be manipulated like any other ns_set.  You can also use this
+command to write to the set of output headers. For example: <tt>ns_set
+put [ns_conn outputheaders] key value</tt>.
+
+<p>
+
+ns_conn peeraddr returns the IP address of the client, i.e. the "other
+side" of the HTTP connection. The IP address is returned in the form
+of a string separated with periods (e.g., 155.164.59.75).
+
+<p>
+
+ns_conn port returns the port specified explicitly in the URL of the
+HTTP request. If the browser does not explicity send the ":port" part
+of the URL, the port number returned will be 0.
+
+<p>
+
+ns_conn protocol returns the protocol of the URL in the HTTP request
+(usually unspecified).
+
+<p>
+
+ns_conn query returns any query data that was part of the HTTP
+request.
+
+<p>
+
+ns_conn request returns the HTTP request line as presented by the
+client, e.g. <tt>GET / HTTP/1.1</tt>.
+
+<p>
+
+ns_conn url returns the URL of the HTTP request.  This is the portion
+of the request after the hostname, for example <tt>[ns_conn url]</tt>
+on http://aolserver.com/ returns <tt>/index.adp</tt>.
+
+<p>
+
+ns_conn urlc returns the number of elements (delimited by `/') in the
+URL of the HTTP request.
+
+<p>
+
+ns_conn urlv returns a list containing the pieces of the URL delimited
+by `/'.
+
+<p>
+
+ns_conn version returns the version of the HTTP request. This is
+usually 1.0 or 1.1.
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_conncptofp>ns_conncptofp</a></h2>
+
+
+Write content to a file
+
+<h3>Syntax</h3>
+
+ns_conncptofp fileId
+
+<h3>Description</h3>
+
+This function writes all the content (including any embedded null
+characters) to the specified file.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_connsendfp>ns_connsendfp</a></h2>
+
+
+Write contents of file to conn
+
+<h3>Syntax</h3>
+
+ns_connsendfp fp len
+
+<h3>Description</h3>
+
+This function writes len bytes of the specified channel or file to the
+conn.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_get_multipart_formdata>ns_get_multipart_formdata</a></h2>
+
+
+Handle the POST action of a form containing one Netscape file widget
+
+<h3>Syntax</h3>
+
+ns_get_multipart_formdata key fieldId ?formdataSet?
+
+<h3>Description</h3>
+
+If you have a Tcl script that is handling a POST of a form containing
+exactly one Netscape INPUT TYPE=FILE widget and 0 or more other
+widgets, you can call ns_get_multipart_formdata instead of ns_conn
+form. If you call ns_get_multipart_formdata at any other point, such
+as inside an ADP script, it may not work properly due to AOLserver's
+processing of the form data prior to execution of the ADP.
+
+<p>
+
+The key argument is the key for the file widget.
+
+<p>
+
+The fileId argument must be the file ID of a file that is open for
+write operations. ns_get_multipart_formdata will write the submitted
+file (from the file widget) to the file specified by fileId.
+
+<p>
+
+If you pass a formdataSet into the function, the rest of the form data
+is dropped into that formdata set.
+
+<h3>Example</h3>
+
+In the HTML page, the form is defined as:
+<pre>
+&lt;form enctype=multipart/form-data method=post action=/foo&gt;
+&lt;input name=file type=file&gt;
+&lt;/form&gt;
+</pre>
+
+The POST action is handled by the /foo script defined below:
+
+<pre>
+ns_register_proc POST /foo foo
+proc foo {conn ignore} {
+   set fp [open "/tmp/uploaded_file" w+]
+   ns_get_multipart_formdata "file" $fp
+   close $fp
+   ## Process file
+   ## return something
+}
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_getform>ns_getform</a></h2>
+
+
+Return an ns_set that contains all of the query data that was part of
+the HTTP request.
+
+<h3>Syntax</h3>
+
+ns_getform
+
+<h3>Description</h3>
+
+If there is query data (from either a form or multipart form data),
+ns_getform returns an ns_set that can be queried for that data. If
+there is no query data, "" is returned.
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_geturl>ns_geturl</a></h2>
+
+
+Fetch a URL.
+
+<h3>Syntax</h3>
+
+ns_geturl URL ?headersSetIdVar?
+
+<h3>Description</h3>
+
+This function retrieves the contents of the passed-in URL. If
+headersSetIdVar is passed in and it is a valid ns_set, then the header
+information received along with the request is inserted into it.
+
+<h3>Example</h3>
+
+<pre>
+ns_register_proc GET /wais getwais
+proc getwais { conn context } {
+    ns_return 200 text/html [ns_geturl http://www.wais.com/]
+}
+</pre>
+
+<h3>Notes</h3>
+
+This function should be used with caution. If the server is running
+with 1 thread, and you perform ns_geturl back to the originating
+server, the server may deadlock.
+
+<p>
+
+Also, ns_geturl does not follow redirects or handle relative URLs.
+URLs that are server-relative (begin with "/") are translated into
+filenames, and the content of the file is returned.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_hrefs>ns_hrefs</a></h2>
+
+
+Return list of HTML &lt;A&gt; links.
+
+<h3>Syntax</h3>
+
+ns_hrefs HTML
+
+<h3>Description</h3>
+
+This function returns a Tcl list of all the URLs that the HTML
+contains &lt;A&gt; links to.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_httptime>ns_httptime</a></h2>
+
+
+Convert time in seconds to HTTP header format.
+
+<h3>Syntax</h3>
+
+ns_httptime time_in_seconds
+
+<h3>Description</h3>
+
+This function converts the time (specified as the number of seconds
+from 00:00:00 UTC, January 1, 1970) to the appropriate format for an
+HTTP header or log file. The time and date is returned with a four
+digit year, for example: "Sun, 06 Nov 1994 08:49:37 GMT".  You can use
+the ns_time function to get the current time in seconds like this:
+
+<pre>
+set time [ns_httptime [ns_time]]
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_httpget>ns_httpget</a></h2>
+
+
+Open an HTTP connection and fetch a page.
+
+<h3>Syntax</h3>
+
+ns_httpget url ?timeout? ?depth?
+
+<h3>Description</h3>
+
+ns_httpget opens an HTTP connection and fetches the page at the
+specified url. You can specify a timeout for opening the connection
+(the default is 30 seconds), and a maximum level of redirection (the
+default is 0). ns_httpget sends the HTTP/1.1 "Host:" header for proper
+support of virtual hosting but only supports HTTP/1.0.
+
+<h3>Example</h3>
+
+set page [ns_httpget http://www.aolserver.com]
+            
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_httpopen>ns_httpopen</a></h2>
+
+
+Open an HTTP connection.
+
+<h3>Syntax</h3>
+
+ns_httpopen method url ?rqset? ?timeout?
+
+<h3>Description</h3>
+
+ns_httpopen opens an HTTP connection and performs the specified method
+at the specified URL. The timeout is the number of seconds to wait for
+the connection to open. ns_httpopen sends the HTTP/1.1 "Host:" header
+for proper support of virtual hosting but only supports HTTP/1.0.
+
+<p>
+
+ns_httpopen returns a list with these three elements: a file
+descriptor for reading, a file descriptor for writing, and a set ID
+for a set describing the connection. The three elements of the set are
+date, server, and content type.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_hostbyaddr>ns_hostbyaddr</a></h2>
+
+
+Resolve an IP address to a hostname.
+
+<h3>Syntax</h3>
+
+ns_hostbyaddr ipaddress
+
+<h3>Description</h3>
+
+ns_hostbyaddr resolves the specified IP address to its corresponding
+host name using AOLserver's built-in DNS cache.  See the
+Administration Guide for adjusting the DNS cache.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_parseheader>ns_parseheader</a></h2>
+
+
+Parse HTTP header.
+
+<h3>Syntax</h3>
+
+ns_parseheader set header
+
+<h3>Description</h3>
+
+This function parses the HTTP header specified by header into an
+ns_set specified by set.
+
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_parsehttptime>ns_parsehttptime</a></h2>
+
+
+Return number of seconds from HTTP time.
+
+<h3>Syntax</h3>
+
+ns_parsehttptime httptime
+
+<h3>Description</h3>
+
+ns_parsehttptime takes a properly formatted HTTP time and returns the
+number of seconds since 00:00:00 UTC Jan 1, 1970.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_parsequery>ns_parsequery</a></h2>
+
+
+Parse a query string.
+
+<h3>Syntax</h3>
+
+ns_parsequery querystring
+
+<h3>Description</h3>
+
+This function parses the specified querystring into an ns_set, which
+is returned. The querystring takes the form: a=bcdefgh&b=123&c=rew.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_queryexists>ns_queryexists</a></h2>
+
+
+Check for a key in the query data that was part of the HTTP request.
+
+<h3>Syntax</h3>
+
+ns_queryexists key
+
+<h3>Description</h3>
+
+ns_queryexists looks in the query data for the specified key. If the
+key exists, 1 is returned; otherwise 0 is returned. The key is
+interpreted in a case insensitive manner.
+
+<h3>Example</h3>
+
+<pre>
+ns_register_proc POST /queryexiststest queryexiststest
+proc queryexiststest { } {
+    if [ns_queryexists name] {
+        # ...process the form...
+    } else {
+        ns_returnerror 400 "you need to supply your name in the form"
+    }
+} ;# queryexiststest
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_queryget>ns_queryget</a></h2>
+
+
+Get a value from the query data that was part of the HTTP request.
+
+<h3>Syntax</h3>
+
+ns_queryget key ?value?
+
+<h3>Description</h3>
+
+ns_queryget looks in the query data for the specified key, and returns
+the value that was included in the HTTP request. If the key does not
+exist in the query data, "" is returned. The key is interpreted in a
+case insensitive manner.
+
+<p>
+
+If the optional value argument is specified, and the key does not
+exist in the query data, the specified value is simply returned. This
+capability allows for providing a default value if the key doesn't
+exist.
+
+<p>
+
+This function works for simple forms as well as for multipart
+formdata.
+
+<p>
+
+For files uploaded with the Netscape file upload widget, the file that
+was uploaded is an entry in the query data. See Example 3, below.
+
+<h3>Examples</h3>
+
+Example 1:
+<pre>
+set x [ns_queryget name]
+</pre>
+
+If "name" is a key in the query data, the variable x will be set to
+the value associated with the "name" key. If "name" is not a key in
+the query data, "" will be returned.
+
+<p>
+
+Example 2:
+<pre>
+set x [ns_queryget name Hoover]
+</pre>
+
+If "name" is a key in the query data, the variable x will be set to
+the value associated with the "name" key. If "name" is not a key in
+the query data, "Hoover" will be returned.
+
+<p>
+
+Example 3:
+
+Given this HTML form:
+<pre>
+&lt;form enctype=multipart/form-data method=POST
+   action=/formtest&gt;
+Local file: &lt;input name=clientfile type=file&gt;
+To remote file: &lt;INPUT TYPE=text NAME=path VALUE="" SIZE=80&gt;
+&lt;input name=submit type=submit value=Upload&gt;
+&lt;/form&gt;
+</pre>
+
+and this POST handler:
+<pre>
+proc formtest { } {
+    set remotefile [ns_queryget path]
+    set localfile [ns_queryget clientfile]
+    set where_the_data_is [ns_queryget clientfile.tmpfile]
+} ;# formtest
+</pre>
+
+<p>
+
+Suppose the user specified "spoon.txt" as the Local File and
+"/oop/ack/tick.txt" as the Remote File, and then submitted the form.
+The variable values in the formtest procedure will be:
+
+remotefile = "/oop/ack/tick.txt"<br>
+
+localfile = "spoon.txt"<br>
+
+_the_data = something like: "/var/tmp/baaa29444"<br>
+
+<p>
+
+If you want to use the contents of the uploaded file, you can open it
+by executing:
+
+<pre>
+open [ns_queryget clientfile.tmpfile]
+</pre>
+
+You can then read it and manipulate it as you want. Note, however,
+that this tmp file will be deleted once the connection closes.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_querygetall>ns_querygetall</a></h2>
+
+
+Get multiple query values.
+
+<h3>Syntax</h3>
+
+ns_querygetall key ?def_result?
+
+<h3>Description</h3>
+
+This function gets multiple query values whose key is key. If there
+are none, the default result (def_result) is returned, or null is
+returned if def_result is not specified. This function is useful for
+checkboxes.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_requestauthorize>ns_requestauthorize</a></h2>
+
+
+Ask the server to check permissions using nsperm.
+
+<h3>Syntax</h3>
+
+ns_requestauthorize method URL authuser authpassword ?ipaddr?
+
+<h3>Description</h3>
+
+This function does the same permission check that the AOLserver does
+before serving a URL. If the nsperm module is loaded, the algorithm is
+as follows.
+
+<pre>
+1. If the authuser is "nsadmin", the password is correct, and the IP
+   address of the client is allowed nsadmin access, then access is
+   authorized.
+2. Find the relevant permission record. If an exact match for the
+   method and URL combination is not found, the end of the URL is
+   pared down until a match is found. For example, if there is no
+   match for `/products/cereals/raisin_bran.html,' then the server
+   looks for a permission record for the URL `/products/cereals.' If
+   that permission record is specified as "Exact URL match is NOT
+   required", then that permission record is used.
+</pre>
+
+By default, the server comes with a row that says GET on `/' is open
+to the world.
+
+<p>
+
+If no relevant permission record is found, access is denied
+(forbidden).
+<pre>
+1. If the authuser is in the "Allow Users" list, access is permitted.
+   If the authuser is a member of a group in the "Allow Groups" list
+   and not in the "Deny Users' list, access is permitted.
+2. If the host is in the "Hosts to allow" list, access is permitted.
+   If the host is in the "Hosts to deny" list, access is denied.
+3. If the request does not come in with authorization data, access is
+   denied.
+4. The user and password are verified. If there is no password
+   specified in the database, any password is accepted.
+5. Otherwise, access is denied.
+</pre>
+
+<h3>Return Values</h3>
+
+The following values can be returned by ns_requestauthorize.
+
+<p>
+
+OK<br>
+The user has permission to execute this URL and method.<br>
+
+DENIED<br>
+The user does not have permission to execute this URL and method.<br>
+
+FORBIDDEN<br>
+There is no possible user/password/IP Address combination that would
+give authorization.<br>
+
+ERROR<br>
+There was an error.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_respond>ns_respond</a></h2>
+
+
+Build a complete HTTP response.
+
+<h3>Syntax</h3>
+
+ns_respond ?-status status? ?-type type? {?-string string? | ?-file file? | ?-fileid fileid? } ?-length length? ?-headers setId?
+
+<h3>Description</h3>
+
+ns_respond builds a complete response for the client with all of the
+specified information in the header.
+
+<h3>Example</h3>
+
+Using ns_respond, it's easy to do an HTTP redirect:
+
+<pre>
+set headers [ns_set new myheaders]
+ns_set put $headers location http://www.aolserver.com
+ns_respond -status 302 -type text/plain \
+    -string "redirection" -headers $headers
+
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_return>ns_return</a></h2>
+
+
+Return the response to the client.
+
+<h3>Syntax</h3>
+
+ns_return status type string<br>
+
+ns_returnadminnotice status msg ?longmsg?<br>
+
+ns_returnbadrequest reason<br>
+
+ns_returnerror status msg<br>
+
+ns_returnfile status type filename<br>
+
+ns_returnforbidden<br>
+
+ns_returnfp status type fileId len<br>
+
+ns_returnnotfound<br>
+
+ns_returnnotice status msg ?longmsg?<br>
+
+ns_returnredirect location<br>
+
+ns_returnunauthorized<br>
+
+
+<h3>Description</h3>
+
+These procedures provide a simple interface for returning information
+to the client. They build HTTP/1.0 headers and send the appropriate
+data out the socket to the client.  The script does not end at the
+time ns_return* is invoked so you can continue processing data after
+the client has gotten the data and closed the socket.
+
+<p>
+
+type should be a MIME type (see ns_guesstype manual page for a list).<br>
+
+status is a three-digit number fitting the pattern below:
+
+<blockquote>
+
+1xx Informational - Not used, but reserved for future use.<br>
+
+2xx Success - The action was successfully received, understood, and
+accepted.<br>
+
+3xx Redirection - Further action must be taken in order to complete the
+request.<br>
+
+4xx Client Error - The request contains bad syntax or cannot be fulfilled.<br>
+
+5xx Server Error - The server failed to fulfill an apparently valid
+request.
+
+</blockquote>
+
+Some common status values and their meanings are:
+
+<blockquote>
+<table>
+<tr>
+<td nowrap align=left valign=top
+200 OK<br>
+201 Created<br>
+202 Accepted<br>
+203 Provisional Information<br>
+204 No Content<br>
+300 Multiple Choices<br>
+301 Moved Permanently<br>
+302 Moved Temporarily<br>
+303 Method<br>
+304 Not Modified<br>
+</td>
+<td nowrap align=left valign=top
+400 Bad Request<br>
+401 Unauthorized<br>
+402 Payment Required<br>
+403 Forbidden<br>
+404 Not Found<br>
+405 Method Not Allowed<br>
+406 None Acceptable<br>
+407 Proxy Authentication Required<br>
+408 Request Time-out<br>
+409 Conflict<br>
+410 Gone<br>
+</td>
+<td nowrap align=left valign=top
+500 Internal Server Error<br>
+501 Not Implemented<br>
+502 Bad Gateway<br>
+503 Service Unavailable<br>
+504 Gateway Time-out<br>
+</td>
+</tr>
+</table>
+
+</blockquote>
+
+<p>
+
+ns_return sends back both the headers and the string.
+
+<p>
+
+ns_returnadminnotice performs the same function as ns_returnnotice,
+except that it appends a line with a link to
+"mailto:serveradministrator" based on the virtual server parameter
+"WebMaster".
+
+<p>
+
+ns_returnbadrequest returns a 400 status code and a formatted HTML
+message containing the reason text.
+
+<p>
+
+ns_returnerror wraps the text msg in some html and returns that to the
+client.
+
+<p>
+
+ns_returnfile sends back the headers and the contents of the file.
+
+<p>
+
+ns_returnforbidden returns a 403 status code.
+
+<p>
+
+ns_returnfp first sends the appropriate headers. Next, it writes out
+the contents of file from the current file position until the end of
+the file.
+
+<p>
+
+ns_returnnotfound returns a 404 status code.
+
+<p>
+
+ns_returnnotice wraps the text msg and longmsg in some html and
+returns that to the client.
+
+<p>
+
+ns_returnredirect returns a redirect to the passed in location.
+
+<p>
+
+ns_returnunauthorized returns a 401 status code.
+
+              
+<h3>Example</h3>
+
+It's often handy to output a page to the user and close the connection
+but still process data afterwards.  Your script will continue to run
+after you invoke an "ns_return*" function.
+
+<pre>
+ns_returnnotice 200 "Thank you" "Thank you for your input!"
+# Do more stuff...
+#  Maybe get a cup of coffee...
+#   It doesn't matter since the client has already left.
+return TCL_OK  ;# not really needed but shown here for clarity.
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_setexpires>ns_setexpires</a></h2>
+
+
+Set the HTTP "Expires" header.
+
+<h3>Syntax</h3>
+
+ns_setexpires seconds
+
+<h3>Description</h3>
+
+This function sets the Expires header so the page will expire in the
+specified number of seconds.  Setting a negative value typically
+causes broken images on browsers so use this option with caution.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockaccept>ns_sockaccept</a></h2>
+
+
+Accept a new socket connection.
+
+<h3>Syntax</h3>
+
+ns_sockaccept sockid
+
+<h3>Description</h3>
+
+ns_sockaccept accepts a new connection pending on sockid.
+
+<h3>Example</h3>
+
+<pre>
+#listen for connections on port 9000
+set sock [ns_socklisten * 9000]
+#wait for new connection
+set fds [ns_sockaccept $sock]
+set rfd [lindex $fds 0]
+set wfd [lindex $fds 1]
+
+puts $wfd "Hello!"
+
+close $rfd
+close $wfd
+close $sock
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockblocking>ns_sockblocking</a></h2>
+
+Set the blocking option on the socket.
+
+<h3>Syntax</h3>
+
+ns_sockblocking sockId
+
+<h3>Description</h3>
+
+This function sets the socket for the specified sockId to "blocking."
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockcallback>ns_sockcallback</a></h2>
+
+Register a socket callback script.
+
+<h3>Syntax</h3>
+
+ns_sockcallback sockid script when
+
+<h3>Description</h3>
+
+ns_sockcallback registers a socket callback script. The script should
+accept the arguments sockid and when. The script will be called
+according to the value of the "when" argument as follows:
+
+<p>
+
+r = the socket is readable<br>
+
+w = the socket is writeable<br>
+
+e = the socket has an exceptional condition<br>
+
+x = the server is shutting down<br>
+
+<h3>Example</h3>
+
+<pre>
+set sock [ns_socklisten * 9000]
+ns_sockcallback $sock newconn r
+# Keep $sock from closing after connection ends
+detach $sock
+
+# When a connection arrives, newconn will be called as:
+# newconn $sock r
+proc newconn {sock when} {
+    set fds [ns_sockaccept $sock]
+    set rfd [lindex $fds 0]
+    set wfd [lindex $fds 1]
+    puts $wfd "Hello!"
+    close $rfd
+    close $wfd
+}
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockcheck>ns_sockcheck</a></h2>
+
+Check if a socket is connected.
+
+<h3>Syntax</h3>
+
+ns_sockcheck fileid
+
+<h3>Description</h3>
+
+ns_sockcheck uses recv() or send() calls to check if a socket is still
+connected. The fileid is the read or write file id returned by
+ns_sockopen. This function is useful if you used the -nonblock option
+with ns_sockopen after calling ns_sockselect.
+
+<h3>Example</h3>
+
+An example containing ns_sockcheck is provided under ns_sockselect.
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_socketpair>ns_socketpair</a></h2>
+
+
+Create a pair of connected sockets.
+
+<h3>Syntax</h3>
+
+ns_socketpair
+
+<h3>Description</h3>
+
+ns_socketpair creates a pair of connected sockets and returns a list
+of file ids: the first one for reads and the second one for writes.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_socklisten>ns_socklisten</a></h2>
+
+Create a new socket listening for connections.
+
+<h3>Syntax</h3>
+
+ns_socklisten address port
+
+<h3>Description</h3>
+
+ns_socklisten creates a new socket listening for connections at the
+specified interface address and port. "*" can be used as the address
+argument to specify all addresses.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_socklistencallback>ns_socklistencallback</a></h2>
+
+Run script on connection.
+
+<h3>Syntax</h3>
+
+ns_socklistencallback address port script
+
+<h3>Description</h3>
+
+This function listens on the specified address and port and runs the
+specified script when new connections are received.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_socknonblocking>ns_socknonblocking</a></h2>
+
+
+Set nonblocking option on the socket.
+
+<h3>Syntax</h3>
+
+ns_socknonblocking sockId
+
+<h3>Description</h3>
+
+This function sets the socket option for the specified sockId to
+"nonblocking."
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_socknread>ns_socknread</a></h2>
+
+
+Return bytes to be read.
+
+<h3>Syntax</h3>
+
+ns_socknread sockId
+
+<h3>Description</h3>
+
+This function returns the number of bytes waiting to be read from the
+specified sockId.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockopen>ns_sockopen</a></h2>
+
+
+Connect to a remote host on the specified port.
+
+<h3>Syntax</h3>
+
+ns_sockopen ?-nonblock | -timeout seconds? host port
+
+<h3>Description</h3>
+
+ns_sockopen uses socket(), bind(), and connect() calls to connect to
+the remote host (host) on the specified port (port). ns_sockopen
+returns a list of two file ids: the first one for reads and the second
+one for writes.
+
+<p>
+
+The -nonblock option specifies that ns_sockopen will return
+immediately, while the connect is still in progress by the operating
+system. If you use -nonblock, you then can call ns_sockcheck with the
+write file id to see if the connect was actually completed.
+
+<p>
+
+The -timeout option specifies how long to wait for the connect to be
+made in seconds before timing out.
+
+<h3>Example</h3>
+
+This is a simple example that fetches a page from an http server
+(www.aolserver.com) on port 80. The headers will be in the $headers
+list, and the body will be in the $page list.
+<pre>
+set fds [ns_sockopen www.aolserver.com 80]
+set rid [lindex $fds 0]
+set wid [lindex $fds 1]
+puts $wid "GET /index.htm HTTP/1.0\r\n\r"
+flush $wid
+while {[set line [string trim [gets $rid]]] != ""} {
+    lappend headers $line
+}
+set page [read $rid]
+close $rid
+close $wid
+</pre>
+
+A more advanced example containing ns_sockopen is provided under
+ns_sockselect.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_sockselect>ns_sockselect</a></h2>
+
+
+Determine readable file id's.
+
+<h3>Syntax</h3>
+
+ns_sockselect ?-timeout seconds? rfds wfds efds
+
+<h3>Description</h3>
+
+ns_sockselect uses a select() call to determine which file id's re
+readable, writeable, or have exceptional conditions. ns_sockselect
+returns a list of three lists of: readable file id's, writeable file
+id's, and file id's with exceptions.
+
+<p>
+
+The -timeout option specifies the length of time to wait in seconds
+for ns_sockselect to return before timing out.
+
+<p>
+
+The rfds, wfds, and efds arguments are lists of readable file id's,
+writeable file id's, and file id's with exceptions, respectively.
+
+<h3>Example</h3>
+
+This example attempts to connect to nine servers at once and service
+the first available connections:
+
+<pre>
+# Start nonblocking connect()'s to www01 through
+# www09.foo.com and remember the read fileid which
+# corresponds to each write fileid.
+
+for {set n 1} {$n < 10} {incr n} {
+    set host [format "www%2d.foo.com" $n]
+    set fds [ns_sockopen -nonblock $host 80]
+    set r [lindex $fds 0]
+    set w [lindex $fds 1]
+    set w2r($w) $r
+    lappend wfds $w
+}
+
+# All connect()'s are in progress, use select to wait for one or
+# more to become writable in the next two seconds which means #
+# they may have connected.  We're not interested in readable or
+# exception sockets so the corresponding lists are empty
+# (i.e., {}).
+
+set sel [ns_sockselect -timeout 2 {} $wfds {}]
+
+# Select returned - get the sockets ready to write to.
+
+set wfds [lindex $sel 1]
+
+# Use ns_sockcheck to see if the sockets actually connected and
+# didn't become writable because the connect() failed (e.g., no
+# Web server was running on port 80 on the corresponding machine).
+# Note that the wfds list may be empty, meaning all sockets timed
+# out on connect.
+
+set ok ""
+foreach w $wfds {
+    if [ns_sockcheck $w] {
+        # Socket is connected - send a GET HTTP request.
+        lappend ok $w
+        puts $w "GET /index.htm HTTP/1.0\r\n\r"
+        # The flush is important, otherwise the remote
+        # server may never see the data.
+        flush $w
+    }
+}
+
+# Get the read ids for each socket which we sent the GET request to.
+
+foreach w $ok {
+    lappend rfds $w2r($w)
+}
+
+# Use select again to wait for the read sockets to have data
+# available in response to the GET request.
+
+set sel [ns_sockselect -timeout 2 $rfds {} {}]
+set rfds [lindex $sel 0]
+
+# Read the pages which came back.
+foreach r $rfds {
+    if [ns_sockcheck $r] {
+        set page($r) [read $r]
+    }
+}
+
+# Close all the sockets
+foreach w [array names w2r] {
+    close $w
+    close $w2r($w)
+}
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_url2file>ns_url2file</a></h2>
+
+
+Return file pathname that corresponds to the URL.
+
+<h3>Syntax</h3>
+
+ns_url2file URL
+
+<h3>Description</h3>
+
+This function returns the file or directory corresponding to the
+specified URL. The file returned is located in the "pages" directory
+on the current virtual server.
+
+<h3>Example</h3>
+
+This is especially useful when using the ns_adp_include command.
+
+<pre>
+&lt;% ns_adp_include [ns_url2file /include/myfile.inc] %&gt;
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_write>ns_write</a></h2>
+
+Write raw content back to the client.
+
+<h3>Syntax</h3>
+
+ns_write string
+
+<h3>Description</h3>
+
+ns_write writes the string out the connection. You can use it instead
+of the ns_return or ns_respond functions to build HTTP responses.
+AOLserver will not include the usual headers on the output data.  The
+script does not end at the time ns_write* is invoked so you can
+continue processing data after the client has gotten the data and
+closed the socket.
+
+
+<h3>Example</h3>
+
+See ns_return.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_writecontent>ns_writecontent</a></h2>
+
+Write content to a file.
+
+<h3>Syntax</h3>
+
+ns_writecontent fileId
+
+<h3>Description</h3>
+
+This function writes all the content (including any embedded null
+characters) to the specified file.
+
+
+<p>
+
+<hr>
+
+<br>
+
+</body>
+</html>

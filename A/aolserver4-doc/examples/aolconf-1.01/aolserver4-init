@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# Start the AOLServer HTTP server.
+#
+
+NAME=aolserver4
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+DAEMON=/usr/lib/$NAME/run
+AOLSERVER=/usr/sbin/$NAME-nsd
+PID_DIR=/var/run/$NAME
+PIDFILE=$PID_DIR/$NAME.pid
+
+trap "" 1
+
+[ -f $AOLSERVER ] || exit 0
+
+if [ ! -d $PID_DIR ]; then
+	mkdir -p -m 0755 $PID_DIR
+fi
+
+start()
+{
+    echo -n "Starting web server: $NAME"
+
+    start-stop-daemon --start --quiet \
+	--exec $DAEMON --pidfile $PIDFILE --oknodo -- daemon >/dev/null 2>&1
+    if [ $? != 0 ]; then
+    	echo " ... failed"
+	exit 1
+    else
+        echo "."
+    fi
+}
+
+stop()
+{
+    echo -n "Stopping web server: $NAME"
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE --oknodo >/dev/null 2>&1
+    if [ $? != 0 ]; then
+    	echo " ... failed"
+	exit 2
+    else
+        echo "."
+    fi
+}
+
+
+case "$1" in
+  start)
+    start
+    ;;
+
+  stop)
+    stop
+    ;;
+
+  reload|force-reload|restart)
+    stop
+    sleep 2
+    start
+    ;;
+
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|reload|force-reload}"
+    exit 1
+    ;;
+esac
+
+exit 0
+

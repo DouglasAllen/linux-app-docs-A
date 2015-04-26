@@ -1,0 +1,63 @@
+# maximum of a sequence of N values
+
+N:	const 	10
+val:	const	7
+	const	8
+	const	20
+	const	43
+	const	15
+	const	70
+	const	18
+	const	71	
+	const	52
+
+	const	83
+	const	1
+MAX:	mem	1
+	#R4=maximum; R2=index
+	load	N	R1
+	loadn	val	R2
+	loadi	R2	R4
+loop:	inc	R2
+	dec	R1
+	jzero	R1 	cont
+	#puts the next value in  R3 
+	loadi	R2	R3
+	# copy before comparing with max
+	storer	R3	R5
+	sub	R4	R5
+	# if R4-R5 > 0 continue
+	jpos	R5	loop
+	#max gets a new value
+	storer 	R3	R4
+	jump	loop	
+cont:	store	R4	MAX
+	halt	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

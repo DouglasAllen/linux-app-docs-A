@@ -1,0 +1,218 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:36 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_adp_ctl</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_adp_ctl</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp_ctl
+&minus; ADP control command</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_adp_ctl
+bufsize</b> <i>?size?</i> <b><br>
+ns_adp_ctl chan</b> <i>channel</i> <b><br>
+ns_adp_ctl autoabort</b> <i>?bool?</i> <b><br>
+ns_adp_ctl detailerror</b> <i>?bool?</i> <b><br>
+ns_adp_ctl displayerror</b> <i>?bool?</i> <b><br>
+ns_adp_ctl expire</b> <i>?bool?</i> <b><br>
+ns_adp_ctl gzip</b> <i>?bool?</i> <b><br>
+ns_adp_ctl nocache</b> <i>?bool?</i> <b><br>
+ns_adp_ctl safe</b> <i>?bool?</i> <b><br>
+ns_adp_ctl singlescript</b> <i>?bool?</i> <b><br>
+ns_adp_ctl stricterror</b> <i>?bool?</i> <b><br>
+ns_adp_ctl trace</b> <i>?bool?</i> <b><br>
+ns_adp_ctl trimspace</b> <i>?bool?</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This command
+enables control of the current ADP execution environment.
+Aside from the <i>bufsize</i> and <i>chan</i> subcommands,
+they all return a boolean value for a given ADP option. If
+the <i>bool</i> argument is given, the option is set to the
+given value and the previous value is returned. <b><br>
+ns_adp_ctl bufsize</b> <i>?size?</i></p>
+
+<p style="margin-left:22%;">This command returns the
+currently ADP output buffer size, setting it to a new value
+if the optionial <i>size</i> argument is specified.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl chan</b>
+<i>channel</i></p>
+
+<p style="margin-left:22%;">This command is used to specify
+an open file channel to receive output when the buffer is
+flushed. If <i>channel</i> is the null string, the output
+channel is cleared. This capability can be useful for
+specialized uses of ADP outside the context of an HTTP
+connection, e.g., for debugging or testing.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl autoabort</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>autoabort</i> option. When enabled, failure to flush a
+buffer (normally the result of a closed HTTP connection)
+generates an ADP exception, unwinding the ADP call
+stack.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl detailerror</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>detailerror</i> option. When enabled, errors in ADP pages
+are formatted with information about the context of the HTTP
+request. This can be very helpful in debugging ADP errors
+but potentially a security risk if the HTTP context (e.g.,
+cookie headers) contains personal or sensitive data. Errors
+are logged to the server log and, if <i>displayerror</i> is
+enabled, appened to the output buffer.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl displayerror</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>displayerror</i> option. When enabled, errors in ADP
+pages are formatted and appended to the output stream,
+normally visiable to a user&rsquo;s browser. This option
+should generally be enabled in development and disabled in
+production.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl expire</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the <i>expire</i>
+option. When enabled, the ADP request processing code adds
+an &quot;Expires: now&quot; header in the response buffer to
+disable any caching. In practice, more thoughtful cache
+control mechanisms should be used based on the HTTP/1.1
+spec.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl gzip</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the <i>gzip</i>
+option. When enabled, the output buffer is compressed before
+being returned in the response. As ADP&rsquo;s are generally
+used to generate text data such as HTML or XML, compression
+is normally quite successful at reducing the response
+size.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl nocache</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the <i>nocache</i>
+option. When enabled, all requests to cache executed ADP
+blocks via the <b>ns_adp_include -cache</b> directive are
+ignored, resulting in normal execution of all code.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl safe</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the <i>safe</i>
+option. When enabled, all code is executed in
+&quot;safe&quot; mode, disabling and ignoring any code
+within &lt;% registered tags.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl singlescript</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>singlescript</i> option. When enabled, ADP pages are
+converted from independent text-script blocks into a single
+script, which text blocks replaced with a call to
+<b>ns_adp_append</b> with the given text. Functionally the
+output is the same however an error anywhere on the page
+will result in the entire ADP page returning instead of
+skipping to the next block which is the normal behavior. In
+practice, <i>singlescript</i> is useful in development while
+in production leaving it disabled provides a more defensive
+execution environment where minor errors in one ADP do not
+inhibit execution of the overall page.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl stricterror</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>stricterror</i> option. When enabled, the result is
+similar to that of <i>singlescript</i> in that an error in a
+particular block will return the entire page instead of
+continuing to the next text or script block.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl trace</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the <i>trace</i>
+option which currently does nothing.</p>
+
+<p style="margin-left:11%;"><b>ns_adp_ctl trimspace</b>
+<i>?bool?</i></p>
+
+<p style="margin-left:22%;">Query or set the
+<i>trimspace</i> option. When enabled, any white space at
+the start of the output buffer is eliminated. White space
+can show up in the output as a result of ADP pages which do
+nothing but include other ADP&rsquo;s in a way to reuse code
+with the unfortunate side effect of the training newline at
+the end of a &quot;&lt;% ns_adp_include myfile.adp
+%&gt;&quot; ending up in the output stream.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_adp(n),
+ns_adp_flush(n), ns_adp_close(n), ns_adp_mimetype(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ADP, dynamic
+pages, buffer</p>
+<hr>
+</body>
+</html>

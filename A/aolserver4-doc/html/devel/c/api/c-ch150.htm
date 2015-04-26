@@ -1,0 +1,67 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DbPoolTimedGetHandle</TITLE>
+<LINK rel=Previous href="c-ch149.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch151.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch149.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch151.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="423722">
+</a><h3>Ns_DbPoolTimedGetHandle</h3>
+<a name="423723">
+</a><h4>Overview</h4>
+Get database handle from pool with timeout
+<a name="423724">
+</a><a name="423725">
+</a><h4>Syntax</h4>
+<pre>    <a name="423726"></a>Ns_DbHandle *Ns_DbPoolTimedGetHandle(
+    <a name="423727"></a>char *poolname,
+    <a name="423728"></a>int timeout
+    <a name="423729"></a>);
+</pre><p><a name="423730">
+</a><h4>Description</h4>
+<p><a name="423731">
+</a>The Ns_DbPoolTimedGetHandle function gets a database handle from the pool specified by <code>poolname</code>. If a <code>timeout</code> is not specified or <code>timeout</code> is zero, it will wait indefinitely (perhaps forever) for the handle to become available. If <code>timeout</code> is greater than zero, it will either return with the handle within that time period, or return "" if the time period was exceeded. If <code>timeout</code> is less than zero, it will not block.</p>
+<p><a name="423732">
+</a>It returns NULL on error or if the attempt times out. Details relating to error conditions are written to the server log. <i>You must request all the database handles you will need for a specific pool with one call to Ns_DbPoolTimedGetHandle (if you need only one handle) or Ns_DbPoolGetTimedMultipleHandles (if you need more than one handle). </i>You must release all your database handles explicitly (with Ns_DbPoolPutHandle) before acquiring more.</p>
+<a name="423986">
+</a><h4>See Also</h4>
+<p><a name="423987">
+</a>Ns_DbPoolGetHandle</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch149.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch151.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

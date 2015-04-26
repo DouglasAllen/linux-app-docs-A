@@ -1,0 +1,122 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:34 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_Url</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_Url</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_AbsoluteUrl,
+Ns_ParseUrl, Ns_RelativeUrl, Ns_SkipUrl &minus; URL
+manipulation routines</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_AbsoluteUrl</b>(<i>Ns_DString *pds, char *url, char
+*baseurl</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ParseUrl</b>(<i>char *url, char **pprotocol, char
+**phost, <br>
+char **pport, char **ppath, char **ptail</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_RelativeUrl</b>(<i>char *url, char *location</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_SkipUrl</b>(<i>Ns_Request *request, int n</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Ns_AbsoluteUrl</b>(<i>pds,
+url, baseurl</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Construct an
+URL based on baseurl but with as many parts of the
+incomplete url as possible. Return NS_OK or NS_ERROR.</p>
+
+<p style="margin-left:11%;"><b>Ns_ParseUrl</b>(<i>url,
+pprotocol, phost, pport, ppath, ptail</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Parse a URL
+into its component parts. Pointers to the protocol, host,
+port, path, and &quot;tail&quot; (last path element) will be
+set by reference in the passed-in pointers. The passed-in
+url will be modified.</p>
+
+<p style="margin-left:11%;"><b>Ns_RelativeUrl</b>(<i>url,
+location</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the url
+passed in is for this server, then the initial part of the
+URL is stripped off. e.g., on a server whose location is
+http://www.foo.com, Ns_RelativeUrl of
+&quot;http://www.foo.com/hello&quot; will return
+&quot;/hello&quot;. Returns a pointer to the beginning of
+the relative url in the passed-in url, or NULL if error.
+Will set errno on error.</p>
+
+<p style="margin-left:11%;"><b>Ns_SkipUrl</b>(<i>request,
+n</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Return a
+pointer n elements into the request&rsquo;s url.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

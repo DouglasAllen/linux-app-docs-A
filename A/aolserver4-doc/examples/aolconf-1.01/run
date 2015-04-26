@@ -1,0 +1,177 @@
+#!/bin/bash
+exec 2>&1
+#
+# /etc/aolserver4 run-script
+# LEG21032005
+#
+
+# find domains.cfg
+CONFDIR=/etc/aolserver4
+# find main.tcl
+HOMEDIR=/usr/lib/aolserver4
+WWWUSR=www-data export WWWUSR
+WWWGRP=www-data export WWWGRP
+
+CONFFILE=$CONFDIR/domains.cfg
+
+# reconect delay range in seconds, if database conection fails
+DELAYMIN=10
+DELAYMAX=20
+
+########### not user servicable inside #####################
+
+# Check if we can find the configuration
+# TODO: provide defaults if we don't find a config.
+
+if [ ! -r $CONFFILE ]; then
+    echo aolserver4-nsd:error: $CONFFILE not found
+    echo     stopping now.
+    svc -dt .
+    exit 1
+fi
+
+# Parse the bind options out of the configfile
+#
+function bind () {
+cat $CONFFILE |\
+while read TOKEN VALUE ARG; do
+    case $TOKEN in
+	bind|bindssl) echo $VALUE ;;
+	http)  [ "$VALUE" == "yes" ] && echo "0.0.0.0:80" ;;
+	https) [ "$VALUE" == "yes" ] && echo "0.0.0.0:443" ;;
+	 *) continue ;;
+      esac
+done
+}
+
+BIND=""
+for iface in $(bind); do
+    if echo $BIND | grep -q $iface; then
+	continue
+    else
+	if [ "$BIND" ]; then
+	    BIND="$BIND $iface"
+	else
+	    BIND=$iface
+	fi
+    fi
+done
+
+BIND=$(echo $BIND| tr ' ' ,)
+
+if [ -z "$BIND" ]; then
+    BIND="0.0.0.0:80"
+else
+    if [ "$BIND" == "0.0.0.0:443" ]; then
+	BIND="0.0.0.0:80",$BIND
+    fi
+fi
+
+
+# Check Database availability
+
+# exit gracefully: prints first parameter and shuts the run script down.
+function exgr () {
+    echo "$1"
+    echo "Aolserver: Shutting down!"
+    svc -dt .
+    svwaitdown `pwd`
+    exit $(($?+1))
+}
+
+# if a successfull conection could be made, keeb quiet
+# else print a diagnostic message on stdout.
+# shut the run script down on fatal errors
+#
+# $1:  db_name
+# $2:  db_user
+# $3:  db_host - empty if local
+# $4:  db_port, only makes sense if db_host not empty
+#
+function check_postgres () {
+    [ "$3" ] && HOSTOPT="-h $3"
+    [ "$4" ] && PORTOPT="-p $4"
+    su - $WWWUSR -c "psql -q -d $1 -U $2 $HOSTOPT $PORTOPT -c '\q'"
+    STATUS=$?
+    case "$STATUS" in
+        0) return 0;;
+        1)
+          echo "Aolserver: fatal error when testing database conection."
+          exgr "           psql exited with internal error status 1"
+          ;;
+        2)
+          echo "Aolserver: no or lost conection to database server,"
+          ;;
+        3)
+          echo "Aolserver: script error when testing database conection."
+          exgr "           Weird: we did not run any script!"
+          ;;
+        *)
+          exgr "Aolserver: psql returned unknown error code: $STATUS"
+          ;;
+    esac
+    return 1
+}
+
+# Check all databases in the configuration file
+function check_db () {
+    # parse config file for database stanzas
+    DB_DRIVER=""
+    cat $CONFFILE |\
+	while read TOKEN VALUE ARG; do
+	    case $TOKEN in
+		database|"}")
+		    if [ "$DB_DRIVER" ]; then
+			# We are ending a previus stanza, lets check
+		        # the database
+			case "$DB_DRIVER" in
+			    postgres)
+			        if [ "$DB_DRIVER" ]; then
+				    [ "$DB_USER" ] || DB_USER="$DB_NAME"
+				    check_postgres "$DB_NAME" "$DB_USER" "$DB_HOST" "$DB_PORT"
+				fi
+			        ;;
+			    # Add other database checks before *)
+			    *) exgr "Aolserver: Unknown database type: $DB_DRIVER"
+			        ;;
+			esac
+		    fi
+		    if [ "$TOKEN" == "database" ]; then
+			DB_DRIVER="$VALUE"
+		    else
+			DB_DRIVER="" DB_USER=""
+		    fi
+		    ;;
+		dbhost) DB_HOST="$VALUE" ;;
+		dbname) DB_NAME="$VALUE" ;;
+		dbuser) DB_USER="$VALUE" ;;
+		dbport) DB_PORT="$VALUE" ;;
+		*) continue ;;
+	    esac
+    done
+}
+
+# Delay a random number of seconds, between $1 and $2
+# default: 20 - 40
+function splay () {
+    DELAY=$((${1:-20}+$RANDOM*(${2:-40}-${1:-20})/32768))
+    echo sleeping: $DELAY seconds
+    sleep $DELAY
+}
+
+DB_STATUS="starting"
+export DB_STATUS
+while [ "$DB_STATUS" ]; do
+    DB_STATUS=$(check_db)
+    echo $DB_STATUS
+    [ "$DB_STATUS" ] && splay $DELAYMIN $DELAYMAX
+done
+
+# Check if we want to run in "inittab" mode
+# inittab mode is used for supervise.
+[ "$1" == daemon ] || mode="-i"
+
+# At last, lets do it!
+
+exec /usr/sbin/aolserver4-nsd \
+  $mode -t $HOMEDIR/main.tcl -u $WWWUSR -g $WWWGRP -b $BIND

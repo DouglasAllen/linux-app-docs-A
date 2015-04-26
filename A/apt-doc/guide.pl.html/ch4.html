@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Podręcznik użytkownika APT - Interfejs</title>
+
+<link href="index.html" rel="start">
+<link href="ch3.html" rel="prev">
+<link href="index.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Ogólne">
+<link href="ch2.html" rel="chapter" title="2 apt-get">
+<link href="ch3.html" rel="chapter" title="3 DSelect">
+<link href="ch4.html" rel="chapter" title="4 Interfejs">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Budowa systemu pakietów">
+<link href="ch4.html#s4.1" rel="section" title="4.1 Uruchamianie">
+<link href="ch4.html#s4.2" rel="section" title="4.2 Raport stanu">
+<link href="ch4.html#s4.3" rel="section" title="4.3 Wyświetlanie stanu przetwarzania">
+<link href="ch4.html#s4.4" rel="section" title="4.4 Dpkg">
+<link href="ch4.html#s4.2.1" rel="subsection" title="4.2.1 Lista dodatkowych pakietów">
+<link href="ch4.html#s4.2.2" rel="subsection" title="4.2.2 Pakiety przeznaczone do usunięcia">
+<link href="ch4.html#s4.2.3" rel="subsection" title="4.2.3 Lista nowych pakietów">
+<link href="ch4.html#s4.2.4" rel="subsection" title="4.2.4 Lista zatrzymanych pakietów">
+<link href="ch4.html#s4.2.5" rel="subsection" title="4.2.5 Ostrzeżenie o zmianie zatrzymanych pakietów">
+<link href="ch4.html#s4.2.6" rel="subsection" title="4.2.6 Podsumowanie">
+
+</head>
+
+<body>
+
+<p><a name="ch4"></a></p>
+<hr>
+
+<p>
+[ <a href="ch3.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ 4 ]
+[ <a href="index.html">dalej</a> ]
+</p>
+
+<hr>
+
+<h1>
+Podręcznik użytkownika APT
+<br>Część 4 - Interfejs
+</h1>
+
+<p>
+Metoda APT programu <code>dselect</code> i program <code>apt-get</code> dzielą
+wspólny interfejs.  Jest to prosty system, który najpierw informuje
+użytkownika, co będzie zrobione, a następnie to robi[<a
+href="footnotes.html#f2" name="fr2">2</a>].  Po wyświetleniu podsumowania
+informującego o tym, co będzie zrobione, APT wyświetla komunikaty dotyczące
+postępu przeprowadzanych operacji, tak żeby można było oszacować czas
+pozostały do ich zakończenia.
+</p>
+
+<hr>
+
+<h2><a name="s4.1"></a>4.1 Uruchamianie</h2>
+
+<p>
+Przed każdą operacją, z wyjątkiem update, APT przeprowadza pewne akcje
+przygotowujące wewnętrzny stan.  Sprawdza również stan systemu.  Te same
+operacje można przeprowadzić w dowolnej chwili, uruchamiając <samp>apt-get
+check</samp>.
+</p>
+
+<pre>
+     # apt-get check
+     Czytanie list pakietów... Gotowe
+     Budowanie drzewa zależności... Gotowe
+</pre>
+
+<p>
+Pierwszą rzeczą, którą robi, jest wczytanie wszystkich plików pakietów do
+pamięci.  APT używa buforowania, tak żeby przyspieszyć tę operację przy
+następnym uruchomieniu.  Jeśli nie znajdzie niektórych plików pakietów, to
+wypisze ostrzeżenie, a te pakiety zignoruje.
+</p>
+
+<p>
+Końcową operacją jest szczegółowa analiza zależności w systemie.
+Sprawdzana jest każda zależność każdego pakietu zainstalowanego lub
+rozpakowanego.  W razie wykrycia problemów z zależnościami
+<code>apt-get</code> wypisze odpowiedni komunikat i odmówi dalszego
+działania.
+</p>
+
+<pre>
+     # apt-get check
+     Czytanie list pakietów... Gotowe
+     Budowanie drzewa zależności... Gotowe
+     Należy uruchomić &quot;apt-get -f install&quot;, aby je naprawić.
+     Następujące pakiety mają niespełnione zależności:
+       9fonts: Wymaga: xlib6g ale nie jest zainstalowany
+       uucp: Wymaga: mailx ale nie jest zainstalowany
+       blast: Wymaga: xlib6g (&gt;= 3.3-5) ale nie jest zainstalowany
+       adduser: Wymaga: perl-base ale nie jest zainstalowany
+       aumix: Wymaga: libgpmg1 but ale nie jest zainstalowany
+       debiandoc-sgml: Wymaga: sgml-base ale nie jest zainstalowany
+       bash-builtins: Wymaga: bash (&gt;= 2.01) but 2.0-3 is installed
+       cthugha: Wymaga: svgalibg1 but it is not installed
+                Wymaga: xlib6g (&gt;= 3.3-5) ale nie jest zainstalowany
+       libreadlineg2: Jest w konflikcie z: libreadline2 (&lt;&lt; 2.1-2.1)
+</pre>
+
+<p>
+Powyższy przykład przedstawia system mający wiele problemów, włączając
+to poważny problem z libreadlineg2.  Każdy pakiet mający niespełnione
+zależności jest wypisywany w osobnej linii razem z niespełnionymi
+zależnościami.  Podane jest również krótkie wyjaśnienie dotyczące
+przyczyny problemu.
+</p>
+
+<p>
+Są dwie przyczyny, z których powodu system może być zepsuty w powyższy
+sposób.  Pierwszą jest to, że <code>dpkg</code> podczas aktualizacji systemu
+nie zauważył jakiejś subtelnej relacji między pakietami[<a
+href="footnotes.html#f3" name="fr3">3</a>].  Drugą przyczyną jest
+wystąpienie błędu w czasie instalowania pakietu.  W takim przypadku pakiet
+może być rozpakowany, mimo że pakiety od niego zależące nie są
+zainstalowane.
+</p>
+
+<p>
+Druga przyczyna jest o wiele mniej poważna niż pierwsza, ponieważ APT
+wymusza pewne więzy integralności dotyczące kolejności instalowania
+pakietów.  W obu przypadkach przekazanie programowi <code>apt-get</code> opcji
+<samp>-f</samp> wymusi na APT znalezienie rozwiązania umożliwiającego mu
+kontynuowanie działania.  Metoda APT programu <code>dselect</code> zawsze
+przekazuje opcję <samp>-f</samp>, aby móc kontynuować po wystąpieniu
+błędu w skryptach opiekunów pakietów.
+</p>
+
+<p>
+Jednak gdy opcja <samp>-f</samp> jest używana do poprawienia zależności w
+poważnie uszkodzonym systemie (pierwsza z opisanych wyżej przyczyn), możliwe
+jest że albo od razu zwróci błąd, albo nie powiedzie się sekwencja
+instalowania pakietów.  W obu przypadkach należy poprawić zależności
+ręcznie, używając do tego dpkg (być może przekazując mu opcje
+wymuszające &quot;--force-...&quot;), w takim stopniu, aby umożliwić
+działanie systemowi APT.
+</p>
+
+<hr>
+
+<h2><a name="s4.2"></a>4.2 Raport stanu</h2>
+
+<p>
+Przed rozpoczęciem przetwarzania <code>apt-get</code> wyświetli raport
+zawierający informacje o tym, co będzie zrobione.  W ogólności raport ten
+zależy od typu wykonywanej operacji, jednakże występuje w nim kilka
+elementów wspólnych dla wszystkich typów.  We wszystkich wypadkach
+wyświetlane są informacje o końcowym stanie, brana jest pod uwagę opcja
+<samp>-f</samp>, a także wszystkie istotne działania wykonywanego polecenia.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.1"></a>4.2.1 Lista dodatkowych pakietów</h3>
+
+<pre>
+     Zostaną zainstalowane następujące dodatkowe pakiety:
+       libdbd-mysql-perl xlib6 zlib1 xzx libreadline2 libdbd-msql-perl
+       mailpgp xdpkg fileutils pinepgp zlib1g xlib6g perl-base
+       bin86 libgdbm1 libgdbmg1 quake-lib gmp2 bcc xbuffy
+       squake pgp-i python-base debmake ldso perl libreadlineg2
+       ssh
+</pre>
+
+<p>
+Lista dodatkowych pakietów wyświetla wszystkie pakiety, które będą
+zainstalowane lub zaktualizowane oprócz tych wymienionych w linii poleceń.
+Jest generowana tylko dla polecenia <samp>install</samp>.  Wymienione pakiety
+są najczęściej wynikiem automatycznej instalacji.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.2"></a>4.2.2 Pakiety przeznaczone do usunięcia</h3>
+
+<pre>
+     Następujące pakiety zostaną USUNIĘTE:
+       xlib6-dev xpat2 tk40-dev xkeycaps xbattle xonix
+       xdaliclock tk40 tk41 xforms0.86 ghostview xloadimage xcolorsel
+       xadmin xboard perl-debug tkined xtetris libreadline2-dev perl-suid
+       nas xpilot xfig
+</pre>
+
+<p>
+Lista pakietów przeznaczonych do usunięcia wyświetla wszystkie pakiety,
+które zostaną usunięte z systemu.  Może być pokazana dla każdej operacji
+i powinna być szczegółowo przeanalizowana, aby zapewnić, że żaden istotny
+pakiet nie będzie usunięty.  W szczególności opcja <samp>-f</samp> może
+wygenerować sporo pakietów do usunięcia, także w przypadku jej użycia
+należy szczególnie dokładnie przeanalizować wyświetlany raport.  Lista
+może zawierać pakiety usuwane z powodu ich tylko częściowego
+zainstalowania, wynikającego być może z przerwania wcześniejszej
+instalacji.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.3"></a>4.2.3 Lista nowych pakietów</h3>
+
+<pre>
+     Zostaną zainstalowane następujące NOWE pakiety:
+       zlib1g xlib6g perl-base libgdbmg1 quake-lib gmp2 pgp-i python-base
+</pre>
+
+<p>
+Lista nowych pakietów to proste przypomnienie o tym, co się stanie.  Wypisane
+pakiety nie są obecnie zainstalowane w systemie, ale będą, kiedy APT
+skończy działanie.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.4"></a>4.2.4 Lista zatrzymanych pakietów</h3>
+
+<pre>
+     Następujące pakiety zostały zatrzymane:
+       compface man-db tetex-base msql libpaper svgalib1
+       gs snmp arena lynx xpat2 groff xscreensaver
+</pre>
+
+<p>
+Jeśli aktualizowany jest cały system, to jest możliwe, że nowe wersje
+pakietów nie będą mogły być zainstalowane, ponieważ wymagają nowych
+pakietów lub są w konflikcie z już zainstalowanymi pakietami.  W takim
+wypadku pakiet pojawi się na liście pakietów zatrzymanych.  Najlepszym
+sposobem na zainstalowanie takich pakietów jest użycie <samp>apt-get
+install</samp> lub rozwiązanie problemów z zależnościami za pomocą
+programu <code>dselect</code>.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.5"></a>4.2.5 Ostrzeżenie o zmianie zatrzymanych pakietów</h3>
+
+<pre>
+     Zostaną zmienione następujące zatrzymane pakiety:
+       cvs
+</pre>
+
+<p>
+Czasami można poprosić APT o zainstalowanie pakietu, który jest zatrzymany.
+W takim przypadku wypisywane jest ostrzeżenie o zmianie zatrzymanego pakietu.
+Może się to zdarzyć tylko podczas dist-upgrade lub install.
+</p>
+
+<hr>
+
+<h3><a name="s4.2.6"></a>4.2.6 Podsumowanie</h3>
+
+<p>
+APT zakończy raport podsumowaniem wszystkich zmian, które przeprowadzi.
+</p>
+
+<pre>
+     206 aktualizowanych, 8 nowo instalowanych, 25 usuwanych i 51 nieaktualizowanych.
+     12 nie w pełni zainstalowanych lub usuniętych.
+     Konieczne pobranie 65.7M/66.7M archiwów. Po rozpakowaniu zostanie użyte 26.5M.
+</pre>
+
+<p>
+Pierwsza linia podsumowania jest uproszczoną wersją powyższych list i
+zawiera liczbę aktualizacji - to jest pakietów już zainstalowanych, których
+nowsze wersje są dostępne.  W drugiej linii wyświetlono liczbę nie do
+końca skonfigurowanych pakietów, prawdopodobnie w wyniku przerwania
+poprzedniej instalacji.  Ostatnia linia zawiera dane dotyczące miejsca na
+dysku.  Pierwsza para liczb odnosi się do rozmiaru plików archiwum: pierwsza
+liczba oznacza liczbę bajtów, które muszą zostać pobrane ze zdalnych
+serwerów, a druga - całkowity rozmiar wszystkich żądanych archiwów.
+Kolejna liczba oznacza różnicę rozmiarów pomiędzy obecnie zainstalowanymi
+pakietami, a nowo instalowanymi pakietami.  W przybliżeniu odpowiada
+przestrzeni dysku, która będzie zajęta w /usr po zakończeniu instalacji.
+Wartość ta może wskazywać na zwolnienie miejsca na dysku, jeśli usuwana
+jest duża liczba pakietów.
+</p>
+
+<p>
+Używając opcji -u, można wygenerować raport pokazujący pakiety
+przeznaczone do aktualizacji, podobny do tego pokazanego w poprzednim
+przykładzie.
+</p>
+
+<hr>
+
+<h2><a name="s4.3"></a>4.3 Wyświetlanie stanu przetwarzania</h2>
+
+<p>
+Podczas pobierania archiwów i plików pakietów APT wyświetla serię
+komunikatów o stanie.
+</p>
+
+<pre>
+     # apt-get update
+     Pob:1 http://ftp.de.debian.org/debian-non-US/ stable/non-US/ Packages
+     Pob:2 http://llug.sep.bnl.gov/debian/ testing/contrib Packages
+     Traf http://llug.sep.bnl.gov/debian/ testing/main Packages
+     Pob:4 http://ftp.de.debian.org/debian-non-US/ unstable/binary-i386/ Packages
+     Pob:5 http://llug.sep.bnl.gov/debian/ testing/non-free Packages
+     11% [5 testing/non-free `Oczekiwane na nagłówki' 0/32.1k 0%] 2203b/s 1m52s
+</pre>
+
+<p>
+Linie zaczynające się od <em>Pob:</em> są wypisywane, kiedy APT zaczyna
+pobierać plik, a ostatnia linia oznacza postęp pobierania.  Pierwsza
+wartość podana w procentach określa całkowity procent pobierania wszystkich
+plików.  Niestety rozmiar plików Package nie jest znany, tak więc
+<samp>apt-get update</samp> estymuje procent wykonanego pobierania, co powoduje
+pewne nieścisłości.
+</p>
+
+<p>
+Następna sekcja linii statusu powtarza się dla każdego wątku pobierania,
+oznacza przeprowadzanie operacji i podaje kilka użytecznych informacji na
+temat tego, co się dzieje.  Czasem sekcja ta zawiera komunikat <em>Tworzenie
+procesu potomnego</em>, co oznacza, że system operacyjny ładuje moduł
+pobierania.  Pierwszym słowem po znaku &quot;[&quot; jest liczba pobrań,
+dokładnie taka jaka jest pokazana liczba linii historii pobrań.  Następnie w
+skróconej formie wyświetlana jest nazwa pobieranego obiektu.  W przypadku
+archiwów nazwa ta będzie zawierać nazwę pobieranego pakietu.
+</p>
+
+<p>
+W pojedynczych cudzysłowach podawany jest komunikat wskazujący na postęp
+tworzenia połączenia pobierania danych.  Zazwyczaj postęp ten jest
+sekwencją zdarzeń od <em>Podłączanie</em> przez <em>Oczekiwanie na
+nagłówki</em> do <em>Pobieranie</em> lub <em>Wznawianie</em>.  Końcową
+wartością jest liczba bajtów pobranych ze zdalnego serwera.  Kiedy tylko
+pobieranie się rozpocznie, wartość ta jest wyświetlana jw formacie typu
+<samp>102/10.2k</samp>, co oznacza, że pobrano 102 bajty, a oczekuje się
+jeszcze pobrania 10.2 kilobajtów.  Aby zaoszczędzić miejsce, całkowity
+rozmiar jest zawsze wyświetlany jako w postaci 4-znakowej.  Po rozmiarze
+następuje procentowy wskaźnik postępu pobierania danego pliku.
+Przedostatnim elementem jest bieżąca średnia prędkość pobierania, która
+jest aktualizowane co każde 5 sekund i odzwierciedla tempo pobierania w tym
+okresie.  W końcu wyświetlany jest estymowany czas pobierania, regularnie
+aktualizowany i odzwierciedlający czas pozostały do zakończenia pobierania
+przy założeniu utrzymania się pokazanego tempa pobierania.
+</p>
+
+<p>
+Linia stanu jest aktualizowana co każde pół sekundy, aby na bieżąco
+informować użytkownika o postępie pobierania, podczas gdy linie
+&quot;Pob:&quot; są przesuwane w dół, gdy tylko zacznie się pobieranie
+nowego pliku.  Ponieważ linia stanu jest ciągle zmieniana, wyjście programu
+nie jest odpowiednie do przekierowania do pliku.  Aby usunąć linie stanu,
+należy użyć opcji <samp>-q</samp>.
+</p>
+
+<hr>
+
+<h2><a name="s4.4"></a>4.4 Dpkg</h2>
+
+<p>
+APT używa programu <code>dpkg</code> do instalowania archiwów i przełączy
+się do interfejsu <code>dpkg</code>, gdy tylko zakończy pobieranie plików.
+<code>dpkg</code> może również zadawać pytania podczas przetwarzania
+pakietów, a same pakiety także mogą zadawać pytania.  Każde pytanie
+zazwyczaj jest poprzedzone opisem, a same pytania są zbyt zróżnicowane, by
+je tutaj opisać.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch3.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ 4 ]
+[ <a href="index.html">dalej</a> ]
+</p>
+
+<hr>
+
+<p>
+Podręcznik użytkownika APT
+</p>
+
+<address>
+$Id: guide.sgml,v 1.7 2003/04/26 23:26:13 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

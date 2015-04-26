@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Interactive mode - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Options.html#Options" title="Options">
+<link rel="next" href="GUI.html#GUI" title="GUI">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interactive-mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GUI.html#GUI">GUI</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options.html#Options">Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">10 Interactive mode</h2>
+
+<p><a name="index-interactive-mode-1259"></a>Interactive mode is entered by executing the command <code>asy</code> with
+no file arguments. When the <code>-multiline</code> option is disabled (the default),
+each line must be a complete <code>Asymptote</code> statement (unless
+explicitly continued by a final backslash character <code>\</code>);
+it is not necessary to terminate input lines with a semicolon. 
+If one assigns <code>settings.multiline=true</code>, interactive code can be
+entered over multiple lines; in this mode, the automatic termination of
+interactive input lines by a semicolon is inhibited. Multiline mode is useful
+for cutting and pasting <code>Asymptote</code> code directly into the
+interactive input buffer.
+
+   <p><a name="index-g_t_0040code_007b_0025_007d-1260"></a>Interactive mode can be conveniently used as a calculator: expressions
+entered at the interactive prompt (for which a corresponding <code>write</code>
+function exists) are automatically evaluated and written to <code>stdout</code>. 
+If the expression is non-writable, its type signature will be printed out
+instead. In either case, the expression can be referred to using the symbol
+<code>%</code> in the next line input at the prompt.  For example:
+<pre class="verbatim">> 2+3
+5
+> %*4
+20
+> 1/%
+0.05
+> sin(%)
+0.0499791692706783
+> currentpicture
+&lt;picture currentpicture>
+> %.size(200,0)
+> 
+</pre>
+
+   <p><a name="index-g_t_0040code_007boperator-answer_007d-1261"></a>The <code>%</code> symbol, when used as a variable, is shorthand for the identifier
+<code>operator answer</code>, which is set by the prompt after each written
+expression evaluation.
+
+   <p>The following special commands are supported only in interactive mode
+and must be entered immediately after the prompt:
+
+     
+<a name="index-g_t_0040code_007bhelp_007d-1262"></a>
+<dl><dt><code>help</code><dd>view the manual;
+<br><dt><code>erase</code><dd>erase <code>currentpicture</code>;
+<a name="index-g_t_0040code_007binput_007d-1263"></a><br><dt><code>reset</code><dd>reset the <code>Asymptote</code> environment to its initial state, except for
+changes to the settings module (see <a href="settings.html#settings">settings</a>), the current directory
+(see <a href="cd.html#cd">cd</a>), and breakpoints (see <a href="Debugger.html#Debugger">Debugger</a>);
+<a name="index-g_t_0040code_007binput_007d-1264"></a><br><dt><code>input FILE</code><dd>does an interactive reset, followed by the command
+<code>include FILE</code>. If the file name <code>FILE</code> contains
+nonalphanumeric characters, enclose it with quotation marks. 
+A trailing semi-colon followed by optional <code>Asymptote</code> commands may
+be entered on the same line. 
+<a name="index-g_t_0040code_007bquit_007d-1265"></a><a name="index-g_t_0040code_007bexit_007d-1266"></a><a name="index-g_t_0040code_007bhistory_007d-1267"></a><a name="history"></a><br><dt><code>quit</code><dd>exit interactive mode (<code>exit</code> is a synonym; the abbreviation
+<code>q</code> is also accepted unless there exists a top-level variable named
+<code>q</code>). 
+<a name="index-g_t_0040code_007bhistorylines_007d-1268"></a>A history of the most recent 1000 (this number can be changed with the
+<code>historylines</code> configuration variable) previous commands will be retained
+in the file <code>.asy/history</code> in the user's home directory (unless
+the command-line option <code>-localhistory</code> was specified, in which case
+the history will be stored in the file <code>.asy_history</code> in the
+current directory).
+
+   </dl>
+
+   <p>Typing <code>ctrl-C</code> interrupts the execution of <code>Asymptote</code> code
+and returns control to the interactive prompt.
+
+   <p>Interactive mode is implemented with the <acronym>GNU</acronym> <code>readline</code> library,
+with command history and auto-completion. To customize the key bindings, see:
+<a href="http://cnswww.cns.cwru.edu/php/chet/readline/readline.html">http://cnswww.cns.cwru.edu/php/chet/readline/readline.html</a>
+
+   <p><a name="index-g_t_0040code_007bPython_007d-usage-1269"></a>The file <code>asymptote.py</code> in the <code>Asymptote</code> system directory
+provides an alternative way of entering <code>Asymptote</code> commands
+interactively, coupled with the full power of <code>Python</code>. Copy this
+file to your <code>Python path</code> and then execute from within
+<code>Python</code> the commands
+<pre class="verbatim">from asymptote import *
+g=asy()
+g.size(200)
+g.draw("unitcircle")
+g.send("draw(unitsquare)")
+g.fill("unitsquare, blue")
+g.clip("unitcircle")
+g.label("\"$O$\", (0,0), SW")
+</pre>
+
+   </body></html>
+

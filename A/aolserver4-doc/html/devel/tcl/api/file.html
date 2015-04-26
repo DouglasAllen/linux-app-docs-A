@@ -1,0 +1,571 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<a name=top><h1>File Manipulation Functions</h1></a>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/file.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+</small>
+<p>
+
+<h2><a href=./ name=ns_chmod>ns_chmod</a></h2>
+
+Change a file's access permissions.
+
+<h3>Syntax</h3>
+
+ns_chmod filename mode
+
+<h3>Description</h3>
+
+ns_chmod changes the specified file's permissions to mode, in the same
+manner as the Unix chmod(1) command-line utility.
+
+<p>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cp>ns_cp</a></h2>
+
+Copy one file to another.
+
+<h3>Syntax</h3>
+
+ns_cp -preserve file1 file2
+
+<h3>Description</h3>
+
+ns_cp copies the contents of file1 to file2, just like the Unix "cp"
+command. The default directory is the home directory for the server.
+
+<p>
+
+If -preserve is specified, the copied file will retain the creation
+time, modification time, owner, and mode of the original file, just
+like the Unix "cp -p" command.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_cpfp>ns_cpfp</a></h2>
+
+Copy a specified number of bytes from one file to another.
+
+<h3>Syntax</h3>
+
+ns_cpfp fileid1 fileid2 ?nbytes?
+
+<h3>Description</h3>
+
+ns_cpfp copies information from one file (fileid1) to another
+(fileid2). If you specify a number of bytes in the nbytes argument,
+only the specified number of bytes will be copied. By default, the
+entire file is copied.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_ftruncate>ns_ftruncate</a></h2>
+
+Truncate an open file to a specified length.
+
+<h3>Syntax</h3>
+
+ns_ftruncate fileid ?length?
+
+<h3>Description</h3>
+
+ns_ftruncate causes the open file specified by fileid to have a size
+of length bytes. If length is not specified, it causes the file to
+have a size of zero bytes. The file must be open and be a regular
+file.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_getcsv>ns_getcsv</a></h2>
+
+Read CSV data from a file.
+
+<h3>Syntax</h3>
+
+ns_getcsv fileId varName
+
+<h3>Description</h3>
+
+ns_getcsv reads one line of CSV data from the specified file and and
+sets the variable specified by varName to a list of the elements in
+that row. Any quotes in the line of data are removed. ns_getcsv
+returns the number of elements in the row.
+
+<p>
+
+If there are no more lines in the file to read, varName does not get
+set, and ns_getcsv returns -1 as the number of elements in the row.
+
+<p>
+
+A CSV file is an ASCII file containing rows of data in the following
+syntax:
+<pre>
+  * Elements in each row must be separated by commas.
+  * Each row must end with either \n, \r, or \r\n.
+  * Elements that contain commas, newlines, or carriage returns can be
+    surrounded by double quotes (e.g., "foo,bar").
+  * If an element surrounded by double quotes also contains a double
+    quote, you can escape the interior double quote by using two
+    double quotes (e.g., "Evander ""Real Deal"" Holyfield"
+  * White space that isn't inside double quotes is ignored. For
+    example, the line: 'bob, sarah, mary' will result in the list {bob
+    sarah mary}.
+  * Null entries are okay, either embedded in the line or at the end
+    of a line. For example, the line: 'bob,,sarah, ' will result in
+    the list: {bob {} sarah {}}.
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_gifsize>ns_gifsize</a></h2>
+
+Determine the width and height of a GIF87 or GIF89 image.
+
+<h3>Syntax</h3>
+
+ns_gifsize file
+
+<h3>Description</h3>
+
+ns_gifsize returns a list of two elements, the width and height of the
+GIF file specified by file. An error is generated if the file does not
+exist or if it is not a GIF file.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_jpegsize>ns_jpegsize</a></h2>
+
+Determine the width and height of a JPEG image.
+
+<h3>Syntax</h3>
+
+ns_jpegsize file
+
+<h3>Description</h3>
+
+ns_jpegsize returns a list of two elements, the width and height of
+the JPEG file specified by file. An error is generated if the file
+does not exist or if it is not a JPEG file.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_link>ns_link</a></h2>
+
+Create a link.
+
+<h3>Syntax</h3>
+
+ns_link ?-nocomplain? filename1 filename2
+
+<h3>Description</h3>
+
+ns_link creates a link named filename2 that points to the file
+specified by filename1. If the link fails, a Tcl error is generated,
+unless -nocomplain is specified.
+
+<p>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_mkdir>ns_mkdir</a></h2>
+
+Create a directory.
+
+<h3>Syntax</h3>
+
+ns_mkdir path
+
+<h3>Description</h3>
+
+ns_mkdir creates the directory named PATH, just like the Unix mkdir
+command. By default, under Unix the directory is created with the file
+permissions set to 0755 (rwxr-xr-x.). These permissions can be
+modified by setting the umask parameter for the server.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_mktemp>ns_mktemp</a></h2>
+
+Return a unique file name based on a template.
+
+<h3>Syntax</h3>
+
+ns_mktemp template
+
+<h3>Description</h3>
+
+ns_mktemp returns a unique filename based on the template you specify.
+The string in the template should contain a string with 6 trailing Xs.
+ns_mktemp will replace the Xs with a letter and the current process
+id. The letter will be chosen to make the filename unique. For
+example, ns_mktemp "/tmp/fooXXXXXX" will return something like:
+"/tmp/fooa000BH".
+
+<p>
+
+ns_mktemp is analogous to the Unix C library mktemp function.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_rename>ns_rename</a></h2>
+
+Rename a file.
+
+<h3>Syntax</h3>
+
+ns_rename file1 file2
+
+<h3>Description</h3>
+
+ns_rename renames the first file (file1) to the file name specified by
+file2. Make sure that the files and the directories in which the
+files exist are read/write accessible to the username that's
+running the AOLserver.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_rmdir>ns_rmdir</a></h2>
+
+Remove a directory.
+
+<h3>Syntax</h3>
+
+ns_rmdir path
+
+<h3>Description</h3>
+
+ns_rmdir removes the directory named path, just like the Unix rmdir
+command.  The directory must already be empty.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_rollfile>ns_rollfile</a></h2>
+
+Roll an arbitrary file.
+
+<h3>Syntax</h3>
+
+ns_rollfile file backupMax
+
+<h3>Description</h3>
+
+This function rolls the specified file, keeping a number of backup
+copies up to backupMax.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_symlink>ns_symlink</a></h2>
+
+Create a symbolic link.
+
+<h3>Syntax</h3>
+
+ns_symlink ?-nocomplain? filename1 filename2
+
+<h3>Description</h3>
+
+ns_symlink creates a symbolic link named filename2 that points to the
+file specified by filename1. If the link fails, a Tcl error is
+generated, unless -nocomplain is specified.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_unlink>ns_unlink</a></h2>
+
+Remove a file.
+
+<h3>Syntax</h3>
+
+ns_unlink [-nocomplain] filename
+
+<h3>Description</h3>
+
+ns_unlink attempts to remove the file filename. If -nocomplain is not
+passed in and the removal fails, a Tcl error is generated.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_truncate>ns_truncate</a></h2>
+
+Truncate a file to a specified length.
+
+<h3>Syntax</h3>
+
+ns_truncate filename ?length?
+
+<h3>Description</h3>
+
+ns_truncate causes the file specified by filename to have a size of
+length bytes. If length is not specified, it causes filename to have a
+size of zero bytes. The file must exist and be a regular file.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_tmpnam>ns_tmpnam</a></h2>
+
+Generate a temporary file name.
+
+<h3>Syntax</h3>
+
+ns_tmpnam
+
+<h3>Description</h3>
+
+ns_tmpnam generates a filename that can safely be used for a temporary
+file. ns_tmpnam calls tmpnam(), and the results will depend on your
+operating system. On Irix, for example, tmpnam() always generates a
+file name using the path-prefix defined as P_tmpdir in the <stdio.h>
+header file, which is "/var/tmp/".
+
+<p>
+
+Alternatively, you can use the ns_mktemp function to create a unique
+file name.
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_writefp>ns_writefp</a></h2>
+
+Write file contents to the connection.
+
+<h3>Syntax</h3>
+
+ns_writefp fileid ?nbytes?
+
+<h3>Description</h3>
+
+ns_writefp writes the contents of the specified file to the
+connection. You can specify the number of bytes to be copied in the
+nbytes argument. By default, the entire file is copied.
+
+<h3>Example</h3>
+
+<pre>
+ns_register_proc GET /sampleWriteFp sampleWriteFp
+proc sampleWriteFp { conn ignore } {
+    set file [open "/home/people/juan/machine.txt" r]
+    ns_writefp $file
+    close $file
+}
+</pre>
+
+
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_normalizepath>ns_normalizepath</a></h2>
+
+Normalize a path.
+
+<h3>Syntax</h3>
+
+ns_normalizepath path
+
+<h3>Description</h3>
+
+ns_normalizepath removes any extraneous slashes from the path and
+resolves "." and ".." references. For example:
+ [ns_normalizepath /dog/cat/../.. /rat/../../dog//mouse/..]
+
+<p>
+
+returns:
+
+ /dog
+
+
+<p>
+
+<hr>
+
+<br>
+
+</body>
+</html>

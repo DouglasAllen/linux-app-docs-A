@@ -1,0 +1,1571 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1><a name=top>General-Purpose Functions</a></h1>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/general.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+</small>
+<p>
+
+
+<h2><a href=./ name=env>env</a></h2>
+
+Manipulate environment variables in a thread-safe manner.
+
+<h3>Syntax</h3>
+
+env exists variable<br>
+
+env get variable<br>
+
+env names<br>
+
+env set variable value<br>
+
+env unset variable<br>
+
+
+<h3>Description</h3>
+
+env exists returns 1 if the variable is set and 0 if it is not set.
+
+<p>
+
+env get returns the value of the specified environment variable.
+
+<p>
+
+env names returns a list of the names of all environment variables.
+(Only the names are returned, not the values.)
+
+<p>
+
+env set sets the specified environment variable to the specified
+value.
+
+<p>
+
+env unset unsets the specified environment variable.
+
+<h3>Notes</h3>
+
+The Tcl env variable was re-implemented as a Tcl command for the
+following reasons:
+
+<pre>
+ 1. Environment variables are not case-sensitive on certain platforms.
+    The env variable code always copied the variables and preserved
+    case into a Tcl array so you may think $env(PATH) wasn't set when
+    in fact $env(Path) was set. This could cause problems when, for
+    example, preparing for an exec. The env command does the right
+    thing and returns the same value with:
+    env get Path
+     or:
+    env get PATH
+ 2. The implementation of env as a variable was not thread safe.
+ 3. The implementation of env as a command always fetches, in a thread
+    safe way, the actual environment variables. In the implementation
+    of env as a variable, on the other hand, the environment variables
+    are copied to the env global array at Tcl interp startup.
+    Therefore, if C code changes the environment, with
+    putenv("foo=bar") for example, the env array wouldn't see the
+    change.
+</pre>
+
+  
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_fmttime>ns_fmttime</a></h2>
+
+Return a formatted date and time
+
+<h3>Syntax</h3>
+
+ns_fmttime time ?formatstring?
+
+<h3>Description</h3>
+
+ns_fmttime returns the specified date and time in a formatted string.
+This function behaves the same as the strftime function in C.
+
+<p>
+
+The time argument must specify the date and time as the number of
+seconds since 00:00:00 UTC, January 1, 1970. You can use the ns_time
+function to get the current time in this format.
+
+<p>
+
+You can use the following elements in the formatstring argument to
+specify how the returned string will be formatted. The default
+formatstring is "%a %b %d %T %Y".
+
+
+%% same as %
+
+<p>
+
+%a locale's abbreviated weekday name
+
+<p>
+
+%A locale's full weekday name
+
+<p>
+
+%b locale's abbreviated month name
+
+<p>
+
+%B locale's full month name
+
+<p>
+
+%c locale's appropriate date and time representation
+
+<p>
+
+%C locale's century number (the year divided by 100 and truncated)
+
+<p>
+
+%d day of month ( 01 - 31 )
+
+<p>
+
+%D date as %m/%d/%y
+
+<p>
+
+%e day of month (1-31; single digits are preceded by a blank)
+
+<p>
+
+%h locale's abbreviated month name
+
+<p>
+
+%H hour ( 00 - 23 )
+
+<p>
+
+%I hour ( 01 - 12 )
+
+<p>
+
+%j day number of year ( 001 - 366 )
+
+<p>
+
+%m month number ( 01 - 12 )
+
+<p>
+
+%M minute ( 00 - 59 )
+
+<p>
+
+%n same as new-line
+
+<p>
+
+%p locale's equivalent of either AM or PM
+
+<p>
+
+%r time as %I:%M:%S [AM|PM]
+
+<p>
+
+%R time as %H:%M
+
+<p>
+
+%S seconds ( 00 - 61 ), allows for leap seconds
+
+<p>
+
+%t same as a tab
+
+<p>
+
+%T time as %H:%M:%S
+
+<p>
+
+%U week number of year ( 00 - 53 ), Sunday is the first day of week1
+
+<p>
+
+%w weekday number ( 0 - 6 ), Sunday = 0
+
+<p>
+
+%W week number of year ( 00 - 53 ), Monday is the first day of week 1
+
+<p>
+
+%x locale's appropriate date representation
+
+<p>
+
+%X locale's appropriate time representation
+
+<p>
+
+%y year within century ( 00 - 99 )
+
+<p>
+
+%Y year as ccyy ( e.g. 1986)
+
+<p>
+
+%Z time zone name or no characters if no time zone exists
+
+<h3>Example</h3>
+
+1. Calling ns_fmttime as follows:
+<pre>
+ns_fmttime [ns_time]
+</pre>
+
+Returns the date and time formatted like this:
+
+<pre>
+Wed Oct 29 15:42:11 1997
+</pre>
+
+2. Calling ns_fmttime as follows:
+<pre>
+ns_fmttime [ns_time] "%D %T"
+</pre>
+
+Returns the date and time formatted like this:
+
+<pre>
+10/29/97 15:50:26
+</pre>
+
+  
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_gmtime>ns_gmtime</a></h2>
+
+Return time in GMT form.
+
+<h3>Syntax</h3>
+
+ns_gmtime
+
+<h3>Description</h3>
+
+Returns the time, in seconds, since Midnight, January 1, 1970, in the
+GMT time zone (rather than the local time zone).
+  
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_guesstype>ns_guesstype</a></h2>
+
+Lookup MIME Type.
+
+<h3>Syntax</h3>
+
+ns_guesstype filename
+
+<h3>Description</h3>
+
+This function guesses and returns the MIME type of the file, based on
+the extension in the file name. It uses a set of default mappings and
+any mappings that are in the "ns/server/servername/mimetypes" section
+of the config file. The default mappings are:
+
+<blockquote>
+<table>
+<tr>
+<td valign=top align=left>
+.ai=application/postscript<br>
+.aif=audio/aiff<br>
+.aiff=audio/aiff<br>
+.ani=application/x-navi-animation<br>
+.au=audio/basic<br>
+.avi=video/x-msvideo<br>
+.bin=application/x-macbinary<br>
+.bmp=image/bmp<br>
+.dp=application/commonground<br>
+.exe=application/octet-stream<br>
+.gif=image/gif<br>
+.gz=application/x-compressed<br>
+.hqx=application/mac-binhex40<br>
+.htm=text/html<br>
+.html=text/html<br>
+.jfif=image/jpeg<br>
+.jpe=image/jpeg<br>
+.jpg=image/jpeg<br>
+.jpeg=image/jpeg<br>
+.map=application/x-navimap<br>
+.mov=video/quicktime<br>
+.mpe=video/mpeg<br>
+.mpeg=video/mpeg<br>
+.mpg=video/mpeg<br>
+
+</td>
+<td valign=top align=left>
+
+.nvd=application/x-navidoc<br>
+.nvm=application/x-navimap<br>
+.pbm=image/x-portable-bitmap<br>
+.pdf=application/pdf<br>
+.pgm=image/x-portable-graymap<br>
+.pic=image/pict<br>
+.pict=image/pict<br>
+.pnm=image/x-portable-anymap<br>
+.ps=application/postscript<br>
+.qt=video/quicktime<br>
+.ras=image/x-cmu-raster<br>
+.rgb=image/x-rgb<br>
+.rtf=application/rtf<br>
+.sit=application/x-stuffit<br>
+.snd=audio/basic<br>
+.stl=application/x-navistyle<br>
+.tar=appliation/x-tar<br>
+.text=text/plain<br>
+.tgz=application/x-compressed<br>
+.tif=image/tiff<br>
+.tiff=image/tiff<br>
+.txt=text/plain<br>
+.xbm=image/x-xbitmap<br>
+.xpm=image/x-xpixmap<br>
+.wav=audio/x-wav<br>
+.z=application/x-compressed<br>
+.zip=application/x-compressed<br>
+</td>
+</tr>
+</table>
+</blockquote>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_localsqltimestamp>ns_localsqltimestamp</a></h2>
+
+Return a SQL timestamp containing the local time.
+
+<h3>Syntax</h3>
+
+ns_localsqltimestamp
+
+<h3>Description</h3>
+
+ns_localsqltimestamp returns and SQL timestamp value that encodes the
+local time.
+
+<h3>Example</h3>
+
+ns_localsqltimestamp
+
+<p>
+
+The result of the above command might be:
+<pre>
+1996-05-22 00:15:58
+</pre>
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_localtime>ns_localtime</a></h2>
+
+Return local time.
+
+<h3>Syntax</h3>
+
+ns_localtime
+
+<h3>Description</h3>
+
+This function returns a Tcl list of the pieces of the current local
+time. The pieces are:
+
+<pre>
+ seconds (0-59)
+ minutes (0-59)
+ hours (0-23)
+ dayofmonth (1-31)
+ monthofyear (0-11)
+ year (year-1900)*
+ dayofweek (Sunday=0)
+ dayofyear (0-365)
+ 1 if Daylight Savings Time is in effect
+</pre>
+
+All values are numeric.  Note that the year value can be longer than
+two digits, which allows for years past 1999.  This is sometimes
+incorrectly assumed to be a "Y2K bug" but it is not.
+  
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_markfordelete>ns_markfordelete</a></h2>
+
+Mark interpreter for deletion.
+
+<h3>Syntax</h3>
+
+ns_markfordelete
+
+<h3>Description</h3>
+
+This function marks the current Tcl interpreter for deletion when the
+connection or thread is closed.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_rand>ns_rand</a></h2>
+
+Generate a random number.
+
+<h3>Syntax</h3>
+
+ns_rand ?max?
+
+<h3>Description</h3>
+
+This function generates a cryptographically-secure random number. If
+max is not specified, the random number is a floating-point value
+ranging from 0.0 to less than 1.0. If max is specified, the random
+number is an integer value ranging from 0 to one less than max. The
+max argument must be a positive number no larger than 2147483647
+(0x7fffffff).
+
+<p>
+
+ns_rand is implemented with the drand48(3) and lrand48(3) standard
+library functions. An internal random seed is generated the first time
+ns_rand is called after the server is started.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_register_filter>ns_register_filter</a></h2>
+
+Register a filter function for a method/URL combination.
+
+<h3>Syntax</h3>
+
+<pre>
+ns_register_filter when method URLpattern myScript ?args?
+
+proc myScript {?conn? args why} {
+   # Do stuff...
+}
+</pre>
+
+<h3>Description</h3>
+
+ns_register_filter registers a Tcl filter script for the specified
+method/URL combination on a virtual server. The script can be called
+at one or more of three given times: pre-authorization,
+post-authorization before page data has been returned to the user, and
+after the connection has been processed and closed.
+
+<p>
+
+This function will be called at the specified stage of a connection,
+if the method/URL combination for the filter matches the method/URL
+combination for the connection using glob style matching.
+
+<p>
+
+The URLpattern can contain standard string-matching characters. For
+example, these are valid URLpatterns:
+<pre>
+/employees/*.tcl
+/accounts/*/out
+</pre>
+
+Valid values for the "when" argument are: preauth, postauth, and trace.
+
+<p>
+
+Using pre-authorization, the procedure will be called (assuming that
+the method/URL combination matches) just before authorization. If the
+procedure returns with a code of:
+<pre>
+  * TCL_OK (using: return "filter_ok"): The server will continue to
+    the next pre-authorization filter for this connection, or, if
+    there are no more pre-authorization filters, it will continue on
+    with authorization.
+  * TCL_BREAK (using: return "filter_break"): The server will not
+    process any more pre-authorization filters for this connection,
+    and it will continue on with authorization.
+  * TCL_RETURN (using: return "filter_return"): The server will close
+    the connection and will not run any more pre-authorization
+    filters. It will not authorize the request, and it will not run
+    the function registered for this METHOD/URL. It WILL run any trace
+    functions registered for this METHOD/URL, usually including
+    logging. It is assumed that the filter has sent a proper response
+    (e.g., using ns_return) to the client before returning TCL_RETURN.
+</pre>
+
+Using post-authorization, the procedure will be called (assuming that
+the method/URL combination matches) just after successful
+authorization. If the procedure returns:
+<pre>
+  * TCL_OK (using: return "filter_ok"): The server will continue to
+    the next post-authorization filter for this connection, or, if
+    there are no more post-authorization filters, it will run the
+    function registered to handle this request.
+  * TCL_BREAK (using: return "filter_break"): The server will not
+    process any more post-authorization filters for this connection,
+    and it will run the function registered to handle this request.
+  * TCL_RETURN (using: return "filter_return"): The server will close
+    the connection and will not run any more post-authorization
+    filters and it will not run the function registered for this
+    METHOD/URL. It WILL run any trace functions registered for this
+    METHOD/URL, usually including logging. It is assumed that the
+    filter has returned a proper response (e.g., using ns_return) to
+    the client before returning TCL_RETURN.
+</pre>
+
+Using trace, the procedure will be called (assuming that the
+method/URL combination match) after the connection has been totally
+processed and closed. If the procedure returns:
+<pre>
+  * TCL_OK (using: return "filter_ok"): The server will continue to
+    the next trace filter.
+  * TCL_BREAK, TCL_RETURN (using: return "filter_break" or return
+    "filter_return"): The rest of the trace filters are ignored.
+</pre>
+
+<h3>Syntax for the registered procedure</h3>
+
+The conn (connection) argument is optional for procedures registered
+by ns_register_filter if the procedure has 1 or 2 arguments (including
+why but not including conn). The following examples show the
+variations that can be used in this case:
+<pre>
+ns_register_filter trace GET /noargs filter_noargs
+ns_register_filter trace GET /context filter_context fnord
+ns_register_filter trace GET /conncontext filter_conncontext
+
+proc filter_noargs { why } {
+    ns_log Notice "filter noargs"
+    return filter_ok
+} ;# filter_noargs
+proc filter_context { arg why } {
+    ns_log Notice "filter context. Arg: $arg"
+    return filter_ok
+} ;# filter_noargs
+proc filter_conncontext { conn arg why } {
+    ns_log Notice "filter conn context"
+    return filter_ok
+} ;# filter_noargs
+</pre>
+
+The conn (connection) argument is required for procedures registered
+by ns_register_filter if the procedure has 3 or more arguments
+(including why but not including conn). The conn argument is
+automatically filled with the connection information. The first
+argument following conn will always take the value supplied by
+ns_register_filter, if there is one, or an empty value. The why
+argument at the end is automatically filled with the type of filter
+requested. All other arguments must supply a default value. The
+following examples show the variations that can be used in this case:
+
+<pre>
+ns_register_filter postauth GET /threeargs threeargs aaa
+ns_register_filter postauth GET /fourargs fourargs aaa bbb ccc
+
+proc threeargs { conn context { greeble bork } why } {
+    ...
+} ;
+
+proc fourargs { conn context { greeble bork } {hoover quark} why } {
+   ...
+} ;
+</pre>
+
+When a GET of /threeargs is requested, the conn and why arguments will
+be filled automatically, the context argument will be assigned "aaa"
+and the greeble argument will be assigned the default value "bork".
+
+<p>
+
+When a GET of /fourargs is requested, the conn and why arguments will
+be filled automatically, the context argument will be assigned "aaa",
+the greeble argument will be assigned "bbb", and the hoover argument
+will be assigned the default value "quark".
+
+<h3>Notes</h3>
+
+ns_register_filter and ns_register_proc are similar, but significantly
+different. With ns_register_proc, the specified URL is used to match
+that URL and any URL below it in the hierarchy. Wildcards such as "*"
+are meaningful only for the final part of the URL, such as
+/scripts/*.tcl. With ns_register_filter, the URLpattern is used to
+match URLs as a string with standard string-matching characters.
+ns_register_proc results in a single match, whereas multiple
+ns_register_filters can be matched and will be called.
+
+<p>
+
+Be aware that executing the same ns_register_filter statement more
+than once (as you might do when re-initializing Tcl) will add the
+filter more than once! You may want to have a shared variable set so
+that you don't do this.
+
+<h3>Example</h3>
+
+This example expires all HTML files after an hour.
+
+<pre>
+ns_share -init {set filters_installed 0} filters_installed
+if {!$filters_installed} {
+    set filters_installed 1
+    ns_register_filter postauth GET /*.html ExpireSoon 3600
+}
+
+proc ExpireSoon {seconds why} {
+    ns_set update [ns_conn outputheaders] Expires \
+        [ns_httptime [expr $seconds + [ns_time]]]
+}
+</pre>
+  
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_register_proc>ns_register_proc</a></h2>
+
+Register one or two procedures for a method/URL combination
+
+<h3>Syntax</h3>
+
+<pre>
+ns_register_proc ?-noinherit? method URL myProc ?args?
+
+proc myProc {?conn? args} {
+    # Do stuff...
+}
+</pre>
+
+
+<h3>Description</h3>
+
+ns_register_proc registers the procname to handle the specified
+method/URL combination. When the server gets a matching request, it
+calls procname with the connection id and any arguments specified
+here.
+
+<p>
+
+If -noinherit is specified, the requested URL must match the specified
+URL exactly. For example, if the URL specified with ns_register_proc
+is /foo/bar, procname will not be called unless the requested URL is
+exactly /foo/bar.
+
+<p>
+
+If -noinherit is not specified, the requested URL can match the
+specified URL or any URL below it. For example, if the URL specified
+with ns_register_proc is /foo/bar, procname will be called for
+/foo/bar, /foo/bar/hmm, and any other URL below /foo/bar, provided
+there is not already another procedure registered for that exact URL
+or for an URL with a closer match.
+
+<p>
+
+Note that you must use a glob-style matching character if you want
+inheritance for file names. For example, if you want /foo/bar to match
+/foo/bar.html, you must use:
+ ns_register_proc /foo/bar*
+
+<p>
+
+You can register two procedures for any given method/URL combination
+by calling ns_register_proc once with the -noinherit flag set and once
+without it. Only one of the procedures will be called for any given
+request, depending on whether the URL was an exact match or not. For
+example:
+
+<pre>
+ns_register_proc -noinherit GET /foo/bar Aproc
+ns_register_proc GET /foo/bar Bproc
+ns_register_proc GET /foo/bar/hmm Cproc
+</pre>
+
+<p>
+
+Aproc will be called when the requested URL is exactly /foo/bar.
+Bproc will be called when the requested URL is below /foo/bar,
+provided there is not already another procedure registered to be
+called for that exact URL or for an URL with a closer match. Cproc
+(not Bproc) will be called when the requested URL is equal to or below
+/foo/bar/hmm.
+
+<h3>Syntax for the registered procedure</h3>
+
+The conn (connection) argument is optional for procedures registered
+by ns_register_proc if the procedure has 0 or 1 arguments (not
+including conn). The following examples show the variations that can
+be used in this case:
+
+<pre>
+ns_register_proc GET /noargs noargs
+ns_register_proc GET /context context fnord
+ns_register_proc GET /conncontext conncontext greeble
+
+proc noargs { } {
+    ns_returnnotice 200 "noargs"
+} ;# noargs
+
+proc context { context } {
+    ns_returnnotice 200 "context is $context"
+} ;# context
+
+proc conncontext { conn context } {
+    ns_returnnotice 200 "conncontext is $context"
+} ;# conncontext
+</pre>
+
+
+The conn (connection) argument is required for procedures registered
+by ns_register_proc if the procedure has 2 or more arguments (not
+including conn). The conn argument will be filled automatically with
+the connection information. The first argument following conn will
+always take the value supplied by ns_register_proc, if there is one,
+or an empty value. All other arguments must supply a default value.
+The following examples show the variations that can be used in this
+case:
+
+<pre>
+ns_register_proc GET /twoargs twoargs fnord
+ns_register_proc GET /threeargs threeargs fnord fjord
+
+proc twoargs { conn context { greeble bork } } {
+    # Do stuff...
+}
+
+proc threeargs { conn context {greeble bork } { hoover quark } {
+    # Do stuff...
+}
+</pre>
+
+When a GET of /twoargs is requested, the conn argument will be filled
+automatically, the context argument will be assigned "fnord" and the
+greeble argument will be assigned the default value "bork".
+
+<p>
+
+When a GET of /threeargs is requested, the conn argument will be
+filled automatically, the context argument will be assigned "fnord"
+and the greeble argument will be assigned "fjord", and the hoover
+argument will be assigned the default value "quark".
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_register_trace>ns_register_trace</a></h2>
+
+Register a Tcl trace script to a method and matching URL.
+
+<p>
+
+(Note: This function is obsolete. Use ns_register_filter instead.)
+
+<h3>Syntax</h3>
+
+ns_register_trace method URLpattern script ?args?
+
+<h3>Description</h3>
+
+ns_register_trace registers a Tcl script as a trace for the specified
+method/URL combination. After the server handles the request for the
+specified method on an URL that matches the URLpattern, it calls the
+trace script with the connection id and any arguments (args)
+specified.
+
+<p>
+
+The URLpattern can contain standard string-matching characters. For
+example, these are valid URLpatterns:
+
+<pre>
+/employees/*.tcl
+/accounts/*/out
+</pre>
+
+<h3>Note</h3>
+
+ns_register_trace is similar to ns_register_proc except that the
+pattern-matching for the URL is performed differently. With
+ns_register_proc, the specified URL is used to match that URL and any
+URL below it in the hierarchy. Wildcards such as "*" are meaningful
+only for the final part of the URL, such as /scripts/*.tcl. With
+ns_register_trace, the URLpattern is used to match URLs as a string
+with standard string-matching characters.
+
+<p>
+
+ns_register_proc results in a single match, whereas multiple
+ns_register_trace's can be matched and will be called.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_sendmail>ns_sendmail</a></h2>
+
+Send a mail message.
+
+<h3>Syntax</h3>
+
+ns_sendmail to from subject body ?extraheaders? ?bcc?
+
+<h3>Description</h3>
+
+ns_sendmail sends a mail message with the specified to, from, and
+subject headers, and the specified body text. You can specify multiple
+"To:" recipients by providing a comma-separated list of email
+addresses in the to argument.
+
+<p>
+
+You can add additional headers (such as an Errors-To header) by
+specifying the set ID of an ns_set that contains header name and
+content pairs in the extraheaders argument. On error, a Tcl error is
+signaled.
+
+<p>
+
+Specify BCC recipients in the bcc argument. Separate multiple BCC
+recipients by commas. If you want to specify BCC recipients, you'll
+need to specify the extraheaders argument, too, but the extraheaders
+argument can be empty.
+
+<p>
+
+ns_sendmail uses the SMTP server specified by the MailHost parameter
+in the configuration file. If MailHost is not specified in the
+configuration file, localhost is used. You can also specify an SMTP
+smarterhost in the SmtpPort parameter in the configuration file.
+
+<p>
+
+ns_sendmail is RFC #822 compliant.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_set>ns_set</a></h2>
+
+Manipulate sets of key-value pairs.
+
+<h3>Syntax</h3>
+
+<blockquote>
+<table>
+<tr>
+<td valign=top align=left>
+
+ns_set copy -persist setId<br>
+
+ns_set cput setId key value<br>
+
+ns_set create -persist name<br>
+
+ns_set delete setId fieldNumber<br>
+
+ns_set delkey setId key<br>
+
+ns_set find setId key<br>
+
+ns_set free setId<br>
+
+ns_set get setId key<br>
+
+ns_set icput setId key value<br>
+
+ns_set idelkey setId key<br>
+
+ns_set ifind setId key<br>
+
+ns_set iget setId key<br>
+
+ns_set isnull setId fieldNumber<br>
+
+ns_set iunique setId key<br>
+
+ns_set key setId fieldNumber<br>
+
+ns_set merge high low<br>
+
+ns_set move to from<br>
+
+</td>
+<td valign=top align=left>
+
+ns_set name setId<br>
+
+ns_set new -persist name<br>
+
+ns_set print setId<br>
+
+ns_set put setId key value<br>
+
+ns_set size setId<br>
+
+ns_set split -persist setId ?splitChar?<br>
+
+ns_set truncate setId size<br>
+
+ns_set unique setId key<br>
+
+ns_set update setId key value<br>
+
+ns_set value setId fieldNumber<br>
+</td>
+</tr>
+</table>
+</blockquote>
+
+
+<h3>Description</h3>
+
+ns_set copy returns a new set that has the same name and key value
+pairs as the passed-in set (setId). If -persist is specified, the new
+set will persist even after the current transaction ends, and you can
+free it later with ns_set free. If -persist is not specified, the new
+set is automatically freed when the transaction ends.
+
+<p>
+
+ns_set cput appends a new field to the set with key key and value
+value if the field does not already exist in the set. The field number
+of the new field is returned.
+
+<p>
+
+ns_set create (which is the same as ns_set new) allocates memory for a
+new set and returns the ID for the new set. If -persist is specified,
+the new set will persist even after the current transaction ends, and
+you can free it later with ns_set free. If -persist is not specified,
+the new set is automatically freed when the transaction ends.
+
+<p>
+
+ns_set delete deletes the field in the set at field number
+fieldNumber.
+
+<p>
+
+ns_set delkey removes the first field in the set whose key is key.
+Note that there could be multiple fields in the set with this key;
+this command only removes the first occurrence.
+
+<p>
+
+ns_set find returns the index of the first field in the specified set
+whose key name matches the specified key. Zero (0) is the index of the
+first field. If no matching fields are found, ns_set find returns -1.
+
+<p>
+
+ns_set free frees the specified set. Sets must be explicitly freed
+with ns_set free if the -persist option was used when creating the
+set. Otherwise, sets are automatically freed when the transaction
+ends.
+
+<p>
+
+ns_set get returns the first value associated with the passed-in key.
+If the key is invalid, an empty string is returned.
+
+<p>
+
+ns_set icput is the case-insensitive counterpart of ns_set cput.
+
+<p>
+
+ns_set idelkey is the case-insensitive counterpart of ns_set delkey.
+
+<p>
+
+ns_set ifind is the case-insensitive counterpart of ns_set find.
+
+<p>
+
+ns_set iget is the case-insensitive counterpart of ns_set get.
+
+<p>
+
+ns_set isnull returns 1 if the value of the field specified by
+fieldNumber is null and 0 if it is not. Note that an empty string is
+not the same as a null. ns_set isnull will return 0 for an empty
+string.
+
+<p>
+
+ns_set iunique returns 1 if the specified key is unique in the
+specified set and 0 if it is not. The test for uniqueness is performed
+case-insensitively. ns_set unique is the case-sensitive version of
+this function.
+
+<p>
+
+For example, a client could send multiple "Accept:" headers which
+would end up in the header set for the connection. ns_set iunique
+would return 0 for the "Accept:" key, because there are multiple
+fields with the key "Accept:".
+
+<p>
+
+ns_set key extracts the key of the set at field number fieldNumber.
+This command is useful when looping through all the key-value pairs in
+the set.
+
+<p>
+
+ns_set merge merges two sets. Any fields in the low set are appended
+to the high set if a field with the same key name does not already
+exist in the high set.
+
+<p>
+
+ns_set move moves all fields from the from set to the end of the to
+set, leaving the from set a valid, empty set.
+
+<p>
+
+ns_set name returns the name of the set.
+
+<p>
+
+ns_set new (which is the same as ns_set create) allocates memory for a
+new set and returns the ID for the new set. If -persist is specified,
+the new set will persist even after the current transaction ends, and
+you can free it later with ns_set free. If -persist is not specified,
+the new set is automatically freed when the transaction ends.
+
+<p>
+
+ns_set print prints the specified set to stderr.
+
+<p>
+
+ns_set put appends a new field to the set with key key and value
+value. Note that the field is appended so if a previous field has the
+same key as the new field, the previous field is returned by ns_set
+get command. The field number of the new field is returned.
+
+<p>
+
+ns_set size returns the number of key-value pairs in the set.
+
+<p>
+
+ns_set split splits one set into multiple sets based on the splitChar
+as described below and returns a Tcl list of the newly-allocated sets.
+It assumes that the keys in the specified set (setId) contain a
+specific character (splitChar) that can be used to separate the name
+of a new set and the key in the new set. The default splitChar is a
+period (.).
+
+<p>
+
+For example, if two fields in the original set have "dog.food" and
+"cat.food" as their key names and "Yummy dog food!" and "Yummy cat
+food!" as their values, ns_set split would return two new sets named
+"dog" and "cat". The dog set would have a single field whose key is
+"food" and whose value is "Yummy dog food!". The cat set would have a
+single field whose key is "food" and whose value is "Yummy cat food!".
+
+<p>
+
+ns_set truncate reduces the set to the first size key-value pairs and
+frees the memory for the rest of the key-value pairs that may have
+been in the set.
+
+<p>
+
+ns_set unique returns 1 if the specified key is unique in the
+specified set and 0 if it is not. The test for uniqueness is performed
+case-sensitively. ns_set iunique is the case-insensitive version of
+this function.
+
+<p>
+
+ns_set update updates the first field in the specified set whose key
+is key and replaces its value with value. ns_set update is equivalent
+to ns_set delkey followed by ns_set put.
+
+<p>
+
+ns_set value extracts the value of the set at field number
+fieldNumber. This command is useful when looping through all the
+key-value pairs in the set.
+
+<h3>Notes</h3>
+
+The fields in the set are ordered by number. The field numbers range
+from 0 to one less than the total number of fields. For example, if
+you have a set with 5 fields, you would use "ns_set key $setid 4" to
+extract the key of the last field in the set..
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_share>ns_share</a></h2>
+
+WARNING: THIS FUNCTION IS OBSOLETE AND SHOULD NOT BE USED.
+
+<p>
+
+Share variable among all Tcl interpreters.
+
+<h3>Syntax</h3>
+
+ns_share -init {initscript} variable ...
+
+<h3>Description</h3>
+
+<b>This function is obsolete and should not be used.  Investigate the
+"nsv" commands instead when sharing variables.</b> ns_share takes the
+specified variable(s) and makes them available to all Tcl interpreters
+in a virtual server.  This is done in a manner that has the potential
+to cause severe performance penalties in applications that make
+excessive use of ns_share.
+
+<p>
+
+<b>ns_share should be called in a script designed to be run only once,
+such as in the init.tcl script for private or shared libraries.  Due
+to the way ns_share handles thread concurrency, execessive use of
+ns_share can have severe performance penalties.</b>
+
+<p>
+
+Multiple variables can be specified by separating the variable names
+with spaces:
+
+<pre>
+ns_share count length width
+</pre>
+
+You can optionally specify an init script when you share a single
+variable (not when sharing multiple variables) to initialize the
+variable at the same time. The following example sets the variable
+count to 0 immediately after sharing it, and the next line increments
+it to 1:
+
+<pre>
+ns_share -init {set count 0} count
+incr count
+</pre>
+
+<p>
+
+You can initialize shared arrays like this:
+
+<pre>
+ns_share -init {
+    set itemlist(a) "Value 1"
+    set itemlist(b) "Value 2"
+}
+</pre>
+
+Unlike global variables, shared variables are not available by default
+at the global level. You must share a variable at the top level also
+and not just in procedures that want to reference the variable. For
+example:
+
+<pre>
+ns_share pagelength
+set pagelength "50"
+proc page { conn i } {
+    ns_share pagelength
+    # ...
+}
+</pre>
+
+  
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_sleep>ns_sleep</a></h2>
+
+Sleep for a specified number of seconds
+
+<h3>Syntax</h3>
+
+ns_sleep seconds
+
+<h3>Description</h3>
+
+This function sleeps for the number of seconds specified in seconds.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_time>ns_time</a></h2>
+
+Return current time in seconds.
+
+<h3>Syntax</h3>
+
+ns_time
+
+<h3>Description</h3>
+
+This function returns the value of time in seconds since 00:00:00 UTC,
+January 1, 1970. This return value is suitable as input to the
+ns_httptime function to get the current time.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_unregister_proc>ns_unregister_proc</a></h2>
+
+Unregister a procedure for a URL.
+
+<h3>Syntax</h3>
+
+ns_unregister_proc ?-noinherit? method URL
+
+<h3>Description</h3>
+
+ns_unregister_proc unregisters any Tcl or C functions registered with
+this method/URL combination and with the same inheritance setting.
+That is, if the -noinherit flag is specified in ns_unregister_proc,
+the function registered with the -noinherit flag in ns_register_proc
+(or the NS_OP_NOINHERIT flag in Ns_RegisterRequest) will be
+unregistered. If -noinherit is omitted, the function registered
+without the -noinherit flag (or the NS_OP_NOINHERIT flag) will be
+unregistered.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_crypt>ns_crypt</a></h2>
+
+Encrypt a string suitable for use as a password for nscp and nsperm
+authentication.
+
+<h3>Syntax</h3>
+
+ns_crypt key salt
+
+<h3>Description</h3>
+
+ns_crypt encrypts the key using the salt and returns the result. It
+uses the same algorithm as the Unix crypt command. Normally key is the
+user's password and salt is a two-character code used to encrypt the
+key.
+
+<h3>Example</h3>
+
+Suppose you have a user nevsky with a password alexander. Nevsky's
+/etc/passwd entry might look like:
+
+<pre>
+nevsky:/gteiXVtAXVqQ:28:1:Musician:/:/bin/sh
+</pre>
+
+The first two characters of the encrypted password are the SALT. Since
+calling the function like:
+
+<pre>
+ns_crypt /g alexander
+</pre>
+
+<p>
+
+returns "/gte...Q", then "alexander" is the correct password.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_quotehtml>ns_quotehtml</a></h2>
+
+Escape <, >, and & characters so they appear as-is in HTML.
+
+<h3>Syntax</h3>
+
+ns_quotehtml HTML
+
+<h3>Description</h3>
+
+ns_quotehtml makes the following substitutions that allow HTML to be
+included in another HTML page as plain text:
+
+<p>
+
+`<` becomes `&lt;'
+
+<br>
+
+`>` becomes `&gt;'
+
+<br>
+
+`&' becomes `&amp;'.
+
+<br>
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_striphtml>ns_striphtml</a></h2>
+
+Remove HTML tags from a string.
+
+<h3>Syntax</h3>
+
+ns_striphtml HTML
+
+<h3>Description</h3>
+
+ns_striphtml returns a new string that is the HTML with all the HTML
+tags removed.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_urldecode>ns_urldecode</a></h2>
+
+Decode characters that are "URL-encoded".
+
+<h3>Syntax</h3>
+
+ns_urldecode data
+
+<h3>Description</h3>
+
+This function decodes any characters encoded in the %XX format in the
+data by the ns_urlencode function or a web client.
+
+<p>
+
+This encoding is defined in RFC #1738, Uniform Resource Locators
+(URL).
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_urlencode>ns_urlencode</a></h2>
+
+Encode characters in a URL.
+
+<h3>Syntax</h3>
+
+ns_urlencode data
+
+<h3>Description</h3>
+
+This function encodes all the characters in data except the
+alphanumerics. The encoding for a character is a "%" followed by the
+two-character hexadecimal representation for the character.
+
+<p>
+
+This encoding is defined in RFC #1738, Uniform Resource Locators
+(URL).
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a href=./ name=ns_uudecode>ns_uudecode</a></h2>
+
+Perform uudecode.
+
+<h3>Syntax</h3>
+
+ns_uudecode string
+
+<h3>Description</h3>
+
+Performs HTTP-style uudecoding on the specified string and returns the
+decoded value.
+
+<p>
+
+Note: This is HTTP-style uuencoding per RFC #1113--sometimes called
+"htuu"--and is not compatible with the format used by the Unix
+uuencode/uudecode commands, nor is it base-64 encoding.
+
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a href=./ name=ns_uuencode>ns_uuencode</a></h2>
+
+Perform uuencode.
+
+<h3>Syntax</h3>
+
+ns_uuencode string
+
+<h3>Description</h3>
+
+Performs HTTP-style encoding on the specified string and returns the
+encoded value.  The input string is limited to 48 characters.  The
+resultant string will be approximately 33% larger than the original.
+
+<p>
+
+Note: This is HTTP-style uuencoding per RFC #1113--sometimes called
+"htuu"--and is not compatible with the format used by the Unix
+uuencode/uudecode commands, nor is it base-64 encoding.
+
+
+<p>
+
+<hr>
+
+<br>
+
+</body>
+</html>

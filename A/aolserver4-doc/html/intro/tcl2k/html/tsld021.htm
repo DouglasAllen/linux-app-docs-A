@@ -1,0 +1,120 @@
+
+<HTML>
+
+<HEAD>
+
+<meta name="GENERATOR" content="Microsoft Internet Assistant for PowerPoint 97">
+ <TITLE>Example: Event-Driven vs Thread I/O</TITLE> 
+</HEAD>
+
+<BODY     >
+
+ <H1>Example: Event-Driven vs Thread I/O</H1> 
+ <P><UL>
+<LI><H2>I/O bound apps are sometimes easier with threads:</H2>
+</UL></P>
+<P><UL>
+global done count
+</UL><UL>
+
+</UL><UL>
+proc my.read {sock} {
+</UL><UL>
+  global done count
+</UL><UL>
+  read $sock
+</UL><UL>
+  if [eof $sock] {
+</UL><UL>
+    close $sock
+</UL><UL>
+    if {[incr count -1] == 0} {
+</UL><UL>
+      set done 1
+</UL><UL>
+    }
+</UL><UL>
+  }
+</UL><UL>
+}
+</UL><UL>
+
+</UL><UL>
+proc my.write {sock} {
+</UL><UL>
+  puts $sock "GET /index.html\r\n"
+</UL><UL>
+  flush $sock
+</UL><UL>
+  fileevent $sock readable "my.read $sock"
+</UL><UL>
+}
+</UL><UL>
+
+</UL><UL>
+set count 0
+</UL><UL>
+foreach host { host1 host2 host3 host4} {
+</UL><UL>
+  incr count
+</UL><UL>
+  set sock [socket -async $host 80]
+</UL><UL>
+  fconfigure $sock -blocking off
+</UL><UL>
+  fileevent $sock writable "my.write $sock"
+</UL><UL>
+}
+</UL><UL>
+
+</UL><UL>
+vwait done</UL></P>
+<P><UL>
+proc my.thread {host} {
+</UL><UL>
+  set sock [socket $host 80]
+</UL><UL>
+  puts $sock "GET /index.html\r\n"
+</UL><UL>
+  flush $sock
+</UL><UL>
+  read $sock
+</UL><UL>
+  close $sock
+</UL><UL>
+}
+</UL><UL>
+
+</UL><UL>
+foreach host {host1 host2 host3 host4} {
+</UL><UL>
+  lappend tids [ns_thread begin ”my.thread $host"]
+</UL><UL>
+}
+</UL><UL>
+
+</UL><UL>
+foreach tid $tids {
+</UL><UL>
+  ns_thread wait $tid
+</UL><UL>
+}</UL></P>
+<P><UL>
+Events</UL></P>
+<P><UL>
+Threads</UL></P>
+<P></P> 
+<P>
+<TABLE>
+  <TD HEIGHT=100 WIDTH=100> <A HREF="tsld020.htm">Previous slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=100> <A HREF="tsld022.htm">Next slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=150> <A HREF="tsld001.htm">Back to first slide</A> </TD>
+  <TD HEIGHT=100 WIDTH=150> <A HREF="sld021.htm">View graphic version</A> </TD>
+</TABLE>
+<BR>
+</P>
+
+
+
+</Body>
+</HTML>

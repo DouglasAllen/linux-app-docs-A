@@ -1,0 +1,480 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- This manual is for GNU AutoGen version 5.12, updated July 2011.
+
+Copyright C 1992-2011 by Bruce Korb.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+
+ -->
+<!-- Created on July 10, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>GNU AutoGen - The Automated Program Generator: 1. Introduction</title>
+
+<meta name="description" content="GNU AutoGen - The Automated Program Generator: 1. Introduction">
+<meta name="keywords" content="GNU AutoGen - The Automated Program Generator: 1. Introduction">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Introduction"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[ &lt; ]</td>
+<td valign="middle" align="left">[<a href="#Generalities" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Introduction-1"></a>
+<h1 class="chapter">1. Introduction</h1>
+<a name="index-Introduction"></a>
+
+<p>AutoGen is a tool designed for generating program files that contain
+repetitive text with varied substitutions.  Its goal is to simplify the
+maintenance of programs that contain large amounts of repetitious text.
+This is especially valuable if there are several blocks of such text
+that must be kept synchronized in parallel tables.
+</p>
+<p>One common example is the problem of maintaining the code required for
+processing program options.  Processing options requires a minimum of
+four different constructs be kept in proper order in different places in
+your program.  You need at least:
+</p>
+<ol>
+<li>
+The flag character in the flag string,
+</li><li>
+code to process the flag when it is encountered,
+</li><li>
+a global state variable or two, and
+</li><li>
+a line in the usage text.
+</li></ol>
+
+<p>You will need more things besides this if you choose to implement long
+option names, rc/ini/config file processing, environment variables and so on.
+All of this can be done mechanically; with the proper templates and this
+program.  In fact, it has already been done and AutoGen itself uses it
+See section <a href="autogen_6.html#AutoOpts">Automated Option Processing</a>.  For a simple example of Automated Option processing,
+See section <a href="autogen_6.html#Quick-Start">Quick Start</a>.  For a full list of the Automated Option features,
+See section <a href="autogen_6.html#Features">AutoOpts Features</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Generalities">1.1 The Purpose of AutoGen</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Example-Usage">1.2 A Simple Example</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#csh_002fzsh-caveat">1.3 csh/zsh caveat</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Testimonial">1.4 A User&rsquo;s Perspective</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Generalities"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Introduction" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Example-Usage" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="The-Purpose-of-AutoGen"></a>
+<h2 class="section">1.1 The Purpose of AutoGen</h2>
+
+<p>The idea of this program is to have a text file, a template if
+you will, that contains the general text of the desired output file.
+That file includes substitution expressions and sections of text that are
+replicated under the control of separate definition files.
+</p>
+<a name="index-design-goals"></a>
+
+<p>AutoGen was designed with the following features:
+</p>
+<ol>
+<li>
+The definitions are completely separate from the template.  By completely
+isolating the definitions from the template it greatly increases the
+flexibility of the template implementation.  A secondary goal is that a
+template user only needs to specify those data that are necessary to describe
+his application of a template.
+
+</li><li>
+Each datum in the definitions is named.  Thus, the definitions can be
+rearranged, augmented and become obsolete without it being necessary to
+go back and clean up older definition files.  Reduce incompatibilities!
+
+</li><li>
+Every definition name defines an array of values, even when there is
+only one entry.  These arrays of values are used to control the
+replication of sections of the template.
+
+</li><li>
+There are named collections of definitions.  They form a nested hierarchy.
+Associated values are collected and associated with a group name.
+These associated data are used collectively in sets of substitutions.
+
+</li><li>
+The template has special markers to indicate where substitutions are
+required, much like the <code>${VAR}</code> construct in a shell <code>here doc</code>.
+These markers are not fixed strings.  They are specified at the start of
+each template.  Template designers know best what fits into their
+syntax and can avoid marker conflicts.
+
+<p>We did this because it is burdensome and difficult to avoid conflicts
+using either M4 tokenization or C preprocessor substitution rules.  It
+also makes it easier to specify expressions that transform the value.
+Of course, our expressions are less cryptic than the shell methods.
+</p>
+</li><li>
+These same markers are used, in conjunction with enclosed keywords, to
+indicate sections of text that are to be skipped and for sections of
+text that are to be repeated.  This is a major improvement over using C
+preprocessing macros.  With the C preprocessor, you have no way of
+selecting output text because it is an <i>un</i>varying, mechanical
+substitution process.
+
+</li><li>
+Finally, we supply methods for carefully controlling the output.
+Sometimes, it is just simply easier and clearer to compute some text or
+a value in one context when its application needs to be later.  So,
+functions are available for saving text or values for later use.
+</li></ol>
+
+
+<hr size="6">
+<a name="Example-Usage"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Generalities" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#csh_002fzsh-caveat" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="A-Simple-Example"></a>
+<h2 class="section">1.2 A Simple Example</h2>
+<a name="index-example_002c-simple-AutoGen"></a>
+
+<p>This is just one simple example that shows a few basic features.
+If you are interested, you also may run &quot;make check&quot; with the
+<code>VERBOSE</code> environment variable set and see a number of other
+examples in the &lsquo;<tt>agen5/test/testdir</tt>&rsquo; directory.
+</p>
+<p>Assume you have an enumeration of names and you wish to associate some
+string with each name.  Assume also, for the sake of this example,
+that it is either too complex or too large to maintain easily by hand.
+We will start by writing an abbreviated version of what the result
+is supposed to be.  We will use that to construct our output templates.
+</p>
+<p>In a header file, &lsquo;<tt>list.h</tt>&rsquo;, you define the enumeration
+and the global array containing the associated strings:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">typedef enum {
+        IDX_ALPHA,
+        IDX_BETA,
+        IDX_OMEGA }  list_enum;
+
+extern char const* az_name_list[ 3 ];
+</pre></td></tr></table>
+
+<p>Then you also have &lsquo;<tt>list.c</tt>&rsquo; that defines the actual strings:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;list.h&quot;
+char const* az_name_list[] = {
+        &quot;some alpha stuff&quot;,
+        &quot;more beta stuff&quot;,
+        &quot;final omega stuff&quot; };
+</pre></td></tr></table>
+
+<p>First, we will define the information that is unique for each enumeration
+name/string pair.  This would be placed in a file named, &lsquo;<tt>list.def</tt>&rsquo;,
+for example.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">autogen definitions list;
+list = { list_element = alpha;
+         list_info    = &quot;some alpha stuff&quot;; };
+list = { list_info    = &quot;more beta stuff&quot;;
+         list_element = beta; };
+list = { list_element = omega;
+         list_info    = &quot;final omega stuff&quot;; };
+</pre></td></tr></table>
+
+<p>The <code>autogen definitions list;</code> entry defines the file as an AutoGen
+definition file that uses a template named <code>list</code>.  That is followed by
+three <code>list</code> entries that define the associations between the
+enumeration names and the strings.  The order of the differently named
+elements inside of list is unimportant.  They are reversed inside of the
+<code>beta</code> entry and the output is unaffected.
+</p>
+<p>Now, to actually create the output, we need a template or two that can be
+expanded into the files you want.  In this program, we use a single template
+that is capable of multiple output files.  The definitions above refer to a
+&lsquo;<tt>list</tt>&rsquo; template, so it would normally be named, &lsquo;<tt>list.tpl</tt>&rsquo;.
+</p>
+<p>It looks something like this.
+(For a full description, See section <a href="autogen_2.html#Template-File">Template File</a>.)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">[+ AutoGen5 template h c +]
+[+ CASE (suffix) +][+
+   ==  h  +]
+typedef enum {[+
+   FOR list &quot;,&quot; +]
+        IDX_[+ (string-upcase! (get &quot;list_element&quot;)) +][+
+   ENDFOR list +] }  list_enum;
+
+extern char const* az_name_list[ [+ (count &quot;list&quot;) +] ];
+[+
+
+   ==  c  +]
+#include &quot;list.h&quot;
+char const* az_name_list[] = {[+
+  FOR list &quot;,&quot; +]
+        &quot;[+list_info+]&quot;[+
+  ENDFOR list +] };[+
+
+ESAC +]
+</pre></td></tr></table>
+
+<p>The <code>[+ AutoGen5 template h c +]</code> text tells AutoGen that this is
+an AutoGen version 5 template file; that it is to be processed twice;
+that the start macro marker is <code>[+</code>; and the end marker is
+<code>+]</code>.  The template will be processed first with a suffix value of
+<code>h</code> and then with <code>c</code>.  Normally, the suffix values are
+appended to the &lsquo;<tt>base-name</tt>&rsquo; to create the output file name.
+</p>
+<p>The <code>[+ == h +]</code> and <code>[+ == c +]</code> <code>CASE</code> selection clauses
+select different text for the two different passes.  In this example,
+the output is nearly disjoint and could have been put in two separate
+templates.  However, sometimes there are common sections and this is
+just an example.
+</p>
+<p>The <code>[+FOR list &quot;,&quot; +]</code> and <code>[+ ENDFOR list +]</code> clauses delimit
+a block of text that will be repeated for every definition of <code>list</code>.
+Inside of that block, the definition name-value pairs that
+are members of each <code>list</code> are available for substitutions.
+</p>
+<p>The remainder of the macros are expressions.  Some of these contain
+special expression functions that are dependent on AutoGen named values;
+others are simply Scheme expressions, the result of which will be
+inserted into the output text.  Other expressions are names of AutoGen
+values.  These values will be inserted into the output text.  For example,
+<code>[+list_info+]</code> will result in the value associated with
+the name <code>list_info</code> being inserted between the double quotes and
+<code>(string-upcase! (get &quot;list_element&quot;))</code> will first &quot;get&quot; the value
+associated with the name <code>list_element</code>, then change the case of
+all the letters to upper case.  The result will be inserted into the
+output document.
+</p>
+<p>If you have compiled AutoGen, you can copy out the template and definitions
+as described above and run <code>autogen list.def</code>.  This will produce
+exactly the hypothesized desired output.
+</p>
+<p>One more point, too.  Lets say you decided it was too much trouble to figure
+out how to use AutoGen, so you created this enumeration and string list with
+thousands of entries.  Now, requirements have changed and it has become
+necessary to map a string containing the enumeration name into the enumeration
+number.  With AutoGen, you just alter the template to emit the table of names.
+It will be guaranteed to be in the correct order, missing none of the entries.
+If you want to do that by hand, well, good luck.
+</p>
+
+<hr size="6">
+<a name="csh_002fzsh-caveat"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Example-Usage" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Testimonial" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="csh_002fzsh-caveat-1"></a>
+<h2 class="section">1.3 csh/zsh caveat</h2>
+
+<p>AutoGen tries to use your normal shell so that you can supply shell code
+in a manner you are accustomed to using.  If, however, you use csh or
+zsh, you cannot do this.  Csh is sufficiently difficult to program that
+it is unsupported.  Zsh, though largely programmable, also has some
+anomalies that make it incompatible with AutoGen usage.  Therefore, when
+invoking AutoGen from these environments, you must be certain to set the
+SHELL environment variable to a Bourne-derived shell, e.g., sh, ksh or
+bash.
+</p>
+<p>Any shell you choose for your own scripts need to follow these basic
+requirements:
+</p>
+<ol>
+<li>
+It handles <code>trap $sig &quot;:&quot;</code> without output to standard out.
+This is done when the server shell is first started.
+If your shell does not handle this, then it may be able to by
+loading functions from its start up files.
+</li><li>
+At the beginning of each scriptlet, the command <code>\\cd $PWD</code>
+is inserted.  This ensures that <code>cd</code> is not aliased to something
+peculiar and each scriptlet starts life in the execution directory.
+</li><li>
+At the end of each scriptlet, the command <code>echo mumble</code> is
+appended.  The program you use as a shell must emit the single
+argument <code>mumble</code> on a line by itself.
+</li></ol>
+
+
+<hr size="6">
+<a name="Testimonial"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#csh_002fzsh-caveat" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="A-User_0027s-Perspective"></a>
+<h2 class="section">1.4 A User&rsquo;s Perspective</h2>
+
+<table><tr><td>&nbsp;</td><td><pre class="format">Alexandre wrote:
+&gt;
+&gt; I&rsquo;d appreciate opinions from others about advantages/disadvantages of
+&gt; each of these macro packages.
+</pre></td></tr></table>
+
+<p>I am using AutoGen in my pet project, and find one of its best points to
+be that it separates the operational data from the implementation.
+</p>
+<p>Indulge me for a few paragraphs, and all will be revealed:
+In the manual, Bruce cites the example of maintaining command line flags
+inside the source code; traditionally spreading usage information, flag
+names, letters and processing across several functions (if not files).
+Investing the time in writing a sort of boiler plate (a template in
+AutoGen terminology) pays by moving all of the option details (usage,
+flags names etc.) into a well structured table (a definition file if you
+will),  so that adding a new command line option becomes a simple matter
+of adding a set of details to the table.
+</p>
+<p>So far so good!  Of course, now that there is a template, writing all of
+that tedious optargs processing and usage functions is no longer an
+issue.  Creating a table of the options needed for the new project and
+running AutoGen generates all of the option processing code in C
+automatically from just the tabular data.  AutoGen in fact already ships
+with such a template... AutoOpts.
+</p>
+<p>One final consequence of the good separation in the design of AutoGen is
+that it is retargetable to a greater extent.  The
+egcs/gcc/fixinc/inclhack.def can equally be used (with different
+templates) to create a shell script (inclhack.sh) or a c program
+(fixincl.c).
+</p>
+<p>This is just the tip of the iceberg.  AutoGen is far more powerful than
+these examples might indicate, and has many other varied uses.  I am
+certain Bruce or I could supply you with many and varied examples, and I
+would heartily recommend that you try it for your project and see for
+yourself how it compares to m4.
+<a name="index-m4"></a>
+</p>
+<p>As an aside, I would be interested to see whether someone might be
+persuaded to rationalise autoconf with AutoGen in place of m4...  Ben,
+are you listening?  autoconf-3.0! &lsquo;kay?  =)O|
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="format">Sincerely,
+        Gary V. Vaughan
+</pre></td></tr></table>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_1.html#Definitions-File" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon</em> on <em>July 10, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

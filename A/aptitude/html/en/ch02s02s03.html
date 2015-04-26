@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Modifying package states</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s02.html" title="Managing packages"><link rel="prev" href="ch02s02s02.html" title="Accessing package information"><link rel="next" href="ch02s02s04.html" title="Downloading, installing, and removing packages"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Modifying package states</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Managing packages</th><td width="20%" align="right"> <a accesskey="n" href="ch02s02s04.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Modifying package states"><div class="titlepage"><div><div><h3 class="title"><a name="idp3410936"></a>Modifying package states</h3></div></div></div><p>
+	  The following commands are available to modify the states of
+	  packages.  Commands take effect the next time you perform an
+	  <a class="link" href="ch02s02s04.html" title="Downloading, installing, and removing packages">install run</a>; until you
+	  do, all of these commands can be reversed using <span class="guimenu">Undo</span> → <span class="guimenuitem">Undo</span> (<span class="shortcut"><strong><span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>u</strong></span></strong></span>).
+	</p><p>
+	  To apply a command to a package, simply select the package
+	  in a package list and issue the command.  These commands can
+	  also be applied to groups of packages by selecting the group
+	  header (for instance, <span class="quote">“<span class="quote">Upgradable Packages</span>”</span>) and issuing the
+	  command.
+	</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><a name="pkgCmdInstall"></a>Install: <span class="guimenu">Package</span> → <span class="guimenuitem">Install</span> (<span class="shortcut"><strong><span class="keycap"><strong>+</strong></span></strong></span>)</td><td>
+		  <p>Flag the current package for installation.</p>
+
+		  <p>
+		    If the package is not installed, it will be
+		    installed.  If it is already installed, it will be
+		    upgraded if possible and any sticky upgrade
+		    prevention that is in effect (eg, Hold) will be
+		    cancelled.
+		  </p>
+		</td></tr><tr class="oddrow"><td><a name="pkgCmdRemove"></a>Remove: <span class="guimenu">Package</span> → <span class="guimenuitem">Remove</span> (<span class="shortcut"><strong><span class="keycap"><strong>-</strong></span></strong></span>)</td><td>
+		  <p>Flag the currently selected package for
+		  removal.</p>
+
+		  <p>
+		    If the package is installed, it will be removed.
+		  </p>
+		</td></tr><tr><td><a name="pkgCmdPurge"></a>Purge: <span class="guimenu">Package</span> → <span class="guimenuitem">Purge</span> (<span class="shortcut"><strong><span class="keycap"><strong>_</strong></span></strong></span>)</td><td>
+		  <p>Flag the current package to be purged.</p>
+
+		  <p>
+		    If the package is installed, it will be removed.
+		    Furthermore, even if it is removed, any remaining
+		    files (such as configuration files) related to the
+		    package will be removed from the system.
+		  </p>
+		</td></tr><tr class="oddrow"><td><a name="pkgCmdKeep"></a>Keep: <span class="guimenu">Package</span> → <span class="guimenuitem">Keep</span> (<span class="shortcut"><strong><span class="keycap"><strong>:</strong></span></strong></span>)</td><td>
+		  <p>
+		    Flag the current package to be kept at its current
+		    version.
+		  </p>
+
+		  <p>
+		    Any action that was to be performed on the package
+		    -- installation, removal, or upgrade -- is
+		    cancelled, and any persistent hold that was set on
+		    the package is removed.
+		  </p>
+		</td></tr><tr><td><a name="pkgCmdHold"></a>Hold: <span class="guimenu">Package</span> → <span class="guimenuitem">Hold</span> (<span class="shortcut"><strong><span class="keycap"><strong>=</strong></span></strong></span>)</td><td>
+		  <p>
+		    Set a persistent hold on the package.
+		  </p>
+
+		  <p>
+		    As with Keep, any action that was to be performed
+		    on the package is cancelled.  In addition, the
+		    package will not be automatically upgraded
+		    <sup>[<a name="footAutoUpgrade" href="#ftn.footAutoUpgrade" class="footnote">a</a>]</sup>
+		    until the hold is removed.  You may cancel a hold
+		    by issuing the Install command.
+		  </p>
+		</td></tr><tr class="oddrow"><td><a name="pkgCmdForbid"></a><span class="guimenu">Package</span> → <span class="guimenuitem">Forbid Version</span> (<span class="shortcut"><strong><span class="keycap"><strong>F</strong></span></strong></span>)</td><td>
+		  <p>
+		    The package will not be automatically
+		    upgraded<sup>[<a href="ch02s02s03.html#ftn.footAutoUpgrade" class="footnoteref">a</a>]</sup>
+		    to the version it would currently be upgraded to.
+		    If it was going to be upgraded, the upgrade will
+		    be cancelled.
+		  </p>
+
+		  <p>
+		    If you issue this command on a particular version
+		    of a package, the package will not be upgraded to
+		    the selected version.  Note that only one version
+		    can be forbidden at once.
+		  </p>
+
+		  <p>
+		    This functionality is largely provided as a
+		    convenience for users of the <span class="quote">“<span class="quote">unstable</span>”</span>
+		    distribution, so they can avoid known-bad versions
+		    of packages.
+		  </p>
+		</td></tr><tr><td><a name="pkgCmdReinstall"></a>
+		  <p>
+		    Reinstall: press <span class="keycap"><strong>L</strong></span>
+		  </p>
+		</td><td>
+		  <p>
+		    Reinstalls the package.
+		  </p>
+
+		  <p>
+		    Note that the reinstallation will not be saved
+		    when you quit <span class="command"><strong>aptitude</strong></span> or perform an install run,
+		    for technical reasons (essentially, the
+		    underlying software layers
+		    (<span class="command"><strong>dpkg</strong></span> and <code class="systemitem">apt</code>) do not provide
+		    any way to find out whether a reinstallation was
+		    successful or not).
+		  </p>
+		</td></tr><tr class="oddrow"><td><a name="pkgCmdAuto"></a><span class="guimenu">Package</span> → <span class="guimenuitem">Mark Auto</span> (<span class="shortcut"><strong><span class="keycap"><strong>M</strong></span></strong></span>), <span class="guimenu">Package</span> → <span class="guimenuitem">Mark Manual</span> (<span class="shortcut"><strong><span class="keycap"><strong>m</strong></span></strong></span>)</td><td>
+		  Sets whether the package is treated as having been
+		  automatically installed; automatically installed
+		  packages will be removed when no other package
+		  requires them.  For more information, see <a class="xref" href="ch02s02s06.html" title="Managing automatically installed packages">the section called “Managing automatically installed packages”</a>.
+		</td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div class="footnote"><p><sup>[<a id="ftn.footAutoUpgrade" href="#footAutoUpgrade" class="para">a</a>] </sup>
+			That is, it will be unaffected by
+			<span class="guimenu">Actions</span> → <span class="guimenuitem">Mark Upgradable</span> (<span class="shortcut"><strong><span class="keycap"><strong>U</strong></span></strong></span>) or the <a class="link" href="ch01s02.html#fullUpgrade"><code class="literal">full-upgrade</code></a>
+			or <a class="link" href="ch01s02.html#safeUpgrade"><code class="literal">safe-upgrade</code></a>
+			command-line actions.
+		      </p></div></td></tr></tbody></table></div><p>
+	  In addition to these commands that affect the selected
+	  package, there are two commands that affect large numbers of
+	  packages at once regardless of what is selected.
+	  <span class="guimenu">Actions</span> → <span class="guimenuitem">Forget new packages</span> (<span class="shortcut"><strong><span class="keycap"><strong>f</strong></span></strong></span>) clears the <span class="quote">“<span class="quote">new</span>”</span> status of all packages in
+	  the package list, and <span class="guimenu">Actions</span> → <span class="guimenuitem">Mark Upgradable</span> (<span class="shortcut"><strong><span class="keycap"><strong>U</strong></span></strong></span>) flags every package
+	  which can be upgraded for upgrade, except for packages that
+	  are held back or would be upgraded to a forbidden version.
+	</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+	    All changes to package states are saved when you quit
+	    <span class="command"><strong>aptitude</strong></span>, update the package list, or perform an install
+	    run.  If you do not wish to save your changes, you can
+	    always abort <span class="command"><strong>aptitude</strong></span> by pressing
+	    <span class="keycap"><strong>Ctrl-C</strong></span>.
+	  </p></td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s02s04.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Accessing package information </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Downloading, installing, and removing packages</td></tr></table></div></body></html>

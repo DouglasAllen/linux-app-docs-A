@@ -1,0 +1,73 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ModLogSetThreshold</TITLE>
+<LINK rel=Previous href="c-ch255.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch257.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch255.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch257.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="598980">
+</a><h3>Ns_ModLogSetThreshold</h3>
+<a name="598984">
+</a><h4>Overview</h4>
+Set the logging severity of a handle
+<a name="598986">
+</a><a name="598988">
+</a><h4>Syntax</h4>
+<pre>    <a name="598990"></a>void Ns_ModLogSetThreshold(
+    <a name="598991"></a>Ns_ModLogHandle handle,
+    <a name="598992"></a>Ns_LogSeverity severity
+    <a name="598993"></a>);
+</pre><p><a name="598995">
+</a><h4>Description</h4>
+<p><a name="598997">
+</a>The Ns_ModLogSetThreshold function sets the logging threshold of a handle to a particular severity. Only those messages that have the same severity or higher as the handle will be logged with Ns_Modlog for that handle. The default handle is used instead for a null handle.</p>
+<a name="599004">
+</a><h4> Examples</h4>
+<pre>    <a name="775782"></a>Ns_ModLogHandle handle;
+    <a name="775784"></a>Ns_ModLogRegister("testrealm", &amp;handle);
+    <a name="775785"></a>Ns_ModLogSetThreshold(handle, Debug);
+    <a name="775786"></a>Ns_ModLog(Debug, handle, "This should appear");
+    <a name="775787"></a>Ns_ModLogSetThreshold(handle, Notice);
+    <a name="599006"></a>Ns_ModLog(Debug, handle, "This should not appear");
+</pre><p><a name="599829">
+</a><h4>See also</h4>
+<p><a name="599832">
+</a><b>ns_modlogcontrol set_threshold</b></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch255.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch257.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

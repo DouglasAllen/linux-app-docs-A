@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Používání aptitude z příkazové řádky</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="prev" href="ch01s01s05.html" title="Aktualizace seznamu a instalace balíků"><link rel="next" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Používání <span class="command"><strong>aptitude</strong></span> z příkazové řádky</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s01s05.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Kapitola 1. Začínáme</th><td width="20%" align="right"> <a accesskey="n" href="ch02.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="section" title="Používání aptitude z příkazové řádky"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="secUsingCmdline"></a>Používání <span class="command"><strong>aptitude</strong></span> z příkazové řádky</h2></div></div></div><p>
+
+Kromě celoobrazovkového režimu popsaného v minulé sekci nabízí
+<span class="command"><strong>aptitude</strong></span> i správu balíků z příkazové řádky podobně, jako program
+<span class="command"><strong>apt-get</strong></span>.  Tato sekce pokrývá pouze nejčastější příkazy. Pro úplný
+seznam se podívejte do <a class="link" href="rn01.html" title="Přehled příkazů"><span class="command"><strong>aptitude</strong></span> -
+přehled příkazů</a>.
+
+</p><p>
+
+Obecně bude spuštění <span class="command"><strong>aptitude</strong></span> v příkazovém režimu vypadat takto:
+
+</p><div class="cmdsynopsis"><p><code class="command">aptitude</code>   <em class="replaceable"><code>akce</code></em>  [<em class="replaceable"><code>argumenty</code></em>...]</p></div><p>
+
+<em class="replaceable"><code>akce</code></em> říká <span class="command"><strong>aptitude</strong></span>, co má vlastně
+udělat. Ostatní argumenty jsou většinou volitelné, často se zde
+zadávají názvy balíků a různé přepínače<sup>[<a name="idp3325384" href="#ftn.idp3325384" class="footnote">4</a>]</sup>.
+
+</p><p>
+
+Nejdůležitější akce jsou:
+
+</p><div class="variablelist"><dl><dt><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>   update </p></div></span></dt><dd><p>
+
+Příkaz aktualizuje seznam balíků, jako kdybyste v celoobrazovkovém
+režimu stiskli klávesu <span class="keycap"><strong>u</strong></span>.
+
+  </p></dd><dt><a name="safeUpgrade"></a><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>   safe-upgrade </p></div></span></dt><dd><p>
+
+Příkaz aktualizuje všechny aktualizovatelné balíky na novější
+verze. Pokud by aktualizací nastal konflikt, a bylo by potřeba pro
+aktualizaci nějakého balíku odstranit jiný nainstalovaný balík, pak se
+aktualizace neprovede. Chcete-li přesto aktualizovat, použijte příkaz
+<a class="link" href="ch01s02.html#fullUpgrade"><code class="literal">full-upgrade</code></a>.
+
+  </p></dd><dt><a name="fullUpgrade"></a><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>   full-upgrade </p></div></span></dt><dd><p>
+
+Tento příkaz se také pokusí aktualizovat všechny aktualizovatelné
+balíky, ale oproti
+<a class="link" href="ch01s02.html#safeUpgrade"><code class="literal">safe-upgrade</code></a>
+je při řešení závislostí mnohem agresivnější: Bude instalovat a
+odstraňovat balíky tak dlouho, dokud uspokojivě nevyřeší všechny
+závislosti. Z povahy tohoto příkazu vyplývá, že může způsobit nečekané
+následky a tudíž byste jej měli používat s rozvahou.
+
+  </p><div class="note" title="Poznámka" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Poznámka]" src="images/note.png"></td><th align="left">Poznámka</th></tr><tr><td align="left" valign="top"><p>
+
+Z historických důvodů se tento příkaz dříve jmenoval
+<code class="literal">dist-upgrade</code> a <span class="command"><strong>aptitude</strong></span> jej stále rozpoznává.
+
+  </p></td></tr></table></div></dd><dt><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [ install  |   remove  |   purge ]  <em class="replaceable"><code>balík1</code></em>  [<em class="replaceable"><code>balík2</code></em>...]</p></div></span></dt><dd><p>
+
+Tyto příkazy nainstalují, odstraní, nebo vyčistí<sup>[<a name="idp3339272" href="#ftn.idp3339272" class="footnote">5</a>]</sup> zadané balíky. Instalování již
+nainstalovaného balíku buď neudělá nic, nebo, pokud se dá balík
+aktualizovat, se aktualizuje na novější verzi.
+
+  </p></dd><dt><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>   search   <em class="replaceable"><code>vzor1</code></em>  [<em class="replaceable"><code>vzor2</code></em>...]</p></div></span></dt><dd><p>
+
+Příkaz hledá balíky jejichž název obsahuje libovolný ze zadaných
+<em class="replaceable"><code>vzor</code></em>ů a výsledky vypisuje na terminál.
+Zadaný <em class="replaceable"><code>vzor</code></em> nemusí být jen text, ale celý
+regulární výraz (viz kapitola <a class="xref" href="ch02s03.html" title="Vyhledávací vzory">„Vyhledávací vzory“</a>).
+
+<sup>[<a name="idp3343608" href="#ftn.idp3343608" class="footnote">6</a>]</sup>
+
+Například <span class="quote">„<span class="quote"><code class="literal">aptitude search gnome kde</code></span>“</span>
+vypíše všechny balíky, jejichž jméno obsahuje řetězec
+<span class="quote">„<span class="quote"><code class="literal">gnome</code></span>“</span> nebo
+<span class="quote">„<span class="quote"><code class="literal">kde</code></span>“</span>.
+
+  </p></dd><dt><span class="term"><div class="cmdsynopsis"><p><code class="command">aptitude</code>   show   <em class="replaceable"><code>balík1</code></em>  [<em class="replaceable"><code>balík2</code></em>...]</p></div></span></dt><dd><p>
+
+Na terminál zobrazí informace o každém
+<em class="replaceable"><code>balíku</code></em>.
+
+  </p></dd></dl></div><p>
+
+Všechny příkazy, které instalují, aktualizují a odstraňují balíky,
+přijímají parametr <code class="literal">-s</code>, což značí
+<span class="quote">„<span class="quote">simulovat</span>“</span>. Když na příkazové řádce použijete tento
+parametr, program se chová jako obvykle, ale ve skutečnosti žádné
+soubory nemaže ani neinstaluje.
+
+</p><p>
+
+<span class="command"><strong>aptitude</strong></span> občas zobrazí výzvu podobnou této:
+
+</p><pre class="screen">Následující NOVÉ balíky budou nainstalovány automaticky:
+  space-orbit-common
+Následující NOVÉ balíky budou instalovány:
+  space-orbit space-orbit-common
+0 balíků aktualizováno, 2 nově instalováno, 0 k odstranění a 0 neaktualizováno.
+Potřebuji stáhnout 3200kB archívů. Po rozbalení bude použito 8413kB.
+<code class="prompt">Chcete pokračovat? [Y/n/?]</code></pre><p>
+
+Kromě zřejmých možností <span class="quote">„<span class="quote">Ano</span>“</span> a <span class="quote">„<span class="quote">Ne</span>“</span> máte
+k dispozici řadu příkazů, kterými můžete změnit styl zobrazení a/nebo
+zadat další akce. Například příkazem <strong class="userinput"><code>s</code></strong>
+u každého balíku zobrazíte nebo skryjete informace o místě, které
+balík na disku zabere.
+
+</p><pre class="screen"><code class="prompt">Chcete pokračovat? [Y/n/?] </code><strong class="userinput"><code>s</code></strong>
+
+Změny velikostí budou zobrazeny.
+
+Následující NOVÉ balíky budou nainstalovány automaticky:
+  space-orbit-common &lt;+8020kB&gt;
+Následující NOVÉ balíky budou instalovány:
+  space-orbit &lt;+393kB&gt; space-orbit-common &lt;+8020kB&gt;
+0 balíků aktualizováno, 2 nově instalováno, 0 k odstranění a 0 neaktualizováno.
+Potřebuji stáhnout 3200kB archívů. Po rozbalení bude použito 8413kB.
+<code class="prompt">Chcete pokračovat? [Y/n/?]</code></pre><p>
+
+Podobně příkaz <strong class="userinput"><code>d</code></strong> zobrazí informace o automaticky
+instalovaných nebo odstraněných balících:
+
+</p><pre class="screen">Následující NOVÉ balíky budou nainstalovány automaticky:
+  space-orbit-common (D: space-orbit)
+Následující NOVÉ balíky budou instalovány:
+  space-orbit space-orbit-common
+0 balíků aktualizováno, 2 nově instalováno, 0 k odstranění a 0 neaktualizováno.
+Potřebuji stáhnout 3200kB archívů. Po rozbalení bude použito 8413kB.</pre><p>
+
+Výpis nám říká, že <code class="systemitem">space-orbit-common</code> bude
+instalován automaticky, protože na něm závisí
+<code class="systemitem">space-orbit</code>. Seznam všech možných příkazů
+můžete získat klávesou <strong class="userinput"><code>?</code></strong>.
+
+</p><p>
+
+Pokud váš požadavek naruší závislosti takovým způsobem, že nemohou být
+vyřešeny triviálním zásahem, <span class="command"><strong>aptitude</strong></span> se raději zeptá, co má dělat:
+
+</p><pre class="screen">Následující balíky jsou PORUŠENY:
+  libsdl1.2debian
+Následující balíky budou ODSTRANĚNY:
+  libsdl1.2debian-alsa
+.
+.
+.
+Následující akce vyřeší tyto závislosti:
+
+Instalovat následující balíky:
+libsdl1.2debian-all [1.2.12-1 (unstable)]
+
+Skóre je 41
+
+<code class="prompt">Přijmout toto řešení? [Y/n/q/?]</code></pre><p>
+
+Klávesou <strong class="userinput"><code>y</code></strong> nebo <span class="keycap"><strong>enter</strong></span> přijmete
+navrhované řešení, stiskem <strong class="userinput"><code>n</code></strong> se zobrazí
+<span class="quote">„<span class="quote">druhé nejlepší</span>“</span> řešení (třetí, čtvrté, …):
+
+</p><pre class="screen"><code class="prompt">Přijmout toto řešení? [Y/n/q/?]</code> <strong class="userinput"><code>n</code></strong>
+Následující akce vyřeší tyto závislosti:
+
+Instalovat následující balíky:
+libsdl1.2debian-esd [1.2.12-1 (unstable)]
+
+Skóre je 19
+
+<code class="prompt">Přijmout toto řešení? [Y/n/q/?]</code></pre><p>
+
+V režimu řešení závislostí můžete, podobně jako na hlavní příkazové
+řádce, provádět mnoho dodatečných akcí, včetně ruční změny stavu
+balíků. Seznam dostupných akcí naleznete pod klávesou
+<strong class="userinput"><code>?</code></strong>.
+
+</p><p>
+
+Klávesa <strong class="userinput"><code>q</code></strong> ukončí všechny snahy o automatické
+vyřešení závislostí a nabídne vám, zda chcete vyřešit závislosti
+ručně:
+
+</p><pre class="screen"><code class="prompt">Přijmout toto řešení? [Y/n/q/?]</code> <strong class="userinput"><code>q</code></strong>
+aptitude se nepodařilo najít řešení těchto závislostí. Můžete je buď
+vyřešit ručně, nebo skončit klávesou „n“.
+Následující balíky mají nesplněné závislosti:
+  libsdl1.2debian: Závisí na: libsdl1.2debian-alsa (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-all (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-esd (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-arts (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-oss (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-nas (= 1.2.12-1) ale ten nelze nainstalovat nebo
+                              libsdl1.2debian-pulseaudio (= 1.2.12-1) ale ten nelze nainstalovat
+<code class="prompt">Vyřešit tyto závislosti ručně? [N/+/-/_/:/?]</code></pre><p>
+
+Pro vyřešení porušených závislostí nyní můžete použít libovolné
+příkazy pro změnu stavu balíků. Seznam dostupných příkazů naleznete
+pod klávesou <strong class="userinput"><code>?</code></strong>. Klávesou <strong class="userinput"><code>n</code></strong>
+nebo <span class="keycap"><strong>enter</strong></span> <span class="command"><strong>aptitude</strong></span> ukončíte.
+
+</p><pre class="screen"><code class="prompt">Vyřešit tyto závislosti ručně? [N/+/-/_/:/?]</code> <strong class="userinput"><code>n</code></strong>
+Přerušeno.</pre><p>
+
+Pro úplný přehled vlastností a parametrů příkazového režimu <span class="command"><strong>aptitude</strong></span>
+se podívejte do kapitoly <a class="xref" href="rn01.html" title="Přehled příkazů">Přehled příkazů</a>.
+
+</p><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp3325384" href="#idp3325384" class="para">4</a>] </sup> Přepínač mívá
+podobu pomlčky následované písmenem, např. <span class="quote">„<span class="quote">-a</span>“</span>,
+<span class="quote">„<span class="quote">-v</span>“</span>, apod.</p></div><div class="footnote"><p><sup>[<a id="ftn.idp3339272" href="#idp3339272" class="para">5</a>] </sup>Termín
+vyčistit znamená, že balík bude odstraněn včetně jeho konfiguračních
+souborů</p></div><div class="footnote"><p><sup>[<a id="ftn.idp3343608" href="#idp3343608" class="para">6</a>] </sup>
+
+Ve skutečnosti platí to samé i o ostatních příkazech, které vyžadují
+jako parametr název balíku (např. <code class="literal">install</code> nebo
+<code class="literal">show</code>).
+
+</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s01s05.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch01.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Aktualizace seznamu a instalace balíků </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> Kapitola 2. <span class="command"><strong>aptitude</strong></span> - referenční příručka</td></tr></table></div></body></html>

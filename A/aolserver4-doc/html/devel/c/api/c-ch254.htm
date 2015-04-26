@@ -1,0 +1,73 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ModLogRedirect</TITLE>
+<LINK rel=Previous href="c-ch253.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch255.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch253.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch255.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="771977">
+</a><h3>Ns_ModLogRedirect</h3>
+<a name="615524">
+</a><h4>Overview</h4>
+Redirect logging of a realm to a file
+<a name="615525">
+</a><a name="615526">
+</a><h4>Syntax</h4>
+<pre>    <a name="615527"></a>void Ns_ModLogRedirect(
+    <a name="615528"></a>Ns_ModLogHandle handle,
+    <a name="615529"></a>FILE *fp,
+    <a name="615530"></a>char *description
+    <a name="615531"></a>);
+</pre><p><a name="615532">
+</a><h4>Description</h4>
+<p><a name="615533">
+</a>The Ns_ModLogRedirect function redirects logging of a realm to an open file. The default handle is used instead for a null handle. fp refers to an open file. A null pointer for fp redirects the output to the default server log file. The description string is printed in the original server log file for the handle.</p>
+<a name="615534">
+</a><h4>Examples</h4>
+<pre>    <a name="615535"></a>FILE *fp;
+    <a name="615536"></a>fp = fopen("cgirealm.log", "a");
+    <a name="615537"></a>Ns_ModLogRedirect(cgiModLogHandle, fp, "redirecting to a different
+
+    <a name="615538"></a>file");
+</pre><p><a name="615539">
+</a><h4>See also</h4>
+<p><a name="615540">
+</a><b>ns_modlogcontrol redirect</b></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch253.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch255.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

@@ -1,0 +1,582 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:20 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnSend</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnSend</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXMPLES">EXMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnPrintfHeader,
+Ns_ConnPuts, Ns_ConnSend, Ns_ConnSendChannel,
+Ns_ConnSendDString, Ns_ConnSendFd, Ns_ConnSendFdEx,
+Ns_ConnSendFp, Ns_ConnWrite, Ns_WriteConn &minus; Routines
+to write data to the connection</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnPrintfHeader(</b><i>conn, fmt, ...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnPuts</b>(<i>conn, string</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSend</b>(<i>conn, bufs, nbufs</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSendChannel</b>(<i>conn, chan, nsend</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSendDString</b>(<i>conn, dsPtr</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSendFd</b>(<i>conn, fd, nsend</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSendFdEx</b>(<i>conn, fd, off, nsend</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnSendFp</b>(<i>conn, fp, nsend</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_ConnWrite</b>(<i>conn, buf, len</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_WriteConn</b>(<i>conn, buf, len</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p style="margin-top: 1em">char <i>*buf</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p style="margin-top: 1em">Pointer to bytes of specified
+length.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>Ns_Conn <i>conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Open connection on which to send content.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>Ns_DString <i>dsPtr</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Pointer to initialized dstring with content to send.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>int <i>fd</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>File descriptor opened for read.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>char <i>*fmt</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Pointer to <b>sprintf</b> style format string which
+specifies the types of the remaining variable number of
+arguments.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>FILE <i>*fp</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Stdio FILE pointer opened for read.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>int <i>len</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Length of bytes pointed to by <i>buf</i>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>int <i>nbufs</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Number of iovec structures pointed to by
+<i>bufs</i>.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>int <i>nsend</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Number of bytes to send from object.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>off_t <i>off</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Offset into open file descriptor to begin sending
+content.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>char <i>*string</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Pointer to null-terminated string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>struct iovec <i>bufs</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Pointer to array of iovec structures.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="52%">
+
+
+<p>Tcl_Channel <i>chan</i> (in)</p></td>
+<td width="9%"></td>
+<td width="28%">
+
+
+<p>Pointer to Tcl channel open for read.</p></td></tr>
+</table>
+
+
+<p style="margin-left:72%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+are the lowest level routines which support sending content
+directly to a connection through the connection&rsquo;s
+communications driver (e.g., nssock or nsopenssl). They all
+attempt to send the entire requested output, blocking the
+calling thread up to the driver-specific timeout if
+necessary. Header data queued for send with
+<b>Ns_ConnQueueHeaders</b>, if any, will be sent before the
+requested user data.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In practice,
+higher level routines such as the <b>Ns_ConnReturn</b>
+functions and <b>Ns_ConnFlush</b> are used to generate
+complete responses instead of these lower level routines.
+The higher level routines construct appropriate headers,
+manage output character encoding, and support gzip
+compression, calling these lower level routines as needed.
+<br>
+int <b>Ns_ConnPrintfHeader</b>(<i>conn, fmt, ...</i>)</p>
+
+<p style="margin-left:22%;">Contrary to it&rsquo;s name,
+this routine has nothing to do with HTTP headers. Instead,
+it simply calls <b>Ns_DStringPrintf</b> with a temporary
+dstring, the given <i>fmt</i> argument, and any variables
+arguments and then calls <b>Ns_ConnSendDString</b> with the
+temporary dstring. The result is NS_OK if all formatted
+bytes were sent, otherwise NS_ERROR.</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnPuts</b>(<i>conn,
+string</i>)</p>
+
+<p style="margin-left:22%;">This routines sends a
+null-terminated string to the client and returns NS_OK if
+successful or NS_ERROR on failure. It is equivalent to
+<b>Ns_WriteConn</b>(<i>conn, string,
+strlen(string)</i>).</p>
+
+<p style="margin-left:11%;">int <b>Ns_ConnSend</b>(<i>conn,
+bufs, nbufs</i>)</p>
+
+<p style="margin-left:22%;">This is the lowest level
+routine which calls the connection&rsquo;s communication
+driver to send an array of zero or more buffers. The result
+is the total number of bytes sent which should equal the
+total requested data or -1 on error. The number of bytes
+sent from queued header data, if any, is not included in the
+result. The <i>bufs</i> argument is a pointer to an array of
+<i>nbufs</i> iovec structures. The usage is similar to the
+the Unix <b>writev</b> system call. The iovec structure is
+defined as:</p>
+
+<p style="margin-left:22%; margin-top: 1em">struct iovec
+{</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>void *iov_base;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>size_t iov_len</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">Each element of
+the structure should contain a pointer to valid user data
+specified by <i>iov_base</i> of length <i>iov_len</i>. A
+NULL value for <i>iov_base</i> and a cooresponding value of
+zero for <i>iov_len</i> is valid and will simply be skipped
+over when sending the total requested bytes. <br>
+int <b>Ns_ConnSendChannel</b>(<i>conn, chan, nsend</i>)</p>
+
+<p style="margin-left:22%;">This routine copies
+<i>nsend</i> bytes from the open Tcl channel to the
+connection. The result is NS_OK if all bytes available in
+the open channel or all bytes requested where sent,
+otherwise NS_ERROR.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnSendDString</b>(<i>conn, dsPtr</i>)</p>
+
+<p style="margin-left:22%;">This routines sends all content
+which exists in the dstring pointed to by <i>dsPtr</i>. The
+result is NS_OK if all bytes where sent, otherwise
+NS_ERROR.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnSendFd</b>(<i>conn, fd, nsend</i>)</p>
+
+<p style="margin-left:22%;">This routine copies
+<i>nsend</i> bytes from the open file descriptor to the
+connection. The result is NS_OK if all bytes available in
+the open file or all bytes requested where sent, otherwise
+NS_ERROR. Copying begins from the current offset.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnSendFp</b>(<i>conn, fp, nsend</i>)</p>
+
+<p style="margin-left:22%;">This routine copies
+<i>nsend</i> bytes from the open stdio FILE to the
+connection. The result is NS_OK if all bytes available in
+the open file or all bytes requested where sent, otherwise
+NS_ERROR. Copying begins from the current offset.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnSendFdEx</b>(<i>conn, fd, off, nsend</i>)</p>
+
+<p style="margin-left:22%;">This routine copies
+<i>nsend</i> bytes from the open file descriptor to the
+connection. The result is NS_OK if all bytes available in
+the open file or all bytes requested where sent, otherwise
+NS_ERROR. Copying begins from the offset given in the
+<i>off</i> parameter. (NOTE: This routine is currently not
+supported on Win32 and always returns NS_ERROR).</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_ConnWrite</b>(<i>conn, buf, len</i>)</p>
+
+<p style="margin-left:22%;">This routine will send a single
+buffer pointed to by <i>buf</i> of length <i>len</i>. The
+result is the number of bytes sent or -1 on error. It is
+equivalent to calling <b>Ns_ConnSend</b> with an single
+struct iovec.</p>
+
+<p style="margin-left:11%;">int
+<b>Ns_WriteConn</b>(<i>conn, buf, len</i>)</p>
+
+<p style="margin-left:22%;">This routine will send a single
+buffer pointed to by <i>buf</i> of length <i>len</i>. The
+result is NS_OK if all content was sent, otherwise NS_ERROR.
+It is equivalent to calling <b>Ns_ConnWrite</b> and mapping
+the bytes sent or -1 error result to NS_OK or NS_ERROR.</p>
+
+<h2>EXMPLES
+<a name="EXMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+example demonstrates crafting some headers and then sending
+two buffers of data. In this case, <b>Ns_ConnSend</b> will
+actually call the communications driver with three buffers,
+the first pointing to header data queued for send by
+<b>Ns_ConnQueueHeaders</b> followed by the two user data
+buffers. The result, assuming all three buffers are
+resonably small, is likely an efficient single send on the
+socket:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>struct iovec iov[2];</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>int contentlength;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>iov[0].iov_base = firstbuf;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>iov[0].iov_len = firstlen;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>iov[1].iov_base = secondbuf;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>iov[1].iov_len= secondlen;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>contentlength = iov[0].iov_len + iov[1].iov_len;</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnSetRequiredHeaders(conn, &quot;text/html&quot;,
+contentlength);</p> </td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnQueueHeaders(conn, 200);</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>if (Ns_ConnSend(conn, iov, contentlength) !=
+contentlength) {</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>... error, e.g., connection drop ...</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>}</p></td></tr>
+<tr valign="top" align="left">
+<td width="3%"></td>
+<td width="5%"></td>
+<td width="3%"></td>
+<td width="89%">
+
+
+<p>Ns_ConnClose(conn);</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnClose(3),
+Ns_ConnReturnHtml(3), Ns_ConnFlush(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection,
+i/o</p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,235 @@
+--
+     ___    ____  __    ___   _________
+    /   |  / _  |/ /   / / | / /__  __/            Source Code Static Analyzer
+   / /| | / / / / /   / /  |/ /  / /                    AdLint - Advanced Lint
+  / __  |/ /_/ / /___/ / /|  /  / /
+ /_/  |_|_____/_____/_/_/ |_/  /_/    Copyright (C) 2010-2012, OGIS-RI Co.,Ltd.
+
+ This file is part of AdLint.
+
+ AdLint is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ AdLint is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ AdLint.  If not, see <http://www.gnu.org/licenses/>.
+
+++
+
+=== \AdLint 1.10.0 is released (2012-06-06)
+
+==== Changes since the 1.8.10 release
+
+* Add W0716 detection
+* Add W0717 detection
+* Add W0718 detection
+* Fix W0500 detection not to warn when two standalone binary arithmetic
+  expressions are appears at 2nd and 3rd expressions of a
+  conditional-expression
+* Fix W0501 detection not to duplicate warnings about a conditional-expression
+* Fix W0582, W0583 and W0584 detections in order to consider type
+  convertibility correctly
+* Fix W1031 detection not to warn when the declaration with `static' and
+  definition without storage-class-specifier
+* Fix lack of sequence-point notification of controlling expressions
+* Add unit specification of C type models
+* Add W0001, W0002, W0003, W0007, W0010, W0013, W0109, W0583, W0606, W0698,
+  W0699, W0703, W0716, W0717, W0718, W0723 and W1031 functional specifications
+
+See the file
+{ChangeLog}[http://adlint.sourceforge.net/pmwiki/upload.d/Main/ChangeLog]
+for more details.
+
+=== \AdLint 1.8.10 is released (2012-05-18)
+
+==== Changes since the 1.8.2 release
+
+* Fix bad narrowing logic of undefined value domain in order to detect W9001
+  correctly
+* Fix W0635 detection not to warn when the expected type of the conversion
+  specifier is a pointer type and the corresponding argument's type is a
+  pointer type whose base type is cv-qualified
+* Fix W0583 detection not to warn when the argument type is a cv-qualified one
+  of the corresponding parameter's type
+* Fix W0112 detection not to warn about floating point relational-expressions
+* Fix W0117 and W0118 detection not to misunderstand linkage of object
+  definitions
+* Fix W0101, W0102, W0103 and W0107 detections not to warn when an address of
+  the parameter array variable (an alias of the caller's array) is going to be
+  saved
+* Fix W0828 detection not to warn when the member variable is a type of char
+  array and the corresponding initializer is a string-literal-specifier
+* Fix W0635 detection not to warn when the `void *' argument passed as the `%p'
+  conversion specifier
+* Fix degraded W0118 detection not to warn when the object declaration is in
+  the header file and the same declaration is in the source file, too
+* Fix bad value domain multiplication logic in order to correctly detect W0723
+  about multiplicative-expressions
+* Fix W0771 detection not to warn when declarations of the same object are in a
+  source file
+* Fix W0080 detection to warn when the file local static variable is defined
+  without initializer
+* Fix bad value domain multiplication logic in order to correctly detect W0608
+  about multiplicative-expressions
+* Fix degraded W0771 detection not to warn when declarations of the same object
+  are in two or more files
+* Fix degraded W0118 detection to warn when all declarations of an object are
+  in the source file
+
+=== \AdLint 1.8.2 is released (2012-05-08)
+
+==== Changes since the 1.8.0 release
+
+* Fix evaluation of array-subscript-expression not to convert the derived array
+  object into a pointer in order to resolve a type of the nested
+  array-subscript-expression correctly
+
+=== \AdLint 1.8.0 is released (2012-04-27)
+
+==== Changes since the 1.6.0 release
+
+* Add W0607 detection
+* Add W0608 detection
+* Add W0625 detection
+* Add W0632 detection
+* Add W0633 detection
+* Add W0634 detection
+* Add W0642 detection
+* Add W0711 detection
+* Add W0712 detection
+* Add W0713 detection
+* Add W0714 detection
+* Add W0715 detection
+* Add W0832 detection
+* Fix W0629 detection not to warn when the translation-unit local function is
+  referred to derive a pointer to the function
+* Fix W0459 and W0460 detections not to warn about inner variables owned by a
+  temporary variable
+* Fix W0461 and W0462 detections not to warn when the length omitted array
+  parameter is specified as an argument
+* Fix W1031 detection not to warn when the storage-class-specifier of the
+  object declaration is explicitly specified and the storage-class-specifier of
+  following object definition is omitted
+* Fix W0581, W0582, W0583 and W0584 detections not to warn when the
+  corresponding types of argument and parameter are array-array or
+  array-pointer pair
+* Fix W0581 detection to warn when the number of arguments in current function
+  call is greater than the number of arguments in previous function calls
+* Fix W0582, W0583 and W0584 detections to warn when the number of parameters
+  is greater than the number of arguments
+* Fix abend problem when the pathname of #include_next directive is not in the
+  executing environment
+* Support mswin path separator in #include or #include_next directives
+* Fix bad FN_UELS (number of incomplete if-else-if statement chains) metric
+  measurement
+* Improve value version management of the abstract interpreter
+
+=== \AdLint 1.6.0 is released (2012-04-06)
+
+==== Changes since the 1.4.0 release
+
+* Add W0541 detection
+* Add W0573 detection
+* Add W0579 detection
+* Add W0685 detection
+* Add W0686 detection
+* Add W0781 detection
+* Add W0787 detection
+* Add W0788 detection
+* Add W0789 detection
+* Add W0807 detection
+* Add W0808 detection
+* Add W0809 detection
+* Add W1030 detection
+* Add W1053 detection
+* Add W1054 detection
+* Add W1055 detection
+* Add W1056 detection
+* Add W1057 detection
+* Add W1058 detection
+* Add W1059 detection
+* Add W1060 detection
+* Add W1061 detection
+* Add W1062 detection
+* Add W1063 detection
+* Fix W0027 detection not to warn when a pointer variable is compared with NULL
+  constant
+* Fix W0728, W0729 and W0730 detections not to warn when the target is a
+  variable of the other enum type
+* Fix W0104 detection not to warn about invariant parameter of array type whose
+  base type is qualified as const
+* Fix bad W0031, W0100, W0104, W0459 and W0460 detections
+* Fix bad FN_UNUV measurement
+* Update the user's guide in Japanese
+* Update the user's guide in English
+
+=== \AdLint 1.4.0 is released (2012-03-29)
+
+==== Changes since the 1.2.0 release
+
+* Add W0606 detection
+* Add W0687 detection
+* Add W0695 detection
+* Add W0698 detection
+* Add W0699 detection
+* Add W0720 detection
+* Add W0721 detection
+* Add W0722 detection
+* Add W0723 detection
+* Add W0726 detection
+* Add W0727 detection
+* Add W0728 detection
+* Add W0729 detection
+* Add W0730 detection
+* Add W0731 detection
+* Add W0737 detection
+* Add W0738 detection
+* Add W0739 detection
+* Add W0740 detection
+* Add W0741 detection
+* Add W0743 detection
+* Add W0801 detection
+* Add W0806 detection
+* Add W1033 detection
+* Add W1064 detection
+* Add W1065 detection
+* Add missing implicit conversion of return-statement in order to detect W0727
+  at an expression of return-statement
+* Update the user's guide in Japanese
+* Update the user's guide in English
+
+=== \AdLint 1.2.0 is released (2012-03-21)
+
+==== Changes since the 1.0.0 release
+
+* Add W0597 detection
+* Add W0598 detection
+* Add W0599 detection
+* Add W0600 detection
+* Add W0688 detection
+* Add W0689 detection
+* Add W0690 detection
+* Change schema version validation method of input YAML files
+* Clarify message text of W0459 and W0460
+* Revise specification of W0459 and W0460 detections not to warn when a pointer
+  argument points to an uninitialized object
+* Fix bad FN_UNUV metric measurement
+* Update the user's guide in Japanese
+* Update the user's guide in English
+
+=== \AdLint 1.0.0 is released (2012-02-28)
+
+This is the initial GA release of \AdLint.
+
+==== Implemented features
+
+* Single module analysis
+* Cross module analysis
+* 597 kinds of warning detections
+* 14 kinds of code structure extractions
+* 15 kinds of quality metric measurements

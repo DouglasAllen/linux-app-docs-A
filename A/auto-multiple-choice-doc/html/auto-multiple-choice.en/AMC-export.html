@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>AMC-export</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="commands.html" title="Commands manual" /><link rel="prev" href="AMC-association-auto.html" title="AMC-association-auto" /><link rel="next" href="AMC-annote.html" title="AMC-annote" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AMC-export</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AMC-association-auto.html">Prev</a> </td><th width="60%" align="center">Commands manual</th><td width="20%" align="right"> <a accesskey="n" href="AMC-annote.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="AMC-export"><a id="AMC-export"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>AMC-export — exports marks for AMC multiple choice exams.</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   export   --data
+          <em class="replaceable"><code>project-data-dir</code></em>   --module <em class="replaceable"><code>module</code></em>   --fich-noms
+          <em class="replaceable"><code>students-list.csv</code></em>  [--noms-encodage <em class="replaceable"><code>list-encoding</code></em>]  --o <em class="replaceable"><code>output-file</code></em> </p></div></div><div class="refsect1" title="Description"><a id="idp6650704"></a><h2>Description</h2><p>The <span class="command"><strong>AMC-export.pl</strong></span> command exports marks from
+        an Auto Multiple Choice exam.</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--data
+            <em class="replaceable"><code>project-data-dir</code></em></code></span></dt><dd><p>gives the directory where data files are (see for example
+              <span class="citerefentry"><span class="refentrytitle">AMC-prepare</span>(1)</span>).</p></dd><dt><span class="term"><code class="option">--module
+            <em class="replaceable"><code>module</code></em></code></span></dt><dd><p>selects a module for export. See below for the modules
+              included in the AMC standard distribution.</p></dd><dt><span class="term"><code class="option">--fich-noms
+            <em class="replaceable"><code>students-list.csv</code></em></code></span></dt><dd><p>sets the students list file.</p></dd><dt><span class="term"><code class="option">--noms-encodage
+            <em class="replaceable"><code>list-encoding</code></em></code></span></dt><dd><p>selects an encoding for file
+              <em class="replaceable"><code>students-list.csv</code></em> (default is
+              utf-8).</p></dd><dt><span class="term"><code class="option">--o
+            <em class="replaceable"><code>output-file</code></em></code></span></dt><dd><p>gives the output file name.</p></dd><dt><span class="term"><code class="option">--option-out
+            <em class="replaceable"><code>options</code></em></code></span></dt><dd><p>gives an option for selected module, in the form
+              <code class="literal">key=value</code> (see below for possible options for
+              each module). To specify multiple options, use
+              <code class="option">--option</code> several times.</p></dd><dt><span class="term"><code class="option">--sort
+            <em class="replaceable"><code>sort-type</code></em></code></span></dt><dd><p>sort the students names, depending on
+              <em class="replaceable"><code>sort-type</code></em>. If
+              <em class="replaceable"><code>sort-type</code></em> is <code class="literal">l</code>,
+              use line number from students list file to sort. If
+              <em class="replaceable"><code>sort-type</code></em> is <code class="literal">m</code>,
+              use mark (and name if marks are equal) to sort. If
+              <em class="replaceable"><code>sort-type</code></em> is <code class="literal">i</code>,
+              use student number to sort. If
+              <em class="replaceable"><code>sort-type</code></em> is <code class="literal">n</code>,
+              use name to sort (or line from students list if equal).</p></dd><dt><span class="term"><code class="option">--useall
+            <em class="replaceable"><code>all</code></em></code></span></dt><dd><p>if <em class="replaceable"><code>all</code></em> is <code class="literal">0</code>
+              or empty, only students with a scaned answer sheet appears in
+              the output. If <em class="replaceable"><code>all</code></em> is
+              <code class="literal">1</code>, all students in the students list appears
+              in the output.</p></dd></dl></div></div><div class="refsect1" title="Modules"><a id="idp6678288"></a><h2>Modules</h2><div class="refsect2" title="OpenDocument"><a id="idp6678928"></a><h3>OpenDocument</h3><p>With "<code class="option">--module ods</code>", an OpenDocument (for use
+          by OpenOffice or LibreOffice for example) is produced. The following
+          options are recognized:</p><div class="variablelist"><dl><dt><span class="term">nom</span></dt><dd><p>gives a name for the exam, to be written on the
+                beginning of the sheet.</p></dd><dt><span class="term">code</span></dt><dd><p>gives an short name for the exam, to be used as a tab
+                name.</p></dd><dt><span class="term">columns</span></dt><dd><p>sets the list of columns that are to be added to each
+                student. Default value is
+                <code class="code">student.key,student.name</code>.</p></dd><dt><span class="term">stats</span></dt><dd><p>with a true value, a table will be added with statistics
+                for all questions.</p></dd><dt><span class="term">statsindic</span></dt><dd><p>with a true value, a table will be added with statistics
+                for all indicative questions.</p></dd></dl></div></div><div class="refsect2" title="CSV"><a id="idp6689616"></a><h3>CSV</h3><p>With "<code class="option">--module CSV</code>", a CSV file is produced.
+          The following options are recognized:</p><div class="variablelist"><dl><dt><span class="term">columns</span></dt><dd><p>sets the list of columns that are to be added to each
+                student. Default value is
+                <code class="code">student.copy,student.key,student.name</code>.</p></dd><dt><span class="term">decimal</span></dt><dd><p>sets the decimal point (default is a dot).</p></dd><dt><span class="term">encodage</span></dt><dd><p>sets the encoding to use for output (default is
+                utf-8).</p></dd><dt><span class="term">separateur</span></dt><dd><p>sets the character used between colums (default is a
+                comma).</p></dd><dt><span class="term">entoure</span></dt><dd><p>sets the character used to enclose strings (default is a
+                double quote).</p></dd><dt><span class="term">ticked</span></dt><dd><p>if not empty, additional columns (with
+                "<code class="literal">CHECKED:</code>" prefix) are included to give all
+                the checked boxes on all the sheets. This can be used by an
+                external program to retrieve all the checked boxes when marks
+                are not sufficient. Use value <code class="literal">01</code> to get
+                0;0;1;1;0 if boxes 3 and 4 are checked, and value
+                <code class="literal">AB</code> to get CD if boxes 3 and 4 are
+                checked.</p></dd></dl></div></div><div class="refsect2" title="List"><a id="idp6704032"></a><h3>List</h3><p>With "<code class="option">--module List</code>", a PDF file is produced
+          with a list of marks for all students. The following options are
+          recognized:</p><div class="variablelist"><dl><dt><span class="term">pagesize</span></dt><dd><p>The page size. Default value is <code class="code">a4</code>.</p></dd><dt><span class="term">nom</span></dt><dd><p>gives the name of the exam, to be printed at the top of
+                the page.</p></dd><dt><span class="term">ncols</span></dt><dd><p>The number of columns. Default value is 2.</p></dd><dt><span class="term">decimal</span></dt><dd><p>sets the decimal point (default is a dot).</p></dd></dl></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AMC-association-auto.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="commands.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AMC-annote.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AMC-association-auto </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AMC-annote</td></tr></table></div></body></html>

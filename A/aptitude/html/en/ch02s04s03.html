@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Searches and versions</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s04.html" title="Search patterns"><link rel="prev" href="ch02s04s02.html" title="Shorthand for search terms"><link rel="next" href="ch02s04s04.html" title="Explicit search targets"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Searches and versions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Search patterns</th><td width="20%" align="right"> <a accesskey="n" href="ch02s04s04.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Searches and versions"><div class="titlepage"><div><div><h3 class="title"><a name="idp3700984"></a>Searches and versions</h3></div></div></div><p>
+	  By default, a pattern matches a package if any version of
+	  the package matches the pattern.  However, some patterns
+	  will restrict their sub-patterns to only match against some
+	  versions of a package.  For instance, the search term
+	  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<em class="replaceable"><code>pattern</code></em>)</code>
+	  will select any package that depends on a package matching
+	  <em class="replaceable"><code>pattern</code></em>.  However,
+	  <em class="replaceable"><code>pattern</code></em> will only be checked
+	  against the versions of the package that actually satisfy a
+	  dependency.  This means that if <code class="literal">foo</code>
+	  depends on <code class="literal">bar (&gt;= 3.0)</code> and versions
+	  <code class="literal">2.0</code>, <code class="literal">3.0</code>, and
+	  <code class="literal">4.0</code> of <code class="literal">bar</code> are
+	  available, then in the search pattern
+	  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(2\.0))</code>, only
+	  versions <code class="literal">3.0</code> and <code class="literal">4.0</code>
+	  will be tested against <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(2\.0)</code>,
+	  and hence <code class="literal">foo</code> will not be found by this
+	  search.
+	</p><p>
+	  It matters which versions are checked because, as in the
+	  example above, some patterns will match one version but not
+	  another.  For instance, the pattern <code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code> will only
+	  match the version of the package (if any) that is currently
+	  installed.  Similarly, the pattern
+	  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>(<em class="replaceable"><code>maintainer</code></em>)</code>
+	  will only match versions that have the given
+	  <em class="replaceable"><code>maintainer</code></em>.  Normally all
+	  versions of a package have the same maintainer, but this is
+	  not always the case; in fact, any search pattern that
+	  examines the fields of a package (other than its name, of
+	  course) will behave this way, because all the fields of a
+	  package can change between versions.
+	</p><p>
+	  To test a pattern against all the versions of a package,
+	  even if the pattern would normally be tested against only
+	  some of the versions, use the <code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code> term.  For instance,
+	  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(2\.0)))</code>
+	  will match any package <em class="replaceable"><code>A</code></em> that
+	  depends on a package <em class="replaceable"><code>B</code></em>, where
+	  <em class="replaceable"><code>B</code></em> has a version matching
+	  <code class="literal">2.0</code>, regardless of whether that version
+	  actually satisfies <em class="replaceable"><code>A</code></em>'s
+	  dependency.  On the other hand, the <code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code> term restricts
+	  the versions that its sub-pattern is matched against:
+	  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code>,
+	  <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(ubuntu)))</code> will match any
+	  package whose installed version has a dependency that can be
+	  satisfied by a package whose version string contains
+	  <span class="quote">“<span class="quote"><code class="literal">ubuntu</code></span>”</span>.
+	</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+	    There is a subtle, but important, distinction between
+	    matching a pattern against a package, and matching it
+	    against all the versions of that package.  When a pattern
+	    is matched against a package, each of its terms is matched
+	    against the package, and so each term will match if
+	    <span class="emphasis"><em>any</em></span> version of the package matches.
+	    In contrast, when a pattern is matched against each
+	    version of a package, it will successfully match if it
+	    matches when all its terms are matched against the
+	    <span class="emphasis"><em>same</em></span> version of the package.
+	  </p><p>
+	    For example: suppose that version <code class="literal">3.0-1</code>
+	    of the package <code class="literal">aardvark</code> is installed,
+	    but that version <code class="literal">4.0-1</code> is available.
+	    Then the search expression
+	    <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(4\.0-1)<code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code></code> matches
+	    <code class="literal">aardvark</code>, because
+	    <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(4\.0-1)</code> matches against
+	    version <code class="literal">4.0-1</code> of
+	    <code class="literal">aardvark</code>, while <code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code> matches
+	    against version <code class="literal">3.0-1</code>.  On the other
+	    hand, this expression <span class="emphasis"><em>does not</em></span> match
+	    against all the versions of <code class="literal">aardvark</code>,
+	    because no single version is installed and also has a
+	    version number of <code class="literal">4.0-1</code>.
+	  </p></td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s04.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s04s04.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Shorthand for search terms </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Explicit search targets</td></tr></table></div></body></html>

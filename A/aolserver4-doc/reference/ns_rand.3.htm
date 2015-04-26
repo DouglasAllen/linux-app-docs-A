@@ -1,0 +1,101 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:44 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_rand</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_rand</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_rand &minus;
+commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_rand</b>
+?<i>max</i>?
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_rand
+generates a cryptographically-secure random number. If
+<i>max</i> is not specified, the random number is a
+floating-point value <i>n</i> such that <i>0.0 &lt;= n &lt;
+1.0.</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">If <i>max</i>
+is specified, it must be a positive integer between 0 and
+2147483647. The return value is an integer value such that
+<i>0 &lt;= n &lt;= (max - 1).</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">Internally
+ns_rand is implemented with the drand48(3) and lrand48(3)
+standard library functions. An internal random seed is
+generated the first time ns_rand is called after the server
+starts.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_rand <br>
+0.39938485692</p>
+
+<p style="margin-left:11%; margin-top: 1em">nscp&gt;
+ns_rand 10 <br>
+7</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n), drand48(3), lrand48(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

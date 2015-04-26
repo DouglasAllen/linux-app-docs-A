@@ -1,0 +1,221 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:45 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_return</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_return</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_connsendfp,
+ns_respond, ns_return, ns_returnadminnotice,
+ns_returnbadrequest, ns_returnerror, ns_returnfile,
+ns_returnforbidden, ns_returnfp, ns_returnnotfound,
+ns_returnnotice, ns_returnredirect, ns_returnunauthorized,
+ns_write &minus; commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_connsendfp</b>
+<i>fp len</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_respond</b></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_return</b>
+<i>status type string</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnadminnotice</b>
+<i>status msg</i> ?longmsg?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnbadrequest</b>
+<i>reason</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnerror</b>
+<i>status msg</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnfile</b>
+<i>status type filename</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnforbidden</b></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnfp</b>
+<i>status type fileid len</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnnotfound</b></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnnotice</b>
+<i>status msg</i> ?longmsg?</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnredirect</b>
+<i>location</i></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_returnunauthorized</b></p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_write</b>
+<i>string</i>
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These
+procedures provide a simple interface for returning
+information to the client. They build HTTP/1.0 headers and
+send the appropriate data out the socket to the client. The
+script does not end at the time ns_return* is invoked so you
+can continue processing data after the client has gotten the
+data and closed the socket.</p>
+
+<p style="margin-left:11%; margin-top: 1em">type should be
+a MIME type (see ns_guesstype manual page for a list).
+status is a three-digit number fitting the pattern below:
+1xx Informational - Not used, but reserved for future use.
+2xx Success - The action was successfully received,
+understood, and accepted. 3xx Redirection - Further action
+must be taken in order to complete the request. 4xx Client
+Error - The request contains bad syntax or cannot be
+fulfilled. 5xx Server Error - The server failed to fulfill
+an apparently valid request. Some common status values and
+their meanings are: 201 Created 202 Accepted 203 Provisional
+Information 204 No Content 300 Multiple Choices 301 Moved
+Permanently 302 Moved Temporarily 303 Method 304 Not
+Modified 401 Unauthorized 402 Payment Required 403 Forbidden
+404 Not Found 405 Method Not Allowed 406 None Acceptable 407
+Proxy Authentication Required 408 Request Time-out 409
+Conflict 410 Gone 501 Not Implemented 502 Bad Gateway 503
+Service Unavailable 504 Gateway Time-out
+<b>ns_connsendfp</b></p>
+
+<p style="margin-left:22%;">This function writes len bytes
+of the specified channel or file to the conn.</p>
+
+<p style="margin-left:11%;"><b>ns_return</b></p>
+
+<p style="margin-left:22%;">Sends back both the headers and
+the string.</p>
+
+
+<p style="margin-left:11%;"><b>ns_returnadminnotice</b></p>
+
+<p style="margin-left:22%;">Wraps the text msg and longmsg
+in some html, appends a line with a link to
+&quot;mailto:serveradministrator&quot; based on the virtual
+server parameter &quot;WebMaster&quot;.</p>
+
+<p style="margin-left:11%;"><b>ns_returnbadrequest</b></p>
+
+<p style="margin-left:22%;">Returns a 400 status code and a
+formatted HTML message containing the reason text.</p>
+
+<p style="margin-left:11%;"><b>ns_returnerror</b></p>
+
+<p style="margin-left:22%;">Wraps the text msg in some html
+and returns that to the client.</p>
+
+<p style="margin-left:11%;"><b>ns_returnfile</b></p>
+
+<p style="margin-left:22%;">Sends back the headers and the
+contents of the file.</p>
+
+<p style="margin-left:11%;"><b>ns_returnforbidden</b></p>
+
+<p style="margin-left:22%;">Returns a 403 status code.</p>
+
+<p style="margin-left:11%;"><b>ns_returnfp</b></p>
+
+<p style="margin-left:22%;">First sends the appropriate
+headers. Next, it writes out the contents of file from the
+current file position until the end of the file.</p>
+
+<p style="margin-left:11%;"><b>ns_returnnotfound</b></p>
+
+<p style="margin-left:22%;">Returns a 404 status code.</p>
+
+<p style="margin-left:11%;"><b>ns_returnnotice</b></p>
+
+<p style="margin-left:22%;">Wraps teh text msg and longmsg
+in some html and returns that to the client.</p>
+
+<p style="margin-left:11%;"><b>ns_returnredirect</b></p>
+
+<p style="margin-left:22%;">Returns a redirect to the
+passed in location</p>
+
+
+<p style="margin-left:11%;"><b>ns_returnunauthorized</b></p>
+
+<p style="margin-left:22%;">Returns a 401 status code</p>
+
+<p style="margin-left:11%;"><b>ns_write</b></p>
+
+<p style="margin-left:22%;">Writes the string out the
+connection. You can use it instead of the ns_return or
+ns_respond functions to build HTTP responses. AOLserver will
+not include the usual headers on the output data. The script
+does not end at the time ns_write* is invoked so you can
+continue processing data after the client has gotten the
+data and closed the socket.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_respond(n),
+ns_writefp(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

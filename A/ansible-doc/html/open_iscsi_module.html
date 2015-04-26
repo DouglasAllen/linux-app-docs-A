@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>open_iscsi - Manage iscsi targets with open-iscsi &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="System Modules" href="list_of_system_modules.html" />
+    <link rel="next" title="ping - Try to connect to host and return pong on success." href="ping_module.html" />
+    <link rel="prev" title="ohai - Returns inventory data from Ohai" href="ohai_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ping_module.html" title="ping - Try to connect to host and return pong on success."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ohai_module.html" title="ohai - Returns inventory data from Ohai"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" accesskey="U">System Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="open-iscsi-manage-iscsi-targets-with-open-iscsi">
+<span id="open-iscsi"></span><h1>open_iscsi - Manage iscsi targets with open-iscsi<a class="headerlink" href="#open-iscsi-manage-iscsi-targets-with-open-iscsi" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Serge van Ginderachter</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>Discover targets on given portal, (dis)connect targets, mark targets to manually or auto start, return device nodes of connected targets.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>auto_node_startup</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>True</li><li>False</li></ul></td>
+    <td>whether the target node should be automatically connected at startup</td>
+</tr>
+        <tr>
+<td>discover</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>True</li><li>False</li></ul></td>
+    <td>whether the list of target nodes on the portal should be (re)discovered and added to the persistent iscsi database. Keep in mind that iscsiadm discovery resets configurtion, like node.startup to manual, hence combined with auto_node_startup=yes will allways return a changed state.</td>
+</tr>
+        <tr>
+<td>login</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>True</li><li>False</li></ul></td>
+    <td>whether the target node should be connected</td>
+</tr>
+        <tr>
+<td>node_auth</td>
+<td>no</td>
+<td>CHAP</td>
+    <td><ul></ul></td>
+    <td>discovery.sendtargets.auth.authmethod</td>
+</tr>
+        <tr>
+<td>node_pass</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>discovery.sendtargets.auth.password</td>
+</tr>
+        <tr>
+<td>node_user</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>discovery.sendtargets.auth.username</td>
+</tr>
+        <tr>
+<td>port</td>
+<td>no</td>
+<td>3260</td>
+    <td><ul></ul></td>
+    <td>the port on which the iscsi target process listens</td>
+</tr>
+        <tr>
+<td>portal</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the ip address of the iscsi target</td>
+</tr>
+        <tr>
+<td>show_nodes</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>True</li><li>False</li></ul></td>
+    <td>whether the list of nodes in the persistent iscsi database should be returned by the module</td>
+</tr>
+        <tr>
+<td>target</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the iscsi target name</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires open_iscsi library and tools (iscsiadm)</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>perform a discovery on 10.1.2.3 and show available target nodes</p>    <p>
+<pre>
+open_iscsi: show_nodes=yes discover=yes portal=10.1.2.3
+</pre>
+</p>
+<p>discover targets on portal and login to the one available (only works if exactly one target is exported to the initiator)</p>    <p>
+<pre>
+open_iscsi: portal={{iscsi_target}} login=yes discover=yes
+</pre>
+</p>
+<p>connect to the named target, after updating the local persistent database (cache)</p>    <p>
+<pre>
+open_iscsi: login=yes target=iqn.1986-03.com.sun:02:f8c1f9e0-c3ec-ec84-c9c9-8bfb0cd5de3d
+</pre>
+</p>
+<p>discconnect from the cached named target</p>    <p>
+<pre>
+open_iscsi: login=no target=iqn.1986-03.com.sun:02:f8c1f9e0-c3ec-ec84-c9c9-8bfb0cd5de3d&#34;
+</pre>
+</p>
+<br/></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">open_iscsi - Manage iscsi targets with open-iscsi</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ohai_module.html"
+                        title="previous chapter">ohai - Returns inventory data from <em>Ohai</em></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ping_module.html"
+                        title="next chapter">ping - Try to connect to host and return <tt class="docutils literal"><span class="pre">pong</span></tt> on success.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ping_module.html" title="ping - Try to connect to host and return pong on success."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ohai_module.html" title="ohai - Returns inventory data from Ohai"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" >System Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

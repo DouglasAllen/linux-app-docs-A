@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+AFNIX Cross Debugger</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+AFNIX Cross Debugger</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+axd [client]</div>
+<hr/>
+<p class="elem">
+Synopsis</p>
+<pre class="frame">
+<![CDATA[axd [options] file
+
+]]></pre>
+<p class="elem">
+Options</p>
+<div class="frame">
+<i>h</i><hr/>
+<p class="text">
+
+	prints the help message
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>v</i><hr/>
+<p class="text">
+
+	prints the program version
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>i</i><i> (path)</i><hr/>
+<p class="text">
+
+	add a directory path to the resolver
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>e</i><i> (mode)</i><hr/>
+<p class="text">
+
+	force the encoding mode
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>f</i><i> (runini)</i><hr/>
+<p class="text">
+
+	run initial file
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>f</i><i> (emacs)</i><hr/>
+<p class="text">
+
+	enable emacs mode
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>f</i><i> (assert)</i><hr/>
+<p class="text">
+
+	enable assertion checking
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>f</i><i> (noseed)</i><hr/>
+<p class="text">
+
+	do not seed the random engine
+      </p>
+</div>
+<p/>
+<div class="frame">
+<i>f</i><i> (seed)</i><hr/>
+<p class="text">
+
+	seed the random engine
+      </p>
+</div>
+<p/>
+<p class="elem">
+Description</p>
+<p class="text">
+<i class="product">axd</i> invokes the AFNIX cross debugger. The <i class="product">axd</i> client permits to debug an AFNIX program by inserting breakpoint at strategic positions in the source code. During a debugging session, when a breakpoint is reached, the program is suspended and the debugger prompt is shown. Since the debugger is based on the AFNIX interpreter, the full power of the AFNIX interpreter is available at the debugger prompt. </p>
+<p class="elem">
+Version</p>
+<p class="text">
+ The current version is the 2.2.0 release. </p>
+<p class="elem">
+See also</p>
+<p class="text">
+<a href="axc.xht">
+axc</a>
+, <a href="axi.xht">
+axd</a>
+, <a href="axl.xht">
+axl</a>
+, </p>
+<p class="elem">
+Notes</p>
+<p class="text">
+AFNIX comes with an extensive documentation. The documentation is available <a href="http://www.afnix.org">
+online</a>
+ or in the <tt class="path">doc</tt> directory in the form of formatted xhtml documents. </p>
+<p class="elem">
+Author</p>
+<p class="text">
+<i class="product">axd</i> has been written by <a href="mailto:amaury@afnix.org">
+Amaury Darsch</a>
+. </p>
+<hr/>
+<div class="chapter">
+Getting started</div>
+<hr/>
+<p class="text">
+ This chapter is short introduction to the cross debugger or <i class="product">axd</i>. The debugger is a special interpreter that is designed to help the developer to trace an application. The debugger is designed to operate in a stand-alone mode or with <i class="product">Emacs</i>. If you plan to use the debugger with <i class="product">Emacs</i>, you will have to install a <i class="package">gud-mode</i> package. </p>
+<div class="section">
+A sample debugger session</div>
+<p class="text">
+ The cross debugger or <i class="product">axd</i> is a special interpreter that gives the developer the opportunity to trace an application and examine the object contents during the execution. Operations normally available in a debugger are available with <i class="product">axd</i>. Such operations include breakpoints, stepping, stack tracing, and many others. Because <i class="product">axd</i> is built on top of the interpreter, all standard operations are supported by the debugger. </p>
+<p class="subsect">
+Starting the debugger</p>
+<p class="text">
+ The debugger is started with the command <tt class="command">axd</tt>. Within <i class="product">Emacs</i>, the command <tt class="command">Meta-x axd</tt> will do the same. When the debugger is started, an <em>axd</em> prompt is displayed. At this stage, there is no difference with the standard interpreter, except that a new <em>nameset</em> called <em>axd</em> is defined with all debugger commands. The <tt class="code">axd:quit</tt> or <tt class="code">axd:quit</tt> commands will terminate the session. </p>
+<pre class="frame">
+<![CDATA[zsh> axd
+(axd)axd:quit
+
+]]></pre>
+<p class="subsect">
+Debugger commands</p>
+<p class="text">
+ All debugger commands are located in the <em>axd</em> nameset. For example, the command to set a breakpoint is <tt class="code">axd:break</tt>. Since typing such command can be annoying, it is possible to rebind them at your convenience. For example, the form <tt class="code">const b axd:break</tt> will define the symbol <tt class="code">b</tt> as the breakpoint command, but care should be taken with this approach if your program uses the same symbol. </p>
+<p class="subsect">
+Debugging session example</p>
+<p class="text">
+ The first example that demonstrates the use of <i class="product">axd</i> is located in the directory <tt class="path">exp/ref</tt>, that is part of this distribution. The platform information example <tt class="file">0501.als</tt> will be used for illustration. A simple session and the original source code is given below. </p>
+<pre class="frame">
+<![CDATA[zsh> axi 0501.als
+major version number   : 
+minor version number   : 
+patch version number   : 
+interpreter version    : ..
+program name           : afnix
+operating system name  : linux
+operating system type  : unix
+afnix official uri     : http://www.afnix.org
+
+]]></pre>
+<p class="text">
+ The source code for this example is given below. </p>
+<pre class="frame">
+<![CDATA[# many comments before
+println "major version number   : " interp:major-version
+println "minor version number   : " interp:minor-version
+println "patch version number   : " interp:patch-version
+println "interpreter version    : " interp:version
+println "program name           : " interp:program-name
+println "operating system name  : " interp:os-name
+println "operating system type  : " interp:os-type
+println "afnix official url     : " interp:afnix-uri
+
+]]></pre>
+<p class="text">
+ The debugger is started with the file to debug. The <tt class="code">axd:info</tt> command can be used to print some information. </p>
+<pre class="frame">
+<![CDATA[zsh> axd 0501.als
+(axd) axd:info
+debugger version    : ..
+os name             : linux
+os type             : unix
+initial file        : 0501.als
+form file name      : 0501.als
+form line number    : 17
+verbose mode        : true
+max line display    : 10
+defined breakpoints : 0
+(axd)
+
+]]></pre>
+<p class="text">
+ Along with the version, initial file name and other information, is the <em>form file name</em> and the <em>form line number</em> that indicates where the debugger is position. Another way to get this information is with the <tt class="code">axd:list</tt> command that display the file at its current break position. </p>
+<pre class="frame">
+<![CDATA[(axd) axd:list
+17    println "major version number   : " interp:major-version
+18    println "minor version number   : " interp:minor-version
+19    println "patch version number   : " interp:patch-version
+20    println "interpreter version    : " interp:version
+21    println "program name           : " interp:program-name
+22    println "operating system name  : " interp:os-name
+23    println "operating system type  : " interp:os-type
+24    println "afnix official uri     : " interp:afnix-uri
+25    
+26
+(axd)
+
+]]></pre>
+<p class="text">
+ With this in place it is possible to run the program. The <tt class="code">axd:run</tt> command will do the job, but will not give you the opportunity to do something since there is no breakpoint installed. So, installing a breakpoint is simply achieved by giving the file name and line number. To make life easier, the <tt class="code">axd:break</tt> command takes also 0 or argument. Without argument, a breakpoint is set at the current position. With one integer argument, a breakpoint is set at the specified line in the current file. If the verbose mode is active (which is the default), a message is printed to indicate the breakpoint index. </p>
+<pre class="frame">
+<![CDATA[(axd) axd:break 19
+setting breakpoint 0 in file 0501.als at line 19
+(axd)axd:run
+major version number   : 
+minor version number   : 
+breakpoint 0 in file 0501.als at line 19
+(axd)
+
+]]></pre>
+<p class="text">
+ The <tt class="code">axd:run</tt> command starts the program and immediately stops at the breakpoint. Note that the debugger prints a message to indicate the cause of such break. After this, stepping is achieved with the <tt class="code">axd:next</tt> command. Resuming the execution is done with the <tt class="code">axd:continue</tt> command. The <tt class="code">axd:exit</tt> or <tt class="code">axd:quit</tt> command terminates the session. </p>
+<pre class="frame">
+<![CDATA[(axd)axd:next
+patch version number   : 
+(axd)axd:next
+interpreter version    : --
+(axd)axd:continue
+program name           : axd
+operating system name  : linux
+operating system type  : unix
+afnix official uri     : http://www.afnix.org
+(axd)axd:quit
+
+]]></pre>
+<hr/>
+<div class="chapter">
+Using the debugger</div>
+<hr/>
+<p class="text">
+ This chapter describes in detail the usage of the cross debugger or <i class="product">axc</i>. The debugger is a special application that is built on top of the interpreter. For this reason, the debugger provides the full execution environment with special commands bound into a dedicated nameset. </p>
+<div class="section">
+Invocation and termination</div>
+<p class="text">
+ The <i class="product">axd</i> debugger is started by typing the command <tt class="command">axd</tt>. Once started, the debugger reads the commands from the terminal. Since the debugger is built on top of the interpreter, any command is in fact a special form that is executed by the interpreter. The natural way to invoke the debugger is to pass the primary file to debug with eventually some arguments. </p>
+<pre class="frame">
+<![CDATA[zsh> axd PROGRAM [arguments]
+
+]]></pre>
+<p class="text">
+ When the debugger is started, a prompt <em>'(axd)'</em> indicates that the session is running. The debugger session is terminated with the commands <tt class="code">axd:exit</tt> or <tt class="code">axd:quit</tt>. </p>
+<pre class="frame">
+<![CDATA[zsh> axd PROGRAM
+(axd) axd:quit
+zsh>
+]]></pre>
+<p class="subsect">
+Debugger options</p>
+<p class="text">
+ The available options can be seen with the <tt class="option">h</tt> option and the current version with the <tt class="option">v</tt> option. This mode of operations is similar to the one found with the interpreter. </p>
+<pre class="frame">
+<![CDATA[zsh> axd [h]
+usage: axd [options] [file] [arguments]
+[h]              print this help message
+[v]              print version information
+[i] path         add a path to the resolver
+[e   mode]       force the encoding mode
+[f runini]       run initial file
+[f  emacs]       enable emacs mode
+[f assert]       enable assertion checks
+[f nopath]       do not set initial path
+
+]]></pre>
+<p class="subsect">
+Running the program</p>
+<p class="text">
+ When a program is run within the debugger, a primary file must be used to indicate where to start the program. The file name can be given either as an <tt class="command">axd</tt> command argument or with the <tt class="code">axd:load</tt> command. The first available form in the primary file is used as the program starting point. </p>
+<p class="subsect">
+Loading the program</p>
+<p class="text">
+ The <tt class="code">axd:load</tt> command loads the primary file and mark the first available form as the starting form for the program execution. The command takes a file name as its first argument. The resolver rule apply for the file name resolution. </p>
+<ul class="text">
+<li>
+
+	  If the string name has the .als extension, the
+	  string is considered to be the file name.
+	</li>
+<li>
+
+	  If the string name has the .axc extension or no
+	  extension, the string is used to search a file that has a
+	  .als extension or that belongs to a librarian.
+	</li>
+</ul>
+<p class="text">
+ Note that these operations are also dependent on the <tt class="option">i</tt> option that adds a path or a librarian to the search-path. </p>
+<p class="subsect">
+Starting the program</p>
+<p class="text">
+ The <tt class="code">axd:run</tt> command starts the program at the first available form in the primary file. The program is executed until a breakpoint or any other halting condition is reached. Generally, when the program execution is suspended, an entry into the debugger is done and the prompt is shown at the command line. </p>
+<pre class="frame">
+<![CDATA[(axd)axd:run
+
+]]></pre>
+<p class="text">
+ The <tt class="code">axd:run</tt> is the primary command to execute before the program can be debugged. Eventually, a file name can be used as the primary file to execute. </p>
+<pre class="frame">
+<![CDATA[(axd)axd:run "test.als"
+
+]]></pre>
+<p class="subsect">
+Setting program arguments</p>
+<p class="text">
+ Since the debugger is built on top of the interpreter, it is possible to set directly the argument vector. The argument vector is bound to the interpreter with the qualified name <tt class="code">interp:argv</tt>. The standard vector can be used to manipulate the argument vector. </p>
+<pre class="frame">
+<![CDATA[(axd)interp:argv:reset
+(axd)interp:argv:append "hello"
+
+]]></pre>
+<p class="text">
+ In this example, the interpreter argument vector is reset and then a single argument string is added to the vector. If one wants to see the interpreter argument vector, a simple procedure can be used as shown below. </p>
+<pre class="frame">
+<![CDATA[const argc (interp:argv:length)
+loop (trans i 0) (< i argc) (i:++) {
+  trans arg (interp:argv:get i)
+  println "argv[" i "] = " arg
+}
+
+]]></pre>
+<div class="section">
+Breakpoints operations</div>
+<p class="text">
+ Breakpoints are set with the <tt class="code">axd:break</tt> command. If a breakpoint is reached during the program execution, the program is suspended and the debugger session is resumed with a command prompt. At the command prompt, the full interpreter is available. It permits to examine symbols. </p>
+<p class="subsect">
+Breakpoint command</p>
+<p class="text">
+ The <tt class="code">axd:break</tt> command sets a breakpoint in a file at a specified line number. If the file is not specified, the primary file is used instead. If the line number is not specified, the first available form in the current file is used. </p>
+<pre class="frame">
+<![CDATA[(axd) axd:break "demo.als" 12
+Setting breakpoint 0 in file demo.als at line 12
+
+]]></pre>
+<p class="text">
+ In this example, a breakpoint is set in the file <tt class="file">demo.als</tt> at the line number 12. The file name does not have to be the primary file. If another file name is specified, the file is loaded, instrumented and the breakpoint is set. </p>
+<p class="subsect">
+Viewing breakpoints</p>
+<p class="text">
+ The <tt class="code">axd:break-info</tt> command reports some information about the current breakpoint setting. </p>
+<pre class="frame">
+<![CDATA[(axd) axd:break "demo.als" 12
+(axd) axd:break "test.als" 18
+(axd) axd:break-info
+Breakpoint 0 in file demo.als at line 12
+Breakpoint 1 in file test.als at line 18
+
+]]></pre>
+<p class="subsect">
+Resuming execution</p>
+<p class="text">
+ The <tt class="code">axd:continue</tt> command resumes the program execution after a breakpoint. The program execution continues until another breaking condition is reached or the program terminates. </p>
+<pre class="frame">
+<![CDATA[(axd) axd:run
+Breakpoint 0 in file demo.als at line 12
+(axd) axd:continue
+
+]]></pre>
+<p class="text">
+ In this example, the program is run and stopped at breakpoint 0. The <tt class="code">axd:continue</tt> command resumes the program execution. </p>
+<hr/>
+<div class="appendix">
+Debugger control reference</div>
+<hr/>
+<p class="text">
+ This appendix is a reference of the cross debugger or <i class="product">axd</i>. The cross debugger is started with the <tt class="command">axd</tt> command. All control commands are bound to the <tt class="code">axd</tt> nameset. </p>
+<p/>
+<div class="elem">
+break</div>
+<p class="text">
+ The <tt class="code">axd:break</tt>break command sets a breakpoint. Without argument a breakpoint is set in the current file at the current line. With a line number, the breakpoint is set in the current file. With two arguments, the first one is used as the file name and the second one is used as the line number. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:break
+axd:break "line"
+axd:break "file" "line"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:break "demo.als"  12
+(axd) axd:break 25
+
+]]></pre>
+<p class="text">
+ The first example sets a breakpoint in the file <tt class="file">demo.als</tt> at line 12. The second example sets a breakpoint in the current file at line 25. Without argument, the command sets the breakpoint at the current line. The current line can be seen with the <tt class="code">axd:info</tt> command. </p>
+<p/>
+<div class="elem">
+break-info</div>
+<p class="text">
+ The <tt class="code">axd:break-info</tt> control command reports some information about the current breakpoints. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:break-info
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:break "demo.als" 12
+(axd) axd:break "test.als" 18
+(axd) axd:break-info
+Breakpoint 0 in file demo.als at line 12
+Breakpoint 1 in file test.als at line 18
+
+]]></pre>
+<p class="text">
+ In this example, two breakpoints are set. One in file <tt class="file">demo.als</tt> at line 12 and one in file <tt class="file">test.als</tt> at line 18. The <tt class="code">axd:break-info</tt> command reports the current breakpoint settings. </p>
+<p/>
+<div class="elem">
+continue</div>
+<p class="text">
+ The <tt class="code">axd:continue</tt> control command resumes the program execution after a breakpoint. The program execution continues until a breakpoint or another terminating condition is reached. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:continue
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:run
+Breakpoint 0 in file demo.als at line 12
+(axd) axd:continue
+
+]]></pre>
+<p class="text">
+ In this example, the program is run and stopped at breakpoint 0. The <tt class="code">axd:continue</tt> command resumes the program execution. </p>
+<p/>
+<div class="elem">
+exit</div>
+<p class="text">
+ The <tt class="code">axd:exit</tt> command terminates a debugger session. This command is similar to the <tt class="code">axd:quit</tt> command. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:exit
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:exit
+
+]]></pre>
+<p/>
+<div class="elem">
+info</div>
+<p class="text">
+ The <tt class="code">axd:info</tt> command reports some debugger information. Such information includes the debugger version, the operating system, the primary input file, the primary input file source and more. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:info
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:info
+debugger version    : ..
+os name             : linux
+os type             : unix
+initial file        : 0501
+form file name      : 0501.als
+form line number    : 17
+verbose mode        : true
+max line display    : 10
+defined breakpoints : 0
+
+]]></pre>
+<p/>
+<div class="elem">
+list</div>
+<p class="text">
+ The <tt class="code">axd:list</tt> command display the form listing starting at the current session line number. The current form line number can also be seen with the <tt class="code">axd:info</tt> command. The number of line is a debugger parameter. The first line to display can also be set as the first parameter. A file name can also be set. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:list
+axd:list "line"
+axd:list "file" "line"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:list
+(axd) axd:list 20
+(axd) axd:list "file.als" 20
+
+]]></pre>
+<p class="text">
+ The first example shows the listing at the current debugger line. The second example starts the listing at line 20. The third example starts at line 20 with file <tt class="file">file.als</tt>. </p>
+<p/>
+<div class="elem">
+load</div>
+<p class="text">
+ The <tt class="code">axd:load</tt> command sets the <em>initial</em> or default file to be used with the <tt class="code">axd:run</tt> control command. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:load "file"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:load "demo.als"
+
+]]></pre>
+<p class="text">
+ In this example, the file <tt class="file">demo.als</tt> is set as the primary file. Using the <tt class="code">axd:info</tt> command will report at which line, the first available form has been found. </p>
+<p/>
+<div class="elem">
+next</div>
+<p class="text">
+ The <tt class="code">axd:next</tt> command executes the next line in the source file. The <tt class="code">axd:next</tt> command does not take argument. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:next
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:next
+
+]]></pre>
+<p/>
+<div class="elem">
+quit</div>
+<p class="text">
+ The <tt class="code">axd:quit</tt> command terminates a debugger session. This command is similar to the <tt class="code">axd:exit</tt> command. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:quit
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:quit
+
+]]></pre>
+<p/>
+<div class="elem">
+run</div>
+<p class="text">
+ The <tt class="code">axd:run</tt> command executes the default file in the slave interpreter. Without argument, the <em>initial</em> or default file is executed. The <tt class="code">axd:load</tt> command can be used to set the <em>initial file</em>. With one argument, the file name argument is used as the <em>initial file</em>. </p>
+<p class="elem">
+Syntax</p>
+<pre class="frame">
+<![CDATA[axd:run
+axd:run "file"
+
+]]></pre>
+<p class="elem">
+Example</p>
+<pre class="frame">
+<![CDATA[(axd) axd:run
+(axd) axd:run "demo.als"
+
+]]></pre>
+<p class="text">
+ The first example runs the initial file. The second example sets the initial file as <tt class="file">demo.als</tt> and run it. </p>
+</body>
+</html>

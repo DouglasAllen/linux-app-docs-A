@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Delegation, Rolling Updates, and Local Actions &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Playbooks: Special Topics" href="playbooks_special_topics.html" />
+    <link rel="next" title="Setting the Environment (and Working With Proxies)" href="playbooks_environment.html" />
+    <link rel="prev" title="Check Mode (“Dry Run”)" href="playbooks_checkmode.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="playbooks_environment.html" title="Setting the Environment (and Working With Proxies)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_checkmode.html" title="Check Mode (“Dry Run”)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" accesskey="U">Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="delegation-rolling-updates-and-local-actions">
+<h1><a class="toc-backref" href="#id6">Delegation, Rolling Updates, and Local Actions</a><a class="headerlink" href="#delegation-rolling-updates-and-local-actions" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#delegation-rolling-updates-and-local-actions" id="id6">Delegation, Rolling Updates, and Local Actions</a><ul>
+<li><a class="reference internal" href="#rolling-update-batch-size" id="id7">Rolling Update Batch Size</a></li>
+<li><a class="reference internal" href="#maximum-failure-percentage" id="id8">Maximum Failure Percentage</a></li>
+<li><a class="reference internal" href="#delegation" id="id9">Delegation</a></li>
+<li><a class="reference internal" href="#run-once" id="id10">Run Once</a></li>
+<li><a class="reference internal" href="#local-playbooks" id="id11">Local Playbooks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Being designed for multi-tier deployments since the beginning, Ansible is great at doing things on one host on behalf of another, or doing local steps with reference to some remote hosts.</p>
+<p>This in particular is very applicable when setting up continuous deployment infrastructure or zero downtime rolling updates, where you might be talking with load balancers or monitoring systems.</p>
+<p>Additional features allow for tuning the orders in which things complete, and assigning a batch window size for how many machines to process at once during a rolling update.</p>
+<p>This section covers all of these features.  For examples of these items in use, <a class="reference external" href="http://github.com/ansible/ansible-examples/">please see the ansible-examples repository</a>. There are quite a few examples of zero-downtime update procedures for different kinds of applications.</p>
+<p>You should also consult the <a class="reference internal" href="modules.html"><em>About Modules</em></a> section, various modules like &#8216;ec2_elb&#8217;, &#8216;nagios&#8217;, and &#8216;bigip_pool&#8217;, and &#8216;netscaler&#8217; dovetail neatly with the concepts mentioned here.</p>
+<p>You&#8217;ll also want to read up on <a class="reference internal" href="playbooks_roles.html"><em>Playbook Roles and Include Statements</em></a>, as the &#8216;pre_task&#8217; and &#8216;post_task&#8217; concepts are the places where you would typically call these modules.</p>
+<div class="section" id="rolling-update-batch-size">
+<span id="id1"></span><h2><a class="toc-backref" href="#id7">Rolling Update Batch Size</a><a class="headerlink" href="#rolling-update-batch-size" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.7.</span></p>
+<p>By default, Ansible will try to manage all of the machines referenced in a play in parallel.  For a rolling updates
+use case, you can define how many hosts Ansible should manage at a single time by using the &#8216;&#8217;serial&#8217;&#8217; keyword:</p>
+<div class="highlight-python"><pre>- name: test play
+  hosts: webservers
+  serial: 3</pre>
+</div>
+<p>In the above example, if we had 100 hosts, 3 hosts in the group &#8216;webservers&#8217;
+would complete the play completely before moving on to the next 3 hosts.</p>
+</div>
+<div class="section" id="maximum-failure-percentage">
+<span id="id2"></span><h2><a class="toc-backref" href="#id8">Maximum Failure Percentage</a><a class="headerlink" href="#maximum-failure-percentage" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.3.</span></p>
+<p>By default, Ansible will continue executing actions as long as there are hosts in the group that have not yet failed.
+In some situations, such as with the rolling updates described above, it may be desirable to abort the play when a
+certain threshold of failures have been reached. To achieve this, as of version 1.3 you can set a maximum failure
+percentage on a play as follows:</p>
+<div class="highlight-python"><pre>- hosts: webservers
+  max_fail_percentage: 30
+  serial: 10</pre>
+</div>
+<p>In the above example, if more than 3 of the 10 servers in the group were to fail, the rest of the play would be aborted.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The percentage set must be exceeded, not equaled. For example, if serial were set to 4 and you wanted the task to abort
+when 2 of the systems failed, the percentage should be set at 49 rather than 50.</p>
+</div>
+</div>
+<div class="section" id="delegation">
+<span id="id3"></span><h2><a class="toc-backref" href="#id9">Delegation</a><a class="headerlink" href="#delegation" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.7.</span></p>
+<p>This isn&#8217;t actually rolling update specific but comes up frequently in those cases.</p>
+<p>If you want to perform a task on one host with reference to other hosts, use the &#8216;delegate_to&#8217; keyword on a task.
+This is ideal for placing nodes in a load balanced pool, or removing them.  It is also very useful for controlling
+outage windows.  Using this with the &#8216;serial&#8217; keyword to control the number of hosts executing at one time is also
+a good idea:</p>
+<div class="highlight-python"><pre>---
+
+- hosts: webservers
+  serial: 5
+
+  tasks:
+
+  - name: take out of load balancer pool
+    command: /usr/bin/take_out_of_pool {{ inventory_hostname }}
+    delegate_to: 127.0.0.1
+
+  - name: actual steps would go here
+    yum: name=acme-web-stack state=latest
+
+  - name: add back to load balancer pool
+    command: /usr/bin/add_back_to_pool {{ inventory_hostname }}
+    delegate_to: 127.0.0.1</pre>
+</div>
+<p>These commands will run on 127.0.0.1, which is the machine running Ansible. There is also a shorthand syntax that you can use on a per-task basis: &#8216;local_action&#8217;. Here is the same playbook as above, but using the shorthand syntax for delegating to 127.0.0.1:</p>
+<div class="highlight-python"><pre>---
+
+# ...
+
+  tasks:
+
+  - name: take out of load balancer pool
+    local_action: command /usr/bin/take_out_of_pool {{ inventory_hostname }}
+
+# ...
+
+  - name: add back to load balancer pool
+    local_action: command /usr/bin/add_back_to_pool {{ inventory_hostname }}</pre>
+</div>
+<p>A common pattern is to use a local action to call &#8216;rsync&#8217; to recursively copy files to the managed servers.
+Here is an example:</p>
+<div class="highlight-python"><pre>---
+# ...
+  tasks:
+
+  - name: recursively copy files from management server to target
+    local_action: command rsync -a /path/to/files {{ inventory_hostname }}:/path/to/target/</pre>
+</div>
+<p>Note that you must have passphrase-less SSH keys or an ssh-agent configured for this to work, otherwise rsync
+will need to ask for a passphrase.</p>
+</div>
+<div class="section" id="run-once">
+<span id="id4"></span><h2><a class="toc-backref" href="#id10">Run Once</a><a class="headerlink" href="#run-once" title="Permalink to this headline">¶</a></h2>
+<p>In some cases there may be a need to only run a task one time and only on one host. This can be achieved
+by configuring &#8220;run_once&#8221; on a task:</p>
+<div class="highlight-python"><pre>---
+# ...
+
+  tasks:
+
+    # ...
+
+    - command: /opt/application/upgrade_db.py
+      run_once: true
+
+    # ...</pre>
+</div>
+<p>This can be optionally paired with &#8220;delegate_to&#8221; to specify an individual host to execute on:</p>
+<div class="highlight-python"><pre>- command: /opt/application/upgrade_db.py
+  run_once: true
+  delegate_to: web01.example.org</pre>
+</div>
+<p>When &#8220;run_once&#8221; is not used with &#8220;delegate_to&#8221; it will execute on the first host, as defined by inventory,
+in the group(s) of hosts targeted by the play. e.g. webservers[0] if the play targeted &#8220;hosts: webservers&#8221;.</p>
+<p>This aproach is similar, although more concise and cleaner than applying a conditional to a task such as:</p>
+<div class="highlight-python"><pre>- command: /opt/application/upgrade_db.py
+  when: inventory_hostname == webservers[0]</pre>
+</div>
+</div>
+<div class="section" id="local-playbooks">
+<span id="id5"></span><h2><a class="toc-backref" href="#id11">Local Playbooks</a><a class="headerlink" href="#local-playbooks" title="Permalink to this headline">¶</a></h2>
+<p>It may be useful to use a playbook locally, rather than by connecting over SSH.  This can be useful
+for assuring the configuration of a system by putting a playbook on a crontab.  This may also be used
+to run a playbook inside an OS installer, such as an Anaconda kickstart.</p>
+<p>To run an entire playbook locally, just set the &#8220;hosts:&#8221; line to &#8220;hosts:127.0.0.1&#8221; and then run the playbook like so:</p>
+<div class="highlight-python"><pre>ansible-playbook playbook.yml --connection=local</pre>
+</div>
+<p>Alternatively, a local connection can be used in a single playbook play, even if other plays in the playbook
+use the default remote connection type:</p>
+<div class="highlight-python"><pre>- hosts: 127.0.0.1
+  connection: local</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>An introduction to playbooks</dd>
+<dt><a class="reference external" href="http://github.com/ansible/ansible-examples">Ansible Examples on GitHub</a></dt>
+<dd>Many examples of full-stack deployments</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-devel">User Mailing List</a></dt>
+<dd>Have a question?  Stop by the google group!</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Delegation, Rolling Updates, and Local Actions</a><ul>
+<li><a class="reference internal" href="#rolling-update-batch-size">Rolling Update Batch Size</a></li>
+<li><a class="reference internal" href="#maximum-failure-percentage">Maximum Failure Percentage</a></li>
+<li><a class="reference internal" href="#delegation">Delegation</a></li>
+<li><a class="reference internal" href="#run-once">Run Once</a></li>
+<li><a class="reference internal" href="#local-playbooks">Local Playbooks</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="playbooks_checkmode.html"
+                        title="previous chapter">Check Mode (&#8220;Dry Run&#8221;)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="playbooks_environment.html"
+                        title="next chapter">Setting the Environment (and Working With Proxies)</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="playbooks_environment.html" title="Setting the Environment (and Working With Proxies)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_checkmode.html" title="Check Mode (“Dry Run”)"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" >Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

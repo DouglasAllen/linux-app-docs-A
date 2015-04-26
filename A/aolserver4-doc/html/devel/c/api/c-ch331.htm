@@ -1,0 +1,81 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_SetIFind</TITLE>
+<LINK rel=Previous href="c-ch330.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch332.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch330.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch332.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="130277">
+</a><h3>Ns_SetIFind</h3>
+<a name="130278">
+</a><h4>Overview</h4>
+Locate the index of a field case-insensitively
+<a name="41053">
+</a><a name="133328">
+</a><h4>Syntax</h4>
+<pre>    <a name="41055"></a>int Ns_SetIFind(
+    <a name="41056"></a>Ns_Set *set,
+    <a name="41057"></a>char *key
+    <a name="41058"></a>);
+</pre><p><a name="134750">
+</a><h4>Description</h4>
+<p><a name="41060">
+</a>The Ns_SetIFind function is the case-insensitive counterpart of the Ns_SetFind function. It returns the index of the first field whose key name matches the given <code>key</code> <i>case-insensitively</i>. The index is in C array order, i.e., 0 is the index of the first field. If no fields are found, Ns_SetIFind returns -1. If more than one field in the set has the same key name, Ns_SetIFind returns just the first field index.</p>
+<a name="232442">
+</a><h4>Examples</h4>
+<pre>    <a name="232443"></a>Ns_Set *aSet;
+    <a name="232444"></a>int index;
+    <a name="232445"></a>
+    <a name="232446"></a>aSet = Ns_SetCreate("");
+    <a name="232447"></a>Ns_SetPut(aSet, "Foo", "foovalue");
+    <a name="232448"></a>Ns_SetPut(aSet, "Bar", "barvalue");
+    <a name="232449"></a>index = Ns_SetIFind(aSet, "foo"); /* case insensitive search*/
+    <a name="232450"></a>if (index == -1) {
+    <a name="232451"></a>	Ns_Log(Warning, "set key foo not found");
+    <a name="232452"></a>} else {
+    <a name="232453"></a>	Ns_Log(Notice, "Value for Foo is %s", 
+    <a name="232454"></a>			Ns_SetGet(aSet, "ooo"));
+    <a name="232455"></a>}
+    <a name="232456"></a>Ns_SetFree(aSet);
+</pre><p><p><a name="232457">
+</a></p>
+<p><a name="232440">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch330.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch332.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

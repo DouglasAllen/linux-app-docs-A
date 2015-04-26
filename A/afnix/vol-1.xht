@@ -1,0 +1,3218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+AFNIX Programmer's guide</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+AFNIX Programmer's guide</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Getting started</div>
+<hr/>
+<p class="text">
+AFNIX is a multi-threaded functional engine with dynamic symbol bindings that supports the object oriented paradigm. The system features a state of the art runtime engine that runs on both 32 and 64 bits platforms. The system specification offers a rich syntax that makes the functional programming a pleasant activity. When the interpreter is used interactively, <em>text</em> is entered on the command line and executed when a complete and valid syntactic object has been constructed. Alternatively, the interpreter can execute a source file or operates with an input stream. </p>
+<p class="text">
+AFNIX is a comprehensive set of application clients, modules and services. The original distribution contains the core interpreter with additional clients like the compiler, the librarian and the debugger. The distribution contains also a rich set of modules that are dedicated to a particular domain. The basic modules are the standard i/o module, the system module and the networking module. Above modules are services. A service is another extension of the engine that provides extra functionalities with help of several modules. This hierarchy is strictly enforced in the system design and provides a clear functional separation between application domain. When looking for a particular feature, it is always a good idea to think in term of module or service functionality. </p>
+<p class="text">
+AFNIX operates with a set of keywords and predicates. The engine has a native Unicode database. The set of standard objects provides support for integers, real numbers, strings, characters and boolean. Various containers like list, vector, hash table, bitset, and graphs are also available in the core distribution. The syntax incorporates the concept of lambda expression with explicit closure. Symbol scope limitation within a lambda expression is a feature called gamma expression. Form like notation with an easy block declaration is also another extension with respect to other system. The object model provides a single inheritance mechanism with dynamic symbol resolution. Special features include instance parenting, class binding instance inference and deference. Native class derivation and method override is also part of the object model with fixed class objects and forms. The engine incorporates an original regular expression engine with group matching, exact or partial match and substitution. An advanced exception engine is also provided with native run-time compatibility. </p>
+<p class="text">
+AFNIX implements a true multi-threaded engine with an automatic object protection mechanism against concurrent access. A read and write locking system which operates with the thread engine is also built in the core system. The object memory management is automatic inside the core interpreter. Finally, the engine is written in C++ and provides runtime compatibility with it. Such compatibility includes the ability to instantiate C++ classes, use virtual methods and raise or catch exceptions. A comprehensive programming interface has been designed to ease the integration of foreign libraries. </p>
+<div class="section">
+First contact</div>
+<p class="text">
+ The fundamental syntactic object is a <em>form</em>. A form is parsed and immediately executed by the interpreter. A form is generally constructed with a function name and a set of arguments. The process of executing a form is called the <em>evaluation</em>. The next example illustrates one of the simplest form which is supported by the engine. This form simply displays the message <em>hello world</em>.</p>
+<p class="subsect">
+Hello world</p>
+<p class="text">
+ At the interpreter prompt, a form is constructed with the special object <tt class="code">println</tt>. The unique argument is a string which is placed between double quotes. </p>
+<pre class="frame">
+<![CDATA[(axi) println "Hello World"
+Hello World
+
+]]></pre>
+<p class="text">
+ The interpreter can be invoked to enter one or several forms interactively. The form can also be placed in a text file and the interpreted called to execute it. The <tt class="extn">als</tt> is the referred extension for a text file, but it can be anything. A simple session which executes the above file -- assuming the original file is called <tt class="file">hello.als</tt> -- is shown below.</p>
+<pre class="frame">
+<![CDATA[zsh> axi hello.als
+Hello World
+
+]]></pre>
+<p class="text">
+ In interactive mode, the interpreter waits for a form. When a form is successfully constructed, it is then immediately executed by the engine. Upon completion, the interpreter prompt is displayed and the interpreter is ready to accept a new form. A session is terminated by typing <tt class="command">ctrl-d</tt>. Another way to use the engine is to call the compiler client called <i class="product">axc</i>, and then invoke the interpreter with the compiled file. The interpreter assumes the <tt class="extn">.axc</tt> extension for compiled file and will automatically figure out which file to execute when a file name is given without an extension. </p>
+<pre class="frame">
+<![CDATA[zsh> axc hello.als
+zsh> axi hello.axc
+Hello World
+zsh> axi hello
+Hello World
+
+]]></pre>
+<p class="text">
+ The order of search is determined by a special system called the <em>file resolver</em>. Its behavior is described in a special chapter of this manual. </p>
+<p class="subsect">
+Interpreter command</p>
+<p class="text">
+ The interpreter can be invoked with several options, a file to execute and some program arguments. The <tt class="option">h</tt> option prints the various interpreter options. </p>
+<pre class="frame">
+<![CDATA[zsh> axi -h
+usage: axi [options] [file] [arguments]
+[h]           print this help message
+[v]           print system version
+[m]           enable the start module
+[i   path]    add a resolver path
+[e   mode]    force the encoding mode
+[f assert]    enable assertion checks
+[f nopath]    do not set initial path
+[f noseed]    do not seed random engine
+[f   seed]    seed random engine
+
+]]></pre>
+<p class="text">
+ The <tt class="option">v</tt> option prints the interpreter version and operating system. The <tt class="option">f</tt> option turns on or off some additional options like the assertion checking. The use of program arguments is illustrated later in this chapter. The <tt class="option">i</tt> option adds a path to the interpreter resolver. Several <tt class="option">i</tt> options can be specified. The order of search is determined by the option order. As mentioned earlier, the use of the resolver combined with the <em>librarian</em> is described in a specific chapter. If the initial file name to execute contains a directory path, such path is added automatically to the interpreter resolver path unless the <tt class="option">nopath</tt> option is specified. </p>
+<p class="subsect">
+Interactive line editing</p>
+<p class="text">
+ Line editing capabilities is provided when the interpreter is used interactively. Error messages are displayed in red if the terminal supports colors. Various accelerators are bound to the terminal as indicated in the table below.</p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Binding</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+backspace</td>
+<td class="text">
+Erase the previous character</td>
+</tr>
+<tr class="text">
+<td class="text">
+delete</td>
+<td class="text">
+Erase at the cursor position</td>
+</tr>
+<tr class="text">
+<td class="text">
+insert</td>
+<td class="text">
+Toggle insert with in-place</td>
+</tr>
+<tr class="text">
+<td class="text">
+ctrl-a</td>
+<td class="text">
+Move to the beginning of the line</td>
+</tr>
+<tr class="text">
+<td class="text">
+ctrl-e</td>
+<td class="text">
+Move to the end of the line</td>
+</tr>
+<tr class="text">
+<td class="text">
+ctrl-u</td>
+<td class="text">
+Clear the input line</td>
+</tr>
+<tr class="text">
+<td class="text">
+ctrl-k</td>
+<td class="text">
+Clear from the cursor position</td>
+</tr>
+<tr class="text">
+<td class="text">
+ctrl-l</td>
+<td class="text">
+Refresh the line editing</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The arrow are also bound to their usual functions. Note that when using the history, a multi-line command editing access is provided by the interpreter. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Binding</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+left</td>
+<td class="text">
+Move the cursor to the left</td>
+</tr>
+<tr class="text">
+<td class="text">
+right</td>
+<td class="text">
+Move the cursor to the right</td>
+</tr>
+<tr class="text">
+<td class="text">
+up</td>
+<td class="text">
+Move up in the history list</td>
+</tr>
+<tr class="text">
+<td class="text">
+down</td>
+<td class="text">
+Move down in the history list</td>
+</tr>
+</table>
+<p/>
+<p class="subsect">
+Command line arguments</p>
+<p class="text">
+ The interpreter command line arguments are stored in a vector called <tt class="code">argv</tt> which is part of the <tt class="code">interp</tt> object. A complete discussion about object and class is covered in the <em>class object chapter</em>. At this time, it is just necessary to note that a method is invoked by a name separated from the object symbol name with a semicolon. The example below illustrates the use of the vector argument.</p>
+<pre class="frame">
+<![CDATA[# argv.als
+# print the argument length and the first one
+println "argument length: " (interp:argv:length)
+println "first argument : " (interp:argv:get 0)
+zsh> axi argv.als hello world
+2
+hello
+
+]]></pre>
+<p class="subsect">
+Loading a source file</p>
+<p class="text">
+ The interpreter object provides also the <tt class="code">load</tt> method to load a file. The argument must be a valid file path or an exception is raised. The <tt class="code">load</tt> method returns <tt class="code">nil</tt>. When the file is loaded, the interpreter input, output and error streams are used. The load operation reads one form after another and executes them sequentially.</p>
+<pre class="frame">
+<![CDATA[# load the source file demo.als
+(axi) interp:load "demo.als"
+# load the compiled file demo.axc
+(axi) interp:load "demo.axc"
+# load whatever is found
+(axi) interp:load "demo"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">load</tt> method operates with the help of the interpreter resolver. By default the source file extension is <tt class="extn">als</tt>. If the file has been compiled, the <tt class="extn">axc</tt> extension can be used instead. This force the interpreter to load the compiled version. If you are not sure, or do not care about which file is loaded, the extension can be omitted. Without extension, the compiled file is searched first. If it is not found the source file is searched and loaded. </p>
+<p class="subsect">
+The compiler</p>
+<p class="text">
+ The client <tt class="command">axc</tt> is the <em>cross
+	compiler</em>. It generates a binary file that can be run across several platforms. The <tt class="option">h</tt> option prints the compiler options.</p>
+<pre class="frame">
+<![CDATA[usage: axc [options] [files]
+[h]            print this help message
+[v]            print version information
+[i] path       add a path to the resolver
+[e  mode]      force the encoding mode
+
+]]></pre>
+<p class="text">
+ One or several files can be specified on the command line. The source file is searched with the help of the resolver. The resolver <tt class="option">i</tt> option can be used to add a path to the resolver. </p>
+<div class="section">
+Writing structure</div>
+<p class="text">
+ The structure of file is a succession of valid syntactic objects separated by blank lines or comments. During the compilation or the execution process, each syntactic object is processed one after another in a single pass. Reserved keywords are an integral part of the writing systems. The association of symbols and literal constitutes a <em>form</em>. A form is the basic execution block in the writing system. When the form uses reserved keyword, it is customary to refer to it as a <em>special form</em>.</p>
+<p class="subsect">
+Character set and comments</p>
+<p class="text">
+ The writing system operates with the standard Unicode character set. Comments starts with the character <tt class="code">#</tt>. All characters until the end of line are consumed. Comments can be placed anywhere in the source file. Comments entered during an interactive session are discarded.</p>
+<p class="subsect">
+Native objects</p>
+<p class="text">
+ The writing system operates mostly with objects. An object is created upon request or automatically by the engine when a native representation is required. To perform this task, several native objects, namely <tt class="code">Boolean</tt> for boolean objects, <tt class="code">Integer</tt> , <tt class="code">Relatif</tt> for integer numbers, <tt class="code">Real</tt> for floating-point number, <tt class="code">Byte</tt>, <tt class="code">Character</tt> and <tt class="code">String</tt> for character or string manipulation are built inside the engine. Most of the time, a native object is built implicitly from its lexical representation, but an explicit representation can also be used.</p>
+<pre class="frame">
+<![CDATA[const boolean  true
+const integer  1999
+const relatif  1234567890R
+const real     2000.0
+const string   "afnix"
+const char     'a'
+trans symbol   "hello world"
+trans symbol   2000
+
+]]></pre>
+<p class="text">
+ The <tt class="code">const</tt> and <tt class="code">trans</tt> reserve keywords are used to declare a new symbol. A symbol is simply a binding between a name and an object. Almost any standard characters can be used to declare a symbol. The <tt class="code">const</tt> reserved keyword creates a <em>constant
+	symbol</em> and returns the last evaluated object. As a consequence, nested <tt class="code">const</tt> constructs are possible like <tt class="code">trans b (const a 1)</tt>. The <tt class="code">trans</tt> reserved keyword declare a new transient symbol. When a symbol is marked transient, the object bound to the symbol can be changed while this is not possible with a constant symbol. Eventually, a symbol can be destroyed with the special form <tt class="code">unref</tt>. It is worth to note that it is the symbol which is destroyed and not the object associated with it.</p>
+<p class="subsect">
+Stop and resume parsing</p>
+<p class="text">
+ The parsing process is stopped in the presence of the <tt class="code">◀</tt> character (Unicode U+25C0). The parsing operation is resumed with the <tt class="code">▶</tt> character (Unicode U+25B6). Such mechanism is useful when dealing with multi line statements. This mechanism is also a good example of Unicode based control characters. </p>
+<p class="subsect">
+Forms</p>
+<p class="text">
+ An implicit form is a single line command. When a command is becoming complex, the use of the standard form notation is more readable. The standard form uses the <tt class="code">(</tt> and <tt class="code">)</tt> characters to start and close a form. A form causes an <em>evaluation</em>. When a form is evaluated, each symbol in the form are evaluated to their corresponding internal object. Then the interpreter treats the first object of the form as the object to execute and the rest is the argument list for the calling object. The use of form inside a form is the standard way to perform recursive evaluation with complex expressions.</p>
+<pre class="frame">
+<![CDATA[const three (+ 1 2)
+
+]]></pre>
+<p class="text">
+ This example defines a symbol which is initialized with the integer 3, that is the result of the computation <tt class="code">(+ 1
+	2)</tt>. The example shows also that a Polish notation is used for arithmetic. If fact, <tt class="code">+</tt> is a built-in operator which causes the arguments to be summed (if possible). Evaluation can be nested as well as definition and assignation. When a form is evaluated, the result of the evaluation is made available to the calling form. If the result is obtained at the top level, the result is discarded.</p>
+<pre class="frame">
+<![CDATA[const  b (trans a (+ 1 2))
+assert a 3
+assert b 3
+
+]]></pre>
+<p class="text">
+ This program illustrates the mechanic of the evaluation process. The evaluation is done recursively. The <tt class="code">(+ 1
+	2)</tt> form is evaluated as 3 and the result transmitted to the form <tt class="code">(trans a 3)</tt>. This form not only creates the symbol <tt class="code">a</tt> and binds to it the integer 3, but returns also 3 which is the result of the previous evaluation. Finally, the form <tt class="code">(const b 3)</tt> is evaluated, that is, the symbol <tt class="code">b</tt> is created and the result discarded. Internally, things are a little more complex, but the idea remains the same. This program illustrates also the usage of the <tt class="code">assert</tt> keyword.</p>
+<p class="subsect">
+Lambda expression</p>
+<p class="text">
+ A <em>lambda expression</em> is another name for a function. The term comes historically from Lisp to express the fact that a lambda expression is analog to the concept of expression found in the lambda calculus. There are various ways to create a lambda expression. A lambda expression is created with the <tt class="code">trans</tt> reserved keyword. A lambda expression takes 0 or more arguments and returns an object. A lambda expression is also an object by itself When a lambda expression is called, the arguments are evaluated from left to right. The function is then called and the object result is transmitted to the calling form. The use of <tt class="code">trans</tt> vs <tt class="code">const</tt> is explain later. To illustrate the use of a lambda expression, the computation of an integer factorial is described in the next example.</p>
+<pre class="frame">
+<![CDATA[# declare the factorial function
+trans fact (n) (
+  if (== n 1) 1 (* n (fact (- n 1))))
+# compute factorial 5
+println "factorial 5 = " (fact 5)
+
+]]></pre>
+<p class="text">
+ This example calls for several comments. First the <tt class="code">trans</tt> keyword defines a new function object with one argument called <tt class="code">n</tt>. The body of the function is defined with the <tt class="code">if</tt> special form and can be easily understood. The function is called in the next form when the <tt class="code">println</tt> special form is executed. Note that here, the call to <tt class="code">fact</tt> produces an integer object, which is converted automatically by the <tt class="code">println</tt> keyword.</p>
+<p class="subsect">
+Block form</p>
+<p class="text">
+ The notation used in the <tt class="code">fact</tt> program is the standard form notation originating from Lisp and the Scheme dialect. There is also another notation called the <em>block
+	form</em> notation with the use of the <tt class="code">{</tt> and <tt class="code">}</tt> characters. A block form is a syntactic notation where each form in the block form is executed sequentially. The form can be either an implicit or a regular form. The <tt class="code">fact</tt> procedure can be rewritten with the block notation as illustrated below.</p>
+<pre class="frame">
+<![CDATA[# declare the factorial procedure
+trans fact (n) {
+  if (== n 1) 1 (* n (fact (- n 1)))
+}
+# compute factorial 5
+println "factorial 5 = " (fact 5)
+
+]]></pre>
+<p class="text">
+ Another way to create a lambda expression is via the <tt class="code">lambda</tt> special form. Recall that a lambda expression is an object. So when such object is created, it can be bounded to a symbol. The factorial example could be rewritten with an explicit lambda call.</p>
+<pre class="frame">
+<![CDATA[# declare the factorial procedure
+const fact (lambda (n) (
+    if (== n 1) 1 (* n (fact (- n 1)))))
+# compute factorial 5
+println "factorial 5 = " (fact 5)
+
+]]></pre>
+<p class="text">
+ Note that here, the symbol <tt class="code">fact</tt> is a constant symbol. The use of <tt class="code">const</tt> is reserved for the creation of <em>gamma expression</em>.</p>
+<p class="subsect">
+Gamma expression</p>
+<p class="text">
+ A lambda expression can somehow becomes very slow during the execution, since the symbol evaluation is done within a set of nested call to resolve the symbols. In other words, each recursive call to a function creates a new symbol set which is linked with its parent. When the recursion is becoming deep, so is the path to traverse from the lower set to the top one. There is also another mechanism called <em>gamma
+	expression</em> which binds only the function symbol set to the top level one. The rest remains the same. Using a gamma expression can speedup significantly the execution. </p>
+<pre class="frame">
+<![CDATA[# declare the factorial procedure
+const fact (n) (
+  if (== n 1) 1 (* n (fact (- n 1))))
+# compute factorial 5
+println "factorial 5 = " (fact 5)
+
+]]></pre>
+<p class="text">
+ We will come back later to the concept of gamma expression. The use of the reserved keyword <tt class="code">const</tt> to declare a gamma expression makes now sense. Since most function definitions are constant with one level, it was a design choice to implement this syntactic sugar. Note that <tt class="code">gamma</tt> is a reserved keyword and can be used to create a gamma expression object. On the other hand, note that the gamma expression mechanism does not work for instance method. We will illustrate this point later in this book.</p>
+<p class="subsect">
+Lambda generation</p>
+<p class="text">
+ A lambda expression can be used to generate another lambda expression. In other word, a function can generate a function, an that capability is an essential ingredient of the <em>functional
+	programming</em> paradigm. The interesting part with lambda expression is the concept of closed variables. In the next example, looking at the lambda expression inside <tt class="code">gen</tt>, notice that the argument to the gamma is <tt class="code">x</tt> while <tt class="code">n</tt> is marked in a form before the body of the gamma. This notation indicates that the gamma should retain the value of the argument <tt class="code">n</tt> when the closure is created. In the literature, you might discover a similar mechanism referenced as a <em>closure</em>. A closure is simply a variable which is closed under a certain context. When a variable is reference in a context without any definition, such variable is called a <em>free variable</em>. We will see later more programs with closures. Note that it is the object created by the lambda or the gamma call which is called a <em>closure</em>.</p>
+<pre class="frame">
+<![CDATA[# a gamma which creates a lambda
+const gen (n) (
+  lambda (x) (n) (+ x n))
+# create a function which add 2 to its argument
+const add-2 (gen 2)
+# call add-2 with an argument and check
+println "result = " (add-2 3)
+
+]]></pre>
+<p class="text">
+ In short, a lambda expression is a function with or without closed variables, which works with nested symbol sets also called <em>namesets</em>. A gamma expression is a function with or without closed variable which is bounded to the top level nameset. The reserved keyword <tt class="code">trans</tt> binds a lambda expression. The reserved keyword <tt class="code">const</tt> binds a gamma expression. A gamma expression cannot be used as an instance method.</p>
+<p class="subsect">
+Multiple arguments binding</p>
+<p class="text">
+ A lambda or gamma expression can be defined to work with extra arguments using the special <tt class="code">args</tt> binding. During a lambda or gamma expression execution, the special symbol <tt class="code">args</tt> is defined with the extra arguments passed at the call. For example, a gamma expression with 0 formal argument and 2 actual arguments has <tt class="code">args</tt> defined as a <em>cons
+	cell</em>.</p>
+<pre class="frame">
+<![CDATA[const proc-nilp (args) {
+  trans result 0
+  for (i) (args) (result:+= i)
+  eval result
+}
+assert 3 (proc-nilp 1 2)
+assert 7 (proc-nilp 1 2 4)
+
+]]></pre>
+<p class="text">
+ The symbol <tt class="code">args</tt> can also be defined with formal arguments. In that case, <tt class="code">args</tt> is defined as a cons cell with the remaining actual arguments. </p>
+<pre class="frame">
+<![CDATA[# check with arguments
+const proc-args (a b args) {
+  trans result (+ a b)
+  for (i) (args) (result:+= i)
+  eval result
+}
+assert 3 (proc-args 1 2)
+assert 7 (proc-args 1 2 4)
+
+]]></pre>
+<p class="text">
+ It is an error to specify formal arguments after <tt class="code">args</tt>. Multiple <tt class="code">args</tt> formal definition are not allowed. The symbol <tt class="code">args</tt> can also be defined as a constant argument.</p>
+<pre class="frame">
+<![CDATA[# check with arguments
+const proc-args (a b (const args)) {
+  trans result (+ a b)
+  for (i) (args) (result:+= i)
+  eval result
+}
+assert 7 (proc-args 1 2 4)
+
+]]></pre>
+<div class="section">
+Nameset and bindings</div>
+<p class="text">
+ A <em>nameset</em> is a container of bindings between a name and <em>symbolic variable</em>. We use the term <em>symbolic variable</em> to denote any binding between a name and an object. There are various ways to express such bindings. The most common one is called a symbol. Another type of binding is an argument. Despite the fact they are different, they share a set of common properties, like being settable. Another point to note is the nature of the nameset. As a matter of fact, there is various type of namesets. The top level nameset is called a <em>global set</em> and is designed to handle a large number of symbols. In a lambda or gamma expression, the nameset is called a <em>local
+      set</em> and is designed to be fast with a small number of symbols. The moral of this little story is to think always in terms of namesets, no matter how it is implemented. All namesets support the concept of parent binding. When a nameset is created (typically during the execution of a lambda expression), this nameset is linked with its parent one. This means that a symbol look-up is done by traversing all nameset from the bottom to the top and stopping when one is found. In term of notation, the <em>current nameset</em> is referenced with the special symbol <tt class="code">'.'</tt>. The <em> parent nameset</em> is referenced with the special symbol <tt class="code">'..'</tt>. The <em>top level
+      nameset</em> is referenced with the symbol <tt class="code">'...'</tt>. </p>
+<p class="subsect">
+Symbol</p>
+<p class="text">
+ A symbol is an object which defines a binding between a name and an object. When a symbol is evaluated, the evaluation process consists in returning the associated object. There are various ways to create or set a symbol, and the different reserved keywords account for the various nature of binding which has to be done depending on the current nameset state. One of the symbol property is to be <tt class="code">const</tt> or not. When a symbol is marked as a constant, it cannot be modified. Note here that it is the symbol which is constant, not the object. A symbol can be created with the reserved keywords <tt class="code">const</tt> or <tt class="code">trans</tt>.</p>
+<p class="subsect">
+Creating a nameset</p>
+<p class="text">
+ A nameset is an object which can be constructed directly by using the object construction notation. Once the object is created, it can be bounded to a symbol. Here is a nameset called <tt class="code">example</tt> in the top level nameset. </p>
+<pre class="frame">
+<![CDATA[# create a new nameset called example
+const example (nameset .)
+# bind a symbol in this nameset
+const example:hello "hello"
+println example:hello
+
+]]></pre>
+<p class="subsect">
+Qualified name</p>
+<p class="text">
+ In the previous example, a symbol is referenced in a given nameset by using a <em>qualified name</em> such like <tt class="code">example:hello</tt>. A qualified name defines a path to access a symbol. The use of a qualified name is a powerful notation to reference an object in reference to another object. For example, the qualified name <tt class="code">.:hello</tt> refers to the symbol <tt class="code">hello</tt> in the current nameset. The qualified name <tt class="code">...:hello</tt> refers to the symbol <tt class="code">hello</tt> in the top level nameset. There are other use for qualified names, like method call with an instance. </p>
+<p class="subsect">
+Symbol binding</p>
+<p class="text">
+ The <tt class="code">trans</tt> reserved keyword has been shown in all previous example. The reserved keyword <tt class="code">trans</tt> creates or set a symbol in the current nameset. For example, the form <tt class="code">trans a 1</tt> is evaluated as follow. First, a symbol named <tt class="code">a</tt> is searched in the current nameset. At this stage, two situations can occur. If the symbol is found, it is set with the corresponding value. If the symbol is not found, it is created in the current nameset and set. The use of qualified name is also permitted -- and encouraged -- with <tt class="code">trans</tt>. The exact nature of the symbol binding with a qualified name depends on the partial evaluation of the qualified name. For example, <tt class="code">trans example:hello 1</tt> will set or create a symbol binding in reference to the <tt class="code">example</tt> object. If <tt class="code">example</tt> refers to a nameset, the symbol is bound in this nameset. If <tt class="code">example</tt> is a class, <tt class="code">hello</tt> is bounded as a class symbol. In theory, there is no restriction to use <tt class="code">trans</tt> on any object. If the object does not have a symbol binding capability, an exception is raised. For example, if <tt class="code">n</tt> is an integer object, the form <tt class="code">trans n:i 1</tt> will fail. With 3 or 4 arguments, <tt class="code">trans</tt> defines automatically a lambda expression. This notation is a syntactic sugar. The lambda expression is constructed from the argument list and bounded to the specified symbol. The rule used to set or define the symbol are the same as described above. </p>
+<pre class="frame">
+<![CDATA[# create automatically a lambda expression
+trans min (x y) (if (< x y) x y)
+
+]]></pre>
+<p class="subsect">
+Constant binding</p>
+<p class="text">
+ The <tt class="code">const</tt> reserved keyword is similar to <tt class="code">trans</tt>, except that it creates a <em>constant
+	symbol</em>. Once the symbol is created, it cannot be changed. This constant property is hold by the symbol itself. When trying to set a constant symbol, an exception is raised. The reserved keyword <tt class="code">const</tt> works also with qualified names. The rules described previously are the same. When a partial evaluation is done, the partial object is called to perform a constant binding. If such capability does not exist, an exception is raised. With 3 or 4 arguments, <tt class="code">const</tt> defines automatically a gamma expression. Like <tt class="code">trans</tt> the rule are the same except that the symbol is marked constant.</p>
+<pre class="frame">
+<![CDATA[# create automatically a gamma expression
+const max (x y) (if (> x y) x y)
+
+]]></pre>
+<p class="subsect">
+Symbol unreferencing</p>
+<p class="text">
+ The <tt class="code">unref</tt> reserved keyword removes a symbol reference in a given context. When the context is a nameset, the object associated with the symbol is detached from the symbol, eventually destroyed with the symbol removed from the nameset. </p>
+<pre class="frame">
+<![CDATA[# create a symbol number
+const x 1
+# unreference it
+unref x
+
+]]></pre>
+<p class="subsect">
+Arguments</p>
+<p class="text">
+ An expression argument is similar to a symbol, except that it is used only with function argument. The concept of binding between a name and an object is still the same, but with an argument, the object is not stored as part of the argument, but rather at another location which is the execution stack. An argument can also be constant. On the other hand, a single argument can have multiple bindings. Such situation is found during the same function call in two different threads. An argument list is part of the lambda or gamma expression declaration. If the argument is defined as a constant argument a sub form notation is used to defined this matter. For example, the <tt class="code">max</tt> gamma expression is given below.</p>
+<pre class="frame">
+<![CDATA[# create a gamma expression with const argument
+const max (gamma ((const x) (const y)) (if (> x y) x y))
+
+]]></pre>
+<p class="text">
+ A special symbols named <tt class="code">args</tt> is defined during a lambda or gamma expression evaluation with the remaining arguments passed at the time the call is made. The symbol can be either <tt class="code">nil</tt> or bound to a list of objects. </p>
+<pre class="frame">
+<![CDATA[const proc-args (a b) {
+  trans result (+ a b)
+  for (i) (args) (result:+= i)
+  eval result
+}
+assert 3 (proc-args 1 2)
+assert 7 (proc-args 1 2 4)
+
+]]></pre>
+<div class="section">
+Special forms</div>
+<p class="text">
+ Special forms provides are reserved keywords which are most of the time imperative statement, as part of the writing system. Special forms are an integral part of the writing system and interact directly with the interpreter. In most cases, a special forms returns the last evaluated object. Most of the special forms are control flow statements.</p>
+<p class="subsect">
+If special form</p>
+<p class="text">
+ The <tt class="code">if</tt> reserved keyword takes two or three arguments. The first argument is the boolean condition to check. If the condition evaluates to <tt class="code">true</tt> the second argument is evaluated. The form return the result of such evaluation. If the condition evaluates to <tt class="code">false</tt>, the third argument is evaluated or nil is returned if it does not exist. An interesting example which combines the <tt class="code">if</tt> reserved keyword and a deep recursion is the computation of the Fibonacci sequence.</p>
+<pre class="frame">
+<![CDATA[const fibo (gamma (n) (
+    if (< n 2) n (+ (fibo (- n 1)) (fibo (- n 2))))
+
+]]></pre>
+<p class="subsect">
+While special form</p>
+<p class="text">
+ The <tt class="code">while</tt> reserved keyword takes 2 or 3 arguments. With 2 arguments, the loop is constructed with a condition and a form. With 3 arguments, the first argument is an initial condition that is executed only once. When an argument acts as a loop condition, the condition evaluate to a boolean. The loop body is executed as long as the boolean condition is true. An interesting example related to integer arithmetic with a <tt class="code">while</tt> loop is the computation of the greatest common divisor or gcd. </p>
+<pre class="frame">
+<![CDATA[const gcd (u v) {
+  while (!= v 0) {
+    trans r (u:mod v)
+    u:= v
+    v:= r
+  }
+  eval u
+}
+
+]]></pre>
+<p class="text">
+ Note in this previous example the use of the symbol <tt class="code">=</tt>. The qualified name <tt class="code">u:=</tt> is in fact a method call. Here, the integer <tt class="code">u</tt> is assigned with a value. In this case, the symbol is not changed. It is the object which is muted. In the presence of 3 arguments, the first argument is an initialization condition that is executed only once. In this mode, it is important to note that the loop introduce its own nameset. The loop condition can be used to initialize a local condition variable. </p>
+<pre class="frame">
+<![CDATA[while (trans valid (is:valid-p)) (valid) {
+  # do something
+  # adjust condition
+  valid:= (and (is:valid-p) (something-else))
+}
+
+]]></pre>
+<p class="subsect">
+Do special form</p>
+<p class="text">
+ The <tt class="code">do</tt> reserved keyword is similar to the <tt class="code">while</tt> reserved keyword, except that the loop condition is evaluated after the body execution. The syntax call is opposite to the <tt class="code">while</tt>. The loop can accept either 2 or 3 arguments. With 2 arguments, the first argument is the loop body and the second argument is the exit loop condition. With 3 arguments, the first argument is the initial condition that is executed only once.</p>
+<pre class="frame">
+<![CDATA[# count the number of digits in a string
+const number-of-digits (s) {
+  const len (s:length)
+  trans index 0
+  trans count 0
+  do {
+    trans c (s:get index)
+    if (c:digit-p) (count:++)
+  } (< (index:++) len)
+  eval count
+}
+
+]]></pre>
+<p class="subsect">
+Loop special form</p>
+<p class="text">
+ The <tt class="code">loop</tt> reserved keyword is another form of loop. It take four arguments. The first is the initialize form. The second is the exit condition. The third is the step form and the fourth is the form to execute at each loop step. Unlike the <tt class="code">while</tt> and <tt class="code">do</tt> loop, the <tt class="code">loop</tt> special form creates its own nameset, since the initialize condition generally creates new symbol for the loop only.</p>
+<pre class="frame">
+<![CDATA[# a simple loop from 0 to 10
+loop (trans i 0) (< i 10) (i:++) (println i)
+
+]]></pre>
+<p class="text">
+ A loop can also be designed with a <tt class="code">Counter</tt> object. In this case, a counter is created with an initial and final count values. The counter <tt class="code">step-p</tt> method can then be used to run the loop </p>
+<pre class="frame">
+<![CDATA[# a counter from 0 to 10
+trans cntr (Counter 10)
+# a simple loop from 1 to 10
+loop (cntr:step-p) (println cntr)
+
+]]></pre>
+<p class="text">
+ In this example, the counter prints from 1 to 10 since the counter is designed to operate from 0 to 9, and the <tt class="code">println</tt> function is called after the <tt class="code">step-p</tt> predicate. </p>
+<p class="subsect">
+Switch special form</p>
+<p class="text">
+ The <tt class="code">switch</tt> reserved keyword is a condition selector. The first argument is the switch selector. The second argument is a list of various value which can be matched by the switch value. A special symbol called <tt class="code">else</tt> can be used to match any value.</p>
+<pre class="frame">
+<![CDATA[# return the primary color in a rgb
+const get-primary-color (color value) (
+  switch color (
+    ("red"   (return (value:substr 0 2)))
+    ("green" (return (value:substr 2 4)))
+    ("blue"  (return (value:substr 4 6)))
+  ))
+
+]]></pre>
+<p class="subsect">
+Return special form</p>
+<p class="text">
+ The <tt class="code">return</tt> reserved keyword indicates an exceptional condition in the flow of execution within a lambda or gamma expression. When a return is executed, the associated argument is returned and the execution terminates. If <tt class="code">return</tt> is used at the top level, the result is simply discarded.</p>
+<pre class="frame">
+<![CDATA[# initialize a vector with a value
+const vector-init (length value) {
+  # treat nil vector first
+  if (<= length 0) return (Vector)
+  trans result (Vector)
+  do (result:add value) (> (length:--) 0)
+}
+
+]]></pre>
+<p class="subsect">
+Eval and protect</p>
+<p class="text">
+ The <tt class="code">eval</tt> reserved keyword forces the evaluation of the object argument. The reserved keyword <tt class="code">eval</tt> is typically used in a function body to return a particular symbol value. It can also be used to force the evaluation of a <em>protected object</em>. In many cases, <tt class="code">eval</tt> is more efficient than <tt class="code">return</tt>. The <tt class="code">protect</tt> reserved keyword constructs an object without evaluating it. Typically when used with a form, <tt class="code">protect</tt> return the form itself. It can also be used to prevent a symbol evaluation. When used with a symbol, the symbol object itself is returned.</p>
+<pre class="frame">
+<![CDATA[const add (protect (+ 1 2))
+(eval add)
+
+]]></pre>
+<p class="text">
+ Note that in the preceding example that the evaluation will return a lambda expression which is evaluated immediately and which return the integer 3. </p>
+<p class="subsect">
+Assert special form</p>
+<p class="text">
+ The <tt class="code">assert</tt> reserved keyword check for equality between the two arguments and abort the execution in case of failure. By default, the assertion checking is turn off, and can be activated with the command option <tt class="option">f assert</tt>. Needless to say that <tt class="code">assert</tt> is used for debugging purpose.</p>
+<pre class="frame">
+<![CDATA[assert true   (> 2 0)
+assert 0      (- 2 2)
+assert "true" (String true)
+
+]]></pre>
+<p class="subsect">
+Block special form</p>
+<p class="text">
+ The <tt class="code">block</tt> reserved keyword executes a form in a new local set. The local set is destroyed at the completion of the execution. The <tt class="code">block</tt> reserved keyword returns the value of the last evaluated form. Since a new local set is created, any new symbol created in this nameset is destroyed at the completion of the execution. In other word, the <tt class="code">block</tt> reserved keyword allows the creation of a local scope.</p>
+<pre class="frame">
+<![CDATA[trans a 1
+block {
+  assert    a 1
+  trans     a (+ 1 1)
+  assert    a 2
+  assert ..:a 1
+}
+assert 1 a
+
+]]></pre>
+<div class="section">
+Built-in objects</div>
+<p class="text">
+ Several built-in objects and built-in operators for arithmetic and logical operations are also integrated in the writing system. The <tt class="code">Integer</tt> and <tt class="code">Real</tt> classes are primarily used to manipulate numbers. The <tt class="code">Boolean</tt> class is used to for boolean operations. Other built-in objects include <tt class="code">Character</tt> and <tt class="code">String</tt>. The exact usage of these objects is described in the next chapter. </p>
+<p class="subsect">
+Arithmetic operations</p>
+<p class="text">
+ Support for the arithmetic operations is provided with the standard operator notation. Normally, these operators will tolerate various object type mixing and the returned value will generally be bound to an object that provides the minimum loss of information. Most of the operations are done with the <tt class="code">+</tt>, <tt class="code">-</tt>, <tt class="code">*</tt> and <tt class="code">/</tt> operators.</p>
+<pre class="frame">
+<![CDATA[(+ 1 2)
+(- 1)
+(* 3 5.0)
+(/ 4.0 2)
+
+]]></pre>
+<p class="subsect">
+Logical operations</p>
+<p class="text">
+ The <tt class="code">Boolean</tt> class is used to represent the boolean value <tt class="code">true</tt> and <tt class="code">false</tt>. These last two symbols are built-in in the interpreter as constant symbols. There are also special forms like <tt class="code">not</tt>, <tt class="code">and</tt> and <tt class="code">or</tt>. Their usage is self understandable.</p>
+<pre class="frame">
+<![CDATA[not true
+and true (== 1 0)
+or (< -1 0) (> 1 0)
+
+]]></pre>
+<p class="subsect">
+Predicates</p>
+<p class="text">
+ A <em>predicate</em> is a function which returns a boolean object. There is always a built-in predicate associated with a built-in object. By convention, a predicate terminates with the sequence <em>-p</em>. The <tt class="code">nil-p</tt> predicate is a special predicate which returns true if the object is nil. The <tt class="code">object-p</tt> predicate is the negation of the <tt class="code">nil-p</tt> predicate.</p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Predicate</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+nil-p</td>
+<td class="text">
+check nil object</td>
+</tr>
+<tr class="text">
+<td class="text">
+eval-p</td>
+<td class="text">
+check evaluation</td>
+</tr>
+<tr class="text">
+<td class="text">
+real-p</td>
+<td class="text">
+check real object</td>
+</tr>
+<tr class="text">
+<td class="text">
+regex-p</td>
+<td class="text">
+check regex object</td>
+</tr>
+<tr class="text">
+<td class="text">
+object-p</td>
+<td class="text">
+check for non nil object</td>
+</tr>
+<tr class="text">
+<td class="text">
+string-p</td>
+<td class="text">
+check string object</td>
+</tr>
+<tr class="text">
+<td class="text">
+number-p</td>
+<td class="text">
+check number object</td>
+</tr>
+<tr class="text">
+<td class="text">
+method-p</td>
+<td class="text">
+check method object</td>
+</tr>
+<tr class="text">
+<td class="text">
+boolean-p</td>
+<td class="text">
+check boolean object</td>
+</tr>
+<tr class="text">
+<td class="text">
+integer-p</td>
+<td class="text">
+check integer object</td>
+</tr>
+<tr class="text">
+<td class="text">
+character-p</td>
+<td class="text">
+check character object</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ For example, one can write a function which returns <tt class="code">true</tt> if the argument is a number, that is, an integer or a real number. </p>
+<pre class="frame">
+<![CDATA[# return true if the argument is a number
+const number-p (n) (
+  or (integer-p n) (real-p n))
+
+]]></pre>
+<p class="text">
+ Special predicates for functional and symbolic programming are also built-in in the engine. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Predicate</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+class-p</td>
+<td class="text">
+check class object</td>
+</tr>
+<tr class="text">
+<td class="text">
+thread-p</td>
+<td class="text">
+check thread object</td>
+</tr>
+<tr class="text">
+<td class="text">
+promise-p</td>
+<td class="text">
+check promise object</td>
+</tr>
+<tr class="text">
+<td class="text">
+lexical-p</td>
+<td class="text">
+check lexical object</td>
+</tr>
+<tr class="text">
+<td class="text">
+literal-p</td>
+<td class="text">
+check literal object</td>
+</tr>
+<tr class="text">
+<td class="text">
+closure-p</td>
+<td class="text">
+check closure object</td>
+</tr>
+<tr class="text">
+<td class="text">
+nameset-p</td>
+<td class="text">
+check nameset object</td>
+</tr>
+<tr class="text">
+<td class="text">
+instance-p</td>
+<td class="text">
+check instance object</td>
+</tr>
+<tr class="text">
+<td class="text">
+qualified-p</td>
+<td class="text">
+check qualified object</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ Finally, for each object, a predicate is also associated. For example, <tt class="code">cons-p</tt> is the predicate for the <tt class="code">Cons</tt> object and <tt class="code">vector-p</tt> is the predicate for the <tt class="code">Vector</tt> object. Another issue related to evaluation, is to decide whether or not an object can be evaluated. The predicate <tt class="code">eval-p</tt> which is a special form is designed to answer this question. Furthermore, the <tt class="code">eval-p</tt> predicate is useful to decide whether or not a symbol is defined or if a qualified name can be evaluated. </p>
+<pre class="frame">
+<![CDATA[assert true  (eval-p .)
+assert false (eval-p an-unknown-symbol)
+
+]]></pre>
+<div class="section">
+Class and instance</div>
+<p class="text">
+ Classes and instances are the fundamental objects that provide support for the object oriented paradigm. A <em>class</em> is a nameset which can be bounded automatically when an <em>instance</em> of that class is created. The class model is sloppy. Compared to other systems, there is no need to declare the data members for a particular class. Data members are created during the instance construction. An instance can also be created without any reference to a class. Methods can be bound to the class or the instance or both. An instance can also be muted during the execution process. </p>
+<p class="subsect">
+Class and members</p>
+<p class="text">
+ A class is declared with the reserved keyword <tt class="code">class</tt>. The resulting object acts like a nameset and it is possible to bind symbol to it.</p>
+<pre class="frame">
+<![CDATA[# create a class object
+const Circle (class)
+const Circle:PI 3.1415926535
+# access by qualified name
+println Circle:PI
+
+]]></pre>
+<p class="text">
+ In the previous example, the symbol <tt class="code">Circle</tt> is created as a class object. With the help of a qualified name, the symbol <tt class="code">PI</tt> is created inside the class nameset. In this case, the symbol <tt class="code">PI</tt> is invariant with respect to the instance object. A form can also be bound to the class nameset. In both cases, the symbol or the form is accessed with the help of a qualified name. </p>
+<p class="subsect">
+Instances</p>
+<p class="text">
+ An instance of a class is created like any built-in object. If a method called <tt class="code">preset</tt> is defined for that class, the method is used to initialize the instance. </p>
+<pre class="frame">
+<![CDATA[# create a class
+const Circle (class)
+trans Circle:preset (r) {
+  const this:radius (r:clone)
+}
+# create a radius 1 circle
+const c (Circle 1)
+
+]]></pre>
+<p class="text">
+ This example calls for several comments. First the <tt class="code">preset</tt> lambda expression is bound to the class. Since <tt class="code">preset</tt> is a reserved name for the class object, the form is automatically executed at the instance construction. Second, note that the instance data member <tt class="code">radius</tt> is created by the lambda expression and another reserved keyword called <tt class="code">this</tt> is used to reference the instance object as it is customary with other programming systems.</p>
+<p class="subsect">
+Instance method</p>
+<p class="text">
+ When a lambda expression is bound to the class or the instance, that lambda can be invoked as an instance method. When an instance method is invoked, the instance nameset is set as the parent nameset for that lambda. This is the main reason why a gamma expression cannot be used as an instance method. Therefore, the use of the reserved keyword <tt class="code">this</tt> is not recommended in a gamma expression, although it is perfectly acceptable to create a symbol with such name.</p>
+<pre class="frame">
+<![CDATA[# create a perimeter method
+trans Circle:perimeter nil (
+  * (* 2.0 Circle:PI) this:radius)
+# call the method with our circle
+trans p (c:perimeter)
+
+]]></pre>
+<p class="text">
+ It must be clear that the <tt class="code">perimeter</tt> symbol defines a method at the class level. It is perfectly acceptable to define a methods at the instance level. Such method is called a <em>specialized method</em>. </p>
+<div class="section">
+Miscellaneous features</div>
+<p class="subsect">
+Iteration</p>
+<p class="text">
+ An iteration facility is provided for some objects known as <em>iterable objects</em>. The <tt class="code">Cons</tt>, <tt class="code">List</tt> and <tt class="code">Vector</tt> are typical iterable objects. There are two ways to iterate with these objects. The first method uses the <tt class="code">for</tt> reserved keyword. The second method uses an explicit iterator which can be constructed by the object.</p>
+<pre class="frame">
+<![CDATA[# compute the scalar product of two vectors
+const scalar-product (u v) {
+  trans result 0
+  for (x y) (u v) (result:+= (* x y))
+  eval result
+}
+
+]]></pre>
+<p class="text">
+ The <tt class="code">for</tt> reserved keyword iterate on both object <tt class="code">u</tt> and <tt class="code">v</tt>. For each iteration, the symbol <tt class="code">x</tt> and <tt class="code">y</tt> are set with their respective object value. In the example above, the result is obtained by summing all intermediate products. </p>
+<pre class="frame">
+<![CDATA[# test the scalar product function
+const v1 (Vector 1 2 3)
+const v2 (Vector 2 4 6)
+(scalar-product v1 v2)
+
+]]></pre>
+<p class="text">
+ The iteration can be done explicitly by creating an iterator for each vectors and advancing steps by steps.</p>
+<pre class="frame">
+<![CDATA[# scalar product with explicit iterators
+const scalar-product (u v) {
+  trans result 0
+  trans u-it   (u:get-iterator)
+  trans v-it   (v:get-iterator)
+  while (u:valid-p) {
+    trans x (u:get-object)
+    trans y (v:get-object)
+    result:+= (* x y)
+    u:next
+    v:next
+  }
+  eval result
+}
+
+]]></pre>
+<p class="text">
+ In the example above, two iterators are constructed for both vectors <tt class="code">u</tt> and <tt class="code">v</tt>. The iteration is done in a <tt class="code">while</tt> loop by invoking the <tt class="code">valid-p</tt> predicate. The <tt class="code">get-object</tt> method returns the object value at the current iterator position. </p>
+<p class="subsect">
+Exception</p>
+<p class="text">
+ An <em>exception</em> is an unexpected change in the execution flow. The exception model is based on a mechanism which throws the exception to be caught by a handler. The mechanism is also designed to be compatible with the native implementation.  An exception is thrown with the special form <tt class="code">throw</tt>. When an exception is thrown, the normal flow of execution is interrupted and an object used to carry the exception information is created. Such exception object is propagated backward in the call stack until an exception handler catch it. The special form <tt class="code">try</tt> executes a form and catch an exception if one has been thrown. With one argument, the form is executed and the result is the result of the form execution unless an exception is caught. If an exception is caught, the result is the exception object. If the exception is a native one, the result is nil.</p>
+<pre class="frame">
+<![CDATA[try (+ 1 2)
+try (throw)
+try (throw "hello")
+try (throw "hello" "world")
+try (throw "hello" "world" "folks")
+
+]]></pre>
+<p class="text">
+ The exception mechanism is also designed to install an exception handler and eventually retrieve some information from the exception object. The reserved symbol <tt class="code">what</tt> can be used to retrieve some exception information.</p>
+<pre class="frame">
+<![CDATA[# protected factorial
+const fact (n) {
+  if (not (integer-p n)) 
+  (throw "number-error" "invalid argument")
+  if (== n 0) 1 (* n (fact (- n 1)))
+}
+# exception handler
+const handler nil {
+  errorln what:eid ',' what:reason
+}
+(try (fact 5)       handler)
+(try (fact "hello") handler)
+
+]]></pre>
+<p class="text">
+ The special symbol <tt class="code">what</tt> stores the necessary information about the place that generated the exception. Most of the time, the qualified name <tt class="code">what:reason</tt> or <tt class="code">what:about</tt> is used.The only difference is that <tt class="code">what:about</tt> contains the file name and line number associated with the reason that generated the exception. </p>
+<p class="subsect">
+Regular Expressions</p>
+<p class="text">
+ A regular expression or <em>regex</em> is an object which is used to match certain text patterns. Regular expressions are built implicitly by the parser with the use of the <tt class="code">[</tt> and <tt class="code">]</tt> characters. Special class of characters are defined with the help of the <tt class="code">$</tt> character. For example, <tt class="code">$d</tt> is the class of character digits as defined by the Unicode consortium. Different regular expression can be grouped by region to be matched as indicated in the example below. </p>
+<pre class="frame">
+<![CDATA[if (== (const re [($d$d):($d$d)]) "12:31") {
+  trans hr (re:get 0)
+  trans mn (re:get 1)
+}
+
+]]></pre>
+<p class="text">
+ In the previous example, a regular expression object is bound to the symbol <tt class="code">re</tt>. The <tt class="code">regex</tt> contains two groups. The call to the operator <tt class="code">==</tt> returns <tt class="code">true</tt> if the regex matches the argument string. The <tt class="code">get</tt> method can be used to retrieve the group by index. </p>
+<p class="subsect">
+Delayed evaluation</p>
+<p class="text">
+ The special form <tt class="code">delay</tt> creates a special object called a <em>promise</em> which records the form to be later evaluated. The special form <tt class="code">force</tt> causes a promise to be evaluated. Subsequent call with <tt class="code">force</tt> will produce the same result. </p>
+<pre class="frame">
+<![CDATA[trans   y 3
+const   l ((lambda (x) (+ x y)) 1)
+assert  4 (force l)
+trans   y 0
+assert  4 (force l)
+
+]]></pre>
+<div class="section">
+Threads</div>
+<p class="text">
+ The interpreter provides a powerful mechanism which allows the concurrent execution of forms and the synchronization of shared objects. The engine provides supports the creation and the synchronization of threads with a native object locking mechanism. During the execution, the interpreter wait until all threads are completed. A threads is created with the reserved keyword <tt class="code">launch</tt>. In the presence of several threads, the interpreter manages automatically the shared objects and protect them against concurrent access. </p>
+<pre class="frame">
+<![CDATA[# shared variable access
+const var 0
+const decr nil (while true (var:= (- var 1)))
+const incr nil (while true (var:= (+ var 1)))
+const prtv nil (while true (println "value = " var))
+# start 3 threads 
+launch (prtv)
+launch (decr)
+launch (incr)
+
+]]></pre>
+<p class="subsect">
+Form synchronization</p>
+<p class="text">
+ Although, the engine provides an automatic synchronization mechanism for reading or writing an object, it is sometimes necessary to control the execution flow. There are basically two techniques to do so. First, protect a form from being executed by several threads. Second, wait for one or several threads to complete their task before going to the next execution step. The reserved keyword <tt class="code">sync</tt> can be used to synchronize a form. When a form, is synchronized, the engine guarantees that only one thread will execute this form. </p>
+<pre class="frame">
+<![CDATA[const print-message (code mesg) (
+  sync {
+    errorln "error  : " code
+    errorln "message: " mesg
+  }
+)
+
+]]></pre>
+<p class="text">
+ The previous example create a gamma expression which make sure that both the error code and error message are printed in one group, when several threads call it. </p>
+<p class="subsect">
+Thread completion</p>
+<p class="text">
+ The other piece of synchronization is the thread completion indicator. The thread descriptor contains a method called <tt class="code">wait</tt> which suspend the calling thread until the thread attached to the descriptor has been completed. If the thread is already completed, the method returns immediately. </p>
+<pre class="frame">
+<![CDATA[# simple flag
+const flag false
+# simple shared tester
+const ftest (bval) (flag:= bval)
+# run the thread and wait
+const thr (launch (ftest true))
+thr:wait
+assert true flag
+
+]]></pre>
+<p class="text">
+ This example is taken from the test suites. It checks that a boolean variable is set in a thread. Note the use of the <tt class="code">wait</tt> method to make sure the thread has completed before checking for the flag value. It is also worth to note that <tt class="code">wait</tt> is one of the method which guarantees that a thread result is valid. Another use of the <tt class="code">wait</tt> method can be made with a vector of thread descriptors when one wants to wait until all of them have completed. </p>
+<pre class="frame">
+<![CDATA[# shared vector of threads descriptors
+const thr-group (Vector)
+# wait until all threads in the group are finished
+const wait-all nil (for (thr) (thr-group) (thr:wait))
+
+]]></pre>
+<p class="subsect">
+Condition variable</p>
+<p class="text">
+ A <em>condition variable</em> is another mechanism to synchronize several threads. A condition variable is modeled with the <tt class="code">Condvar</tt> object. At construction, the condition variable is initialized to <tt class="code">false</tt>. A thread calling the <tt class="code">wait</tt> method will block until the condition becomes <tt class="code">true</tt>. The <tt class="code">mark</tt> method can be used by a thread to change the state of a condition variable and eventually awake some threads which are blocked on it. The use of condition variable is particularly recommended when one need to make sure a particular thread has been doing a particular task. </p>
+<div class="section">
+The interpreter object</div>
+<p class="text">
+ The interpreter can also be seen as an object. As such, it provides several special symbols and forms. For example, the symbol <tt class="code">argv</tt> is the argument vector. The symbol <tt class="code">library</tt> is an interpreter method that loads a library. A complete description of the interpreter object is made in a special chapter of this book. </p>
+<hr/>
+<div class="chapter">
+Literals</div>
+<hr/>
+<p class="text">
+ This chapters covers in detail the literals objects used to manipulate numbers and strings. First the integer, relatif and real numbers are described. There is a broad range of methods for these three objects that support numerical computation. As a second step, string and character objects are described. Many examples show the various operations which can be used as automatic conversion between one type and another. Finally, the boolean object is described. These objects belongs to the class of <em>literal objects</em>, which are objects that have a string representation. A special literal object known as <em>regular expression</em> or <em>regex</em> is also described at the end of this chapter. </p>
+<div class="section">
+Integer number</div>
+<p class="text">
+ The fundamental number representation is the <tt class="code">Integer</tt>. The integer is a 64 bits signed 2's complement number. Even when running with a 32 bits machine, the 64 bits representation is used. If a larger representation is needed, the <tt class="code">Relatif</tt> object might be more appropriate. The <tt class="code">Integer</tt> object is a literal object that belongs to the number class. </p>
+<p class="subsect">
+Integer format</p>
+<p class="text">
+ The default literal format for an integer is the decimal notation. The minus sign (without blank) indicates a negative number. Hexadecimal and binary notations can also be used with prefix <tt class="code">0x</tt> and <tt class="code">0b</tt>. The underscore character can be used to make the notation more readable. </p>
+<pre class="frame">
+<![CDATA[const a  123
+trans b -255
+const h  0xff
+const b  0b1111_1111
+
+]]></pre>
+<p class="text">
+ Integer number are constructed from the literal notation or by using an explicit integer instance. The <tt class="code">Integer</tt> class offers standard constructors. The default constructor creates an integer object and initialize it to 0. The other constructors take either an integer, a real number, a character or a string.</p>
+<pre class="frame">
+<![CDATA[const a (Integer)
+const b (Integer 2000)
+const c (Integer "23")
+
+]]></pre>
+<p class="text">
+ When the hexadecimal or binary notation is used, care should be taken to avoid a negative integer. For example, <tt class="code">0x_8000_0000_0000_0000</tt> is the smallest negative number. This number exhibits also the strange property to be equal to its negation since with 2's complement, there is no positive representation. </p>
+<p class="subsect">
+Integer arithmetic</p>
+<p class="text">
+ Standard arithmetic operators are available as built-in operators. The usual addition <tt class="code">+</tt>, multiplication <tt class="code">*</tt> and division <tt class="code">/</tt> operate with two arguments. The subtraction <tt class="code">-</tt> operates with one or two arguments.</p>
+<pre class="frame">
+<![CDATA[+ 3 4
+- 3 4
+- 3
+* 3 4
+/ 4 2
+
+]]></pre>
+<p class="text">
+ As a built-in object, the <tt class="code">Integer</tt> object offers various methods for built-in arithmetic which directly operates on the object. The following example illustrates these methods. </p>
+<pre class="frame">
+<![CDATA[trans i 0
+i:++
+i:--
+i:+ 4
+i:= 4
+i:- 1
+i:* 2
+i:/ 2
+i:+= 1
+i:-= 1
+i:*= 2
+i:/= 2
+
+]]></pre>
+<p class="text">
+ As a side effect, these methods allows a const symbol to be modified. Since the methods operates on an object, they do not modify the state of the symbol. Such methods are called <em>mutable methods</em>. </p>
+<pre class="frame">
+<![CDATA[const i 0
+i:= 1
+
+]]></pre>
+<p class="subsect">
+Integer comparison</p>
+<p class="text">
+ The comparison operators works the same. The only difference is that they always return a <tt class="code">Boolean</tt> result. The comparison operators are namely equal <tt class="code">==</tt>, not equal <tt class="code">!=</tt>, less than <tt class="code">&lt;</tt>, less equal <tt class="code">&lt;=</tt>, greater <tt class="code">&gt;</tt> and greater equal <tt class="code">&gt;=</tt>. These operators take two arguments. </p>
+<pre class="frame">
+<![CDATA[== 0 1
+!= 0 1
+
+]]></pre>
+<p class="text">
+ Like the arithmetic methods, the comparison operators are supported as object methods. These methods return a <tt class="code">Boolean</tt> object. </p>
+<pre class="frame">
+<![CDATA[i:=  1
+i:== 1
+i:!= 0
+
+]]></pre>
+<p class="subsect">
+Integer calculus</p>
+<p class="text">
+ Armed with all these functions, it is possible to develop a battery of functions operating with numbers. As another example, we revisit the Fibonacci sequence as demonstrated in the introduction chapter. Such example was terribly slow, because of the double recursion. Another method suggested by Springer and Friedman uses two functions to perform the same job. </p>
+<pre class="frame">
+<![CDATA[const fib-it (gamma (n acc1 acc2) (
+    if (== n 1) acc2 (fib-it (- n 1) acc2 (+ acc1 acc2))))
+const fiboi (gamma (n) (
+    if (== n 0) 0 (fib-it n 0 1)))
+
+]]></pre>
+<p class="text">
+ This later example is by far much faster, since it uses only one recursion. Although, it is no the fastest way to write it, it is still an elegant way to write complex functions. </p>
+<p class="subsect">
+Other Integer methods</p>
+<p class="text">
+ The <tt class="code">Integer</tt> class offers other convenient methods. The <tt class="code">odd-p</tt> and <tt class="code">even-p</tt> are predicates. The <tt class="code">mod</tt> take one argument and returns the modulo between the calling integer and the argument. The <tt class="code">abs</tt> methods returns the absolute value of the calling integer. </p>
+<pre class="frame">
+<![CDATA[i:even-p
+i:odd-p
+i:mod 2
+i:= -1
+i:abs
+i:to-string
+
+]]></pre>
+<p class="text">
+ The <tt class="code">Integer</tt> object is a <em>literal object</em> and a <em>number object</em>. As a literal object, the <tt class="code">to-string</tt> and <tt class="code">to-literal</tt> methods are provided to obtain a string representation for the integer object. Although the <tt class="code">to-string</tt> method returns a string representation of the calling integer, the <tt class="code">to-literal</tt> method returns a parsable string. Strictly speaking for an integer, there is no difference between a string representation and a literal representation. However, this is not true for other objects. </p>
+<pre class="frame">
+<![CDATA[(axi) const i 0x123
+(axi) println (i:to-string)
+291
+(axi) println (i:to-literal)
+291
+
+]]></pre>
+<p class="text">
+ As a number object, the integer number can also be represented in hexadecimal format. The <tt class="code">to-hexa</tt> and <tt class="code">to-hexa-strign</tt> methods are designed to obtained such representation. In the first form, the <tt class="code">to-hexa</tt> method return a literal hexadecimal string representation with the appropriate prefix while the second one does not. </p>
+<pre class="frame">
+<![CDATA[(axi) const i 0x123
+(axi) println (i:to-hexa)
+0x123
+(axi) println (i:to-hexa-string)
+123
+
+]]></pre>
+<div class="section">
+Relatif number</div>
+<p class="text">
+ A <em>relatif</em> or big number is an integer with infinite precision. The <tt class="code">Relatif</tt> class is similar to the <tt class="code">Integer</tt> class except that it works with infinitely long number. The relatif notation uses a <tt class="code">r</tt> or <tt class="code">R</tt> suffix to express a relatif number versus an integer one. The <tt class="code">Relatif</tt> object is a literal object that belongs to the number class. The predicate associated with the <tt class="code">Relatif</tt> object is <tt class="code">relatif-p</tt>. </p>
+<pre class="frame">
+<![CDATA[const a  123R
+trans b -255R
+const c  0xffR
+const d  0b1111_1111R
+const e (Relatif)
+const f (Relatif 2000)
+const g (Relatif "23")
+
+]]></pre>
+<p class="subsect">
+Relatif operations</p>
+<p class="text">
+ Most of the <tt class="code">Integer</tt> class operations are supported by the <tt class="code">Relatif</tt> object. The only difference is that there is no limitation on the number size. This naturally comes with a computational price. An amazing example is to compute the biggest know prime Mersenne number. The world record exponent is 6972593. The number is therefore: </p>
+<pre class="frame">
+<![CDATA[const i 1R
+const m (- (i:shl 6972593) 1)
+
+]]></pre>
+<p class="text">
+ This number has 2098960 digits. You can use the <tt class="code">println</tt> method if you wish, but you have been warned... </p>
+<div class="section">
+Real number</div>
+<p class="text">
+ The <tt class="code">real</tt> class implements the representation for floating point number. The internal representation is machine dependent, and generally follows the double representation with 64 bits as specified by the IEEE 754-1985 standard for binary floating point arithmetic. All integer operations are supported for real numbers. The <tt class="code">Real</tt> object is a literal object that belongs to the number class.</p>
+<p class="subsect">
+Real format</p>
+<p class="text">
+ The parser supports two types of literal representation for real number. The first representation is the <em>dotted
+	decimal</em> notation. The second notation is the <em>scientific
+	notation</em>. </p>
+<pre class="frame">
+<![CDATA[const a  123.0 # a positive real
+const b -255.5 # a negative real
+const c  2.0e3 # year 2000.0
+
+]]></pre>
+<p class="text">
+ Real number are constructed from the literal notation or by using an explicit real instance. The <tt class="code">Real</tt> class offers standard constructors. The default constructor creates a real number object and initialize it to 0.0. The other constructors takes either an integer, a real number, a character or a string. </p>
+<p class="subsect">
+Real arithmetic</p>
+<p class="text">
+ The real arithmetic is similar to the integer one. When an integer is added to a real number, that number is automatically converted to a real. Ultimately, a pure integer operation might generate a real result. </p>
+<pre class="frame">
+<![CDATA[+ 1999.0 1   # 2000.0  
++ 1999.0 1.0 # 2000.0
+- 2000.0 1   # 1999.0  
+- 2000.0 1.0 # 1999.0
+* 1000 2.0   # 2000.0  
+* 1000.0 2.0 # 2000.0
+/ 2000.0 2   # 1000.0  
+/ 2000.0 2.0 # 1000.0
+
+]]></pre>
+<p class="text">
+ Like the <tt class="code">Integer</tt> object, the <tt class="code">Real</tt> object has arithmetic built-in methods. </p>
+<pre class="frame">
+<![CDATA[trans  r 0.0 # 0.0  
+r:++       # 1.0 
+r:--       # 0.0  
+r:+ 4.0    # 4.0  
+r:= 4.0    # 4.0  
+r:- 1.0    # 3.0  
+r:* 2.0    # 8.0  
+r:/ 2.0    # 2.0  
+r:+= 1.0   # 5.0  
+r:-= 1.0   # 4.0  
+r:*= 2.0   # 8.0  
+r:/= 2.0   # 4.0
+
+]]></pre>
+<p class="subsect">
+Real comparison</p>
+<p class="text">
+ The comparison operators works as the integer one. As for the other operators, an implicit conversion between an integer to a real is done automatically. </p>
+<pre class="frame">
+<![CDATA[== 2000 2000   # true
+!= 2000 1999   # true
+
+]]></pre>
+<p class="text">
+ Comparison methods are also available for the <tt class="code">Real</tt> object. These methods take either an integer or a real as argument. </p>
+<pre class="frame">
+<![CDATA[r:=  1.0 # 1.0
+r:== 1.0 # true  
+r:!= 0.0 # true
+
+]]></pre>
+<p class="subsect">
+A complex example</p>
+<p class="text">
+ One of the most interesting point with functional programming language is the ability to create complex function. For example let's assume we wish to compute the value at a point <tt class="code">x</tt> of the <em>Legendre polynomial of order
+	n</em>. One of the solution is to encode the function given its order. Another solution is to compute the function and then compute the value.</p>
+<pre class="frame">
+<![CDATA[# legendre polynomial order 0 and 1
+const lp-0 (gamma (x) 1)
+const lp-1 (gamma (x) x)
+# legendre polynomial of order n
+const lp-n (gamma (n) (
+    if (> n 1) {
+      const lp-n-1 (lp-n (- n 1))
+      const lp-n-2 (lp-n (- n 2))
+      gamma (x) (n lp-n-1 lp-n-2) 
+      (/ (- (* (* (- (* 2 n) 1) x) 
+            (lp-n-1 x))
+          (* (- n 1) (lp-n-2 x))) n)
+    } (if (== n 1) lp-1 lp-0)
+  ))
+# generate order 2 polynomial
+const lp-2 (lp-n 2)
+# print lp-2 (2)
+println "lp2 (2) = " (lp-2 2)
+
+]]></pre>
+<p class="text">
+ Note that the computation can be done either with integer or real numbers. With integers, you might get some strange results anyway, but it will work. Note also how the closed variable mechanism is used. The recursion capture each level of the polynomial until it is constructed. Note also that we have here a double recursion. </p>
+<p class="subsect">
+Other real methods</p>
+<p class="text">
+ The real numbers are delivered with a battery of functions. These include the trigonometric functions, the logarithm and couple others. Hyperbolic functions like <tt class="code">sinh</tt>, <tt class="code">cosh</tt>, <tt class="code">tanh</tt>, <tt class="code">asinh</tt>, <tt class="code">acosh</tt> and <tt class="code">atanh</tt> are also supported. The square root <tt class="code">sqrt</tt> method return the square root of the calling real. The <tt class="code">floor</tt> and <tt class="code">ceiling</tt> returns respectively the floor and the ceiling of the calling real.</p>
+<pre class="frame">
+<![CDATA[const r0 0.0       # 0.0
+const r1 1.0       # 1.0
+const r2 2.0       # 2.0
+const rn -2.0      # -2.0
+const rq (r2:sqrt) # 1.414213
+const pi 3.1415926 # 3.141592
+rq:floor           # 1.0
+rq:ceiling         # 2.0
+rn:abs             # 2.0
+r1:log             # 0.0
+r0:exp             # 1.0
+r0:sin             # 0.0
+r0:cos             # 1.0
+r0:tan             # 0.0
+r0:asin            # 0.0
+pi:floor           # 3.0
+pi:ceiling         # 4.0
+
+]]></pre>
+<p class="subsect">
+Accuracy and formatting</p>
+<p class="text">
+ Real numbers are not necessarily accurate, nor precise. The accuracy and precision are highly dependent on the hardware as well as the nature of the operation being performed. In any case, never assume that a real value is an exact one. Most of the time, a real comparison will fail, even if the numbers are very close together. When comparing real numbers, it is preferable to use the <tt class="code">?=</tt> operator. Such operator result is bounded by the internal precision representation and will generally return the desired value. The real precision is an interpreter value which is set with the <tt class="code">set-absolute-precision</tt> method while the <tt class="code">get-absolute-precision</tt> returns the interpreter precision. There is also a <tt class="code">set-relative-precision</tt> and <tt class="code">get-relative-precision</tt> methods used for the definition of relative precision. By default, the absolute precision is set to 0.00001 and the relative precision is set to 1.0E-8. </p>
+<pre class="frame">
+<![CDATA[interp:set-absolute-precision 0.0001
+const r 2.0
+const s (r:sqrt) # 1.4142135
+(s:?= 1.4142)    # true
+
+]]></pre>
+<p class="text">
+ Real number formatting is another story. The <tt class="code">format</tt> method takes a <em>precision argument</em> which indicates the number of digits to print for the decimal part. Note that the format command might round the result as indicated in the example below.</p>
+<pre class="frame">
+<![CDATA[const pi 3.1415926535
+pi:format 3  # 3.142
+
+]]></pre>
+<p class="text">
+ If additional formatting is needed, the <tt class="code">String</tt><tt class="code">fill-left</tt> and <tt class="code">fill-right</tt> methods can be used.</p>
+<pre class="frame">
+<![CDATA[const pi  3.1415926535        # 3.1415926535
+const val (pi:format 4)       # 3.1416
+println (val:fill-left '0' 9) # 0003.1416
+
+]]></pre>
+<p class="subsect">
+Number object</p>
+<p class="text">
+ The <tt class="code">Integer</tt>, <tt class="code">Relatif</tt> and <tt class="code">Real</tt> objects are all derived from the <tt class="code">Number</tt> object which is a <tt class="code">Literal</tt> object. As such, the predicate <tt class="code">number-p</tt> is the right mechanism to test an object for a number. The class also provides the basic mechanism to format the number as a string. For integer and relatif, the hexadecimal representation can be obtained by the <tt class="code">to-hexa</tt> and <tt class="code">to-hexa-string</tt> methods. For integer and real numbers, the <tt class="code">format</tt> method adjusts the final representation with the precision argument as indicated before. It is worth to note that a formatted integer gets automatically converted into a real representation. </p>
+<div class="section">
+Character</div>
+<p class="text">
+ The <tt class="code">Character</tt> object is another built-in object. A character is internally represented by a quad by using a 31 bit representation as specified by the Unicode standard and ISO 10646. </p>
+<p class="subsect">
+Character format</p>
+<p class="text">
+ The standard quote notation is used to represent a character. In that respect, there is hare a substantial difference with other functional language where the quote protect a form. </p>
+<pre class="frame">
+<![CDATA[const LA01 'a' # the character a
+const ND10 '0' # the digit 0
+
+]]></pre>
+<p class="text">
+ All characters from the <em>Unicode codeset</em> are supported by the AFNIX engine. The characters are constructed from the literal notation or by using an explicit character instance. The <tt class="code">Character</tt> class offers standard constructors. The default constructor creates a null character. The other constructors take either an integer, a character or a string. The string can be either a single quoted character or the literal notation based on the <tt class="code">U+</tt> notation in hexadecimal. For example, <tt class="code">U+40</tt> is the <em>@</em> character while <tt class="code">U+3A3</tt> is the sigma capital letter. </p>
+<pre class="frame">
+<![CDATA[const nilc (Character)        # null character
+const a    (Character 'a')    # a
+const 0    (Character 48)     # 0
+const mul  (Character "*")    # *
+const div  (Character "U+40") # @
+
+]]></pre>
+<p class="subsect">
+Character arithmetic</p>
+<p class="text">
+ A character is like an integer, except that it operates in the range 0 to 0x7FFFFFFF. The character arithmetic is simpler compared to the integer one and no overflow or underflow checking is done. Note that the arithmetic operations take an integer as an argument. </p>
+<pre class="frame">
+<![CDATA[+ 'a' 1 # 'b' 
+- '9' 1 # '8'
+
+]]></pre>
+<p class="text">
+ Several <tt class="code">Character</tt> object methods are also provided for arithmetic operations in a way similar to the <tt class="code">Integer</tt> class. </p>
+<pre class="frame">
+<![CDATA[trans  c 'a' # 'a'
+c:++         # 'b'
+trans  c '9' # '9'  
+c:--         # '8'
+c:+ 1        # '9'
+c:- 9        # '0'
+
+]]></pre>
+<p class="subsect">
+Character comparison</p>
+<p class="text">
+ Comparison operators are also working with the <tt class="code">Character</tt> object. The standard operators are namely equal <tt class="code">==</tt>, not equal <tt class="code">!=</tt>, less than <tt class="code">&lt;</tt>, less equal <tt class="code">&lt;=</tt>, greater <tt class="code">&gt;</tt> and greater equal <tt class="code">&gt;=</tt>. These operators take two arguments. </p>
+<pre class="frame">
+<![CDATA[== 'a' 'b' # false  
+!= '0' '1' # true
+
+]]></pre>
+<p class="subsect">
+Other character methods</p>
+<p class="text">
+ The <tt class="code">Character</tt> object comes with additional methods. These are mostly conversion methods and predicates. The <tt class="code">to-string</tt> method returns a string representation of the calling character. The <tt class="code">to-integer</tt> method returns an integer representation the calling character. The predicates are <tt class="code">alpha-p</tt>, <tt class="code">digit-p</tt>, <tt class="code">blank-p</tt>, <tt class="code">eol-p</tt>, <tt class="code">eos-p</tt> and <tt class="code">nil-p</tt>. </p>
+<pre class="frame">
+<![CDATA[const LA01 'a'  # 'a'
+const ND10 '0'  # '0'
+LA01:to-string  # "a"
+LA01:to-integer # 97
+LA01:alpha-p    # true
+ND10:digit-p    # true
+
+]]></pre>
+<div class="section">
+String</div>
+<p class="text">
+ The <tt class="code">String</tt> object is one of the most important built-in object in the AFNIX engine. Internally, a string is a vector of <em>Unicode characters</em>. Because a string operates with Unicode characters, care should be taken when using composing characters. </p>
+<p class="subsect">
+String format</p>
+<p class="text">
+ The standard double quote notation is used to represent literally a string. Standard escape sequences are also accepted to construct a string. </p>
+<pre class="frame">
+<![CDATA[const hello "hello"
+
+]]></pre>
+<p class="text">
+ Any literal object can be used to construct a string. This means that integer, real, boolean or character objects are all valid to construct strings. The default constructor creates a null string. The string constructor can also takes a string. </p>
+<pre class="frame">
+<![CDATA[const nils (String)      # ""
+const one  (String 1)    # "1"
+const a    (String 'a')  # "a"
+const b    (String true) # "true"
+
+]]></pre>
+<p class="subsect">
+String operations</p>
+<p class="text">
+ The <tt class="code">String</tt> object provides numerous methods and operators. The most common ones are illustrated in the example below. The <tt class="code">length</tt> methods returns the total number of characters in the string object. It is worth to note that this number is not necessarily the number of printed characters since some characters might be <em>combining characters</em> used, for example, as diacritics. The <tt class="code">non-combining-length</tt> method might be more adapted to get the number of printable characters. </p>
+<pre class="frame">
+<![CDATA[const h "hello"
+h:length       # 5
+h:get 0        # 'h'
+h:== "world"   # false
+h:!= "world"   # true
+h:+= " world"  # "hello world"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">sub-left</tt> and <tt class="code">sub-right</tt> methods return a sub-string, given the position index. For <tt class="code">sub-left</tt>, the index is the terminating index, while <tt class="code">sub-right</tt> is the starting index, counting from 0. </p>
+<pre class="frame">
+<![CDATA[# example of sub-left method
+const msg "hello world"
+msg:sub-left  5 # "hello"
+msg:sub-right 6 # "world"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">strip</tt>, <tt class="code">strip-left</tt> and <tt class="code">strip-right</tt> are methods used to strip blanks and tabs. The <tt class="code">strip</tt> method combines both <tt class="code">strip-left</tt> and <tt class="code">strip-right</tt>. </p>
+<pre class="frame">
+<![CDATA[# example of strip method
+const str " hello world "
+println (str:strip) # "hello world"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">split</tt> method returns a vector of strings by splitting the string according to a break sequence. By default, the break sequence is the blank, tab and newline characters. The break sequence can be one or more characters passed as one single argument to the method. </p>
+<pre class="frame">
+<![CDATA[# example of split method
+const str "hello:world"
+const vec (str:split ":" # "hello" "world")
+println (vec:length) # 2
+
+]]></pre>
+<p class="text">
+ The <tt class="code">fill-left</tt> and <tt class="code">fill-right</tt> methods can be used to fill a string with a character up to a certain length. If the string is longer than the length, nothing happens. </p>
+<pre class="frame">
+<![CDATA[# example of fill-left method
+const pi  3.1415926535  # 3.1415926535
+const val (pi:format 4) # 3.1416
+val:fill-left '0' 9     # 0003.1416
+
+]]></pre>
+<p class="subsect">
+Conversion methods</p>
+<p class="text">
+ The case conversion methods are the standard <tt class="code">to-upper</tt> and <tt class="code">to-lower</tt> methods. The method operates with the internal Unicode database. As a result, the conversion might change the string length. Other conversion methods related to the Unicode representation are also available. These are rather technical, but can be used to put the string in a normal form which might be suitable for comparison. Such conversion always uses the Unicode database normal form representation. </p>
+<pre class="frame">
+<![CDATA[# example of case conversion
+const str "hello world"
+println (str:to-upper) # HELLO WORLD
+
+]]></pre>
+<p class="subsect">
+String hash value</p>
+<p class="text">
+ The <tt class="code">hashid</tt> method is a method that computes the hash value of a string. The value depends on the target machine and will change between a 32 bits and a 64 bits machine. Example <em>example 0203.als</em> illustrates the computation of a hash value for our favorite test string. </p>
+<pre class="frame">
+<![CDATA[# test our favorite string
+const hello "hello world"
+hello:hashid # 1054055120
+
+]]></pre>
+<p class="text">
+ The algorithm used by the engine is shown as an example below. As a side note, it is recommended to print the shift amount in the program. One may notice, that the value remains bounded by 24. Since we are <em>xoring</em> the final value, it does illustrate that the algorithm is design for a 32 bits machine. With a 64 bits machine the algorithm is slightly modified to use the extra space. This also means that the hashid value is not portable across platforms. </p>
+<pre class="frame">
+<![CDATA[# compute string hashid
+const hashid (s) {
+  const len (s:length)
+  trans cnt 0
+  trans val 0
+  trans sht 17
+  do {
+    # compute the hash value
+    trans i (Integer (s:get cnt))
+    val:= (val:xor (i:shl sht))
+    # adjust shift index
+    if (< (sht:-= 7) 0) (sht:+= 24)
+  } (< (cnt:++) len)
+  eval val
+}
+
+]]></pre>
+<div class="section">
+Regular expression</div>
+<p class="text">
+ A regular expression or <em>regex</em> is a special literal object designed to describe a character string in a compact form with regular patterns. A regular expression provides a convenient way to perform pattern matching and filed extraction within a character string. </p>
+<p class="subsect">
+Regex syntax</p>
+<p class="text">
+ A regular expression is defined with a special <tt class="code">Regex</tt> object. A regular expression can be built implicitly or explicitly with the use of the <tt class="code">Regex</tt> object. The regex syntax uses the <tt class="code">[</tt> and <tt class="code">]</tt> characters as block delimiters. When used in a source file, the parser automatically recognizes a regex and built the object accordingly. The following example shows two equivalent methods for the same regex expression. </p>
+<pre class="frame">
+<![CDATA[# syntax built-in regex
+(== [$d+] 2000)         # true
+# explicit built-in regex
+(== (Regex "$d+") 2000) # true
+
+]]></pre>
+<p class="text">
+ In its first form, the <tt class="code">[</tt> and <tt class="code">]</tt> characters are used as syntax delimiters. The lexical analyzer automatically recognizes this token as a regex and built the equivalent <tt class="code">Regex</tt> object. The second form is the explicit construction of the <tt class="code">Regex</tt> object. Note also that the <tt class="code">[</tt> and <tt class="code">]</tt> characters are also used as regex block delimiters. </p>
+<p class="subsect">
+Regex characters and meta-characters</p>
+<p class="text">
+ Any character, except the one used as operators can be used in a regex. The <tt class="code">$</tt> character is used as a meta-character -- or control character -- to represent a particular set of characters. For example, <tt class="code">[hello world]</tt> is a regex which match only the <tt class="code">"hello world"</tt> string. The <tt class="code">[$d+]</tt> regex matches one or more digits. The following meta characters are built-in in the regex engine. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Character</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+$a</td>
+<td class="text">
+matches any letter or digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$b</td>
+<td class="text">
+matches any blank characters</td>
+</tr>
+<tr class="text">
+<td class="text">
+$c</td>
+<td class="text">
+matches any combining alphanumeric</td>
+</tr>
+<tr class="text">
+<td class="text">
+$d</td>
+<td class="text">
+matches any digit</td>
+</tr>
+<tr class="text">
+<td class="text">
+$e</td>
+<td class="text">
+matches eol, cr and eos</td>
+</tr>
+<tr class="text">
+<td class="text">
+$l</td>
+<td class="text">
+matches any lower case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$n</td>
+<td class="text">
+matches eol or cr</td>
+</tr>
+<tr class="text">
+<td class="text">
+$s</td>
+<td class="text">
+matches any letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$u</td>
+<td class="text">
+matches any upper case letter</td>
+</tr>
+<tr class="text">
+<td class="text">
+$v</td>
+<td class="text">
+matches any valid afnix constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$w</td>
+<td class="text">
+matches any word constituent</td>
+</tr>
+<tr class="text">
+<td class="text">
+$x</td>
+<td class="text">
+matches any hexadecimal characters</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The uppercase version is the complement of the corresponding lowercase character set. </p>
+<p class="text">
+ A character which follows a <tt class="code">$</tt> character and that is not a meta character is treated as a normal character. For example <tt class="code">$[</tt> is the <tt class="code">[</tt> character. A quoted string can be used to define character matching which could otherwise be interpreted as control characters or operator. A quoted string also interprets standard <em>escaped sequences</em> but not meta characters. </p>
+<pre class="frame">
+<![CDATA[(== [$d+]   2000) # true
+(== ["$d+"] 2000) # false
+
+]]></pre>
+<p class="text">
+ Combining alphanumerical characters can generate surprising result when used with Unicode string. Combining alphanumeric characters are alphanumeric characters and non spacing combining mark as defined by the Unicode consortium. In practice, the combining marks are the diacritics used with regular letter, such like the accents found in the western languages. Because the writing system uses a canonical decomposition for representing the Unicode string, it turns out that the printed string is generally represented with more bytes, making the string length longer than it appears. </p>
+<p class="subsect">
+Regex character set</p>
+<p class="text">
+ A character set is defined with the <tt class="code">&lt;</tt> and <tt class="code">&gt;</tt> characters. Any enclosed character defines a character set. Note that meta characters are also interpreted inside a character set. For example, <tt class="code">&lt;$d+-&gt;</tt> represents any digit or a plus or minus. If the first character is the <tt class="code">^</tt> character in the character set, the character set is complemented with regards to its definition. </p>
+<p class="subsect">
+Regex blocks and operators</p>
+<p class="text">
+ The <tt class="code">[</tt> and <tt class="code">]</tt> characters are the regex sub-expressions delimiters. When used at the top level of a regex definition, they can identify an implicit object. Their use at the top level for explicit construction is optional. The following example is strictly equivalent. </p>
+<pre class="frame">
+<![CDATA[# simple real number check
+const real-1 (Regex "$d*.$d+")
+# another way with [] characters
+const real-2 (Regex "[$d*.$d+]")
+
+]]></pre>
+<p class="text">
+ Sub-expressions can be nested -- that's their role -- and combined with operators. There is no limit in the nesting level. </p>
+<pre class="frame">
+<![CDATA[# pair of digit testing
+(== [$d$d[$d$d]+] 2000)  # true
+(== [$d$d[$d$d]+] 20000) # false
+
+]]></pre>
+<p class="text">
+ The following unary operators can be used with single character, control characters and sub-expressions. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Operator</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+*</td>
+<td class="text">
+match 0 or more times</td>
+</tr>
+<tr class="text">
+<td class="text">
++</td>
+<td class="text">
+match 1 or more times</td>
+</tr>
+<tr class="text">
+<td class="text">
+?</td>
+<td class="text">
+match 0 or 1 time</td>
+</tr>
+<tr class="text">
+<td class="text">
+|</td>
+<td class="text">
+alternation</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ Alternation is an operator which work with a secondary expression. Care should be taken when writing the right sub-expression. For example the following regex <tt class="code">[$d|hello]</tt> is equivalent to <tt class="code">[[$d|h]ello]</tt>. In other word, the minimal first sub-expression is used when compiling the regex. </p>
+<p class="subsect">
+Grouping</p>
+<p class="text">
+ Groups of sub-expressions are created with the <tt class="code">(</tt> and <tt class="code">)</tt> characters. When a group is matched, the resulting sub-string is placed on a stack and can be used later. In this respect, the regex engine can be used to extract sub-strings. The following example extracts the month, day and year from a particular date format: <tt class="code">[($d$d):($d$d):($d$d$d$d)]</tt>. This regex assumes a date in the form <em>mm:dd:yyyy</em>. </p>
+<pre class="frame">
+<![CDATA[if (== (const re [($d$d):($d$d)]) "12:31") {
+  trans hr (re:get 0)
+  trans mn (re:get 1)
+}
+
+]]></pre>
+<p class="text">
+ Grouping is the mechanism to retrieve sub-strings when a match is successful. If the regex is bound to a symbol, the <tt class="code">get</tt> method can be used to get the sub-string by index. </p>
+<p class="subsect">
+Regex object</p>
+<p class="text">
+ Although a regex can be built implicitly, the <tt class="code">Regex</tt> object can also be used to build a new regex. The argument is a string which is compiled during the object construction. A <tt class="code">Regex</tt> object is a literal object. This means that the <tt class="code">to-string</tt> method is available and that a call to the <tt class="code">println</tt> special form will work directly. </p>
+<pre class="frame">
+<![CDATA[const   re (Regex "$d+")
+println re           # $d+
+println re:to-string # [$d+]
+
+]]></pre>
+<p class="subsect">
+Regex operators</p>
+<p class="text">
+ The <tt class="code">==</tt> and <tt class="code">!=</tt> operators are the primary operators to perform a regex match. The <tt class="code">==</tt> operator returns <tt class="code">true</tt> if the regex matches the string argument from the beginning to the end of string. Such operator implies the begin and end of string anchoring. The <tt class="code">&lt;</tt> operator returns true if the regex matches the string or a sub-string or the string argument. </p>
+<p class="subsect">
+Regex methods</p>
+<p class="text">
+ The primary regex method is the <tt class="code">get</tt> method which returns by index the sub-string when a group has been matched. The <tt class="code">length</tt> method returns the number of group match. </p>
+<pre class="frame">
+<![CDATA[if (== (const re [($d$d):($d$d)]) "12:31") {
+  re:length # 2
+  re:get 0  # 12
+  re:get 1  # 31
+}
+
+]]></pre>
+<p class="text">
+ The <tt class="code">match</tt> method returns the first string which is matched by the regex. </p>
+<pre class="frame">
+<![CDATA[const regex [$d+]
+regex:match "Happy new year 2000" # 2000
+
+]]></pre>
+<p class="text">
+ The <tt class="code">replace</tt> method any occurrence of the matching string with the string argument. </p>
+<pre class="frame">
+<![CDATA[const regex [$d+]
+regex:replace "Hello year 2000" "3000" # hello year 3000
+
+]]></pre>
+<p class="subsect">
+Argument conversion</p>
+<p class="text">
+ The use of the <tt class="code">Regex</tt> operators implies that the arguments are evaluated as literal object. For this reason, an implicit string conversion is made during such operator call. For example, passing the integer <tt class="code">12</tt> or the string <tt class="code">"12"</tt> is strictly equivalent. Care should be taken when using this implicit conversion with real numbers. </p>
+<hr/>
+<div class="chapter">
+Container objects</div>
+<hr/>
+<p class="text">
+ This chapter covers the standard container objects and more specifically, <em>iterable</em> objects such like <tt class="code">Cons</tt>, <tt class="code">List</tt> and <tt class="code">Vector</tt>. Special objects like <tt class="code">Fifo</tt>, <tt class="code">Queue</tt> and <tt class="code">Bitset</tt> are treated at the end of this chapter. Although the name container is sufficient enough to describe the object functionality, it is clear that a container is more than a simple object reservoir. In particular, the choice of a container object is often associated to the underlying algorithm used to store the object. For example, a vector is appropriate when storing by index is important. If the order of storage must be preserved, then a fifo object might be more appropriate. In any case, the choice of a container is always a question of compromise, so is the implementation.</p>
+<div class="section">
+Cons object</div>
+<p class="text">
+ Originally, a <tt class="code">Cons</tt> object or <em>cons cell</em> have been the fundamental object of the Lisp or Scheme machine. The cons cell is the building block for list and is similar in some respect to the <em>cons cell</em> found in traditional functional programming language. A <tt class="code">Cons</tt> object is a simple element used to build linked list. The cons cell holds an object and a pointer to the next cons cell. The cons cell object is called <em>car</em> and the next cons cell is called the <em>cdr</em>. This original Lisp notation is maintained here for the sake of tradition. Although a cons cell is the building block for single linked list, the cell itself is not a list object. When a list object is needed, the <tt class="code">List</tt> double linked list object might be more appropriate. </p>
+<p class="subsect">
+Cons cell constructors</p>
+<p class="text">
+ The default constructor creates a cons cell those car is initialized to the nil object. The constructor can also take one or several objects. </p>
+<pre class="frame">
+<![CDATA[const nil-cons (Cons)
+const lst-cons (Cons 1 'a' "hello")
+
+]]></pre>
+<p class="text">
+ The constructor can take any kind of objects. When all objects have the same type, the result list is said to be <em>homogeneous</em>. If all objects do not have the same type, the result list is said to be <em>heterogeneous</em>. List can also be constructed directly by the parser. Since all internal forms are built with cons cell, the construction can be achieved by simply <em>protecting</em> the form from being interpreted. </p>
+<pre class="frame">
+<![CDATA[const blist (protect ((1) ((2) ((3)))))
+
+]]></pre>
+<p class="subsect">
+Cons cell methods</p>
+<p class="text">
+ A <tt class="code">Cons</tt> object provides several methods to access the <em>car</em> and the <em>cdr</em> of a cons cell. Other methods allows access to a list by index. </p>
+<pre class="frame">
+<![CDATA[const c (Cons "hello" "world")
+c:length   # 2
+c:get-car  # "hello"
+c:get-cadr # "world"
+c:get 0    # "hello"
+c:get 1    # "world"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">set-car</tt> method set the car of the cons cell. The <tt class="code">add</tt> method adds a new cons cell at the end of the cons list and set the car with the specified object.</p>
+<div class="section">
+List object</div>
+<p class="text">
+ The <tt class="code">List</tt> object provides the facility of a double-link list. The <tt class="code">List</tt> object is another example of <em>iterable object</em>. The <tt class="code">List</tt> object provides support for forward and backward iteration. </p>
+<p class="subsect">
+List construction</p>
+<p class="text">
+ A list is constructed like a cons cell with zero or more arguments. Unlike the cons cell, the <tt class="code">List</tt> can have a null size. </p>
+<pre class="frame">
+<![CDATA[const nil-list (List)
+const dbl-list (List 1 'a' "hello")
+
+]]></pre>
+<p class="subsect">
+List methods</p>
+<p class="text">
+ The <tt class="code">List</tt> object methods are similar the <tt class="code">Cons</tt> object. The <tt class="code">add</tt> method adds an object at the end of the list. The <tt class="code">insert</tt> method inserts an object at the beginning of the list. </p>
+<pre class="frame">
+<![CDATA[const list (List "hello" "world")
+list:length      # 2
+list:get 0       # "hello"
+list:get 1       # "world"
+list:add "folks" # "hello" "world" "folks"
+
+]]></pre>
+<div class="section">
+Vector object</div>
+<p class="text">
+ The <tt class="code">Vector</tt> object provides the facility of an index array of objects. The <tt class="code">Vector</tt> object is another example of <em>iterable object</em>. The <tt class="code">Vector</tt> object provides support for forward and backward iteration. </p>
+<p class="subsect">
+Vector construction</p>
+<p class="text">
+ A vector is constructed like a cons cell or a list. The default constructor creates a vector with 0 objects. </p>
+<pre class="frame">
+<![CDATA[const nil-vector (Vector)
+const obj-vector (Vector 1 'a' "hello")
+
+]]></pre>
+<p class="subsect">
+Vector methods</p>
+<p class="text">
+ The <tt class="code">Vector</tt> object methods are similar to the <tt class="code">List</tt> object. The <tt class="code">add</tt> method appends an object at the end of the vector. The <tt class="code">set</tt> method set a vector position by index. </p>
+<pre class="frame">
+<![CDATA[const vec (Vector "hello" "world")
+vec:length          # 2
+vec:get 0           # "hello"
+vec:get 1           # "world"
+vec:add "folks"     # "hello" "world" "folks"
+vec:set 0 "bonjour" # "bonjour" "world" "folks"
+
+]]></pre>
+<div class="section">
+Set object</div>
+<p class="text">
+ The <tt class="code">Set</tt> object provides the facility of an object container. The <tt class="code">Set</tt> object is another example of <em>iterable object</em>. The <tt class="code">Set</tt> object provides support for forward iteration. One of the property of a set is that there is only one object representation per set. Adding two times the same object results in one object only. </p>
+<p class="subsect">
+Set construction</p>
+<p class="text">
+ A set is constructed like a vector. The default constructor creates a set with 0 objects. </p>
+<pre class="frame">
+<![CDATA[const nil-set (Set)
+const obj-set (Set 1 'a' "hello")
+
+]]></pre>
+<p class="subsect">
+Set methods</p>
+<p class="text">
+ The <tt class="code">Set</tt> object methods are similar to the <tt class="code">Vector</tt> object. The <tt class="code">add</tt> method adds an object in the set. If the object is already in the set, the object is not added. The <tt class="code">length</tt> method returns the number of elements in the set. </p>
+<pre class="frame">
+<![CDATA[const set       (Set "hello" "world")
+set:get-size    # 2
+set:add "folks" # "hello" "world" "folks"
+
+]]></pre>
+<div class="section">
+Iteration</div>
+<p class="text">
+ When an object is <em>iterable</em>, it can be used with the reserved keyword <tt class="code">for</tt>. The <tt class="code">for</tt> keyword iterates on one or several objects and binds associated symbols during each step of the iteration process. All iterable objects provides also the method <tt class="code">get-iterator</tt> which returns an iterator for a given object. The use of iterator is justified during backward iteration, since <tt class="code">for</tt> only perform forward iteration. </p>
+<p class="subsect">
+Function mapping</p>
+<p class="text">
+ Given a function <tt class="code">func</tt>, it is relatively easy to apply this function to all objects of an iterable object. The result is a list of successive calls with the function. Such function is called a mapping function and is generally called <tt class="code">map</tt>.</p>
+<pre class="frame">
+<![CDATA[const map (obj func) {
+  trans result (Cons)
+  for (car) (obj) (result:link (func car))
+  eval result
+}
+
+]]></pre>
+<p class="text">
+ The <tt class="code">link</tt> method differs from the <tt class="code">add</tt> method in the sense that the object to append is set to the cons cell car if the car and cdr is nil.</p>
+<p class="subsect">
+Multiple iteration</p>
+<p class="text">
+ Multiple iteration can be done with one call to <tt class="code">for</tt>. The computation of a scalar product is a simple but illustrative example. </p>
+<pre class="frame">
+<![CDATA[# compute the scalar product of two vectors
+const scalar-product (u v) {
+  trans result 0
+  for (x y) (u v) (result:+= (* x y))
+  eval result
+}
+
+]]></pre>
+<p class="text">
+ Note that the function <tt class="code">scalar-product</tt> does not make any assumption about the object to iterate. One could compute the scalar product between a vector a list for example. </p>
+<pre class="frame">
+<![CDATA[const u (Vector 1 2 3)
+const v (List   2 3 4)
+scalar-product u v
+
+]]></pre>
+<p class="subsect">
+Conversion of iterable objects</p>
+<p class="text">
+ The use of an iterator is suitable for direct conversion between one object and another. The conversion to a vector can be simply defined as indicted below. </p>
+<pre class="frame">
+<![CDATA[# convert an iterable object to a vector
+const to-vector (obj) {
+  trans result (Vector)
+  for (i) (obj) (result:add i)
+  eval result
+}
+
+]]></pre>
+<p class="subsect">
+Explicit iterator</p>
+<p class="text">
+ An explicit iterator is constructed with the <tt class="code">get-iterator</tt> method. At construction, the iterator is reset to the beginning position. The <tt class="code">get-object</tt> method returns the object at the current iterator position. The <tt class="code">next</tt> advances the iterator to its next position. The <tt class="code">valid-p</tt> method returns <tt class="code">true</tt> if the iterator is in a valid position. When the iterator supports backward operations, the <tt class="code">prev</tt> method move the iterator to the previous position. Note that <tt class="code">Cons</tt> objects do not support backward iteration. The <tt class="code">begin</tt> method reset the iterator to the beginning. The <tt class="code">end</tt> method moves the iterator the last position. This method is available only with backward iterator. </p>
+<pre class="frame">
+<![CDATA[# reverse a list
+const reverse-list (obj) {
+  trans result (List)
+  trans itlist (obj:get-iterator)
+  itlist:end
+  while (itlist:valid-p) {
+    result:add (itlist:get-object))
+  itlist:prev
+}
+eval result
+}
+
+]]></pre>
+<div class="section">
+Special Objects</div>
+<p class="text">
+ The engine incorporates other container objects. To name a few, such objects are the <tt class="code">Queue</tt>, <tt class="code">Bitset</tt> or <tt class="code">Fifo</tt> objects. </p>
+<p class="subsect">
+Queue object</p>
+<p class="text">
+ A <em>queue</em> is a special object which acts as container with a <em>fifo policy</em>. When an object is placed in the queue, it remains there until it has been dequeued. The <tt class="code">Fifo</tt> and <tt class="code">Queue</tt> objects are somehow similar, with the fundamental difference that the queue resize itself if needed. </p>
+<pre class="frame">
+<![CDATA[# create a queue with objects
+const q (Queue "hello" "world")
+q:empty-p # false
+q:length  # 2 
+# dequeue some object
+q:dequeue # hello
+q:dequeue # world
+q:empty-p # true
+
+]]></pre>
+<p class="subsect">
+Bitset object</p>
+<p class="text">
+ A <em>bit set</em> is a special container for bit. A bit set can be constructed with a specific size. When the bit set is constructed, each bit can be marked and tested by index. Initially, the bitset size is null. </p>
+<pre class="frame">
+<![CDATA[# create a bit set by size
+const bs (Bitset 8)
+bitset-p bs # true
+# check, mark and clear
+assert false (bs:marked-p 0)
+bs:mark 0
+assert true  (bs:marked-p 0)
+bs:clear 0
+assert false (bs:marked-p 0)
+
+]]></pre>
+<hr/>
+<div class="chapter">
+Classes</div>
+<hr/>
+<p class="text">
+ This chapter covers the class model and its associated operations. The class model is slightly different compared to traditional one because dynamic symbol bindings do not enforce to declare the class data members. A class is an object which can be manipulated by itself. Such class is said to belongs to a group of <em>meta class</em> as described later in this chapter. Once the class concept has been detailed, the chapter moves to the concept of instance of that class and shows how instance data members and functions can be used. The chapter terminates with a description of dynamic class programming. </p>
+<div class="section">
+Class object</div>
+<p class="text">
+ A <em>class object</em> is simply a nameset which can be replicated via a construction mechanism. A class is created with the special form <tt class="code">class</tt>. The result is an object of type <tt class="code">Class</tt> which supports various symbol binding operations. </p>
+<p class="subsect">
+Class declaration and bindings</p>
+<p class="text">
+ A new class is an object created with the reserved keyword <tt class="code">class</tt>. Such class is an object which can be bound to a symbol.</p>
+<pre class="frame">
+<![CDATA[const Color (class)
+
+]]></pre>
+<p class="text">
+ Because a class acts like a nameset, it is possible to bind directly symbols with the <em>qualified name</em> notation. </p>
+<pre class="frame">
+<![CDATA[const Color (class)
+const Color:RED-FACTOR   0.75
+const Color:BLUE-FACTOR  0.75
+const Color:GREEN-FACTOR 0.75
+
+]]></pre>
+<p class="text">
+ When a data is defined in the class nameset, it is common to refer it as a <em>class data member</em>. A class data member is invariant over the instance of that class. When the data member is declared with the <tt class="code">const</tt> reserved keyword, the symbol binding is in the class nameset. </p>
+<p class="subsect">
+Class closure binding</p>
+<p class="text">
+ A lambda or gamma expression can be define for a class. If the class do not reference an instance of that class, the resulting closure is called a <em>class method</em> of that class. Class methods are invariant among the class instances. The standard declaration syntax for a lambda or gamma expression is still valid with a class.</p>
+<pre class="frame">
+<![CDATA[const Color:get-primary-by-string (color value) {
+  trans val "0x"
+  val:+= (switch color (
+      ("red"   (value:substr 1 3))
+      ("green" (value:substr 3 5))
+      ("blue"  (value:substr 5 7))
+    ))
+  Integer val
+}
+
+]]></pre>
+<p class="text">
+ The invocation of a class method is done with the standard <em>qualified name</em> notation. </p>
+<pre class="frame">
+<![CDATA[Color:get-primary-by-string "red"   "#23c4e5"
+Color:get-primary-by-string "green" "#23c4e5"
+Color:get-primary-by-string "blue"  "#23c4e5"
+
+]]></pre>
+<p class="subsect">
+Class symbol access</p>
+<p class="text">
+ A class acts as a nameset and therefore provides the mechanism to evaluate any symbol with the qualified name notation. </p>
+<pre class="frame">
+<![CDATA[const Color:RED-VALUE "#ff0000"
+const Color:print-primary-colors (color) {
+  println "red   color " (
+    Color:get-primary-color "red"   color)
+  println "green color " (
+    Color:get-primary-color "green" color)
+  println "blue  color " (
+    Color:get-primary-color "blue"  color)
+}
+# print the color components for the red color
+Color:print-primary-colors Color:RED-VALUE
+
+]]></pre>
+<div class="section">
+Instance</div>
+<p class="text">
+ An <em>instance</em> of a class is an object which is constructed by a special class method called a <em>constructor</em>. If an instance constructor does not exist, the instance is said to have a default construction. An instance acts also as a nameset. The only difference with a class, is that a symbol resolution is done first in the instance nameset and then in the instance class. As a consequence, creating an instance is equivalent to define a default nameset hierarchy. </p>
+<p class="subsect">
+Instance construction</p>
+<p class="text">
+ By default, a instance of the class is an object which defines an instance nameset. The simplest way to define an anonymous instance is to create it directly. </p>
+<pre class="frame">
+<![CDATA[const i     ((class))
+const Color (class)
+const red   (Color)
+
+]]></pre>
+<p class="text">
+ The example above define an instance of an anonymous class. If a class object is bound to a symbol, such symbol can be used to create an instance of that class. When an instance is created, the special symbol named <tt class="code">this</tt> is defined in the instance nameset. This symbol is bounded to the instance object and can be used to reference in an anonymous way the instance itself.</p>
+<p class="subsect">
+Instance initialization</p>
+<p class="text">
+ When an instance is created, the engine looks for a special lambda expression called <tt class="code">preset</tt>. This lambda expression, if it exists, is executed after the default instance has been constructed. Such lambda expression is a method since it can refer to the <tt class="code">this</tt> symbol and bind some instance symbols. The arguments which are passed during the instance construction are passed to the <tt class="code">preset</tt> method.</p>
+<pre class="frame">
+<![CDATA[const Color (class)
+trans Color:preset (red green blue) {
+  const this:red   (Integer red)
+  const this:green (Integer green)
+  const this:blue  (Integer blue)
+}
+# create some default colors
+const Color:RED   (Color 255   0   0)
+const Color:GREEN (Color   0 255   0)
+const Color:BLUE  (Color   0   0 255)
+const Color:BLACK (Color   0   0   0)
+const Color:WHITE (Color 255 255 255)
+
+]]></pre>
+<p class="text">
+ In the example above, each time a color is created, a new instance object is created. The constructor is invoked with the <tt class="code">this</tt> symbol bound to the newly created instance. Note that the qualified name <tt class="code">this:red</tt> defines a new symbol in the instance nameset. Such symbol is sometimes referred as an <em>instance data member</em>. Note as well that there is no ambiguity in resolving the symbol <tt class="code">red</tt>. Once the symbol is created, it shadows the one defined as a constructor argument. </p>
+<p class="subsect">
+Instance symbol access</p>
+<p class="text">
+ An instance acts as a nameset. It is therefore possible to bind locally to an instance a symbol. When a symbol needs to be evaluated, the instance nameset is searched first. If the symbol is not found, the class nameset is searched. When an instance symbol and a class symbol have the same name, the instance symbol is said to shadow the class symbol. The simple example below illustrates this property. </p>
+<pre class="frame">
+<![CDATA[const c   (class)
+const c:a 1
+const i   (c)
+const j   (c)
+const i:a 2
+# class symbol access
+println   c:a
+# shadow symbol access
+println   i:a
+# non shadow access
+println   j:a
+
+]]></pre>
+<p class="text">
+ When the instance is created, the special symbol <tt class="code">meta</tt> is bound in the instance nameset with the instance class object. This symbol can therefore be used to access a shadow symbol.</p>
+<pre class="frame">
+<![CDATA[const c   (class)
+const i   (c)
+const c:a 1
+const i:a 2
+println   i:a
+println   i:meta:a
+
+]]></pre>
+<p class="text">
+ The symbol <tt class="code">meta</tt> must be used carefully, especially inside an initialization since it might create an infinite recursion as shown below. </p>
+<pre class="frame">
+<![CDATA[const c (class)
+trans c:preset nil (const i (this:meta))
+const i (c)
+
+]]></pre>
+<p class="subsect">
+Instance method</p>
+<p class="text">
+ When lambda expression is defined within the class or the instance nameset, that lambda expression is callable from the instance itself. If the lambda expression uses the <tt class="code">this</tt> symbol, that lambda is called an instance method since the symbol <tt class="code">this</tt> is defined in the instance nameset. If the instance method is defined in the class nameset, the instance method is said to be <em>global</em>, that is, callable by any instance of that class. If the method is defined in the instance nameset, that method is said to be <em>local</em> and is callable by the instance only. Due to the nature of the nameset parent binding, only lambda expression can be used. Gamma expressions will not work since the gamma nameset has always the top level nameset as its parent one. </p>
+<pre class="frame">
+<![CDATA[const Color (class)
+# class constructor
+trans Color:preset (red green blue) {
+  const this:red   (Integer red)
+  const this:green (Integer green)
+  const this:blue  (Integer blue)
+}
+const Color:RF 0.75
+const Color:GF 0.75
+const Color:BF 0.75
+# this method returns a darker color
+trans Color:darker nil {
+  trans lr (Integer (max (this:red:*   Color:RF) 0))
+  trans lg (Integer (max (this:green:* Color:GF) 0))
+  trans lb (Integer (max (this:blue:*  Color:BF) 0))
+  Color lr lg lb
+}
+# get a darker color than yellow
+const yellow      (Color 255 255 0)
+const dark-yellow (yellow:darker)
+
+]]></pre>
+<p class="subsect">
+Instance operators</p>
+<p class="text">
+ Any operator can be defined at the class or the instance level. Operators like <tt class="code">==</tt> or <tt class="code">!=</tt> generally requires the ability to assert if the argument is of the same type of the instance. The global operator <tt class="code">==</tt> will return true if two classes are the same. With the use of the <tt class="code">meta</tt> symbol, it is possible to assert such equality. </p>
+<pre class="frame">
+<![CDATA[# this method checks that two colors are equals
+trans Color:== (color) {
+  if (== Color color:meta) {
+    if (!= this:red   color:red)   (return false)    
+    if (!= this:green color:green) (return false)    
+    if (!= this:blue  color:blue)  (return false)
+    eval true
+  } false
+}
+# create a new yellow color
+const  yellow (Color 255 255 0)
+(yellow:== (Color 255 255 0)) # true
+
+]]></pre>
+<p class="text">
+ The global operator <tt class="code">==</tt> returns <tt class="code">true</tt> if both arguments are the same, even for classes. Method operators are left open to the user. </p>
+<p class="subsect">
+Complex number example</p>
+<p class="text">
+ As a final example, a class simulating the behavior of a complex number is given hereafter. The interesting point to note is the use of the operators. As illustrated before, the class uses uses a default method method to initialize the data members. </p>
+<pre class="frame">
+<![CDATA[# class declaration
+const Complex (class)
+# constructor
+trans Complex:preset (re im) {
+  trans this:re (Real re)
+  trans this:im (Real im)
+}
+
+]]></pre>
+<p class="text">
+ The constructor creates a complex object with the help of the real part and the imaginary part. Any object type which can be bound to a <tt class="code">Real</tt> object is acceptable. </p>
+<pre class="frame">
+<![CDATA[# class mutators
+trans Complex:set-re (x) (trans this:re (Real re))
+trans Complex:set-im (x) (trans this:im (Real im))
+# class accessors
+trans Complex:get-re nil (Real this:re)
+trans Complex:get-im nil (Real this:im)
+
+]]></pre>
+<p class="text">
+ The accessors and the mutators simply provides the interface to the complex number components and perform a cloning of the calling or returned objects. </p>
+<pre class="frame">
+<![CDATA[# complex number module
+trans Complex:module nil {
+  trans result (Real (+ (* this:re this:re) 
+      (* this:im this:im)))
+  result:sqrt
+}
+# complex number formatting
+trans Complex:format nil {
+  trans result (String this:re)
+  result:+= "+i" 
+  result:+= (String this:im)
+}
+
+]]></pre>
+<p class="text">
+ The <tt class="code">module</tt> and <tt class="code">format</tt> are simple methods. Note the the complex number formatting is arbitrary here. </p>
+<pre class="frame">
+<![CDATA[# complex predicate
+const complex-p (c) (
+  if (instance-p c) (== Complex c:meta) false)
+
+]]></pre>
+<p class="text">
+ The <tt class="code">complex-p</tt> predicate is the perfect illustration of the use of the <tt class="code">meta</tt> reserved symbol. However, it shall be noted that the meta-comparison is done if and only if the calling argument is an instance. </p>
+<pre class="frame">
+<![CDATA[# operators
+trans Complex:== (c) (
+  if (complex-p c) (and (this:re:== c:re) 
+    (this:im:== c:im)) (
+    if (number-p c)  (and (this:re:== c) 
+      (this:im:zero-p)) false))
+trans Complex:= (c) {
+  if (complex-p c) {
+    this:re:= (Real c:re)
+    this:im:= (Real c:im)
+    return this
+  }
+  this:re:= (Real c)
+  this:im:= 0.0
+  return this
+}
+trans Complex:+ (c) {
+  trans result (Complex this:re this:im)
+  if (complex-p c) {
+    result:re:+= c:re
+    result:im:+= c:im
+    return result
+  }
+  result:re:+= (Real c)
+  eval result
+}
+
+]]></pre>
+<p class="text">
+ The operators are a little tedious to write. The comparison can be done with a complex number or a built-in number object. The assignation operator creates a copy for both the real and imaginary part. The summation operator is given here for illustration purpose. </p>
+<div class="section">
+Inheritance</div>
+<p class="text">
+ Inheritance is the mechanism by which a class or an instance inherits methods and data member access from a parent object. The class model is based on a single inheritance model. When an instance object defines a parent object, such object is called a <em>super instance</em>. The instance which has a super instance is called a <em>derived instance</em>. The main utilization of inheritance is the ability to reuse methods for that super instance.</p>
+<p class="subsect">
+Derivation construction</p>
+<p class="text">
+ A derived object is generally defined within the <tt class="code">preset</tt> method of that instance by setting the <tt class="code">super</tt> data member. The <tt class="code">super</tt> reserved keyword is set to nil at the instance construction. The good news is that any object can be defined as a super instance, including built-in object.</p>
+<pre class="frame">
+<![CDATA[const c (class)
+const c:preset nil {
+  trans this:super 0
+}
+
+]]></pre>
+<p class="text">
+ In the example above, an instance of class <tt class="code">c</tt> is constructed. The super instance is with an integer object. As a consequence, the instance is derived from the <tt class="code">Integer</tt> instance. Another consequence of this scheme is that derived instance do not have to be built from the same base class. </p>
+<p class="subsect">
+Derived symbol access</p>
+<p class="text">
+ When an instance is derived from another one, any symbol which belongs to the super instance can be access with the use of the <tt class="code">super</tt> data member. If the super class can evaluate a symbol, that symbol is resolved automatically by the derived instance. </p>
+<pre class="frame">
+<![CDATA[const c       (class)
+const i       (c)
+trans i:a     1
+const j       (c)
+trans j:super i
+println j:a
+
+]]></pre>
+<p class="text">
+ When a symbol is evaluated, a set of search rules is applied. The engine gives the priority to the class nameset vs the super instance. As a consequence, a class data member might shadow a super instance data member. The rule associated with a symbol evaluation can be summarized as follow. </p>
+<ul class="text">
+<li>
+Look in the instance nameset.</li>
+<li>
+Look in the class nameset.</li>
+<li>
+Look in the super instance if it exists.</li>
+<li>
+Look in the base object.</li>
+</ul>
+<p class="subsect">
+Instance re-parenting</p>
+<p class="text">
+ The ability to set dynamically the parent instance make the object model an ideal candidate to support <em>instance
+	re-parenting</em>. In this model, a change in the parent instance is automatically reflected at the instance method call. </p>
+<pre class="frame">
+<![CDATA[const c (class)
+const i (c)
+trans i:super 0
+println (i:to-string) # 0
+trans i:super "hello world"
+println (i:to-string) # hello world
+
+]]></pre>
+<p class="text">
+ In this example, the instance is originally set with an <tt class="code">Integer</tt> instance parent. Then the instance is <em>re-parented</em> with a <tt class="code">String</tt> instance parent. The call to the <tt class="code">to-string</tt> method illustrates this behavior. </p>
+<p class="subsect">
+Instance re-binding</p>
+<p class="text">
+ The ability to set dynamically the instance class is another powerful feature of the class model. In this approach, the instance meta class can be changed dynamically with the <tt class="code">mute</tt> method. Furthermore, it is also possible to create initially an instance without any class binding, which is later muted.</p>
+<pre class="frame">
+<![CDATA[# create a point class
+const  point (class)
+# point class
+trans point:preset (x y) {
+  trans this:x x
+  trans this:y y
+}
+# create an empty instance
+const p (Instance)
+# bind the point class
+p:mute point 1 2
+
+]]></pre>
+<p class="text">
+ In this example, when the instance is muted, the <tt class="code">preset</tt> method is called automatically with the extra arguments.</p>
+<p class="subsect">
+Instance inference</p>
+<p class="text">
+ The ability to instantiate dynamically inferred instance is offered by the instance model. An instance <em>b</em> is said to be inferred by the instance <em>a</em> when the instance <em>a</em> is the super instance of the instance <em>b</em>. The instance inference is obtained by binding the <tt class="code">infer</tt> symbol to a class. When an instance of that class is created, the inferred instance is also created. </p>
+<pre class="frame">
+<![CDATA[# base class A
+const A  (class)
+# inferred class B
+const B  (class)
+const A:infer B
+# create an instance from A
+const  x (A)
+assert B (x:meta)
+assert A (x:super:meta)
+
+]]></pre>
+<p class="text">
+ In this example, when the instance is created, the inferred instance is also created and returned by the instantiation process. The <tt class="code">preset</tt> method is only called for the inferred instance if possible or the base instance if there is no inferring class. Because the base <tt class="code">preset</tt> preset method is not called automatically, the inferred method is responsible to do such call. </p>
+<pre class="frame">
+<![CDATA[trans B:preset (x y) {
+  trans this:xb x
+  trans this:yb y
+  if (== A this:super:meta) (this:super:preset x y)
+}
+
+]]></pre>
+<p class="text">
+ Because the class can mute from one call to another and also the inferred class, the <tt class="code">preset</tt> method call must be used after a discrimination of the meta class has been made as indicated by the above example. </p>
+<p class="subsect">
+Instance deference</p>
+<p class="text">
+ In the process of creating instances, one might have a generic class with a method that attempts to access a data member which is bound to another class. The concept of class <em>deference</em> is exactly designed for this purpose. With the help of reserved keyword <tt class="code">defer</tt>, a class with virtual data member accessors can be bound to a base class as indicated in the example below. </p>
+<pre class="frame">
+<![CDATA[# create the base and defer class
+const bc (class)
+const dc (class)
+# bind the base preset method
+trans bc:preset nil (const this:y 2)
+# bind the defer accessor to the base data member
+trans dc:get-y nil (eval this:y)
+# bind the defer class in the base class
+const bc:defer dc
+# create an instance from the base class
+const i (bc)
+# access to the base member with the defer method
+assert 2 (i:get-y)
+
+]]></pre>
+<p class="text">
+ It is worth to note that the class deference is made at the class level. When an instance of the base class is created, all methods associated with the <em>deferent</em> class are visible from the base class, thus making the <em>deferent</em> class a virtual interface to the base class. </p>
+<hr/>
+<div class="chapter">
+Advanced concepts</div>
+<hr/>
+<p class="text">
+ This chapter covers advanced concepts of the writing system. The first subject is the exception model. The second subject covers some properties of the namesets in the context of the interpreter object. The thread sub-system is then described along with the synchronization mechanism. Finally, some notes related to the functional system are given at the end of this chapter. </p>
+<div class="section">
+Exception</div>
+<p class="text">
+ An <em>exception</em> is an unexpected change in the execution flow. The exception model is based on a mechanism which throws the exception to be caught by a handler. The mechanism is also designed to be compatible with the native "C++" implementation. </p>
+<p class="subsect">
+Throwing an exception</p>
+<p class="text">
+ An exception is thrown with the reserved keyword <tt class="code">throw</tt>. When an exception is thrown, the normal flow of execution is interrupted and an object used to carry the exception information is created. Such exception object is propagated backward in the call stack until an exception handler catch it.</p>
+<pre class="frame">
+<![CDATA[if (not (number-p n)) 
+(throw "type-error" "invalid object found" n)
+
+]]></pre>
+<p class="text">
+ The example above is the general form to throw an exception. The first argument is the <em>the exception id</em>. The second argument is the <em>exception reason</em>. The third argument is the <em>exception object</em>. The exception id and reason are always a string. The exception object can be any object which is carried by the exception. The reserved keyword <tt class="code">throw</tt> accepts 0 or more arguments. </p>
+<pre class="frame">
+<![CDATA[throw              
+throw "type-error" 
+throw "type-error" "invalid argument"
+
+]]></pre>
+<p class="text">
+ With 0 argument, the exception is thrown with the exception id set to "user-exception". With one argument, the argument is the exception id. With 2 arguments, the exception id and reason are set. Within a try block, an exception can be thrown again by using the exception object represented with the <tt class="code">what</tt> symbol.</p>
+<pre class="frame">
+<![CDATA[try {
+  ...
+} {
+  println "exception caught and re-thrown"
+  throw what
+}
+
+]]></pre>
+<p class="subsect">
+Exception handler</p>
+<p class="text">
+ The special form <tt class="code">try</tt> executes a form and catch an exception if one has been thrown. With one argument, the form is executed and the result is the result of the form execution unless an exception is caught. If an exception is caught, the result is the exception object. If the exception is a native one, the result is nil.</p>
+<pre class="frame">
+<![CDATA[try (+ 1 2)
+try (throw)
+try (throw "hello")
+try (throw "hello" "world")
+try (throw "hello" "world" "folks")
+
+]]></pre>
+<p class="text">
+ In its second form, the <tt class="code">try</tt> reserved keyword can accept a second form which is executed when an exception is caught. When an exception is caught, a new nameset is created and the special symbol <tt class="code">what</tt> is bounded with the exception object. In such environment, the exception can be evaluated. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Symbol</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+eid</td>
+<td class="text">
+Exception id</td>
+</tr>
+<tr class="text">
+<td class="text">
+name</td>
+<td class="text">
+Exception file name</td>
+</tr>
+<tr class="text">
+<td class="text">
+line</td>
+<td class="text">
+Exception line number</td>
+</tr>
+<tr class="text">
+<td class="text">
+about</td>
+<td class="text">
+Exception extended reason</td>
+</tr>
+<tr class="text">
+<td class="text">
+reason</td>
+<td class="text">
+Exception reason</td>
+</tr>
+<tr class="text">
+<td class="text">
+object</td>
+<td class="text">
+Exception object</td>
+</tr>
+</table>
+<p/>
+<pre class="frame">
+<![CDATA[try (throw "hello")              
+(eval what:eid)
+try (throw "hello" "world")      
+(eval what:reason)
+try (throw "hello" "world" 2000) 
+(eval what:object)
+
+]]></pre>
+<p class="text">
+ Exceptions are useful to notify abruptly that something went wrong. With an untyped language, it is also a convenient mechanism to abort an expression call if some arguments do not match the expected types. </p>
+<pre class="frame">
+<![CDATA[# protected factorial
+const fact (n) {
+  if (not (integer-p n)) 
+  (throw "number-error" "invalid argument in fact")
+  if (== n 0) 1 (* n (fact (- n 1)))
+}
+try (fact 5) 0
+try (fact "hello") 0
+
+]]></pre>
+<div class="section">
+Nameset</div>
+<p class="text">
+ A nameset is created with the reserved keyword <tt class="code">nameset</tt>. Without argument, the <tt class="code">nameset</tt> reserved keyword creates a nameset without setting its parent. With one argument, a nameset is created and the parent set with the argument.</p>
+<pre class="frame">
+<![CDATA[const nset (nameset)
+const nset (nameset ...)
+
+]]></pre>
+<p class="subsect">
+Default namesets</p>
+<p class="text">
+ When a nameset is created, the symbol <tt class="code">.</tt> is automatically created and bound to the newly created nameset. If a parent nameset exists, the symbol <tt class="code">..</tt> is also automatically created. The use of the current nameset is a useful notation to resolve a particular name given a hierarchy of namesets.</p>
+<pre class="frame">
+<![CDATA[trans a 1 # 1
+block {
+  trans   a (+ a 1) # 2
+  println ..:a 1    # 1
+}
+println a           # 1
+
+]]></pre>
+<p class="subsect">
+Nameset and inheritance</p>
+<p class="text">
+ When a nameset is set as the super object of an instance, some interesting results are obtained. Because symbols are resolved in the nameset hierarchy, there is no limitation to use a nameset to simulate a kind of multiple inheritance. The following example illustrates this point. </p>
+<pre class="frame">
+<![CDATA[const   cls (class)
+const   ins (cls)
+const   ins:super (nameset)
+const   ins:super:value 2000
+const   ins:super:hello "hello world "
+println ins:hello ins:value # hello world 2000
+
+]]></pre>
+<div class="section">
+Delayed Evaluation</div>
+<p class="text">
+ The engine provides a mechanism called <em>delayed
+      evaluation</em>. Such mechanism permits the encapsulation of a form to be evaluated inside an object called a <em>promise</em>. </p>
+<p class="subsect">
+Creating a promise</p>
+<p class="text">
+ The reserved keyword <tt class="code">delay</tt> creates a <em>promise</em>. When the promise is created, the associated object is not evaluated. This means that the promise evaluates to itself.</p>
+<pre class="frame">
+<![CDATA[const a (delay (+ 1 2))
+promise-p a # true
+
+]]></pre>
+<p class="text">
+ The previous example creates a promise and store the argument form. The form is not yet evaluated. As a consequence, the symbol <tt class="code">a</tt> evaluates to the promise object. </p>
+<p class="subsect">
+Forcing a promise</p>
+<p class="text">
+ The reserved keyword <tt class="code">force</tt> the evaluation of a promise. Once the promise has been forced, any further call will produce the same result. Note also that, at this stage, the promise evaluates to the evaluated form.</p>
+<pre class="frame">
+<![CDATA[trans   y 3
+const   l ((lambda (x) (+ x y)) 1)
+assert  4 (force l)
+trans   y 0
+assert  4 (force l)
+
+]]></pre>
+<div class="section">
+Enumeration</div>
+<p class="text">
+ Enumeration, that is, named constant bound to an object, can be declared with the reserved keyword <tt class="code">enum</tt>. The enumeration is built with a list of literal and evaluated as is. </p>
+<pre class="frame">
+<![CDATA[const  e    (enum E1 E2 E3)
+assert true (enum-p e)
+
+]]></pre>
+<p class="text">
+ The complete enumeration evaluates to an <tt class="code">Enum</tt> object. Once built, enumeration item evaluates by literal and returns an <tt class="code">Item</tt> object.</p>
+<pre class="frame">
+<![CDATA[assert true   (item-p e:E1)
+assert "Item" (e:E1:repr)
+
+]]></pre>
+<p class="text">
+ Items are comparable objects. Only items can be compared. For a given item, the source enumeration can be obtained with the <tt class="code">get-enum</tt> method.</p>
+<pre class="frame">
+<![CDATA[# check for item equality
+const i1 e:E1
+const i2 e:E2
+assert true  (i1:== i1)
+assert false (== i1 i2)
+# get back the enumeration
+assert true (enum-p (i1:get-enum))
+
+]]></pre>
+<div class="section">
+Logger</div>
+<p class="text">
+ The <tt class="code">Logger</tt> class is a message logger that stores messages in a buffer with a level. The default level is the level 0. A negative level generally indicates a warning or an error message but this is just a convention which is not enforced by the class. A high level generally indicates a less important message. The messages are stored in a circular buffer. When the logger is full, a new message replace the oldest one. By default, the logger is initialized with a 256 messages capacity that can be re-sized.</p>
+<pre class="frame">
+<![CDATA[const log    (Logger)
+assert true  (logger-p log)
+
+]]></pre>
+<p class="text">
+ When a message is added, the message is stored with a time-stamp and a level. The time-stamp is used later to format a message. The <tt class="code">length</tt> method returns the number of logged messages. The <tt class="code">get-message</tt> method returns a message by index. Because the system operates with a circular buffer, the <tt class="code">get-message</tt> method manages the indexes in such way that the old messages are accessible with the oldest index. For example, even after a buffer circulation, the index 0 will point to the oldest message. The <tt class="code">get-message-level</tt> returns the message level and the <tt class="code">get-message-time</tt> returns the message posted time.</p>
+<pre class="frame">
+<![CDATA[const mesg (log:get-message 0)
+
+]]></pre>
+<p class="text">
+ In term of usage, the logger facility can be conveniently used with other derived classes. The standard i/o module provides several classes that permits to manage logging operations in a convenient way. </p>
+<div class="section">
+Interpreter</div>
+<p class="text">
+ The interpreter is by itself a special object with specialized methods which do not have equivalent using the standard notation. The interpreter is always referred with the special symbol <tt class="code">interp</tt>. The following table is a summary of the symbols and methods bound to the interpreter. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Symbol</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+argv</td>
+<td class="text">
+Command arguments vector</td>
+</tr>
+<tr class="text">
+<td class="text">
+os-name</td>
+<td class="text">
+Operating system name</td>
+</tr>
+<tr class="text">
+<td class="text">
+os-type</td>
+<td class="text">
+Operating system type</td>
+</tr>
+<tr class="text">
+<td class="text">
+version</td>
+<td class="text">
+Full version</td>
+</tr>
+<tr class="text">
+<td class="text">
+program-name</td>
+<td class="text">
+Interpreter program name</td>
+</tr>
+<tr class="text">
+<td class="text">
+major-version</td>
+<td class="text">
+Major version number</td>
+</tr>
+<tr class="text">
+<td class="text">
+minor-version</td>
+<td class="text">
+Minor version number</td>
+</tr>
+<tr class="text">
+<td class="text">
+patch-version</td>
+<td class="text">
+Patch version number</td>
+</tr>
+<tr class="text">
+<td class="text">
+afnix-uri </td>
+<td class="text">
+Official uri name</td>
+</tr>
+<tr class="text">
+<td class="text">
+load</td>
+<td class="text">
+Load a file and execute it</td>
+</tr>
+<tr class="text">
+<td class="text">
+launch</td>
+<td class="text">
+Launch a normal thread</td>
+</tr>
+<tr class="text">
+<td class="text">
+library</td>
+<td class="text">
+Load and initialize a library</td>
+</tr>
+<tr class="text">
+<td class="text">
+set-absolute-precision</td>
+<td class="text">
+Set absolute precision</td>
+</tr>
+<tr class="text">
+<td class="text">
+set-relative-precision</td>
+<td class="text">
+Set relative precision</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-absolute-precision</td>
+<td class="text">
+Get absolute precision</td>
+</tr>
+<tr class="text">
+<td class="text">
+get-relative-precision</td>
+<td class="text">
+Get relative precision</td>
+</tr>
+</table>
+<p/>
+<p class="subsect">
+Arguments vector</p>
+<p class="text">
+ The <tt class="code">interp:argv</tt> qualified name evaluates to a vector of strings. Each argument is stored in the vector during the interpreter initialization. </p>
+<pre class="frame">
+<![CDATA[zsh> axi hello world
+(axi) println (interp:argv:length) # 2
+(axi) println (interp:argv:get 0)  # hello
+
+]]></pre>
+<p class="subsect">
+Interpreter version</p>
+<p class="text">
+ Several symbols can be used to track the interpreter version and the operating system. The full version is bound to the <tt class="code">interp:version</tt> qualified name. The full version is composed of the <em>major</em>, <em>minor</em> and <em>patch</em> number. The operating system name is bound to the qualified name <tt class="code">interp:os-name</tt>. The operating system type is bound to the <tt class="code">interp:os-type</tt>. </p>
+<pre class="frame">
+<![CDATA[println "major number   : " interp:major-version
+println "minor number   : " interp:minor-version
+println "patch number   : " interp:patch-version
+println "version number : " interp:version
+println "system name    : " interp:os-name
+println "system type    : " interp:os-type
+println "official uri   : " interp:afnix-uri
+
+]]></pre>
+<p class="subsect">
+File loading</p>
+<p class="text">
+ The <tt class="code">interp:load</tt> method loads and execute a file. The interpreter interactive command session is suspended during the execution of the file. In case of error or if an exception is raised, the file execution is terminated. The process used to load a file is governed by the <em>file
+	resolver</em>. Without extension, a compiled file is searched first and if not found a source file is searched. </p>
+<p class="subsect">
+Library loading</p>
+<p class="text">
+ The <tt class="code">interp:library</tt> method loads and initializes a library. The interpreter maintains a list of opened library. Multiple execution of this method for the same library does nothing. The method returns the library object. </p>
+<pre class="frame">
+<![CDATA[interp:library "afnix-sys"
+println "random number: " (afnix:sys:get-random)
+
+]]></pre>
+<p class="subsect">
+Interpreter duplication</p>
+<p class="text">
+ The interpreter can be duplicated with the help of the <tt class="code">dup</tt> method. Without argument, a clone of the current interpreter is made and a terminal object is attached to it. When used in conjunction with the <tt class="code">roll</tt> method, this approach permits to create an interactive interpreter. The <tt class="code">dup</tt> method also accepts a terminal object. </p>
+<pre class="frame">
+<![CDATA[# duplicate the interpreter
+const si (interp:dup)
+# change the primary prompt
+si:set-primary-prompt "(si)"
+
+]]></pre>
+<p class="subsect">
+Interpreter loop</p>
+<p class="text">
+ The interpreter loop can be run with the <tt class="code">roll</tt>. The loop operates by reading the interpreter input stream. If the interpreter has been cloned with the help of the <tt class="code">dup</tt> method, this method provides a convenient way to operate in interactive mode. The method is not called <em>loop</em> because it is a reserved keyword and starting a loop is like having the ball rolling. </p>
+<pre class="frame">
+<![CDATA[# duplicate the interpreter
+const si (interp:dup)
+# loop with this interpreter
+si:roll
+
+]]></pre>
+<div class="section">
+Librarian object</div>
+<p class="text">
+ A <em>librarian file</em> is a special file that acts as a containers for various files. A librarian file is created with the <tt class="command">axl</tt> -- cross librarian --utility. Once a librarian file is created, it can be added to the interpreter resolver. The file access is later performed automatically by name with the standard interpreter <tt class="code">load</tt> method. </p>
+<p class="subsect">
+Creating a librarian</p>
+<p class="text">
+ The <tt class="command">axl</tt> utility is the preferred way to create a librarian. Given a set of files, <tt class="command">axl</tt> combines them into a single one. </p>
+<pre class="frame">
+<![CDATA[zsh: axl -h
+usage: axl [options] [files]
+[h]      print this help message
+[v]      print version information
+[c]      create a new librarian
+[x]      extract from the librarian
+[s]      get file names from the librarian
+[t]      report librarian contents
+[f] lib  set the librarian file name
+
+]]></pre>
+<p class="text">
+ The <tt class="option">c</tt> option creates a new librarian. The librarian file name is specified with the <tt class="option">f</tt> option. </p>
+<pre class="frame">
+<![CDATA[zsh: axl -c -f librarian.axl file-1.als file-2.als
+
+]]></pre>
+<p class="text">
+ The previous command combines <tt class="file">file-1.als</tt> and <tt class="file">file-2.als</tt> into a single file called <tt class="file">librarian.axl</tt> . Note that any file can be included in a librarian. </p>
+<p class="subsect">
+Using the librarian</p>
+<p class="text">
+ Once a librarian is created, the interpreter <tt class="option">-i</tt> option can be used to specify it. The <tt class="option">-i</tt> option accepts either a directory name or a librarian file. Once the librarian has been opened, the interpreter <tt class="code">load</tt> method can be used as usual. </p>
+<pre class="frame">
+<![CDATA[zsh> axi -i librarian.axl
+(axi) interp:load "file-1.als"
+(axi) interp:load "file-2.als"
+
+]]></pre>
+<p class="text">
+ The librarian acts like a <em>file archive</em>. The interpreter file resolver takes care to extract the file from the librarian when the <tt class="code">load</tt> method is invoked. </p>
+<p class="subsect">
+Librarian contents</p>
+<p class="text">
+ The <tt class="command">axl</tt> utility provides the <tt class="option">-t</tt> and <tt class="option">-s</tt> options to look at the librarian contents. The <tt class="option">-s</tt> option returns all file name in the librarian. The <tt class="option">-t</tt> option returns a one line description for each file in the librarian. </p>
+<pre class="frame">
+<![CDATA[zsh: axl -t -f librarian.axl
+--------       1234 file-1.als
+--------       5678 file-2.als
+
+]]></pre>
+<p class="text">
+ The one line report contains the file flags, the file size and the file name. The file flags are not used at this time. One possible use in the future is for example, an <em>auto-load
+	bit</em> or any other useful things. </p>
+<p class="subsect">
+Librarian extraction</p>
+<p class="text">
+ The <tt class="option">-x</tt> option permits to extract file from the librarian. Without any file argument, all files are extracted. With some file arguments, only those specified files are extracted. </p>
+<pre class="frame">
+<![CDATA[zsh: axl -x -f librarian.axl
+zsh: axl -x -f librarian.axl file-1.als
+
+]]></pre>
+<div class="section">
+Librarian object</div>
+<p class="text">
+ The <tt class="code">Librarian</tt> object can be used as a convenient way to create a collection of files or to extract some of them. </p>
+<p class="subsect">
+Output librarian</p>
+<p class="text">
+ The <tt class="code">Librarian</tt> object is a standard object. Its predicate is <tt class="code">librarian-p</tt>. Without argument, a librarian is created in <em>output mode</em>. With a string argument, the librarian is opened in <em>input mode</em>, with the file name argument. The output mode is used to create a new librarian by adding file into it. The input mode is created to read file from the librarian. </p>
+<pre class="frame">
+<![CDATA[# create a new librarian
+const lbr (Librarian)
+# add a file into it
+lbr:add "file-1.als"
+# write it
+lbr:write "librarian.axl"
+
+]]></pre>
+<p class="text">
+ The <tt class="code">add</tt> method adds a new file into the librarian. The <tt class="code">write</tt> method the full librarian as a single file those name is <tt class="code">write</tt> method argument. </p>
+<p class="subsect">
+Input librarian</p>
+<p class="text">
+ With an argument, the librarian object is created in input mode. Once created, file can be read or extracted. The <tt class="code">length</tt> method -- which also work with an output librarian -- returns the number of files in the librarian. The <tt class="code">exists-p</tt> predicate returns true if the file name argument exists in the librarian. The <tt class="code">get-names</tt> method returns a vector of file names in this librarian. The <tt class="code">extract</tt> method returns an input stream object for the specific file name. </p>
+<pre class="frame">
+<![CDATA[# open a librarian for reading
+const lbr (Librarian "librarian.axl")
+# get the number of files
+println (lbr:length)
+# extract the first file
+const is (lbr:extract "file-1.als")
+# is is an input stream - dump each line
+while (is:valid-p) (println (is:readln))
+
+]]></pre>
+<p class="text">
+ Most of the time, the librarian object is used to extract file dynamically. Because a librarian is mapped into the memory at the right offset, there is no worry to use big librarian, even for a small file. Note that any type of file can be used, text or binaries. </p>
+<div class="section">
+File resolver</div>
+<p class="text">
+ The <em>file resolver</em> is a special object used by the interpreter to resolve file path based on the search path. The resolver uses a mixed list of directories and librarian files in its search path. When a file path needs to be resolved, the search path is scanned until a matched is found. Because the librarian resolution is integrated inside the resolver, there is no need to worry about file extraction. That process is done automatically. The resolver can also be used to perform any kind of file path resolution. </p>
+<p class="subsect">
+Resolver object</p>
+<p class="text">
+ The resolver object is created without argument. The <tt class="code">add</tt> method adds a directory path or a librarian file to the resolver. The <tt class="code">valid</tt> method checks for the existence of a file. The <tt class="code">lookup</tt> method returns an input stream object associated with the object. </p>
+<pre class="frame">
+<![CDATA[# create a new resolver
+const rslv (Resolver)
+assert true (resolver-p rslv)
+# add the local directory on the search path
+rslv:add "."
+# check if file test.als exists
+# if this is ok - print its  contents
+if (rslv:valid-p "test.als") {
+  const is (rslv:lookup "test.als")
+  while (is:valid-p) (println (is:readln))
+}
+
+]]></pre>
+<div class="section">
+Thread operations</div>
+<p class="text">
+ The interpreter is a multi-threaded engine with a native implementation of objects locking. A thread is started with the reserved keyword <tt class="code">launch</tt>. The execution is completed when all threads have terminated. This means that the master thread (i.e the first thread) is suspended until all other threads have completed their execution.</p>
+<p class="subsect">
+Starting a thread</p>
+<p class="text">
+ A thread is started with the reserved keyword <tt class="code">launch</tt>. The form to execute in a thread is the argument. The simplest thread to execute is the <tt class="code">nil</tt> thread. </p>
+<pre class="frame">
+<![CDATA[launch (nil)
+
+]]></pre>
+<p class="text">
+ There exists an alternate mechanism to start a thread with the reserved keyword <tt class="code">launch</tt> and a thread object. Such mechanism is used when using deferred thread object creation or a thread generator object known as a <em>thread set</em>. </p>
+<p class="subsect">
+Thread object and result</p>
+<p class="text">
+ When a thread terminate, the thread object holds the result of the last executed form. The thread object is returned by the <tt class="code">launch</tt> command. The <tt class="code">thread-p</tt> predicates returns <tt class="code">true</tt> if the object is a thread descriptor.</p>
+<pre class="frame">
+<![CDATA[const thr (launch (nil))
+println   (thread-p thr) # true
+
+]]></pre>
+<p class="text">
+ The thread result can be obtained with the help of the <tt class="code">result</tt> method. Although the result can be accessed at any time, the returned value will be <tt class="code">nil</tt> until the thread as completed its execution. </p>
+<pre class="frame">
+<![CDATA[const thr (launch (nil))
+println   (thr:result)   # nilp
+
+]]></pre>
+<p class="text">
+ Although the engine will ensure that the result is <tt class="code">nil</tt> until the thread has completed its execution, it does not mean that it is a reliable approach to test until the result is not <tt class="code">nil</tt>. The engine provides various mechanisms to synchronize a thread and eventually wait for its completion. </p>
+<div class="section">
+Shared objects</div>
+<p class="text">
+ The whole purpose of using a multi-threaded environment is to provide a concurrent execution with some shared variables. Although, several threads can execute concurrently without sharing data, the most common situation is that one or more global variable are accessed -- and even changed -- by one or more threads. Various scenarios are possible. For example, a variable is changed by one thread, the other thread just read its value. Another scenario is one read, multiple write, or even more complicated, multiple read and multiple write. In any case, the interpreter subsystem must ensure that each objects are in a good state when such operation do occur. The engine provides an automatic synchronization mechanism for global objects, where only one thread can modify an object, but several thread can read it. This mechanism known as <em>read-write locking</em> guarantees that there is only one writer, but eventually multiple reader. When a thread starts to modify an object, no other thread are allowed to read or write this object until the transaction has been completed. On the opposite, no thread is allowed to change (i.e. write) an object, until all thread which access (i.e. read) the object value have completed the transaction. Because a context switch can occur at any time, the object read-write locking will ensure a safe protection during each concurrent access.</p>
+<p class="subsect">
+Shared protection access</p>
+<p class="text">
+ We illustrate the previous discussion with an interesting example and some variations around it. Let's consider a form which increase an integer object and another form which decrease the same integer object. If the integer is initialized to 0, and the two forms run in two separate threads, we might expect to see the value bounded by the time allocated for each thread. In other word, this simple example is a very good illustration of your machine scheduler. </p>
+<pre class="frame">
+<![CDATA[# shared variable access
+const var 0
+# increase method
+const incr nil {
+  while true (println "increase: " (var:= (+ var 1)))
+}
+# decrease method
+const decr nil {
+  while true (println "decrease: " (var:= (- var 1)))
+}
+# start both threads
+launch (decr)
+launch (incr)
+
+]]></pre>
+<p class="text">
+ In the previous example, <tt class="code">var</tt> is initialized to 0. The <tt class="code">incr</tt> thread increments <tt class="code">var</tt> while the <tt class="code">decr</tt> thread decrements <tt class="code">var</tt>. Depending on the operating system, the result stays bounded within a certain range. The previous example can be changed by using the main thread or a third thread to print the variable value. The end result is the same, except that there is more threads competing for the shared variable. </p>
+<pre class="frame">
+<![CDATA[# shared variable access
+const var 0	
+# incrementer, decrementer and printer
+const incr nil (while true (var:= (+ var 1)))
+const decr nil (while true (var:= (- var 1)))
+const prtv nil (while true (println "value = " var))
+# start all threads
+launch (decr)
+launch (incr)
+launch (prtv)
+
+]]></pre>
+<div class="section">
+Synchronization</div>
+<p class="text">
+ Although, there is an automatic synchronization mechanism for reading or writing an object, it is sometimes necessary to control the execution flow. There are basically two techniques to do so. First, protect a form from being executed by several threads. Second, wait for one or several threads to complete their task before going to the next execution step. </p>
+<p class="subsect">
+Form synchronization</p>
+<p class="text">
+ The reserved keyword <tt class="code">sync</tt> can be used to synchronize a form. When a form, is synchronized, the engine guarantees that only one thread will execute this form. </p>
+<pre class="frame">
+<![CDATA[const print-message (code mesg) (
+  sync {
+    errorln "error  : " code
+    errorln "message: " mesg
+  }
+)
+
+]]></pre>
+<p class="text">
+ The previous example creates a gamma expression which make sure that both the error code and error message are printed in one group, when several threads call it. </p>
+<p class="subsect">
+Thread completion</p>
+<p class="text">
+ The other piece of synchronization is the thread completion indicator. The thread descriptor contains a method called <tt class="code">wait</tt> which suspend the calling thread until the thread attached to the descriptor has been completed. If the thread is already completed, the method returns immediately. </p>
+<pre class="frame">
+<![CDATA[# simple flag
+const flag false
+# simple tester
+const ftest (bval) (flag:= bval)
+# run the thread and wait
+const thr (launch (ftest true))
+thr:wait
+assert true flag
+
+]]></pre>
+<p class="text">
+ This example is taken from the test suites. It checks that a boolean variable is set when started in a thread. Note the use of the <tt class="code">wait</tt> method to make sure the thread has completed before checking for the flag value. It is also worth to note that <tt class="code">wait</tt> is one of the method which guarantees that a thread result is valid. Another use of the <tt class="code">wait</tt> method can be made with a vector of thread descriptors when one wants to wait until all of them have completed. </p>
+<pre class="frame">
+<![CDATA[# shared vector of threads descriptors
+const thr-group (Vector)
+# wait until all threads in the group are finished
+const wait-all nil (for (thr) (thr-group) (thr:wait))
+
+]]></pre>
+<p class="subsect">
+Complete example</p>
+<p class="text">
+ We illustrate the previous discussion with a complete example. The idea is to perform a matrix multiplication. A thread is launched when when multiplying one line with one column. The result is stored in the thread descriptor. A vector of thread descriptor is used to store the result. </p>
+<pre class="frame">
+<![CDATA[# initialize the shared library
+interp:library "afnix-sys"
+# shared vector of threads descriptors
+const thr-group (Vector)
+# waits until all threads in the group are finished
+const wait-all nil (for (thr) (thr-group) (thr:wait))
+
+]]></pre>
+<p class="text">
+ The group of threads is represented as a vector. Based on the the previous discussion, a simple loop that blocks until all threads are completed is designed as a simple gamma expression. </p>
+<pre class="frame">
+<![CDATA[# initializes a matrix with random numbers
+const init-matrix (n) {
+  trans i (Integer 0)
+  const m (Vector)
+  do {
+    trans v (m:add (Vector))
+    trans j (Integer)
+    do {
+      v:add (afnix:sys:get-random)
+    } (< (j:++) n)
+  } (< (i:++) n)
+  eval m
+}
+
+]]></pre>
+<p class="text">
+ The matrix initialization is quite straightforward. The matrix is represented as a vector of lines. Each line is also a vector of random integer number. It is here worth to note that the standard <em>math</em> module provides a native implementation of real matrix. </p>
+<pre class="frame">
+<![CDATA[# this procedure multiply one line with one column
+const mult-line-column (u v) {
+  assert (u:length) (v:length)
+  trans result 0
+  for (x y) (u v) (result:+= (* x y))
+  eval result
+}
+# this procedure multiply two vectors assuming one 
+# is a line and one is a column from the matrix
+const mult-matrix (mx my) {
+  for (lv) (mx) {
+    assert true (vector-p lv)
+    for (cv) (my) {
+      assert true (vector-p cv)
+      thr-group:add (launch (mult-line-column lv cv))
+    }
+  }
+}
+
+]]></pre>
+<p class="text">
+ The matrix vector multiplication is at the heart of the example. Each line-column multiplication is started into a thread and the thread object is placed into the thread group vector. </p>
+<pre class="frame">
+<![CDATA[# check for some arguments
+# note the use of errorln method
+if (== 0 (interp:argv:length)) {
+  errorln "usage: axi 0607.als size"
+  afnix:sys:exit 1
+}
+# get the integer and multiply
+const n (Integer (interp:argv:get 0))
+mult-matrix (init-matrix n) (init-matrix n)
+# wait for all threads to complete
+wait-all
+# make sure we have the right number
+assert (* n n) (thr-group:length)
+
+]]></pre>
+<p class="text">
+ The main execution is started with the matrix size as the first argument. Two random matrices are then created and the multi-threaded multiplication is launched. The main thread is blocked until all threads in the thread group are completed. </p>
+<p class="subsect">
+Condition variable</p>
+<p class="text">
+ A <em>condition variable</em> is another mechanism to synchronize several threads. A condition variable is modeled with the <tt class="code">Condvar</tt> object. At construction, the condition variable is initialized to <tt class="code">false</tt>. A thread calling the <tt class="code">wait</tt> method will block until the condition becomes <tt class="code">true</tt>. The <tt class="code">mark</tt> method can be used by a thread to change the state of a condition variable and eventually awake some threads which are blocked on it. The following example shows how the main thread blocks until another change the state of the condition. </p>
+<pre class="frame">
+<![CDATA[# create a condition variable
+const cv (Condvar)
+# this function runs in a thread - does some 
+# computation and mark the condition variable
+const do-something nil {
+  # do some computation
+  ....
+  # mark the condition
+  cv:mark
+}
+# start some computation in a thread
+launch (do-something)
+# block until the condition is changed
+cv:wait-unlock
+# continue here
+...
+
+]]></pre>
+<p class="text">
+ In this example, the condition variable is created at the beginning. The thread is started and the main thread blocks until the thread change the state of the condition variable. It is important to note the use of the <tt class="code">wait-unlock</tt> method. When the main thread is re-started (after the condition variable has been marked), the main thread owns the lock associated with the condition variable. The <tt class="code">wait-unlock</tt> method unlocks that lock when the main thread is restarted. Note also that the <tt class="code">wait-unlock</tt> method reset the condition variable. if the <tt class="code">wait</tt> method was used instead of <tt class="code">wait-unlock</tt> the lock would still be owned by the main thread. Any attempt by other thread to call the mark method would result in the calling thread to block until the lock is released. The <tt class="code">Condvar</tt> class has several methods which can be used to control the behavior of the condition variable. Most of them are related to lock control. The <tt class="code">reset</tt> method reset the condition variable. The <tt class="code">lock</tt> and <tt class="code">unlock</tt> control the condition variable locking. The <tt class="code">mark</tt>, <tt class="code">wait</tt> and <tt class="code">wait-unlock</tt> method controls the synchronization among several threads. </p>
+<div class="section">
+Function expression</div>
+<p class="text">
+ A lambda expression or a gamma expression can be seen like a function object with no name. During the evaluation process, the expression object is evaluated as well as the arguments -- from left to right -- and a result is produced by applying those arguments to the function object. An expression can be built dynamically as part of the evaluation process. </p>
+<pre class="frame">
+<![CDATA[(axi) println ((lambda (n) (+n 1)) 1)
+2
+
+]]></pre>
+<p class="text">
+ The difference between a lambda expression and a gamma expression is only in the nameset binding during the evaluation process. The lambda expression nameset is linked with the calling one, while the gamma expression nameset is linked with the top level nameset. The use of gamma expression is particularly interesting with recursive functions as it can generate a significant execution speedup. The previous example will behaves the same with a gamma expression.</p>
+<pre class="frame">
+<![CDATA[(axi) println ((gamma (n) (+n 1)) 1)
+2
+
+]]></pre>
+<p class="subsect">
+Self reference</p>
+<p class="text">
+ When combining a function expression with recursion, the need for the function to call itself is becoming a problem since that function expression does not have a name. For this reason, the writing system provides the reserved keyword <tt class="code">self</tt> that is a reference to the function expression. We illustrate this capability with the well-known factorial expression written in pure functional style. </p>
+<pre class="frame">
+<![CDATA[(axi) println ((gamma (n) 
+    (if (<= n 1) 1 (* n (self (- n 1))))) 5)
+120
+
+]]></pre>
+<p class="text">
+ The use of a gamma expression versus a lambda expression is a matter of speed. Since the gamma expression does not have free variables, the symbol resolution is not a concern here. </p>
+<p class="subsect">
+Closed variables</p>
+<p class="text">
+ One of the writing system characteristic is the treatment of <em>free variables</em>. A variable is said to be free if it is not bound in the expression environment or its children at the time of the symbol resolution. For example, the expression <tt class="code">((lambda (n) (+ n x)) 1)</tt> computes the sum of the argument <tt class="code">n</tt> with the free variable <tt class="code">x</tt>. The evaluation will succeeds if <tt class="code">x</tt> is defined in one of the parent environment. Actually this example can also illustrates the difference between a lambda expression and a gamma expression. Let's consider the following forms.</p>
+<pre class="frame">
+<![CDATA[trans x 1
+const do-print nil {
+  trans x 2
+  println ((lambda (n) (+ n x)) 1)
+}
+
+]]></pre>
+<p class="text">
+ The gamma expression <tt class="code">do-print</tt> will produce <tt class="code">3</tt> since it sums the argument <tt class="code">n</tt> bound to 1, with the free variable <tt class="code">x</tt> which is defined in the calling environment as <tt class="code">2</tt>. Now if we rewrite the previous example with a gamma expression the result will be one, since the expression parent will be the top level environment that defines <tt class="code">x</tt> as 1. </p>
+<pre class="frame">
+<![CDATA[trans x 1
+const do-print nil {
+  trans x 2
+  println ((gamma (n) (+ n x)) 1)
+}
+
+]]></pre>
+<p class="text">
+ With this example, it is easy to see that there is a need to be able to determine a particular symbol value during the expression construction. Doing so is called <em>closing a
+	variable</em>. Closing a variable is a mechanism that binds into the expression a particular symbol with a value and such symbol is called a <em>closed variable</em>, since its value is closed under the current environment evaluation. For example, the previous example can be rewritten to close the symbol <tt class="code">x</tt>. </p>
+<pre class="frame">
+<![CDATA[trans x 1
+const do-print nil {
+  trans x 2
+  println ((gamma (n) (x) (+ n x)) 1)
+}
+
+]]></pre>
+<p class="text">
+ Note that the list of closed variable immediately follow the argument list. In this particular case, the function <tt class="code">do-print</tt> will print <tt class="code">3</tt> since <tt class="code">x</tt> has been closed with the value <tt class="code">2</tt> has defined in the function <tt class="code">do-print</tt>. </p>
+<p class="subsect">
+Dynamic binding</p>
+<p class="text">
+ Because there is a dynamic binding symbol resolution, it is possible to have under some circumstances a free or closed variable. This kind of situation can happen when a particular symbol is defined under a condition.</p>
+<pre class="frame">
+<![CDATA[lambda (n) {
+  if (<= n 1) (trans x 1)
+  println (+ n x)
+}
+
+]]></pre>
+<p class="text">
+ With this example, the symbol <tt class="code">x</tt> is a free variable if the argument <tt class="code">n</tt> is greater than 1. While this mechanism can be powerful, extreme caution should be made when using such feature. </p>
+<p class="subsect">
+Lexical and qualified names</p>
+<p class="text">
+ The basic forms elements are the lexical and qualified names. Lexical and qualified names are constructed by the parser. Although the evaluation process make that lexical object transparent, it is possible to manipulate them directly.</p>
+<pre class="frame">
+<![CDATA[(axi) const sym (protect lex)
+(axi) println   (sym:repr)
+Lexical
+
+]]></pre>
+<p class="text">
+ In this example, the <tt class="code">protect</tt> reserved keyword is used to avoid the evaluation of the lexical object named <tt class="code">lex</tt>. Therefore the symbol <tt class="code">sym</tt> refers to a lexical object. Since a lexical -- and a qualified -- object is a also a literal object, the <tt class="code">println</tt> reserved function will work and print the object name. In fact, a literal object provides the <tt class="code">to-string</tt> method that returns the string representation of a literal object. </p>
+<pre class="frame">
+<![CDATA[(axi) const sym (protect lex)
+(axi) println   (sym:to-string)
+lex
+
+]]></pre>
+<p class="subsect">
+Symbol and argument access</p>
+<p class="text">
+ Each nameset maintains a table of symbols. A symbol is a binding between a name and an object. Eventually, the symbol carries the <tt class="code">const</tt> flag. During the lexical evaluation process, the lexical object tries to find an object in the nameset hierarchy. Such object can be either a symbol or an argument. Again, this process is transparent, but can be controlled manually. Both lexical and qualified named object have the <tt class="code">map</tt> method that returns the first object associated in the nameset hierarchy.</p>
+<pre class="frame">
+<![CDATA[(axi) const obj 0
+(axi) const lex (protect obj)
+(axi) const sym (lex:map)
+(axi) println   (sym:repr)
+Symbol
+
+]]></pre>
+<p class="text">
+ A symbol is also a literal object, so the <tt class="code">to-string</tt> and <tt class="code">to-literal</tt> methods will return the symbol name. Symbol methods are provided to access or modify the symbol values. It is also possible to change the <tt class="code">const</tt> symbol flag with the <tt class="code">set-const</tt> method. </p>
+<pre class="frame">
+<![CDATA[(axi) println (sym:get-const)
+true
+(axi) println (sym:get-object)
+0
+(axi) sym:set-object true
+(axi) println (sym:get-object)
+true
+
+]]></pre>
+<p class="text">
+ A symbol name cannot be modified, since the name must be synchronized with the nameset association. On the other hand, a symbol can be explicitly constructed. As any object, the <tt class="code">=</tt> operator can be used to assign a symbol value. The operator will behaves like the <tt class="code">set-object</tt> method. </p>
+<pre class="frame">
+<![CDATA[(axi) const sym (Symbol "symbol")
+(axi) println sym
+symbol
+(axi) sym:= 0
+(axi) println (eval sym)
+0
+
+]]></pre>
+<p class="subsect">
+Closure</p>
+<p class="text">
+ As an object, the <tt class="code">Closure</tt> can be manipulated outside the traditional declarative way. A closure is a special object that holds an argument list, a set of closed variables and a form to execute. The mechanic of a closure evaluation has been described earlier. What we are interested here is the ability to manipulate a closure as an object and eventually modify it. Note that by default a closure is constructed as a lambda expression. With a boolean argument set to true the same result is obtained. With false, a gamma expression is created. </p>
+<pre class="frame">
+<![CDATA[(axi) const f (Closure)
+(axi) println (closure-p f)
+true
+
+]]></pre>
+<p class="text">
+ This example creates an empty closure. The default closure is equivalent to the <tt class="code">trans f nil nil</tt>. The same can be obtained with <tt class="code">const f (Closure true)</tt>. For a gamma expression, the following forms are equivalent, <tt class="code">const f
+	(Closure false)</tt> and <tt class="code">const f nil
+	nil</tt>. Remember that it is <tt class="code">trans</tt> and <tt class="code">const</tt> that differentiate between a lambda and a gamma expression. Once the closure object is defined, the <tt class="code">set-form</tt> method can be used to bind a form. </p>
+<pre class="frame">
+<![CDATA[# the simple way
+trans f nil (println "hello world")
+# the complex way
+const f    (Closure)
+f:set-form (protect (println "hello world"))
+
+]]></pre>
+<p class="text">
+ There are numerous situations where it is desirable to mute dynamically a closure expression. The simplest one is the closure that mute itself based on some context. With the use of <tt class="code">self</tt>, a new form can be set to the one that is executed. Another use is a mechanism call <em>advice</em>, where some new computation are inserted prior the closure execution. Note that appending to a closure can lead to some strange results if the existing closure expression uses <em>return</em> special forms. In a multi-threaded environment, the ability to change a closure expression is particularly handy. For example a special thread could be used to monitor some context. When a particular situation develops, that threads might trigger some closure expression changes. Note that changing a closure expression does not affect the one that is executed. If such change occurs during a recursive call, that change is seen only at the next call.</p>
+</body>
+</html>

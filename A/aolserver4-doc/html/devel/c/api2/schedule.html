@@ -1,0 +1,573 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1>Scheduling C Library Functions</h1>
+
+<p>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/c/index.html,v 1.1 2002/03/07 19:15:35 kriston Exp $
+<p>
+
+
+
+<h2><a name= href=./>Ns_RegisterAtExit</a></h2>
+
+Register an exit procedure.
+
+<h3>Syntax</h3>
+
+<pre>    
+    typedef void (Ns_Callback) (void *context);
+
+    Ns_ProcHandle Ns_RegisterAtExit(
+    Ns_Callback *proc,
+    void *context
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_RegisterAtExit function registers proc as a function to call
+   before AOLserver exits after all servers are shut down. The procedures
+   are run in last-registered first-run order.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_RegisterAtPreStartup</a></h2>
+
+Register a procedure for pre-server startup
+
+<h3>Syntax</h3>
+
+<pre>    
+    void* Ns_RegisterAtPreStartup (
+    Ns_Callback* proc,
+    void* arg
+    );
+</pre>
+
+<h3>Description</h3>
+
+Register a procedure to be called just before the binder is
+   terminated, prior to server startup. The return value is an opaque
+   handle (which is currently not useful).
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_RegisterAtSignal</a></h2>
+
+Register a procedure at HUP signal
+
+<h3>Syntax</h3>
+
+<pre>    
+    void* Ns_RegisterAtSignal (
+    Ns_Callback* proc,
+    void* context
+    );
+</pre>
+
+<h3>Description</h3>
+
+Register a callback to run when the HUP signal is received by the
+   server.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_RegisterAtStartup</a></h2>
+
+Register a procedure for server startup
+
+<h3>Syntax</h3>
+
+<pre>    
+    void* Ns_RegisterAtStartup (
+    Ns_Callback* proc,
+    void* context
+    );
+</pre>
+
+<h3>Description</h3>
+
+Register a callback to run when the server is done starting up.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a name= href=./>Ns_RegisterServerShutdown</a></h2>
+
+Register a shutdown procedure for a server.
+
+<h3>Syntax</h3>
+
+<pre>    
+    typedef void (Ns_Callback) (void *context);
+
+    Ns_ProcHandle Ns_RegisterServerShutdown(
+    char *hServer,
+    Ns_Callback *proc,
+    Ns_OpContext context
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_RegisterServerShutdown function registers proc as a shutdown
+   procedure on the specified server. The server calls all shutdown
+   procedures before shutting down, in last-registered first-run order.
+   The shutdown procedure takes the context as its sole argument. A
+   shutdown procedure is often used to close or free a resource allocated
+   by a module's initialization routine.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+<h2><a name= href=./>Ns_RegisterShutdown</a></h2>
+
+Register a shutdown procedure.
+
+<h3>Syntax</h3>
+
+<pre>    
+    typedef void (Ns_Callback) (void *context);
+
+    Ns_ProcHandle Ns_RegisterShutdown(
+    Ns_Callback *proc,
+    void *context
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_RegisterShutdown function registers proc as a shutdown
+   procedure. The server calls all shutdown procedures before shutting
+   down, in last-registered first-run order. The shutdown procedure takes
+   the context as its sole argument. A shutdown procedure is often used
+   to close or free a resource allocated by a module's initialization
+   routine.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+
+<h2><a name= href=./>Ns_TclRegisterAtCreate</a></h2>
+
+Register function for interpreter creation
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_TclRegisterAtCreate (
+    Ns_TclInterpInitProc* proc,
+    void* arg
+    );
+</pre>
+
+<h3>Description</h3>
+
+Register a procedure to be called when an interpreter is first created
+   for a thread.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_TclRegisterDeferred</a></h2>
+
+Register a function for interpreter cleanup
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_TclRegisterDeferred (
+    Tcl_Interp *interpPtr ,
+    Ns_TclDeferProc *deferProc ,
+    void *contex
+    );
+</pre>
+
+<h3>Description</h3>
+
+Register a procedure to be called when the interpreter is cleaned up.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a name= href=./>Ns_ScheduleDaily</a></h2>
+
+Schedule a procedure to run once a day
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_ScheduleDaily(
+    Ns_SchedProc *proc,
+    void *context,
+    int flags,
+    int hour,
+    int minute,
+    Ns_SchedProc *cleanup
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ScheduleDaily function schedules the procedure (proc) to be run
+   once a day at the specified time (hour and minute).
+
+<p>
+
+The proc is the scheduled procedure that will be run once a day. It is
+   a function that takes the context and id of the schedule procedure.
+   The id can be used in the Ns_UnscheduleProc procedure to stop the
+   procedure from being called again.
+    typedef void (Ns_SchedProc) (void *context, int id);
+
+   The context is the context to pass to the scheduled procedure.
+
+<p>
+
+The possible flags are NS_SCHED_ONCE and NS_SCHED_THREAD. If you
+   specify NS_SCHED_ONCE, the procedure will only be executed once on the
+   specified day and time, and it will not be re-scheduled to execute
+   again the next day. By default, the procedure is re-scheduled after
+   every time it is executed.
+
+<p>
+
+If you specify NS_SCHED_THREAD, the procedure will run detached in a
+   separate thread instead of using the one scheduled procedure thread
+   used by all other scheduled procedures. You should use NS_SCHED_THREAD
+   if the procedure will not return immediately. Note that if you use
+   NS_SCHED_THREAD, and the procedure is still active the next time to
+   run occurs, the next run is skipped instead of just delayed.
+
+<p>
+
+The hour can be an integer from 0 to 23, and the minute an integer
+   from 0 to 59.
+
+<p>
+
+The cleanup procedure will be run once when the proc procedure is
+   unscheduled.
+
+<h3>Examples</h3>
+
+<pre>
+   Run a procedure (MyProc) once in its own thread at 2:30 a.m.:
+    Ns_ScheduleDaily(myProc, myCtx, NS_SCHED_ONCE | NS_SCHED_THREAD,
+2, 30, NULL)
+
+   
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ScheduleProc</a></h2>
+
+Schedule a procedure to run at specified intervals
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_ScheduleProc(
+    void (*proc) (),
+    void *context,
+    int fNewThread,
+    int interval
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ScheduleProc function schedules the procedure proc to be run
+   every interval seconds, with context as an argument. The flag
+   fNewThread determines whether proc runs in its own thread.
+   Ns_ScheduleProc returns an integer id for use in the Ns_UnscheduleProc
+   function.
+
+<p>
+
+Note that the newer Ns_ScheduleProcEx function provides a superset of
+   the functionality in Ns_ScheduleProc.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ScheduleProcEx</a></h2>
+
+Schedule a procedure to run at specified intervals
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_ScheduleProcEx(
+    Ns_SchedProc *proc,
+    void *context,
+    int flags,
+    int interval,
+    Ns_SchedProc *cleanup
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ScheduleProcEx function schedules the procedure (proc) to be
+   run at a specific time interval specified in seconds.
+   Ns_ScheduleProcEx returns an integer id for use in the
+   Ns_UnscheduleProc function.
+
+<p>
+
+The proc procedure is the scheduled procedure that will be run at each
+   interval. It is a function that takes the context and id of the
+   schedule procedure. The id can be used in the Ns_UnscheduleProc
+   procedure to stop the procedure from being called again.
+    typedef void (Ns_SchedProc) (void *context, int id);
+
+   The context is the context to pass to the scheduled procedure.
+
+<p>
+
+The possible flags are NS_SCHED_ONCE and NS_SCHED_THREAD. If you
+   specify NS_SCHED_ONCE, the procedure will only be executed once on the
+   specified day and time, and it will not be re-scheduled to execute
+   again. By default, the procedure is re-scheduled after every time it
+   is executed.
+
+<p>
+
+If you specify NS_SCHED_THREAD, the procedure will run detached in a
+   separate thread instead of using the one scheduled procedure thread
+   used by all other scheduled procedures. You should use NS_SCHED_THREAD
+   if the procedure will not return immediately. Note that if you use
+   NS_SCHED_THREAD, and the procedure is still active the next time to
+   run occurs, the next run is skipped instead of just delayed.
+
+<p>
+
+The interval is the number of seconds between runs of the procedure.
+
+<p>
+
+The cleanup procedure will be run once when the proc procedure is
+   unscheduled.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_ScheduleWeekly</a></h2>
+
+Schedule a procedure to run once a week
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_ScheduleWeekly(
+    Ns_SchedProc *proc,
+    void *context,
+    int flags,
+    int day,
+    int hour,
+    int minute,
+    Ns_SchedProc *cleanup
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_ScheduleWeekly function schedules the procedure (proc) to be
+   run once a week on the specified day (day) at the specified time (hour
+   and minute).
+
+<p>
+
+The proc procedure is the scheduled procedure that will be run once a
+   week. It is a function that takes the context and id of the schedule
+   procedure. The id can be used in the Ns_UnscheduleProc procedure to
+   stop the procedure from being called again.
+    typedef void (Ns_SchedProc) (void *context, int id);
+
+   The context is the context to pass to the scheduled procedure.
+
+<p>
+
+The possible flags are NS_SCHED_ONCE and NS_SCHED_THREAD. If you
+   specify NS_SCHED_ONCE, the procedure will only be executed once on the
+   specified day and time, and it will not be re-scheduled to execute
+   again the next week. By default, the procedure is re-scheduled after
+   every time it is executed.
+
+<p>
+
+If you specify NS_SCHED_THREAD, the procedure will run detached in a
+   separate thread instead of using the one scheduled procedure thread
+   used by all other scheduled procedures. You should use NS_SCHED_THREAD
+   if the procedure will not return immediately. Note that if you use
+   NS_SCHED_THREAD, and the procedure is still active the next time to
+   run occurs, the next run is skipped instead of just delayed.
+
+<p>
+
+The day can be an integer from 0 to 6, where 0 represents Sunday. The
+   hour can be an integer from 0 to 23, and the minute an integer from 0
+   to 59.
+
+<p>
+
+The cleanup procedure will be run once when the proc procedure is
+   unscheduled.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+
+
+<h2><a name= href=./>Ns_UnscheduleProc</a></h2>
+
+Stop a scheduled procedure
+
+<h3>Syntax</h3>
+
+<pre>    
+    void Ns_UnscheduleProc (
+    int id
+    );
+</pre>
+
+<h3>Description</h3>
+
+The Ns_UnscheduleProc function stops a scheduled procedure from
+   executing again. The scheduled procedure to be stopped is identified
+   by its id, which was returned by the Ns_Schedule* function that was
+   used to schedule the procedure. It is safe to call Ns_UnscheduleProc
+   from inside a scheduled procedure.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+<h2><a name= href=./>Ns_WaitForStartup</a></h2>
+
+Block until server startup
+
+<h3>Syntax</h3>
+
+<pre>    
+    int Ns_WaitForStartup (void);
+</pre>
+
+<h3>Description</h3>
+
+Block until server startup.
+</pre>
+
+
+<p>
+
+<hr>
+
+<br>
+
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:17 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_ConnDriver</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_ConnDriver</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#ARGUMENTS">ARGUMENTS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_ConnDriverContext,
+Ns_ConnDriverName &minus; Routines to access communication
+driver data</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">void * <b><br>
+Ns_ConnDriverContext</b>(<i>conn</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ConnDriverName</b>(<i>conn</i>)</p>
+
+<h2>ARGUMENTS
+<a name="ARGUMENTS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="32%">
+
+
+<p style="margin-top: 1em">Ns_Conn <i>conn</i> (in)</p></td>
+<td width="9%"></td>
+<td width="42%">
+
+
+<p style="margin-top: 1em">Pointer to open connection.</p></td>
+<td width="6%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:52%;">_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+provide access to the underyling communications driver data
+for an open connection. <br>
+char *<b>Ns_ConnDriverName</b>(<i>conn</i>)</p>
+
+<p style="margin-left:22%;">Returns the string name of the
+communication driver, e.g., &quot;nssock&quot;. This is the
+name passed in the <i>Ns_DriverInitData</i> structure in a
+call to <b>Ns_DriverInit</b>, not the module name for the
+particular instance of the loaded driver.</p>
+
+<p style="margin-left:11%;">void
+*<b>Ns_ConnDriverContent</b>(<i>conn</i>)</p>
+
+<p style="margin-left:22%;">Returns a pointer to the
+connection-specific driver context for the given connection.
+This value is that of the <i>arg</i> element of the
+underlying <i>Ns_Sock</i> structure allocated by the server
+and used by communication drivers to manage private state.
+If the connection is closed, the value returned is always
+NULL.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_DriverInit(3)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">connection,
+context</p>
+<hr>
+</body>
+</html>

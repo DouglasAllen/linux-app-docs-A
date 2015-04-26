@@ -1,0 +1,51 @@
+
+This is the cookbook.html file containing the form:
+
+<pre>
+ <HTML>
+ <HEAD>
+<TITLE>The ABC's of Fruit Cookbook</TITLE>
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+ <H1>
+The ABC's of Fruit Cookbook
+ </H1>
+ <P>
+ How would you like to view this cookbook?
+ <FORM ACTION="cookbook.adp" METHOD="POST">
+<INPUT TYPE="radio" NAME="question" VALUE="yes" CHECKED>With
+Frames<BR>
+<INPUT TYPE="radio" NAME="question" VALUE="no">Without
+Frames
+<P>
+<INPUT TYPE=submit VALUE="View Cookbook">
+ </FORM>
+ <P>
+ </BODY></HTML>
+</pre>
+
+This is the ADP, cookbook.adp, that determines the response and
+displays the appropriate page:
+
+<pre>
+ <HTML>
+ <HEAD>
+<TITLE>The ABC's of Fruit Cookbook</TITLE>
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+ &lt;%
+ # Get form data and assign to variables
+ set r [ns_conn form $conn]
+ set question [ns_set get $r question]
+ # Display cookbook in appropriate format
+ if {$question == "yes"} {ns_adp_include cookset.html} \
+ else {ns_adp_include cook.html}
+ %&gt;
+ </BODY></HTML>
+</pre>
+
+<p>
+
+The cookset.html file contains a frame set for the cookbook. The
+cook.html file contains the cookbook without frames.
+

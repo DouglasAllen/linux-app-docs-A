@@ -1,0 +1,72 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DStringValue</TITLE>
+<LINK rel=Previous href="c-ch177.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch179.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch177.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch179.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="562458">
+</a><h3>Ns_DStringValue</h3>
+<a name="562459">
+</a><h4>Overview</h4>
+Return the current value of an Ns_DString
+<a name="562460">
+</a><a name="562461">
+</a><h4>Syntax</h4>
+<pre>    <a name="562462"></a>char *Ns_DStringValue(
+    <a name="562463"></a>Ns_DString *dsPtr
+    <a name="562464"></a>);
+</pre><p><a name="562465">
+</a><h4>Description</h4>
+<p><a name="562466">
+</a>The Ns_DStringValue macro returns a pointer to the current value of an Ns_DString. This may be a pointer to the Ns_DString's static space or to a string allocated on the heap if the static space has overflowed. It is <i>not</i> safe to use the value returned by this macro after an intervening call to Ns_DStringAppend because the Ns_DString string could overflow to or move within the heap.</p>
+<a name="562467">
+</a><h4>Examples</h4>
+<pre>    <a name="562468"></a>Ns_DString ds;
+    <a name="562469"></a>Ns_DStringInit(&amp;ds);
+    <a name="562470"></a>Ns_DStringAppend(&amp;ds, "foo");
+    <a name="562471"></a>/* do something with the dstring */
+    <a name="562472"></a>printf ("%s\n", Ns_DStringValue(&amp;ds));
+    <a name="562473"></a>Ns_DStringFree(&amp;ds); /* finished with dstring */
+</pre><p><p><a name="562474">
+</a></p>
+<p><a name="230720">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch177.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch179.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

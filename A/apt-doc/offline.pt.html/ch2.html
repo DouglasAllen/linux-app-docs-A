@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Usando o APT Offline - Usando o APT em ambas máquinas</title>
+
+<link href="index.html" rel="start">
+<link href="ch1.html" rel="prev">
+<link href="ch3.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Introdução">
+<link href="ch2.html" rel="chapter" title="2 Usando o APT em ambas máquinas">
+<link href="ch3.html" rel="chapter" title="3 Usando APT e wget">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Visão geral">
+<link href="ch2.html#s2.1" rel="section" title="2.1 Visão geral">
+<link href="ch2.html#s2.2" rel="section" title="2.2 O ficheiro de configuração">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Visão geral">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Operação">
+
+</head>
+
+<body>
+
+<p><a name="ch2"></a></p>
+<hr>
+
+<p>
+[ <a href="ch1.html">anterior</a> ]
+[ <a href="index.html#contents">Índice</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">próximo</a> ]
+</p>
+
+<hr>
+
+<h1>
+Usando o APT Offline
+<br>Capítulo 2 - Usando o APT em ambas máquinas
+</h1>
+
+<hr>
+
+<h2><a name="s2.1"></a>2.1 Visão geral</h2>
+
+<p>
+Estando o APT disponível em ambas máquinas dá a configuração mais simples.
+A ideia básica é colocar uma cópia do ficheiro de estado no disco e usar a
+máquina remota para obter os ficheiros de pacotes mais recentes e decidir
+quais pacotes descarregar.  A estrutura de directórios do disco deverá
+parecer-se com:
+</p>
+
+<pre>
+       /disc/
+         archives/
+            partial/
+         lists/
+            partial/
+         status
+         sources.list
+         apt.conf
+</pre>
+
+<hr>
+
+<h2><a name="s2.2"></a>2.2 O ficheiro de configuração</h2>
+
+<p>
+O ficheiro de configuração deve dizer ao APT para armazenar os seus ficheiro
+no disco e usar os ficheiros de configuração do disco também.  O
+sources.list deve conter os sites apropriados que deseja usar a partir da
+máquina remota, e o ficheiro de estado deve ser uma cópia de
+<em>/var/lib/dpkg/status</em> a partir do <em>target host</em>.  Por favor
+note, se está a usar um arquivo local você deve usar copy URIs, a sintaxe é
+idêntica a file URIs.
+</p>
+
+<p>
+<em>apt.conf</em> tem de conter a informação necessária para fazer o APT
+usar o disco:
+</p>
+
+<pre>
+      APT
+      {
+        /* Isto não é necessário se as duas máquinas forem da mesma arquitectura, diz
+           ao APT remoto que arquitectura tem a máquina de destino */
+        Architecture &quot;i386&quot;;
+        
+        Get::Download-Only &quot;true&quot;;
+      };
+      
+      Dir
+      {
+        /* Usa o disco para informação de estado e redirecciona o ficheiro de estado a partir de
+           the /var/lib/dpkg default */
+        State &quot;/disc/&quot;;
+        State::status &quot;status&quot;;
+     
+        // Caches binárias serão armazenadas localmente
+        Cache::archives &quot;/disc/archives/&quot;;
+        Cache &quot;/tmp/&quot;;
+        
+        // Localização da lista de fontes.
+        Etc &quot;/disc/&quot;;
+      };
+</pre>
+
+<p>
+Mais detalhes podem ser vistos ao examinar o manual do apt.conf e o exemplo de
+ficheiro de configuração em <em>/usr/share/doc/apt/examples/apt.conf</em>.
+</p>
+
+<p>
+Na máquina de destino a primeira coisa a fazer é montar o disco e copiar
+<em>/var/lib/dpkg/status</em> para ele.  Você também precisa de criar os
+directórios delineados na Visão Geral, <em>archives/partial/</em> e
+<em>lists/partial/</em>.  Depois leve o disco até à máquina remota e
+configure o sources.list.  Na máquina remota execute o seguinte:
+</p>
+
+<pre>
+      # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+      # apt-get update
+      [ APT obtém os ficheiros de pacotes ]
+      # apt-get dist-upgrade
+      [ APT obtém todos os pacotes necessários para actualizar a máquina de destino ]
+</pre>
+
+<p>
+O comando dist-upgrade pode ser substituído por qualquer outro comando APT
+standard, particularmente dselect-upgrade.  Você até pode usar um front-end
+do APT como o <em>dselect</em>.  No entanto isto apresenta um problema ao
+comunicar as suas selecções de volta ao computador local.
+</p>
+
+<p>
+Agora o disco contém todos os ficheiros de índice e os arquivos necessários
+para actualizar a máquina de destino.  Devolva o disco e corra:
+</p>
+
+<pre>
+       # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+       # apt-get check
+       [ APT gera uma cópia local dos ficheiros de cache ]
+       # apt-get --no-d -o dir::state::status=/var/lib/dpkg/status dist-upgrade
+       [ Ou qualquer outro comando APT ]
+</pre>
+
+<p>
+Para uma função apropriada é necessário re-especificar que o ficheiro de
+estado seja o ficheiro local.  Isto é muito importante!
+</p>
+
+<p>
+Se está a usar dselect você pode fazer a operação muito arriscada de copiar
+disc/status para /var/lib/dpkg/status para que quaisquer selecções que faça
+na máquina remota sejam actualizadas.  Eu recomendo altamente que as pessoas
+apenas façam selecções na máquina local - mas isto pode nem sempre ser
+possível.  NÃO copie o ficheiro de estado se entretanto correu o dpkg ou o
+APT!!
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch1.html">anterior</a> ]
+[ <a href="index.html#contents">Índice</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">próximo</a> ]
+</p>
+
+<hr>
+
+<p>
+Usando o APT Offline
+</p>
+
+<address>
+$Id: offline.sgml,v 1.8 2003/02/12 15:06:41 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

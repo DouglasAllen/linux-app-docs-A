@@ -1,0 +1,139 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:15 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_Adp</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_Adp</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_AdpRegisterParser,
+Ns_AdpRequest &minus; Create and use ADP parsers</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_AdpRegisterParser</b>(<i>char *extension,
+Ns_AdpParserProc *newParserProc</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_AdpRequest</b>(<i>arg, arg</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+register new ADP parsers and run ADP requests. <b><br>
+Ns_AdpRegisterParser</b>(<i>extension,
+newParserProc</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Registers a
+new, named ADP parser procedure with the name given in
+<i>extension</i>. You can tie a file extension to a
+particular named parser in the <b>nsd.tcl</b> file. The
+<i>newParserProc</i> will be called when an ADP with the
+associated file extension needs to be parsed. If a file
+extension is registered as an ADP in the <b>nsd.tcl</b> but
+no parser is associated with that file extension, the
+default ADP parser is used.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The
+<i>newParserProc</i> must accept two arguments:</p>
+
+<p style="margin-left:22%; margin-top: 1em">typedef void
+(Ns_AdpParserProc)(Ns_DString *out, char *in);</p>
+
+<p style="margin-left:22%; margin-top: 1em">The ADP input
+is pointed to by <i>in</i>. Your parser must process the
+content of <i>in</i> and append the parsed output to
+<i>out</i>.</p>
+
+<p style="margin-left:22%; margin-top: 1em">The output
+should be formatted as a series of concatenated
+&quot;chunks&quot;. A chunk is a string of the format:</p>
+
+<p style="margin-left:22%; margin-top: 1em">&lt;type
+character&gt;&lt;string&gt;&lt;null&gt;</p>
+
+<p style="margin-left:22%; margin-top: 1em">where &lt;type
+character&gt; = &rsquo;t&rsquo; or &rsquo;s&rsquo;. A
+&rsquo;t&rsquo; means what follows is HTML and should be
+returned directly to the browser. An &rsquo;s&rsquo; means
+what follows is Tcl and should be evaluated.</p>
+
+<p style="margin-left:22%; margin-top: 1em">After the last
+chunk there should be an extra &lt;null&gt; character. For
+example, the &quot;adp&quot; parser will take a page like
+this:</p>
+
+<p style="margin-left:22%; margin-top: 1em">This is a test
+page&lt;%ns_puts hi%&gt;The end&lt;%ns_puts bye%&gt;</p>
+
+<p style="margin-left:22%; margin-top: 1em">And create this
+output:</p>
+
+<p style="margin-left:22%; margin-top: 1em">&quot;tThis is
+a test page\0sns_puts hi\0tThe end\0sns_puts
+bye\0\0&quot;</p>
+
+
+<p style="margin-left:11%;"><b>Ns_AdpRequest</b>(<i>conn</i>,
+<i>file</i>)</p>
+
+<p style="margin-left:22%; margin-top: 1em">Parse and
+evaluate an ADP file.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>AMC-analyse</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="commands.html" title="Commands manual" /><link rel="prev" href="AMC-imprime.html" title="AMC-imprime" /><link rel="next" href="AMC-note.html" title="AMC-note" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AMC-analyse</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AMC-imprime.html">Prev</a> </td><th width="60%" align="center">Commands manual</th><td width="20%" align="right"> <a accesskey="n" href="AMC-note.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="AMC-analyse"><a id="AMC-analyse"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>AMC-analyse — automatic data capture from scans for AMC multiple choice
+        exams.</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   analyse   --projet
+          <em class="replaceable"><code>project-dir</code></em>  [--seuil-coche <em class="replaceable"><code>threshold</code></em>] [--tol-marque <em class="replaceable"><code>tol</code></em>] [ --list-fichiers
+            <em class="replaceable"><code>files-list.txt</code></em>  |   <em class="replaceable"><code>scan-files</code></em>... ]</p></div></div><div class="refsect1" title="Description"><a id="idp6513616"></a><h2>Description</h2><p>The <span class="command"><strong>AMC-analyse.pl</strong></span> command performs automatic
+        data capture from scans of completed answer sheets of an AMC multiple
+        choice questionnaire. Before calling
+        <span class="command"><strong>AMC-analyse.pl</strong></span>, <span class="citerefentry"><span class="refentrytitle">AMC-prepare</span>(1)</span> should have been called to make working documents
+        (<code class="option">--mode s</code>) and the layout should have been processed
+        with <span class="citerefentry"><span class="refentrytitle">AMC-meptex</span>(1)</span>.</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--data
+            <em class="replaceable"><code>data-dir</code></em></code></span></dt><dd><p>gives the directory where data files are (see for example
+              <span class="citerefentry"><span class="refentrytitle">AMC-meptex</span>(1)</span>). Defaults to
+              <code class="filename"><em class="replaceable"><code>project-dir</code></em>/data</code>.</p></dd><dt><span class="term"><code class="option">--cr
+            <em class="replaceable"><code>project-cr-dir</code></em></code></span></dt><dd><p>gives a directory where to create image reports of the
+              data capture (zooms on the boxes in a <code class="filename">zooms</code>
+              sub-directory, name filed extraction as a
+              <code class="filename">name-*.jpg</code> file, and layout report as a
+              <code class="filename">page-*.jpg</code> file).</p></dd><dt><span class="term"><code class="option">--projet
+            <em class="replaceable"><code>project-dir</code></em></code></span></dt><dd><p>When using this option, if <code class="option">--cr</code> is not
+              used, <em class="replaceable"><code>project-cr-dir</code></em> will be set to
+              <code class="filename"><em class="replaceable"><code>project-dir</code></em>/cr</code>.</p></dd></dl></div><p>Giving the names of the scan files to process can be done in two
+        ways:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>these names can be given as arguments,</p></li><li class="listitem"><p>these names can be written to a plain file (one filename per
+            line), using the <code class="option">--list-fichiers
+            <em class="replaceable"><code>files-list.txt</code></em></code> to give the
+            name of this file.</p></li></ul></div><p>Some parameters for data capture may be set using the following
+        options:</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--prop
+            <em class="replaceable"><code>proportion</code></em></code></span></dt><dd><p>sets the proportion of each box that will be measured to
+              decide if the box is ticked or not. Default value is 0.8.</p></dd><dt><span class="term"><code class="option">--seuil-coche
+            <em class="replaceable"><code>threshold</code></em></code></span></dt><dd><p>When deciding whether a box is checked or not,
+              <span class="command"><strong>AMC-analyse.pl</strong></span> compares the black ratio
+              (number of black pixels over total number of pixels) to
+              <em class="replaceable"><code>threshold</code></em>. If the black ratio is
+              greater then <em class="replaceable"><code>threshold</code></em>, the box is
+              declared to be checked. Standard values can be 0.15 in the
+              standard layout, or 0.5 for separate answer sheet layout (in
+              this last case, letters are drawn in the boxes, and the students
+              are told to fill the boxes entirely). The black ratio is written
+              in the data capture reports, so that this threshold value can be
+              refined later without calling <span class="command"><strong>AMC-analyse.pl</strong></span>
+              again.</p></dd><dt><span class="term"><code class="option">--bw-threshold
+            <em class="replaceable"><code>threshold</code></em></code></span></dt><dd><p>This parameter is used when converting the grayscale scan
+              file to black and white. To get more black pixels, use a greater
+              value. To get more white pixels, use a smaller value. The
+              threshold must be between 0 and 1. The default value is
+              0.6.</p></dd><dt><span class="term"><code class="option">--ignore-red</code></span></dt><dd><p>With this option, only red channel will be used from color
+              scans. This way, all that is written in red will be ignored in
+              the scan. This can be useful when the boxes are printed in
+              red.</p></dd><dt><span class="term"><code class="option">--tol-marque
+            <em class="replaceable"><code>tol</code></em></code></span></dt><dd><p>defines the tolerance when detecting the four marks in the
+              scans corners. These marks are detected looking for black
+              connected components which dimensions are
+              <span class="emphasis"><em>closed</em></span> to the target dimension
+              <em class="replaceable"><code>target</code></em> (exact dimensions of the marks
+              if printing/scanning process where perfectly acurate). If
+              <em class="replaceable"><code>tol</code></em> is a real number, accepted
+              dimensions are those between
+              (1-<em class="replaceable"><code>tol</code></em>)*<em class="replaceable"><code>target</code></em>
+              and
+              (1+<em class="replaceable"><code>tol</code></em>)*<em class="replaceable"><code>target</code></em>.
+              If <em class="replaceable"><code>tol</code></em> is
+              "<em class="replaceable"><code>tinf</code></em>,<em class="replaceable"><code>tsup</code></em>"
+              (where <em class="replaceable"><code>tinf</code></em> and
+              <em class="replaceable"><code>tsup</code></em> are real numbers), accepted
+              dimensions are those between
+              (1-<em class="replaceable"><code>tinf</code></em>)*<em class="replaceable"><code>target</code></em>
+              and
+              (1+<em class="replaceable"><code>tsup</code></em>)*<em class="replaceable"><code>target</code></em>.
+              A standard value is 0.2.</p></dd><dt><span class="term"><code class="option">--multiple</code></span></dt><dd><p>This option is to be used when the scans are photocopies
+              from some subjects (different students can have the same
+              subject). In thie case, <span class="emphasis"><em>copy</em></span> numbers are
+              allocated to students so that their answer sheets, with the same
+              subject number, can be differenciated.</p></dd><dt><span class="term"><code class="option">--pre-allocate
+            <em class="replaceable"><code>copy_id</code></em></code></span></dt><dd><p>This option can be used in conjonction with
+              <code class="option">--multiple</code>. The copy numbers used for the scans
+              will start from <em class="replaceable"><code>copy_id</code></em>, in the same
+              order than the scans given as arguments.</p></dd><dt><span class="term"><code class="option">--debug
+            <em class="replaceable"><code>file.log</code></em></code></span></dt><dd><p>gives a file to fill with debugging information.</p></dd></dl></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AMC-imprime.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="commands.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AMC-note.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AMC-imprime </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AMC-note</td></tr></table></div></body></html>

@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>ax_lib_readline - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Macros.html#The-Macros" title="The Macros">
+<link rel="prev" href="ax_005flib_005fpostgresql.html#ax_005flib_005fpostgresql" title="ax_lib_postgresql">
+<link rel="next" href="ax_005flib_005fsocket_005fnsl.html#ax_005flib_005fsocket_005fnsl" title="ax_lib_socket_nsl">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ax_lib_readline"></a>
+<a name="ax_005flib_005freadline"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ax_005flib_005fsocket_005fnsl.html#ax_005flib_005fsocket_005fnsl">ax_lib_socket_nsl</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ax_005flib_005fpostgresql.html#ax_005flib_005fpostgresql">ax_lib_postgresql</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Macros.html#The-Macros">The Macros</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ax_lib_readline</h3>
+
+<h2 class="majorheading">Synopsis</h2>
+
+<pre class="smallexample">     AX_LIB_READLINE
+</pre>
+<h2 class="majorheading">Description</h2>
+
+<p>Searches for a readline compatible library. If found, defines
+`HAVE_LIBREADLINE'. If the found library has the `add_history' function,
+sets also `HAVE_READLINE_HISTORY'. Also checks for the locations of the
+necessary include files and sets `HAVE_READLINE_H' or
+`HAVE_READLINE_READLINE_H' and `HAVE_READLINE_HISTORY_H' or
+'HAVE_HISTORY_H' if the corresponding include files exists.
+
+<p>The libraries that may be readline compatible are `libedit',
+`libeditline' and `libreadline'. Sometimes we need to link a termcap
+library for readline to work, this macro tests these cases too by trying
+to link with `libtermcap', `libcurses' or `libncurses' before giving up.
+
+<p>Here is an example of how to use the information provided by this macro
+to perform the necessary includes or declarations in a C file:
+
+<pre class="smallexample">       #ifdef HAVE_LIBREADLINE
+       #  if defined(HAVE_READLINE_READLINE_H)
+       #    include &lt;readline/readline.h&gt;
+       #  elif defined(HAVE_READLINE_H)
+       #    include &lt;readline.h&gt;
+       #  else /* !defined(HAVE_READLINE_H) */
+       extern char *readline ();
+       #  endif /* !defined(HAVE_READLINE_H) */
+       char *cmdline = NULL;
+       #else /* !defined(HAVE_READLINE_READLINE_H) */
+         /* no readline */
+       #endif /* HAVE_LIBREADLINE */
+</pre>
+<pre class="smallexample">       #ifdef HAVE_READLINE_HISTORY
+       #  if defined(HAVE_READLINE_HISTORY_H)
+       #    include &lt;readline/history.h&gt;
+       #  elif defined(HAVE_HISTORY_H)
+       #    include &lt;history.h&gt;
+       #  else /* !defined(HAVE_HISTORY_H) */
+       extern void add_history ();
+       extern int write_history ();
+       extern int read_history ();
+       #  endif /* defined(HAVE_READLINE_HISTORY_H) */
+         /* no history */
+       #endif /* HAVE_READLINE_HISTORY */
+</pre>
+<h2 class="majorheading">Source Code</h2>
+
+<p>Download the
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_lib_readline.m4">latest version of <samp><span class="file">ax_lib_readline.m4</span></samp></a> or browse
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=history;f=m4/ax_lib_readline.m4">the macro's revision history</a>.
+
+<h2 class="majorheading">License</h2>
+
+<p>Copyright&nbsp;&copy;&nbsp;2008&nbsp;Ville&nbsp;Laurikari&nbsp;<a href="mailto:vl@iki.fi">vl@iki.fi</a><!-- /@w -->
+
+<p>Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved. This file is offered as-is, without any
+warranty.
+
+</body></html>
+

@@ -1,0 +1,68 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ConnLocation</TITLE>
+<LINK rel=Previous href="c-ch78.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch80.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch78.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch80.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="97071">
+</a><h3>Ns_ConnLocation</h3>
+<a name="97072">
+</a><h4>Overview</h4>
+Return location
+<a name="58978">
+</a><a name="132414">
+</a><h4>Syntax</h4>
+<pre>    <a name="58980"></a>char *Ns_ConnLocation(
+    <a name="58981"></a>Ns_Conn *conn
+    <a name="58982"></a>);
+</pre><p><a name="133744">
+</a><h4>Description</h4>
+<p><a name="58984">
+</a>The Ns_ConnLocation function returns the HTTP location associated with the connection. For example: <code>http://www.avalon.com:81</code>.</p>
+<p><a name="214076">
+</a>Multiple communications drivers can be loaded into a single server. This means a server may have more than one location. For example, if the nsssl module is loaded and bound to port 8000 and the nssock module is loaded and bound to port 9000, the server would have the following two locations:</p>
+<pre>    <a name="214081"></a>
+    <a name="214082"></a>	http://<code>www.avalon.com</code>:9000
+    <a name="214083"></a>	https://<code>www.avalon.com</code>:8000
+    <a name="214088"></a>
+</pre><p><p><a name="214085">
+</a>For this reason it is important to use the Ns_ConnLocation function to determine the driver location at run time.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch78.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch80.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

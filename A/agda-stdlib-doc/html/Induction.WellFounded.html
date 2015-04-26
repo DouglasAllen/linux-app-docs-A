@@ -1,0 +1,3392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Induction.WellFounded</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Well-founded induction</a
+      ><a name="131"
+      >
+</a
+      ><a name="132" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="204"
+      >
+
+</a
+      ><a name="206" class="Keyword"
+      >open</a
+      ><a name="210"
+      > </a
+      ><a name="211" class="Keyword"
+      >import</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Relation.Binary.html#1" class="Module"
+      >Relation</a
+      ><a name="226"
+      >.</a
+      ><a name="227" href="Relation.Binary.html#1" class="Module"
+      >Binary</a
+      ><a name="233"
+      >
+
+</a
+      ><a name="235" class="Keyword"
+      >module</a
+      ><a name="241"
+      > </a
+      ><a name="242" href="Induction.WellFounded.html#1" class="Module"
+      >Induction</a
+      ><a name="251"
+      >.</a
+      ><a name="252" href="Induction.WellFounded.html#1" class="Module"
+      >WellFounded</a
+      ><a name="263"
+      > </a
+      ><a name="264" class="Keyword"
+      >where</a
+      ><a name="269"
+      >
+
+</a
+      ><a name="271" class="Keyword"
+      >open</a
+      ><a name="275"
+      > </a
+      ><a name="276" class="Keyword"
+      >import</a
+      ><a name="282"
+      > </a
+      ><a name="283" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="287"
+      >.</a
+      ><a name="288" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="295"
+      >
+</a
+      ><a name="296" class="Keyword"
+      >open</a
+      ><a name="300"
+      > </a
+      ><a name="301" class="Keyword"
+      >import</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="316"
+      >
+</a
+      ><a name="317" class="Keyword"
+      >open</a
+      ><a name="321"
+      > </a
+      ><a name="322" class="Keyword"
+      >import</a
+      ><a name="328"
+      > </a
+      ><a name="329" href="Induction.html#1" class="Module"
+      >Induction</a
+      ><a name="338"
+      >
+</a
+      ><a name="339" class="Keyword"
+      >open</a
+      ><a name="343"
+      > </a
+      ><a name="344" class="Keyword"
+      >import</a
+      ><a name="350"
+      > </a
+      ><a name="351" href="Relation.Unary.html#1" class="Module"
+      >Relation</a
+      ><a name="359"
+      >.</a
+      ><a name="360" href="Relation.Unary.html#1" class="Module"
+      >Unary</a
+      ><a name="365"
+      >
+
+</a
+      ><a name="367" class="Comment"
+      >-- When using well-founded recursion you can recurse arbitrarily, as</a
+      ><a name="435"
+      >
+</a
+      ><a name="436" class="Comment"
+      >-- long as the arguments become smaller, and &quot;smaller&quot; is</a
+      ><a name="493"
+      >
+</a
+      ><a name="494" class="Comment"
+      >-- well-founded.</a
+      ><a name="510"
+      >
+
+</a
+      ><a name="512" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="517"
+      > </a
+      ><a name="518" class="Symbol"
+      >:</a
+      ><a name="519"
+      > </a
+      ><a name="520" class="Symbol"
+      >&#8704;</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Symbol"
+      >{</a
+      ><a name="523" href="Induction.WellFounded.html#523" class="Bound"
+      >a</a
+      ><a name="524" class="Symbol"
+      >}</a
+      ><a name="525"
+      > </a
+      ><a name="526" class="Symbol"
+      >{</a
+      ><a name="527" href="Induction.WellFounded.html#527" class="Bound"
+      >A</a
+      ><a name="528"
+      > </a
+      ><a name="529" class="Symbol"
+      >:</a
+      ><a name="530"
+      > </a
+      ><a name="531" class="PrimitiveType"
+      >Set</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Induction.WellFounded.html#523" class="Bound"
+      >a</a
+      ><a name="536" class="Symbol"
+      >}</a
+      ><a name="537"
+      > </a
+      ><a name="538" class="Symbol"
+      >&#8594;</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Induction.WellFounded.html#527" class="Bound"
+      >A</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Induction.WellFounded.html#523" class="Bound"
+      >a</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Symbol"
+      >&#8594;</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Induction.html#724" class="Function"
+      >RecStruct</a
+      ><a name="559"
+      > </a
+      ><a name="560" href="Induction.WellFounded.html#527" class="Bound"
+      >A</a
+      ><a name="561"
+      >
+</a
+      ><a name="562" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="Induction.WellFounded.html#568" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Induction.WellFounded.html#572" class="Bound"
+      >P</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Induction.WellFounded.html#574" class="Bound"
+      >x</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Symbol"
+      >=</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >&#8704;</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Induction.WellFounded.html#580" class="Bound"
+      >y</a
+      ><a name="581"
+      > </a
+      ><a name="582" class="Symbol"
+      >&#8594;</a
+      ><a name="583"
+      > </a
+      ><a name="584" href="Induction.WellFounded.html#580" class="Bound"
+      >y</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Induction.WellFounded.html#568" class="Bound Operator"
+      >&lt;</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Induction.WellFounded.html#574" class="Bound"
+      >x</a
+      ><a name="589"
+      > </a
+      ><a name="590" class="Symbol"
+      >&#8594;</a
+      ><a name="591"
+      > </a
+      ><a name="592" href="Induction.WellFounded.html#572" class="Bound"
+      >P</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Induction.WellFounded.html#580" class="Bound"
+      >y</a
+      ><a name="595"
+      >
+
+</a
+      ><a name="597" class="Comment"
+      >-- The accessibility predicate: x is accessible if everything which is</a
+      ><a name="667"
+      >
+</a
+      ><a name="668" class="Comment"
+      >-- smaller than x is also accessible (inductively).</a
+      ><a name="719"
+      >
+
+</a
+      ><a name="721" class="Keyword"
+      >data</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="729"
+      > </a
+      ><a name="730" class="Symbol"
+      >{</a
+      ><a name="731" href="Induction.WellFounded.html#731" class="Bound"
+      >a</a
+      ><a name="732" class="Symbol"
+      >}</a
+      ><a name="733"
+      > </a
+      ><a name="734" class="Symbol"
+      >{</a
+      ><a name="735" href="Induction.WellFounded.html#735" class="Bound"
+      >A</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Symbol"
+      >:</a
+      ><a name="738"
+      > </a
+      ><a name="739" class="PrimitiveType"
+      >Set</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Induction.WellFounded.html#731" class="Bound"
+      >a</a
+      ><a name="744" class="Symbol"
+      >}</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >(</a
+      ><a name="747" href="Induction.WellFounded.html#747" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="750"
+      > </a
+      ><a name="751" class="Symbol"
+      >:</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="756"
+      > </a
+      ><a name="757" href="Induction.WellFounded.html#735" class="Bound"
+      >A</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Induction.WellFounded.html#731" class="Bound"
+      >a</a
+      ><a name="760" class="Symbol"
+      >)</a
+      ><a name="761"
+      > </a
+      ><a name="762" class="Symbol"
+      >(</a
+      ><a name="763" href="Induction.WellFounded.html#763" class="Bound"
+      >x</a
+      ><a name="764"
+      > </a
+      ><a name="765" class="Symbol"
+      >:</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Induction.WellFounded.html#735" class="Bound"
+      >A</a
+      ><a name="768" class="Symbol"
+      >)</a
+      ><a name="769"
+      > </a
+      ><a name="770" class="Symbol"
+      >:</a
+      ><a name="771"
+      > </a
+      ><a name="772" class="PrimitiveType"
+      >Set</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Induction.WellFounded.html#731" class="Bound"
+      >a</a
+      ><a name="777"
+      > </a
+      ><a name="778" class="Keyword"
+      >where</a
+      ><a name="783"
+      >
+  </a
+      ><a name="786" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="789"
+      > </a
+      ><a name="790" class="Symbol"
+      >:</a
+      ><a name="791"
+      > </a
+      ><a name="792" class="Symbol"
+      >(</a
+      ><a name="793" href="Induction.WellFounded.html#793" class="Bound"
+      >rs</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >:</a
+      ><a name="797"
+      > </a
+      ><a name="798" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Induction.WellFounded.html#747" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="807"
+      > </a
+      ><a name="808" class="Symbol"
+      >(</a
+      ><a name="809" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Induction.WellFounded.html#747" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="816" class="Symbol"
+      >)</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Induction.WellFounded.html#763" class="Bound"
+      >x</a
+      ><a name="819" class="Symbol"
+      >)</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >&#8594;</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="826"
+      > </a
+      ><a name="827" href="Induction.WellFounded.html#747" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="830"
+      > </a
+      ><a name="831" href="Induction.WellFounded.html#763" class="Bound"
+      >x</a
+      ><a name="832"
+      >
+
+</a
+      ><a name="834" class="Comment"
+      >-- The accessibility predicate encodes what it means to be</a
+      ><a name="892"
+      >
+</a
+      ><a name="893" class="Comment"
+      >-- well-founded; if all elements are accessible, then _&lt;_ is</a
+      ><a name="953"
+      >
+</a
+      ><a name="954" class="Comment"
+      >-- well-founded.</a
+      ><a name="970"
+      >
+
+</a
+      ><a name="972" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="984"
+      > </a
+      ><a name="985" class="Symbol"
+      >:</a
+      ><a name="986"
+      > </a
+      ><a name="987" class="Symbol"
+      >&#8704;</a
+      ><a name="988"
+      > </a
+      ><a name="989" class="Symbol"
+      >{</a
+      ><a name="990" href="Induction.WellFounded.html#990" class="Bound"
+      >a</a
+      ><a name="991" class="Symbol"
+      >}</a
+      ><a name="992"
+      > </a
+      ><a name="993" class="Symbol"
+      >{</a
+      ><a name="994" href="Induction.WellFounded.html#994" class="Bound"
+      >A</a
+      ><a name="995"
+      > </a
+      ><a name="996" class="Symbol"
+      >:</a
+      ><a name="997"
+      > </a
+      ><a name="998" class="PrimitiveType"
+      >Set</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Induction.WellFounded.html#990" class="Bound"
+      >a</a
+      ><a name="1003" class="Symbol"
+      >}</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" class="Symbol"
+      >&#8594;</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Induction.WellFounded.html#994" class="Bound"
+      >A</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Induction.WellFounded.html#990" class="Bound"
+      >a</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" class="Symbol"
+      >&#8594;</a
+      ><a name="1016"
+      > </a
+      ><a name="1017" class="PrimitiveType"
+      >Set</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Induction.WellFounded.html#990" class="Bound"
+      >a</a
+      ><a name="1022"
+      >
+</a
+      ><a name="1023" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Induction.WellFounded.html#1036" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" class="Symbol"
+      >=</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >&#8704;</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Induction.WellFounded.html#1044" class="Bound"
+      >x</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >&#8594;</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Induction.WellFounded.html#1036" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Induction.WellFounded.html#1044" class="Bound"
+      >x</a
+      ><a name="1057"
+      >
+
+</a
+      ><a name="1059" class="Comment"
+      >-- Well-founded induction for the subset of accessible elements:</a
+      ><a name="1123"
+      >
+
+</a
+      ><a name="1125" class="Keyword"
+      >module</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Induction.WellFounded.html#1132" class="Module"
+      >Some</a
+      ><a name="1136"
+      > </a
+      ><a name="1137" class="Symbol"
+      >{</a
+      ><a name="1138" href="Induction.WellFounded.html#1138" class="Bound"
+      >a</a
+      ><a name="1139" class="Symbol"
+      >}</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" class="Symbol"
+      >{</a
+      ><a name="1142" href="Induction.WellFounded.html#1142" class="Bound"
+      >A</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" class="Symbol"
+      >:</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" class="PrimitiveType"
+      >Set</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Induction.WellFounded.html#1138" class="Bound"
+      >a</a
+      ><a name="1151" class="Symbol"
+      >}</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" class="Symbol"
+      >{</a
+      ><a name="1154" href="Induction.WellFounded.html#1154" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" class="Symbol"
+      >:</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" href="Induction.WellFounded.html#1142" class="Bound"
+      >A</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Induction.WellFounded.html#1138" class="Bound"
+      >a</a
+      ><a name="1167" class="Symbol"
+      >}</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" class="Keyword"
+      >where</a
+      ><a name="1174"
+      >
+
+  </a
+      ><a name="1178" href="Induction.WellFounded.html#1178" class="Function"
+      >wfRec-builder</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" class="Symbol"
+      >:</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Induction.html#1473" class="Function"
+      >SubsetRecursorBuilder</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" class="Symbol"
+      >(</a
+      ><a name="1217" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" href="Induction.WellFounded.html#1154" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1224" class="Symbol"
+      >)</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" class="Symbol"
+      >(</a
+      ><a name="1227" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="1232"
+      > </a
+      ><a name="1233" href="Induction.WellFounded.html#1154" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1236" class="Symbol"
+      >)</a
+      ><a name="1237"
+      >
+  </a
+      ><a name="1240" href="Induction.WellFounded.html#1178" class="Function"
+      >wfRec-builder</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" href="Induction.WellFounded.html#1254" class="Bound"
+      >P</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Induction.WellFounded.html#1256" class="Bound"
+      >f</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" href="Induction.WellFounded.html#1258" class="Bound"
+      >x</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >(</a
+      ><a name="1261" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Induction.WellFounded.html#1265" class="Bound"
+      >rs</a
+      ><a name="1267" class="Symbol"
+      >)</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" class="Symbol"
+      >=</a
+      ><a name="1270"
+      > </a
+      ><a name="1271" class="Symbol"
+      >&#955;</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" href="Induction.WellFounded.html#1273" class="Bound"
+      >y</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Induction.WellFounded.html#1275" class="Bound"
+      >y&lt;x</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" class="Symbol"
+      >&#8594;</a
+      ><a name="1280"
+      >
+    </a
+      ><a name="1285" href="Induction.WellFounded.html#1256" class="Bound"
+      >f</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" href="Induction.WellFounded.html#1273" class="Bound"
+      >y</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" class="Symbol"
+      >(</a
+      ><a name="1290" href="Induction.WellFounded.html#1178" class="Function"
+      >wfRec-builder</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" href="Induction.WellFounded.html#1254" class="Bound"
+      >P</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" href="Induction.WellFounded.html#1256" class="Bound"
+      >f</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" href="Induction.WellFounded.html#1273" class="Bound"
+      >y</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" class="Symbol"
+      >(</a
+      ><a name="1311" href="Induction.WellFounded.html#1265" class="Bound"
+      >rs</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="Induction.WellFounded.html#1273" class="Bound"
+      >y</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Induction.WellFounded.html#1275" class="Bound"
+      >y&lt;x</a
+      ><a name="1319" class="Symbol"
+      >))</a
+      ><a name="1321"
+      >
+
+  </a
+      ><a name="1325" href="Induction.WellFounded.html#1325" class="Function"
+      >wfRec</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" class="Symbol"
+      >:</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" href="Induction.html#1635" class="Function"
+      >SubsetRecursor</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" class="Symbol"
+      >(</a
+      ><a name="1349" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Induction.WellFounded.html#1154" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1356" class="Symbol"
+      >)</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" class="Symbol"
+      >(</a
+      ><a name="1359" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" href="Induction.WellFounded.html#1154" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1368" class="Symbol"
+      >)</a
+      ><a name="1369"
+      >
+  </a
+      ><a name="1372" href="Induction.WellFounded.html#1325" class="Function"
+      >wfRec</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" class="Symbol"
+      >=</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Induction.html#1772" class="Function"
+      >subsetBuild</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Induction.WellFounded.html#1178" class="Function"
+      >wfRec-builder</a
+      ><a name="1405"
+      >
+
+</a
+      ><a name="1407" class="Comment"
+      >-- Well-founded induction for all elements, assuming they are all</a
+      ><a name="1472"
+      >
+</a
+      ><a name="1473" class="Comment"
+      >-- accessible:</a
+      ><a name="1487"
+      >
+
+</a
+      ><a name="1489" class="Keyword"
+      >module</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Induction.WellFounded.html#1496" class="Module"
+      >All</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" class="Symbol"
+      >{</a
+      ><a name="1501" href="Induction.WellFounded.html#1501" class="Bound"
+      >a</a
+      ><a name="1502" class="Symbol"
+      >}</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" class="Symbol"
+      >{</a
+      ><a name="1505" href="Induction.WellFounded.html#1505" class="Bound"
+      >A</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" class="Symbol"
+      >:</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" class="PrimitiveType"
+      >Set</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" href="Induction.WellFounded.html#1501" class="Bound"
+      >a</a
+      ><a name="1514" class="Symbol"
+      >}</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" class="Symbol"
+      >{</a
+      ><a name="1517" href="Induction.WellFounded.html#1517" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" class="Symbol"
+      >:</a
+      ><a name="1522"
+      > </a
+      ><a name="1523" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" href="Induction.WellFounded.html#1505" class="Bound"
+      >A</a
+      ><a name="1528"
+      > </a
+      ><a name="1529" href="Induction.WellFounded.html#1501" class="Bound"
+      >a</a
+      ><a name="1530" class="Symbol"
+      >}</a
+      ><a name="1531"
+      >
+           </a
+      ><a name="1543" class="Symbol"
+      >(</a
+      ><a name="1544" href="Induction.WellFounded.html#1544" class="Bound"
+      >wf</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" class="Symbol"
+      >:</a
+      ><a name="1548"
+      > </a
+      ><a name="1549" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" href="Induction.WellFounded.html#1517" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1565" class="Symbol"
+      >)</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" class="Keyword"
+      >where</a
+      ><a name="1572"
+      >
+
+  </a
+      ><a name="1576" href="Induction.WellFounded.html#1576" class="Function"
+      >wfRec-builder</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" class="Symbol"
+      >:</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" href="Induction.html#896" class="Function"
+      >RecursorBuilder</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" class="Symbol"
+      >(</a
+      ><a name="1609" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="1614"
+      > </a
+      ><a name="1615" href="Induction.WellFounded.html#1517" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1618" class="Symbol"
+      >)</a
+      ><a name="1619"
+      >
+  </a
+      ><a name="1622" href="Induction.WellFounded.html#1576" class="Function"
+      >wfRec-builder</a
+      ><a name="1635"
+      > </a
+      ><a name="1636" href="Induction.WellFounded.html#1636" class="Bound"
+      >P</a
+      ><a name="1637"
+      > </a
+      ><a name="1638" href="Induction.WellFounded.html#1638" class="Bound"
+      >f</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" href="Induction.WellFounded.html#1640" class="Bound"
+      >x</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" class="Symbol"
+      >=</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" href="Induction.WellFounded.html#1178" class="Function"
+      >Some</a
+      ><a name="1648"
+      >.</a
+      ><a name="1649" href="Induction.WellFounded.html#1178" class="Function"
+      >wfRec-builder</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" href="Induction.WellFounded.html#1636" class="Bound"
+      >P</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Induction.WellFounded.html#1638" class="Bound"
+      >f</a
+      ><a name="1666"
+      > </a
+      ><a name="1667" href="Induction.WellFounded.html#1640" class="Bound"
+      >x</a
+      ><a name="1668"
+      > </a
+      ><a name="1669" class="Symbol"
+      >(</a
+      ><a name="1670" href="Induction.WellFounded.html#1544" class="Bound"
+      >wf</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Induction.WellFounded.html#1640" class="Bound"
+      >x</a
+      ><a name="1674" class="Symbol"
+      >)</a
+      ><a name="1675"
+      >
+
+  </a
+      ><a name="1679" href="Induction.WellFounded.html#1679" class="Function"
+      >wfRec</a
+      ><a name="1684"
+      > </a
+      ><a name="1685" class="Symbol"
+      >:</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Induction.html#1085" class="Function"
+      >Recursor</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" class="Symbol"
+      >(</a
+      ><a name="1697" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="1702"
+      > </a
+      ><a name="1703" href="Induction.WellFounded.html#1517" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1706" class="Symbol"
+      >)</a
+      ><a name="1707"
+      >
+  </a
+      ><a name="1710" href="Induction.WellFounded.html#1679" class="Function"
+      >wfRec</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" class="Symbol"
+      >=</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="Induction.html#1244" class="Function"
+      >build</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Induction.WellFounded.html#1576" class="Function"
+      >wfRec-builder</a
+      ><a name="1737"
+      >
+
+</a
+      ><a name="1739" class="Comment"
+      >-- It might be useful to establish proofs of Acc or Well-founded using</a
+      ><a name="1809"
+      >
+</a
+      ><a name="1810" class="Comment"
+      >-- combinators such as the ones below (see, for instance,</a
+      ><a name="1867"
+      >
+</a
+      ><a name="1868" class="Comment"
+      >-- &quot;Constructing Recursion Operators in Intuitionistic Type Theory&quot; by</a
+      ><a name="1938"
+      >
+</a
+      ><a name="1939" class="Comment"
+      >-- Lawrence C Paulson).</a
+      ><a name="1962"
+      >
+
+</a
+      ><a name="1964" class="Keyword"
+      >module</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="Induction.WellFounded.html#1971" class="Module"
+      >Subrelation</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" class="Symbol"
+      >{</a
+      ><a name="1984" href="Induction.WellFounded.html#1984" class="Bound"
+      >a</a
+      ><a name="1985" class="Symbol"
+      >}</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" class="Symbol"
+      >{</a
+      ><a name="1988" href="Induction.WellFounded.html#1988" class="Bound"
+      >A</a
+      ><a name="1989"
+      > </a
+      ><a name="1990" class="Symbol"
+      >:</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" class="PrimitiveType"
+      >Set</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" href="Induction.WellFounded.html#1984" class="Bound"
+      >a</a
+      ><a name="1997" class="Symbol"
+      >}</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" class="Symbol"
+      >{</a
+      ><a name="2000" href="Induction.WellFounded.html#2000" class="Bound Operator"
+      >_&lt;&#8321;_</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" href="Induction.WellFounded.html#2005" class="Bound Operator"
+      >_&lt;&#8322;_</a
+      ><a name="2009"
+      > </a
+      ><a name="2010" class="Symbol"
+      >:</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="2015"
+      > </a
+      ><a name="2016" href="Induction.WellFounded.html#1988" class="Bound"
+      >A</a
+      ><a name="2017"
+      > </a
+      ><a name="2018" href="Induction.WellFounded.html#1984" class="Bound"
+      >a</a
+      ><a name="2019" class="Symbol"
+      >}</a
+      ><a name="2020"
+      >
+                   </a
+      ><a name="2040" class="Symbol"
+      >(</a
+      ><a name="2041" href="Induction.WellFounded.html#2041" class="Bound"
+      >&lt;&#8321;&#8658;&lt;&#8322;</a
+      ><a name="2046"
+      > </a
+      ><a name="2047" class="Symbol"
+      >:</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" class="Symbol"
+      >&#8704;</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" class="Symbol"
+      >{</a
+      ><a name="2052" href="Induction.WellFounded.html#2052" class="Bound"
+      >x</a
+      ><a name="2053"
+      > </a
+      ><a name="2054" href="Induction.WellFounded.html#2054" class="Bound"
+      >y</a
+      ><a name="2055" class="Symbol"
+      >}</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" class="Symbol"
+      >&#8594;</a
+      ><a name="2058"
+      > </a
+      ><a name="2059" href="Induction.WellFounded.html#2052" class="Bound"
+      >x</a
+      ><a name="2060"
+      > </a
+      ><a name="2061" href="Induction.WellFounded.html#2000" class="Bound Operator"
+      >&lt;&#8321;</a
+      ><a name="2063"
+      > </a
+      ><a name="2064" href="Induction.WellFounded.html#2054" class="Bound"
+      >y</a
+      ><a name="2065"
+      > </a
+      ><a name="2066" class="Symbol"
+      >&#8594;</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" href="Induction.WellFounded.html#2052" class="Bound"
+      >x</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" href="Induction.WellFounded.html#2005" class="Bound Operator"
+      >&lt;&#8322;</a
+      ><a name="2072"
+      > </a
+      ><a name="2073" href="Induction.WellFounded.html#2054" class="Bound"
+      >y</a
+      ><a name="2074" class="Symbol"
+      >)</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" class="Keyword"
+      >where</a
+      ><a name="2081"
+      >
+
+  </a
+      ><a name="2085" href="Induction.WellFounded.html#2085" class="Function"
+      >accessible</a
+      ><a name="2095"
+      > </a
+      ><a name="2096" class="Symbol"
+      >:</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2101"
+      > </a
+      ><a name="2102" href="Induction.WellFounded.html#2005" class="Bound Operator"
+      >_&lt;&#8322;_</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" href="Relation.Unary.html#1714" class="Function Operator"
+      >&#8838;</a
+      ><a name="2108"
+      > </a
+      ><a name="2109" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2112"
+      > </a
+      ><a name="2113" href="Induction.WellFounded.html#2000" class="Bound Operator"
+      >_&lt;&#8321;_</a
+      ><a name="2117"
+      >
+  </a
+      ><a name="2120" href="Induction.WellFounded.html#2085" class="Function"
+      >accessible</a
+      ><a name="2130"
+      > </a
+      ><a name="2131" class="Symbol"
+      >(</a
+      ><a name="2132" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2135"
+      > </a
+      ><a name="2136" href="Induction.WellFounded.html#2136" class="Bound"
+      >rs</a
+      ><a name="2138" class="Symbol"
+      >)</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" class="Symbol"
+      >=</a
+      ><a name="2141"
+      > </a
+      ><a name="2142" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2145"
+      > </a
+      ><a name="2146" class="Symbol"
+      >(&#955;</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="Induction.WellFounded.html#2149" class="Bound"
+      >y</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" href="Induction.WellFounded.html#2151" class="Bound"
+      >y&lt;x</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" class="Symbol"
+      >&#8594;</a
+      ><a name="2156"
+      > </a
+      ><a name="2157" href="Induction.WellFounded.html#2085" class="Function"
+      >accessible</a
+      ><a name="2167"
+      > </a
+      ><a name="2168" class="Symbol"
+      >(</a
+      ><a name="2169" href="Induction.WellFounded.html#2136" class="Bound"
+      >rs</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" href="Induction.WellFounded.html#2149" class="Bound"
+      >y</a
+      ><a name="2173"
+      > </a
+      ><a name="2174" class="Symbol"
+      >(</a
+      ><a name="2175" href="Induction.WellFounded.html#2041" class="Bound"
+      >&lt;&#8321;&#8658;&lt;&#8322;</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" href="Induction.WellFounded.html#2151" class="Bound"
+      >y&lt;x</a
+      ><a name="2184" class="Symbol"
+      >)))</a
+      ><a name="2187"
+      >
+
+  </a
+      ><a name="2191" href="Induction.WellFounded.html#2191" class="Function"
+      >well-founded</a
+      ><a name="2203"
+      > </a
+      ><a name="2204" class="Symbol"
+      >:</a
+      ><a name="2205"
+      > </a
+      ><a name="2206" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="2218"
+      > </a
+      ><a name="2219" href="Induction.WellFounded.html#2005" class="Bound Operator"
+      >_&lt;&#8322;_</a
+      ><a name="2223"
+      > </a
+      ><a name="2224" class="Symbol"
+      >&#8594;</a
+      ><a name="2225"
+      > </a
+      ><a name="2226" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="2238"
+      > </a
+      ><a name="2239" href="Induction.WellFounded.html#2000" class="Bound Operator"
+      >_&lt;&#8321;_</a
+      ><a name="2243"
+      >
+  </a
+      ><a name="2246" href="Induction.WellFounded.html#2191" class="Function"
+      >well-founded</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" href="Induction.WellFounded.html#2259" class="Bound"
+      >wf</a
+      ><a name="2261"
+      > </a
+      ><a name="2262" class="Symbol"
+      >=</a
+      ><a name="2263"
+      > </a
+      ><a name="2264" class="Symbol"
+      >&#955;</a
+      ><a name="2265"
+      > </a
+      ><a name="2266" href="Induction.WellFounded.html#2266" class="Bound"
+      >x</a
+      ><a name="2267"
+      > </a
+      ><a name="2268" class="Symbol"
+      >&#8594;</a
+      ><a name="2269"
+      > </a
+      ><a name="2270" href="Induction.WellFounded.html#2085" class="Function"
+      >accessible</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" class="Symbol"
+      >(</a
+      ><a name="2282" href="Induction.WellFounded.html#2259" class="Bound"
+      >wf</a
+      ><a name="2284"
+      > </a
+      ><a name="2285" href="Induction.WellFounded.html#2266" class="Bound"
+      >x</a
+      ><a name="2286" class="Symbol"
+      >)</a
+      ><a name="2287"
+      >
+
+</a
+      ><a name="2289" class="Keyword"
+      >module</a
+      ><a name="2295"
+      > </a
+      ><a name="2296" href="Induction.WellFounded.html#2296" class="Module"
+      >Inverse-image</a
+      ><a name="2309"
+      > </a
+      ><a name="2310" class="Symbol"
+      >{</a
+      ><a name="2311" href="Induction.WellFounded.html#2311" class="Bound"
+      >&#8467;</a
+      ><a name="2312" class="Symbol"
+      >}</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" class="Symbol"
+      >{</a
+      ><a name="2315" href="Induction.WellFounded.html#2315" class="Bound"
+      >A</a
+      ><a name="2316"
+      > </a
+      ><a name="2317" href="Induction.WellFounded.html#2317" class="Bound"
+      >B</a
+      ><a name="2318"
+      > </a
+      ><a name="2319" class="Symbol"
+      >:</a
+      ><a name="2320"
+      > </a
+      ><a name="2321" class="PrimitiveType"
+      >Set</a
+      ><a name="2324"
+      > </a
+      ><a name="2325" href="Induction.WellFounded.html#2311" class="Bound"
+      >&#8467;</a
+      ><a name="2326" class="Symbol"
+      >}</a
+      ><a name="2327"
+      > </a
+      ><a name="2328" class="Symbol"
+      >{</a
+      ><a name="2329" href="Induction.WellFounded.html#2329" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2332"
+      > </a
+      ><a name="2333" class="Symbol"
+      >:</a
+      ><a name="2334"
+      > </a
+      ><a name="2335" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" href="Induction.WellFounded.html#2317" class="Bound"
+      >B</a
+      ><a name="2340"
+      > </a
+      ><a name="2341" href="Induction.WellFounded.html#2311" class="Bound"
+      >&#8467;</a
+      ><a name="2342" class="Symbol"
+      >}</a
+      ><a name="2343"
+      >
+                     </a
+      ><a name="2365" class="Symbol"
+      >(</a
+      ><a name="2366" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2367"
+      > </a
+      ><a name="2368" class="Symbol"
+      >:</a
+      ><a name="2369"
+      > </a
+      ><a name="2370" href="Induction.WellFounded.html#2315" class="Bound"
+      >A</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" class="Symbol"
+      >&#8594;</a
+      ><a name="2373"
+      > </a
+      ><a name="2374" href="Induction.WellFounded.html#2317" class="Bound"
+      >B</a
+      ><a name="2375" class="Symbol"
+      >)</a
+      ><a name="2376"
+      > </a
+      ><a name="2377" class="Keyword"
+      >where</a
+      ><a name="2382"
+      >
+
+  </a
+      ><a name="2386" href="Induction.WellFounded.html#2386" class="Function"
+      >accessible</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" class="Symbol"
+      >:</a
+      ><a name="2398"
+      > </a
+      ><a name="2399" class="Symbol"
+      >&#8704;</a
+      ><a name="2400"
+      > </a
+      ><a name="2401" class="Symbol"
+      >{</a
+      ><a name="2402" href="Induction.WellFounded.html#2402" class="Bound"
+      >x</a
+      ><a name="2403" class="Symbol"
+      >}</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" class="Symbol"
+      >&#8594;</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2410"
+      > </a
+      ><a name="2411" href="Induction.WellFounded.html#2329" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2414"
+      > </a
+      ><a name="2415" class="Symbol"
+      >(</a
+      ><a name="2416" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2417"
+      > </a
+      ><a name="2418" href="Induction.WellFounded.html#2402" class="Bound"
+      >x</a
+      ><a name="2419" class="Symbol"
+      >)</a
+      ><a name="2420"
+      > </a
+      ><a name="2421" class="Symbol"
+      >&#8594;</a
+      ><a name="2422"
+      > </a
+      ><a name="2423" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2426"
+      > </a
+      ><a name="2427" class="Symbol"
+      >(</a
+      ><a name="2428" href="Induction.WellFounded.html#2329" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2431"
+      > </a
+      ><a name="2432" href="Function.html#2044" class="Function Operator"
+      >on</a
+      ><a name="2434"
+      > </a
+      ><a name="2435" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2436" class="Symbol"
+      >)</a
+      ><a name="2437"
+      > </a
+      ><a name="2438" href="Induction.WellFounded.html#2402" class="Bound"
+      >x</a
+      ><a name="2439"
+      >
+  </a
+      ><a name="2442" href="Induction.WellFounded.html#2386" class="Function"
+      >accessible</a
+      ><a name="2452"
+      > </a
+      ><a name="2453" class="Symbol"
+      >(</a
+      ><a name="2454" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2457"
+      > </a
+      ><a name="2458" href="Induction.WellFounded.html#2458" class="Bound"
+      >rs</a
+      ><a name="2460" class="Symbol"
+      >)</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" class="Symbol"
+      >=</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2467"
+      > </a
+      ><a name="2468" class="Symbol"
+      >(&#955;</a
+      ><a name="2470"
+      > </a
+      ><a name="2471" href="Induction.WellFounded.html#2471" class="Bound"
+      >y</a
+      ><a name="2472"
+      > </a
+      ><a name="2473" href="Induction.WellFounded.html#2473" class="Bound"
+      >fy&lt;fx</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" class="Symbol"
+      >&#8594;</a
+      ><a name="2480"
+      > </a
+      ><a name="2481" href="Induction.WellFounded.html#2386" class="Function"
+      >accessible</a
+      ><a name="2491"
+      > </a
+      ><a name="2492" class="Symbol"
+      >(</a
+      ><a name="2493" href="Induction.WellFounded.html#2458" class="Bound"
+      >rs</a
+      ><a name="2495"
+      > </a
+      ><a name="2496" class="Symbol"
+      >(</a
+      ><a name="2497" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" href="Induction.WellFounded.html#2471" class="Bound"
+      >y</a
+      ><a name="2500" class="Symbol"
+      >)</a
+      ><a name="2501"
+      > </a
+      ><a name="2502" href="Induction.WellFounded.html#2473" class="Bound"
+      >fy&lt;fx</a
+      ><a name="2507" class="Symbol"
+      >))</a
+      ><a name="2509"
+      >
+
+  </a
+      ><a name="2513" href="Induction.WellFounded.html#2513" class="Function"
+      >well-founded</a
+      ><a name="2525"
+      > </a
+      ><a name="2526" class="Symbol"
+      >:</a
+      ><a name="2527"
+      > </a
+      ><a name="2528" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="2540"
+      > </a
+      ><a name="2541" href="Induction.WellFounded.html#2329" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2544"
+      > </a
+      ><a name="2545" class="Symbol"
+      >&#8594;</a
+      ><a name="2546"
+      > </a
+      ><a name="2547" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="2559"
+      > </a
+      ><a name="2560" class="Symbol"
+      >(</a
+      ><a name="2561" href="Induction.WellFounded.html#2329" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2564"
+      > </a
+      ><a name="2565" href="Function.html#2044" class="Function Operator"
+      >on</a
+      ><a name="2567"
+      > </a
+      ><a name="2568" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2569" class="Symbol"
+      >)</a
+      ><a name="2570"
+      >
+  </a
+      ><a name="2573" href="Induction.WellFounded.html#2513" class="Function"
+      >well-founded</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="Induction.WellFounded.html#2586" class="Bound"
+      >wf</a
+      ><a name="2588"
+      > </a
+      ><a name="2589" class="Symbol"
+      >=</a
+      ><a name="2590"
+      > </a
+      ><a name="2591" class="Symbol"
+      >&#955;</a
+      ><a name="2592"
+      > </a
+      ><a name="2593" href="Induction.WellFounded.html#2593" class="Bound"
+      >x</a
+      ><a name="2594"
+      > </a
+      ><a name="2595" class="Symbol"
+      >&#8594;</a
+      ><a name="2596"
+      > </a
+      ><a name="2597" href="Induction.WellFounded.html#2386" class="Function"
+      >accessible</a
+      ><a name="2607"
+      > </a
+      ><a name="2608" class="Symbol"
+      >(</a
+      ><a name="2609" href="Induction.WellFounded.html#2586" class="Bound"
+      >wf</a
+      ><a name="2611"
+      > </a
+      ><a name="2612" class="Symbol"
+      >(</a
+      ><a name="2613" href="Induction.WellFounded.html#2366" class="Bound"
+      >f</a
+      ><a name="2614"
+      > </a
+      ><a name="2615" href="Induction.WellFounded.html#2593" class="Bound"
+      >x</a
+      ><a name="2616" class="Symbol"
+      >))</a
+      ><a name="2618"
+      >
+
+</a
+      ><a name="2620" class="Keyword"
+      >module</a
+      ><a name="2626"
+      > </a
+      ><a name="2627" href="Induction.WellFounded.html#2627" class="Module"
+      >Transitive-closure</a
+      ><a name="2645"
+      > </a
+      ><a name="2646" class="Symbol"
+      >{</a
+      ><a name="2647" href="Induction.WellFounded.html#2647" class="Bound"
+      >a</a
+      ><a name="2648" class="Symbol"
+      >}</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" class="Symbol"
+      >{</a
+      ><a name="2651" href="Induction.WellFounded.html#2651" class="Bound"
+      >A</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" class="Symbol"
+      >:</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" class="PrimitiveType"
+      >Set</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="Induction.WellFounded.html#2647" class="Bound"
+      >a</a
+      ><a name="2660" class="Symbol"
+      >}</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" class="Symbol"
+      >(</a
+      ><a name="2663" href="Induction.WellFounded.html#2663" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2666"
+      > </a
+      ><a name="2667" class="Symbol"
+      >:</a
+      ><a name="2668"
+      > </a
+      ><a name="2669" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="2672"
+      > </a
+      ><a name="2673" href="Induction.WellFounded.html#2651" class="Bound"
+      >A</a
+      ><a name="2674"
+      > </a
+      ><a name="2675" href="Induction.WellFounded.html#2647" class="Bound"
+      >a</a
+      ><a name="2676" class="Symbol"
+      >)</a
+      ><a name="2677"
+      > </a
+      ><a name="2678" class="Keyword"
+      >where</a
+      ><a name="2683"
+      >
+
+  </a
+      ><a name="2687" class="Keyword"
+      >infix</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" class="Number"
+      >4</a
+      ><a name="2694"
+      > _&lt;&#8314;_
+
+  </a
+      ><a name="2703" class="Keyword"
+      >data</a
+      ><a name="2707"
+      > </a
+      ><a name="2708" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="2712"
+      > </a
+      ><a name="2713" class="Symbol"
+      >:</a
+      ><a name="2714"
+      > </a
+      ><a name="2715" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="2718"
+      > </a
+      ><a name="2719" href="Induction.WellFounded.html#2651" class="Bound"
+      >A</a
+      ><a name="2720"
+      > </a
+      ><a name="2721" href="Induction.WellFounded.html#2647" class="Bound"
+      >a</a
+      ><a name="2722"
+      > </a
+      ><a name="2723" class="Keyword"
+      >where</a
+      ><a name="2728"
+      >
+    </a
+      ><a name="2733" href="Induction.WellFounded.html#2733" class="InductiveConstructor Operator"
+      >[_]</a
+      ><a name="2736"
+      >   </a
+      ><a name="2739" class="Symbol"
+      >:</a
+      ><a name="2740"
+      > </a
+      ><a name="2741" class="Symbol"
+      >&#8704;</a
+      ><a name="2742"
+      > </a
+      ><a name="2743" class="Symbol"
+      >{</a
+      ><a name="2744" href="Induction.WellFounded.html#2744" class="Bound"
+      >x</a
+      ><a name="2745"
+      > </a
+      ><a name="2746" href="Induction.WellFounded.html#2746" class="Bound"
+      >y</a
+      ><a name="2747" class="Symbol"
+      >}</a
+      ><a name="2748"
+      > </a
+      ><a name="2749" class="Symbol"
+      >(</a
+      ><a name="2750" href="Induction.WellFounded.html#2750" class="Bound"
+      >x&lt;y</a
+      ><a name="2753"
+      > </a
+      ><a name="2754" class="Symbol"
+      >:</a
+      ><a name="2755"
+      > </a
+      ><a name="2756" href="Induction.WellFounded.html#2744" class="Bound"
+      >x</a
+      ><a name="2757"
+      > </a
+      ><a name="2758" href="Induction.WellFounded.html#2663" class="Bound Operator"
+      >&lt;</a
+      ><a name="2759"
+      > </a
+      ><a name="2760" href="Induction.WellFounded.html#2746" class="Bound"
+      >y</a
+      ><a name="2761" class="Symbol"
+      >)</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" class="Symbol"
+      >&#8594;</a
+      ><a name="2764"
+      > </a
+      ><a name="2765" href="Induction.WellFounded.html#2744" class="Bound"
+      >x</a
+      ><a name="2766"
+      > </a
+      ><a name="2767" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >&lt;&#8314;</a
+      ><a name="2769"
+      > </a
+      ><a name="2770" href="Induction.WellFounded.html#2746" class="Bound"
+      >y</a
+      ><a name="2771"
+      >
+    </a
+      ><a name="2776" href="Induction.WellFounded.html#2776" class="InductiveConstructor"
+      >trans</a
+      ><a name="2781"
+      > </a
+      ><a name="2782" class="Symbol"
+      >:</a
+      ><a name="2783"
+      > </a
+      ><a name="2784" class="Symbol"
+      >&#8704;</a
+      ><a name="2785"
+      > </a
+      ><a name="2786" class="Symbol"
+      >{</a
+      ><a name="2787" href="Induction.WellFounded.html#2787" class="Bound"
+      >x</a
+      ><a name="2788"
+      > </a
+      ><a name="2789" href="Induction.WellFounded.html#2789" class="Bound"
+      >y</a
+      ><a name="2790"
+      > </a
+      ><a name="2791" href="Induction.WellFounded.html#2791" class="Bound"
+      >z</a
+      ><a name="2792" class="Symbol"
+      >}</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" class="Symbol"
+      >(</a
+      ><a name="2795" href="Induction.WellFounded.html#2795" class="Bound"
+      >x&lt;y</a
+      ><a name="2798"
+      > </a
+      ><a name="2799" class="Symbol"
+      >:</a
+      ><a name="2800"
+      > </a
+      ><a name="2801" href="Induction.WellFounded.html#2787" class="Bound"
+      >x</a
+      ><a name="2802"
+      > </a
+      ><a name="2803" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >&lt;&#8314;</a
+      ><a name="2805"
+      > </a
+      ><a name="2806" href="Induction.WellFounded.html#2789" class="Bound"
+      >y</a
+      ><a name="2807" class="Symbol"
+      >)</a
+      ><a name="2808"
+      > </a
+      ><a name="2809" class="Symbol"
+      >(</a
+      ><a name="2810" href="Induction.WellFounded.html#2810" class="Bound"
+      >y&lt;z</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" class="Symbol"
+      >:</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" href="Induction.WellFounded.html#2789" class="Bound"
+      >y</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >&lt;&#8314;</a
+      ><a name="2820"
+      > </a
+      ><a name="2821" href="Induction.WellFounded.html#2791" class="Bound"
+      >z</a
+      ><a name="2822" class="Symbol"
+      >)</a
+      ><a name="2823"
+      > </a
+      ><a name="2824" class="Symbol"
+      >&#8594;</a
+      ><a name="2825"
+      > </a
+      ><a name="2826" href="Induction.WellFounded.html#2787" class="Bound"
+      >x</a
+      ><a name="2827"
+      > </a
+      ><a name="2828" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >&lt;&#8314;</a
+      ><a name="2830"
+      > </a
+      ><a name="2831" href="Induction.WellFounded.html#2791" class="Bound"
+      >z</a
+      ><a name="2832"
+      >
+
+  </a
+      ><a name="2836" href="Induction.WellFounded.html#2836" class="Function"
+      >downwards-closed</a
+      ><a name="2852"
+      > </a
+      ><a name="2853" class="Symbol"
+      >:</a
+      ><a name="2854"
+      > </a
+      ><a name="2855" class="Symbol"
+      >&#8704;</a
+      ><a name="2856"
+      > </a
+      ><a name="2857" class="Symbol"
+      >{</a
+      ><a name="2858" href="Induction.WellFounded.html#2858" class="Bound"
+      >x</a
+      ><a name="2859"
+      > </a
+      ><a name="2860" href="Induction.WellFounded.html#2860" class="Bound"
+      >y</a
+      ><a name="2861" class="Symbol"
+      >}</a
+      ><a name="2862"
+      > </a
+      ><a name="2863" class="Symbol"
+      >&#8594;</a
+      ><a name="2864"
+      > </a
+      ><a name="2865" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2868"
+      > </a
+      ><a name="2869" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="2873"
+      > </a
+      ><a name="2874" href="Induction.WellFounded.html#2860" class="Bound"
+      >y</a
+      ><a name="2875"
+      > </a
+      ><a name="2876" class="Symbol"
+      >&#8594;</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" href="Induction.WellFounded.html#2858" class="Bound"
+      >x</a
+      ><a name="2879"
+      > </a
+      ><a name="2880" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >&lt;&#8314;</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" href="Induction.WellFounded.html#2860" class="Bound"
+      >y</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" class="Symbol"
+      >&#8594;</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="2895"
+      > </a
+      ><a name="2896" href="Induction.WellFounded.html#2858" class="Bound"
+      >x</a
+      ><a name="2897"
+      >
+  </a
+      ><a name="2900" href="Induction.WellFounded.html#2836" class="Function"
+      >downwards-closed</a
+      ><a name="2916"
+      > </a
+      ><a name="2917" class="Symbol"
+      >(</a
+      ><a name="2918" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2921"
+      > </a
+      ><a name="2922" href="Induction.WellFounded.html#2922" class="Bound"
+      >rs</a
+      ><a name="2924" class="Symbol"
+      >)</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" href="Induction.WellFounded.html#2926" class="Bound"
+      >x&lt;y</a
+      ><a name="2929"
+      > </a
+      ><a name="2930" class="Symbol"
+      >=</a
+      ><a name="2931"
+      > </a
+      ><a name="2932" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="2935"
+      > </a
+      ><a name="2936" class="Symbol"
+      >(&#955;</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" href="Induction.WellFounded.html#2939" class="Bound"
+      >z</a
+      ><a name="2940"
+      > </a
+      ><a name="2941" href="Induction.WellFounded.html#2941" class="Bound"
+      >z&lt;x</a
+      ><a name="2944"
+      > </a
+      ><a name="2945" class="Symbol"
+      >&#8594;</a
+      ><a name="2946"
+      > </a
+      ><a name="2947" href="Induction.WellFounded.html#2922" class="Bound"
+      >rs</a
+      ><a name="2949"
+      > </a
+      ><a name="2950" href="Induction.WellFounded.html#2939" class="Bound"
+      >z</a
+      ><a name="2951"
+      > </a
+      ><a name="2952" class="Symbol"
+      >(</a
+      ><a name="2953" href="Induction.WellFounded.html#2776" class="InductiveConstructor"
+      >trans</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Induction.WellFounded.html#2941" class="Bound"
+      >z&lt;x</a
+      ><a name="2962"
+      > </a
+      ><a name="2963" href="Induction.WellFounded.html#2926" class="Bound"
+      >x&lt;y</a
+      ><a name="2966" class="Symbol"
+      >))</a
+      ><a name="2968"
+      >
+
+  </a
+      ><a name="2972" class="Keyword"
+      >mutual</a
+      ><a name="2978"
+      >
+
+    </a
+      ><a name="2984" href="Induction.WellFounded.html#2984" class="Function"
+      >accessible</a
+      ><a name="2994"
+      > </a
+      ><a name="2995" class="Symbol"
+      >:</a
+      ><a name="2996"
+      > </a
+      ><a name="2997" class="Symbol"
+      >&#8704;</a
+      ><a name="2998"
+      > </a
+      ><a name="2999" class="Symbol"
+      >{</a
+      ><a name="3000" href="Induction.WellFounded.html#3000" class="Bound"
+      >x</a
+      ><a name="3001" class="Symbol"
+      >}</a
+      ><a name="3002"
+      > </a
+      ><a name="3003" class="Symbol"
+      >&#8594;</a
+      ><a name="3004"
+      > </a
+      ><a name="3005" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3008"
+      > </a
+      ><a name="3009" href="Induction.WellFounded.html#2663" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3012"
+      > </a
+      ><a name="3013" href="Induction.WellFounded.html#3000" class="Bound"
+      >x</a
+      ><a name="3014"
+      > </a
+      ><a name="3015" class="Symbol"
+      >&#8594;</a
+      ><a name="3016"
+      > </a
+      ><a name="3017" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3020"
+      > </a
+      ><a name="3021" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="3025"
+      > </a
+      ><a name="3026" href="Induction.WellFounded.html#3000" class="Bound"
+      >x</a
+      ><a name="3027"
+      >
+    </a
+      ><a name="3032" href="Induction.WellFounded.html#2984" class="Function"
+      >accessible</a
+      ><a name="3042"
+      > </a
+      ><a name="3043" href="Induction.WellFounded.html#3043" class="Bound"
+      >acc-x</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" class="Symbol"
+      >=</a
+      ><a name="3050"
+      > </a
+      ><a name="3051" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="3054"
+      > </a
+      ><a name="3055" class="Symbol"
+      >(</a
+      ><a name="3056" href="Induction.WellFounded.html#3080" class="Function"
+      >accessible&#8242;</a
+      ><a name="3067"
+      > </a
+      ><a name="3068" href="Induction.WellFounded.html#3043" class="Bound"
+      >acc-x</a
+      ><a name="3073" class="Symbol"
+      >)</a
+      ><a name="3074"
+      >
+
+    </a
+      ><a name="3080" href="Induction.WellFounded.html#3080" class="Function"
+      >accessible&#8242;</a
+      ><a name="3091"
+      > </a
+      ><a name="3092" class="Symbol"
+      >:</a
+      ><a name="3093"
+      > </a
+      ><a name="3094" class="Symbol"
+      >&#8704;</a
+      ><a name="3095"
+      > </a
+      ><a name="3096" class="Symbol"
+      >{</a
+      ><a name="3097" href="Induction.WellFounded.html#3097" class="Bound"
+      >x</a
+      ><a name="3098" class="Symbol"
+      >}</a
+      ><a name="3099"
+      > </a
+      ><a name="3100" class="Symbol"
+      >&#8594;</a
+      ><a name="3101"
+      > </a
+      ><a name="3102" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3105"
+      > </a
+      ><a name="3106" href="Induction.WellFounded.html#2663" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="Induction.WellFounded.html#3097" class="Bound"
+      >x</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" class="Symbol"
+      >&#8594;</a
+      ><a name="3113"
+      > </a
+      ><a name="3114" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="3119"
+      > </a
+      ><a name="3120" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="3124"
+      > </a
+      ><a name="3125" class="Symbol"
+      >(</a
+      ><a name="3126" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3129"
+      > </a
+      ><a name="3130" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="3134" class="Symbol"
+      >)</a
+      ><a name="3135"
+      > </a
+      ><a name="3136" href="Induction.WellFounded.html#3097" class="Bound"
+      >x</a
+      ><a name="3137"
+      >
+    </a
+      ><a name="3142" href="Induction.WellFounded.html#3080" class="Function"
+      >accessible&#8242;</a
+      ><a name="3153"
+      > </a
+      ><a name="3154" class="Symbol"
+      >(</a
+      ><a name="3155" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="3158"
+      > </a
+      ><a name="3159" href="Induction.WellFounded.html#3159" class="Bound"
+      >rs</a
+      ><a name="3161" class="Symbol"
+      >)</a
+      ><a name="3162"
+      > </a
+      ><a name="3163" href="Induction.WellFounded.html#3163" class="Bound"
+      >y</a
+      ><a name="3164"
+      > </a
+      ><a name="3165" href="Induction.WellFounded.html#2733" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="3166"
+      > </a
+      ><a name="3167" href="Induction.WellFounded.html#3167" class="Bound"
+      >y&lt;x</a
+      ><a name="3170"
+      > </a
+      ><a name="3171" href="Induction.WellFounded.html#2733" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="3172"
+      >         </a
+      ><a name="3181" class="Symbol"
+      >=</a
+      ><a name="3182"
+      > </a
+      ><a name="3183" href="Induction.WellFounded.html#2984" class="Function"
+      >accessible</a
+      ><a name="3193"
+      > </a
+      ><a name="3194" class="Symbol"
+      >(</a
+      ><a name="3195" href="Induction.WellFounded.html#3159" class="Bound"
+      >rs</a
+      ><a name="3197"
+      > </a
+      ><a name="3198" href="Induction.WellFounded.html#3163" class="Bound"
+      >y</a
+      ><a name="3199"
+      > </a
+      ><a name="3200" href="Induction.WellFounded.html#3167" class="Bound"
+      >y&lt;x</a
+      ><a name="3203" class="Symbol"
+      >)</a
+      ><a name="3204"
+      >
+    </a
+      ><a name="3209" href="Induction.WellFounded.html#3080" class="Function"
+      >accessible&#8242;</a
+      ><a name="3220"
+      > </a
+      ><a name="3221" href="Induction.WellFounded.html#3221" class="Bound"
+      >acc-x</a
+      ><a name="3226"
+      >    </a
+      ><a name="3230" href="Induction.WellFounded.html#3230" class="Bound"
+      >y</a
+      ><a name="3231"
+      > </a
+      ><a name="3232" class="Symbol"
+      >(</a
+      ><a name="3233" href="Induction.WellFounded.html#2776" class="InductiveConstructor"
+      >trans</a
+      ><a name="3238"
+      > </a
+      ><a name="3239" href="Induction.WellFounded.html#3239" class="Bound"
+      >y&lt;z</a
+      ><a name="3242"
+      > </a
+      ><a name="3243" href="Induction.WellFounded.html#3243" class="Bound"
+      >z&lt;x</a
+      ><a name="3246" class="Symbol"
+      >)</a
+      ><a name="3247"
+      > </a
+      ><a name="3248" class="Symbol"
+      >=</a
+      ><a name="3249"
+      >
+      </a
+      ><a name="3256" href="Induction.WellFounded.html#2836" class="Function"
+      >downwards-closed</a
+      ><a name="3272"
+      > </a
+      ><a name="3273" class="Symbol"
+      >(</a
+      ><a name="3274" href="Induction.WellFounded.html#3080" class="Function"
+      >accessible&#8242;</a
+      ><a name="3285"
+      > </a
+      ><a name="3286" href="Induction.WellFounded.html#3221" class="Bound"
+      >acc-x</a
+      ><a name="3291"
+      > </a
+      ><a name="3292" class="Symbol"
+      >_</a
+      ><a name="3293"
+      > </a
+      ><a name="3294" href="Induction.WellFounded.html#3243" class="Bound"
+      >z&lt;x</a
+      ><a name="3297" class="Symbol"
+      >)</a
+      ><a name="3298"
+      > </a
+      ><a name="3299" href="Induction.WellFounded.html#3239" class="Bound"
+      >y&lt;z</a
+      ><a name="3302"
+      >
+
+  </a
+      ><a name="3306" href="Induction.WellFounded.html#3306" class="Function"
+      >well-founded</a
+      ><a name="3318"
+      > </a
+      ><a name="3319" class="Symbol"
+      >:</a
+      ><a name="3320"
+      > </a
+      ><a name="3321" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="3333"
+      > </a
+      ><a name="3334" href="Induction.WellFounded.html#2663" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3337"
+      > </a
+      ><a name="3338" class="Symbol"
+      >&#8594;</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="3352"
+      > </a
+      ><a name="3353" href="Induction.WellFounded.html#2708" class="Datatype Operator"
+      >_&lt;&#8314;_</a
+      ><a name="3357"
+      >
+  </a
+      ><a name="3360" href="Induction.WellFounded.html#3306" class="Function"
+      >well-founded</a
+      ><a name="3372"
+      > </a
+      ><a name="3373" href="Induction.WellFounded.html#3373" class="Bound"
+      >wf</a
+      ><a name="3375"
+      > </a
+      ><a name="3376" class="Symbol"
+      >=</a
+      ><a name="3377"
+      > </a
+      ><a name="3378" class="Symbol"
+      >&#955;</a
+      ><a name="3379"
+      > </a
+      ><a name="3380" href="Induction.WellFounded.html#3380" class="Bound"
+      >x</a
+      ><a name="3381"
+      > </a
+      ><a name="3382" class="Symbol"
+      >&#8594;</a
+      ><a name="3383"
+      > </a
+      ><a name="3384" href="Induction.WellFounded.html#2984" class="Function"
+      >accessible</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" class="Symbol"
+      >(</a
+      ><a name="3396" href="Induction.WellFounded.html#3373" class="Bound"
+      >wf</a
+      ><a name="3398"
+      > </a
+      ><a name="3399" href="Induction.WellFounded.html#3380" class="Bound"
+      >x</a
+      ><a name="3400" class="Symbol"
+      >)</a
+      ><a name="3401"
+      >
+
+</a
+      ><a name="3403" class="Keyword"
+      >module</a
+      ><a name="3409"
+      > </a
+      ><a name="3410" href="Induction.WellFounded.html#3410" class="Module"
+      >Lexicographic</a
+      ><a name="3423"
+      > </a
+      ><a name="3424" class="Symbol"
+      >{</a
+      ><a name="3425" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3426" class="Symbol"
+      >}</a
+      ><a name="3427"
+      > </a
+      ><a name="3428" class="Symbol"
+      >{</a
+      ><a name="3429" href="Induction.WellFounded.html#3429" class="Bound"
+      >A</a
+      ><a name="3430"
+      > </a
+      ><a name="3431" class="Symbol"
+      >:</a
+      ><a name="3432"
+      > </a
+      ><a name="3433" class="PrimitiveType"
+      >Set</a
+      ><a name="3436"
+      > </a
+      ><a name="3437" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3438" class="Symbol"
+      >}</a
+      ><a name="3439"
+      > </a
+      ><a name="3440" class="Symbol"
+      >{</a
+      ><a name="3441" href="Induction.WellFounded.html#3441" class="Bound"
+      >B</a
+      ><a name="3442"
+      > </a
+      ><a name="3443" class="Symbol"
+      >:</a
+      ><a name="3444"
+      > </a
+      ><a name="3445" href="Induction.WellFounded.html#3429" class="Bound"
+      >A</a
+      ><a name="3446"
+      > </a
+      ><a name="3447" class="Symbol"
+      >&#8594;</a
+      ><a name="3448"
+      > </a
+      ><a name="3449" class="PrimitiveType"
+      >Set</a
+      ><a name="3452"
+      > </a
+      ><a name="3453" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3454" class="Symbol"
+      >}</a
+      ><a name="3455"
+      >
+                     </a
+      ><a name="3477" class="Symbol"
+      >(</a
+      ><a name="3478" href="Induction.WellFounded.html#3478" class="Bound"
+      >RelA</a
+      ><a name="3482"
+      > </a
+      ><a name="3483" class="Symbol"
+      >:</a
+      ><a name="3484"
+      > </a
+      ><a name="3485" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="3488"
+      > </a
+      ><a name="3489" href="Induction.WellFounded.html#3429" class="Bound"
+      >A</a
+      ><a name="3490"
+      > </a
+      ><a name="3491" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3492" class="Symbol"
+      >)</a
+      ><a name="3493"
+      >
+                     </a
+      ><a name="3515" class="Symbol"
+      >(</a
+      ><a name="3516" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="3520"
+      > </a
+      ><a name="3521" class="Symbol"
+      >:</a
+      ><a name="3522"
+      > </a
+      ><a name="3523" class="Symbol"
+      >&#8704;</a
+      ><a name="3524"
+      > </a
+      ><a name="3525" href="Induction.WellFounded.html#3525" class="Bound"
+      >x</a
+      ><a name="3526"
+      > </a
+      ><a name="3527" class="Symbol"
+      >&#8594;</a
+      ><a name="3528"
+      > </a
+      ><a name="3529" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="3532"
+      > </a
+      ><a name="3533" class="Symbol"
+      >(</a
+      ><a name="3534" href="Induction.WellFounded.html#3441" class="Bound"
+      >B</a
+      ><a name="3535"
+      > </a
+      ><a name="3536" href="Induction.WellFounded.html#3525" class="Bound"
+      >x</a
+      ><a name="3537" class="Symbol"
+      >)</a
+      ><a name="3538"
+      > </a
+      ><a name="3539" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3540" class="Symbol"
+      >)</a
+      ><a name="3541"
+      > </a
+      ><a name="3542" class="Keyword"
+      >where</a
+      ><a name="3547"
+      >
+
+  </a
+      ><a name="3551" class="Keyword"
+      >data</a
+      ><a name="3555"
+      > </a
+      ><a name="3556" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >_&lt;_</a
+      ><a name="3559"
+      > </a
+      ><a name="3560" class="Symbol"
+      >:</a
+      ><a name="3561"
+      > </a
+      ><a name="3562" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="3565"
+      > </a
+      ><a name="3566" class="Symbol"
+      >(</a
+      ><a name="3567" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="3568"
+      > </a
+      ><a name="3569" href="Induction.WellFounded.html#3429" class="Bound"
+      >A</a
+      ><a name="3570"
+      > </a
+      ><a name="3571" href="Induction.WellFounded.html#3441" class="Bound"
+      >B</a
+      ><a name="3572" class="Symbol"
+      >)</a
+      ><a name="3573"
+      > </a
+      ><a name="3574" href="Induction.WellFounded.html#3425" class="Bound"
+      >&#8467;</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" class="Keyword"
+      >where</a
+      ><a name="3581"
+      >
+    </a
+      ><a name="3586" href="Induction.WellFounded.html#3586" class="InductiveConstructor"
+      >left</a
+      ><a name="3590"
+      >  </a
+      ><a name="3592" class="Symbol"
+      >:</a
+      ><a name="3593"
+      > </a
+      ><a name="3594" class="Symbol"
+      >&#8704;</a
+      ><a name="3595"
+      > </a
+      ><a name="3596" class="Symbol"
+      >{</a
+      ><a name="3597" href="Induction.WellFounded.html#3597" class="Bound"
+      >x&#8321;</a
+      ><a name="3599"
+      > </a
+      ><a name="3600" href="Induction.WellFounded.html#3600" class="Bound"
+      >y&#8321;</a
+      ><a name="3602"
+      > </a
+      ><a name="3603" href="Induction.WellFounded.html#3603" class="Bound"
+      >x&#8322;</a
+      ><a name="3605"
+      > </a
+      ><a name="3606" href="Induction.WellFounded.html#3606" class="Bound"
+      >y&#8322;</a
+      ><a name="3608" class="Symbol"
+      >}</a
+      ><a name="3609"
+      > </a
+      ><a name="3610" class="Symbol"
+      >(</a
+      ><a name="3611" href="Induction.WellFounded.html#3611" class="Bound"
+      >x&#8321;&lt;x&#8322;</a
+      ><a name="3616"
+      > </a
+      ><a name="3617" class="Symbol"
+      >:</a
+      ><a name="3618"
+      > </a
+      ><a name="3619" href="Induction.WellFounded.html#3478" class="Bound"
+      >RelA</a
+      ><a name="3623"
+      >   </a
+      ><a name="3626" href="Induction.WellFounded.html#3597" class="Bound"
+      >x&#8321;</a
+      ><a name="3628"
+      > </a
+      ><a name="3629" href="Induction.WellFounded.html#3603" class="Bound"
+      >x&#8322;</a
+      ><a name="3631" class="Symbol"
+      >)</a
+      ><a name="3632"
+      > </a
+      ><a name="3633" class="Symbol"
+      >&#8594;</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" class="Symbol"
+      >(</a
+      ><a name="3636" href="Induction.WellFounded.html#3597" class="Bound"
+      >x&#8321;</a
+      ><a name="3638"
+      > </a
+      ><a name="3639" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3640"
+      > </a
+      ><a name="3641" href="Induction.WellFounded.html#3600" class="Bound"
+      >y&#8321;</a
+      ><a name="3643" class="Symbol"
+      >)</a
+      ><a name="3644"
+      > </a
+      ><a name="3645" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >&lt;</a
+      ><a name="3646"
+      > </a
+      ><a name="3647" class="Symbol"
+      >(</a
+      ><a name="3648" href="Induction.WellFounded.html#3603" class="Bound"
+      >x&#8322;</a
+      ><a name="3650"
+      > </a
+      ><a name="3651" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3652"
+      > </a
+      ><a name="3653" href="Induction.WellFounded.html#3606" class="Bound"
+      >y&#8322;</a
+      ><a name="3655" class="Symbol"
+      >)</a
+      ><a name="3656"
+      >
+    </a
+      ><a name="3661" href="Induction.WellFounded.html#3661" class="InductiveConstructor"
+      >right</a
+      ><a name="3666"
+      > </a
+      ><a name="3667" class="Symbol"
+      >:</a
+      ><a name="3668"
+      > </a
+      ><a name="3669" class="Symbol"
+      >&#8704;</a
+      ><a name="3670"
+      > </a
+      ><a name="3671" class="Symbol"
+      >{</a
+      ><a name="3672" href="Induction.WellFounded.html#3672" class="Bound"
+      >x</a
+      ><a name="3673"
+      > </a
+      ><a name="3674" href="Induction.WellFounded.html#3674" class="Bound"
+      >y&#8321;</a
+      ><a name="3676"
+      > </a
+      ><a name="3677" href="Induction.WellFounded.html#3677" class="Bound"
+      >y&#8322;</a
+      ><a name="3679" class="Symbol"
+      >}</a
+      ><a name="3680"
+      >     </a
+      ><a name="3685" class="Symbol"
+      >(</a
+      ><a name="3686" href="Induction.WellFounded.html#3686" class="Bound"
+      >y&#8321;&lt;y&#8322;</a
+      ><a name="3691"
+      > </a
+      ><a name="3692" class="Symbol"
+      >:</a
+      ><a name="3693"
+      > </a
+      ><a name="3694" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="3698"
+      > </a
+      ><a name="3699" href="Induction.WellFounded.html#3672" class="Bound"
+      >x</a
+      ><a name="3700"
+      > </a
+      ><a name="3701" href="Induction.WellFounded.html#3674" class="Bound"
+      >y&#8321;</a
+      ><a name="3703"
+      > </a
+      ><a name="3704" href="Induction.WellFounded.html#3677" class="Bound"
+      >y&#8322;</a
+      ><a name="3706" class="Symbol"
+      >)</a
+      ><a name="3707"
+      > </a
+      ><a name="3708" class="Symbol"
+      >&#8594;</a
+      ><a name="3709"
+      > </a
+      ><a name="3710" class="Symbol"
+      >(</a
+      ><a name="3711" href="Induction.WellFounded.html#3672" class="Bound"
+      >x</a
+      ><a name="3712"
+      >  </a
+      ><a name="3714" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3715"
+      > </a
+      ><a name="3716" href="Induction.WellFounded.html#3674" class="Bound"
+      >y&#8321;</a
+      ><a name="3718" class="Symbol"
+      >)</a
+      ><a name="3719"
+      > </a
+      ><a name="3720" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >&lt;</a
+      ><a name="3721"
+      > </a
+      ><a name="3722" class="Symbol"
+      >(</a
+      ><a name="3723" href="Induction.WellFounded.html#3672" class="Bound"
+      >x</a
+      ><a name="3724"
+      >  </a
+      ><a name="3726" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3727"
+      > </a
+      ><a name="3728" href="Induction.WellFounded.html#3677" class="Bound"
+      >y&#8322;</a
+      ><a name="3730" class="Symbol"
+      >)</a
+      ><a name="3731"
+      >
+
+  </a
+      ><a name="3735" class="Keyword"
+      >mutual</a
+      ><a name="3741"
+      >
+
+    </a
+      ><a name="3747" href="Induction.WellFounded.html#3747" class="Function"
+      >accessible</a
+      ><a name="3757"
+      > </a
+      ><a name="3758" class="Symbol"
+      >:</a
+      ><a name="3759"
+      > </a
+      ><a name="3760" class="Symbol"
+      >&#8704;</a
+      ><a name="3761"
+      > </a
+      ><a name="3762" class="Symbol"
+      >{</a
+      ><a name="3763" href="Induction.WellFounded.html#3763" class="Bound"
+      >x</a
+      ><a name="3764"
+      > </a
+      ><a name="3765" href="Induction.WellFounded.html#3765" class="Bound"
+      >y</a
+      ><a name="3766" class="Symbol"
+      >}</a
+      ><a name="3767"
+      > </a
+      ><a name="3768" class="Symbol"
+      >&#8594;</a
+      ><a name="3769"
+      >
+                 </a
+      ><a name="3787" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3790"
+      > </a
+      ><a name="3791" href="Induction.WellFounded.html#3478" class="Bound"
+      >RelA</a
+      ><a name="3795"
+      > </a
+      ><a name="3796" href="Induction.WellFounded.html#3763" class="Bound"
+      >x</a
+      ><a name="3797"
+      > </a
+      ><a name="3798" class="Symbol"
+      >&#8594;</a
+      ><a name="3799"
+      > </a
+      ><a name="3800" class="Symbol"
+      >(&#8704;</a
+      ><a name="3802"
+      > </a
+      ><a name="3803" class="Symbol"
+      >{</a
+      ><a name="3804" href="Induction.WellFounded.html#3804" class="Bound"
+      >x</a
+      ><a name="3805" class="Symbol"
+      >}</a
+      ><a name="3806"
+      > </a
+      ><a name="3807" class="Symbol"
+      >&#8594;</a
+      ><a name="3808"
+      > </a
+      ><a name="3809" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="3821"
+      > </a
+      ><a name="3822" class="Symbol"
+      >(</a
+      ><a name="3823" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="3827"
+      > </a
+      ><a name="3828" href="Induction.WellFounded.html#3804" class="Bound"
+      >x</a
+      ><a name="3829" class="Symbol"
+      >))</a
+      ><a name="3831"
+      > </a
+      ><a name="3832" class="Symbol"
+      >&#8594;</a
+      ><a name="3833"
+      >
+                 </a
+      ><a name="3851" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3854"
+      > </a
+      ><a name="3855" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >_&lt;_</a
+      ><a name="3858"
+      > </a
+      ><a name="3859" class="Symbol"
+      >(</a
+      ><a name="3860" href="Induction.WellFounded.html#3763" class="Bound"
+      >x</a
+      ><a name="3861"
+      > </a
+      ><a name="3862" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3863"
+      > </a
+      ><a name="3864" href="Induction.WellFounded.html#3765" class="Bound"
+      >y</a
+      ><a name="3865" class="Symbol"
+      >)</a
+      ><a name="3866"
+      >
+    </a
+      ><a name="3871" href="Induction.WellFounded.html#3747" class="Function"
+      >accessible</a
+      ><a name="3881"
+      > </a
+      ><a name="3882" href="Induction.WellFounded.html#3882" class="Bound"
+      >accA</a
+      ><a name="3886"
+      > </a
+      ><a name="3887" href="Induction.WellFounded.html#3887" class="Bound"
+      >wfB</a
+      ><a name="3890"
+      > </a
+      ><a name="3891" class="Symbol"
+      >=</a
+      ><a name="3892"
+      > </a
+      ><a name="3893" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="3896"
+      > </a
+      ><a name="3897" class="Symbol"
+      >(</a
+      ><a name="3898" href="Induction.WellFounded.html#3933" class="Function"
+      >accessible&#8242;</a
+      ><a name="3909"
+      > </a
+      ><a name="3910" href="Induction.WellFounded.html#3882" class="Bound"
+      >accA</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" class="Symbol"
+      >(</a
+      ><a name="3916" href="Induction.WellFounded.html#3887" class="Bound"
+      >wfB</a
+      ><a name="3919"
+      > </a
+      ><a name="3920" class="Symbol"
+      >_)</a
+      ><a name="3922"
+      > </a
+      ><a name="3923" href="Induction.WellFounded.html#3887" class="Bound"
+      >wfB</a
+      ><a name="3926" class="Symbol"
+      >)</a
+      ><a name="3927"
+      >
+
+    </a
+      ><a name="3933" href="Induction.WellFounded.html#3933" class="Function"
+      >accessible&#8242;</a
+      ><a name="3944"
+      > </a
+      ><a name="3945" class="Symbol"
+      >:</a
+      ><a name="3946"
+      >
+      </a
+      ><a name="3953" class="Symbol"
+      >&#8704;</a
+      ><a name="3954"
+      > </a
+      ><a name="3955" class="Symbol"
+      >{</a
+      ><a name="3956" href="Induction.WellFounded.html#3956" class="Bound"
+      >x</a
+      ><a name="3957"
+      > </a
+      ><a name="3958" href="Induction.WellFounded.html#3958" class="Bound"
+      >y</a
+      ><a name="3959" class="Symbol"
+      >}</a
+      ><a name="3960"
+      > </a
+      ><a name="3961" class="Symbol"
+      >&#8594;</a
+      ><a name="3962"
+      >
+      </a
+      ><a name="3969" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" href="Induction.WellFounded.html#3478" class="Bound"
+      >RelA</a
+      ><a name="3977"
+      > </a
+      ><a name="3978" href="Induction.WellFounded.html#3956" class="Bound"
+      >x</a
+      ><a name="3979"
+      > </a
+      ><a name="3980" class="Symbol"
+      >&#8594;</a
+      ><a name="3981"
+      > </a
+      ><a name="3982" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="3985"
+      > </a
+      ><a name="3986" class="Symbol"
+      >(</a
+      ><a name="3987" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="3991"
+      > </a
+      ><a name="3992" href="Induction.WellFounded.html#3956" class="Bound"
+      >x</a
+      ><a name="3993" class="Symbol"
+      >)</a
+      ><a name="3994"
+      > </a
+      ><a name="3995" href="Induction.WellFounded.html#3958" class="Bound"
+      >y</a
+      ><a name="3996"
+      > </a
+      ><a name="3997" class="Symbol"
+      >&#8594;</a
+      ><a name="3998"
+      > </a
+      ><a name="3999" class="Symbol"
+      >(&#8704;</a
+      ><a name="4001"
+      > </a
+      ><a name="4002" class="Symbol"
+      >{</a
+      ><a name="4003" href="Induction.WellFounded.html#4003" class="Bound"
+      >x</a
+      ><a name="4004" class="Symbol"
+      >}</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" class="Symbol"
+      >&#8594;</a
+      ><a name="4007"
+      > </a
+      ><a name="4008" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="4020"
+      > </a
+      ><a name="4021" class="Symbol"
+      >(</a
+      ><a name="4022" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="4026"
+      > </a
+      ><a name="4027" href="Induction.WellFounded.html#4003" class="Bound"
+      >x</a
+      ><a name="4028" class="Symbol"
+      >))</a
+      ><a name="4030"
+      > </a
+      ><a name="4031" class="Symbol"
+      >&#8594;</a
+      ><a name="4032"
+      >
+      </a
+      ><a name="4039" href="Induction.WellFounded.html#512" class="Function"
+      >WfRec</a
+      ><a name="4044"
+      > </a
+      ><a name="4045" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >_&lt;_</a
+      ><a name="4048"
+      > </a
+      ><a name="4049" class="Symbol"
+      >(</a
+      ><a name="4050" href="Induction.WellFounded.html#726" class="Datatype"
+      >Acc</a
+      ><a name="4053"
+      > </a
+      ><a name="4054" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >_&lt;_</a
+      ><a name="4057" class="Symbol"
+      >)</a
+      ><a name="4058"
+      > </a
+      ><a name="4059" class="Symbol"
+      >(</a
+      ><a name="4060" href="Induction.WellFounded.html#3956" class="Bound"
+      >x</a
+      ><a name="4061"
+      > </a
+      ><a name="4062" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4063"
+      > </a
+      ><a name="4064" href="Induction.WellFounded.html#3958" class="Bound"
+      >y</a
+      ><a name="4065" class="Symbol"
+      >)</a
+      ><a name="4066"
+      >
+    </a
+      ><a name="4071" href="Induction.WellFounded.html#3933" class="Function"
+      >accessible&#8242;</a
+      ><a name="4082"
+      > </a
+      ><a name="4083" class="Symbol"
+      >(</a
+      ><a name="4084" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="4087"
+      > </a
+      ><a name="4088" href="Induction.WellFounded.html#4088" class="Bound"
+      >rsA</a
+      ><a name="4091" class="Symbol"
+      >)</a
+      ><a name="4092"
+      > </a
+      ><a name="4093" class="Symbol"
+      >_</a
+      ><a name="4094"
+      >    </a
+      ><a name="4098" href="Induction.WellFounded.html#4098" class="Bound"
+      >wfB</a
+      ><a name="4101"
+      > </a
+      ><a name="4102" class="DottedPattern Symbol"
+      >._</a
+      ><a name="4104"
+      > </a
+      ><a name="4105" class="Symbol"
+      >(</a
+      ><a name="4106" href="Induction.WellFounded.html#3586" class="InductiveConstructor"
+      >left</a
+      ><a name="4110"
+      >  </a
+      ><a name="4112" href="Induction.WellFounded.html#4112" class="Bound"
+      >x&#8242;&lt;x</a
+      ><a name="4116" class="Symbol"
+      >)</a
+      ><a name="4117"
+      > </a
+      ><a name="4118" class="Symbol"
+      >=</a
+      ><a name="4119"
+      > </a
+      ><a name="4120" href="Induction.WellFounded.html#3747" class="Function"
+      >accessible</a
+      ><a name="4130"
+      > </a
+      ><a name="4131" class="Symbol"
+      >(</a
+      ><a name="4132" href="Induction.WellFounded.html#4088" class="Bound"
+      >rsA</a
+      ><a name="4135"
+      > </a
+      ><a name="4136" class="Symbol"
+      >_</a
+      ><a name="4137"
+      > </a
+      ><a name="4138" href="Induction.WellFounded.html#4112" class="Bound"
+      >x&#8242;&lt;x</a
+      ><a name="4142" class="Symbol"
+      >)</a
+      ><a name="4143"
+      > </a
+      ><a name="4144" href="Induction.WellFounded.html#4098" class="Bound"
+      >wfB</a
+      ><a name="4147"
+      >
+    </a
+      ><a name="4152" href="Induction.WellFounded.html#3933" class="Function"
+      >accessible&#8242;</a
+      ><a name="4163"
+      > </a
+      ><a name="4164" href="Induction.WellFounded.html#4164" class="Bound"
+      >accA</a
+      ><a name="4168"
+      > </a
+      ><a name="4169" class="Symbol"
+      >(</a
+      ><a name="4170" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="4173"
+      > </a
+      ><a name="4174" href="Induction.WellFounded.html#4174" class="Bound"
+      >rsB</a
+      ><a name="4177" class="Symbol"
+      >)</a
+      ><a name="4178"
+      > </a
+      ><a name="4179" href="Induction.WellFounded.html#4179" class="Bound"
+      >wfB</a
+      ><a name="4182"
+      > </a
+      ><a name="4183" class="DottedPattern Symbol"
+      >._</a
+      ><a name="4185"
+      > </a
+      ><a name="4186" class="Symbol"
+      >(</a
+      ><a name="4187" href="Induction.WellFounded.html#3661" class="InductiveConstructor"
+      >right</a
+      ><a name="4192"
+      > </a
+      ><a name="4193" href="Induction.WellFounded.html#4193" class="Bound"
+      >y&#8242;&lt;y</a
+      ><a name="4197" class="Symbol"
+      >)</a
+      ><a name="4198"
+      > </a
+      ><a name="4199" class="Symbol"
+      >=</a
+      ><a name="4200"
+      >
+      </a
+      ><a name="4207" href="Induction.WellFounded.html#786" class="InductiveConstructor"
+      >acc</a
+      ><a name="4210"
+      > </a
+      ><a name="4211" class="Symbol"
+      >(</a
+      ><a name="4212" href="Induction.WellFounded.html#3933" class="Function"
+      >accessible&#8242;</a
+      ><a name="4223"
+      > </a
+      ><a name="4224" href="Induction.WellFounded.html#4164" class="Bound"
+      >accA</a
+      ><a name="4228"
+      > </a
+      ><a name="4229" class="Symbol"
+      >(</a
+      ><a name="4230" href="Induction.WellFounded.html#4174" class="Bound"
+      >rsB</a
+      ><a name="4233"
+      > </a
+      ><a name="4234" class="Symbol"
+      >_</a
+      ><a name="4235"
+      > </a
+      ><a name="4236" href="Induction.WellFounded.html#4193" class="Bound"
+      >y&#8242;&lt;y</a
+      ><a name="4240" class="Symbol"
+      >)</a
+      ><a name="4241"
+      > </a
+      ><a name="4242" href="Induction.WellFounded.html#4179" class="Bound"
+      >wfB</a
+      ><a name="4245" class="Symbol"
+      >)</a
+      ><a name="4246"
+      >
+
+  </a
+      ><a name="4250" href="Induction.WellFounded.html#4250" class="Function"
+      >well-founded</a
+      ><a name="4262"
+      > </a
+      ><a name="4263" class="Symbol"
+      >:</a
+      ><a name="4264"
+      > </a
+      ><a name="4265" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="4277"
+      > </a
+      ><a name="4278" href="Induction.WellFounded.html#3478" class="Bound"
+      >RelA</a
+      ><a name="4282"
+      > </a
+      ><a name="4283" class="Symbol"
+      >&#8594;</a
+      ><a name="4284"
+      > </a
+      ><a name="4285" class="Symbol"
+      >(&#8704;</a
+      ><a name="4287"
+      > </a
+      ><a name="4288" class="Symbol"
+      >{</a
+      ><a name="4289" href="Induction.WellFounded.html#4289" class="Bound"
+      >x</a
+      ><a name="4290" class="Symbol"
+      >}</a
+      ><a name="4291"
+      > </a
+      ><a name="4292" class="Symbol"
+      >&#8594;</a
+      ><a name="4293"
+      > </a
+      ><a name="4294" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="4306"
+      > </a
+      ><a name="4307" class="Symbol"
+      >(</a
+      ><a name="4308" href="Induction.WellFounded.html#3516" class="Bound"
+      >RelB</a
+      ><a name="4312"
+      > </a
+      ><a name="4313" href="Induction.WellFounded.html#4289" class="Bound"
+      >x</a
+      ><a name="4314" class="Symbol"
+      >))</a
+      ><a name="4316"
+      > </a
+      ><a name="4317" class="Symbol"
+      >&#8594;</a
+      ><a name="4318"
+      >
+                 </a
+      ><a name="4336" href="Induction.WellFounded.html#972" class="Function"
+      >Well-founded</a
+      ><a name="4348"
+      > </a
+      ><a name="4349" href="Induction.WellFounded.html#3556" class="Datatype Operator"
+      >_&lt;_</a
+      ><a name="4352"
+      >
+  </a
+      ><a name="4355" href="Induction.WellFounded.html#4250" class="Function"
+      >well-founded</a
+      ><a name="4367"
+      > </a
+      ><a name="4368" href="Induction.WellFounded.html#4368" class="Bound"
+      >wfA</a
+      ><a name="4371"
+      > </a
+      ><a name="4372" href="Induction.WellFounded.html#4372" class="Bound"
+      >wfB</a
+      ><a name="4375"
+      > </a
+      ><a name="4376" href="Induction.WellFounded.html#4376" class="Bound"
+      >p</a
+      ><a name="4377"
+      > </a
+      ><a name="4378" class="Symbol"
+      >=</a
+      ><a name="4379"
+      > </a
+      ><a name="4380" href="Induction.WellFounded.html#3747" class="Function"
+      >accessible</a
+      ><a name="4390"
+      > </a
+      ><a name="4391" class="Symbol"
+      >(</a
+      ><a name="4392" href="Induction.WellFounded.html#4368" class="Bound"
+      >wfA</a
+      ><a name="4395"
+      > </a
+      ><a name="4396" class="Symbol"
+      >(</a
+      ><a name="4397" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="4402"
+      > </a
+      ><a name="4403" href="Induction.WellFounded.html#4376" class="Bound"
+      >p</a
+      ><a name="4404" class="Symbol"
+      >))</a
+      ><a name="4406"
+      > </a
+      ><a name="4407" href="Induction.WellFounded.html#4372" class="Bound"
+      >wfB</a
+      ><a name="4410"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,1711 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Data.AVL.IndexedMap</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Finite maps with indexed keys and values, based on AVL trees</a
+      ><a name="169"
+      >
+</a
+      ><a name="170" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="242"
+      >
+
+</a
+      ><a name="244" class="Keyword"
+      >open</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Keyword"
+      >import</a
+      ><a name="255"
+      > </a
+      ><a name="256" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="260"
+      >.</a
+      ><a name="261" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="268"
+      > </a
+      ><a name="269" class="Symbol"
+      >as</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Module"
+      >Prod</a
+      ><a name="276"
+      >
+</a
+      ><a name="277" class="Keyword"
+      >open</a
+      ><a name="281"
+      > </a
+      ><a name="282" class="Keyword"
+      >import</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Relation.Binary.html#1" class="Module"
+      >Relation</a
+      ><a name="297"
+      >.</a
+      ><a name="298" href="Relation.Binary.html#1" class="Module"
+      >Binary</a
+      ><a name="304"
+      >
+</a
+      ><a name="305" class="Keyword"
+      >open</a
+      ><a name="309"
+      > </a
+      ><a name="310" class="Keyword"
+      >import</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation</a
+      ><a name="325"
+      >.</a
+      ><a name="326" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Binary</a
+      ><a name="332"
+      >.</a
+      ><a name="333" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >PropositionalEquality</a
+      ><a name="354"
+      > </a
+      ><a name="355" class="Keyword"
+      >using</a
+      ><a name="360"
+      > </a
+      ><a name="361" class="Symbol"
+      >(</a
+      ><a name="362"
+      >_&#8801;_</a
+      ><a name="365" class="Symbol"
+      >)</a
+      ><a name="366"
+      >
+
+</a
+      ><a name="368" class="Keyword"
+      >module</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Data.AVL.IndexedMap.html#1" class="Module"
+      >Data</a
+      ><a name="379"
+      >.</a
+      ><a name="380" href="Data.AVL.IndexedMap.html#1" class="Module"
+      >AVL</a
+      ><a name="383"
+      >.</a
+      ><a name="384" href="Data.AVL.IndexedMap.html#1" class="Module"
+      >IndexedMap</a
+      ><a name="394"
+      >
+  </a
+      ><a name="397" class="Symbol"
+      >{</a
+      ><a name="398" href="Data.AVL.IndexedMap.html#398" class="Bound"
+      >i</a
+      ><a name="399"
+      > </a
+      ><a name="400" href="Data.AVL.IndexedMap.html#400" class="Bound"
+      >k</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="Data.AVL.IndexedMap.html#402" class="Bound"
+      >v</a
+      ><a name="403"
+      > </a
+      ><a name="404" href="Data.AVL.IndexedMap.html#404" class="Bound"
+      >&#8467;</a
+      ><a name="405" class="Symbol"
+      >}</a
+      ><a name="406"
+      >
+  </a
+      ><a name="409" class="Symbol"
+      >{</a
+      ><a name="410" href="Data.AVL.IndexedMap.html#410" class="Bound"
+      >Index</a
+      ><a name="415"
+      > </a
+      ><a name="416" class="Symbol"
+      >:</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="PrimitiveType"
+      >Set</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Data.AVL.IndexedMap.html#398" class="Bound"
+      >i</a
+      ><a name="423" class="Symbol"
+      >}</a
+      ><a name="424"
+      > </a
+      ><a name="425" class="Symbol"
+      >{</a
+      ><a name="426" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="429"
+      > </a
+      ><a name="430" class="Symbol"
+      >:</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Data.AVL.IndexedMap.html#410" class="Bound"
+      >Index</a
+      ><a name="437"
+      > </a
+      ><a name="438" class="Symbol"
+      >&#8594;</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="PrimitiveType"
+      >Set</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Data.AVL.IndexedMap.html#400" class="Bound"
+      >k</a
+      ><a name="445" class="Symbol"
+      >}</a
+      ><a name="446"
+      > </a
+      ><a name="447" class="Symbol"
+      >(</a
+      ><a name="448" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="453"
+      > </a
+      ><a name="454" class="Symbol"
+      >:</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Data.AVL.IndexedMap.html#410" class="Bound"
+      >Index</a
+      ><a name="461"
+      > </a
+      ><a name="462" class="Symbol"
+      >&#8594;</a
+      ><a name="463"
+      > </a
+      ><a name="464" class="PrimitiveType"
+      >Set</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Data.AVL.IndexedMap.html#402" class="Bound"
+      >v</a
+      ><a name="469" class="Symbol"
+      >)</a
+      ><a name="470"
+      >
+  </a
+      ><a name="473" class="Symbol"
+      >{</a
+      ><a name="474" href="Data.AVL.IndexedMap.html#474" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="477"
+      > </a
+      ><a name="478" class="Symbol"
+      >:</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="Relation.Binary.Core.html#761" class="Function"
+      >Rel</a
+      ><a name="483"
+      > </a
+      ><a name="484" class="Symbol"
+      >(</a
+      ><a name="485" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="490" class="Symbol"
+      >)</a
+      ><a name="491"
+      > </a
+      ><a name="492" href="Data.AVL.IndexedMap.html#404" class="Bound"
+      >&#8467;</a
+      ><a name="493" class="Symbol"
+      >}</a
+      ><a name="494"
+      >
+  </a
+      ><a name="497" class="Symbol"
+      >(</a
+      ><a name="498" href="Data.AVL.IndexedMap.html#498" class="Bound"
+      >isStrictTotalOrder</a
+      ><a name="516"
+      > </a
+      ><a name="517" class="Symbol"
+      >:</a
+      ><a name="518"
+      > </a
+      ><a name="519" href="Relation.Binary.html#8381" class="Record"
+      >IsStrictTotalOrder</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="Data.AVL.IndexedMap.html#474" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="545" class="Symbol"
+      >)</a
+      ><a name="546"
+      >
+  </a
+      ><a name="549" class="Keyword"
+      >where</a
+      ><a name="554"
+      >
+
+</a
+      ><a name="556" class="Keyword"
+      >open</a
+      ><a name="560"
+      > </a
+      ><a name="561" class="Keyword"
+      >import</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="Category.Functor.html#1" class="Module"
+      >Category</a
+      ><a name="576"
+      >.</a
+      ><a name="577" href="Category.Functor.html#1" class="Module"
+      >Functor</a
+      ><a name="584"
+      >
+</a
+      ><a name="585" class="Keyword"
+      >import</a
+      ><a name="591"
+      > </a
+      ><a name="592" href="Data.AVL.html#1" class="Module"
+      >Data</a
+      ><a name="596"
+      >.</a
+      ><a name="597" href="Data.AVL.html#1" class="Module"
+      >AVL</a
+      ><a name="600"
+      >
+</a
+      ><a name="601" class="Keyword"
+      >open</a
+      ><a name="605"
+      > </a
+      ><a name="606" class="Keyword"
+      >import</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Data.Bool.html#1" class="Module"
+      >Data</a
+      ><a name="617"
+      >.</a
+      ><a name="618" href="Data.Bool.html#1" class="Module"
+      >Bool</a
+      ><a name="622"
+      >
+</a
+      ><a name="623" class="Keyword"
+      >open</a
+      ><a name="627"
+      > </a
+      ><a name="628" class="Keyword"
+      >import</a
+      ><a name="634"
+      > </a
+      ><a name="635" href="Data.List.html#1" class="Module"
+      >Data</a
+      ><a name="639"
+      >.</a
+      ><a name="640" href="Data.List.html#1" class="Module"
+      >List</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Symbol"
+      >as</a
+      ><a name="647"
+      > </a
+      ><a name="648" class="Module"
+      >List</a
+      ><a name="652"
+      > </a
+      ><a name="653" class="Keyword"
+      >using</a
+      ><a name="658"
+      > </a
+      ><a name="659" class="Symbol"
+      >(</a
+      ><a name="660"
+      >List</a
+      ><a name="664" class="Symbol"
+      >)</a
+      ><a name="665"
+      >
+</a
+      ><a name="666" class="Keyword"
+      >open</a
+      ><a name="670"
+      > </a
+      ><a name="671" class="Keyword"
+      >import</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="Data.Maybe.html#1" class="Module"
+      >Data</a
+      ><a name="682"
+      >.</a
+      ><a name="683" href="Data.Maybe.html#1" class="Module"
+      >Maybe</a
+      ><a name="688"
+      > </a
+      ><a name="689" class="Symbol"
+      >as</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Module"
+      >Maybe</a
+      ><a name="697"
+      >
+</a
+      ><a name="698" class="Keyword"
+      >open</a
+      ><a name="702"
+      > </a
+      ><a name="703" class="Keyword"
+      >import</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="718"
+      >
+</a
+      ><a name="719" class="Keyword"
+      >open</a
+      ><a name="723"
+      > </a
+      ><a name="724" class="Keyword"
+      >import</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="736"
+      >
+
+</a
+      ><a name="738" class="Keyword"
+      >open</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Category.Functor.html#334" class="Module"
+      >RawFunctor</a
+      ><a name="753"
+      > </a
+      ><a name="754" class="Symbol"
+      >(</a
+      ><a name="755" href="Data.Maybe.html#1556" class="Function"
+      >Maybe</a
+      ><a name="760"
+      >.</a
+      ><a name="761" href="Data.Maybe.html#1556" class="Function"
+      >functor</a
+      ><a name="768"
+      > </a
+      ><a name="769" class="Symbol"
+      >{</a
+      ><a name="770"
+      >f </a
+      ><a name="772" class="Symbol"
+      >=</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Data.AVL.IndexedMap.html#398" class="Bound"
+      >i</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Data.AVL.IndexedMap.html#400" class="Bound"
+      >k</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="781"
+      > </a
+      ><a name="782" href="Data.AVL.IndexedMap.html#402" class="Bound"
+      >v</a
+      ><a name="783"
+      > </a
+      ><a name="784" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Data.AVL.IndexedMap.html#404" class="Bound"
+      >&#8467;</a
+      ><a name="787" class="Symbol"
+      >})</a
+      ><a name="789"
+      >
+
+</a
+      ><a name="791" class="Comment"
+      >-- Key/value pairs.</a
+      ><a name="810"
+      >
+
+</a
+      ><a name="812" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="814"
+      > </a
+      ><a name="815" class="Symbol"
+      >:</a
+      ><a name="816"
+      > </a
+      ><a name="817" class="PrimitiveType"
+      >Set</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >(</a
+      ><a name="822" href="Data.AVL.IndexedMap.html#398" class="Bound"
+      >i</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Data.AVL.IndexedMap.html#400" class="Bound"
+      >k</a
+      ><a name="827"
+      > </a
+      ><a name="828" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="829"
+      > </a
+      ><a name="830" href="Data.AVL.IndexedMap.html#402" class="Bound"
+      >v</a
+      ><a name="831" class="Symbol"
+      >)</a
+      ><a name="832"
+      >
+</a
+      ><a name="833" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="835"
+      > </a
+      ><a name="836" class="Symbol"
+      >=</a
+      ><a name="837"
+      > </a
+      ><a name="838" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="839"
+      > </a
+      ><a name="840" class="Symbol"
+      >&#955;</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="Data.AVL.IndexedMap.html#842" class="Bound"
+      >i</a
+      ><a name="843"
+      > </a
+      ><a name="844" class="Symbol"
+      >&#8594;</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="Data.AVL.IndexedMap.html#842" class="Bound"
+      >i</a
+      ><a name="851"
+      > </a
+      ><a name="852" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="853"
+      > </a
+      ><a name="854" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="859"
+      > </a
+      ><a name="860" href="Data.AVL.IndexedMap.html#842" class="Bound"
+      >i</a
+      ><a name="861"
+      >
+
+</a
+      ><a name="863" class="Comment"
+      >-- Conversions.</a
+      ><a name="878"
+      >
+
+</a
+      ><a name="880" class="Keyword"
+      >private</a
+      ><a name="887"
+      >
+
+  </a
+      ><a name="891" href="Data.AVL.IndexedMap.html#891" class="Function"
+      >fromKV</a
+      ><a name="897"
+      > </a
+      ><a name="898" class="Symbol"
+      >:</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >&#8594;</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Data.Product.html#439" class="Record"
+      >&#931;[</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Data.AVL.IndexedMap.html#908" class="Bound"
+      >ik</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Data.Product.html#439" class="Record"
+      >&#8758;</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Data.Product.html#439" class="Record"
+      >]</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="926"
+      > </a
+      ><a name="927" class="Symbol"
+      >(</a
+      ><a name="928" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Data.AVL.IndexedMap.html#908" class="Bound"
+      >ik</a
+      ><a name="936" class="Symbol"
+      >)</a
+      ><a name="937"
+      >
+  </a
+      ><a name="940" href="Data.AVL.IndexedMap.html#891" class="Function"
+      >fromKV</a
+      ><a name="946"
+      > </a
+      ><a name="947" class="Symbol"
+      >(</a
+      ><a name="948" href="Data.AVL.IndexedMap.html#948" class="Bound"
+      >i</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Data.AVL.IndexedMap.html#952" class="Bound"
+      >k</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Data.AVL.IndexedMap.html#956" class="Bound"
+      >v</a
+      ><a name="957" class="Symbol"
+      >)</a
+      ><a name="958"
+      > </a
+      ><a name="959" class="Symbol"
+      >=</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >((</a
+      ><a name="963" href="Data.AVL.IndexedMap.html#948" class="Bound"
+      >i</a
+      ><a name="964"
+      > </a
+      ><a name="965" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="966"
+      > </a
+      ><a name="967" href="Data.AVL.IndexedMap.html#952" class="Bound"
+      >k</a
+      ><a name="968" class="Symbol"
+      >)</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Data.AVL.IndexedMap.html#956" class="Bound"
+      >v</a
+      ><a name="973" class="Symbol"
+      >)</a
+      ><a name="974"
+      >
+
+  </a
+      ><a name="978" href="Data.AVL.IndexedMap.html#978" class="Function"
+      >toKV</a
+      ><a name="982"
+      > </a
+      ><a name="983" class="Symbol"
+      >:</a
+      ><a name="984"
+      > </a
+      ><a name="985" href="Data.Product.html#439" class="Record"
+      >&#931;[</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Data.AVL.IndexedMap.html#988" class="Bound"
+      >ik</a
+      ><a name="990"
+      > </a
+      ><a name="991" href="Data.Product.html#439" class="Record"
+      >&#8758;</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="994"
+      > </a
+      ><a name="995" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Data.Product.html#439" class="Record"
+      >]</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" class="Symbol"
+      >(</a
+      ><a name="1008" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Data.AVL.IndexedMap.html#988" class="Bound"
+      >ik</a
+      ><a name="1016" class="Symbol"
+      >)</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" class="Symbol"
+      >&#8594;</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="1022"
+      >
+  </a
+      ><a name="1025" href="Data.AVL.IndexedMap.html#978" class="Function"
+      >toKV</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" class="Symbol"
+      >((</a
+      ><a name="1032" href="Data.AVL.IndexedMap.html#1032" class="Bound"
+      >i</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Data.AVL.IndexedMap.html#1036" class="Bound"
+      >k</a
+      ><a name="1037" class="Symbol"
+      >)</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Data.AVL.IndexedMap.html#1041" class="Bound"
+      >v</a
+      ><a name="1042" class="Symbol"
+      >)</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" class="Symbol"
+      >=</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >(</a
+      ><a name="1047" href="Data.AVL.IndexedMap.html#1032" class="Bound"
+      >i</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Data.AVL.IndexedMap.html#1036" class="Bound"
+      >k</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1054"
+      > </a
+      ><a name="1055" href="Data.AVL.IndexedMap.html#1041" class="Bound"
+      >v</a
+      ><a name="1056" class="Symbol"
+      >)</a
+      ><a name="1057"
+      >
+
+</a
+      ><a name="1059" class="Comment"
+      >-- The map type.</a
+      ><a name="1075"
+      >
+
+</a
+      ><a name="1077" class="Keyword"
+      >private</a
+      ><a name="1084"
+      >
+  </a
+      ><a name="1087" class="Keyword"
+      >open</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Keyword"
+      >module</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Data.AVL.IndexedMap.html#1099" class="Module"
+      >AVL</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" class="Symbol"
+      >=</a
+      ><a name="1104"
+      >
+    </a
+      ><a name="1109" href="Data.AVL.html#1" class="Module"
+      >Data</a
+      ><a name="1113"
+      >.</a
+      ><a name="1114" href="Data.AVL.html#1" class="Module"
+      >AVL</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" class="Symbol"
+      >(&#955;</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" href="Data.AVL.IndexedMap.html#1121" class="Bound"
+      >ik</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" class="Symbol"
+      >&#8594;</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" class="Symbol"
+      >(</a
+      ><a name="1133" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="1138"
+      > </a
+      ><a name="1139" href="Data.AVL.IndexedMap.html#1121" class="Bound"
+      >ik</a
+      ><a name="1141" class="Symbol"
+      >))</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Data.AVL.IndexedMap.html#498" class="Bound"
+      >isStrictTotalOrder</a
+      ><a name="1162"
+      >
+    </a
+      ><a name="1167" class="Keyword"
+      >public</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" class="Keyword"
+      >using</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" class="Symbol"
+      >()</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" class="Keyword"
+      >renaming</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" class="Symbol"
+      >(</a
+      ><a name="1193"
+      >Tree </a
+      ><a name="1198" class="Symbol"
+      >to</a
+      ><a name="1200"
+      > Map</a
+      ><a name="1204" class="Symbol"
+      >)</a
+      ><a name="1205"
+      >
+
+</a
+      ><a name="1207" class="Comment"
+      >-- Repackaged functions.</a
+      ><a name="1231"
+      >
+
+</a
+      ><a name="1233" href="Data.AVL.IndexedMap.html#1233" class="Function"
+      >empty</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" class="Symbol"
+      >:</a
+      ><a name="1240"
+      > </a
+      ><a name="1241" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1244"
+      >
+</a
+      ><a name="1245" href="Data.AVL.IndexedMap.html#1233" class="Function"
+      >empty</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" class="Symbol"
+      >=</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Data.AVL.html#12477" class="Function"
+      >AVL</a
+      ><a name="1256"
+      >.</a
+      ><a name="1257" href="Data.AVL.html#12477" class="Function"
+      >empty</a
+      ><a name="1262"
+      >
+
+</a
+      ><a name="1264" href="Data.AVL.IndexedMap.html#1264" class="Function"
+      >singleton</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" class="Symbol"
+      >:</a
+      ><a name="1275"
+      > </a
+      ><a name="1276" class="Symbol"
+      >&#8704;</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" class="Symbol"
+      >{</a
+      ><a name="1279" href="Data.AVL.IndexedMap.html#1279" class="Bound"
+      >i</a
+      ><a name="1280" class="Symbol"
+      >}</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >&#8594;</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Data.AVL.IndexedMap.html#1279" class="Bound"
+      >i</a
+      ><a name="1289"
+      > </a
+      ><a name="1290" class="Symbol"
+      >&#8594;</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" href="Data.AVL.IndexedMap.html#1279" class="Bound"
+      >i</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" class="Symbol"
+      >&#8594;</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1305"
+      >
+</a
+      ><a name="1306" href="Data.AVL.IndexedMap.html#1264" class="Function"
+      >singleton</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Data.AVL.IndexedMap.html#1316" class="Bound"
+      >k</a
+      ><a name="1317"
+      > </a
+      ><a name="1318" href="Data.AVL.IndexedMap.html#1318" class="Bound"
+      >v</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" class="Symbol"
+      >=</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" href="Data.AVL.html#12522" class="Function"
+      >AVL</a
+      ><a name="1325"
+      >.</a
+      ><a name="1326" href="Data.AVL.html#12522" class="Function"
+      >singleton</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" class="Symbol"
+      >(</a
+      ><a name="1337" href="Data.Product.html#1406" class="Function Operator"
+      >,</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" href="Data.AVL.IndexedMap.html#1316" class="Bound"
+      >k</a
+      ><a name="1340" class="Symbol"
+      >)</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" href="Data.AVL.IndexedMap.html#1318" class="Bound"
+      >v</a
+      ><a name="1343"
+      >
+
+</a
+      ><a name="1345" href="Data.AVL.IndexedMap.html#1345" class="Function"
+      >insert</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" class="Symbol"
+      >:</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" class="Symbol"
+      >&#8704;</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" class="Symbol"
+      >{</a
+      ><a name="1357" href="Data.AVL.IndexedMap.html#1357" class="Bound"
+      >i</a
+      ><a name="1358" class="Symbol"
+      >}</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" class="Symbol"
+      >&#8594;</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Data.AVL.IndexedMap.html#1357" class="Bound"
+      >i</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" class="Symbol"
+      >&#8594;</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="1375"
+      > </a
+      ><a name="1376" href="Data.AVL.IndexedMap.html#1357" class="Bound"
+      >i</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" class="Symbol"
+      >&#8594;</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" class="Symbol"
+      >&#8594;</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1389"
+      >
+</a
+      ><a name="1390" href="Data.AVL.IndexedMap.html#1345" class="Function"
+      >insert</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" href="Data.AVL.IndexedMap.html#1397" class="Bound"
+      >k</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="Data.AVL.IndexedMap.html#1399" class="Bound"
+      >v</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" class="Symbol"
+      >=</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" href="Data.AVL.html#12609" class="Function"
+      >AVL</a
+      ><a name="1406"
+      >.</a
+      ><a name="1407" href="Data.AVL.html#12609" class="Function"
+      >insert</a
+      ><a name="1413"
+      > </a
+      ><a name="1414" class="Symbol"
+      >(</a
+      ><a name="1415" href="Data.Product.html#1406" class="Function Operator"
+      >,</a
+      ><a name="1416"
+      > </a
+      ><a name="1417" href="Data.AVL.IndexedMap.html#1397" class="Bound"
+      >k</a
+      ><a name="1418" class="Symbol"
+      >)</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" href="Data.AVL.IndexedMap.html#1399" class="Bound"
+      >v</a
+      ><a name="1421"
+      >
+
+</a
+      ><a name="1423" href="Data.AVL.IndexedMap.html#1423" class="Function"
+      >delete</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" class="Symbol"
+      >:</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" class="Symbol"
+      >&#8704;</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" class="Symbol"
+      >{</a
+      ><a name="1435" href="Data.AVL.IndexedMap.html#1435" class="Bound"
+      >i</a
+      ><a name="1436" class="Symbol"
+      >}</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" class="Symbol"
+      >&#8594;</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" href="Data.AVL.IndexedMap.html#1435" class="Bound"
+      >i</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >&#8594;</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" class="Symbol"
+      >&#8594;</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1457"
+      >
+</a
+      ><a name="1458" href="Data.AVL.IndexedMap.html#1423" class="Function"
+      >delete</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Data.AVL.IndexedMap.html#1465" class="Bound"
+      >k</a
+      ><a name="1466"
+      > </a
+      ><a name="1467" class="Symbol"
+      >=</a
+      ><a name="1468"
+      > </a
+      ><a name="1469" href="Data.AVL.html#12713" class="Function"
+      >AVL</a
+      ><a name="1472"
+      >.</a
+      ><a name="1473" href="Data.AVL.html#12713" class="Function"
+      >delete</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" class="Symbol"
+      >(</a
+      ><a name="1481" href="Data.Product.html#1406" class="Function Operator"
+      >,</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" href="Data.AVL.IndexedMap.html#1465" class="Bound"
+      >k</a
+      ><a name="1484" class="Symbol"
+      >)</a
+      ><a name="1485"
+      >
+
+</a
+      ><a name="1487" href="Data.AVL.IndexedMap.html#1487" class="Function"
+      >lookup</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" class="Symbol"
+      >:</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" class="Symbol"
+      >&#8704;</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" class="Symbol"
+      >{</a
+      ><a name="1499" href="Data.AVL.IndexedMap.html#1499" class="Bound"
+      >i</a
+      ><a name="1500" class="Symbol"
+      >}</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" class="Symbol"
+      >&#8594;</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Data.AVL.IndexedMap.html#1499" class="Bound"
+      >i</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" class="Symbol"
+      >&#8594;</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" class="Symbol"
+      >&#8594;</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Data.Maybe.Core.html#315" class="Datatype"
+      >Maybe</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" class="Symbol"
+      >(</a
+      ><a name="1525" href="Data.AVL.IndexedMap.html#448" class="Bound"
+      >Value</a
+      ><a name="1530"
+      > </a
+      ><a name="1531" href="Data.AVL.IndexedMap.html#1499" class="Bound"
+      >i</a
+      ><a name="1532" class="Symbol"
+      >)</a
+      ><a name="1533"
+      >
+</a
+      ><a name="1534" href="Data.AVL.IndexedMap.html#1487" class="Function"
+      >lookup</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Data.AVL.IndexedMap.html#1541" class="Bound"
+      >k</a
+      ><a name="1542"
+      > </a
+      ><a name="1543" href="Data.AVL.IndexedMap.html#1543" class="Bound"
+      >m</a
+      ><a name="1544"
+      > </a
+      ><a name="1545" class="Symbol"
+      >=</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" href="Data.AVL.html#12795" class="Function"
+      >AVL</a
+      ><a name="1550"
+      >.</a
+      ><a name="1551" href="Data.AVL.html#12795" class="Function"
+      >lookup</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" class="Symbol"
+      >(</a
+      ><a name="1559" href="Data.Product.html#1406" class="Function Operator"
+      >,</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" href="Data.AVL.IndexedMap.html#1541" class="Bound"
+      >k</a
+      ><a name="1562" class="Symbol"
+      >)</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" href="Data.AVL.IndexedMap.html#1543" class="Bound"
+      >m</a
+      ><a name="1565"
+      >
+
+</a
+      ><a name="1567" href="Data.AVL.IndexedMap.html#1567" class="Function Operator"
+      >_&#8712;?_</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" class="Symbol"
+      >:</a
+      ><a name="1573"
+      > </a
+      ><a name="1574" class="Symbol"
+      >&#8704;</a
+      ><a name="1575"
+      > </a
+      ><a name="1576" class="Symbol"
+      >{</a
+      ><a name="1577" href="Data.AVL.IndexedMap.html#1577" class="Bound"
+      >i</a
+      ><a name="1578" class="Symbol"
+      >}</a
+      ><a name="1579"
+      > </a
+      ><a name="1580" class="Symbol"
+      >&#8594;</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Data.AVL.IndexedMap.html#426" class="Bound"
+      >Key</a
+      ><a name="1585"
+      > </a
+      ><a name="1586" href="Data.AVL.IndexedMap.html#1577" class="Bound"
+      >i</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" class="Symbol"
+      >&#8594;</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" class="Symbol"
+      >&#8594;</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="1600"
+      >
+</a
+      ><a name="1601" href="Data.AVL.IndexedMap.html#1567" class="Function Operator"
+      >_&#8712;?_</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" href="Data.AVL.IndexedMap.html#1606" class="Bound"
+      >k</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" class="Symbol"
+      >=</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="Data.AVL.html#12879" class="Function Operator"
+      >AVL</a
+      ><a name="1613"
+      >.</a
+      ><a name="1614" href="Data.AVL.html#12879" class="Function Operator"
+      >_&#8712;?_</a
+      ><a name="1618"
+      > </a
+      ><a name="1619" class="Symbol"
+      >(</a
+      ><a name="1620" href="Data.Product.html#1406" class="Function Operator"
+      >,</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" href="Data.AVL.IndexedMap.html#1606" class="Bound"
+      >k</a
+      ><a name="1623" class="Symbol"
+      >)</a
+      ><a name="1624"
+      >
+
+</a
+      ><a name="1626" href="Data.AVL.IndexedMap.html#1626" class="Function"
+      >headTail</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >:</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" class="Symbol"
+      >&#8594;</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Data.Maybe.Core.html#315" class="Datatype"
+      >Maybe</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" class="Symbol"
+      >(</a
+      ><a name="1650" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="1654"
+      > </a
+      ><a name="1655" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1658" class="Symbol"
+      >)</a
+      ><a name="1659"
+      >
+</a
+      ><a name="1660" href="Data.AVL.IndexedMap.html#1626" class="Function"
+      >headTail</a
+      ><a name="1668"
+      > </a
+      ><a name="1669" href="Data.AVL.IndexedMap.html#1669" class="Bound"
+      >m</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" class="Symbol"
+      >=</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Data.Product.html#1657" class="Function"
+      >Prod</a
+      ><a name="1677"
+      >.</a
+      ><a name="1678" href="Data.Product.html#1657" class="Function"
+      >map</a
+      ><a name="1681"
+      > </a
+      ><a name="1682" href="Data.AVL.IndexedMap.html#978" class="Function"
+      >toKV</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Function.html#1017" class="Function"
+      >id</a
+      ><a name="1689"
+      > </a
+      ><a name="1690" href="Category.Functor.html#424" class="Function Operator"
+      >&lt;$&gt;</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" href="Data.AVL.html#12939" class="Function"
+      >AVL</a
+      ><a name="1697"
+      >.</a
+      ><a name="1698" href="Data.AVL.html#12939" class="Function"
+      >headTail</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Data.AVL.IndexedMap.html#1669" class="Bound"
+      >m</a
+      ><a name="1708"
+      >
+
+</a
+      ><a name="1710" href="Data.AVL.IndexedMap.html#1710" class="Function"
+      >initLast</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" class="Symbol"
+      >:</a
+      ><a name="1720"
+      > </a
+      ><a name="1721" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" class="Symbol"
+      >&#8594;</a
+      ><a name="1726"
+      > </a
+      ><a name="1727" href="Data.Maybe.Core.html#315" class="Datatype"
+      >Maybe</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" class="Symbol"
+      >(</a
+      ><a name="1734" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1737"
+      > </a
+      ><a name="1738" href="Data.Product.html#858" class="Function Operator"
+      >&#215;</a
+      ><a name="1739"
+      > </a
+      ><a name="1740" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="1742" class="Symbol"
+      >)</a
+      ><a name="1743"
+      >
+</a
+      ><a name="1744" href="Data.AVL.IndexedMap.html#1710" class="Function"
+      >initLast</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" href="Data.AVL.IndexedMap.html#1753" class="Bound"
+      >m</a
+      ><a name="1754"
+      > </a
+      ><a name="1755" class="Symbol"
+      >=</a
+      ><a name="1756"
+      > </a
+      ><a name="1757" href="Data.Product.html#1657" class="Function"
+      >Prod</a
+      ><a name="1761"
+      >.</a
+      ><a name="1762" href="Data.Product.html#1657" class="Function"
+      >map</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" href="Function.html#1017" class="Function"
+      >id</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" href="Data.AVL.IndexedMap.html#978" class="Function"
+      >toKV</a
+      ><a name="1773"
+      > </a
+      ><a name="1774" href="Category.Functor.html#424" class="Function Operator"
+      >&lt;$&gt;</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Data.AVL.html#13138" class="Function"
+      >AVL</a
+      ><a name="1781"
+      >.</a
+      ><a name="1782" href="Data.AVL.html#13138" class="Function"
+      >initLast</a
+      ><a name="1790"
+      > </a
+      ><a name="1791" href="Data.AVL.IndexedMap.html#1753" class="Bound"
+      >m</a
+      ><a name="1792"
+      >
+
+</a
+      ><a name="1794" href="Data.AVL.IndexedMap.html#1794" class="Function"
+      >fromList</a
+      ><a name="1802"
+      > </a
+      ><a name="1803" class="Symbol"
+      >:</a
+      ><a name="1804"
+      > </a
+      ><a name="1805" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" class="Symbol"
+      >&#8594;</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1818"
+      >
+</a
+      ><a name="1819" href="Data.AVL.IndexedMap.html#1794" class="Function"
+      >fromList</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" class="Symbol"
+      >=</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Data.AVL.html#13380" class="Function"
+      >AVL</a
+      ><a name="1833"
+      >.</a
+      ><a name="1834" href="Data.AVL.html#13380" class="Function"
+      >fromList</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" href="Data.List.html#1385" class="Function"
+      >List</a
+      ><a name="1849"
+      >.</a
+      ><a name="1850" href="Data.List.html#1385" class="Function"
+      >map</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" href="Data.AVL.IndexedMap.html#891" class="Function"
+      >fromKV</a
+      ><a name="1860"
+      >
+
+</a
+      ><a name="1862" href="Data.AVL.IndexedMap.html#1862" class="Function"
+      >toList</a
+      ><a name="1868"
+      > </a
+      ><a name="1869" class="Symbol"
+      >:</a
+      ><a name="1870"
+      > </a
+      ><a name="1871" href="Data.AVL.html#12368" class="Datatype"
+      >Map</a
+      ><a name="1874"
+      > </a
+      ><a name="1875" class="Symbol"
+      >&#8594;</a
+      ><a name="1876"
+      > </a
+      ><a name="1877" href="Data.List.html#659" class="Datatype"
+      >List</a
+      ><a name="1881"
+      > </a
+      ><a name="1882" href="Data.AVL.IndexedMap.html#812" class="Function"
+      >KV</a
+      ><a name="1884"
+      >
+</a
+      ><a name="1885" href="Data.AVL.IndexedMap.html#1862" class="Function"
+      >toList</a
+      ><a name="1891"
+      > </a
+      ><a name="1892" class="Symbol"
+      >=</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" href="Data.List.html#1385" class="Function"
+      >List</a
+      ><a name="1898"
+      >.</a
+      ><a name="1899" href="Data.List.html#1385" class="Function"
+      >map</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Data.AVL.IndexedMap.html#978" class="Function"
+      >toKV</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="1909"
+      > </a
+      ><a name="1910" href="Data.AVL.html#13481" class="Function"
+      >AVL</a
+      ><a name="1913"
+      >.</a
+      ><a name="1914" href="Data.AVL.html#13481" class="Function"
+      >toList</a
+      ><a name="1920"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

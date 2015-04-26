@@ -1,0 +1,520 @@
+<html>
+<head>
+<title>AOLserver</title>
+</head>
+<body>
+
+<h1><a name=top>AOLserver Tcl API Reference</a></h1>
+
+<p>
+<small>
+$Header: /cvsroot/aolserver/aolserver.com/docs/devel/tcl/api/index.html,v 1.2 2002/03/09 02:26:03 kriston Exp $
+</small>
+<p>
+
+<table width=75%>
+
+<tr>
+
+<td valign=top align=left>
+
+<h3>Contents</h3>
+
+<a href=#general>General-Purpose Functions</a><br>
+<a href=#adp>ADP Functions</a><br>
+<a href=#file>File Manipulation Functions</a><br>
+<a href=#conn>Connection and Socket Functions</a><br>
+<a href=#admin>Administration Functions</a><br>
+<a href=#db>Database Functions</a><br>
+<a href=#thread>Thread, Cache, and Scheduling Functions</a><br>
+
+</td>
+
+<td valign=top align=left>
+
+<h3>See Also:</h3>
+
+<a href=http://tcl.activestate.com/man/>Tcl Language Manuals</a><br>
+<a href=../../tech/standards.html>AOLserver Engineering Standards Manual<br>
+
+</td>
+</tr>
+</table>
+
+<br>
+
+<hr>
+
+<br>
+
+
+<table width=100%>
+
+<tr>
+
+<td width=25% align=left valign=top colspan=4><a
+name=general><h2>General-Purpose Functions</h2></a></td>
+
+</tr>
+<tr>
+
+<td width=25% align=left valign=top>
+
+<a href=general.html#env>env</a><br>
+
+<a href=general.html#ns_fmttime>ns_fmttime</a><br>
+
+<a href=general.html#ns_gmtime>ns_gmtime</a><br>
+
+<a href=general.html#ns_guesstype>ns_guesstype</a><br>
+
+<a href=general.html#ns_localtime>ns_localtime</a><br>
+
+<a href=general.html#ns_markfordelete>ns_markfordelete</a><br>
+
+<a href=general.html#ns_normalizepath>ns_normalizepath</a><br>
+
+<a href=general.html#ns_rand>ns_rand</a><br>
+
+<a href=general.html#ns_register_filter>ns_register_filter</a><br>
+
+<a href=general.html#ns_register_proc>ns_register_proc</a><br>
+
+<a href=general.html#ns_register_trace>ns_register_trace</a><br>
+
+</td>
+<td width=25% align=left valign=top>
+
+<a href=general.html#ns_sendmail>ns_sendmail</a><br>
+
+<a href=general.html#ns_set>ns_set</a><br>
+
+<a href=general.html#ns_share>ns_share</a><br>
+
+<a href=general.html#ns_sleep>ns_sleep</a><br>
+
+<a href=general.html#ns_time>ns_time</a><br>
+
+<a href=general.html#ns_crypt>ns_crypt</a><br>
+
+<a href=general.html#ns_quotehtml>ns_quotehtml</a><br>
+
+<a href=general.html#ns_striphtml>ns_striphtml</a><br>
+
+<a href=general.html#ns_urldecode>ns_urldecode</a><br>
+
+<a href=general.html#ns_urlencode>ns_urlencode</a><br>
+
+<a href=general.html#ns_uudecode>ns_uudecode</a><br>
+
+<a href=general.html#ns_uuencode>ns_uuencode</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+
+<td width=25% align=left valign=top>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width=25% valign=top align=left colspan=4><a name=adp><h2>ADP
+Functions</h2></a></td>
+
+</tr>
+<tr>
+
+<td width=25% align=left valign=top>
+
+<a href=adp.html#ns_adp_argc>ns_adp_argc</a><br>
+
+<a href=adp.html#ns_adp_argv>ns_adp_argv</a><br>
+
+<a href=adp.html#ns_adp_bind_args>ns_adp_bind_args</a><br>
+
+<a href=adp.html#ns_adp_break>ns_adp_break</a><br>
+
+<a href=adp.html#ns_adp_debug>ns_adp_debug</a><br>
+
+<a href=adp.html#ns_adp_dir>ns_adp_dir</a><br>
+
+<a href=adp.html#ns_adp_dump>ns_adp_dump</a><br>
+
+<a href=adp.html#ns_adp_eval>ns_adp_eval</a><br>
+
+<a href=adp.html#ns_adp_exception>ns_adp_exception</a><br>
+
+</td>
+<td width=25% align=left valign=top>
+
+<a href=adp.html#ns_adp_include>ns_adp_include</a><br>
+
+<a href=adp.html#ns_adp_parse>ns_adp_parse</a><br>
+
+<a href=adp.html#ns_adp_puts>ns_adp_puts</a><br>
+
+<a href=adp.html#ns_adp_registertag>ns_adp_registertag</a><br>
+
+<a href=adp.html#ns_adp_return>ns_adp_return</a><br>
+
+<a href=adp.html#ns_adp_stream>ns_adp_stream</a><br>
+
+<a href=adp.html#ns_adp_tell>ns_adp_tell</a><br>
+
+<a href=adp.html#ns_adp_trunc>ns_adp_trunc</a><br>
+
+<a href=adp.html#ns_register_adptag>ns_register_adptag</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+
+<td width=25% align=left valign=top>
+
+</td>
+
+
+</tr>
+
+<tr>
+
+<td width=25% align=left valign=top colspan=4><a name=file><h2>File
+Manipulation Functions</h2></a></td>
+
+</tr>
+<tr>
+
+<td width=25% align=left valign=top>
+
+<a href=file.html#ns_chmod>ns_chmod</a><br>
+
+<a href=file.html#ns_cp>ns_cp</a><br>
+
+<a href=file.html#ns_cpfp>ns_cpfp</a><br>
+
+<a href=file.html#ns_ftruncate>ns_ftruncate</a><br>
+
+<a href=file.html#ns_getcsv>ns_getcsv</a><br>
+
+<a href=file.html#ns_gifsize>ns_gifsize</a><br>
+
+<a href=file.html#ns_jpegsize>ns_jpegsize</a><br>
+
+<a href=file.html#ns_link>ns_link</a><br>
+
+<a href=file.html#ns_mkdir>ns_mkdir</a><br>
+
+<a href=file.html#ns_mktemp>ns_mktemp</a><br>
+
+</td>
+<td width=25% align=left valign=top>
+
+<a href=file.html#ns_normalizepath>ns_normalizepath</a><br>
+
+<a href=file.html#ns_rename>ns_rename</a><br>
+
+<a href=file.html#ns_rmdir>ns_rmdir</a><br>
+
+<a href=file.html#ns_rollfile>ns_rollfile</a><br>
+
+<a href=file.html#ns_symlink>ns_symlink</a><br>
+
+<a href=file.html#ns_tmpnam>ns_tmpnam</a><br>
+
+<a href=file.html#ns_truncate>ns_truncate</a><br>
+
+<a href=file.html#ns_unlink>ns_unlink</a><br>
+
+<a href=file.html#ns_writefp>ns_writefp</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+
+<td width=25% align=left valign=top>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width=25% align=left valign=top colspan=4><a
+name=conn><h2>Connection and Socket Functions</h2></a></td>
+
+</tr>
+<tr>
+
+<td width=25% align=left valign=top>
+
+<a href=conn.html#ns_checkurl>ns_checkurl</a><br>
+
+<a href=conn.html#ns_conn>ns_conn</a><br>
+
+<a href=conn.html#ns_conncptofp>ns_conncptofp</a><br>
+
+<a href=conn.html#ns_connsendfp>ns_connsendfp</a><br>
+
+<a href=conn.html#ns_get_multipart_formdata>ns_get_multipart_formdata</a><br>
+
+<a href=conn.html#ns_getform>ns_getform</a><br>
+
+<a href=conn.html#ns_geturl>ns_geturl</a><br>
+
+<a href=conn.html#ns_hostbyaddr>ns_hostbyaddr</a><br>
+
+<a href=conn.html#ns_hrefs>ns_hrefs</a><br>
+
+<a href=conn.html#ns_httpget>ns_httpget</a><br>
+
+<a href=conn.html#ns_httpopen>ns_httpopen</a><br>
+
+<a href=conn.html#ns_httptime>ns_httptime</a><br>
+
+</td>
+<td width=25% align=left valign=top>
+
+<a href=conn.html#ns_parseheader>ns_parseheader</a><br>
+
+<a href=conn.html#ns_parsehttptime>ns_parsehttptime</a><br>
+
+<a href=conn.html#ns_parsequery>ns_parsequery</a><br>
+
+<a href=conn.html#ns_queryexists>ns_queryexists</a><br>
+
+<a href=conn.html#ns_queryget>ns_queryget</a><br>
+
+<a href=conn.html#ns_querygetall>ns_querygetall</a><br>
+
+<a href=conn.html#ns_requestauthorize>ns_requestauthorize</a><br>
+
+<a href=conn.html#ns_respond>ns_respond</a><br>
+
+<a href=conn.html#ns_return>ns_return</a><br>
+
+</td>
+<td width=25% align=left valign=top>
+
+<a href=conn.html#ns_setexpires>ns_setexpires</a><br>
+
+<a href=conn.html#ns_sockaccept>ns_sockaccept</a><br>
+
+<a href=conn.html#ns_sockblocking>ns_sockblocking</a><br>
+
+<a href=conn.html#ns_sockcallback>ns_sockcallback</a><br>
+
+<a href=conn.html#ns_sockcheck>ns_sockcheck</a><br>
+
+<a href=conn.html#ns_socketpair>ns_socketpair</a><br>
+
+<a href=conn.html#ns_socklistencallback>ns_socklistencallback</a><br>
+
+<a href=conn.html#ns_socknonblocking>ns_socknonblocking</a><br>
+
+<a href=conn.html#ns_socknread>ns_socknread</a><br>
+
+<a href=conn.html#ns_sockopen>ns_sockopen</a><br>
+
+<a href=conn.html#ns_sockopen>ns_sockopen</a><br>
+
+<a href=conn.html#ns_sockselect>ns_sockselect</a><br>
+
+<a href=conn.html#ns_url2file>ns_url2file</a><br>
+
+<a href=conn.html#ns_write>ns_write</a><br>
+
+<a href=conn.html#ns_writecontent>ns_writecontent</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+</tr>
+<tr>
+
+<td width=25% valign=top align=left colspan=4><a
+name=admin><h2>Administration Functions</h2></a></td>
+
+</tr>
+
+<td width=25% valign=top align=left>
+
+<a href=admin.html#ns_config>ns_config</a><br>
+
+<a href=admin.html#ns_configsection>ns_configsection</a><br>
+
+<a href=admin.html#ns_configsections>ns_configsections</a><br>
+
+<a href=admin.html#ns_eval>ns_eval</a><br>
+
+<a href=admin.html#ns_info>ns_info</a><br>
+
+<a href=admin.html#ns_kill>ns_kill</a><br>
+
+<a href=admin.html#ns_library>ns_library</a><br>
+
+<a href=admin.html#ns_log>ns_log</a><br>
+
+<a href=admin.html#ns_logroll>ns_logroll</a><br>
+
+<a href=admin.html#ns_modulepath>ns_modulepath</a><br>
+
+</td>
+<td width=25% valign=top align=left>
+
+<a href=admin.html#ns_param>ns_param</a><br>
+
+<a href=admin.html#ns_passwordcheck>ns_passwordcheck</a><br>
+
+<a href=admin.html#ns_perm>ns_perm</a><br>
+
+<a href=admin.html#ns_permpasswd>ns_permpasswd</a><br>
+
+<a href=admin.html#ns_section>ns_section</a><br>
+
+<a href=admin.html#ns_server>ns_server</a><br>
+
+<a href=admin.html#ns_set_precision>ns_set_precision</a><br>
+
+<a href=admin.html#ns_shutdown>ns_shutdown</a><br>
+
+</td>
+
+<td width=25% valign=top align=left>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width=25% align=left valign=top colspan=4><a 
+name=db><h2>Database Functions</h2></a></td> </tr>
+
+<tr>
+
+<td width=25% align=left valign=top>
+
+<a href=db.html#ns_db>ns_db</a><br>
+
+<a href=db.html#ns_dbconfigpath>ns_dbconfigpath</a><br>
+
+<a href=db.html#ns_dberror>ns_dberror</a><br>
+
+<a href=db.html#ns_dbformvalue>ns_dbformvalue</a><br>
+
+<a href=db.html#ns_dbformvalueput>ns_dbformvalueput</a><br>
+
+<a href=db.html#ns_dbquotename>ns_dbquotename</a><br>
+
+<a href=db.html#ns_dbquotevalue>ns_dbquotevalue</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+<a href=db.html#ns_deleterow>ns_deleterow</a><br>
+
+<a href=db.html#ns_ext>ns_ext</a><br>
+
+<a href=db.html#ns_findrowbyid>ns_findrowbyid</a><br>
+
+<a href=db.html#ns_insertrow>ns_insertrow</a><br>
+
+<a href=db.html#ns_localsqltimestamp>ns_localsqltimestamp</a><br>
+
+<a href=db.html#ns_pooldescription>ns_pooldescription</a><br>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+<td width=25% align=left valign=top>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width=25% align=left valign=top colspan=4><a
+name=thread><h2>Thread, Cache, and Scheduling Functions</h2></a></td>
+
+</tr>
+<tr>
+
+<td width=25% valign=top align=left>
+
+<a href=thread.html#ns_cond>ns_cond</a><br>
+
+<a href=thread.html#ns_critsec>ns_critsec</a><br>
+
+<a href=thread.html#ns_event>ns_event</a><br>
+
+<a href=thread.html#ns_mutex>ns_mutex</a><br>
+
+<a href=thread.html#ns_rwlock>ns_rwlock</a><br>
+
+<a href=thread.html#ns_sema>ns_sema</a><br>
+
+<a href=thread.html#ns_thread>ns_thread</a><br>
+
+</td>
+<td width=25% valign=top align=left>
+
+<a href=thread.html#ns_cache_flush>ns_cache_flush</a><br>
+
+<a href=thread.html#ns_cache_names>ns_cache_names</a><br>
+
+<a href=thread.html#ns_cache_size>ns_cache_size</a><br>
+
+<a href=thread.html#ns_cache_stats>ns_cache_stats</a><br>
+
+</td>
+<td width=25% valign=top align=left>
+
+<a href=thread.html#ns_atclose>ns_atclose</a><br>
+
+<a href=thread.html#ns_atexit>ns_atexit</a><br>
+
+<a href=thread.html#ns_atshutdown>ns_atshutdown</a><br>
+
+<a href=thread.html#ns_atsignal>ns_atsignal</a><br>
+
+<a href=thread.html#ns_schedule_daily>ns_schedule_daily</a><br>
+
+<a href=thread.html#ns_schedule_proc>ns_schedule_proc</a><br>
+
+<a href=thread.html#ns_schedule_weekly>ns_schedule_weekly</a><br>
+
+<a href=thread.html#ns_unschedule_proc>ns_unschedule_proc</a><br>
+
+</td>
+
+<td width=25% valign=top align=left>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+</html>
+

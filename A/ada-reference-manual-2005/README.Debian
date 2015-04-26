@@ -1,0 +1,49 @@
+What is the Ada Reference Manual?
+=================================
+
+The Ada Reference Manual is the free (libre) version of the
+international standard ISO/IEC 8652:201x(E) (Draft 17). It describes a
+programming language called "Ada".
+
+The Ada Reference Manual was last revised in 2012, and approved by ISO
+in TBD; it is called "Ada 2012". Previous versions are labeled Ada 95
+and Ada 2005. Ada 2005 and Ada 2012 version manuals are included in
+this Debian source package; the current (as of June 2012) Debian Ada
+compiler supports only Ada 2005, but future testing releases will
+contain Ada 2012 (and users may install other Ada 2012 compilers).
+
+If you want versions of the manual with change markup, see
+http://www.adaic.com/standards/
+
+For each year version, there are two different versions of manual, one
+that contains just the text of the official standard, and one which
+contains additional annotations for compiler writers, language lawyers
+etc. The latter version is called the "Annotated Ada Reference Manual"
+(or AARM for short). Both versions are provided by this package.
+
+Why aren't these files the same as upstream?
+================================================
+
+The text and HTML files are the same as upstream (processed by the
+same tool from the same Scheme sources).
+
+The upstream release does not include an info version; this package
+uses the upstream tool to produces texinfo format from the upstream
+Scheme sources, and then standard Debian tools to produce info format.
+
+The upstream PDF files are produced from the Scheme sources using
+Microsoft word as an intermediate step. The PDF file included here is
+produced from the texinfo intermediate; it is intended for paper
+printing only, since it has no hyperlinks.
+
+Why don't these PDF files have hyperlinks?
+==========================================
+
+The upstream PDF files don't have hyperlinks either. The problem is
+the intermediate processors; they don't generate proper hyperlinks for
+PDF (they do for HTML and info). To get hyperlinks in PDF, we would
+need to adapt the Ada code to produce PDF directly from the original
+source.
+
+
+ -- Stephen Leake <stephen_leake@stephe-leake.org>, Sun, 29 Apr 2012 08:00:00 -0400

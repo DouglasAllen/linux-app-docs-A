@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lvg - Configure LVM volume groups &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="System Modules" href="list_of_system_modules.html" />
+    <link rel="next" title="lvol - Configure LVM logical volumes" href="lvol_module.html" />
+    <link rel="prev" title="locale_gen - Creates of removes locales." href="locale_gen_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="lvol_module.html" title="lvol - Configure LVM logical volumes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="locale_gen_module.html" title="locale_gen - Creates of removes locales."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" accesskey="U">System Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="lvg-configure-lvm-volume-groups">
+<span id="lvg"></span><h1>lvg - Configure LVM volume groups<a class="headerlink" href="#lvg-configure-lvm-volume-groups" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Alexander Bulimov</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+<p>This module creates, removes or resizes volume groups.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If yes, allows to remove volume group with logical volumes.</td>
+</tr>
+        <tr>
+<td>pesize</td>
+<td>no</td>
+<td>4</td>
+    <td><ul></ul></td>
+    <td>The size of the physical extent in megabytes. Must be a power of 2.</td>
+</tr>
+        <tr>
+<td>pvs</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>List of comma-separated devices to use as physical devices in this volume group. Required when creating or resizing volume group.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Control if the volume group exists.</td>
+</tr>
+        <tr>
+<td>vg</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The name of the volume group.</td>
+</tr>
+        <tr>
+<td>vg_options</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Additional options to pass to <code>vgcreate</code> when creating the volume group. (added in Ansible 1.6)</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Create a volume group on top of /dev/sda1 with physical extent size = 32MB.
+- lvg:  vg=vg.services pvs=/dev/sda1 pesize=32
+
+# Create or resize a volume group on top of /dev/sdb1 and /dev/sdc5.
+# If, for example, we already have VG vg.services on top of /dev/sdb1,
+# this VG will be extended by /dev/sdc5.  Or if vg.services was created on
+# top of /dev/sda5, we first extend it with /dev/sdb1 and /dev/sdc5,
+# and then reduce by /dev/sda5.
+- lvg: vg=vg.services pvs=/dev/sdb1,/dev/sdc5
+
+# Remove a volume group with name vg.services.
+- lvg: vg=vg.services state=absent</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">module does not modify PE size for already present volume group</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">lvg - Configure LVM volume groups</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="locale_gen_module.html"
+                        title="previous chapter">locale_gen - Creates of removes locales.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lvol_module.html"
+                        title="next chapter">lvol - Configure LVM logical volumes</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="lvol_module.html" title="lvol - Configure LVM logical volumes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="locale_gen_module.html" title="locale_gen - Creates of removes locales."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" >System Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,3202 @@
+
+   #Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetDriverProc
+  
+    Overview
+    
+   Get a communications driver procedure
+   
+    Syntax
+    
+    int Ns_GetDriverProc(
+    Ns_Driver driver,
+    Ns_DrvId id,
+    void **pprocPtrPtr
+    );
+
+    Description
+    
+   Get a communications driver procedure for the specified ID. Valid ID
+   values are listed in the left column of the table below.
+   
+   The procPtrPtr will be filled in with the address of a registerd
+   driver function. NS_ERROR will be returned if no registered function
+   could be found. The resulting function is of the type shown in the
+   right column below
+   
+   ID Value
+   
+   Resulting Function Type
+   
+   Ns_DrvIdName
+   
+   typedef char *(Ns_ConnDriverNameProc) (void *pConnCtx);
+   
+   Ns_DrvIdStart
+   
+   typedef int (Ns_DriverStartProc) (char *hServer, char *hDriver, void
+   **ppDriverCtx);
+   
+   Ns_DrvIdAccept
+   
+   typedef int (Ns_DriverAcceptProc) (void *pDriverCtx, void
+   **ppConnCtx);
+   
+   Ns_DrvIdStop
+   
+   typedef void (Ns_DriverStopProc) (void *pDriverCtx);
+   
+   Ns_DrvIdInit
+   
+   typedef int (Ns_ConnInitProc) (void *pConnCtx);
+   
+   Ns_DrvIdRead
+   
+   typedef int (Ns_ConnReadProc) (void *pConnCtx, void *pvBuf, int
+   iToRead);
+   
+   Ns_DrvIdWrite
+   
+   typedef int (Ns_ConnWriteProc) (void *pConnCtx, void *pvBuf, int
+   iToWrite);
+   
+   Ns_DrvIdClose
+   
+   typedef int (Ns_ConnCloseProc) (void *pConnCtx);
+   
+   Ns_DrvIdFree
+   
+   typedef void (Ns_ConnFreeProc) (void *pConnCtx);
+   
+   Ns_DrvIdPeer
+   
+   typedef char *(Ns_ConnPeerProc) (void *pConnCtx);
+   
+   Ns_DrvIdLocation
+   
+   typedef char *(Ns_ConnLocationProc) (void *pConnCtx);
+   
+   Ns_DrvIdHost
+   
+   typedef char *(Ns_ConnHostProc) (void *pConnCtx);
+   
+   Ns_DrvIdPort
+   
+   typedef int (Ns_ConnPortProc) (void *pConnCtx);
+   
+   Ns_DrvIdSendFd
+   
+   typedef int (Ns_ConnSendFdProc) (void *pConnCtx, int fd, int nsend);
+   
+   Ns_DrvIdSendFile
+   
+   typedef int (Ns_ConnSendFileProc) (void *pConnCtx, char *file);
+   
+   Ns_DrvIdDetach
+   
+   typedef void *(Ns_ConnDetachProc) (void *pConnCtx);
+   
+   Ns_DrvIdConnectionFd
+   
+   typedef int (Ns_ConnConnectionFdProc) (void *pConnCtx);
+   
+   Ns_DrvIdMoveContext
+   
+   (unsupported)
+   
+   Ns_DrvIdPeerPort
+   
+   typedef int (Ns_ConnPeerPortProc) (void *pConnCtx);
+   
+   Ns_DrvIdSetSSLAuth
+   
+   typedef int (Ns_SetSSLAuthProc) (void *pCtx, Ns_SSLAuthProc *, void
+   *ctx, Ns_FreeAuthCtxProc *);
+   
+   Ns_DrvIdSSLHandshake
+   
+   typedef void *(Ns_SSLHandshakeProc) (void *aCtx, int socket, char *DN,
+   Ns_SSLAuthProc *auth, void *authctx, Ns_FreeAuthCtxProc *pFree);
+   
+   :
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetFirstDriver
+  
+    Overview
+    
+   Get pointer to first socket driver
+   
+    Syntax
+    
+    void* Ns_GetFirstDriver (
+    char* ignored
+    );
+
+    Description
+    
+   Returns a pointer to the first socket driver. Use this function with
+   Ns_GetNextDriver.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetHostByAddr
+  
+    Overview
+    
+   Convert an IP address to a hostname
+   
+    Syntax
+    
+    int Ns_GetHostByAddr(
+    Ns_DString *pds,
+    char *addrStr
+    );
+
+    Description
+    
+   The Ns_GetHostByAddr function converts a numeric IP address into a
+   host name. If no name can be found, the function returns NS_FALSE;
+   otherwise, it returns NS_TRUE. Because the response time of the Domain
+   Name Service can be slow, this function may significantly delay the
+   response to a client. The hostname string is appended to the specified
+   Ns_DString (pds).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetMimeType
+  
+    Overview
+    
+   Get Mime type
+   
+    Syntax
+    
+    char* Ns_GetMimeType (
+    char* file
+    );
+
+    Description
+    
+   Guess the Mime type based on the filename extension. Case is ignored.
+   The return value is of the form: "text/html".
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetNextDriver
+  
+    Overview
+    
+   Get pointer to next socket driver
+   
+    Syntax
+    
+    void* Ns_GetNextDriver (
+    Ns_Driver driver
+    );
+
+    Description
+    
+   Returns a pointer to the next socket driver. Use this function with
+   Ns_GetFirstDriver.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetRequest
+  
+    Overview
+    
+   Return the parameters of a request
+   
+    Syntax
+    
+    typedef void *Ns_OpContext;
+    typedef int (Ns_OpProc) (void *context, Ns_Conn *conn);
+    typedef void (Ns_OpDeleteProc) (void *context);
+
+    void Ns_GetRequest(
+    char *hServer
+    char *method,
+    char *URL,
+    Ns_OpProc **pProc,
+    Ns_OpDeleteProc **pDeleteProc,
+    Ns_OpContext **pContext
+    int *pflags
+    );
+
+    Description
+    
+   The Ns_GetRequest function sets pproc to the procedure the server
+   would call to handle a request of method and URL on the specified
+   server. pContext is set to the context that would be passed to pProc
+   when called, and pDeletepProc is set to the delete procedure that
+   would be called if pProc were unregistered (or re-registered). pflags
+   points to the flags argument passed to Ns_RegisterRequest. The
+   function returned is the best matching function and not necessarily an
+   exact matching function.
+   
+   You can use Ns_GetRequest and the NS_OP_NODELETE flag for
+   Ns_RegisterRequest to implement wrapper-type operation, where you save
+   the operation function, delete procedure, and context and register a
+   new function that does some type of pre-processing before calling the
+   operation or delete procedures.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetSockAddr
+  
+    Overview
+    
+   Get socket driver address
+   
+    Syntax
+    
+    int Ns_GetSockAddr (
+    struct sockaddr_in* saPtr,
+    char* host,
+    int port
+    );
+
+    Description
+    
+   Specify host and port in saPtr. Specify an IP address or a hostname
+   for host. A NULL host means INADDR_ANY.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetThread
+  
+    Overview
+    
+   Get the identifier for the current thread
+   
+    Syntax
+    
+    void Ns_GetThread(
+    Ns_Thread *thread
+    );
+
+    Description
+    
+   Ns_GetThread fills in the unique thread identifier for the current
+   thread. (see Ns_WaitForThread)
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetThreadId
+  
+    Overview
+    
+   Get the unique ID number for the current thread
+   
+    Syntax
+    
+    int Ns_GetThreadId(void);
+
+    Description
+    
+   This routine tries to come up with a unique integer corresponding to
+   the current thread. (This is the integer that shows up in the log
+   files.) Often, this unique ID is the PID, but not always.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetThreadLocalStorage
+  
+    Overview
+    
+   Get the thread local storage
+   
+    Syntax
+    
+    int Ns_GetThreadLocalStorage(
+    Ns_ThreadLocalStorage * tls,
+    void **p
+    );
+
+    Description
+    
+   Fill *p with the value of the thread local storage. Note: If tls has
+   not been set within the current the thread *p will be set to NULL.
+   
+   Ns_TlsGet is the preferred function for getting thread local storage.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetTime
+  
+    Overview
+    
+   Perform gettimeofday
+   
+    Syntax
+    
+    void Ns_GetTime (
+    Ns_Time*
+    );
+
+    Description
+    
+   This function is a wrapper for gettimeofday(3B).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetUid
+  
+    Overview
+    
+   Return UID of user
+   
+    Syntax
+    
+    int Ns_GetUid (
+    char* user
+    );
+
+    Description
+    
+   Returns the Unix UID of the user running the server.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_GetUserHome
+  
+    Overview
+    
+   Get UNIX user's home directory
+   
+    Syntax
+    
+    int Ns_GetUserHome(
+    Ns_DString *pds,
+    char *user
+    );
+
+    Description
+    
+   The Ns_GetUserHome function returns NS_TRUE and appends the user's
+   home directory to the Ns_DString passed in, or it returns NS_FALSE if
+   the user doesn't exist.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Gmtime
+  
+    Overview
+    
+   Perform gmtime
+   
+    Syntax
+    
+    struct tm* Ns_Gmtime (
+    const time_t* clock
+    );
+
+    Description
+    
+   This function is a wrapper for gmtime(3C).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_HomePath
+  
+    Overview
+    
+   Construct a path name relative to the AOLserver home directory
+   
+    Syntax
+    
+    char *Ns_HomePath(
+    Ns_DString * dest,
+    char *relpath
+    );
+
+    Description
+    
+   The Ns_HomePath function constructs a path name by appending the given
+   relative path to the AOLserver home directory. The resulting path name
+   is appended to the given Ns_DString.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_HttpTime
+  
+    Overview
+    
+   Return a formatted time string
+   
+    Syntax
+    
+    char *Ns_HttpTime(
+    Ns_DString *pds
+    time_t *when
+    );
+
+    Description
+    
+   The Ns_HttpTime function converts given time to the appropriate format
+   for an HTTP header or log file. The Ns_HttpTime function returns the
+   time and date with a four digit year, e.g., "Sun, 06 Nov 1994 08:49:37
+   GMT".
+   
+   If when is NULL, the function returns a string containing the current
+   time. The formatted time string is appended to the specified
+   Ns_DString (pds).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_HtuuDecode
+  
+    Overview
+    
+   Perform base64 decode
+   
+    Syntax
+    
+    int Ns_HtuuDecode (
+    char* string,
+    unsigned char* buf,
+    int bufsize
+    );
+
+    Description
+    
+   Performs a base64 decode on string and writes the result into buf.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_HtuuEncode
+  
+    Overview
+    
+   Perform base64 encode
+   
+    Syntax
+    
+    int Ns_HtuuEncode (
+    unsigned char* string,
+    unsigned int bufsize,
+    char* buf
+    );
+
+    Description
+    
+   Performs a base64 encode on string and writes the result into buf.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_IncrTime
+  
+    Overview
+    
+   Increment time by seconds and microseconds
+   
+    Syntax
+    
+    void Ns_IncrTime (
+    Ns_Time* time,
+    time_t sec,
+    long usec
+    );
+
+    Description
+    
+   Increment time by sec.usec, where usec is microseconds.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InetNtoa
+  
+    Overview
+    
+   Perform inet_ntoa
+   
+    Syntax
+    
+    char* Ns_InetNtoa (
+    struct in_addr addr
+    );
+
+    Description
+    
+   This function wraps inet_ntoa(3N).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoBootTime
+  
+    Overview
+    
+   Return server boot time
+   
+    Syntax
+    
+   int Ns_InfoBootTime (void);
+   
+    Description
+    
+   Return the time (in time_t form) of the most recent server boot.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoBuildDate
+  
+    Overview
+    
+   Return AOLserver build date
+   
+    Syntax
+    
+    char *Ns_InfoBuildDate(void);
+
+    Description
+    
+   The Ns_InfoBuildDate function returns the date and time AOLServer was
+   compiled.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoConfigFile
+  
+    Overview
+    
+   Return full path name of the configuration file in use.
+   
+    Syntax
+    
+    char *Ns_InfoConfigFile(void)
+
+    Description
+    
+   Return full path name of the configuration file in use.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoErrorLog
+  
+    Overview
+    
+   Return error log name
+   
+    Syntax
+    
+    char* Ns_InfoErrorLog (void);
+
+    Description
+    
+   Return the name of the error log.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoHomePath
+  
+    Overview
+    
+   Return directory where the AOLserver is installed.
+   
+    Syntax
+    
+    char *Ns_InfoHomePath(void)
+
+    Description
+    
+   Return directory where the AOLserver is installed.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoHostname
+  
+    Overview
+    
+   Return hostname of server
+   
+    Syntax
+    
+    char* Ns_InfoHostname (void);
+
+    Description
+    
+   Return the hostname that AOLserver thinks it's running on, as
+   specified in the configuration file.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoLabel
+  
+    Overview
+    
+   Return source code label for server
+   
+    Syntax
+    
+    char *Ns_InfoLabel(void);
+
+    Description
+    
+   Returns the source code label for the server. If no label was used,
+   "unlabeled" is returned. You can use these functions to provide the
+   source code label when you report problems with the server.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoPid
+  
+    Overview
+    
+   Return server pid
+   
+    Syntax
+    
+    int Ns_InfoPid (void);
+
+    Description
+    
+   Return pid of AOLserver.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoPlatform
+  
+    Overview
+    
+   Return platform
+   
+    Syntax
+    
+    char* Ns_InfoPlatform (void);
+
+    Description
+    
+   Returns platform name, e.g. "IRIX".
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoServerName
+  
+    Overview
+    
+   Return AOLserver name string ("AOLserver").
+   
+    Syntax
+    
+    char *Ns_InfoServerName(void)
+
+    Description
+    
+   Return AOLserver name string ("AOLserver").
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoServersStarted
+  
+    Overview
+    
+   Determine if server has started
+   
+    Syntax
+    
+    int Ns_InfoServersStarted (void);
+
+    Description
+    
+   Return TRUE if the server has started, i.e., if initialization and
+   module loading is complete.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoServerVersion
+  
+    Overview
+    
+   Return AOLserver version string.
+   
+    Syntax
+    
+    char *Ns_InfoServerVersion(void)
+
+    Description
+    
+   Return AOLserver version string.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoShutdownPending
+  
+    Overview
+    
+   Determine if a server shutdown is pending
+   
+    Syntax
+    
+    int Ns_InfoShutdownPending (void);
+
+    Description
+    
+   Return TRUE if there is there a shutdown pending, i.e., if an INTR
+   signal has been received or if ns_shutdown has been called.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoStarted
+  
+    Overview
+    
+   Determine if server has started
+   
+    Syntax
+    
+    int Ns_InfoStarted (void);
+
+    Description
+    
+   Return TRUE if the server has started, i.e., if initialization and
+   module loading is complete.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InfoUptime
+  
+    Overview
+    
+   Return time server has been running
+   
+    Syntax
+    
+    int Ns_InfoUptime (void);
+
+    Description
+    
+   Return how long, in seconds, AOLserver has been running.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InitializeCriticalSection
+  
+    Overview
+    
+   Initialize a critical section
+   
+    Syntax
+    
+    int Ns_InitializeCriticalSection(
+    Ns_CriticalSection * section
+    );
+
+    Description
+    
+   Initialize the specified critical section. It is recommended that you
+   use a mutex instead of a critical section if possible.
+   
+   Ns_CsInit is the preferred function for initializing a critical
+   section.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InitializeEvent
+  
+    Overview
+    
+   Initialize an event object
+   
+    Syntax
+    
+    int Ns_InitializeEvent(
+    Ns_Event * event
+    );
+
+    Description
+    
+   Initialize an event object.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InitializeMutex
+  
+    Overview
+    
+   Initialize a mutual exclusion lock
+   
+    Syntax
+    
+    int Ns_InitializeMutex(
+    Ns_Mutex * mutex
+    );
+
+    Description
+    
+   Initialize a Mutual Exclusion lock for use.
+   
+   Ns_MutexInit is the preferred function for initializing a mutex.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InitializeRWLock
+  
+    Overview
+    
+   Initialize a read/write lock
+   
+    Syntax
+    
+    int Ns_InitializeRWLock(
+    Ns_RWLock *lock
+    );
+
+    Description
+    
+   Initialize a read/write lock for use. A lock ID is returned via the
+   lock parameter, which can be used in the other read/write lock
+   functions.
+   
+    About Read/Write Locks
+    
+   Read/write locks are a serialization mechanism for using data
+   structures where multiple reads can happen simultaneously, but where
+   writes must happen singly. For example, suppose you have a hash table
+   that is heavily used but doesn't change very often. You'd like to have
+   multiple threads be able to read from the table without blocking on
+   each other, but when you need to update the table, you can do so
+   safely without having to worry about other threads reading incorrect
+   data.
+   
+   The principal feature of read/write locks is the mechanism of which
+   locks have priority and which locks must wait. Any number of read
+   locks can be pending. If there's a write lock active, the read lock
+   acquisition blocks until the write lock is released. Also, only one
+   write lock can be in effect. If there are pending read locks active,
+   the write lock acquisition blocks until all of the read locks drain.
+   If a subsequent read lock acquisition attempt is made while a write
+   lock is waiting to acquire, the write lock has priority.
+   
+   Ns_RWLockInit is the preferred function for initializing a read/write
+   lock.
+   
+    Examples
+    
+    NS_RWLock lock;
+    int GetData (int key)
+    {
+        /* acquire a read lock */
+        Ns_ReadLockRWLock (&lock);
+        search through the data structure looking for key's data;
+
+        /* release our read lock */
+        Ns_ReadUnlockRWLock (&lock);
+        return (value);
+
+    } /* GetData */
+    int StoreData (int key, int value)
+    {
+       /* acquire the write lock */
+       Ns_WriteLockRWLock (&lock);
+       manipulate the data structure storing key's value;
+       /* release the write lock */
+       Ns_WriteUnlockRWLock (&lock);
+       return (value);
+    } /* StoreData */
+    ...
+    Ns_InitializeRWLock (&lock);
+    ...
+    (different threads using GetData and StoreData)
+    ...
+    Ns_DestoryRWLock (&lock);
+
+    See Also
+    
+   Ns_DestroyRWLock
+   
+   Ns_ReadLockRWLock
+   
+   Ns_ReadUnlockRWLock
+   
+   Ns_WriteLockRWLock
+   
+   Ns_WriteUnlockRWLock
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_InitializeSemaphore
+  
+    Overview
+    
+   Initialize a semaphore
+   
+    Syntax
+    
+    int Ns_InitializeSemaphore(
+    Ns_Semaphore * sema,
+    int beg_count
+    );
+
+    Description
+    
+   Initialize the semaphore with a semaphore count of beg_count.
+   
+   Ns_SemaInit is the preferred function for initializing a semaphore.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_LeaveCriticalSection
+  
+    Overview
+    
+   Leave a critical section
+   
+    Syntax
+    
+    int Ns_LeaveCriticalSection(
+    Ns_CriticalSection * section
+    );
+
+    Description
+    
+   Leave the specified critical section.
+   
+   Ns_CsLeave is the preferred function for leaving a critical section.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_LibPath
+  
+    Overview
+    
+   Construct path relative to lib
+   
+    Syntax
+    
+    char* Ns_LibPath (Ns_DString* dest,...);
+
+    Description
+    
+   Make a path relative to $ASHOME/lib/ given the specified destination.
+   For example, if AOLserver is running out of /disk2/aolserver, the
+   following call would return "/disk2/aolserver/lib/foo/bar":
+    Ns_LibPath("foo", "bar", NULL);
+
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Localtime
+  
+    Overview
+    
+   Perform localtime
+   
+    Syntax
+    
+    struct tm* Ns_Localtime (
+    const time_t* clock
+    );
+
+    Description
+    
+   This function wraps localtime(3C).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_LockMutex
+  
+    Overview
+    
+   Create a mutual exclusion lock
+   
+    Syntax
+    
+    int Ns_LockMutex(
+    Ns_Mutex * mutex
+    );
+
+    Description
+    
+   Acquire the mutex. If the mutex is already locked then the current
+   thread will block until the mutex is unlocked. Note: mutexes are not
+   recursive. If the current thread tries to lock the mutex twice in a
+   row, it will block or get an error depending on the platform.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Log
+  
+    Overview
+    
+   Log formatted message
+   
+    Syntax
+    
+    void Ns_Log(
+    Ns_LogSeverity severity,
+    char *fmt,
+    ...
+    );
+
+    Description
+    
+   The Ns_Log function writes formatted messages to the server log file.
+   Allowable values for severity are:
+   
+   Notice
+   
+   Something interesting occurred.
+   
+   Warning
+   
+   Maybe something bad occurred.
+   
+   Error
+   
+   Something bad occurred.
+   
+   Fatal
+   
+   Something extremely bad occurred. The server will shut down after
+   logging this message.
+   
+   Bug
+   
+   Something occurred that implies there is a bug in your code.
+   
+   Debug
+   
+   If the server is in Debug mode, the message is printed. Debug mode is
+   specified in the [ns/parameters] section of the configuration file. If
+   the server is not in debug mode, the message is not printed.
+   
+    Examples
+    
+    char *hServer; /* server handle */
+    char *hModule; /* module handle */
+    Ns_Log(Notice, "Initializing module %s on server %s",
+                                        hModule, hServer);
+
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_LogRoll
+  
+    Overview
+    
+   Roll server log
+   
+    Syntax
+    
+    int Ns_LogRoll (void);
+
+    Description
+    
+   Roll the server.log file, renaming the existing file with the date and
+   starting a new log file.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_LogTime
+  
+    Overview
+    
+   Construct local date and time for log file
+   
+    Syntax
+    
+    char *Ns_LogTime(
+    char *dateTimeBuf
+    );
+
+    Description
+    
+   The Ns_LogTime function constructs the local date and time for use in
+   the log file. Upon completion, dateTimeBuf will contain the formatted
+   string. Ns_LogTime is used by Ns_Log to create log file entries.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_MakePath
+  
+    Overview
+    
+   Construct a path name from a list of path elements
+   
+    Syntax
+    
+    char *Ns_MakePath(
+    Ns_DString * dest,
+    ...
+    );
+
+    Description
+    
+   The Ns_MakePath function constructs a path name by appending a list of
+   path elements to the given Ns_DString. The path elements are separated
+   by single slashes, and the resulting path name is appended to the
+   given Ns_DString. The last argument needs to be NULL to indicate the
+   end of the argument list.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Malloc
+  
+    Overview
+    
+   Allocate a block of memory
+   
+    Syntax
+    
+    void *Ns_Malloc(
+    size_t size
+    );
+
+    Description
+    
+   The Ns_Malloc function returns a block of memory of the given size.
+   This function replaces the system malloc function.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Match
+  
+    Overview
+    
+   Compare strings
+   
+    Syntax
+    
+    char* Ns_Match (
+    char* pattern,
+    char* string
+    );
+
+    Description
+    
+   Compare the beginnings of two strings, case insensitively. The
+   comparison stops when the end of the shorter string is reached.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLog
+  
+    Overview
+    
+   Log a message within a realm
+   
+    Syntax
+    
+    void Ns_ModLog(
+    Ns_LogSeverity severity,
+    Ns_ModLogHandle handle,
+    char *inFormat,
+    ...
+    );
+
+    Description
+    
+   The Ns_ModLog function logs a message of some severity to a realm
+   contained in the handle. The severities, in order from highest to
+   lowest, are Fatal, Bug, Error, Notice, Warning, and Debug.
+   
+    Examples
+    
+   Ns_ModLog(Warning, cgiModLogHandle, "No such CGI interps section: %s",
+   ds.string);
+   
+    See also
+    
+   ns_modlog
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogGetThreshold
+  
+    Overview
+    
+   Get the severity of the logging threshold of a handle
+   
+    Syntax
+    
+    Ns_LogSeverity Ns_ModLogGetThreshold(
+    Ns_ModLogHandle handle
+    );
+
+    Description
+    
+   The Ns_ModLogGetThreshold function obtains the severity of the logging
+   threshold of a handle. The default handle is used instead for a null
+   handle.
+   
+    Examples
+    
+    Ns_LogSeverity severity;
+    Ns_ModLogHandle handle;
+
+    handle = Ns_ModLogLookupHandle("nsd.sock");
+    severity = Ns_ModLogGetThreshold(handle);
+
+    See also
+    
+   ns_modlogcontrol get_threshold
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogLookupHandle
+  
+    Overview
+    
+   Obtain the handle given a realm
+   
+    Syntax
+    
+    Ns_ModLogHandle Ns_ModLogLookupHandle(
+    char *realm
+    );
+
+    Description
+    
+   The Ns_ModLogLookupHandle function returns a handle given a realm
+   name. A null handle is returned if that realm is not registered. The
+   default handle is returned for a null realm.
+   
+    Examples
+    
+    Ns_ModLogHandle handle;
+    handle = Ns_ModLogLookupHandle("myrealm");
+
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogLookupRealm
+  
+    Overview
+    
+   Obtain the realm from the handle
+   
+    Syntax
+    
+    char *Ns_ModLogLookupRealm(
+    Ns_ModLogHandle handle
+    );
+
+    Description
+    
+   The Ns_ModLogLookupRealm function returns a realm from a handle. The
+   realm of the default handle is returned for a null handle.
+   
+    Examples
+    
+    Ns_ModLogHandle handle;
+    Ns_ModLogRegister("testrealm", &handle);
+    Ns_Log(Notice, "Realm is %s", Ns_ModLogLookupRealm(handle));
+
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogRedirect
+  
+    Overview
+    
+   Redirect logging of a realm to a file
+   
+    Syntax
+    
+    void Ns_ModLogRedirect(
+    Ns_ModLogHandle handle,
+    FILE *fp,
+    char *description
+    );
+
+    Description
+    
+   The Ns_ModLogRedirect function redirects logging of a realm to an open
+   file. The default handle is used instead for a null handle. fp refers
+   to an open file. A null pointer for fp redirects the output to the
+   default server log file. The description string is printed in the
+   original server log file for the handle.
+   
+    Examples
+    
+    FILE *fp;
+    fp = fopen("cgirealm.log", "a");
+    Ns_ModLogRedirect(cgiModLogHandle, fp, "redirecting to a different
+
+    file");
+
+    See also
+    
+   ns_modlogcontrol redirect
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogRegister
+  
+    Overview
+    
+   Register a new realm
+   
+    Syntax
+    
+    void Ns_ModLogRegister(
+    char *realm,
+    Ns_ModLogHandle *handle
+    );
+
+    Description
+    
+   The Ns_ModLogRegister function allocates a new handle. The new handle
+   initialized with the realm, the default logging severity, and the
+   default server log file. A realm is a character string. The default
+   handle is returned if realm is null.
+   
+    Examples
+    
+    static Ns_ModLogHandle cgiModLogHandle;
+    int Ns_ModuleInit(char *server, char *name)
+    {
+      Ns_ModLogRegister(name, &cgiModLogHandle);
+      CgiInit(server);
+      return NS_OK;
+    }
+
+    See also
+    
+   ns_modlogcontrol register
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModLogSetThreshold
+  
+    Overview
+    
+   Set the logging severity of a handle
+   
+    Syntax
+    
+    void Ns_ModLogSetThreshold(
+    Ns_ModLogHandle handle,
+    Ns_LogSeverity severity
+    );
+
+    Description
+    
+   The Ns_ModLogSetThreshold function sets the logging threshold of a
+   handle to a particular severity. Only those messages that have the
+   same severity or higher as the handle will be logged with Ns_Modlog
+   for that handle. The default handle is used instead for a null handle.
+   
+    Examples
+    
+    Ns_ModLogHandle handle;
+    Ns_ModLogRegister("testrealm", &handle);
+    Ns_ModLogSetThreshold(handle, Debug);
+    Ns_ModLog(Debug, handle, "This should appear");
+    Ns_ModLogSetThreshold(handle, Notice);
+    Ns_ModLog(Debug, handle, "This should not appear");
+
+    See also
+    
+   ns_modlogcontrol set_threshold
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModuleLoad
+  
+    Overview
+    
+   Load a module into AOLserver
+   
+    Syntax
+    
+    int Ns_ModuleLoad(
+    char *hServer,
+    char *hModule,
+    char *sModuleFile,
+    char *sInitProc
+    );
+
+    Description
+    
+   The Ns_ModuleLoad function loads a module into AOLserver and calls the
+   initialization routine (sInitProc). If sInitProc is NULL, the
+   initialization routine used defaults to Ns_ModuleInit.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModulePath
+  
+    Overview
+    
+   Construct a path from base path
+   
+    Syntax
+    
+    char *Ns_ModulePath(
+    Ns_DString *dest,
+    char *hServer,
+    char *hModule,
+    ...
+    );
+
+    Description
+    
+   The Ns_ModulePath function constructs a path by appending the final
+   variable arguments to the base path defined by a module on the
+   specified server. The list of arguments must end with NULL.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ModuleSymbol
+  
+    Overview
+    
+   Return symbol
+   
+    Syntax
+    
+    int Ns_ModuleSymbol(
+    char *sModuleFile,
+    char *sSymbolName
+    );
+
+    Description
+    
+   The Ns_ModuleSymbol function returns a pointer to the value of a
+   symbol in a particular shared library.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_MutexDestroy
+  
+    Overview
+    
+   Destroy a mutex object
+   
+    Syntax
+    
+    void Ns_MutexDestroy (
+    Ns_Mutex *mutexPtr
+    );
+
+    Description
+    
+   Free the mutex's associated resources.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_MutexInit
+  
+    Overview
+    
+   Initialize a mutex object
+   
+    Syntax
+    
+    void Ns_MutexInit (
+    Ns_Mutex *mutexPtr
+    );
+
+    Description
+    
+   Initialize a Mutual Exclusion lock for use.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_MutexLock
+  
+    Overview
+    
+   Lock a mutex object
+   
+    Syntax
+    
+    void Ns_MutexLock (
+    Ns_Mutex *mutexPtr
+    );
+
+    Description
+    
+   Acquire the mutex. If the mutex is already locked then the current
+   thread will block until the mutex is unlocked. Note: mutexes are not
+   recursive. If the current thread tries to lock the mutex twice in a
+   row, it will block or get an error depending on the platform.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_MutexUnlock
+  
+    Overview
+    
+   Unlock a mutex object
+   
+    Syntax
+    
+    void Ns_MutexUnlock (
+    Ns_Mutex *mutexPtr
+    );
+
+    Description
+    
+   Unlock the mutex.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_NextWord
+  
+    Overview
+    
+   Find next word in string
+   
+    Syntax
+    
+    char* Ns_NextWord (
+    char* line
+    );
+
+    Description
+    
+   Find the next word (after whiteaspace) in a string.
+   
+   For example, Ns_NextWord("abc def") returns a pointer to the 'd' in
+   that string.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_NormalizePath
+  
+    Overview
+    
+   Normalize a path name
+   
+    Syntax
+    
+    char *Ns_NormalizePath(
+    Ns_DString *dest,
+    char *path
+    );
+
+    Description
+    
+   This function removes any extraneous slashes from the path and
+   resolves "." and ".." references. The result is appended to the given
+   Ns_DString. For example
+    Ns_NormalizePath(&ds,
+"/dog/cat/../../rat/../../dog//mouse/..");
+
+   appends "/dog" to the Ns_DString.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PageRoot
+  
+    Overview
+    
+   Return path name of the AOLserver pages directory for a server.
+   
+    Syntax
+    
+    char *Ns_PageRoot(
+    char *hServer
+    );
+
+    Description
+    
+   Return path name of the AOLserver pages directory for a server.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ParseHeader
+  
+    Overview
+    
+   Parse Http headers
+   
+    Syntax
+    
+    int Ns_ParseHeader (
+    Ns_Set* psetHeaders,
+    char* sHeader,
+    ...
+    );
+
+    Description
+    
+   Parse http headers into the Ns_Set. The trailing arguments exist for
+   backwards compatibility and are ignored.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ParseHttpTime
+  
+    Overview
+    
+   Convert Http time into time_t
+   
+    Syntax
+    
+    time_t Ns_ParseHttpTime (
+    char* str
+    );
+
+    Description
+    
+   Convert a time like "Thursday, 10-Jun-93 01:29:59 GMT" or "Thu, 10 Jan
+   1993 01:29:59 GMT" into time_t.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ParseRequest
+  
+    Overview
+    
+   Parse an HTTP request line into an Ns_Request
+   
+    Syntax
+    
+    Ns_Request *Ns_ParseRequest(
+    char *requestLine
+    );
+
+    Description
+    
+   The Ns_ParseRequest function takes an HTTP request line and returns a
+   newly allocated Ns_Request structure. You must eventually call
+   Ns_FreeRequest to free the memory used by the Ns_Request structure and
+   its members.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ParseUrl
+  
+    Overview
+    
+   Parse a URL
+   
+    Syntax
+    
+    int Ns_ParseUrl(
+    char *url,
+    char **pprotocol,
+    char **phost,
+    char **pport,
+    char **ppath,
+    char **ptail
+    );
+
+    Description
+    
+   Parse a URL into its component parts. Pointers to the protocol, host,
+   port, path, and "tail" (last path element) will be set by reference in
+   the passed-in pointers. The passed-in url will be modified. Return
+   NS_OK on success or NS_ERROR on failure.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PathIsAbsolute
+  
+    Overview
+    
+   Check for an absolute path name
+   
+    Syntax
+    
+    int Ns_PathIsAbsolute(
+    char *path
+    );
+
+    Description
+    
+   This function returns 1 if the path is absolute and 0 otherwise. Under
+   Unix, an absolute path starts with a `/'.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PermPasswordCheck
+  
+    Overview
+    
+   Check user's encrypted password
+   
+    Syntax
+    
+    int Ns_PermPasswordCheck(
+    char *user,
+    char *password
+    );
+
+    Description
+    
+   Validate a user's encrypted password. This function is only accessible
+   if the nsperm module is loaded. NS_TRUE is returned if the password is
+   correct.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolAlloc
+  
+    Overview
+    
+   Allocate memory within a pool
+   
+    Syntax
+    
+    void* Ns_PoolAlloc (
+    Ns_Pool* pool,
+    unsigned int size
+    );
+
+    Description
+    
+   Alloc memory within a pool. Memory pools are thread-specific memory
+   that reduce the number of globally-locking malloc(3C) calls.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolCreate
+  
+    Overview
+    
+   Create a new memory pool
+   
+    Syntax
+    
+    Ns_Pool* Ns_PoolCreate (
+    char* name
+    );
+
+    Description
+    
+   Create a new memory pool with the specified name.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolDestroy
+  
+    Overview
+    
+   Destroy a memory pool
+   
+    Syntax
+    
+    void Ns_PoolDestroy (
+    Ns_Pool* pool
+    );
+
+    Description
+    
+   Destroy the specified memory pool.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolDump
+  
+    Overview
+    
+   Debug a memory pool
+   
+    Syntax
+    
+    void Ns_PoolDump (
+    int fd,
+    Ns_Pool* pool
+    );
+
+    Description
+    
+   Write information about the pool to the open file descriptor fd.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolFree
+  
+    Overview
+    
+   Free pool memory
+   
+    Syntax
+    
+    void Ns_PoolFree (
+    Ns_Pool* pool,
+    void* ptr
+    );
+
+    Description
+    
+   Free pool memory.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolRealloc
+  
+    Overview
+    
+   Reallocate pool memory
+   
+    Syntax
+    
+    void* Ns_PoolRealloc (
+    Ns_Pool* pool,
+    void* ptr,
+    unsigned int size
+    );
+
+    Description
+    
+   Perform realloc for pools. See the realloc(3C) man page.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_PoolTrace
+  
+    Overview
+    
+   Trace a memory pool
+   
+    Syntax
+    
+    int Ns_PoolTrace (
+    char* filename
+    );
+
+    Description
+    
+   Open the specified filename to contain debugging information and begin
+   debugging. Returns NS_OK or NS_ERROR
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_QueryToSet
+  
+    Overview
+    
+   Parse query data into Ns_Set
+   
+    Syntax
+    
+    int Ns_QueryToSet (
+    char* query,
+    Ns_Set* set
+    );
+
+    Description
+    
+   Parse query data (such as "a=b&c=d&jkl=rew") into an Ns_Set.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_QueueConn
+  
+    Overview
+    
+   Make and queue a new conn
+   
+    Syntax
+    
+    int Ns_QueueConn (
+    Ns_Driver driver,
+    void* ctx
+    );
+
+    Description
+    
+   Make a new conn and put it on the list of conns to be served. This
+   function is called by socket drivers.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_QuoteHtml
+  
+    Overview
+    
+   Quote an HTML string
+   
+    Syntax
+    
+    void Ns_QuoteHtml(
+    Ns_DString *pds,
+    char *string
+    );
+
+    Description
+    
+   The Ns_QuoteHtml function appends the given string to the Ns_DString,
+   making the following substitutions that allow HTML to be included in
+   another HTML page as plain text:
+   
+   <
+   
+   &lt;
+   
+   >
+   
+   &gt;
+   
+   &
+   
+   &amp;
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Readdir
+  
+    Overview
+    
+   Perform readdir
+   
+    Syntax
+    
+    struct dirent* Ns_Readdir (
+    DIR* pDir
+    );
+
+    Description
+    
+   This funciton wraps readdir(3B).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_Realloc
+  
+    Overview
+    
+   Resize a previously allocated block of memory
+   
+    Syntax
+    
+    void *Ns_Realloc(
+    void *buf,
+    size_t size
+    );
+
+    Description
+    
+   The Ns_Realloc function reallocates a block of memory previously
+   allocated with Ns_Malloc or Ns_Calloc to the given size. The block of
+   memory may or may not move as a result. This function replaces the
+   system realloc function.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ReadLockRWLock
+  
+    Overview
+    
+   Acquire a read lock
+   
+    Syntax
+    
+    int Ns_ReadLockRWLock(
+    Ns_RWLock *lock
+    );
+
+    Description
+    
+   Ns_ReadLockRWLock acquires a read lock. Any number of read locks can
+   be pending. If there's a write lock active, the read lock acquisition
+   blocks until the write lock is released.
+   
+   For general information about read/write locks and an example showing
+   the use of the read/write lock functions, see the Ns_InitializeRWLock
+   function.
+   
+   Ns_RWLockRdLock is the preferred function for acquiring a read lock.
+   
+    See Also
+    
+   Ns_InitializeRWLock
+   
+   Ns_DestroyRWLock
+   
+   Ns_ReadUnlockRWLock
+   
+   Ns_WriteLockRWLock
+   
+   Ns_WriteUnlockRWLock
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_ReadUnlockRWLock
+  
+    Overview
+    
+   Release a read lock
+   
+    Syntax
+    
+    int Ns_ReadUnlockRWLock(
+    Ns_RWLock *lock
+    );
+
+    Description
+    
+   Ns_ReadUnlockRWLock releases a read lock.
+   
+   For general information about read/write locks and an example showing
+   the use of the read/write lock functions, see the Ns_InitializeRWLock
+   function.
+   
+   Ns_RWLockUnlock is the preferred function for releasing a lock.
+   
+    See Also
+    
+   Ns_InitializeRWLock
+   
+   Ns_DestroyRWLock
+   
+   Ns_ReadLockRWLock
+   
+   Ns_WriteLockRWLock
+   
+   Ns_WriteUnlockRWLock
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterAtExit
+  
+    Overview
+    
+   Register an exit procedure.
+   
+    Syntax
+    
+    typedef void (Ns_Callback) (void *context);
+
+    Ns_ProcHandle Ns_RegisterAtExit(
+    Ns_Callback *proc,
+    void *context
+    );
+
+    Description
+    
+   The Ns_RegisterAtExit function registers proc as a function to call
+   before AOLserver exits after all servers are shut down. The procedures
+   are run in last-registered first-run order.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterAtPreStartup
+  
+    Overview
+    
+   Register a procedure for pre-server startup
+   
+    Syntax
+    
+    void* Ns_RegisterAtPreStartup (
+    Ns_Callback* proc,
+    void* arg
+    );
+
+    Description
+    
+   Register a procedure to be called just before the binder is
+   terminated, prior to server startup. The return value is an opaque
+   handle (which is currently not useful).
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterAtSignal
+  
+    Overview
+    
+   Register a procedure at HUP signal
+   
+    Syntax
+    
+    void* Ns_RegisterAtSignal (
+    Ns_Callback* proc,
+    void* context
+    );
+
+    Description
+    
+   Register a callback to run when the HUP signal is received by the
+   server.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterAtStartup
+  
+    Overview
+    
+   Register a procedure for server startup
+   
+    Syntax
+    
+    void* Ns_RegisterAtStartup (
+    Ns_Callback* proc,
+    void* context
+    );
+
+    Description
+    
+   Register a callback to run when the server is done starting up.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterCleanup
+  
+    Overview
+    
+   Register a procedure for connection cleanup trace
+   
+    Syntax
+    
+    void *Ns_RegisterCleanup(
+    Ns_TraceProc *proc,
+    void *arg
+    );
+
+    Description
+    
+   Register a connection cleanup trace procedure. Traces registered with
+   this procedure are always called in LIFO order at the end of
+   connection, regardless of the result code from the connection's
+   request procedure. In other words, the procedure is called even if the
+   client drops connection.
+   
+   It returns a pointer to the trace.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterDriver
+  
+    Overview
+    
+   Register a socket driver
+   
+    Syntax
+    
+    Ns_Driver Ns_RegisterDriver (
+    char* hServer,
+    char* hDriver,
+    Ns_DrvProc* procs,
+    void* ctx
+    );
+
+    Description
+    
+   Register a socket driver.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterFilter
+  
+    Overview
+    
+   Register a filter function to handle a method/URL combination
+   
+    Syntax
+    
+    typedef int (Ns_FilterProc) (void *context, Ns_Conn *conn, int
+why);
+
+    Ns_ProcHandle Ns_RegisterFilter(
+    char *hServer,
+    char *method,
+    char *URLpatterns,
+    Ns_FilterProc *proc,
+    int why,
+    void *context
+    );
+
+    Description
+    
+   This function will register a filter procedure for a method/URL
+   combination on a server. This function will be called at the specified
+   stage of a connection, if the method/URL combination for the filter
+   matches the method/URL combination for the connection using glob style
+   matching. The procedures are run in last-registered last-run order. A
+   filter procedure is often used for logging.
+   
+   The why argument can be any of the following, or some combination of
+   them by bitwise OR-ing (with "|") them together:
+   
+          NS_FILTER_PRE_AUTH: the filter will be called before
+          authorization of a page
+          NS_FILTER_POST_AUTH: the filter will be called after
+          authorization but before a page has been returned
+          NS_FILTER_TRACE: the filter will be called after the connection
+          has been totally processed
+          
+   Using pre-authorization, the procedure will be called (assuming that
+   the method/URL combination matches) just before authorization. If the
+   procedure returns:
+     * NS_OK: The server will continue to the next pre-authorization
+       filter for this connection, or, if there are no more
+       pre-authorization filters, it will continue on with authorization.
+     * NS_FILTER_BREAK: The server will not process any more
+       pre-authorization filters for this connection, and it will
+       continue on with authorization.
+     * NS_FILTER_RETURN: The server will close the connection and will
+       not run any more pre-authorization filters. It will not authorize
+       the request, and it will not run the function registered for this
+       METHOD/URL. It WILL run any trace functions registered for this
+       METHOD/URL, usually including logging. It is assumed that the
+       filter has returned a proper response to the client before
+       returning NS_FILTER_RETURN.
+       
+   Using post-authorization, the procedure will be called (assuming that
+   the method/URL combination matches) just after successful
+   authorization. If the procedure returns:
+     * NS_OK: The server will continue to the next post-authorization
+       filter for this connection, or, if there are no more
+       post-authorization filters, it will run the function registered to
+       handle this request.
+     * NS_FILTER_BREAK: The server will not process any more
+       post-authorization filters for this connection, and it will run
+       the function registered to handle this request.
+     * NS_FILTER_RETURN: The server will close the connection and will
+       not run any more post-authorization filters and it will not run
+       the function registered for this METHOD/URL. It WILL run any trace
+       functions registered for this METHOD/URL, usually including
+       logging. It is assumed that the filter has returned a proper
+       response to the client before returning NS_FILTER_RETURN.
+       
+   Using trace, the procedure will be called (assuming that the
+   method/URL combination match) after the connection has been totally
+   processed and closed. If the procedure returns:
+     * NS_OK: The server will continue to the next trace filter.
+     * NS_FILTER_BREAK, NS_FILTER_RETURN: The rest of the trace filters
+       are ignored
+       
+   The URLpatterns can contain standard string-matching characters. For
+   example, these are valid URLpatterns:
+   
+          /employees/*.tcl
+          /accounts/*/out
+          
+    Examples
+    
+    static int
+    ReportUse(void *context, Ns_Conn *conn, int why){
+     int status=NS_OK;
+     switch(why){
+      case NS_FILTER_PRE_AUTH:
+       Ns_Log(Notice, "User trying to access %s",conn->request->url);
+         break;
+        case NS_FILTER_POST_AUTH:
+          Ns_Log(Notice, "User authorized to access %s",conn->request-
+>url);
+          break;
+        case NS_FILTER_TRACE:
+          Ns_Log(Notice, "User has retrieved %s",conn->request->url);
+          break;
+        default:
+          status=NS_ERROR;
+      }
+      return status;
+    }
+    int
+    Ns_ModuleInit(char *hServer, char *hModule){
+      Ns_RegisterFilter(hServer, "GET", "/test/a*", ReportUse,
+        Ns_FILTER_PRE_AUTH, NULL);
+      Ns_RegisterFilter(hServer, "GET", "/test/b*", ReportUse,
+        Ns_FILTER_POST_AUTH, NULL);
+      Ns_RegisterFilter(hServer, "GET", "/test/c*", ReportUse,
+        Ns_FILTER_TRACE, NULL);
+      Ns_RegisterFilter(hServer, "GET", "/test/d*", ReportUse,
+        Ns_FILTER_PRE_AUTH | NS_FILTER_POST_AUTH, NULL);
+      Ns_RegisterFilter(hServer, "GET", "/test/e*", ReportUse,
+        Ns_FILTER_POST_AUTH | NS_FILTER_TRACE, NULL);
+      Ns_RegisterFilter(hServer, "GET", "/test/f*", ReportUse,
+        Ns_FILTER_PRE_AUTH | Ns_FILTER_POST_AUTH | NS_FILTER_TRACE,
+NULL);
+
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterLocation
+  
+    Overview
+    
+   Register location for socket driver
+   
+    Syntax
+    
+    int Ns_RegisterLocation (
+    char* name,
+    char* location,
+    char* address,
+    int port
+    );
+
+    Description
+    
+   Register the built-in socket driver with the name of the socket driver
+   and a location, host, and port. For example:
+    Ns_RegisterLocation("nssock", "http://host:port/",
+    "hostname.com", 80)
+
+   After this call, the server will immediately begin serving pages from
+   that location, host, and port.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterProxyRequest
+  
+    Overview
+    
+   Register a function to proxy requests for a method/protocol
+   combination
+   
+    Syntax
+    
+    typedef void *Ns_OpContext;
+    typedef int (Ns_OpProc) (void *context, Ns_Conn *conn);
+    typedef void (Ns_OpDeleteProc) (void *context);
+
+    void Ns_RegisterProxyRequest(
+    char        *Server,
+    char        *method,
+    char        *protocol,
+    Ns_OpProc   *proc,
+    Ns_Callback *deleteProc,
+    void        *context
+    );
+
+    Description
+    
+   The Ns_RegisterProxyRequest function registers function proc to handle
+   HTTP requests. When the specified server receives a proxy request, it
+   finds the appropriate registered function.
+   
+   The server passes your procedure the context you specify here and the
+   Ns_Conn structure associated with the new HTTP connection.
+   
+   When a procedure is unregistered with either
+   Ns_UnRegisterProxyRequest, the server calls the deleteProc with the
+   same context. You can use this to do any cleanup you might require
+   (e.g., close an index file or free something from the heap). If the
+   value of deleteProc is NULL, the server does nothing.
+   
+    Examples
+    
+   See the example in the examples/c/nsproxy directory.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterRequest
+  
+    Overview
+    
+   Register one or two functions to handle HTTP requests for a method/URL
+   combination
+   
+    Syntax
+    
+    typedef void *Ns_OpContext;
+    typedef int (Ns_OpProc) (void *context, Ns_Conn *conn);
+    typedef void (Ns_OpDeleteProc) (void *context);
+
+    void Ns_RegisterRequest(
+    char *hServer,
+    char *method,
+    char *URL,
+    Ns_OpProc *proc,
+    Ns_OpDeleteProc *deleteProc,
+    Ns_OpContext context,
+    int flags
+    );
+
+    Description
+    
+   The Ns_RegisterRequest function registers function proc to handle HTTP
+   requests. When the specified server receives an HTTP request, it finds
+   the most specific registered operation. The default operation for a
+   GET (i.e., the one registered with URL \Q/') serves up a page out of
+   the file system.
+   
+   The server passes your procedure the context you specify here and the
+   Ns_Conn structure associated with the new HTTP connection.
+   
+   When a procedure is unregistered with either Ns_UnRegisterRequest or
+   by registering another procedure with the same method and URL, the
+   server calls the deleteProc with the same context. You can use this to
+   do any cleanup you might require (e.g., close an index file or free
+   something from the heap). If the value of deleteProc is NULL, the
+   server does nothing.
+   
+   The flags parameter specifies one or more constants that can be OR'ed
+   together. The available flags are NS_OP_NOINHERIT and NS_OP_NODELETE.
+   
+   NS_OP_NOINHERIT tells AOLserver to only call your procedure if the URL
+   matches exactly (the default behavior is to look for the closest
+   match). You can register two procedures for the same method/URL
+   combination by calling Ns_RegisterRequest once with NS_OP_NOINHERIT
+   specified and once without NS_OP_NOINHERIT specified. The first
+   procedure will be called if there is an exact match with the specified
+   URL. The second procedure will be called if the requested URL is below
+   the specified URL, provided there is not already another procedure
+   registered with a closer match.
+   
+   NS_OP_NODELETE specifies that the previous procedure's deleteproc
+   should not be called. NS_OP_NODELETE can be used in conjunction with
+   Ns_GetRequest to implement wrappers.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterReturn
+  
+    Overview
+    
+   Register a return status for a URL
+   
+    Syntax
+    
+    void Ns_RegisterReturn (
+    int status,
+    char* url
+    );
+
+    Description
+    
+   Associate a URL with a return status (for custom error pages). For
+   exmaple:
+    Ns_RegisterReturn(404, "http://www.foo.com/notfound.html");
+
+   will send redirects to http://www.foo.com/notfound.html whenever a 404
+   error is to be returned.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterServerShutdown
+  
+    Overview
+    
+   Register a shutdown procedure for a server.
+   
+    Syntax
+    
+    typedef void (Ns_Callback) (void *context);
+
+    Ns_ProcHandle Ns_RegisterServerShutdown(
+    char *hServer,
+    Ns_Callback *proc,
+    Ns_OpContext context
+    );
+
+    Description
+    
+   The Ns_RegisterServerShutdown function registers proc as a shutdown
+   procedure on the specified server. The server calls all shutdown
+   procedures before shutting down, in last-registered first-run order.
+   The shutdown procedure takes the context as its sole argument. A
+   shutdown procedure is often used to close or free a resource allocated
+   by a module's initialization routine.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.
+   
+   Previous ToC Index Next
+   
+   [as-c-sm.gif] [ Previous ] [ Contents ] [ Index ] [ Next ] 
+   
+  Ns_RegisterServerTrace
+  
+    Overview
+    
+   Register a trace procedure for a server.
+   
+    Syntax
+    
+    typedef void (Ns_TraceProc) (void *context, Ns_Conn *conn);
+
+    Ns_ProcHandle Ns_RegisterServerTrace(
+    char *hServer,
+    Ns_TraceProc *proc,
+    void *context
+    );
+
+    Description
+    
+   The Ns_RegisterServerTrace function registers proc as a trace for the
+   specified server. The server calls all trace procedures after every
+   HTTP connection with the context and the Ns_Conn for that connection.
+   The procedures are run in last-registered first-run order. A trace
+   procedure is often used for logging.
+   
+   [bluebult.gif] Top of Page [bluebult.gif]
+   
+               [ Previous ] [ Contents ] [ Index ] [ Next ] 
+                  Copyright © 1998-99 America Online, Inc.

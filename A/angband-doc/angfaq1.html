@@ -1,0 +1,1288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+
+<TITLE>Angband FAQ Part One</TITLE>
+
+<STYLE TYPE="text/css"><!--
+ul.acro li { font-size: smaller }
+ul.acro li code { font-size: larger }
+--></STYLE>
+</HEAD>
+<BODY>
+<!-- Notes:
+Version: $Id: angfaq1.html,v 1.20 2003/03/24 09:14:24 trs80 Exp trs80 $
+   Need to add a Borg section.
+   Need to finish section 7i (who are these people)
+   Is there an rpm for angband?
+   Should add a question about graphics.
+   Update question 5n with ~/.angband/Angband/ (done), maybe add section on pref files
+-->
+<H1>Angband FAQ Part One</H1>
+From: <A HREF="mailto:trs80@tartarus.uwa.edu.au">trs80@tartarus.uwa.edu.au</A> (James Andrewartha)<BR>
+Newsgroups: <A HREF="news:rec.games.roguelike.angband">rec.games.roguelike.angband</A>,<A HREF="news:rec.games.roguelike.announce">rec.games.roguelike.announce</A>,<A HREF="news:rec.answers">rec.answers</a>,<A HREF="news:news.answers">news.answers</A><BR>
+Subject: rec.games.roguelike.angband FAQ part 1<BR>
+Followup-To: <A HREF="news:rec.games.roguelike.angband">rec.games.roguelike.angband</A><BR>
+Organization: Adventurers Anonymous<BR>
+Summary: Answers to common questions about the roguelike game Angband<BR>
+Approved: news-answers-request@mit.edu,rgra-request@eyrie.org<BR>
+<BR>
+Archive-name: games/roguelike/angband-faq<BR>
+Last-modified: 2003-03-24<BR>
+Version: 0.3.0<BR>
+Posting-frequency: fortnightly<BR>
+Maintainer: James Andrewartha (<A HREF="mailto:trs80@tartarus.uwa.edu.au">trs80@tartarus.uwa.edu.au</A>)<BR>
+URL: &lt;<A HREF="ftp://clockwork.dementia.org/angband/Help/angfaq1.html">ftp://clockwork.dementia.org/angband/Help/angfaq1.html</A>&gt;<BR>
+URL: &lt;<A HREF="http://tartarus.uwa.edu.au/~trs80/angfaq1.html">http://tartarus.uwa.edu.au/~trs80/angfaq1.html</A>&gt;<BR>
+<BR>
+<HR SIZE=5>
+<B>Angband Frequently Asked Questions - Part 1 (Non-spoilers)</B>
+<HR SIZE=5>
+<BR>
+Originally compiled and maintained by Jason Holtzapple.<BR>
+Previously maintained by Ben Harrison
+(<A HREF="mailto:benh@phial.com">benh@phial.com</A>).<BR>
+Currently maintained by James Andrewartha
+(<A HREF="mailto:trs80@tartarus.uwa.edu.au">trs80@tartarus.uwa.edu.au</A>).<BR>
+For Angband 3.0.3 - May be inaccurate with other versions and variants.<BR>
+Modified in most recent update: 10b, 10c, 11c based on suggestions by Leon Marrick.<BR>
+<BR>
+Angband FAQ Part Two (Spoilers) is available separately, however it is not
+up to date.<BR>
+<BR>
+Based on the source code, and information provided by: Jules Bean,
+Scott Bigham, Matt Craighead, Joseph W. DeVincentis, Ben Harrison,
+Jason Holtzapple, Randy Hutson, Stephen S. Lee, Rick Lim, Steve Linberg,
+Ross Millikan, Adam Schenker, Andrew Schoonmaker, Cliff Stamp, Billy Tanksley,
+Charles F. Teague II, Pat Tracy, Otto Martin, Tom Harris, Mynstral, David
+Thornley, Eytan Zweig, pelpel, Chris Kern, Leon Marrick and others.<BR>
+<BR>
+<HR SIZE=5>
+<B>Table of Contents</B>
+<HR SIZE=5>
+<B>Angband FAQ - Part One:</B>
+<BR>
+<OL TYPE="1" START="1">
+<LI><A HREF="#1">General Information</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#1a">What is Angband?</A>
+        <LI><A HREF="#1b">Who is Morgoth?</A>
+        <LI><A HREF="#1c">On what computers can I play?</A>
+        <LI><A HREF="#1d">What is the latest version?</A>
+        <LI><A HREF="#1e">How do I get the latest version of this FAQ?</A>
+        <LI><A HREF="#1f">Who's the current maintainer?</A>
+        <LI><A HREF="#1g">Version History</A>
+</OL>
+<LI><A HREF="#2">Obtaining Angband and related material</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#2a">How to get Angband</A>
+        <LI><A HREF="#2b">FTP sites</A>
+        <LI><A HREF="#2c">WWW sites</A>
+        <LI><A HREF="#2d">The Angband Newbie Guide (TANG)</A>
+</OL>
+<LI><A HREF="#3">Technical Information</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#3a">Expanding ZIP archives</A>
+        <LI><A HREF="#3b">How do I use an old savefile or savefile from another platform?</A>
+        <LI><A HREF="#3c">What is a "patch"?</A>
+        <LI><A HREF="#3d">How do I compile Angband myself?</A>
+</OL>
+<LI><A HREF="#4">Creating Characters</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#4a">What is maximize mode?</A>
+        <LI><A HREF="#4b">What is preserve mode?</A>
+        <LI><A HREF="#4c">Player stat creation</A>
+        <LI><A HREF="#4d">Birth options</A>
+</OL>
+<LI><A HREF="#5">Gameplay Questions</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#5a">How do I set game options and what do they mean?</A>
+        <LI><A HREF="#5b">What effect does turning off haggling have on the price of items?</A>
+        <LI><A HREF="#5c">How does shopkeeper rotation work?</A>
+ 	<LI><A HREF="#5d">What is auto-scum?</A>
+ 	<LI><A HREF="#5e">How do the cheating options work?</A>
+        <LI><A HREF="#5f">What are the messages I get upon entering a new level?</A>
+        <LI><A HREF="#5g">What causes a "special" feeling?</A>
+        <LI><A HREF="#5h">How do I exchange weapons in Angband?</A>
+        <LI><A HREF="#5i">What do the minuses in the name of a piece of armor mean?</A>
+        <LI><A HREF="#5j">The game tells me that I must "Study" but I can't learn any new spells. What is going on?</A>
+        <LI><A HREF="#5k">How does the fractional speed system work?</A>
+        <LI><A HREF="#5l">How do I autopickup my ammunition?</A>
+        <LI><A HREF="#5m">Introduction to macros</A>
+        <LI><A HREF="#5n">How do I save macros?</A>
+</OL>
+<LI><A HREF="#6">Questionable gameplay techniques</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#6a">Savefile abuse</A>
+        <LI><A HREF="#6b">Stair-scumming</A>
+        <LI><A HREF="#6c">Monster farming</A>
+        <LI><A HREF="#6d">Summoning/Polymorphing</A>
+</OL>
+<LI><A HREF="#7">About rec.games.roguelike.angband</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#7a">General notes</A>
+        <LI><A HREF="#7b">Glossary of terms</A>
+        <LI><A HREF="#7c">Questions on r.g.r.a</A>
+        <LI><A HREF="#7d">Victory (or YAWP) posts</A>
+        <LI><A HREF="#7e">Stupid Death (or YASD) posts</A>
+        <LI><A HREF="#7f">Why do so many players seem to dislike or even hate Nethack?</A>
+	<LI><A HREF="#7g">What's the weird code in some people's .sigs?</A>
+	<LI><A HREF="#7h">Angband IRC</A>
+        <!-- <LI><A HREF="#7i">Who are these people?</A> -->
+</OL>
+<LI><A HREF="#8">Suggestions for future versions that have been considered</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#8a">I've got this really great idea for Angband ...</A>
+        <LI><A HREF="#8b">Let the player store money in his/her home.</A>
+        <LI><A HREF="#8c">Increase the player's carrying capacity.</A>
+        <LI><A HREF="#8d">Let players give or sell their items to other players.</A>
+        <LI><A HREF="#8e">I want a real-time multi-player Angband!</A>
+        <LI><A HREF="#8f">Increase the size of the player's home</A>
+        <LI><A HREF="#8g">Allow the player to wear a ring on each finger</A>
+        <LI><A HREF="#8h">Allow the player to load saved games after death</A>
+        <LI><A HREF="#8i">Dungeon levels should be persistent</A>
+</OL>
+<LI><A HREF="#9">Programming Questions</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#9a">Where can I obtain the source code?</A>
+        <LI><A HREF="#9b">To what extent can I modify the source and release modified versions?</A>
+        <LI><A HREF="#9c">Is there any easy way for a non-programmer to hack the game?</A>
+        <LI><A HREF="#9d">What are the *_info.txt files?</A>
+        <LI><A HREF="#9e">I know how to program C, where can I get an introduction to Angband programming?</A>
+	<LI><A HREF="#9f">C is ugly, can't I program in Lisp instead?</A>
+        <LI><A HREF="#9g">Why doesn't wizard mode work in the version that I have?</A>
+        <LI><A HREF="#9h">What is the borg?  Why doesn't it appear in the version that I have?</A>
+        <LI><A HREF="#9i">How do I use the borg?</A>
+        <LI><A HREF="#9j">How do I generate auto-spoilers?</A>
+        <LI><A HREF="#9k">What is CVS?</A>
+</OL>
+<LI><A HREF="#10">Variants</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#10a">Angband Variant FAQ</A>
+	<LI><A HREF="#10b">What is OAngband-style Combat?</A>
+	<LI><A HREF="#10c">What is the JLE patch?</A>
+</OL>
+<LI><A HREF="#11">Miscellaneous</A>
+<OL TYPE="a" START="1">
+        <LI><A HREF="#11a">The game says that I'm missing a spellbook when I try to learn some new spells.  What's the reason for this?</A>
+        <LI><A HREF="#11b">What happened to player ghosts?</A>
+        <LI><A HREF="#11c">What license is Angband distributed under?</A>
+</OL>
+</OL>
+<HR SIZE=5>
+<B>Angband FAQ - Part One</B>
+<HR SIZE=5>
+<BR>
+<HR SIZE=5>
+<A NAME="1"><B>1. General Information</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="1a"><B>1a. What is Angband?</B></A>
+<HR>
+Angband is a single-player, text-based, dungeon simulation derived
+from the game Moria, an enhancement of the old unix game Rogue. It is
+often described as a "roguelike" game because the look and feel of
+the game is still quite similar to Rogue.<P>
+Angband features many enhancements over Moria: unique foes, artifacts,
+monster pits and vaults to name a few. Many of these new creatures
+and objects are drawn from the writings of J.R.R Tolkien, although
+some of the monsters come straight from classical mythology, Dungeons
+&amp; Dragons, Rolemaster, or the minds of the orginal Angband coders.<P>
+The ultimate goal of the game is to develop a character strong enough
+to defeat Morgoth, who lurks around dungeon level 100. Upon doing so,
+you will receive the exalted status of "winner" and your character may
+retire.
+<P>
+Angband is a reference to Morgoth's "prison of iron."
+<P>
+<A NAME="1b"><B>1b. Who is Morgoth?</B></A>
+<HR>
+Morgoth was 'the Dark Enemy of Middle-Earth' during its First Age. He
+was banished by the Valar (offspring of Eru, "god" of J.R.R.
+Tolkien's world) at the end of the First Age and thus never appears
+in The Lord of the Rings, set during the Third Age. Sauron, who does
+figure into those tales, was the most powerful of his servants. Read
+Tolkien's 'The Silmarillion' for more on the legends of Middle-Earth.
+<P>
+<A NAME="1c"><B>1c. On what computers can I play?</B></A>
+<HR>
+The most recent version of Angband can be played on Unix (including Linux and X
+Windows), Acorn, Amiga, Macintosh, Power Macintosh, Mac OS X, Windows, 286, 386
+and OS/2-386 systems. Pre-compiled binaries for most of these systems are
+available. With the introduction of version 2.7, it has become much simpler to
+port the code to any machine with a decent C compiler. See the source code and
+question <A HREF="#3d">(3d)</A> for more details.
+<P>
+In particular, there is a version of Angband for PocketPC (formerly Windows CE)
+available at
+&lt;<A HREF="http://mirrors.mksecure.com/angbandce/">http://mirrors.mksecure.com/angbandce/</A>&gt;,
+but there isn't a version of Angband for PalmOS, although you can get ports
+of iRogue and uMoria for PalmOS at
+&lt;<A HREF="http://roguelike-palm.sourceforge.net/">http://roguelike-palm.sourceforge.net/</A>&gt;.
+<P>
+<A NAME="1d"><B>1d. What is the latest version of Angband?</B></A>
+<HR>
+Angband 3.0.3 is the most recent stable version.
+<P>
+<A NAME="1e"><B>1e. How do I get the latest version of this FAQ?</B></A>
+<HR>
+Both parts of the FAQ are posted to
+<A HREF="news:rec.games.roguelike.angband">rec.games.roguelike.angband</A>
+fortnightly, although Part Two is currently in hiatus, pending updating.
+Part One is an official Usenet FAQ and is also posted to
+<A HREF="news:rec.game.roguelike.announce">rec.games.roguelike.announce</A>,
+<A HREF="news:rec.answers">rec.answers</A>
+and <A HREF="news:news.answers">news.answers</A>.
+<P>
+Part One (as an official Usenet FAQ) is archived at rtfm.mit.edu
+&lt;<A HREF="ftp://rtfm.mit.edu/pub/usenet/news.answers/games/roguelike/angband-faq">ftp://rtfm.mit.edu/pub/usenet/news.answers/games/roguelike/angband-faq</A>&gt;
+and at www.faqs.org
+&lt;<A HREF="http://www.faqs.org/faqs/games/roguelike/angband-faq">http://www.faqs.org/faqs/games/roguelike/angband-faq</A>&gt;
+<P>
+Part One of the FAQ is available on the FTP site in both HTML and text forms:
+<UL TYPE=DISC>
+<LI>Angband FAQ Part One as HTML
+&lt;<A HREF="ftp://clockwork.dementia.org/angband/Help/angfaq1.html">ftp://clockwork.dementia.org/angband/Help/angfaq1.html</A>&gt;
+<LI>Angband FAQ Part One as text
+&lt;<A HREF="ftp://clockwork.dementia.org/angband/Help/angfaq1.txt">ftp://clockwork.dementia.org/angband/Help/angfaq1.txt</A>&gt;
+</UL>
+<P>
+<A NAME="1f"><B>1f. Who's the current maintainer?</B></A>
+<HR>
+Robert Ruehlmann (<A HREF="mailto:rr9@angband.org">rr9@angband.org</A>)
+is the current maintainer of Angband.
+<P>
+<A NAME="1g"><B>1g. Version history</B></A>
+<HR>
+This would be incomplete without a short Moria history as well:
+<P>
+The first version of Moria was was written by Robert Alan Koeneke and Jimmey
+Wayne Todd Jr in 1983 for VAX machines. It was ported to Unix in 1987 under
+the name 'Umoria' and further maintained by James E. Wilson.
+<P>
+In 1990, Alex Cutler and Andy Astrand, students at the University of Warwick,
+England, decided to write a Tolkien-based game based on Umoria 5.2.1 and
+Angband was born. Their intentions were to keep, or even strengthen, Moria's
+firm grounding in Tolkien lore. Their original changes included greatly
+expanded monsters and items (including uniques and artifacts), level
+feelings, pseudo-ID, activation, monster pits and vaults. The resulting
+heavily-customized Moria was not intended for outside release, but merely as
+a local version of Moria, to run only on Warwick's Unix system. Sometime in
+its development, before it was released and ported, the existing Unix code
+got the unlikely version number 'Angband 2.4.Frog-knows'.
+<P>
+Over time, various people released various changes to Angband, including
+Sean Marsh, Geoff Hill, Charles Teague, and Charles Swiger. Ben Harrison,
+the immediate previous maintainer, performed a large and comprehensive
+cleanup of the code over several years, starting when he released version
+2.7.0.
+<P>
+For a more detailed history, including current contributers, see the Angband
+help file "version.txt" for some more information.
+<P>
+<HR SIZE=5>
+<A NAME="2"><B>2. Obtaining Angband And Related Material</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="2a"><B>2a. How to get Angband</B></A>
+<HR>
+You can get Angband in several different ways. The most common is to download
+it from a FTP or WWW site, as listed in questions <A HREF="#2b">(2b)</A> and
+<A HREF="#2c">(2c)</A>. You can download either a precompiled version
+(available for most platforms, except Unix/Linux), which you only need to
+decompress to run, or the source code, which you have compile yourself - see
+question <A HREF="#3d">(3d)</A> on how to do this.
+<P>
+Another way to get Angband is via CVS - see question <A HREF="#9j">(9j)</A>
+for how to use CVS. If you have a <A HREF="http://www.debian.org/">Debian</A>
+GNU/Linux system, the "angband" package is available in the non-free section.
+Angband is also sometimes sold on CD-ROMs containing many free games - while
+this method of distribution is not strictly permitted by the license, it is not
+a big deal. See question <A HREF="#11c">(11c)</A> for more detail on this.
+<P>
+<A NAME="2b"><B>2b. FTP sites</B></A>
+<HR>
+There are several useful Angband FTP sites.  These FTP sites are often not
+accessible with the FTP function of a web browser. If you experience trouble,
+make sure your browser is using passive FTP or try a non-web browser FTP
+client. To learn how to use FTP, read the Roguelike Games FAQ
+&lt;<A HREF="http://www.faqs.org/faqs/games/roguelike/info-ftp/index.html">http://www.faqs.org/faqs/games/roguelike/info-ftp/index.html</A>&gt;,
+posted every week to
+<A HREF="news:rec.games.roguelike.misc">rec.games.roguelike.misc</A>.
+<P>
+<UL TYPE=DISC>
+<LI>Official Angband Development FTP site
+&lt;<A HREF="ftp://clockwork.dementia.org/angband/">ftp://clockwork.dementia.org/angband/</A>&gt;
+<LI>Official Angband Mirror FTP site
+&lt;<A HREF="ftp://ftp.greyhelm.com/pub/Games/Angband/Angband-2.7.x/">ftp://ftp.greyhelm.com/pub/Games/Angband/Angband-2.7.x/</A>&gt;
+<LI>European Angband Mirror FTP site
+&lt;<A HREF="ftp://ftp.sunet.se/pub/games/Angband/">ftp://ftp.sunet.se/pub/games/Angband/</A>&gt;
+<LI>Australian Angband Mirror FTP site
+&lt;<A HREF="ftp://ftp.planetmirror.com/pub/angband/">ftp://ftp.planetmirror.com/pub/angband/</A>&gt;
+</UL>
+<P>
+<A NAME="2c"><B>2c. WWW sites</B></A>
+<HR>
+There are lots of Angband WWW sites. Quite a few are geared towards particular
+variants or platforms.
+<UL TYPE=DISC>
+<LI>Official Angband Home Page
+&lt;<A HREF="http://www.thangorodrim.net">http://www.thangorodrim.net</A>&gt;
+<LI>Angband code page - put it in your .sig
+&lt;<A HREF="http://www.harris.ukgateway.net/angband/code.html">http://www.harris.ukgateway.net/angband/code.html</A>&gt;
+<LI>Angband Links page at Thangorodrim - lists many, many Angband sites
+&lt;<A HREF="http://www.thangorodrim.net/links.html">http://www.thangorodrim.net/links.html</A>&gt;
+</UL>
+<P>
+<A NAME="2d"><B>2d. The Angband Newbie Guide</B></A>
+<HR>
+<P>
+An excellent source of gameplay information is available from The Angband
+Newbie Guide (TANG), by Chris Weisiger. TANG is available in the in-game help
+system, or from
+&lt;<A HREF="http://www.thangorodrim.net/TANG/index.html">http://www.thangorodrim.net/TANG/index.html</A>&gt;
+<P>
+<HR SIZE=5>
+<A NAME="3"><B>3. Technical Information</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="3a"><B>3a. Expanding ZIP archives</B></A>
+<HR>
+When using "PKUNZIP" to expand a distribution archive, be sure to use the '-d'
+option to create the 'lib' subdirectories, or they will have to be created by
+hand.  This is not necessary with "WinZip". On Linux or Unix systems, use the
+'-aL' command line options to "unzip" so that text files are converted to UNIX
+(LF) end-of-line format.
+<P>
+<A NAME="3b"><B>3b. How do I use an old savefile or savefile from another platform?</B></A>
+<HR>
+The latest version of Angband only imports savefiles from version 2.9.0 or
+newer. If you want to import from version older than 2.9.0, including
+MacAngband 1.0 - 2.0.3 and PC Angband 1.4, you will first have to import it
+into Angband 2.9.3, and then into Angband 3.0.3. However, some older savefiles
+will lose some information during the import (for example, pre-2.7.8 savefiles
+may lose all or part of the monster memory and/or object memory).
+<P>
+Savefiles are platform-independent. Be sure to use 'binary' FTP if that is your
+method of transfer. On a Macintosh, use the <B>Import...</B> menu item to import
+savefiles lacking the proper type ('SAVE') and creator ('A271').
+<P>
+<A NAME="3c"><B>3c. What is a "patch"?</B></A>
+<HR>
+A patch is a modification to Angband that alters the game in some way. Some
+patches add more features to the game, while others change the gameplay. Many
+patches are available from the patch page on Thangorodrim
+&lt;<A HREF="http://www.thangorodrim.net/development/patches.html">http://www.thangorodrim.net/development/patches.html</A>&gt;
+<P>
+The method of installing patches varies from patch to patch. For example, a LUA
+patch only requires placing some files in 'lib/script'; many others require the
+game to be recomplied. For the patches that require recompilation, there are
+sometimes pre-compiled patched versions available. If you want to apply
+multiple patches, you'll almost certainly have to compile your own copy of
+Angband.
+<P>
+<A NAME="3d"><B>3d. How do I compile Angband myself?</B></A>
+<HR>
+To compile Angband, you need two things - a C compiler, and the Angband source.
+You can get the source from the FTP sites listed in question
+<A HREF="#9a">(9a)</A>. Most unix systems (including Linux) come with a C
+compiler (either cc or gcc).  For Windows, you'll need to have either a
+commercial C compiler, eg Microsoft Visual C++ or Borland C, or download a free
+C compiler, eg DJGPP (will only make DOS versions of Angband) or Cygwin. For
+Macintosh, the commercial C compilers available are Metrowerks Codewarrior (at
+least version 5 to compile recent Angband version), while the Macintosh
+Programmer's Workshop is free from Apple (although this is untested with recent
+versions).
+<P>
+Once you have both of these, go into the "./src" directory, and edit the
+appropriate "makefile.???" (??? = mac for Mac, ami for Amiga etc.) for your
+system, and config.h to set the compile-time options you want. Or, if you have
+a unix system, you could try the autoconf system - type "./configure" to use
+this. Then you can start the compilation, either by typing "make" or selecting
+the appropriate menu option in your compiler.
+<P>
+The above are only general instructions - for more detail about compiling
+Angband for your particular system, see the Thangorodrim compiling page
+&lt;<A HREF="http://www.thangorodrim.net/compiling.html">http://www.thangorodrim.net/compiling.html</A>&gt;
+<P>
+<HR SIZE=5>
+<A NAME="4"><B>4. Creating Characters</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="4a"><B>4a. What is maximize mode?</B></A><BR>
+<HR>
+All characters receive stat modifiers based on their race and class (Half-Trolls
+get an INT penalty, Priests get a WIS bonus, and so forth). The maximize mode
+flag determines how these modifiers are applied to the character's actual stats.
+Since this obviously affects character creation, the value of this flag must be
+chosen before you create your character (birth options).
+<P>
+As an example of how this works, imagine rolling up a High-Elf Mage. High-Elf
+Mages receive a combined racial and class bonus of +6 to INT; for purposes of
+illustration, let's say the stat roller rolls a 17 INT (the highest possible
+value before modification).
+<P>
+In non-maximize mode, the +6 bonus is applied much as if the character quaffed
+six Potions of Intelligence.  The positive side of this is that your character
+can get a starting INT of around 18/70, since each "potion" can give them more
+than 10 percentiles once they are past 18.  The negative side of this is that
+this 18/70 is now your character's base INT, and without stat-boosting items,
+he/she can only push their base INT up to 18/100.
+<P>
+In maximize mode, the +6 bonus is applied as though the character had swallowed
+a Ring of Intelligence (+6).  The negative side of this is that your character
+can't get a starting INT above 18/50 (17 plus the +6 "ring" bonus). The positive
+side of this is that although the effective INT is 18/50, the base INT is only
+17; once you've pushed your character's base INT up to 18/100, the effective INT
+without stat-boosting items will be 18/160!
+<P>
+On the flip side, our High-Elf Mage also gets a combined -4 penalty to STR. In
+non-maximize mode, this is treated like quaffing four Potions of Weakness, but
+your character's STR can still be increased all the way up to 18/100. In
+maximize mode, you've effectively got a Spleen of Weakness (-4), which means
+that your character's maximum possible effective STR, without stat-boosting
+items, is 18/60 (18/100 base plus the -4 penalty).
+<P>
+In summary, then in non-maximize mode, your character will get bettter starting
+stats, and all stats will max out at 18/100.  This typically makes the early
+game easier, while in maximize mode, your character's starting stats aren't as
+good, but the primary stat(s) will max out above 18/100, while the "off" stats
+will max out below 18/100. This typically makes the end game easier.
+<P>
+[Contributed by Scott Bigham]
+<P>
+<A NAME="4b"><B>4b. What is preserve mode?</B></A>
+<HR>
+"Preserve mode" is named because having the mode on preserves artifacts.
+<P>
+Characters created with preserve mode off will sometimes get a "special"
+feeling upon entering a level.  This means that the level contains a pit,
+vault, or artifact.  Any artifact which is lying on the floor when the player
+leaves the level will be lost forever.
+<P>
+Characters created with preserve mode on do not get the "special" feeling, but
+as long as an artifact is not identified, it will show up again.  (If you ID an
+artifact and leave it on the floor it will disappear forever once you leave the
+level.)
+<P>
+See questions <A HREF="#5f">(5f)</A> and <A HREF="#5g">(5g)</A> for more
+information on level feelings.
+<P>
+[Contributed by Chris Kern]
+<P>
+<A NAME="4c"><B>4c. Player stat generation</B></A>
+<HR>
+Once you have chosen the race/sex/class of your character, their stats will
+be generated. There are several methods to do this, which one is used will
+depend upon what birth options are set (see question <A HREF="#4d">(4d)</A>):
+<DL><DT>Autoroller<DD>You will be presented with a list of the six character
+statistics (STR, INT, WIS, DEX, CON, CHR) and their maximum possible values
+for your race/class. <!-- XXX (which variesce/class. <!-- XXX (which varies depending on maximise mode) -->
+Enter the minimum desired value for each stat, or leave it blank to accept any
+value. Once you have done this for all the stats, characters are rolled up 
+until one that meets the minimums you gave is obtained. You can then accept or
+reject this character - if you reject it, more characters are rolled up until
+another one that meets your minimums is created.
+<DT>Point-based<DD>Each of your internal statistics starts at 10, which you
+can increase by spending some of your 48 points. The number of points required
+to increase a stat increases relative to how many points you've already put
+into that stat. Any points not used are added to your starting gold at 100 GP
+per point. Non-mamixise mode does not give better starting stats than maximise
+mode with point-based generation.
+<DT>Basic<DD>If you don't select point-based or autoroller, characters are
+rolled up one at a time and presented for you to accept or reject.</DL>
+<P>
+<A NAME="4d"><B>4d. Birth options</B></A>
+<HR>
+Birth options are game options (see question <A HREF="#5a">(5a)</A>) that only
+affect starting characters. Any changes you make to the birth options
+will take effect the next time you create a character. During character
+creation, you will be asked if you want to modify the options; this is the only
+time you can change birth options and have an effect on the current character.
+In some variants you have to press the "=" key to set the birth options during
+character creation. Some birth options (and the questions that have more detail
+on them) are maximise <A HREF="#4a">(4a)</A>, preserve <A HREF="#4b">(4b)</A>
+and ironman <A HREF="#7b">(7b)</A> modes, whether the autoroller or point based
+systems are used <A HREF="#4c">(4c)</A>, and whether to cheat death
+<A HREF="#5e">(5e)</A>.
+<P>
+<HR SIZE=5>
+<A NAME="5"><B>5. Gameplay Questions</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="5a"><B>5a. How do I set game options and what do they mean?</B></A>
+<HR>
+They are set using the "=" command. To see what the various options mean,
+access the <B>List of Options</B> help menu with the "?" command. Doing
+this while in the options menu will jump you to the help section for the option
+that is currently selected.
+<P>
+<A NAME="5b"><B>5b. What effect does turning off haggling have on the price of items?</B></A>
+<HR>
+Turning off haggling causes all prices to be determined as the "best" price
+that could have been acheived via haggling, modified by a special ten percent
+"transaction tax".  This tax is not applied if haggling would not have been
+necessary in the first place (if the item is very cheap or very expensive, or
+you have a good haggling history for the item, or you have a good haggling
+history with the shopkeeper).  So, normally, it is possible to get a better
+deal by taking the time to actually haggle with a shopkeeper.
+<P>
+<A NAME="5c"><B>5c. How does shopkeeper rotation work?</B></A>
+<HR>
+The shopkeepers will change, but this can take a long time. Be patient.
+When they do change, all items in the shop are marked down by various
+percentages (from 10-90%) and all haggling and insult counters are reset.
+<P>
+Different shop owners will give different prices for items for various
+reasons, and no shop owner will ever pay more for an item then the
+amount mentioned in the header of the shop's inventory list, which varies
+from 5000-30000.
+<P>
+<A NAME="5d"><B>5d. What is auto-scum?</B></A>
+<HR>
+With autoscum enabled, the Angband dungeon generator will stop only on levels
+that it considers "good enough". The deeper in the dungeon your character, the "better"
+the level must be. See question <A HREF="#5f">(5f)</A> for an explanation of
+what contributes to this calculation.
+<P>
+If your character is not in preserve mode, the game will always stop on any
+"special" level.
+<P>
+<A NAME="5e"><B>5e. How do the cheating options work?</B></A>
+<HR>
+Enabling any of the cheating options will mark the current savefile as a
+"cheater", and your character will be unable to make the high score list.
+Each option activates some special behavior which may make the game easier
+in some way.
+<P>
+The various "peek into xxx creation" cheating options will cause the game to
+announce the creation of "interesting" occurances of the relevant topic.  The
+"peek into something else" option will cause the game to accounce all changes
+involving shops.
+<P>
+The "know complete monster info" cheating option will grant your character
+complete information about every monster.
+<P>
+The "allow player to avoid death" cheating option will allow your character
+to "cheat death" whenever he would normally die.  This causes your character
+to be fully healed, and instantly teleported to the town level.
+<P>
+<A NAME="5f"><B>5f. What are the messages I get upon entering a new level?</B></A>
+<HR>
+These are known as "level feelings" and give the general rating of the level.
+You will only get them when you enter a level if you've been on the previous
+level long enough. Otherwise you will get a "Looks like any other level"
+message. "Long enough" is 1000 game turns, adjusted by your speed. For a
+normal speed character, this would be 100 player turns. Many players say that
+only "good," "very good," "excellent," "superb," and "special" levels are
+worth exploring, but this of course a matter of opinion.
+<P>
+Valuable objects, artifacts, pits, nests, vaults, out-of-depth creatures and
+out-of-depth non-cursed objects all contribute to the "rating" of a level,
+and thus to the resulting "feeling".
+<P>
+<A NAME="5g"><B>5g. What causes a "special" feeling?</B></A>
+<HR>
+A "special" feeling (about a level) only occurs if, when the level was first
+created, it contained an artifact, a monster pit, a monster nest, or a vault.
+As your character gets deeper in the dungeon, there is less of a chance
+that monster pits, monster nests, and vaults will cause "special" feelings.
+See the spoiler "dungeon.spo" for more detail. If you are playing in preserve
+mode, you will never receive a "special" feeling.
+<P>
+<A NAME="5h"><B>5h. How do I exchange weapons in Angband?</B></A>
+<HR>
+There is a fairly simple way to exchange weapons using a default macro. Using
+the "{" command, inscribe your "primary" weapon with "@w1@w0", and your
+"secondary" weapon with "@w2@w0". The "X" command will then switch between
+the two, and you will be also be able to use the command "w1" and "w2" to
+explicitly wield the primary and secondary weapons, respectively.
+<P>
+<A NAME="5i"><B>5i. What do the minuses in the name of a piece of armor mean?</B></A>
+<HR>
+This is a to-hit penalty for wearing heavy or inflexible armor. Such armor,
+if not identified, will not show the penalty but it will still be in effect.
+<P>
+<A NAME="5j"><B>5j. The game tells me that I must "Study" but I can't learn any new spells. What is going on?</B></A>
+<HR>     
+Your character is missing one of the more powerful books containing spells
+that s/he can learn. See question <A HREF="#11a">(11a)</A> for more detail.
+<P>
+<A NAME="5k"><B>5k. How does the fractional speed system work?</B></A>
+<HR>
+Basically, time passes in the world in small units called "game turns", and
+during every "game turn", each entity (the monsters and the player) receives
+some "energy" points, based on its "speed" rating.  When an entity acquires
+at least 100 energy points, they must perform some action (such as move or
+attack or rest) which consumes some of their energy points.  The higher the
+"speed" rating, the faster "energy" points are acquired, so more actions can
+be performed in a given number of "game turns".
+<P>
+A "normal" entity has a speed of 110, and receives 10 energy points per game
+turn.  A "slow" entity has a speed below 110, and receives between 1 and 9
+energy points per game turn.  A "fast" entity has a speed above 110, and
+receives between 11 and 49 energy points per game turn.  Note that the number
+of energy points received per game turn is approximately equal to the speed
+minus 110, but the actual equation is more asymptotic.  The current speed of
+your character, if not "normal", is displayed as "Slow (-N)" or "Fast (+N)",
+indicating the distance of the speed from "normal".
+<P>
+The most obvious effect of speed is in combat, but it also affects the rate
+of food consumption (extremely fast characters must be careful not to starve),
+and the number of "player turns" that a character must spend on a level to get
+a level feeling on the next.
+<P>
+<A NAME="5l"><B>5l. How do I autopickup my ammunition?</B></A>
+<HR>
+Inscribe (the "{" command) it with "=g", then whenever you walk over an item
+that's the same as one inscribed with "=g" in your inventory, you will
+automatically pick it up. For more useful inscriptions (including how to stop
+fighting with your shovel), read the Really Quick Guide to Magic Inscriptions
+&lt;<A HREF="http://www.fragment.com/~jl8e/angband/inscriptions.html">http://www.fragment.com/~jl8e/angband/inscriptions.html</A>&gt;
+<P>
+<A NAME="5m"><B>5m. Introduction to macros</B></A>
+<HR>
+See the Angband help file "playing.txt" for a good introduction to macros,
+and to the "user pref files" in which they can be saved. Since macros are
+stored in user pref files, and not in your character's savefile, if you
+quit without saving your new macros to a user pref file, they will be lost.
+<P>
+Angband will automatically load several "user pref files" when a character
+is loaded, for example, if I am playing a high-elf mage named "Fearless" on
+some kind of Macintosh computer, in graphics mode, then the user pref files
+"pref.prf", "graf.prf", "user.prf", and "Fearless.prf" will be autoloaded,
+which will themselves load "pref-mac.prf", "graf-mac.prf", "graf-xxx.prf",
+and "user-mac.prf".  In this example, new macros sould be saved either in
+"user-mac.prf" or "Fearless.prf".
+<P>
+A very in-depth treatment of macros is given in the Angband Macro FAQ
+&lt;<A HREF="http://www.thangorodrim.net/help/macrofaq.txt">http://www.thangorodrim.net/help/macrofaq.txt</A>&gt;
+<P>
+<A NAME="5n"><B>5n. How do I save macros?</B></A>
+<HR>
+Use the "%" command. Option 2, "<B>Dump macros</B>," will allow you to save all
+the current macros into a user pref file.  There is currently no way to only
+save newly added macros. If you are on a multiuser system, all pref files will
+be saved to ~/.angband/Angband, otherwise they will be in the 'lib/user' directory.
+<P>
+<HR SIZE=5>
+<A NAME="6"><B>6. Questionable Gameplay Techniques</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="6a"><B>6a. Savefile abuse</B></A>
+<HR>    
+Angband follows the same behavior when a character dies as many of the
+other rogue-like games. When a character dies, that's it, game over.
+Information on monsters that the character has seen (monster memory)
+is retained, but the player must start again. This is in contrast to
+most fantasy role-playing computer games that let you restore your
+game from a savefile if you die. Angband also differs from most
+commercial games in that there is no puzzle solving as such.
+<P>
+This behavior has given rise to backup savefile abuse, which entails
+making a copy of the savefile to another part of your disk, and in
+the unfortunate event of death, moving it back to its original
+location and restoring the game.
+<P>
+Almost everyone uses backup savefiles at the start, but as soon as
+your players stop dying with great frequency, you should probably
+stop using them. Your play experience will become more rewarding as a
+result. You certainly do not have to stop using backups, many players
+never do. As long as you enjoy the game, who cares? However, when posting
+winner posts to the <A HREF="#7">newsgroup</A>, you should note if you
+used backup savefiles.
+<P>
+Note that it is possible to compile Angband with a variety of options which
+attempt to prevent savefile abuse and other security problems, but this
+normally only applies if you are using some version of UNIX.
+<P>
+<A NAME="6b"><B>6b. Stair-scumming</B></A>
+<HR>    
+Stair scumming is a technique primarily used to generate levels with
+artifacts (special weapons and items). It involves loitering around a
+stairway for a certain number of turns on a "non-special" level, then
+using the stairway to force the game to generate a new level. If the new level
+is not "special," the process is repeated.
+<P>
+The technique may also be used to force the storekeepers in town to refresh
+their inventory of identify and word of recall scrolls, restore stat and
+life-level restore potions, and light sources, since they restock every 10000
+game turns (1000 player turns for a character at normal speed). This is also
+known as "town scumming".
+<P>
+The first type of scumming is a more serious abuse than the second.
+<P>
+There has been much discussion on the newsgroup on how to restrict this type of
+abuse. It will likely remain unresolved because of the personal decision
+involved, i.e. you don't *have* to stair scum. Also, many of the proposed fixes
+(for this and other forms of scumming) have negative gameplay effects for
+people who don't stair scum.
+<P>
+<A NAME="6c"><B>6c. Monster farming</B></A>
+<HR>
+Involves cloning monsters with good treasure drops in the hopes of
+getting good items and gaining experience. Effective with ancient
+dragons, wyrms, druj, and many others. Can be dangerous, considering
+the power of the monsters. Also used in regards to "worm farming,"
+which is an easy (albeit boring) way to quickly gain experience at low
+levels.
+<P>
+This leads to the "golf ball" trick, in which a golf ball is placed
+upon a key to hold it down. This then repeats a macro that performs 
+the worm farming for you. For more details about this method, see
+the Angband Macro FAQ
+&lt;<A HREF="http://www.thangorodrim.net/help/macrofaq.txt">http://www.thangorodrim.net/help/macrofaq.txt</A>&gt;
+<P>
+Finally, when you don't have enough money to afford that Ring of Speed in
+the black market, you can engage in "townperson scumming", killing the
+people generated in town for the (small) amount of gold they drop. Since
+some townspeople are dangerous for low level characters and/or don't drop
+much money, this sort of scumming (like most others) is an exercise for
+the high-level and patient.
+<P>
+<A NAME="6d"><B>6d. Summoning/Polymorphing</B></A>
+<HR>
+Summoning and polymorphing monsters at low experience levels can be
+dangerous if the new monster is more than your character can handle.
+Summoning deep in the dungeon is perilous for any character.
+<P>
+<HR SIZE=5>
+<A NAME="7"><B>7. About rec.games.roguelike.angband</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="7a"><B>7a. General notes</B></A>
+<HR>    
+The newsgroup serves a dual-purpose role, supporting both game development and
+gameplay discussions. If you write new program code for the game, don't post it
+(unless it is really short); upload it to an ftp site and give a pointer. Also,
+since Angband and its variants are still in active development, this newsgroup
+has high traffic.
+<P>
+<A NAME="7b"><B>7b. Glossary of terms</B></A>
+<HR>
+Common Abbreviations:
+<UL TYPE=DISC CLASS=ACRO>
+        <LI><CODE>C?W&nbsp;&nbsp;&nbsp;- Cure (Light/Serious/Critical) Wounds</CODE>
+        <LI><CODE>DSM&nbsp;&nbsp;&nbsp;- Dragon Scale Mail</CODE>
+        <LI><CODE>FA&nbsp;&nbsp;&nbsp;&nbsp;- Free Action</CODE>
+        <LI><CODE>GCV&nbsp;&nbsp;&nbsp;- Greater Checkerboard Vault</CODE>
+        <LI><CODE>GoI&nbsp;&nbsp;&nbsp;- Globe of Invulnerability</CODE>
+        <LI><CODE>HA&nbsp;&nbsp;&nbsp;&nbsp;- Holy Avenger</CODE>
+        <LI><CODE>OoD&nbsp;&nbsp;&nbsp;- Orb of Draining</CODE>
+        <LI><CODE>OOD&nbsp;&nbsp;&nbsp;- Out Of Depth</CODE>
+        <LI><CODE>PDSM&nbsp;&nbsp;- Power Dragon Scale Mail</CODE>
+        <LI><CODE>Phial&nbsp;- Phial of Galadriel</CODE>
+        <LI><CODE>RGRA&nbsp;&nbsp;- rec.games.roguelike.angband</CODE>
+        <LI><CODE>RLL&nbsp;&nbsp;&nbsp;- Potion of Restore Life Levels</CODE>
+        <LI><CODE>RNG&nbsp;&nbsp;&nbsp;- Random Number Generator/Random Number God</CODE>
+        <LI><CODE>RoS&nbsp;&nbsp;&nbsp;- Ring of Speed</CODE>
+        <LI><CODE>WoR&nbsp;&nbsp;&nbsp;- Word of Recall</CODE>
+        <LI><CODE>YAAD&nbsp;&nbsp;- Yet Another Annoying Death</CODE>
+        <LI><CODE>YABWP&nbsp;- Yet Another Borg Winner Post / Yet Another Borg Winning Player</CODE>
+        <LI><CODE>YACD&nbsp;&nbsp;- Yet Another Character Dump</CODE>
+        <LI><CODE>YAFM&nbsp;&nbsp;- Yet Another Funny Message</CODE>
+        <LI><CODE>YASD&nbsp;&nbsp;- Yet Another Stupid Death / Yet Another Silly Death</CODE>
+        <LI><CODE>YASM&nbsp;&nbsp;- Yet Another Stupid Move / Yet Another Strange Message / Yet Another Silly Message</CODE>
+        <LI><CODE>YAWP&nbsp;&nbsp;- Yet Another Winning Player / Yet Another Winning Post</CODE>
+</UL>
+Definitions:
+<UL TYPE=DISC>
+        <LI>Borg - An automatic Angband player. Must be enabled at compile time.
+        Precompiled versions of the game do not often come with the Borg.
+        <LI>Graveyard - a monster nest filled with undead creatures.
+	<LI>Ironman - a style of play in which you cannot go up stairs or recall
+	to town once in the dungeon, and/or other restrictions. Can be enforced
+	by setting birth options.
+        <LI>Nest - Similar to a pit, but containing an inner room and a random
+        assortment of monsters of a given type. Monsters vary by depth, so a Nest
+        deep in the dungeon can be very nasty.
+        <LI>Pit - A 19x5 room filled with a certain type of creature.
+        <LI>Vault - A special room that comes in two flavors, lesser and greater.
+        They will often contain out-of-depth monsters and good items.
+	<LI>Vanilla - Angband itself is often called "Vanilla" when speaking of
+	the many variants, which usually just have names with one or more letters
+	tacked on it front of the word "Angband" (or sometimes, just "band").
+	<LI>*band - Angband and all its variants. Generally used when discussing
+	features common to all (or most) variants.
+        <LI>Wizard Mode - Used mainly by Angband coders to debug the game. Allows
+        object creation, telepathy, etc. It is enabled by default, but can be
+	turned off at compile time.
+        <LI>Zoo - A monster nest filled with animals.
+</UL>
+See also the Angband acronym page
+&lt;<A HREF="http://www.thangorodrim.net/acronyms.html">http://www.thangorodrim.net/acronyms.html</A>&gt;
+<P>
+<A NAME="7c"><B>7c. Questions on r.g.r.a</B></A>
+<HR>
+Don't let the amount of technical information discussed deter you from asking
+a question, but do browse this FAQ (and the table of contents of Part Two as
+well) and read some recent postings before posting yourself. Questions on
+strategy, bug reports, suggestions, and amusing stories related to the game
+are all welcome.
+<P>
+If you give hints, you should be fairly sure that you have accurate information
+(or you may qualify your statements with a comment on your uncertainty).
+Although there isn't any plot to speak of, information about monsters or items
+is considered spoilers by some, so it's polite to marked them with "SPOILER" in
+the subject line.
+<P>
+<A NAME="7d"><B>7d. Victory (or YAWP)  posts</B></A>
+<HR>
+Victory posts are where you get to boast of your crowning achievement,
+the defeat of Morgoth. A victory post commonly gives the equipment
+list and statistic screen for the lucky King or Queen (through the
+'C' command), plus a short summary of the game including highlights
+such as especially lucky treasure finds or near-death experiences.
+<P>
+With a victory post you should state some facts like which version
+of Angband you are playing and whether you used backup files,
+cheating options, wizard mode. If you are a die-hard player and win
+with a self-imposed restriction (like "no artifacts") mention this as
+well so others will shower you with even more glory.
+<P>
+<A NAME="7e"><B>7e. Stupid Death (or YASD) posts</B></A>
+<HR> 
+This is where you post your depressing stories about your poor, late
+alter ego. Other people may be able to empathize with you and console
+you; others may be able to offer tips so that you won't fall into the
+same trap again. Also, you teach others about your experience and
+help them avoid the same mistake you made. Posts that are in the form
+of a short, amusing tale often provoke a positive response from other
+readers of the group and do wonders at relieving stress.
+<P>
+<A NAME="7f"><B>7f. Why do so many players seem to dislike or even hate Nethack?</B></A>
+<HR>
+Nethack's atmosphere is less serious than Angband and sometimes just plain
+silly. Many people enjoy and play both games, there is just a different
+philosophy behind Nethack. Also, Nethack thrives on hundreds of
+individually-scripted responses to different situations in the game (using
+an uncursed wand of wishing while confused might give a totally different
+result than using it while posioned on a full moon), while Angband tries to
+avoid these.
+<P>
+<A NAME="7g"><B>7g. What's the weird code in some people's .sigs?</B></A>
+<HR>
+Some people place a copy of their
+<A HREF="http://www.harris.ukgateway.net/angband/code.html">Angband code</A>
+in their .signature. The Angband code is similar to the
+<A HREF="http://www.geekcode.com/">Geek code</A> and lists various things about
+your current character, playing style and thoughts on various aspects of
+Angband (and variants). You can encode your Angband code and decode others
+using the guide at the Angband Code page
+&lt;<A HREF="http://www.harris.ukgateway.net/angband/code.html">http://www.harris.ukgateway.net/angband/code.html</A>&gt;.
+An example of an Angband code follows:
+<PRE>A(2.9.1) DS "Niehao" HEM L:41 DL:2200' A+ R- Sp w:Ringil(+20,+23)
+A L H- D- ?c f- PV+ s- TT? d- P++ M+
+C? S- I+ So- B-- ac !GHB SQ? !RQ V?</PRE>
+<P>
+<A NAME="7h"><B>7h. Angband IRC</B></A>
+<HR>
+Want to talk to people in real time about Angband? Then join #angband on
+the WorldIRC network
+&lt;<A HREF="http://www.worldirc.org/">http://www.worldirc.org/</A>&gt;.
+There's generally people active all through the day, from all around the
+world. The channel infobot, Gandalf, has many features, including searchable
+artifact spoilers for all major variants. There's also a stats page
+&lt;<A HREF="http://everything.vaevictus.net/index.pl?node_id=424">http://everything.vaevictus.net/index.pl?node_id=424</A>&gt;
+and a gallery of some of the regulars
+&lt;<A HREF="http://angband.oook.cz/gallery/">http://angband.oook.cz/gallery/</A>&gt;.
+<P>
+<!-- <A NAME="7i"><B>7i. Who are these people?</B></A>
+<HR>
+The denizens of rec.games.roguelike.angband are a varied bunch ....
+<P>
+<UL TYPE=DISC>Jonathan Ellis: Co-maintainer of PsiAngband, and author of the JLE patch.
+Skylar Thompson:
+Julian Lighton:
+Werner Baer:
+Robert Ruelhelm (sp): Maintainer of Angband, project lead of ZAngband, stays out of most discussions.
+DarkGod: Maintainner of PernAngband and PernMAngband
+GSN: Scathing wit, unforgiving of newbies
+Chris Kern:
+William (Billy) Tanksley: Maintainer of Omega, a roguelike game.
+Eytan Zweig: Maintainer of EyAngband
+Steven Fuerst: 
+</UL>
+<P> -->
+<HR SIZE=5>
+<A NAME="8"><B>8. Suggestions For Future Versions That Have Been Considered</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="8a"><B>8a. I've got this really great idea for Angband ...</B></A>
+<HR>
+While you are free to raise any Angband-related topic on rgra, there are
+a number of topics that have been discussed many times before. Therefore,
+before posting on any of the topics in this section, you should check the
+<A HREF="http://groups.google.com/groups?q=rec.games.roguelike.angband">rgra archives</A>
+at &lt;<A HREF="http://groups.google.com/">http://groups.google.com/</A>&gt;
+and check to see if you really have something new to consider.
+<P>
+Also, Angband and its variants have many things that are a matter of personal
+opinion, and so there is no often no "right" way that a particular feature
+should be. In any case, the opinions that matter are the variant maintainers'.
+So, if there's something that the variant maintainer refuses to change,
+consider starting your own variant and doing it your way, rather than argue
+over it with them.
+<P>
+Another reason why suggestions are not used is that they would change aspects
+of Angband that are essential to its nature. Angband has a long history, and
+so has developed a certain character over the years. Some changes, while they
+might make a good game, or even a better game than Angband, would likely make
+a game that is not Angband. To some extent, variants exist to address this,
+but even so they tend to adhere to the core Angband principles.
+<P>
+<A NAME="8b"><B>8b. Let the player store money in his/her home.</B></A>
+<HR>
+This would make the monetary theft attack useless.
+<P>
+Omega features a bank. Nethack allows players to keep money in bags so
+it can't be stolen, but this allows the whole bag to be stolen!
+<P>
+<A NAME="8c"><B>8c. Increase the player's carrying capacity.</B></A>
+<HR>
+This idea involves giving the player more item slots or the creation
+of items like "bags of holding."
+<P>
+If the character was allowed to carry a nearly unlimited supply of
+items, then there would be no strategy involving careful selection of
+equipment and inventory, which is an integral part of the game.
+<P>
+<A NAME="8d"><B>8d. Let players give or sell their items to other players.</B></A>
+<HR>
+That would make the game trivial for low level players with friends and
+make rare items much easier to acquire. The "pawn shop" in town falls
+into this category.
+<P>
+In Nethack, players can do this indirectly, because its "bone" files
+contain the inventory of the dead player. The roguelike FAQ contains a
+list of multi-player roguelike games, where this might be an option.
+<P>
+<A NAME="8e"><B>8e. I want a real-time multi-player Angband!</B></A>
+<HR>
+There are two variants that offer this - MAngband
+&lt;<A HREF="http://www.mangband.org/">http://www.mangband.org/</A>&gt;,
+which is based on Vanilla, and ToMENet
+&lt;<A HREF="http://www.tomenet.net/">http://www.tomenet.net/</A>&gt;,
+which is based on Vanilla and ToME. For more details read the
+Angband Variants FAQ, detailed in question <A HREF="#10a">(10a)</A>.
+<P>
+<A NAME="8f"><B>8f. Increase the capacity of the player's home</B></A>
+<HR>
+The limit on the size of the home is part of the game balance of Angband - it
+forces the player to make choices about what they store and what they throw
+out. There are occasionally suggestions about having museums in the town to
+store particularly bad junkarts etc. in (and they cannot be removed from the
+museum), and there have been a few patches posted to the newsgroup that do
+this.
+<P>
+<A NAME="8g"><B>8g. Allow the player to wear a ring on each finger</B></A>
+<HR>
+Again, allowing the player to wear only two rings is a game balance decision.
+As it stands, the player is forced to consider which combination of rings is
+best for their situation, also rings are powerful enough that 10 of them would
+make the player unstoppable.
+<P>
+ToME allows possessors to wear more rings depending upon what body they
+are possesing, but this is balanced by bodies with many ring slots tending to
+not be able to wield a weapon or wear armour.
+<P>
+<A NAME="8h"><B>8h. Allow the player to load saved games after death</B></A>
+<HR>
+This goes against a core premise of Angband (and many other roguelike games):
+that death is final. However, you can resurrect a dead character by loading the
+savefile in wizard mode, but doing so will mark the savefile, meaning that the
+character will not be able to make the high score list. It is trivial to get
+around this restriction by save-scumming (see question <A HREF="#6a">(6a)</A>),
+but it is unlikely that a save-scum feature will ever be added to the game.
+<P>
+Conversely, Angband will probably not make it harder to load saved games after
+death, for the simple reason that any measures it takes can be easily
+circumvented outside of the game, and also inconvienences the player. In the
+case of ADOM, which corrupts savefiles after a game is loaded, there exist a
+number of utilites to backup savefiles to prevent the loss of a character due
+to a (program or computer) crash.
+<P>
+<A NAME="8i"><B>8i. Dungeon levels should be persistent</B></A>
+<HR>
+Angband requires the player to kill many monsters to obtain the experience and
+equipment necessary to kill Morgoth, however few monsters are generated on
+previously cleared dungeon levels. Also, storing the entire dungeon requires a
+great deal of memory, which would prevent Angband from running on low-end
+systems (yes, people still use them). Storing just the dungeon layout and other
+variations on persistent levels hav been discussed, but nothing much has come
+of them.
+<P>
+Several variants have experimented with persistent levels, including GSNband.
+Nethack and ADOM also have persistent dungeon levels.
+<P>
+<A NAME="8j"><B>8j. OAngband combat should be added to Angband</B></A>
+<HR>
+This is not going to be done (at least in the near future) because too many
+people feel that such a fundamental change with major implications everywhere
+in the game should be reserved for variants rather than Standard (the same
+applies to a wilderness, set or random quests, lots of new races or classes,
+multiple dungeons, etc.)
+<P>
+[Contributed by Chris Kern]
+<P>
+<HR SIZE=5>
+<A NAME="9"><B>9. Programming Questions</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="9a"><B>9a. Where can I obtain the source code?</B></A>
+<HR>    
+The source code for the most recent version is available via anonymous FTP.
+<UL TYPE=DISC>
+<LI>Official Angband Developement FTP site Source directory
+&lt;<A HREF="ftp://clockwork.dementia.org/angband/Source/">ftp://clockwork.dementia.org/angband/Source/</A>&gt;
+<LI>Official Angband Mirror FTP site Source directory
+&lt;<A HREF="ftp://ftp.greyhelm.com/pub/Games/Angband/Angband-2.7.xSource/">ftp://ftp.greyhelm.com/pub/Games/Angband/Angband-2.7.x/Source/</A>&gt;
+<LI>European Angband Mirror FTP site Source directory
+&lt;<A HREF="ftp://ftp.sunet.se/pub/games/Angband/Source/">ftp://ftp.sunet.se/pub/games/Angband/Source/</A>&gt;
+<LI>Australian Angband Mirror FTP site Source directory
+&lt;<A HREF="ftp://ftp.planetmirror.com/pub/angband/Source/">ftp://ftp.planetmirror.com/pub/angband/Source/</A>&gt;
+</UL>
+<P>
+<A NAME="9b"><B>9b. To what extent can I modify the source and release modified versions?</B></A>
+<HR>        
+You are free to rewrite sections of the game code and release your own 
+version of Angband, provided that you retain copyright notices and proper 
+credits, and do not attempt to make a profit in any way. The license is
+discussed in more detail in question <A HREF="#11c">(11c)</A>.
+<P>
+<A NAME="9c"><B>9c. Is there any easy way for a non-programmer to hack the game?</B></A>
+<HR>
+Figure out the format of the 'lib/edit/*.txt' files, edit them, delete
+the corresponding 'lib/data/*.raw' files (deleting them is not necessary
+in recent versions), and restart the game.  This should not be done unless you
+know exactly what you are doing (or at least have a fairly good idea). These
+files should be treated in the same manner as "source code", and for those of
+you who do not know what this means, realize that changing such files may result
+in unusable savefiles and/or unexpected crashes. You have been warned!
+<P>
+But don't let this warning scare you off. Most (if not all) of the
+'lib/edit/*.txt' files have documentation describing their format at the top of
+the file. Changing values within each entry is not likely to mess up your game.
+However changing the order of entries, or what each item is does require a good
+knowledge of Angband internals, since there are still quite a few hardcoded
+limits.
+<P>
+In any case, you should keep a seperate set of 'lib/edit/*.txt' files (or even
+a complete second copy of the game) for fiddling with rather than messing up
+the savefile of your character who's just about to take on Morgoth.
+<P>
+Another way of changing the game is to write LUA scripts. LUA is a small
+scripting language embedded into Angband (version 3.0.0 and greater), ToME
+and ZAngband (recent development versions). Depending on the variant, you
+can add new races, classes, objects and stores. This is similar to editting
+the lib/edit/*.txt files described above, except that LUA is much easier to
+read.
+<P>
+The main advantage of LUA, however, is that you can actually write small
+programs in it. For example, if you have a new spell you want to put into the
+game, you can define its effect as a combination of various other spells, add
+it to a spellbook and set its cost completely in LUA. You can also have
+LUA programs execute when certain events occur. This allows people who don't
+know C to customise the game to a greater extent than previously.
+<P>
+<A NAME="9d"><B>9d. What are the *_info.txt files?</B></A>
+<HR>
+The 'lib/edit/*.txt' files used to be called *_info.txt (eg a_info.txt for
+artifacts, r_info.txt for monsters) instead of the current artifact.txt and
+monster.txt etc. However, since this change was only recently implemented,
+most variants (and people in the newsgroup) still call these the *_info.txt
+files.
+<P>
+<A NAME="9e"><B>9e. I know how to program C, where can I get an introduction to Angband programming?</B></A>
+<HR>
+Have a look at
+&lt;<A HREF="http://www.thangorodrim.net/development/index.html">http://www.thangorodrim.net/development/index.html</A>&gt;,
+especially the "Angband coding style"
+&lt;<A HREF="http://www.thangorodrim.net/development/coding_style.html">http://www.thangorodrim.net/development/coding_style.html</A>&gt;
+and "The Caveman Guide to Angband Programming"
+&lt;<A HREF="http://www.thangorodrim.net/development/caveman-programming-guide.html">http://www.thangorodrim.net/development/caveman-programming-guide.html</A>&gt;.
+These pages contain an introduction to the Angband codebase and programming
+style.
+<P>
+Once you've read these, the best way to start learning is to make your
+own changes! Use the wizard mode to test (that's what it's there for) and pick
+up any bugs. Lather, rinse, repeat. However, it's probably best to start with
+simple changes, and not attempt to add/rewrite entire subsystems until you have
+a good idea of how the code works.
+<P>
+<A NAME="9f"><B>9f. C is ugly, can't I program in Lisp instead?</B></A>
+<HR>
+Yes, you can. LAngband &lt;<A HREF="http://langband.org/">http://langband.org/</A>&gt;
+is a reimplementation of Angband in Common Lisp. It is designed around a plugin
+strategy, with different variants as different plugins, although currently
+there only exists an (incomplete) Vanilla plugin. It also sports a new
+SDL-based interface using either ASCII or graphic tiles.
+<P>
+<A NAME="9g"><B>9g. Why doesn't wizard mode work in the version that I have?</B></A>
+<HR>
+The debug commands are intended as a debugging tool for programmers. While
+it is enabled by default, your system administrator may have disabled it for
+space or other reasons on a multi-user system. You can always activate the
+debug commands by compiling your own version of Angband (or by getting
+somebody else to do it for you).  Using the debug commands will "mark" your
+character's savefile, and you will be unable to make the high score list that
+character.  See the source code for more information.
+<P>
+<A NAME="9h"><B>9h. What is the borg?  Why doesn't it appear in the version that I have?</B></A>
+<HR>        
+The borg commands allow an automatic player to control your character.
+It is not currently enabled with most pre-compiled versions of Angband
+because of the additional memory and disk space required, but some special
+pre-compiled versions do include the borg commands.  You can always activate
+the borg commands by compiling your own version of Angband (or by getting
+somebody else to do it for you).  Using the borg commands will "mark" your
+character's savefile, and you will be unable to make the high score list
+that character, unless SCORE_BORGS is enabled at compile time.  See the source
+code for more information.
+<P>
+<A NAME="9i"><B>9i. How do I use the borg?</B></A>
+<HR>
+Use the "control-z" command to access the borg commands, if they have been
+included in the version you are using.  When prompted, you may start the
+borg using the "z" key, and stop it by pressing any key.  See the source
+code for more information.  Be warned that the borg may contain bugs!
+<P>
+<A NAME="9j"><B>9j. How do I generate auto-spoilers?</B></A>
+<HR>
+You must have a version compiled with ALLOW_WIZARD and ALLOW_SPOILERS, which
+is most versions these days.
+Enter wizard mode, then type control-a and a double quote (<B>"</B>).
+<P>
+<A NAME="9k"><B>9k. What is CVS?</B></A>
+<HR>
+CVS is a means of letting multiple developers work on the same project at once.
+It can also be used to non-developers (ie most of us) to download the most
+absolutely recent version of a game without waiting for an official release.
+This has some advantages and disadvantages: often bugs are said to be "fixed
+in CVS", which means that if you are suffering from a bug you should upgrade
+to the latest CVS version. However, since CVS is the development version, some
+features may be broken or not fully implemented.
+<P>
+The Angband CVS can be accessed at
+&lt;<A HREF="http://angband.oook.cz/cvs.php">http://angband.oook.cz/cvs.php</A>&gt;.
+You will have to compile it yourself (see question <A HREF="#3d">(3d)</A>
+for details). Scott Holder is currently doing daily compiles for Windows, which
+are available at
+&lt;<A HREF="http://angbandcvs.homedns.org/">http://angbandcvs.homedns.org/</A>&gt;.
+A good guide on how to use CVS is the CVS HOWTO at
+&lt;<A HREF="http://www.tldp.org/HOWTO/CVS-RCS-HOWTO.html">http://www.tldp.org/HOWTO/CVS-RCS-HOWTO.html</A>&gt;.
+<P>
+<HR SIZE=5>
+<A NAME="10"><B>10. Variants</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="10a"><B>10a. Angband Variant FAQ</B></A>
+<HR>
+Julian Lighton maintains an FAQ listing all the known Angband variants. It is
+posted regularly to the newsgroup, and is also available from
+&lt;<A HREF="http://www.fragment.com/~jl8e/angband/faq.txt">http://www.fragment.com/~jl8e/angband/faq.txt</A>&gt;.
+For each variant, it lists the most recent version, development status (active
+or inactive), author(s)/maintainer(s), web site and download location, as well
+as a brief description of the variant.
+<P>
+<A NAME="10b"><B>10b. What is OAngband Combat?</B></A>
+<HR>
+OAngband emphasizes larger weapons whereas Vanilla combat emphasizes the
+smaller, lighter weapons. It originated in OAngband , and has since been
+adopted by ZAngband (in versions 2.4 and above) and DrAngband (2.9.3 and
+above). For specific details on how it affects damage, please see the Part
+Two of the Angband FAQ (when it is updated).
+<!--&lt;<A HREF="http://thangorodrim.angband.org/angfaq2.html">http://thangorodrim.angband.org/angfaq2.html</A>&gt;.-->
+<P>
+<A NAME="10c"><B>10c. What is the JLE patch?</B></A>
+<HR>
+The JLE patch (by Jonathan Ellis) is a set of files (*_info.txt and help) that
+alters the distributions and types of monsters, items, artifacts, as well as
+adding new ones. This means that it plays differently to normal Angband,
+although the game mechanics are unchanged. It is available (with installation
+instructions) from the Thangorodrim patch page
+&lt;<A HREF="http://www.thangorodrim.net/development/patches.html">http://www.thangorodrim.net/development/patches.html</A>&gt;.
+<P>
+The JLE patch has been integrated into Vanilla since version 3.0.0.
+<!-- Should I be pimping variants? - ed.
+<P>
+If you like the gameplay of the JLE patch, you might also want to check out
+PsiAngband, which was the basis for the patch. It has further gameplay changes
+in the same vein as the JLE patch (which cannot currently be done simply by
+editing the *_info.txt files). -->
+<P>
+<HR SIZE=5>
+<A NAME="11"><B>11. Miscellaneous</B></A>
+<HR SIZE=5>
+<P>
+<A NAME="11a"><B>11a. The game says that I'm missing a spellbook when I try to learn some new spells.  What's the reason for this?</B></A>
+<HR>
+You are missing a book containing spells that you can learn. More
+often than not, your character needs one of the books that can only
+be found in the black market or deep in the dungeon. Only 4 of the 9
+mage or priest spellbooks are readily available in town.
+<P>
+<A NAME="11b"><B>11b. What happened to player ghosts?</B></A>
+<HR>
+Player ghosts were removed in Angband 2.7.9, during a code cleanup by the
+then maintainer (Ben Harrision), who thought they were a hack. There have
+been proposals to put them back in, but none have come to fruition yet.
+Also, some variants (including OAngband and PernAngband) have reimplented
+player ghosts.
+<P>
+<A NAME="11c"><B>11c. What license is Angband distributed under?</B></A>
+<HR>
+Angband has the following license:
+<BLOCKQUOTE>
+Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+<P>
+This software may be copied and distributed for educational, research,
+and not for profit purposes provided that this copyright and statement
+are included in all such copies.  Other copyrights may also apply.
+</BLOCKQUOTE>
+In addition:
+<BLOCKQUOTE>
+All changes made by Ben Harrison, Robert Ruehlmann, and many other Angband
+developers are also available under the GNU GENERAL PUBLIC LICENSE.
+Note that this doesn't influence the current distribution, since parts of
+the source are still only available under the old Moria/Angband license.
+Until all parts of Angband are distributed under the GPL the only valid
+license remains the original Moria/Angband license.
+</BLOCKQUOTE>
+This second license is due to an ongoing attempt to dual-license the the
+source code under the GPL, but many of the earlier contributors are hard to
+reach for their permission to this change. There is more information about
+Angband and the GPL at
+&lt;<A HREF="http://www.thangorodrim.net/development/opensource.html">http://www.thangorodrim.net/development/opensource.html</A>&gt;
+<P>
+So what does the above mean? Basically you can give Angband to anyone, but are
+not allowed to charge someone for it. In theory, you can't sell a CD containing
+Angband to someone, but in practice you could sell them a blank CDR, and then
+burn a copy of Angband for them on that CDR free of charge. Downloading off the
+internet etc. is all legal as well.
+<P>
+If you are making a variant, the license does not compel you to release the
+sources. However, not releasing the sources is frowned upon by the Angband
+community, and it is likely that a large portion would not run it, either on
+principle or because they need the sources to compile for their particular
+system.
+<P>
+There is more that could be said about the license, but it's boring legalese
+that would just clog up this FAQ. If you want further information, look at the
+above webpage, and browse the
+<A HREF="http://groups.google.com/groups?q=rec.games.roguelike.angband">rgra archives</A>
+at &lt;<A HREF="http://groups.google.com/">http://groups.google.com</A>&gt;.
+Debates over the Angband license have a tendancy to get heated and most of
+the time don't accomplish anything. Be careful if you are considering raising
+this topic (especially along the lines of "I don't like the GPL.")
+<P>
+<!-- <A NAME="11d"><B>11d. Where's the _real_ Angband FAQ?</B></A>
+<HR>
+Umm .... err ok, you've caught me out. The real
+Perhaps insert sfuerst's fake FAQ in here?
+<P> -->
+<HR SIZE=5>
+<HR SIZE=5>
+</BODY>
+</HTML>
+

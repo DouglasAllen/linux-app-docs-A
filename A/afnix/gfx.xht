@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Graph Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Graph Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Graph Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Graph</em> module is an original implementation dedicated to the graph moddeling and manipulation. At the heart of this module is the concept of edges and vertices. </p>
+<div class="section">
+Graph concepts</div>
+<p class="text">
+ The <tt class="code">afnix-gfx</tt> module provides the support for manipulating graphs. Formally a graph is a collection of edges and vertices. In a normal graph, an edge connects two vertices. On the other hand, a vertex can have several edges. When an edge connects several vertices, it is called an hyperedge and the resulting structure is called an hypergraph. </p>
+<p class="subsect">
+Edge class</p>
+<p class="text">
+ The <tt class="code">Edge</tt> class is a class used for a graph construction in association with the <tt class="code">Vertex</tt> class. An edge is used to connect vertices. Normally, an edge connects two vertices. The number of vertices attached to an edge is called the cardinality of that edge. When the edge cardinality is one, the edge is called a self-loop. This mean that the edge connects the vertex to itself. This last point is merely a definition but present the advantage of defining an hyperedge as a set of vertices. </p>
+<p class="subsect">
+Vertex class </p>
+<p class="text">
+ The <tt class="code">Vertex</tt> is the other class used for the graph construction. and operates with the <tt class="code">edge</tt> class. A vertex is used to reference edges. the number of edges referenced by a vertex is called the degree of that vertex. </p>
+<p class="subsect">
+Graph</p>
+<p class="text">
+ The <tt class="code">Graph</tt> class is class that represent either a graph or a hypergraph. By definition, a graph is collection of edges and vertices. There are numerous property attached to graph. Formally, a graph consists of a set of edges, a set of vertices and the associated endpoints. However, the implementation is designed in a way so that each edge and vertex carry its associated objects. This method ensures that the graph is fully defined by only its two sets. </p>
+<div class="section">
+Graph construction</div>
+<p class="text">
+ The graph construction is quite simple and proceed by adding edges and vertices. The base system does not enforce rules on the graph structure. it is possible to add con connected vertices as well as unreferenced edges. </p>
+<p class="subsect">
+Edge construction</p>
+<p class="text">
+ An edge is constructed by simply invoking the default constructor. Optionally, a client object can be attached to the edge. </p>
+<pre class="frame">
+<![CDATA[# create a default edge
+const edge (afnix:gfx:Edge)
+# create an edge with a client object
+const hello (afnix:gfx:Edge "hello")
+
+]]></pre>
+<p class="text">
+ The <tt class="code">edge-p</tt> predicate can be used to check for the object type. When an edge is created with client object, the <tt class="code">get-client</tt> method can be used to access that object. </p>
+<p class="subsect">
+Vertex construction</p>
+<p class="text">
+ A vertex is constructed a way similar to the <tt class="code">Edge&gt;</tt> object. The vertex is constructed by simply invoking the default constructor. Optionally, a client object can be attached to the edge. </p>
+<pre class="frame">
+<![CDATA[# create a default vertex
+const vrtx (afnix:gfx:Vertex)
+# create an vertex with a client object
+const world (afnix:gfx:Vertex "world")
+
+]]></pre>
+<p class="text">
+ The <tt class="code">vertex-p</tt> predicate can be used to check for the object type. When a vertex is created with a client object, the <tt class="code">get-client</tt> method can be used to access that object. </p>
+<p class="subsect">
+Graph construction</p>
+<p class="text">
+ A graph is constructed by simply adding edges and vertices to it. The <tt class="code">graph-p</tt> predicate can be use to assert the graph type. the graph class also supports the concept of client object which can be attached at construction or with the <tt class="code">set-client</tt> method. </p>
+<pre class="frame">
+<![CDATA[const graph (afnix:gfx:Graph)
+
+]]></pre>
+<p class="text">
+ The <tt class="code">add</tt> method can be used to add edges or vertices to the graph. The important point is that during the construction process, the graph structure is updated with the proper number of edge and vertices. </p>
+<pre class="frame">
+<![CDATA[# create a graph
+const  g    (afnix:gfx:Graph)
+assert true (afnix:gfx:graph-p g)
+# create an edge and add vertices
+const edge (afnix:gfx:Edge)
+edge:add   (afnix:gfx:Vertex "hello") 
+edge:add   (afnix:gfx:Vertex "world")
+assert 2   (edge:degree)
+# add the edge to the graph and check
+g:add edge
+assert 1 (g:number-of-edges)
+assert 2 (g:number-of-vertices)
+# check for nodes and edges
+assert true (afnix:gfx:edge-p   (g:get-edge   0))
+assert true (afnix:gfx:vertex-p (g:get-vertex 0))
+assert true (afnix:gfx:vertex-p (g:get-vertex 1))
+
+]]></pre>
+<hr/>
+<div class="appendix">
+Standard Graph Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Edge</div>
+<p class="text">
+ The <tt class="code">Edge</tt> class is a class used for a graph construction in association with the <tt class="code">Vertex</tt> class. An edge is used to connect vertices. Normally, an edge connects two vertices. The number of vertices attached to an edge is called the cardinality of that edge. A client object can also be attached to the class. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>edge-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Edge</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Edge constructor create an empty edge.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Edge</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The Edge constructor create an edge with a client object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset all vertices attached to the edge.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>cardinality</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The cardinality method returns the cardinality of the
+	  edge. The cardinality of an edge is the number of attached vertices.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Vertex)</i><i> (Vertex)</i><hr/>
+<p class="text">
+
+	  The add method attach a vertex to this edge.
+	  The method return the argument vertex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Vertex)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the attached vertex by
+	  index. If the index is out-of range, and exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-client</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-client method returns the edge client
+	  object. If the client object is not set, nil is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-client</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-client method sets the edge client object. The
+	  object is returned by this method.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Vertex</div>
+<p class="text">
+ The <tt class="code">Vertex</tt> class is a class used for a graph construction in association with the <tt class="code">Edge</tt> class. An vertex is an edge node. The number of edges referenced by a vertex is called the degree of that vertex. A client object can also be attached to the object. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>vertex-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Vertex</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Vertex constructor create an empty vertex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Vertex</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The Vertex constructor create a vertex with a client object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset all edges attached to the vertex.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>degree</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The degree method returns the degree of the
+	  vertex. The degree of a vertex is the number of referenced edges.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Edge)</i><i> (Edge)</i><hr/>
+<p class="text">
+
+	  The add method references an edge with this vertex.
+	  The method return the argument edge.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get</i><i> (&rarr; Edge)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get method returns the referenced edge by
+	  index. If the index is out-of range, and exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-client</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-client method returns the vertex client
+	  object. If the client object is not set, nil is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-client</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-client method sets the vertex client object. The
+	  object is returned by this method.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Graph</div>
+<p class="text">
+ The <tt class="code">Graph</tt> object is a general graph class that manages a set of edges and vertices. The graph operates by adding edges and vertices to it. The graph object also accepts a client object in a way similar to the <tt class="code">Edge</tt> and <tt class="code">Vertex</tt> classes </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>graph-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Graph</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Graph constructor create an empty graph.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Graph</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The Graph constructor create a graph with a client
+	  object.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the graph
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset-edges</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset-edges method reset all edges attached to
+	  the graph. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>reset-vertices</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset-vertices method reset all vertices attached to
+	  the graph. 
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add</i><i> (&rarr; Object)</i><i> (Vertex|Edge)</i><hr/>
+<p class="text">
+
+	  The add method adds a vertex or an edge to the
+	  graph. When adding an edge, the methods check that the source and
+	  target vertices are also part of the graph.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>exists</i><i> (&rarr; Boolean)</i><i> (Vertex|Edge)</i><hr/>
+<p class="text">
+
+	  The exists method returns true if the vertex or edge
+	  argument exists in the graph.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-edge</i><i> (&rarr; Edge)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-edge method returns an edge by index. If the
+	  index is out-of-range, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-vertex</i><i> (&rarr; Vertex)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-vertex method returns a vertex by index. If the
+	  index is out-of-range, an exception is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>number-of-vertices</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The number-of-vertices methods returns the number
+	  of vertices in the graph.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>number-of-edges</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The number-of-edges methods returns the number of
+	  edges in the graph.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-client</i><i> (&rarr; Object)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-client method returns the graph client
+	  object. If the client object is not set, nil is returned.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-client</i><i> (&rarr; Object)</i><i> (Object)</i><hr/>
+<p class="text">
+
+	  The set-client method sets the graph client
+	  object. The object is returned by this method.
+	</p>
+</div>
+<p/>
+</body>
+</html>

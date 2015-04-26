@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>User-defined operators - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Operators.html#Operators" title="Operators">
+<link rel="prev" href="Self-_0026-prefix-operators.html#Self-_0026-prefix-operators" title="Self &amp; prefix operators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-defined-operators"></a>
+<a name="User_002ddefined-operators"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Self-_0026-prefix-operators.html#Self-_0026-prefix-operators">Self &amp; prefix operators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Operators.html#Operators">Operators</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.9.3 User-defined operators</h4>
+
+<p><a name="index-user_002ddefined-operators-628"></a><a name="index-g_t_0040code_007boperator_007d-629"></a>The following symbols may be used with <code>operator</code> to define or redefine
+operators on structures and built-in types:
+<pre class="verbatim">- + * / % ^ ! &lt; > == != &lt;= >= &amp; | ^^ .. :: -- --- ++
+&lt;&lt; >> $ $$ @ @@
+</pre>
+The operators on the second line have precedence one higher than the
+boolean operators <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, and <code>&gt;=</code>.
+
+   <p>Guide operators like <code>..</code> may be overloaded, say, to write
+a user function that produces a new guide from a given guide:
+<pre class="verbatim">guide dots(... guide[] g)=operator ..;
+
+guide operator ..(... guide[] g) {
+  guide G;
+  if(g.length > 0) {
+    write(g[0]);
+    G=g[0];
+  }
+  for(int i=1; i &lt; g.length; ++i) {
+    write(g[i]);
+    write();
+    G=dots(G,g[i]);
+  }
+  return G;
+}
+
+guide g=(0,0){up}..{SW}(100,100){NE}..{curl 3}(50,50)..(10,10);
+write("g=",g);
+</pre>
+
+   </body></html>
+

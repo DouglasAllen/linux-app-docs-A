@@ -1,0 +1,75 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_UrlSpecificSet</TITLE>
+<LINK rel=Previous href="c-ch425.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch427.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch425.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch427.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="132173">
+</a><h3>Ns_UrlSpecificSet</h3>
+<a name="132174">
+</a><h4>Overview</h4>
+Store URL-specific data for subsequent retrieval
+<a name="64531">
+</a><a name="133555">
+</a><h4>Syntax</h4>
+<pre>    <a name="368659"></a>void Ns_UrlSpecificSet(
+    <a name="368660"></a>char *handle,
+    <a name="368661"></a>char *method,
+    <a name="368662"></a>char *url,
+    <a name="368663"></a>int id,
+    <a name="368664"></a>void *data,
+    <a name="368665"></a>int flags
+    <a name="368666"></a>void (*deletefunc) (void *)
+    <a name="64541"></a>);
+</pre><p><a name="134935">
+</a><h4>Description</h4>
+<p><a name="368669">
+</a>The Ns_UrlSpecificSet function stores data in memory, allowing subsequent retrieval using handle, method, url, id, and inheritance flag.</p>
+<p><a name="368670">
+</a>The flags argument can be NS_OP_NOINHERIT or NS_OP_NODELETE. You can store two sets of data based on the same handle, method, url, and id combination-- one set with inheritance on and one set with inheritance off. If the NS_OP_NOINHERIT flag is set, the data is stored based on the exact URL. If NS_OP_NOINHERIT is omitted, the data is stored based on the specified URL and any URL below it. In this case, Ns_UrlSpecificGetExact will match to the closest URL when retrieving the data.</p>
+<p><a name="368671">
+</a>The deletefunc argument is called with data as an argument when this handle/url/method/id combination is re-registered or deleted, or when this server shuts down. unless NS_OP_NODELETE is set.</p>
+<p><a name="214502">
+</a>Normally, calling Ns_UrlSpecificSet on a handle/url/method/id combination which already has an operation registered for it causes the previous operation's delete procedure to be called. You can override this behavior by adding the NS_OP_NODELETE flag.</p>
+<a name="368675">
+</a><h4>Examples</h4>
+<pre>    <a name="214503"></a>See the example for Ns_UrlSpecificAlloc.
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch425.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch427.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

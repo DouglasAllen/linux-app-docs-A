@@ -1,0 +1,2333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >IO</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- IO</a
+      ><a name="111"
+      >
+</a
+      ><a name="112" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="184"
+      >
+
+</a
+      ><a name="186" class="Symbol"
+      >{-#</a
+      ><a name="189"
+      > </a
+      ><a name="190" class="Keyword"
+      >OPTIONS</a
+      ><a name="197"
+      > --no-termination-check </a
+      ><a name="221" class="Symbol"
+      >#-}</a
+      ><a name="224"
+      >
+
+</a
+      ><a name="226" class="Keyword"
+      >module</a
+      ><a name="232"
+      > </a
+      ><a name="233" href="IO.html#1" class="Module"
+      >IO</a
+      ><a name="235"
+      > </a
+      ><a name="236" class="Keyword"
+      >where</a
+      ><a name="241"
+      >
+
+</a
+      ><a name="243" class="Keyword"
+      >open</a
+      ><a name="247"
+      > </a
+      ><a name="248" class="Keyword"
+      >import</a
+      ><a name="254"
+      > </a
+      ><a name="255" href="Coinduction.html#1" class="Module"
+      >Coinduction</a
+      ><a name="266"
+      >
+</a
+      ><a name="267" class="Keyword"
+      >open</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Keyword"
+      >import</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="Data.Unit.html#1" class="Module"
+      >Data</a
+      ><a name="283"
+      >.</a
+      ><a name="284" href="Data.Unit.html#1" class="Module"
+      >Unit</a
+      ><a name="288"
+      >
+</a
+      ><a name="289" class="Keyword"
+      >open</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Keyword"
+      >import</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Data.String.html#1" class="Module"
+      >Data</a
+      ><a name="305"
+      >.</a
+      ><a name="306" href="Data.String.html#1" class="Module"
+      >String</a
+      ><a name="312"
+      >
+</a
+      ><a name="313" class="Keyword"
+      >open</a
+      ><a name="317"
+      > </a
+      ><a name="318" class="Keyword"
+      >import</a
+      ><a name="324"
+      > </a
+      ><a name="325" href="Data.Colist.html#1" class="Module"
+      >Data</a
+      ><a name="329"
+      >.</a
+      ><a name="330" href="Data.Colist.html#1" class="Module"
+      >Colist</a
+      ><a name="336"
+      >
+</a
+      ><a name="337" class="Keyword"
+      >open</a
+      ><a name="341"
+      > </a
+      ><a name="342" class="Keyword"
+      >import</a
+      ><a name="348"
+      > </a
+      ><a name="349" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="357"
+      >
+</a
+      ><a name="358" class="Keyword"
+      >import</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="IO.Primitive.html#1" class="Module"
+      >IO</a
+      ><a name="367"
+      >.</a
+      ><a name="368" href="IO.Primitive.html#1" class="Module"
+      >Primitive</a
+      ><a name="377"
+      > </a
+      ><a name="378" class="Symbol"
+      >as</a
+      ><a name="380"
+      > </a
+      ><a name="381" class="Module"
+      >Prim</a
+      ><a name="385"
+      >
+</a
+      ><a name="386" class="Keyword"
+      >open</a
+      ><a name="390"
+      > </a
+      ><a name="391" class="Keyword"
+      >import</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="403"
+      >
+
+</a
+      ><a name="405" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="477"
+      >
+</a
+      ><a name="478" class="Comment"
+      >-- The IO monad</a
+      ><a name="493"
+      >
+
+</a
+      ><a name="495" class="Comment"
+      >-- One cannot write &quot;infinitely large&quot; computations with the</a
+      ><a name="555"
+      >
+</a
+      ><a name="556" class="Comment"
+      >-- postulated IO monad in IO.Primitive without turning off the</a
+      ><a name="618"
+      >
+</a
+      ><a name="619" class="Comment"
+      >-- termination checker (or going via the FFI, or perhaps abusing</a
+      ><a name="683"
+      >
+</a
+      ><a name="684" class="Comment"
+      >-- something else). The following coinductive deep embedding is</a
+      ><a name="747"
+      >
+</a
+      ><a name="748" class="Comment"
+      >-- introduced to avoid this problem. Possible non-termination is</a
+      ><a name="812"
+      >
+</a
+      ><a name="813" class="Comment"
+      >-- isolated to the run function below.</a
+      ><a name="851"
+      >
+
+</a
+      ><a name="853" class="Keyword"
+      >infixl</a
+      ><a name="859"
+      > </a
+      ><a name="860" class="Number"
+      >1</a
+      ><a name="861"
+      > _&gt;&gt;=_ _&gt;&gt;_
+
+</a
+      ><a name="874" class="Keyword"
+      >data</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="881"
+      > </a
+      ><a name="882" class="Symbol"
+      >{</a
+      ><a name="883" href="IO.html#883" class="Bound"
+      >a</a
+      ><a name="884" class="Symbol"
+      >}</a
+      ><a name="885"
+      > </a
+      ><a name="886" class="Symbol"
+      >(</a
+      ><a name="887" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="888"
+      > </a
+      ><a name="889" class="Symbol"
+      >:</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="PrimitiveType"
+      >Set</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="IO.html#883" class="Bound"
+      >a</a
+      ><a name="896" class="Symbol"
+      >)</a
+      ><a name="897"
+      > </a
+      ><a name="898" class="Symbol"
+      >:</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="PrimitiveType"
+      >Set</a
+      ><a name="903"
+      > </a
+      ><a name="904" class="Symbol"
+      >(</a
+      ><a name="905" href="Level.html#287" class="Primitive"
+      >suc</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="IO.html#883" class="Bound"
+      >a</a
+      ><a name="910" class="Symbol"
+      >)</a
+      ><a name="911"
+      > </a
+      ><a name="912" class="Keyword"
+      >where</a
+      ><a name="917"
+      >
+  </a
+      ><a name="920" href="IO.html#920" class="InductiveConstructor"
+      >lift</a
+      ><a name="924"
+      >   </a
+      ><a name="927" class="Symbol"
+      >:</a
+      ><a name="928"
+      > </a
+      ><a name="929" class="Symbol"
+      >(</a
+      ><a name="930" href="IO.html#930" class="Bound"
+      >m</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >:</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="IO.Primitive.html#448" class="Postulate"
+      >Prim</a
+      ><a name="938"
+      >.</a
+      ><a name="939" href="IO.Primitive.html#448" class="Postulate"
+      >IO</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="943" class="Symbol"
+      >)</a
+      ><a name="944"
+      > </a
+      ><a name="945" class="Symbol"
+      >&#8594;</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="951"
+      >
+  </a
+      ><a name="954" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >:</a
+      ><a name="962"
+      > </a
+      ><a name="963" class="Symbol"
+      >(</a
+      ><a name="964" href="IO.html#964" class="Bound"
+      >x</a
+      ><a name="965"
+      > </a
+      ><a name="966" class="Symbol"
+      >:</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="969" class="Symbol"
+      >)</a
+      ><a name="970"
+      > </a
+      ><a name="971" class="Symbol"
+      >&#8594;</a
+      ><a name="972"
+      > </a
+      ><a name="973" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="977"
+      >
+  </a
+      ><a name="980" href="IO.html#980" class="InductiveConstructor Operator"
+      >_&gt;&gt;=_</a
+      ><a name="985"
+      >  </a
+      ><a name="987" class="Symbol"
+      >:</a
+      ><a name="988"
+      > </a
+      ><a name="989" class="Symbol"
+      >{</a
+      ><a name="990" href="IO.html#990" class="Bound"
+      >B</a
+      ><a name="991"
+      > </a
+      ><a name="992" class="Symbol"
+      >:</a
+      ><a name="993"
+      > </a
+      ><a name="994" class="PrimitiveType"
+      >Set</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="IO.html#883" class="Bound"
+      >a</a
+      ><a name="999" class="Symbol"
+      >}</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" class="Symbol"
+      >(</a
+      ><a name="1002" href="IO.html#1002" class="Bound"
+      >m</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" class="Symbol"
+      >:</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Coinduction.html#414" class="Datatype"
+      >&#8734;</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" class="Symbol"
+      >(</a
+      ><a name="1009" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="IO.html#990" class="Bound"
+      >B</a
+      ><a name="1013" class="Symbol"
+      >))</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" class="Symbol"
+      >(</a
+      ><a name="1017" href="IO.html#1017" class="Bound"
+      >f</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" class="Symbol"
+      >:</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" class="Symbol"
+      >(</a
+      ><a name="1022" href="IO.html#1022" class="Bound"
+      >x</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >:</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="IO.html#990" class="Bound"
+      >B</a
+      ><a name="1027" class="Symbol"
+      >)</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" class="Symbol"
+      >&#8594;</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Coinduction.html#414" class="Datatype"
+      >&#8734;</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" class="Symbol"
+      >(</a
+      ><a name="1034" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="1038" class="Symbol"
+      >))</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" class="Symbol"
+      >&#8594;</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="1047"
+      >
+  </a
+      ><a name="1050" href="IO.html#1050" class="InductiveConstructor Operator"
+      >_&gt;&gt;_</a
+      ><a name="1054"
+      >   </a
+      ><a name="1057" class="Symbol"
+      >:</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" class="Symbol"
+      >{</a
+      ><a name="1060" href="IO.html#1060" class="Bound"
+      >B</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" class="Symbol"
+      >:</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" class="PrimitiveType"
+      >Set</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="IO.html#883" class="Bound"
+      >a</a
+      ><a name="1069" class="Symbol"
+      >}</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" class="Symbol"
+      >(</a
+      ><a name="1072" href="IO.html#1072" class="Bound"
+      >m&#8321;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" class="Symbol"
+      >:</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Coinduction.html#414" class="Datatype"
+      >&#8734;</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" class="Symbol"
+      >(</a
+      ><a name="1080" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="IO.html#1060" class="Bound"
+      >B</a
+      ><a name="1084" class="Symbol"
+      >))</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" class="Symbol"
+      >(</a
+      ><a name="1088" href="IO.html#1088" class="Bound"
+      >m&#8322;</a
+      ><a name="1090"
+      > </a
+      ><a name="1091" class="Symbol"
+      >:</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" href="Coinduction.html#414" class="Datatype"
+      >&#8734;</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" class="Symbol"
+      >(</a
+      ><a name="1096" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="1100" class="Symbol"
+      >))</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" class="Symbol"
+      >&#8594;</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="IO.html#887" class="Bound"
+      >A</a
+      ><a name="1109"
+      >
+
+</a
+      ><a name="1111" class="Comment"
+      >-- The use of abstract ensures that the run function will not be</a
+      ><a name="1175"
+      >
+</a
+      ><a name="1176" class="Comment"
+      >-- unfolded infinitely by the type checker.</a
+      ><a name="1219"
+      >
+
+</a
+      ><a name="1221" class="Keyword"
+      >abstract</a
+      ><a name="1229"
+      >
+
+  </a
+      ><a name="1233" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1236"
+      > </a
+      ><a name="1237" class="Symbol"
+      >:</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" class="Symbol"
+      >&#8704;</a
+      ><a name="1240"
+      > </a
+      ><a name="1241" class="Symbol"
+      >{</a
+      ><a name="1242" href="IO.html#1242" class="Bound"
+      >a</a
+      ><a name="1243" class="Symbol"
+      >}</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" class="Symbol"
+      >{</a
+      ><a name="1246" href="IO.html#1246" class="Bound"
+      >A</a
+      ><a name="1247"
+      > </a
+      ><a name="1248" class="Symbol"
+      >:</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" class="PrimitiveType"
+      >Set</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" href="IO.html#1242" class="Bound"
+      >a</a
+      ><a name="1255" class="Symbol"
+      >}</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" class="Symbol"
+      >&#8594;</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1261"
+      > </a
+      ><a name="1262" href="IO.html#1246" class="Bound"
+      >A</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >&#8594;</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" href="IO.Primitive.html#448" class="Postulate"
+      >Prim</a
+      ><a name="1270"
+      >.</a
+      ><a name="1271" href="IO.Primitive.html#448" class="Postulate"
+      >IO</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="IO.html#1246" class="Bound"
+      >A</a
+      ><a name="1275"
+      >
+  </a
+      ><a name="1278" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >(</a
+      ><a name="1283" href="IO.html#920" class="InductiveConstructor"
+      >lift</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="IO.html#1288" class="Bound"
+      >m</a
+      ><a name="1289" class="Symbol"
+      >)</a
+      ><a name="1290"
+      >   </a
+      ><a name="1293" class="Symbol"
+      >=</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" href="IO.html#1288" class="Bound"
+      >m</a
+      ><a name="1296"
+      >
+  </a
+      ><a name="1299" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" class="Symbol"
+      >(</a
+      ><a name="1304" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="1310"
+      > </a
+      ><a name="1311" href="IO.html#1311" class="Bound"
+      >x</a
+      ><a name="1312" class="Symbol"
+      >)</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" class="Symbol"
+      >=</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="IO.Primitive.html#588" class="Postulate"
+      >Prim</a
+      ><a name="1320"
+      >.</a
+      ><a name="1321" href="IO.Primitive.html#588" class="Postulate"
+      >return</a
+      ><a name="1327"
+      > </a
+      ><a name="1328" href="IO.html#1311" class="Bound"
+      >x</a
+      ><a name="1329"
+      >
+  </a
+      ><a name="1332" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" class="Symbol"
+      >(</a
+      ><a name="1337" href="IO.html#1337" class="Bound"
+      >m</a
+      ><a name="1338"
+      >  </a
+      ><a name="1340" href="IO.html#980" class="InductiveConstructor Operator"
+      >&gt;&gt;=</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="IO.html#1344" class="Bound"
+      >f</a
+      ><a name="1345" class="Symbol"
+      >)</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" class="Symbol"
+      >=</a
+      ><a name="1348"
+      > </a
+      ><a name="1349" href="IO.Primitive.html#628" class="Postulate Operator"
+      >Prim</a
+      ><a name="1353"
+      >.</a
+      ><a name="1354" href="IO.Primitive.html#628" class="Postulate Operator"
+      >_&gt;&gt;=_</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" class="Symbol"
+      >(</a
+      ><a name="1361" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" class="Symbol"
+      >(</a
+      ><a name="1366" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" href="IO.html#1337" class="Bound"
+      >m</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" class="Symbol"
+      >))</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" class="Symbol"
+      >&#955;</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" href="IO.html#1375" class="Bound"
+      >x</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" class="Symbol"
+      >&#8594;</a
+      ><a name="1378"
+      > </a
+      ><a name="1379" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1382"
+      > </a
+      ><a name="1383" class="Symbol"
+      >(</a
+      ><a name="1384" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" class="Symbol"
+      >(</a
+      ><a name="1387" href="IO.html#1344" class="Bound"
+      >f</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" href="IO.html#1375" class="Bound"
+      >x</a
+      ><a name="1390" class="Symbol"
+      >))</a
+      ><a name="1392"
+      >
+  </a
+      ><a name="1395" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" class="Symbol"
+      >(</a
+      ><a name="1400" href="IO.html#1400" class="Bound"
+      >m&#8321;</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="1405"
+      > </a
+      ><a name="1406" href="IO.html#1406" class="Bound"
+      >m&#8322;</a
+      ><a name="1408" class="Symbol"
+      >)</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" class="Symbol"
+      >=</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" href="IO.Primitive.html#628" class="Postulate Operator"
+      >Prim</a
+      ><a name="1416"
+      >.</a
+      ><a name="1417" href="IO.Primitive.html#628" class="Postulate Operator"
+      >_&gt;&gt;=_</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" class="Symbol"
+      >(</a
+      ><a name="1424" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" class="Symbol"
+      >(</a
+      ><a name="1429" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="1430"
+      > </a
+      ><a name="1431" href="IO.html#1400" class="Bound"
+      >m&#8321;</a
+      ><a name="1433" class="Symbol"
+      >))</a
+      ><a name="1435"
+      > </a
+      ><a name="1436" class="Symbol"
+      >&#955;</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="IO.html#1438" class="Bound"
+      >_</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" class="Symbol"
+      >&#8594;</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" href="IO.html#1233" class="Function"
+      >run</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >(</a
+      ><a name="1447" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" href="IO.html#1406" class="Bound"
+      >m&#8322;</a
+      ><a name="1451" class="Symbol"
+      >)</a
+      ><a name="1452"
+      >
+
+</a
+      ><a name="1454" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="1526"
+      >
+</a
+      ><a name="1527" class="Comment"
+      >-- Utilities</a
+      ><a name="1539"
+      >
+
+</a
+      ><a name="1541" href="IO.html#1541" class="Function"
+      >sequence</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" class="Symbol"
+      >:</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" class="Symbol"
+      >&#8704;</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" class="Symbol"
+      >{</a
+      ><a name="1555" href="IO.html#1555" class="Bound"
+      >a</a
+      ><a name="1556" class="Symbol"
+      >}</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" class="Symbol"
+      >{</a
+      ><a name="1559" href="IO.html#1559" class="Bound"
+      >A</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" class="Symbol"
+      >:</a
+      ><a name="1562"
+      > </a
+      ><a name="1563" class="PrimitiveType"
+      >Set</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" href="IO.html#1555" class="Bound"
+      >a</a
+      ><a name="1568" class="Symbol"
+      >}</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" class="Symbol"
+      >&#8594;</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" class="Symbol"
+      >(</a
+      ><a name="1580" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" href="IO.html#1559" class="Bound"
+      >A</a
+      ><a name="1584" class="Symbol"
+      >)</a
+      ><a name="1585"
+      > </a
+      ><a name="1586" class="Symbol"
+      >&#8594;</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" class="Symbol"
+      >(</a
+      ><a name="1592" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="1598"
+      > </a
+      ><a name="1599" href="IO.html#1559" class="Bound"
+      >A</a
+      ><a name="1600" class="Symbol"
+      >)</a
+      ><a name="1601"
+      >
+</a
+      ><a name="1602" href="IO.html#1541" class="Function"
+      >sequence</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" href="Data.Colist.html#1305" class="InductiveConstructor"
+      >[]</a
+      ><a name="1613"
+      >       </a
+      ><a name="1620" class="Symbol"
+      >=</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" href="Data.Colist.html#1305" class="InductiveConstructor"
+      >[]</a
+      ><a name="1631"
+      >
+</a
+      ><a name="1632" href="IO.html#1541" class="Function"
+      >sequence</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" class="Symbol"
+      >(</a
+      ><a name="1642" href="IO.html#1642" class="Bound"
+      >c</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" href="Data.Colist.html#1322" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1645"
+      > </a
+      ><a name="1646" href="IO.html#1646" class="Bound"
+      >cs</a
+      ><a name="1648" class="Symbol"
+      >)</a
+      ><a name="1649"
+      > </a
+      ><a name="1650" class="Symbol"
+      >=</a
+      ><a name="1651"
+      > </a
+      ><a name="1652" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" href="IO.html#1642" class="Bound"
+      >c</a
+      ><a name="1655"
+      >                  </a
+      ><a name="1673" href="IO.html#980" class="InductiveConstructor Operator"
+      >&gt;&gt;=</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" class="Symbol"
+      >&#955;</a
+      ><a name="1678"
+      > </a
+      ><a name="1679" href="IO.html#1679" class="Bound"
+      >x</a
+      ><a name="1680"
+      >  </a
+      ><a name="1682" class="Symbol"
+      >&#8594;</a
+      ><a name="1683"
+      >
+                    </a
+      ><a name="1704" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" class="Symbol"
+      >(</a
+      ><a name="1707" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" href="IO.html#1541" class="Function"
+      >sequence</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" class="Symbol"
+      >(</a
+      ><a name="1719" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="1720"
+      > </a
+      ><a name="1721" href="IO.html#1646" class="Bound"
+      >cs</a
+      ><a name="1723" class="Symbol"
+      >)</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" href="IO.html#980" class="InductiveConstructor Operator"
+      >&gt;&gt;=</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" class="Symbol"
+      >&#955;</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" href="IO.html#1731" class="Bound"
+      >xs</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" class="Symbol"
+      >&#8594;</a
+      ><a name="1735"
+      >
+                    </a
+      ><a name="1756" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="1764"
+      > </a
+      ><a name="1765" class="Symbol"
+      >(</a
+      ><a name="1766" href="IO.html#1679" class="Bound"
+      >x</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="1771"
+      > </a
+      ><a name="1772" href="IO.html#1731" class="Bound"
+      >xs</a
+      ><a name="1774" class="Symbol"
+      >))</a
+      ><a name="1776"
+      >
+
+</a
+      ><a name="1778" class="Comment"
+      >-- The reason for not defining sequence&#8242; in terms of sequence is</a
+      ><a name="1842"
+      >
+</a
+      ><a name="1843" class="Comment"
+      >-- efficiency (the unused results could cause unnecessary memory use).</a
+      ><a name="1913"
+      >
+
+</a
+      ><a name="1915" href="IO.html#1915" class="Function"
+      >sequence&#8242;</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" class="Symbol"
+      >:</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" class="Symbol"
+      >&#8704;</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" class="Symbol"
+      >{</a
+      ><a name="1930" href="IO.html#1930" class="Bound"
+      >a</a
+      ><a name="1931" class="Symbol"
+      >}</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" class="Symbol"
+      >{</a
+      ><a name="1934" href="IO.html#1934" class="Bound"
+      >A</a
+      ><a name="1935"
+      > </a
+      ><a name="1936" class="Symbol"
+      >:</a
+      ><a name="1937"
+      > </a
+      ><a name="1938" class="PrimitiveType"
+      >Set</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" href="IO.html#1930" class="Bound"
+      >a</a
+      ><a name="1943" class="Symbol"
+      >}</a
+      ><a name="1944"
+      > </a
+      ><a name="1945" class="Symbol"
+      >&#8594;</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >(</a
+      ><a name="1955" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1957"
+      > </a
+      ><a name="1958" href="IO.html#1934" class="Bound"
+      >A</a
+      ><a name="1959" class="Symbol"
+      >)</a
+      ><a name="1960"
+      > </a
+      ><a name="1961" class="Symbol"
+      >&#8594;</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="1965"
+      > </a
+      ><a name="1966" class="Symbol"
+      >(</a
+      ><a name="1967" href="Level.html#745" class="Record"
+      >Lift</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="1973" class="Symbol"
+      >)</a
+      ><a name="1974"
+      >
+</a
+      ><a name="1975" href="IO.html#1915" class="Function"
+      >sequence&#8242;</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Data.Colist.html#1305" class="InductiveConstructor"
+      >[]</a
+      ><a name="1987"
+      >       </a
+      ><a name="1994" class="Symbol"
+      >=</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" class="Symbol"
+      >_</a
+      ><a name="2004"
+      >
+</a
+      ><a name="2005" href="IO.html#1915" class="Function"
+      >sequence&#8242;</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" class="Symbol"
+      >(</a
+      ><a name="2016" href="IO.html#2016" class="Bound"
+      >c</a
+      ><a name="2017"
+      > </a
+      ><a name="2018" href="Data.Colist.html#1322" class="InductiveConstructor Operator"
+      >&#8759;</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" href="IO.html#2020" class="Bound"
+      >cs</a
+      ><a name="2022" class="Symbol"
+      >)</a
+      ><a name="2023"
+      > </a
+      ><a name="2024" class="Symbol"
+      >=</a
+      ><a name="2025"
+      > </a
+      ><a name="2026" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2027"
+      > </a
+      ><a name="2028" href="IO.html#2016" class="Bound"
+      >c</a
+      ><a name="2029"
+      >                   </a
+      ><a name="2048" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="2050"
+      >
+                     </a
+      ><a name="2072" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2073"
+      > </a
+      ><a name="2074" class="Symbol"
+      >(</a
+      ><a name="2075" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2076"
+      > </a
+      ><a name="2077" href="IO.html#1915" class="Function"
+      >sequence&#8242;</a
+      ><a name="2086"
+      > </a
+      ><a name="2087" class="Symbol"
+      >(</a
+      ><a name="2088" href="Coinduction.html#482" class="Function"
+      >&#9837;</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" href="IO.html#2020" class="Bound"
+      >cs</a
+      ><a name="2092" class="Symbol"
+      >)</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="2096"
+      >
+                     </a
+      ><a name="2118" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2119"
+      > </a
+      ><a name="2120" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="2126"
+      > </a
+      ><a name="2127" class="Symbol"
+      >_)</a
+      ><a name="2129"
+      >
+
+</a
+      ><a name="2131" href="IO.html#2131" class="Function"
+      >mapM</a
+      ><a name="2135"
+      > </a
+      ><a name="2136" class="Symbol"
+      >:</a
+      ><a name="2137"
+      > </a
+      ><a name="2138" class="Symbol"
+      >&#8704;</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" class="Symbol"
+      >{</a
+      ><a name="2141" href="IO.html#2141" class="Bound"
+      >a</a
+      ><a name="2142"
+      > </a
+      ><a name="2143" href="IO.html#2143" class="Bound"
+      >b</a
+      ><a name="2144" class="Symbol"
+      >}</a
+      ><a name="2145"
+      > </a
+      ><a name="2146" class="Symbol"
+      >{</a
+      ><a name="2147" href="IO.html#2147" class="Bound"
+      >A</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" class="Symbol"
+      >:</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" class="PrimitiveType"
+      >Set</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" href="IO.html#2141" class="Bound"
+      >a</a
+      ><a name="2156" class="Symbol"
+      >}</a
+      ><a name="2157"
+      > </a
+      ><a name="2158" class="Symbol"
+      >{</a
+      ><a name="2159" href="IO.html#2159" class="Bound"
+      >B</a
+      ><a name="2160"
+      > </a
+      ><a name="2161" class="Symbol"
+      >:</a
+      ><a name="2162"
+      > </a
+      ><a name="2163" class="PrimitiveType"
+      >Set</a
+      ><a name="2166"
+      > </a
+      ><a name="2167" href="IO.html#2143" class="Bound"
+      >b</a
+      ><a name="2168" class="Symbol"
+      >}</a
+      ><a name="2169"
+      > </a
+      ><a name="2170" class="Symbol"
+      >&#8594;</a
+      ><a name="2171"
+      >
+       </a
+      ><a name="2179" class="Symbol"
+      >(</a
+      ><a name="2180" href="IO.html#2147" class="Bound"
+      >A</a
+      ><a name="2181"
+      > </a
+      ><a name="2182" class="Symbol"
+      >&#8594;</a
+      ><a name="2183"
+      > </a
+      ><a name="2184" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2186"
+      > </a
+      ><a name="2187" href="IO.html#2159" class="Bound"
+      >B</a
+      ><a name="2188" class="Symbol"
+      >)</a
+      ><a name="2189"
+      > </a
+      ><a name="2190" class="Symbol"
+      >&#8594;</a
+      ><a name="2191"
+      > </a
+      ><a name="2192" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" href="IO.html#2147" class="Bound"
+      >A</a
+      ><a name="2200"
+      > </a
+      ><a name="2201" class="Symbol"
+      >&#8594;</a
+      ><a name="2202"
+      > </a
+      ><a name="2203" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2205"
+      > </a
+      ><a name="2206" class="Symbol"
+      >(</a
+      ><a name="2207" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="IO.html#2159" class="Bound"
+      >B</a
+      ><a name="2215" class="Symbol"
+      >)</a
+      ><a name="2216"
+      >
+</a
+      ><a name="2217" href="IO.html#2131" class="Function"
+      >mapM</a
+      ><a name="2221"
+      > </a
+      ><a name="2222" href="IO.html#2222" class="Bound"
+      >f</a
+      ><a name="2223"
+      > </a
+      ><a name="2224" class="Symbol"
+      >=</a
+      ><a name="2225"
+      > </a
+      ><a name="2226" href="IO.html#1541" class="Function"
+      >sequence</a
+      ><a name="2234"
+      > </a
+      ><a name="2235" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="Data.Colist.html#2102" class="Function"
+      >map</a
+      ><a name="2240"
+      > </a
+      ><a name="2241" href="IO.html#2222" class="Bound"
+      >f</a
+      ><a name="2242"
+      >
+
+</a
+      ><a name="2244" href="IO.html#2244" class="Function"
+      >mapM&#8242;</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" class="Symbol"
+      >:</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" class="Symbol"
+      >{</a
+      ><a name="2253" href="IO.html#2253" class="Bound"
+      >A</a
+      ><a name="2254"
+      > </a
+      ><a name="2255" href="IO.html#2255" class="Bound"
+      >B</a
+      ><a name="2256"
+      > </a
+      ><a name="2257" class="Symbol"
+      >:</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" class="PrimitiveType"
+      >Set</a
+      ><a name="2262" class="Symbol"
+      >}</a
+      ><a name="2263"
+      > </a
+      ><a name="2264" class="Symbol"
+      >&#8594;</a
+      ><a name="2265"
+      > </a
+      ><a name="2266" class="Symbol"
+      >(</a
+      ><a name="2267" href="IO.html#2253" class="Bound"
+      >A</a
+      ><a name="2268"
+      > </a
+      ><a name="2269" class="Symbol"
+      >&#8594;</a
+      ><a name="2270"
+      > </a
+      ><a name="2271" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2273"
+      > </a
+      ><a name="2274" href="IO.html#2255" class="Bound"
+      >B</a
+      ><a name="2275" class="Symbol"
+      >)</a
+      ><a name="2276"
+      > </a
+      ><a name="2277" class="Symbol"
+      >&#8594;</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" href="Data.Colist.html#1266" class="Datatype"
+      >Colist</a
+      ><a name="2285"
+      > </a
+      ><a name="2286" href="IO.html#2253" class="Bound"
+      >A</a
+      ><a name="2287"
+      > </a
+      ><a name="2288" class="Symbol"
+      >&#8594;</a
+      ><a name="2289"
+      > </a
+      ><a name="2290" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2292"
+      > </a
+      ><a name="2293" class="Symbol"
+      >(</a
+      ><a name="2294" href="Level.html#745" class="Record"
+      >Lift</a
+      ><a name="2298"
+      > </a
+      ><a name="2299" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="2300" class="Symbol"
+      >)</a
+      ><a name="2301"
+      >
+</a
+      ><a name="2302" href="IO.html#2244" class="Function"
+      >mapM&#8242;</a
+      ><a name="2307"
+      > </a
+      ><a name="2308" href="IO.html#2308" class="Bound"
+      >f</a
+      ><a name="2309"
+      > </a
+      ><a name="2310" class="Symbol"
+      >=</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" href="IO.html#1915" class="Function"
+      >sequence&#8242;</a
+      ><a name="2321"
+      > </a
+      ><a name="2322" href="Function.html#724" class="Function Operator"
+      >&#8728;</a
+      ><a name="2323"
+      > </a
+      ><a name="2324" href="Data.Colist.html#2102" class="Function"
+      >map</a
+      ><a name="2327"
+      > </a
+      ><a name="2328" href="IO.html#2308" class="Bound"
+      >f</a
+      ><a name="2329"
+      >
+
+</a
+      ><a name="2331" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="2403"
+      >
+</a
+      ><a name="2404" class="Comment"
+      >-- Simple lazy IO</a
+      ><a name="2421"
+      >
+
+</a
+      ><a name="2423" class="Comment"
+      >-- Note that the semantics of these functions depends on the version</a
+      ><a name="2491"
+      >
+</a
+      ><a name="2492" class="Comment"
+      >-- of the Haskell base library. If the version is 4.2.0.0 (or later?),</a
+      ><a name="2562"
+      >
+</a
+      ><a name="2563" class="Comment"
+      >-- then the functions use the character encoding specified by the</a
+      ><a name="2628"
+      >
+</a
+      ><a name="2629" class="Comment"
+      >-- locale. For older versions of the library (going back to at least</a
+      ><a name="2697"
+      >
+</a
+      ><a name="2698" class="Comment"
+      >-- version 3) the functions use ISO-8859-1.</a
+      ><a name="2741"
+      >
+
+</a
+      ><a name="2743" href="IO.html#2743" class="Function"
+      >getContents</a
+      ><a name="2754"
+      > </a
+      ><a name="2755" class="Symbol"
+      >:</a
+      ><a name="2756"
+      > </a
+      ><a name="2757" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2759"
+      > </a
+      ><a name="2760" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="2768"
+      >
+</a
+      ><a name="2769" href="IO.html#2743" class="Function"
+      >getContents</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" class="Symbol"
+      >=</a
+      ><a name="2782"
+      > </a
+      ><a name="2783" href="IO.html#920" class="InductiveConstructor"
+      >lift</a
+      ><a name="2787"
+      > </a
+      ><a name="2788" href="IO.Primitive.html#1210" class="Postulate"
+      >Prim</a
+      ><a name="2792"
+      >.</a
+      ><a name="2793" href="IO.Primitive.html#1210" class="Postulate"
+      >getContents</a
+      ><a name="2804"
+      >
+
+</a
+      ><a name="2806" href="IO.html#2806" class="Function"
+      >readFile</a
+      ><a name="2814"
+      > </a
+      ><a name="2815" class="Symbol"
+      >:</a
+      ><a name="2816"
+      > </a
+      ><a name="2817" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="2823"
+      > </a
+      ><a name="2824" class="Symbol"
+      >&#8594;</a
+      ><a name="2825"
+      > </a
+      ><a name="2826" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2828"
+      > </a
+      ><a name="2829" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="2837"
+      >
+</a
+      ><a name="2838" href="IO.html#2806" class="Function"
+      >readFile</a
+      ><a name="2846"
+      > </a
+      ><a name="2847" href="IO.html#2847" class="Bound"
+      >f</a
+      ><a name="2848"
+      > </a
+      ><a name="2849" class="Symbol"
+      >=</a
+      ><a name="2850"
+      > </a
+      ><a name="2851" href="IO.html#920" class="InductiveConstructor"
+      >lift</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" class="Symbol"
+      >(</a
+      ><a name="2857" href="IO.Primitive.html#1238" class="Postulate"
+      >Prim</a
+      ><a name="2861"
+      >.</a
+      ><a name="2862" href="IO.Primitive.html#1238" class="Postulate"
+      >readFile</a
+      ><a name="2870"
+      > </a
+      ><a name="2871" href="IO.html#2847" class="Bound"
+      >f</a
+      ><a name="2872" class="Symbol"
+      >)</a
+      ><a name="2873"
+      >
+
+</a
+      ><a name="2875" href="IO.html#2875" class="Function"
+      >writeFile&#8734;</a
+      ><a name="2885"
+      > </a
+      ><a name="2886" class="Symbol"
+      >:</a
+      ><a name="2887"
+      > </a
+      ><a name="2888" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="2894"
+      > </a
+      ><a name="2895" class="Symbol"
+      >&#8594;</a
+      ><a name="2896"
+      > </a
+      ><a name="2897" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="2905"
+      > </a
+      ><a name="2906" class="Symbol"
+      >&#8594;</a
+      ><a name="2907"
+      > </a
+      ><a name="2908" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="2910"
+      > </a
+      ><a name="2911" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="2912"
+      >
+</a
+      ><a name="2913" href="IO.html#2875" class="Function"
+      >writeFile&#8734;</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="IO.html#2924" class="Bound"
+      >f</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" href="IO.html#2926" class="Bound"
+      >s</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" class="Symbol"
+      >=</a
+      ><a name="2929"
+      >
+  </a
+      ><a name="2932" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2933"
+      > </a
+      ><a name="2934" class="InductiveConstructor"
+      >lift</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" class="Symbol"
+      >(</a
+      ><a name="2940" href="IO.Primitive.html#1275" class="Postulate"
+      >Prim</a
+      ><a name="2944"
+      >.</a
+      ><a name="2945" href="IO.Primitive.html#1275" class="Postulate"
+      >writeFile</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="IO.html#2924" class="Bound"
+      >f</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" href="IO.html#2926" class="Bound"
+      >s</a
+      ><a name="2958" class="Symbol"
+      >)</a
+      ><a name="2959"
+      > </a
+      ><a name="2960" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="2962"
+      >
+  </a
+      ><a name="2965" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="2966"
+      > </a
+      ><a name="2967" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="2973"
+      > </a
+      ><a name="2974" class="Symbol"
+      >_</a
+      ><a name="2975"
+      >
+
+</a
+      ><a name="2977" href="IO.html#2977" class="Function"
+      >writeFile</a
+      ><a name="2986"
+      > </a
+      ><a name="2987" class="Symbol"
+      >:</a
+      ><a name="2988"
+      > </a
+      ><a name="2989" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="2995"
+      > </a
+      ><a name="2996" class="Symbol"
+      >&#8594;</a
+      ><a name="2997"
+      > </a
+      ><a name="2998" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3004"
+      > </a
+      ><a name="3005" class="Symbol"
+      >&#8594;</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3009"
+      > </a
+      ><a name="3010" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3011"
+      >
+</a
+      ><a name="3012" href="IO.html#2977" class="Function"
+      >writeFile</a
+      ><a name="3021"
+      > </a
+      ><a name="3022" href="IO.html#3022" class="Bound"
+      >f</a
+      ><a name="3023"
+      > </a
+      ><a name="3024" href="IO.html#3024" class="Bound"
+      >s</a
+      ><a name="3025"
+      > </a
+      ><a name="3026" class="Symbol"
+      >=</a
+      ><a name="3027"
+      > </a
+      ><a name="3028" href="IO.html#2875" class="Function"
+      >writeFile&#8734;</a
+      ><a name="3038"
+      > </a
+      ><a name="3039" href="IO.html#3022" class="Bound"
+      >f</a
+      ><a name="3040"
+      > </a
+      ><a name="3041" class="Symbol"
+      >(</a
+      ><a name="3042" href="Data.String.html#1578" class="Function"
+      >toCostring</a
+      ><a name="3052"
+      > </a
+      ><a name="3053" href="IO.html#3024" class="Bound"
+      >s</a
+      ><a name="3054" class="Symbol"
+      >)</a
+      ><a name="3055"
+      >
+
+</a
+      ><a name="3057" href="IO.html#3057" class="Function"
+      >appendFile&#8734;</a
+      ><a name="3068"
+      > </a
+      ><a name="3069" class="Symbol"
+      >:</a
+      ><a name="3070"
+      > </a
+      ><a name="3071" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3077"
+      > </a
+      ><a name="3078" class="Symbol"
+      >&#8594;</a
+      ><a name="3079"
+      > </a
+      ><a name="3080" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="3088"
+      > </a
+      ><a name="3089" class="Symbol"
+      >&#8594;</a
+      ><a name="3090"
+      > </a
+      ><a name="3091" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3093"
+      > </a
+      ><a name="3094" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3095"
+      >
+</a
+      ><a name="3096" href="IO.html#3057" class="Function"
+      >appendFile&#8734;</a
+      ><a name="3107"
+      > </a
+      ><a name="3108" href="IO.html#3108" class="Bound"
+      >f</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="IO.html#3110" class="Bound"
+      >s</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" class="Symbol"
+      >=</a
+      ><a name="3113"
+      >
+  </a
+      ><a name="3116" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3117"
+      > </a
+      ><a name="3118" class="InductiveConstructor"
+      >lift</a
+      ><a name="3122"
+      > </a
+      ><a name="3123" class="Symbol"
+      >(</a
+      ><a name="3124" href="IO.Primitive.html#1319" class="Postulate"
+      >Prim</a
+      ><a name="3128"
+      >.</a
+      ><a name="3129" href="IO.Primitive.html#1319" class="Postulate"
+      >appendFile</a
+      ><a name="3139"
+      > </a
+      ><a name="3140" href="IO.html#3108" class="Bound"
+      >f</a
+      ><a name="3141"
+      > </a
+      ><a name="3142" href="IO.html#3110" class="Bound"
+      >s</a
+      ><a name="3143" class="Symbol"
+      >)</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="3147"
+      >
+  </a
+      ><a name="3150" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3151"
+      > </a
+      ><a name="3152" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="3158"
+      > </a
+      ><a name="3159" class="Symbol"
+      >_</a
+      ><a name="3160"
+      >
+
+</a
+      ><a name="3162" href="IO.html#3162" class="Function"
+      >appendFile</a
+      ><a name="3172"
+      > </a
+      ><a name="3173" class="Symbol"
+      >:</a
+      ><a name="3174"
+      > </a
+      ><a name="3175" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3181"
+      > </a
+      ><a name="3182" class="Symbol"
+      >&#8594;</a
+      ><a name="3183"
+      > </a
+      ><a name="3184" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3190"
+      > </a
+      ><a name="3191" class="Symbol"
+      >&#8594;</a
+      ><a name="3192"
+      > </a
+      ><a name="3193" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3195"
+      > </a
+      ><a name="3196" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3197"
+      >
+</a
+      ><a name="3198" href="IO.html#3162" class="Function"
+      >appendFile</a
+      ><a name="3208"
+      > </a
+      ><a name="3209" href="IO.html#3209" class="Bound"
+      >f</a
+      ><a name="3210"
+      > </a
+      ><a name="3211" href="IO.html#3211" class="Bound"
+      >s</a
+      ><a name="3212"
+      > </a
+      ><a name="3213" class="Symbol"
+      >=</a
+      ><a name="3214"
+      > </a
+      ><a name="3215" href="IO.html#3057" class="Function"
+      >appendFile&#8734;</a
+      ><a name="3226"
+      > </a
+      ><a name="3227" href="IO.html#3209" class="Bound"
+      >f</a
+      ><a name="3228"
+      > </a
+      ><a name="3229" class="Symbol"
+      >(</a
+      ><a name="3230" href="Data.String.html#1578" class="Function"
+      >toCostring</a
+      ><a name="3240"
+      > </a
+      ><a name="3241" href="IO.html#3211" class="Bound"
+      >s</a
+      ><a name="3242" class="Symbol"
+      >)</a
+      ><a name="3243"
+      >
+
+</a
+      ><a name="3245" href="IO.html#3245" class="Function"
+      >putStr&#8734;</a
+      ><a name="3252"
+      > </a
+      ><a name="3253" class="Symbol"
+      >:</a
+      ><a name="3254"
+      > </a
+      ><a name="3255" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" class="Symbol"
+      >&#8594;</a
+      ><a name="3265"
+      > </a
+      ><a name="3266" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3268"
+      > </a
+      ><a name="3269" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3270"
+      >
+</a
+      ><a name="3271" href="IO.html#3245" class="Function"
+      >putStr&#8734;</a
+      ><a name="3278"
+      > </a
+      ><a name="3279" href="IO.html#3279" class="Bound"
+      >s</a
+      ><a name="3280"
+      > </a
+      ><a name="3281" class="Symbol"
+      >=</a
+      ><a name="3282"
+      >
+  </a
+      ><a name="3285" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" class="InductiveConstructor"
+      >lift</a
+      ><a name="3291"
+      > </a
+      ><a name="3292" class="Symbol"
+      >(</a
+      ><a name="3293" href="IO.Primitive.html#1363" class="Postulate"
+      >Prim</a
+      ><a name="3297"
+      >.</a
+      ><a name="3298" href="IO.Primitive.html#1363" class="Postulate"
+      >putStr</a
+      ><a name="3304"
+      > </a
+      ><a name="3305" href="IO.html#3279" class="Bound"
+      >s</a
+      ><a name="3306" class="Symbol"
+      >)</a
+      ><a name="3307"
+      > </a
+      ><a name="3308" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="3310"
+      >
+  </a
+      ><a name="3313" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3314"
+      > </a
+      ><a name="3315" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="3321"
+      > </a
+      ><a name="3322" class="Symbol"
+      >_</a
+      ><a name="3323"
+      >
+
+</a
+      ><a name="3325" href="IO.html#3325" class="Function"
+      >putStr</a
+      ><a name="3331"
+      > </a
+      ><a name="3332" class="Symbol"
+      >:</a
+      ><a name="3333"
+      > </a
+      ><a name="3334" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3340"
+      > </a
+      ><a name="3341" class="Symbol"
+      >&#8594;</a
+      ><a name="3342"
+      > </a
+      ><a name="3343" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3345"
+      > </a
+      ><a name="3346" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3347"
+      >
+</a
+      ><a name="3348" href="IO.html#3325" class="Function"
+      >putStr</a
+      ><a name="3354"
+      > </a
+      ><a name="3355" href="IO.html#3355" class="Bound"
+      >s</a
+      ><a name="3356"
+      > </a
+      ><a name="3357" class="Symbol"
+      >=</a
+      ><a name="3358"
+      > </a
+      ><a name="3359" href="IO.html#3245" class="Function"
+      >putStr&#8734;</a
+      ><a name="3366"
+      > </a
+      ><a name="3367" class="Symbol"
+      >(</a
+      ><a name="3368" href="Data.String.html#1578" class="Function"
+      >toCostring</a
+      ><a name="3378"
+      > </a
+      ><a name="3379" href="IO.html#3355" class="Bound"
+      >s</a
+      ><a name="3380" class="Symbol"
+      >)</a
+      ><a name="3381"
+      >
+
+</a
+      ><a name="3383" href="IO.html#3383" class="Function"
+      >putStrLn&#8734;</a
+      ><a name="3392"
+      > </a
+      ><a name="3393" class="Symbol"
+      >:</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" href="Data.String.html#973" class="Function"
+      >Costring</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" class="Symbol"
+      >&#8594;</a
+      ><a name="3405"
+      > </a
+      ><a name="3406" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3408"
+      > </a
+      ><a name="3409" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3410"
+      >
+</a
+      ><a name="3411" href="IO.html#3383" class="Function"
+      >putStrLn&#8734;</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="IO.html#3421" class="Bound"
+      >s</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" class="Symbol"
+      >=</a
+      ><a name="3424"
+      >
+  </a
+      ><a name="3427" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3428"
+      > </a
+      ><a name="3429" class="InductiveConstructor"
+      >lift</a
+      ><a name="3433"
+      > </a
+      ><a name="3434" class="Symbol"
+      >(</a
+      ><a name="3435" href="IO.Primitive.html#1398" class="Postulate"
+      >Prim</a
+      ><a name="3439"
+      >.</a
+      ><a name="3440" href="IO.Primitive.html#1398" class="Postulate"
+      >putStrLn</a
+      ><a name="3448"
+      > </a
+      ><a name="3449" href="IO.html#3421" class="Bound"
+      >s</a
+      ><a name="3450" class="Symbol"
+      >)</a
+      ><a name="3451"
+      > </a
+      ><a name="3452" href="IO.html#1050" class="InductiveConstructor Operator"
+      >&gt;&gt;</a
+      ><a name="3454"
+      >
+  </a
+      ><a name="3457" href="Coinduction.html#447" class="CoinductiveConstructor Operator"
+      >&#9839;</a
+      ><a name="3458"
+      > </a
+      ><a name="3459" href="IO.html#954" class="InductiveConstructor"
+      >return</a
+      ><a name="3465"
+      > </a
+      ><a name="3466" class="Symbol"
+      >_</a
+      ><a name="3467"
+      >
+
+</a
+      ><a name="3469" href="IO.html#3469" class="Function"
+      >putStrLn</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" class="Symbol"
+      >:</a
+      ><a name="3479"
+      > </a
+      ><a name="3480" href="Data.String.html#861" class="Postulate"
+      >String</a
+      ><a name="3486"
+      > </a
+      ><a name="3487" class="Symbol"
+      >&#8594;</a
+      ><a name="3488"
+      > </a
+      ><a name="3489" href="IO.html#879" class="Datatype"
+      >IO</a
+      ><a name="3491"
+      > </a
+      ><a name="3492" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="3493"
+      >
+</a
+      ><a name="3494" href="IO.html#3469" class="Function"
+      >putStrLn</a
+      ><a name="3502"
+      > </a
+      ><a name="3503" href="IO.html#3503" class="Bound"
+      >s</a
+      ><a name="3504"
+      > </a
+      ><a name="3505" class="Symbol"
+      >=</a
+      ><a name="3506"
+      > </a
+      ><a name="3507" href="IO.html#3383" class="Function"
+      >putStrLn&#8734;</a
+      ><a name="3516"
+      > </a
+      ><a name="3517" class="Symbol"
+      >(</a
+      ><a name="3518" href="Data.String.html#1578" class="Function"
+      >toCostring</a
+      ><a name="3528"
+      > </a
+      ><a name="3529" href="IO.html#3503" class="Bound"
+      >s</a
+      ><a name="3530" class="Symbol"
+      >)</a
+      ><a name="3531"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

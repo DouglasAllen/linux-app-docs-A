@@ -1,0 +1,85 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DbSelect</TITLE>
+<LINK rel=Previous href="c-ch153.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch155.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch153.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch155.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="117068">
+</a><h3>Ns_DbSelect</h3>
+<a name="117069">
+</a><h4>Overview</h4>
+Send a row-generating query to the database
+<a name="78067">
+</a><a name="132794">
+</a><h4>Syntax</h4>
+<pre>    <a name="78069"></a>Ns_Set *Ns_DbSelect(
+    <a name="78070"></a>Ns_DbHandle *handle,
+    <a name="78071"></a>char *sql
+    <a name="78072"></a>);
+</pre><p><a name="134155">
+</a><h4>Description</h4>
+<p><a name="78074">
+</a>The Ns_DbSelect function executes the given SQL statement. It returns an Ns_Set where the field key names are the column names that were returned by the select statement on success. The field values are NULL until the first call to Ns_DbGetRow where they are replaced with the values of the first row fetched from the database. The set is statically allocated; do not free it with Ns_SetFree when your query is complete.</p>
+<p><a name="78075">
+</a>On error, Ns_DbSelect returns NULL. Detailed error message may have accumulated in an internal buffer in the Ns_DbHandle.</p>
+<a name="225012">
+</a><h4>Examples</h4>
+<pre>    <a name="225013"></a>Ns_DbHandle *handle;
+    <a name="225014"></a>if ((handle = Ns_DbPoolGetHandle("aPoolName")) != NULL) {
+    <a name="225015"></a>	Ns_Set *row;
+    <a name="225016"></a>	row = Ns_DbSelect(handle, "select * from aTable");
+    <a name="225030"></a>	if (row == NULL) {
+    <a name="225031"></a>		/*... handle select error ...*/
+    <a name="225032"></a>	}
+    <a name="225033"></a>	while ((status = Ns_DbGetRow(handle, row)) == NS_OK) {
+    <a name="225034"></a>		/*... process the row fetched from the database ...*/
+    <a name="225035"></a>	}
+    <a name="225036"></a>	if (status != NS_END_DATA) {
+    <a name="225037"></a>		/*... handle get row error ...*/
+    <a name="225038"></a>	}
+    <a name="225018"></a>	Ns_DbPoolPutHandle(handle); /* done with handle */
+</pre><p><p><a name="225019">
+</a>}</p>
+<p><a name="225020">
+</a></p>
+<p><a name="225010">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch153.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch155.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

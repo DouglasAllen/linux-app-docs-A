@@ -1,0 +1,3915 @@
+
+
+                                   Annex D
+                                 (normative)
+
+                              Real-Time Systems
+
+
+1   {real-time systems} {embedded systems} This Annex specifies additional
+characteristics of Ada implementations intended for real-time systems
+software. To conform to this Annex, an implementation shall also conform to
+the Systems Programming Annex.
+
+
+                                   Metrics
+
+2   The metrics are documentation requirements; an implementation shall
+document the values of the language-defined metrics for at least one
+configuration [of hardware or an underlying system] supported by the
+implementation, and shall document the details of that configuration.
+
+2.a/2       This paragraph was deleted.
+
+2.a.1/2     Documentation Requirement: The details of the configuration used
+            to generate the values of all metrics.
+
+2.b         Reason: The actual values of the metrics are likely to depend on
+            hardware configuration details that are variable and generally
+            outside the control of a compiler vendor.
+
+3   The metrics do not necessarily yield a simple number. [For some, a range
+is more suitable, for others a formula dependent on some parameter is
+appropriate, and for others, it may be more suitable to break the metric into
+several cases.] Unless specified otherwise, the metrics in this annex are
+expressed in processor clock cycles. For metrics that require documentation of
+an upper bound, if there is no upper bound, the implementation shall report
+that the metric is unbounded.
+
+3.a         Discussion: There are several good reasons to specify metrics in
+            seconds; there are however equally good reasons to specify them in
+            processor clock cycles. In defining the metrics, we have tried to
+            strike a balance on a case-by-case basis.
+
+3.b         It has been suggested that all metrics should be given names, so
+            that "data-sheets" could be formulated and published by vendors.
+            However the paragraph number can serve that purpose.
+
+        NOTES
+
+4       1  The specification of the metrics makes a distinction between upper
+        bounds and simple execution times. Where something is just specified
+        as "the execution time of" a piece of code, this leaves one the
+        freedom to choose a nonpathological case. This kind of metric is of
+        the form "there exists a program such that the value of the metric is
+        V". Conversely, the meaning of upper bounds is "there is no program
+        such that the value of the metric is greater than V". This kind of
+        metric can only be partially tested, by finding the value of V for one
+        or more test programs.
+
+5       2  The metrics do not cover the whole language; they are limited to
+        features that are specified in Annex C, "Systems Programming" and in
+        this Annex. The metrics are intended to provide guidance to potential
+        users as to whether a particular implementation of such a feature is
+        going to be adequate for a particular real-time application. As such,
+        the metrics are aimed at known implementation choices that can result
+        in significant performance differences.
+
+6       3  The purpose of the metrics is not necessarily to provide
+        fine-grained quantitative results or to serve as a comparison between
+        different implementations on the same or different platforms. Instead,
+        their goal is rather qualitative; to define a standard set of
+        approximate values that can be measured and used to estimate the
+        general suitability of an implementation, or to evaluate the
+        comparative utility of certain features of an implementation for a
+        particular real-time application.
+
+
+                            Extensions to Ada 83
+
+6.a         {extensions to Ada 83} This Annex is new to Ada 95.
+
+
+D.1 Task Priorities
+
+
+1   [This clause specifies the priority model for real-time systems. In
+addition, the methods for specifying priorities are defined.]
+
+
+                                   Syntax
+
+2       The form of a pragma Priority is as follows:
+
+3         pragma Priority(expression);
+
+4       The form of a pragma Interrupt_Priority is as follows:
+
+5         pragma Interrupt_Priority[(expression)];
+
+
+                            Name Resolution Rules
+
+6   {expected type (Priority pragma argument) [partial]}
+{expected type (Interrupt_Priority pragma argument) [partial]} The expected
+type for the expression in a Priority or Interrupt_Priority pragma is Integer.
+
+
+                               Legality Rules
+
+7   A Priority pragma is allowed only immediately within a task_definition, a
+protected_definition, or the declarative_part of a subprogram_body. An
+Interrupt_Priority pragma is allowed only immediately within a
+task_definition or a protected_definition. At most one such pragma shall
+appear within a given construct.
+
+8   For a Priority pragma that appears in the declarative_part of a
+subprogram_body, the expression shall be static, and its value shall be in the
+range of System.Priority.
+
+8.a         Reason: This value is needed before it gets elaborated, when the
+            environment task starts executing.
+
+
+                              Static Semantics
+
+9   The following declarations exist in package System:
+
+10      subtype Any_Priority is Integer range implementation-defined;
+        subtype Priority is Any_Priority
+           range Any_Priority'First .. implementation-defined;
+        subtype Interrupt_Priority is Any_Priority
+           range Priority'Last+1 .. Any_Priority'Last;
+
+11      Default_Priority : constant Priority := (Priority'First + Priority'Last)/2;
+
+11.a        Implementation defined: The declarations of Any_Priority and
+            Priority.
+
+12  The full range of priority values supported by an implementation is
+specified by the subtype Any_Priority. The subrange of priority values that
+are high enough to require the blocking of one or more interrupts is specified
+by the subtype Interrupt_Priority. [The subrange of priority values below
+System.Interrupt_Priority'First is specified by the subtype System.Priority.]
+
+13  The priority specified by a Priority or Interrupt_Priority pragma is the
+value of the expression in the pragma, if any. If there is no expression in an
+Interrupt_Priority pragma, the priority value is Interrupt_Priority'Last.
+
+
+                              Dynamic Semantics
+
+14  A Priority pragma has no effect if it occurs in the declarative_part of
+the subprogram_body of a subprogram other than the main subprogram.
+
+15  {task priority} {priority} {priority inheritance} {base priority}
+{active priority} A task priority is an integer value that indicates a degree
+of urgency and is the basis for resolving competing demands of tasks for
+resources. Unless otherwise specified, whenever tasks compete for processors
+or other implementation-defined resources, the resources are allocated to the
+task with the highest priority value. The base priority of a task is the
+priority with which it was created, or to which it was later set by
+Dynamic_Priorities.Set_Priority (see D.5). At all times, a task also has an
+active priority, which generally reflects its base priority as well as any
+priority it inherits from other sources. Priority inheritance is the process
+by which the priority of a task or other entity (e.g. a protected object; see
+D.3) is used in the evaluation of another task's active priority.
+
+15.a        Implementation defined: Implementation-defined execution resources.
+
+16  The effect of specifying such a pragma in a protected_definition is
+discussed in D.3.
+
+17  {creation (of a task object)} The expression in a Priority or
+Interrupt_Priority pragma that appears in a task_definition is evaluated for
+each task object (see 9.1). For a Priority pragma, the value of the
+expression is converted to the subtype Priority; for an Interrupt_Priority
+pragma, this value is converted to the subtype Any_Priority. The priority
+value is then associated with the task object whose task_definition contains
+the pragma. {implicit subtype conversion (pragma Priority) [partial]}
+{implicit subtype conversion (pragma Interrupt_Priority) [partial]}
+
+18  Likewise, the priority value is associated with the environment task if
+the pragma appears in the declarative_part of the main subprogram.
+
+19  The initial value of a task's base priority is specified by default or by
+means of a Priority or Interrupt_Priority pragma. [After a task is created,
+its base priority can be changed only by a call to
+Dynamic_Priorities.Set_Priority (see D.5).] The initial base priority of a
+task in the absence of a pragma is the base priority of the task that creates
+it at the time of creation (see 9.1). If a pragma Priority does not apply to
+the main subprogram, the initial base priority of the environment task is
+System.Default_Priority. [The task's active priority is used when the task
+competes for processors. Similarly, the task's active priority is used to
+determine the task's position in any queue when Priority_Queuing is specified
+(see D.4).]
+
+20/2 {AI95-00357-01} At any time, the active priority of a task is the maximum
+of all the priorities the task is inheriting at that instant. For a task that
+is not held (see D.11), its base priority is a source of priority inheritance
+unless otherwise specified for a particular task dispatching policy. Other
+sources of priority inheritance are specified under the following conditions:
+
+20.a        Discussion: Other parts of the annex, e.g. D.11, define other
+            sources of priority inheritance.
+
+21/1   * {8652/0072} {AI95-00092-01} During activation, a task being activated
+        inherits the active priority that its activator (see 9.2) had at the
+        time the activation was initiated.
+
+22/1   * {8652/0072} {AI95-00092-01} During rendezvous, the task accepting the
+        entry call inherits the priority of the entry call (see 9.5.3 and
+        D.4).
+
+23    * During a protected action on a protected object, a task inherits the
+        ceiling priority of the protected object (see 9.5 and D.3).
+
+24  In all of these cases, the priority ceases to be inherited as soon as the
+condition calling for the inheritance no longer exists.
+
+
+                         Implementation Requirements
+
+25  The range of System.Interrupt_Priority shall include at least one value.
+
+26  The range of System.Priority shall include at least 30 values.
+
+        NOTES
+
+27      4  The priority expression can include references to discriminants of
+        the enclosing type.
+
+28      5  It is a consequence of the active priority rules that at the point
+        when a task stops inheriting a priority from another source, its
+        active priority is re-evaluated. This is in addition to other
+        instances described in this Annex for such re-evaluation.
+
+29      6  An implementation may provide a non-standard mode in which tasks
+        inherit priorities under conditions other than those specified above.
+
+29.a        Ramification: The use of a Priority or Interrupt_Priority pragma
+            does not require the package System to be named in a with_clause
+            for the enclosing compilation_unit.
+
+
+                            Extensions to Ada 83
+
+29.b        {extensions to Ada 83} The priority of a task is per-object and
+            not per-type.
+
+29.c        Priorities need not be static anymore (except for the main
+            subprogram).
+
+
+                         Wording Changes from Ada 83
+
+29.d        The description of the Priority pragma has been moved to this
+            annex.
+
+
+                         Wording Changes from Ada 95
+
+29.e/2      {8652/0072} {AI95-00092-01} Corrigendum: Clarified that dynamic
+            priority changes are not transitive - that is, they don't apply to
+            tasks that are being activated by or in rendezvous with the task
+            that had its priority changed.
+
+29.f/2      {AI95-00357-01} Generalized the definition of priority inheritance
+            to take into account the differences between the existing and new
+            dispatching policies.
+
+
+D.2 Priority Scheduling
+
+
+1/2 {AI95-00321-01} [This clause describes the rules that determine which task
+is selected for execution when more than one task is ready (see 9).]
+
+
+                         Wording Changes from Ada 95
+
+1.a/2       {AI95-00321-01} This introduction is simplified in order to
+            reflect the rearrangement and expansion of this clause.
+
+
+D.2.1 The Task Dispatching Model
+
+
+1/2 {AI95-00321-01} [The task dispatching model specifies task scheduling,
+based on conceptual priority-ordered ready queues.]
+
+
+                              Static Semantics
+
+1.1/2 {AI95-00355-01} The following language-defined library package exists:
+
+1.2/2   package Ada.Dispatching is
+          pragma Pure(Dispatching);
+          Dispatching_Policy_Error : exception;
+        end Ada.Dispatching;
+
+1.3/2 Dispatching serves as the parent of other language-defined library units
+concerned with task dispatching.
+
+
+                              Dynamic Semantics
+
+2/2 {AI95-00321-01} A task can become a running task only if it is ready (see
+9) and the execution resources required by that task are available. Processors
+are allocated to tasks based on each task's active priority.
+
+3   It is implementation defined whether, on a multiprocessor, a task that is
+waiting for access to a protected object keeps its processor busy.
+
+3.a         Implementation defined: Whether, on a multiprocessor, a task that
+            is waiting for access to a protected object keeps its processor
+            busy.
+
+4/2 {AI95-00321-01} {task dispatching} {dispatching, task}
+{task dispatching point [distributed]} {dispatching point [distributed]} Task
+dispatching is the process by which one ready task is selected for execution
+on a processor. This selection is done at certain points during the execution
+of a task called task dispatching points. A task reaches a task dispatching
+point whenever it becomes blocked, and when it terminates. [Other task
+dispatching points are defined throughout this Annex for specific policies.]
+
+4.a         Ramification: On multiprocessor systems, more than one task can be
+            chosen, at the same time, for execution on more than one
+            processor, as explained below.
+
+5/2 {AI95-00321-01} {ready queue} {head (of a queue)} {tail (of a queue)}
+{ready task} {task dispatching policy [partial]}
+{dispatching policy for tasks [partial]} Task dispatching policies are
+specified in terms of conceptual ready queues and task states. A ready queue
+is an ordered list of ready tasks. The first position in a queue is called the
+head of the queue, and the last position is called the tail of the queue. A
+task is ready if it is in a ready queue, or if it is running. Each processor
+has one ready queue for each priority value. At any instant, each ready queue
+of a processor contains exactly the set of tasks of that priority that are
+ready for execution on that processor, but are not running on any processor;
+that is, those tasks that are ready, are not running on any processor, and can
+be executed using that processor and other available resources. A task can be
+on the ready queues of more than one processor.
+
+5.a         Discussion: The core language defines a ready task as one that is
+            not blocked. Here we refine this definition and talk about ready
+            queues.
+
+6/2 {AI95-00321-01} {running task} Each processor also has one running task,
+which is the task currently being executed by that processor. Whenever a task
+running on a processor reaches a task dispatching point it goes back to one or
+more ready queues; a task (possibly the same task) is then selected to run on
+that processor. The task selected is the one at the head of the highest
+priority nonempty ready queue; this task is then removed from all ready queues
+to which it belongs.
+
+6.a         Discussion: There is always at least one task to run, if we count
+            the idle task.
+
+7/2 This paragraph was deleted.{AI95-00321-01}
+
+7.a/2       This paragraph was deleted.
+
+8/2 This paragraph was deleted.{AI95-00321-01}
+
+8.a/2       This paragraph was deleted.
+
+
+                         Implementation Permissions
+
+9/2 {AI95-00321-01} An implementation is allowed to define additional
+resources as execution resources, and to define the corresponding allocation
+policies for them. Such resources may have an implementation-defined effect on
+task dispatching.
+
+9.a/2       Implementation defined: The effect of implementation-defined
+            execution resources on task dispatching.
+
+10  An implementation may place implementation-defined restrictions on tasks
+whose active priority is in the Interrupt_Priority range.
+
+10.a        Ramification: For example, on some operating systems, it might be
+            necessary to disallow them altogether. This permission applies to
+            tasks whose priority is set to interrupt level for any reason: via
+            a pragma, via a call to Dynamic_Priorities.Set_Priority, or via
+            priority inheritance.
+
+10.1/2 {AI95-00321-01} [For optimization purposes,] an implementation may
+alter the points at which task dispatching occurs, in an
+implementation-defined manner. However, a delay_statement always corresponds
+to at least one task dispatching point.
+
+        NOTES
+
+11      7  Section 9 specifies under which circumstances a task becomes ready.
+        The ready state is affected by the rules for task activation and
+        termination, delay statements, and entry calls. {blocked [partial]}
+        When a task is not ready, it is said to be blocked.
+
+12      8  An example of a possible implementation-defined execution resource
+        is a page of physical memory, which needs to be loaded with a
+        particular page of virtual memory before a task can continue execution.
+
+13      9  The ready queues are purely conceptual; there is no requirement
+        that such lists physically exist in an implementation.
+
+14      10  While a task is running, it is not on any ready queue. Any time
+        the task that is running on a processor is added to a ready queue, a
+        new running task is selected for that processor.
+
+15      11  In a multiprocessor system, a task can be on the ready queues of
+        more than one processor. At the extreme, if several processors share
+        the same set of ready tasks, the contents of their ready queues is
+        identical, and so they can be viewed as sharing one ready queue, and
+        can be implemented that way. [Thus, the dispatching model covers
+        multiprocessors where dispatching is implemented using a single ready
+        queue, as well as those with separate dispatching domains.]
+
+16      12  The priority of a task is determined by rules specified in this
+        subclause, and under D.1, "Task Priorities", D.3, "
+        Priority Ceiling Locking", and D.5, "Dynamic Priorities".
+
+17/2    13  {AI95-00321-01} The setting of a task's base priority as a result
+        of a call to Set_Priority does not always take effect immediately when
+        Set_Priority is called. The effect of setting the task's base priority
+        is deferred while the affected task performs a protected action.
+
+
+                         Wording Changes from Ada 95
+
+17.a/2      {AI95-00321-01} This description is simplified to describe only
+            the parts of the dispatching model common to all policies. In
+            particular, rules about preemption are moved elsewhere. This makes
+            it easier to add other policies (which may not involve
+            preemption).
+
+
+D.2.2 Task Dispatching Pragmas
+
+
+0.1/2 {AI95-00355-01} [This clause allows a single task dispatching policy to
+be defined for all priorities, or the range of priorities to be split into
+subranges that are assigned individual dispatching policies.]
+
+
+                                   Syntax
+
+1       The form of a pragma Task_Dispatching_Policy is as follows:
+
+2         pragma Task_Dispatching_Policy(policy_identifier);
+
+2.1/2   {AI95-00355-01} The form of a pragma Priority_Specific_Dispatching is
+        as follows:
+
+2.2/2     pragma Priority_Specific_Dispatching (
+             policy_identifier, first_priority_expression,
+        last_priority_expression);
+
+
+                            Name Resolution Rules
+
+2.3/2 {AI95-00355-01} The expected type for first_priority_expression and
+last_priority_expression is Integer.
+
+
+                               Legality Rules
+
+3/2 {AI95-00321-01} {AI95-00355-01} The policy_identifier used in a pragma
+Task_Dispatching_Policy shall be the name of a task dispatching policy.
+
+3.a/2       This paragraph was deleted.
+
+3.1/2 {AI95-00355-01} The policy_identifier used in a pragma
+Priority_Specific_Dispatching shall be the name of a task dispatching policy.
+
+3.2/2 {AI95-00355-01} Both first_priority_expression and last_priority_-
+expression shall be static expressions in the range of System.Any_Priority;
+last_priority_expression shall have a value greater than or equal to
+first_priority_expression.
+
+
+                              Static Semantics
+
+3.3/2 {AI95-00355-01} Pragma Task_Dispatching_Policy specifies the single task
+dispatching policy.
+
+3.4/2 {AI95-00355-01} Pragma Priority_Specific_Dispatching specifies the task
+dispatching policy for the specified range of priorities. Tasks with base
+priorities within the range of priorities specified in a
+Priority_Specific_Dispatching pragma have their active priorities determined
+according to the specified dispatching policy. Tasks with active priorities
+within the range of priorities specified in a Priority_Specific_Dispatching
+pragma are dispatched according to the specified dispatching policy.
+
+3.b/2       Reason: {AI95-00355-01} Each ready queue is managed by exactly one
+            policy. Anything else would be chaos. The ready queue is
+            determined by the active priority. However, how the active
+            priority is calculated is determined by the policy; in order to
+            break out of this circle, we have to say that the active priority
+            is calculated by the method determined by the policy of the base
+            priority.
+
+3.5/2 {AI95-00355-01} If a partition contains one or more
+Priority_Specific_Dispatching pragmas the dispatching policy for priorities
+not covered by any Priority_Specific_Dispatching pragmas is
+FIFO_Within_Priorities.
+
+
+                           Post-Compilation Rules
+
+4/2 {AI95-00355-01} {configuration pragma (Task_Dispatching_Policy)
+ [partial]} {pragma, configuration (Task_Dispatching_Policy) [partial]} A
+Task_Dispatching_Policy pragma is a configuration pragma. A
+Priority_Specific_Dispatching pragma is a configuration pragma.
+{configuration pragma (Priority_Specific_Dispatching) [partial]}
+{pragma, configuration (Priority_Specific_Dispatching) [partial]}
+
+4.1/2 {AI95-00355-01} The priority ranges specified in more than one
+Priority_Specific_Dispatching pragma within the same partition shall not be
+overlapping.
+
+4.2/2 {AI95-00355-01} If a partition contains one or more
+Priority_Specific_Dispatching pragmas it shall not contain a
+Task_Dispatching_Policy pragma.
+
+5/2 This paragraph was deleted.{AI95-00333-01}
+
+
+                              Dynamic Semantics
+
+6/2 {AI95-00355-01} {task dispatching policy} [A task dispatching policy
+specifies the details of task dispatching that are not covered by the basic
+task dispatching model. These rules govern when tasks are inserted into and
+deleted from the ready queues.] A single task dispatching policy is specified
+by a Task_Dispatching_Policy pragma. Pragma Priority_Specific_Dispatching
+assigns distinct dispatching policies to subranges of System.Any_Priority.
+
+6.1/2 {AI95-00355-01} {unspecified [partial]} If neither pragma applies to any
+of the program units comprising a partition, the task dispatching policy for
+that partition is unspecified.
+
+6.2/2 {AI95-00355-01} If a partition contains one or more
+Priority_Specific_Dispatching pragmas a task dispatching point occurs for the
+currently running task of a processor whenever there is a non-empty ready
+queue for that processor with a higher priority than the priority of the
+running task.
+
+6.a/2       Discussion: If we have priority specific dispatching then we want
+            preemption across the entire range of priorities. That prevents
+            higher priority tasks from being blocked by lower priority tasks
+            that have a different policy. On the other hand, if we have a
+            single policy for the entire partition, we want the
+            characteristics of that policy to apply for preemption;
+            specifically, we may not require any preemption. Note that policy
+            Non_Preemptive_FIFO_Within_Priorities is not allowed in a priority
+            specific dispatching pragma.
+
+6.3/2 {AI95-00355-01} A task that has its base priority changed may move from
+one dispatching policy to another. It is immediately subject to the new
+dispatching policy.
+
+6.b/2       Ramification: Once subject to the new dispatching policy, it may
+            be immediately preempted or dispatched, according the rules of the
+            new policy.
+
+Paragraphs 7 through 13 were moved to D.2.3.
+
+
+                         Implementation Requirements
+
+13.1/2 {AI95-00333-01} {AI95-00355-01} An implementation shall allow, for a
+single partition, both the locking policy (see D.3) to be specified as
+Ceiling_Locking and also one or more Priority_Specific_Dispatching pragmas to
+be given.
+
+
+                         Documentation Requirements
+
+Paragraphs 14 through 16 were moved to D.2.3.
+
+16.a/2      This paragraph was deleted.
+
+
+                         Implementation Permissions
+
+17/2 {AI95-00256-01} Implementations are allowed to define other task
+dispatching policies, but need not support more than one task dispatching
+policy per partition.
+
+18/2 {AI95-00355-01} An implementation need not support pragma
+Priority_Specific_Dispatching if it is infeasible to support it in the target
+environment.
+
+18.a/2      Implementation defined: Implementation defined task dispatching
+            policies.
+
+        NOTES
+
+        Paragraphs 19 through 21 were deleted.
+
+
+                            Extensions to Ada 95
+
+21.a/2      {AI95-00333-01} {extensions to Ada 95} Amendment Correction: It is
+            no longer required to specify Ceiling_Locking with the
+            language-defined task dispatching policies; we only require that
+            implementations allow them to be used together.
+
+21.b/2      {AI95-00355-01} Pragma Priority_Specific_Dispatching is new; it
+            allows specifying different policies for different priorities.
+
+
+                         Wording Changes from Ada 95
+
+21.c/2      {AI95-00256-01} Clarified that an implementation need support only
+            one task dispatching policy (of any kind, language-defined or
+            otherwise) per partition.
+
+21.d/2      {AI95-00321-01} This description is simplified to describe only
+            the rules for the Task_Dispatching_Policy pragma that are common
+            to all policies. In particular, rules about preemption are moved
+            elsewhere. This makes it easier to add other policies (which may
+            not involve preemption).
+
+
+D.2.3 Preemptive Dispatching
+
+
+1/2 {AI95-00321-01} [This clause defines a preemptive task dispatching
+policy.]
+
+
+                              Static Semantics
+
+2/2 {AI95-00355-01} The policy_identifier FIFO_Within_Priorities is a task
+dispatching policy.
+
+
+                              Dynamic Semantics
+
+3/2 {AI95-00321-01} When FIFO_Within_Priorities is in effect, modifications to
+the ready queues occur only as follows:
+
+4/2   * {AI95-00321-01} When a blocked task becomes ready, it is added at the
+        tail of the ready queue for its active priority.
+
+5/2   * When the active priority of a ready task that is not running changes,
+        or the setting of its base priority takes effect, the task is removed
+        from the ready queue for its old active priority and is added at the
+        tail of the ready queue for its new active priority, except in the
+        case where the active priority is lowered due to the loss of inherited
+        priority, in which case the task is added at the head of the ready
+        queue for its new active priority.
+
+6/2   * When the setting of the base priority of a running task takes effect,
+        the task is added to the tail of the ready queue for its active
+        priority.
+
+7/2   * When a task executes a delay_statement that does not result in
+        blocking, it is added to the tail of the ready queue for its active
+        priority.
+
+7.a/2       Ramification: If the delay does result in blocking, the task moves
+            to the "delay queue", not to the ready queue.
+
+8/2 {AI95-00321-01} {task dispatching point [partial]} {dispatching point
+ [partial]} Each of the events specified above is a task dispatching point
+(see D.2.1).
+
+9/2 {AI95-00321-01} A task dispatching point occurs for the currently running
+task of a processor whenever there is a nonempty ready queue for that
+processor with a higher priority than the priority of the running task. The
+currently running task is said to be preempted and it is added at the head of
+the ready queue for its active priority.{preempt (a running task)}
+
+
+                         Implementation Requirements
+
+10/2 {AI95-00333-01} An implementation shall allow, for a single partition,
+both the task dispatching policy to be specified as FIFO_Within_Priorities and
+also the locking policy (see D.3) to be specified as Ceiling_Locking.
+
+10.a/2      Reason: This is the preferred combination of the
+            FIFO_Within_Priorities policy with a locking policy, and we want
+            that combination to be portable.
+
+
+                         Documentation Requirements
+
+11/2 {AI95-00321-01} {priority inversion} Priority inversion is the duration
+for which a task remains at the head of the highest priority nonempty ready
+queue while the processor executes a lower priority task. The implementation
+shall document:
+
+12/2   * The maximum priority inversion a user task can experience due to
+        activity of the implementation (on behalf of lower priority tasks),
+        and
+
+12.a/2      Documentation Requirement: The maximum priority inversion a user
+            task can experience from the implementation.
+
+13/2   * whether execution of a task can be preempted by the implementation
+        processing of delay expirations for lower priority tasks, and if so,
+        for how long.
+
+13.a/2      Documentation Requirement: The amount of time that a task can be
+            preempted for processing on behalf of lower-priority tasks.
+
+        NOTES
+
+14/2    14  {AI95-00321-01} If the active priority of a running task is
+        lowered due to loss of inherited priority (as it is on completion of a
+        protected operation) and there is a ready task of the same active
+        priority that is not running, the running task continues to run
+        (provided that there is no higher priority task).
+
+15/2    15  {AI95-00321-01} Setting the base priority of a ready task causes
+        the task to move to the tail of the queue for its active priority,
+        regardless of whether the active priority of the task actually changes.
+
+
+                         Wording Changes from Ada 95
+
+15.a/2      {AI95-00321-01} This subclause is new; it mainly consists of text
+            that was found in D.2.1 and D.2.2 in Ada 95. This was separated
+            out so the definition of additional policies was easier.
+
+15.b/2      {AI95-00333-01} We require that implementations allow this policy
+            and Ceiling_Locking together.
+
+15.c/2      {AI95-00355-01} We explicitly defined FIFO_Within_Priorities to be
+            a task dispatching policy.
+
+
+D.2.4 Non-Preemptive Dispatching
+
+
+1/2 {AI95-00298-01} [This clause defines a non-preemptive task dispatching
+policy.]
+
+
+                              Static Semantics
+
+2/2 {AI95-00298-01} {AI95-00355-01} The policy_identifier
+Non_Preemptive_FIFO_Within_Priorities is a task dispatching policy.
+
+
+                               Legality Rules
+
+3/2 {AI95-00355-01} Non_Preemptive_FIFO_Within_Priorities shall not be
+specified as the policy_identifier of pragma Priority_Specific_Dispatching
+(see D.2.2).
+
+3.a/2       Reason: The non-preemptive nature of this policy could cause the
+            policies of higher priority tasks to malfunction, missing
+            deadlines and having unlimited priority inversion. That would
+            render the use of such policies impotent and misleading. As such,
+            this policy only makes sense for a complete system.
+
+
+                              Dynamic Semantics
+
+4/2 {AI95-00298-01} When Non_Preemptive_FIFO_Within_Priorities is in effect,
+modifications to the ready queues occur only as follows:
+
+5/2   * {AI95-00298-01} When a blocked task becomes ready, it is added at the
+        tail of the ready queue for its active priority.
+
+6/2   * When the active priority of a ready task that is not running changes,
+        or the setting of its base priority takes effect, the task is removed
+        from the ready queue for its old active priority and is added at the
+        tail of the ready queue for its new active priority.
+
+7/2   * When the setting of the base priority of a running task takes effect,
+        the task is added to the tail of the ready queue for its active
+        priority.
+
+8/2   * When a task executes a delay_statement that does not result in
+        blocking, it is added to the tail of the ready queue for its active
+        priority.
+
+8.a/2       Ramification: If the delay does result in blocking, the task moves
+            to the "delay queue", not to the ready queue.
+
+9/2 For this policy, a non-blocking delay_statement is the only non-blocking
+event that is a task dispatching point (see D.2.1).{task dispatching point
+ [partial]} {dispatching point [partial]}
+
+
+                         Implementation Requirements
+
+10/2 {AI95-00333-01} An implementation shall allow, for a single partition,
+both the task dispatching policy to be specified as
+Non_Preemptive_FIFO_Within_Priorities and also the locking policy (see D.3) to
+be specified as Ceiling_Locking.
+
+10.a/2      Reason: This is the preferred combination of the
+            Non_Preemptive_FIFO_Within_Priorities policy with a locking
+            policy, and we want that combination to be portable.
+
+
+                         Implementation Permissions
+
+11/2 {AI95-00298-01} Since implementations are allowed to round all ceiling
+priorities in subrange System.Priority to System.Priority'Last (see D.3), an
+implementation may allow a task to execute within a protected object without
+raising its active priority provided the associated protected unit does not
+contain pragma Interrupt_Priority, Interrupt_Handler, or Attach_Handler.
+
+
+                            Extensions to Ada 95
+
+11.a/2      {AI95-00298-01} {AI95-00355-01} {extensions to Ada 95} Policy
+            Non_Preemptive_FIFO_Within_Priorities is new.
+
+
+D.2.5 Round Robin Dispatching
+
+
+1/2 {AI95-00355-01} [This clause defines the task dispatching policy
+Round_Robin_Within_Priorities and the package Round_Robin.]
+
+
+                              Static Semantics
+
+2/2 {AI95-00355-01} The policy_identifier Round_Robin_Within_Priorities is a
+task dispatching policy.
+
+3/2 {AI95-00355-01} The following language-defined library package exists:
+
+4/2     with System;
+        with Ada.Real_Time;
+        package Ada.Dispatching.Round_Robin is
+          Default_Quantum : constant Ada.Real_Time.Time_Span :=
+                     implementation-defined;
+          procedure Set_Quantum (Pri     : in System.Priority;
+                                 Quantum : in Ada.Real_Time.Time_Span);
+          procedure Set_Quantum (Low, High : in System.Priority;
+                                 Quantum   : in Ada.Real_Time.Time_Span);
+          function Actual_Quantum
+         (Pri : System.Priority) return Ada.Real_Time.Time_Span;
+          function Is_Round_Robin (Pri : System.Priority) return Boolean;
+        end Ada.Dispatching.Round_Robin;
+
+4.a.1/2     Implementation defined: The value of Default_Quantum in
+            Dispatching.Round_Robin.
+
+5/2 {AI95-00355-01} When task dispatching policy Round_Robin_Within_Priorities
+is the single policy in effect for a partition, each task with priority in the
+range of System.Interrupt_Priority is dispatched according to policy
+FIFO_Within_Priorities.
+
+
+                              Dynamic Semantics
+
+6/2 {AI95-00355-01} The procedures Set_Quantum set the required Quantum value
+for a single priority level Pri or a range of priority levels Low .. High. If
+no quantum is set for a Round Robin priority level, Default_Quantum is used.
+
+7/2 {AI95-00355-01} The function Actual_Quantum returns the actual quantum
+used by the implementation for the priority level Pri.
+
+8/2 {AI95-00355-01} The function Is_Round_Robin returns True if priority Pri
+is covered by task dispatching policy Round_Robin_Within_Priorities; otherwise
+it returns False.
+
+9/2 {AI95-00355-01} A call of Actual_Quantum or Set_Quantum raises exception
+Dispatching.Dispatching_Policy_Error if a predefined policy other than
+Round_Robin_Within_Priorities applies to the specified priority or any of the
+priorities in the specified range.
+
+10/2 {AI95-00355-01} For Round_Robin_Within_Priorities, the dispatching rules
+for FIFO_Within_Priorities apply with the following additional rules:
+
+11/2   * When a task is added or moved to the tail of the ready queue for its
+        base priority, it has an execution time budget equal to the quantum
+        for that priority level. This will also occur when a blocked task
+        becomes executable again.
+
+12/2   * When a task is preempted (by a higher priority task) and is added to
+        the head of the ready queue for its priority level, it retains its
+        remaining budget.
+
+13/2   * While a task is executing, its budget is decreased by the amount of
+        execution time it uses. The accuracy of this accounting is the same as
+        that for execution time clocks (see D.14).
+
+13.a/2      Ramification: Note that this happens even when the task is
+            executing at a higher, inherited priority, and even if that higher
+            priority is dispatched by a different policy than round robin.
+
+14/2   * When a task has exhausted its budget and is without an inherited
+        priority (and is not executing within a protected operation), it is
+        moved to the tail of the ready queue for its priority level. This is a
+        task dispatching point.
+
+14.a/2      Ramification: In this case, it will be given a budget as described
+            in the first bullet.
+
+14.b/2      The rules for FIFO_Within_Priority (to which these bullets are
+            added) say that a task that has its base priority set to a Round
+            Robin priority is moved to the tail of the ready queue for its new
+            priority level, and then will be given a budget as described in
+            the first bullet. That happens whether or not the task's original
+            base priority was a Round Robin priority.
+
+
+                         Implementation Requirements
+
+15/2 {AI95-00333-01} {AI95-00355-01} An implementation shall allow, for a
+single partition, both the task dispatching policy to be specified as
+Round_Robin_Within_Priorities and also the locking policy (see D.3) to be
+specified as Ceiling_Locking.
+
+15.a/2      Reason: This is the preferred combination of the
+            Round_Robin_Within_Priorities policy with a locking policy, and we
+            want that combination to be portable.
+
+
+                         Documentation Requirements
+
+16/2 {AI95-00355-01} An implementation shall document the quantum values
+supported.
+
+16.a.1/2    Documentation Requirement: The quantum values supported for round
+            robin dispatching.
+
+17/2 {AI95-00355-01} An implementation shall document the accuracy with which
+it detects the exhaustion of the budget of a task.
+
+17.a.1/2    Documentation Requirement: The accuracy of the detection of the
+            exhaustion of the budget of a task for round robin dispatching.
+
+        NOTES
+
+18/2    16  {AI95-00355-01} Due to implementation constraints, the quantum
+        value returned by Actual_Quantum might not be identical to that set
+        with Set_Quantum.
+
+19/2    17  {AI95-00355-01} A task that executes continuously with an
+        inherited priority will not be subject to round robin dispatching.
+
+
+                            Extensions to Ada 95
+
+19.a/2      {AI95-00355-01} {extensions to Ada 95} Policy
+            Round_Robin_Within_Priorities and package Dispatching.Round_Robin
+            are new.
+
+
+D.2.6 Earliest Deadline First Dispatching
+
+
+1/2 {AI95-00357-01} The deadline of a task is an indication of the urgency of
+the task; it represents a point on an ideal physical time line. The deadline
+might affect how resources are allocated to the task.
+
+2/2 {AI95-00357-01} This clause defines a package for representing the
+deadline of a task and a dispatching policy that defines Earliest Deadline
+First (EDF) dispatching. A pragma is defined to assign an initial deadline to
+a task.
+
+2.a/2       Discussion: This pragma is the only way of assigning an initial
+            deadline to a task so that its activation can be controlled by EDF
+            scheduling. This is similar to the way pragma Priority is used to
+            give an initial priority to a task.
+
+
+                         Language Design Principles
+
+2.b/2       {AI95-00357-01} To predict the behavior of a multi-tasking program
+            it is necessary to control access to the processor which is
+            preemptive, and shared objects which are usually non-preemptive
+            and embodied in protected objects. Two common dispatching policies
+            for the processor are fixed priority and EDF. The most effective
+            control over shared objects is via preemption levels. With a pure
+            priority scheme a single notion of priority is used for processor
+            dispatching and preemption levels. With EDF and similar schemes
+            priority is used for preemption levels (only), with another
+            measure used for dispatching. T.P. Baker showed (Real-Time
+            Systems, March 1991, vol. 3, num. 1, Stack-Based Scheduling of
+            Realtime Processes) that for EDF a newly released task should only
+            preempt the currently running task if it has an earlier deadline
+            and a higher preemption level than any currently "locked"
+            protected object. The rules of this clause implement this scheme
+            including the case where the newly released task should execute
+            before some existing tasks but not preempt the currently executing
+            task.
+
+
+                                   Syntax
+
+3/2     {AI95-00357-01} The form of a pragma Relative_Deadline is as follows:
+
+4/2       pragma Relative_Deadline (relative_deadline_expression);
+
+
+                            Name Resolution Rules
+
+5/2 {AI95-00357-01} The expected type for relative_deadline_expression is
+Real_Time.Time_Span.
+
+
+                               Legality Rules
+
+6/2 {AI95-00357-01} A Relative_Deadline pragma is allowed only immediately
+within a task_definition or the declarative_part of a subprogram_body. At most
+one such pragma shall appear within a given construct.
+
+
+                              Static Semantics
+
+7/2 {AI95-00357-01} The policy_identifier EDF_Across_Priorities is a task
+dispatching policy.
+
+8/2 {AI95-00357-01} The following language-defined library package exists:
+
+9/2     with Ada.Real_Time;
+        with Ada.Task_Identification;
+        package Ada.Dispatching.EDF is
+          subtype Deadline is Ada.Real_Time.Time;
+          Default_Deadline : constant Deadline :=
+                      Ada.Real_Time.Time_Last;
+          procedure Set_Deadline (D : in Deadline;
+                      T : in Ada.Task_Identification.Task_Id :=
+                      Ada.Task_Identification.Current_Task);
+          procedure Delay_Until_And_Set_Deadline (
+                      Delay_Until_Time : in Ada.Real_Time.Time;
+                      Deadline_Offset : in Ada.Real_Time.Time_Span);
+          function Get_Deadline (T : Ada.Task_Identification.Task_Id :=
+                      Ada.Task_Identification.Current_Task) return Deadline;
+        end Ada.Dispatching.EDF;
+
+
+                           Post-Compilation Rules
+
+10/2 {AI95-00357-01} If the EDF_Across_Priorities policy is specified for a
+partition, then the Ceiling_Locking policy (see D.3) shall also be specified
+for the partition.
+
+11/2 {AI95-00357-01} If the EDF_Across_Priorities policy appears in a
+Priority_Specific_Dispatching pragma (see D.2.2) in a partition, then the
+Ceiling_Locking policy (see D.3) shall also be specified for the partition.
+
+11.a/2      Reason: Unlike the other language-defined dispatching policies,
+            the semantic description of EDF_Across_Priorities assumes
+            Ceiling_Locking (and a ceiling priority) in order to make the
+            mapping between deadlines and priorities work. Thus, we require
+            both policies to be specified if EDF is used in the partition.
+
+
+                              Dynamic Semantics
+
+12/2 {AI95-00357-01} A Relative_Deadline pragma has no effect if it occurs in
+the declarative_part of the subprogram_body of a subprogram other than the
+main subprogram.
+
+13/2 {AI95-00357-01} The initial absolute deadline of a task containing pragma
+Relative_Deadline is the value of Real_Time.Clock +
+relative_deadline_expression, where the call of Real_Time.Clock is made between task creation
+and the start of its activation. If there is no Relative_Deadline pragma then
+the initial absolute deadline of a task is the value of Default_Deadline. [The
+environment task is also given an initial deadline by this rule.]
+
+13.a/2      Proof: The environment task is a normal task by 10.2, so of course
+            this rule applies to it.
+
+14/2 {AI95-00357-01} The procedure Set_Deadline changes the absolute deadline
+of the task to D. The function Get_Deadline returns the absolute deadline of
+the task.
+
+15/2 {AI95-00357-01} The procedure Delay_Until_And_Set_Deadline delays the
+calling task until time Delay_Until_Time. When the task becomes runnable again
+it will have deadline Delay_Until_Time + Deadline_Offset.
+
+16/2 {AI95-00357-01} On a system with a single processor, the setting of the
+deadline of a task to the new value occurs immediately at the first point that
+is outside the execution of a protected action. If the task is currently on a
+ready queue it is removed and re-entered on to the ready queue determined by
+the rules defined below.
+
+17/2 {AI95-00357-01} When EDF_Across_Priorities is specified for priority
+range Low..High all ready queues in this range are ordered by deadline. The
+task at the head of a queue is the one with the earliest deadline.
+
+18/2 {AI95-00357-01} A task dispatching point occurs for the currently running
+task T to which policy EDF_Across_Priorities applies:
+
+19/2   * when a change to the deadline of T occurs;
+
+20/2   * there is a task on the ready queue for the active priority of T with
+        a deadline earlier than the deadline of T; or
+
+21/2   * there is a non-empty ready queue for that processor with a higher
+        priority than the active priority of the running task.
+
+22/2 In these cases, the currently running task is said to be preempted and is
+returned to the ready queue for its active priority.
+
+23/2 {AI95-00357-01} For a task T to which policy EDF_Across_Priorities
+applies, the base priority is not a source of priority inheritance; the active
+priority when first activated or while it is blocked is defined as the maximum
+of the following:
+
+24/2   * the lowest priority in the range specified as EDF_Across_Priorities
+        that includes the base priority of T;
+
+25/2   * the priorities, if any, currently inherited by T;
+
+26/2   * the highest priority P, if any, less than the base priority of T such
+        that one or more tasks are executing within a protected object with
+        ceiling priority P and task T has an earlier deadline than all such
+        tasks.
+
+26.a/2      Ramification: The active priority of T might be lower than its
+            base priority.
+
+27/2 {AI95-00357-01} When a task T is first activated or becomes unblocked, it
+is added to the ready queue corresponding to this active priority. Until it
+becomes blocked again, the active priority of T remains no less than this
+value; it will exceed this value only while it is inheriting a higher priority.
+
+27.a/2      Discussion: These rules ensure that a task executing in a
+            protected object is preempted only by a task with a shorter
+            deadline and a higher base priority. This matches the traditional
+            preemption level description without the need to define a new kind
+            of protected object locking.
+
+28/2 {AI95-00357-01} When the setting of the base priority of a ready task
+takes effect and the new priority is in a range specified as
+EDF_Across_Priorities, the task is added to the ready queue corresponding to
+its new active priority, as determined above.
+
+29/2 {AI95-00357-01} For all the operations defined in Dispatching.EDF,
+Tasking_Error is raised if the task identified by T has terminated.
+Program_Error is raised if the value of T is Null_Task_Id.
+
+
+                          Bounded (Run-Time) Errors
+
+30/2 {AI95-00357-01} {bounded error (cause) [partial]} If
+EDF_Across_Priorities is specified for priority range Low..High, it is a
+bounded error to declare a protected object with ceiling priority Low or to
+assign the value Low to attribute 'Priority. In either case either
+Program_Error is raised or the ceiling of the protected object is assigned the
+value Low+1.
+
+
+                             Erroneous Execution
+
+31/2 {AI95-00357-01} {erroneous execution (cause) [partial]} If a value of
+Task_Id is passed as a parameter to any of the subprograms of this package and
+the corresponding task object no longer exists, the execution of the program
+is erroneous.
+
+
+                         Documentation Requirements
+
+32/2 {AI95-00357-01} On a multiprocessor, the implementation shall document
+any conditions that cause the completion of the setting of the deadline of a
+task to be delayed later than what is specified for a single processor.
+
+32.a.1/2    Documentation Requirement: Any conditions that cause the
+            completion of the setting of the deadline of a task to be delayed
+            for a multiprocessor.
+
+        NOTES
+
+33/2    18  {AI95-00357-01} If two adjacent priority ranges, A..B and B+1..C
+        are specified to have policy EDF_Across_Priorities then this is not
+        equivalent to this policy being specified for the single range, A..C.
+
+34/2    19  {AI95-00357-01} The above rules implement the preemption-level
+        protocol (also called Stack Resource Policy protocol) for resource
+        sharing under EDF dispatching. The preemption-level for a task is
+        denoted by its base priority. The definition of a ceiling
+        preemption-level for a protected object follows the existing rules for
+        ceiling locking.
+
+34.a/2      Implementation Note: {AI95-00357-01} An implementation may support
+            additional dispatching policies by replacing absolute deadline
+            with an alternative measure of urgency.
+
+
+                            Extensions to Ada 95
+
+34.b/2      {AI95-00357-01} {extensions to Ada 95} Policy
+            EDF_Across_Priorities and package Dispatching.EDF are new.
+
+
+D.3 Priority Ceiling Locking
+
+
+1   [This clause specifies the interactions between priority task scheduling
+and protected object ceilings. This interaction is based on the concept of the
+ceiling priority of a protected object.]
+
+
+                                   Syntax
+
+2       The form of a pragma Locking_Policy is as follows:
+
+3         pragma Locking_Policy(policy_identifier);
+
+
+                               Legality Rules
+
+4   The policy_identifier shall either be Ceiling_Locking or an
+implementation-defined identifier.
+
+4.a         Implementation defined: Implementation-defined policy_identifiers
+            allowed in a pragma Locking_Policy.
+
+
+                           Post-Compilation Rules
+
+5   {configuration pragma (Locking_Policy) [partial]}
+{pragma, configuration (Locking_Policy) [partial]} A Locking_Policy pragma is a
+configuration pragma.
+
+
+                              Dynamic Semantics
+
+6/2 {8652/0073} {AI95-00091-01} {AI95-00327-01} {locking policy} [A locking
+policy specifies the details of protected object locking. All protected
+objects have a priority. The locking policy specifies the meaning of the
+priority of a protected object, and the relationships between these priorities
+and task priorities. In addition, the policy specifies the state of a task
+when it executes a protected action, and how its active priority is affected
+by the locking.] The locking policy is specified by a Locking_Policy pragma.
+For implementation-defined locking policies, the meaning of the priority of a
+protected object is implementation defined. If no Locking_Policy pragma
+applies to any of the program units comprising a partition, the locking policy
+for that partition, as well as the meaning of the priority of a protected
+object, are implementation defined. {Priority (of a protected object)}
+
+6.a/2       Implementation defined: The locking policy if no Locking_Policy
+            pragma applies to any unit of a partition.
+
+6.1/2 {AI95-00327-01} The expression of a Priority or Interrupt_Priority
+pragma (see D.1) is evaluated as part of the creation of the corresponding
+protected object and converted to the subtype System.Any_Priority or
+System.Interrupt_Priority, respectively. The value of the expression is the
+initial priority of the corresponding protected object. If no Priority or
+Interrupt_Priority pragma applies to a protected object, the initial priority
+is specified by the locking policy.
+{implicit subtype conversion (pragma Priority) [partial]}
+{implicit subtype conversion (pragma Interrupt_Priority) [partial]}
+
+7   There is one predefined locking policy, Ceiling_Locking; this policy is
+defined as follows:
+
+8/2   * {AI95-00327-01} {ceiling priority (of a protected object)} Every
+        protected object has a ceiling priority, which is determined by either
+        a Priority or Interrupt_Priority pragma as defined in D.1, or by
+        assignment to the Priority attribute as described in D.5.2. The
+        ceiling priority of a protected object (or ceiling, for short) is an
+        upper bound on the active priority a task can have when it calls
+        protected operations of that protected object.
+
+9/2   * {AI95-00327-01} The initial ceiling priority of a protected object is
+        equal to the initial priority for that object.
+
+10/2   * {AI95-00327-01} If an Interrupt_Handler or Attach_Handler pragma (see
+        C.3.1) appears in a protected_definition without an Interrupt_Priority
+        pragma, the initial priority of protected objects of that type is
+        implementation defined, but in the range of the subtype
+        System.Interrupt_Priority.
+
+10.a        Implementation defined: Default ceiling priorities.
+
+11/2   * {AI95-00327-01} If no pragma Priority, Interrupt_Priority,
+        Interrupt_Handler, or Attach_Handler is specified in the
+        protected_definition, then the initial priority of the corresponding
+        protected object is System.Priority'Last.
+
+12    * While a task executes a protected action, it inherits the ceiling
+        priority of the corresponding protected object.
+
+13    * {Ceiling_Check [partial]} {check, language-defined (Ceiling_Check)}
+        {Program_Error (raised by failure of run-time check)} When a task calls
+        a protected operation, a check is made that its active priority is not
+        higher than the ceiling of the corresponding protected object;
+        Program_Error is raised if this check fails.
+
+
+                          Bounded (Run-Time) Errors
+
+13.1/2 {AI95-00327-01} Following any change of priority, it is a bounded error
+for the active priority of any task with a call queued on an entry of a
+protected object to be higher than the ceiling priority of the protected
+object. {bounded error (cause) [partial]} In this case one of the following
+applies:
+
+13.2/2   * at any time prior to executing the entry body Program_Error is
+        raised in the calling task;
+        {Program_Error (raised by failure of run-time check)}
+
+13.3/2   * when the entry is open the entry body is executed at the ceiling
+        priority of the protected object;
+
+13.4/2   * when the entry is open the entry body is executed at the ceiling
+        priority of the protected object and then Program_Error is raised in
+        the calling task; or
+        {Program_Error (raised by failure of run-time check)}
+
+13.5/2   * when the entry is open the entry body is executed at the ceiling
+        priority of the protected object that was in effect when the entry
+        call was queued.
+
+13.a.1/2    Ramification: Note that the error is "blamed" on the task that did
+            the entry call, not the task that changed the priority of the task
+            or protected object. This seems to make sense for the case of
+            changing the priority of a task blocked on a call, since if the
+            Set_Priority had happened a little bit sooner, before the task
+            queued a call, the entry-calling task would get the error.
+            Similarly, there is no reason not to raise the priority of a task
+            that is executing in an abortable_part, so long as its priority is
+            lowered before it gets to the end and needs to cancel the call.
+            The priority might need to be lowered to allow it to remove the
+            call from the entry queue, in order to avoid violating the
+            ceiling. This seems relatively harmless, since there is an error,
+            and the task is about to start raising an exception anyway.
+
+
+                         Implementation Permissions
+
+14  The implementation is allowed to round all ceilings in a certain subrange
+of System.Priority or System.Interrupt_Priority up to the top of that
+subrange, uniformly.
+
+14.a        Discussion: For example, an implementation might use Priority'Last
+            for all ceilings in Priority, and Interrupt_Priority'Last for all
+            ceilings in Interrupt_Priority. This would be equivalent to having
+            two ceiling priorities for protected objects, "nonpreemptible" and
+            "noninterruptible", and is an allowed behavior.
+
+14.b        Note that the implementation cannot choose a subrange that crosses
+            the boundary between normal and interrupt priorities.
+
+15/2 {AI95-00256-01} Implementations are allowed to define other locking
+policies, but need not support more than one locking policy per partition.
+
+16  [Since implementations are allowed to place restrictions on code that runs
+at an interrupt-level active priority (see C.3.1 and D.2.1), the
+implementation may implement a language feature in terms of a protected object
+with an implementation-defined ceiling, but the ceiling shall be no less than
+Priority'Last.]
+
+16.a        Implementation defined: The ceiling of any protected object used
+            internally by the implementation.
+
+16.b        Proof: This permission follows from the fact that the
+            implementation can place restrictions on interrupt handlers and on
+            any other code that runs at an interrupt-level active priority.
+
+16.c        The implementation might protect a storage pool with a protected
+            object whose ceiling is Priority'Last, which would cause
+            allocators to fail when evaluated at interrupt priority. Note that
+            the ceiling of such an object has to be at least Priority'Last,
+            since there is no permission for allocators to fail when evaluated
+            at a non-interrupt priority.
+
+
+                            Implementation Advice
+
+17  The implementation should use names that end with "_Locking" for
+implementation-defined locking policies.
+
+17.a/2      Implementation Advice: Names that end with "_Locking" should be
+            used for implementation-defined locking policies.
+
+        NOTES
+
+18      20  While a task executes in a protected action, it can be preempted
+        only by tasks whose active priorities are higher than the ceiling
+        priority of the protected object.
+
+19      21  If a protected object has a ceiling priority in the range of
+        Interrupt_Priority, certain interrupts are blocked while protected
+        actions of that object execute. In the extreme, if the ceiling is
+        Interrupt_Priority'Last, all blockable interrupts are blocked during
+        that time.
+
+20      22  The ceiling priority of a protected object has to be in the
+        Interrupt_Priority range if one of its procedures is to be used as an
+        interrupt handler (see C.3).
+
+21      23  When specifying the ceiling of a protected object, one should
+        choose a value that is at least as high as the highest active priority
+        at which tasks can be executing when they call protected operations of
+        that object. In determining this value the following factors, which
+        can affect active priority, should be considered: the effect of
+        Set_Priority, nested protected operations, entry calls, task
+        activation, and other implementation-defined factors.
+
+22      24  Attaching a protected procedure whose ceiling is below the
+        interrupt hardware priority to an interrupt causes the execution of
+        the program to be erroneous (see C.3.1).
+
+23      25  On a single processor implementation, the ceiling priority rules
+        guarantee that there is no possibility of deadlock involving only
+        protected subprograms (excluding the case where a protected operation
+        calls another protected operation on the same protected object).
+
+
+                            Extensions to Ada 95
+
+23.a/2      {AI95-00327-01} {extensions to Ada 95} All protected objects now
+            have a priority, which is the value of the Priority attribute of
+            D.5.2. How this value is interpreted depends on the locking
+            policy; for instance, the ceiling priority is derived from this
+            value when the locking policy is Ceiling_Locking.
+
+
+                         Wording Changes from Ada 95
+
+23.b/2      {8652/0073} {AI95-00091-01} Corrigendum: Corrected the wording to
+            reflect that pragma Locking_Policy cannot be inside of a program
+            unit.
+
+23.c/2      {AI95-00256-01} Clarified that an implementation need support only
+            one locking policy (of any kind, language-defined or otherwise)
+            per partition.
+
+23.d/2      {AI95-00327-01} The bounded error for the priority of a task being
+            higher than the ceiling of an object it is currently in was moved
+            here from D.5, so that it applies no matter how the situation
+            arises.
+
+
+D.4 Entry Queuing Policies
+
+
+1/1 {8652/0074} {AI95-00068-01} [{queuing policy} This clause specifies a
+mechanism for a user to choose an entry queuing policy. It also defines two
+such policies. Other policies are implementation defined.]
+
+1.a         Implementation defined: Implementation-defined queuing policies.
+
+
+                                   Syntax
+
+2       The form of a pragma Queuing_Policy is as follows:
+
+3         pragma Queuing_Policy(policy_identifier);
+
+
+                               Legality Rules
+
+4   The policy_identifier shall be either FIFO_Queuing, Priority_Queuing or an
+implementation-defined identifier.
+
+
+                           Post-Compilation Rules
+
+5   {configuration pragma (Queuing_Policy) [partial]}
+{pragma, configuration (Queuing_Policy) [partial]} A Queuing_Policy pragma is a
+configuration pragma.
+
+
+                              Dynamic Semantics
+
+6   {queuing policy} [A queuing policy governs the order in which tasks are
+queued for entry service, and the order in which different entry queues are
+considered for service.] The queuing policy is specified by a Queuing_Policy
+pragma.
+
+6.a         Ramification: The queuing policy includes entry queuing order, the
+            choice among open alternatives of a selective_accept, and the
+            choice among queued entry calls of a protected object when more
+            than one entry_barrier condition is True.
+
+7/2 {AI95-00355-01} Two queuing policies, FIFO_Queuing and Priority_Queuing,
+are language defined. If no Queuing_Policy pragma applies to any of the
+program units comprising the partition, the queuing policy for that partition
+is FIFO_Queuing. The rules for this policy are specified in 9.5.3 and 9.7.1.
+
+8   The Priority_Queuing policy is defined as follows:
+
+9     * {priority of an entry call} The calls to an entry [(including a member
+        of an entry family)] are queued in an order consistent with the
+        priorities of the calls. The priority of an entry call is initialized
+        from the active priority of the calling task at the time the call is
+        made, but can change later. Within the same priority, the order is
+        consistent with the calling (or requeuing, or priority setting) time
+        (that is, a FIFO order).
+
+10/1   * {8652/0075} {AI95-00205-01} After a call is first queued, changes to
+        the active priority of a task do not affect the priority of the call,
+        unless the base priority of the task is set while the task is blocked
+        on an entry call.
+
+11    * When the base priority of a task is set (see D.5), if the task is
+        blocked on an entry call, and the call is queued, the priority of the
+        call is updated to the new active priority of the calling task. This
+        causes the call to be removed from and then reinserted in the queue at
+        the new active priority.
+
+11.a        Reason: A task is blocked on an entry call if the entry call is
+            simple, conditional, or timed. If the call came from the
+            triggering_statement of an asynchronous_select, or a requeue
+            thereof, then the task is not blocked on that call; such calls do
+            not have their priority updated. Thus, there can exist many queued
+            calls from a given task (caused by many nested ATC's), but a task
+            can be blocked on only one call at a time.
+
+11.b        A previous version of Ada 9X required queue reordering in the
+            asynchronous_select case as well. If the call corresponds to a "
+            synchronous" entry call, then the task is blocked while queued,
+            and it makes good sense to move it up in the queue if its priority
+            is raised.
+
+11.c        However, if the entry call is "asynchronous," that is, it is due
+            to an asynchronous_select whose triggering_statement is an entry
+            call, then the task is not waiting for this entry call, so the
+            placement of the entry call on the queue is irrelevant to the rate
+            at which the task proceeds.
+
+11.d        Furthermore, when an entry is used for asynchronous_selects, it is
+            almost certain to be a "broadcast" entry or have only one caller
+            at a time. For example, if the entry is used to notify tasks of a
+            mode switch, then all tasks on the entry queue would be signaled
+            when the mode changes. Similarly, if it is indicating some
+            interrupting event such as a control-C, all tasks sensitive to the
+            interrupt will want to be informed that the event occurred. Hence,
+            the order on such a queue is essentially irrelevant.
+
+11.e        Given the above, it seems an unnecessary semantic and
+            implementation complexity to specify that asynchronous queued
+            calls are moved in response to dynamic priority changes.
+            Furthermore, it is somewhat inconsistent, since the call was
+            originally queued based on the active priority of the task, but
+            dynamic priority changes are changing the base priority of the
+            task, and only indirectly the active priority. We say explicitly
+            that asynchronous queued calls are not affected by normal changes
+            in active priority during the execution of an abortable_part.
+            Saying that, if a change in the base priority affects the active
+            priority, then we do want the calls reordered, would be
+            inconsistent. It would also require the implementation to maintain
+            a readily accessible list of all queued calls which would not
+            otherwise be necessary.
+
+11.f        Several rules were removed or simplified when we changed the rules
+            so that calls due to asynchronous_selects are never moved due to
+            intervening changes in active priority, be they due to protected
+            actions, some other priority inheritance, or changes in the base
+            priority.
+
+12    * When more than one condition of an entry_barrier of a protected object
+        becomes True, and more than one of the respective queues is nonempty,
+        the call with the highest priority is selected. If more than one such
+        call has the same priority, the call that is queued on the entry whose
+        declaration is first in textual order in the protected_definition is
+        selected. For members of the same entry family, the one with the lower
+        family index is selected.
+
+13    * If the expiration time of two or more open delay_alternatives is the
+        same and no other accept_alternatives are open, the
+        sequence_of_statements of the delay_alternative that is first in
+        textual order in the selective_accept is executed.
+
+14    * When more than one alternative of a selective_accept is open and has
+        queued calls, an alternative whose queue has the highest-priority call
+        at its head is selected. If two or more open alternatives have
+        equal-priority queued calls, then a call on the entry in the
+        accept_alternative that is first in textual order in the
+        selective_accept is selected.
+
+
+                         Implementation Permissions
+
+15/2 {AI95-00256-01} Implementations are allowed to define other queuing
+policies, but need not support more than one queuing policy per partition.
+
+15.a.1/2    Discussion: {8652/0116} {AI95-00069-01} {AI95-00256-01} This rule
+            is really redundant, as 10.1.5 allows an implementation to limit
+            the use of configuration pragmas to an empty environment. In that
+            case, there would be no way to have multiple policies in a
+            partition.
+
+15.1/2 {AI95-00188-02} Implementations are allowed to defer the reordering of
+entry queues following a change of base priority of a task blocked on the
+entry call if it is not practical to reorder the queue immediately.
+
+15.a.2/2    Reason: Priority change is immediate, but the effect of the change
+            on entry queues can be deferred. That is necessary in order to
+            implement priority changes on top of a non-Ada kernel.
+
+15.a.3/2    Discussion: The reordering should occur as soon as the blocked
+            task can itself perform the reinsertion into the entry queue.
+
+
+                            Implementation Advice
+
+16  The implementation should use names that end with "_Queuing" for
+implementation-defined queuing policies.
+
+16.a/2      Implementation Advice: Names that end with "_Queuing" should be
+            used for implementation-defined queuing policies.
+
+
+                         Wording Changes from Ada 95
+
+16.b/2      {8652/0074} {AI95-00068-01} Corrigendum: Corrected the number of
+            queuing policies defined.
+
+16.c/2      {8652/0075} {AI95-00205-01} Corrigendum: Corrected so that a call
+            of Set_Priority in an abortable part does not change the priority
+            of the triggering entry call.
+
+16.d/2      {AI95-00188-02} Added a permission to defer queue reordering when
+            the base priority of a task is changed. This is a counterpart to
+            stronger requirements on the implementation of priority change.
+
+16.e/2      {AI95-00256-01} Clarified that an implementation need support only
+            one queuing policy (of any kind, language-defined or otherwise)
+            per partition.
+
+16.f/2      {AI95-00355-01} Fixed wording to make clear that pragma never
+            appears inside of a unit; rather it "applies to" the unit.
+
+
+D.5 Dynamic Priorities
+
+
+1/2 {AI95-00327-01} [This clause describes how the priority of an entity can
+be modified or queried at run time.]
+
+
+                         Wording Changes from Ada 95
+
+1.a/2       {AI95-00327-01} This clause is turned into two subclauses. This
+            clause introduction is new.
+
+
+D.5.1 Dynamic Priorities for Tasks
+
+
+1   [This clause describes how the base priority of a task can be modified or
+queried at run time.]
+
+
+                              Static Semantics
+
+2   The following language-defined library package exists:
+
+3/2     {AI95-00362-01} with System;
+        with Ada.Task_Identification; -- See C.7.1
+        package Ada.Dynamic_Priorities is
+            pragma Preelaborate(Dynamic_Priorities);
+
+4           procedure Set_Priority(Priority : in System.Any_Priority;
+                                   T : in Ada.Task_Identification.Task_Id :=
+                                   Ada.Task_Identification.Current_Task);
+
+5           function Get_Priority (T : Ada.Task_Identification.Task_Id :=
+                                   Ada.Task_Identification.Current_Task)
+                                   return System.Any_Priority;
+
+6       end Ada.Dynamic_Priorities;
+
+
+                              Dynamic Semantics
+
+7   The procedure Set_Priority sets the base priority of the specified task to
+the specified Priority value. Set_Priority has no effect if the task is
+terminated.
+
+8   The function Get_Priority returns T's current base priority.
+{Tasking_Error (raised by failure of run-time check)} Tasking_Error is raised
+if the task is terminated.
+
+8.a         Reason: There is no harm in setting the priority of a terminated
+            task. A previous version of Ada 9X made this a run-time error.
+            However, there is little difference between setting the priority
+            of a terminated task, and setting the priority of a task that is
+            about to terminate very soon; neither case should be an error.
+            Furthermore, the run-time check is not necessarily feasible to
+            implement on all systems, since priority changes might be deferred
+            due to inter-processor communication overhead, so the error might
+            not be detected until after Set_Priority has returned.
+
+8.b         However, we wish to allow implementations to avoid storing "
+            extra" information about terminated tasks. Therefore, we make
+            Get_Priority of a terminated task raise an exception; the
+            implementation need not continue to store the priority of a task
+            that has terminated.
+
+9   {Program_Error (raised by failure of run-time check)} Program_Error is
+raised by Set_Priority and Get_Priority if T is equal to Null_Task_Id.
+
+10/2 {AI95-00188-02} On a system with a single processor, the setting of the
+base priority of a task T to the new value occurs immediately at the first
+point when T is outside the execution of a protected action.
+
+10.a/2      Implementation Note: {AI95-00188-02} The priority change is
+            immediate if the target task is on a delay queue or a ready queue
+            outside of a protected action. However, consider when Set_Priority
+            is called by a task T1 to set the priority of T2, if T2 is
+            blocked, waiting on an entry call queued on a protected object,
+            the entry queue needs to be reordered. Since T1 might have a
+            priority that is higher than the ceiling of the protected object,
+            T1 cannot, in general, do the reordering. One way to implement
+            this is to wake T2 up and have T2 do the work. This is similar to
+            the disentangling of queues that needs to happen when a
+            high-priority task aborts a lower-priority task, which might have
+            a call queued on a protected object with a low ceiling. We have an
+            Implementation Permission in D.4 to allow this implementation. We
+            could have required an immediate priority change if on a ready
+            queue during a protected action, but that would have required
+            extra checks for ceiling violations to meet
+            Bounded (Run-Time) Error requirements of D.3 and potentially could
+            cause a protected action to be abandoned in the middle (by raising
+            Program_Error). That seems bad.
+
+10.b        Reason: A previous version of Ada 9X made it a run-time error for
+            a high-priority task to set the priority of a lower-priority task
+            that has a queued call on a protected object with a low ceiling.
+            This was changed because:
+
+10.c          * The check was not feasible to implement on all systems, since
+                priority changes might be deferred due to inter-processor
+                communication overhead. The calling task would continue to
+                execute without finding out whether the operation succeeded or
+                not.
+
+10.d          * The run-time check would tend to cause intermittent system
+                failures - how is the caller supposed to know whether the
+                other task happens to have a queued call at any given time?
+                Consider for example an interrupt that needs to trigger a
+                priority change in some task. The interrupt handler could not
+                safely call Set_Priority without knowing exactly what the
+                other task is doing, or without severely restricting the
+                ceilings used in the system. If the interrupt handler wants to
+                hand the job off to a third task whose job is to call
+                Set_Priority, this won't help, because one would normally want
+                the third task to have high priority.
+
+
+                          Bounded (Run-Time) Errors
+
+11/2 This paragraph was deleted.{AI95-00327-01}
+
+11.a/2      This paragraph was deleted.
+
+
+                             Erroneous Execution
+
+12  {erroneous execution (cause) [partial]} If any subprogram in this package
+is called with a parameter T that specifies a task object that no longer
+exists, the execution of the program is erroneous.
+
+12.a        Ramification: Note that this rule overrides the above rule saying
+            that Program_Error is raised on Get_Priority of a terminated task.
+            If the task object still exists, and the task is terminated,
+            Get_Priority raises Program_Error. However, if the task object no
+            longer exists, calling Get_Priority causes erroneous execution.
+
+
+                         Documentation Requirements
+
+12.1/2 {AI95-00188-02} On a multiprocessor, the implementation shall document
+any conditions that cause the completion of the setting of the priority of a
+task to be delayed later than what is specified for a single processor.
+
+12.a.1/2    Documentation Requirement: Any conditions that cause the
+            completion of the setting of the priority of a task to be delayed
+            for a multiprocessor.
+
+
+                                   Metrics
+
+13  The implementation shall document the following metric:
+
+14    * The execution time of a call to Set_Priority, for the nonpreempting
+        case, in processor clock cycles. This is measured for a call that
+        modifies the priority of a ready task that is not running (which
+        cannot be the calling one), where the new base priority of the
+        affected task is lower than the active priority of the calling task,
+        and the affected task is not on any entry queue and is not executing a
+        protected operation.
+
+14.a/2      Documentation Requirement: The metrics for Set_Priority.
+
+        NOTES
+
+15/2    26  {AI95-00321-01} Setting a task's base priority affects task
+        dispatching. First, it can change the task's active priority. Second,
+        under the FIFO_Within_Priorities policy it always causes the task to
+        move to the tail of the ready queue corresponding to its active
+        priority, even if the new base priority is unchanged.
+
+16      27  Under the priority queuing policy, setting a task's base priority
+        has an effect on a queued entry call if the task is blocked waiting
+        for the call. That is, setting the base priority of a task causes the
+        priority of a queued entry call from that task to be updated and the
+        call to be removed and then reinserted in the entry queue at the new
+        priority (see D.4), unless the call originated from the
+        triggering_statement of an asynchronous_select.
+
+17      28  The effect of two or more Set_Priority calls executed in parallel
+        on the same task is defined as executing these calls in some serial
+        order.
+
+17.a        Proof: This follows from the general reentrancy requirements
+            stated near the beginning of Annex A, "
+            Predefined Language Environment".
+
+18      29  The rule for when Tasking_Error is raised for Set_Priority or
+        Get_Priority is different from the rule for when Tasking_Error is
+        raised on an entry call (see 9.5.3). In particular, setting or
+        querying the priority of a completed or an abnormal task is allowed,
+        so long as the task is not yet terminated.
+
+19      30  Changing the priorities of a set of tasks can be performed by a
+        series of calls to Set_Priority for each task separately. For this to
+        work reliably, it should be done within a protected operation that has
+        high enough ceiling priority to guarantee that the operation completes
+        without being preempted by any of the affected tasks.
+
+
+                            Extensions to Ada 95
+
+19.a/2      {AI95-00188-02} {extensions to Ada 95} Amendment Correction:
+            Priority changes are now required to be done immediately so long
+            as the target task is not on an entry queue.
+
+19.b/2      {AI95-00362-01} Dynamic_Priorities is now Preelaborated, so it can
+            be used in preelaborated units.
+
+
+                         Wording Changes from Ada 95
+
+19.c/2      {AI95-00327-01} This Ada 95 clause was turned into a subclause.
+            The paragraph numbers are the same as those for D.5 in Ada 95.
+
+19.d/2      {AI95-00321-01} There is no "standard" policy anymore, so that
+            phrase was replaced by the name of a specific policy in the notes.
+
+19.e/2      {AI95-00327-01} The bounded error for the priority of a task being
+            higher than the ceiling of an object it is currently in was moved
+            to D.3, so that it applies no matter how the situation arises.
+
+
+D.5.2 Dynamic Priorities for Protected Objects
+
+
+1/2 {AI95-00327-01} This clause specifies how the priority of a protected
+object can be modified or queried at run time.
+
+
+                              Static Semantics
+
+2/2 {AI95-00327-01} The following attribute is defined for a prefix P that
+denotes a protected object:
+
+3/2 P'Priority  {AI95-00327-01} Denotes a non-aliased component of the
+                protected object P. This component is of type
+                System.Any_Priority and its value is the priority of P.
+                P'Priority denotes a variable if and only if P denotes a
+                variable. A reference to this attribute shall appear only
+                within the body of P.
+
+4/2 {AI95-00327-01} The initial value of this attribute is the initial value
+of the priority of the protected object[, and can be changed by an
+assignment].
+
+
+                              Dynamic Semantics
+
+5/2 {AI95-00327-01} If the locking policy Ceiling_Locking (see D.3) is in
+effect then the ceiling priority of a protected object P is set to the value
+of P'Priority at the end of each protected action of P.
+
+6/2 {AI95-00445-01} If the locking policy Ceiling_Locking is in effect, then
+for a protected object P with either an Attach_Handler or Interrupt_Handler
+pragma applying to one of its procedures, a check is made that the value to be
+assigned to P'Priority is in the range System.Interrupt_Priority. If the check
+fails, Program_Error is
+raised.{Program_Error (raised by failure of run-time check)}
+
+
+                                   Metrics
+
+7/2 {AI95-00327-01} The implementation shall document the following metric:
+
+8/2   * The difference in execution time of calls to the following procedures
+        in protected object P:
+
+9/2     protected P is
+           procedure Do_Not_Set_Ceiling (Pr : System.Any_Priority);
+           procedure Set_Ceiling (Pr : System.Any_Priority);
+        end P;
+
+10/2    protected body P is
+           procedure Do_Not_Set_Ceiling (Pr : System.Any_Priority) is
+           begin
+              null;
+           end;
+           procedure Set_Ceiling (Pr : System.Any_Priority) is
+           begin
+              P'Priority := Pr;
+           end;
+        end P;
+
+10.a/2      Documentation Requirement: The metrics for setting the priority of
+            a protected object.
+
+        NOTES
+
+11/2    31  {AI95-00327-01} Since P'Priority is a normal variable, the value
+        following an assignment to the attribute immediately reflects the new
+        value even though its impact on the ceiling priority of P is postponed
+        until completion of the protected action in which it is executed.
+
+
+                            Extensions to Ada 95
+
+11.a/2      {AI95-00327-01} {AI95-00445-01} {extensions to Ada 95} The ability
+            to dynamically change and query the priority of a protected object
+            is new.
+
+
+D.6 Preemptive Abort
+
+
+1   [This clause specifies requirements on the immediacy with which an aborted
+construct is completed.]
+
+
+                              Dynamic Semantics
+
+2   On a system with a single processor, an aborted construct is completed
+immediately at the first point that is outside the execution of an
+abort-deferred operation.
+
+
+                         Documentation Requirements
+
+3   On a multiprocessor, the implementation shall document any conditions that
+cause the completion of an aborted construct to be delayed later than what is
+specified for a single processor.
+
+3.a/2       This paragraph was deleted.
+
+3.b/2       Documentation Requirement: On a multiprocessor, any conditions
+            that cause the completion of an aborted construct to be delayed
+            later than what is specified for a single processor.
+
+
+                                   Metrics
+
+4   The implementation shall document the following metrics:
+
+5     * The execution time, in processor clock cycles, that it takes for an
+        abort_statement to cause the completion of the aborted task. This is
+        measured in a situation where a task T2 preempts task T1 and aborts
+        T1. T1 does not have any finalization code. T2 shall verify that T1
+        has terminated, by means of the Terminated attribute.
+
+6     * On a multiprocessor, an upper bound in seconds, on the time that the
+        completion of an aborted task can be delayed beyond the point that it
+        is required for a single processor.
+
+7/2   * {AI95-00114-01} An upper bound on the execution time of an
+        asynchronous_select, in processor clock cycles. This is measured
+        between a point immediately before a task T1 executes a protected
+        operation Pr.Set that makes the condition of an entry_barrier Pr.Wait
+        True, and the point where task T2 resumes execution immediately after
+        an entry call to Pr.Wait in an asynchronous_select. T1 preempts T2
+        while T2 is executing the abortable part, and then blocks itself so
+        that T2 can execute. The execution time of T1 is measured separately,
+        and subtracted.
+
+8     * An upper bound on the execution time of an asynchronous_select, in the
+        case that no asynchronous transfer of control takes place. This is
+        measured between a point immediately before a task executes the
+        asynchronous_select with a nonnull abortable part, and the point where
+        the task continues execution immediately after it. The execution time
+        of the abortable part is subtracted.
+
+8.a/2       Documentation Requirement: The metrics for aborts.
+
+
+                            Implementation Advice
+
+9   Even though the abort_statement is included in the list of potentially
+blocking operations (see 9.5.1), it is recommended that this statement be
+implemented in a way that never requires the task executing the
+abort_statement to block.
+
+9.a/2       Implementation Advice: The abort_statement should not require the
+            task executing the statement to block.
+
+10  On a multi-processor, the delay associated with aborting a task on another
+processor should be bounded; the implementation should use periodic polling,
+if necessary, to achieve this.
+
+10.a/2      Implementation Advice: On a multi-processor, the delay associated
+            with aborting a task on another processor should be bounded.
+
+        NOTES
+
+11      32  Abortion does not change the active or base priority of the
+        aborted task.
+
+12      33  Abortion cannot be more immediate than is allowed by the rules for
+        deferral of abortion during finalization and in protected actions.
+
+
+D.7 Tasking Restrictions
+
+
+1   [This clause defines restrictions that can be used with a pragma
+Restrictions (see 13.12) to facilitate the construction of highly efficient
+tasking run-time systems.]
+
+
+                              Static Semantics
+
+2   The following restriction_identifiers are language defined:
+
+3   {Restrictions (No_Task_Hierarchy)} No_Task_Hierarchy
+                All (nonenvironment) tasks depend directly on the environment
+                task of the partition.
+
+4/2 {8652/0042} {AI95-00130-01} {AI95-00360-01}
+                {Restrictions (No_Nested_Finalization)} No_Nested_Finalization
+                Objects of a type that needs finalization (see 7.6) and access
+                types that designate a type that needs finalization shall be
+                declared only at library level.
+
+4.a/1       This paragraph was deleted.{8652/0042} {AI95-00130-01}
+
+5   {Restrictions (No_Abort_Statements)} No_Abort_Statements
+                There are no abort_statements, and there are no calls on
+                Task_Identification.Abort_Task.
+
+6   {Restrictions (No_Terminate_Alternatives)} No_Terminate_Alternatives
+                There are no selective_accepts with terminate_alternatives.
+
+7   {Restrictions (No_Task_Allocators)} No_Task_Allocators
+                There are no allocators for task types or types containing
+                task subcomponents.
+
+8   {Restrictions (No_Implicit_Heap_Allocations)} No_Implicit_Heap_Allocations
+                There are no operations that implicitly require heap storage
+                allocation to be performed by the implementation. The
+                operations that implicitly require heap storage allocation are
+                implementation defined.
+
+8.a         Implementation defined: Any operations that implicitly require
+            heap storage allocation.
+
+9/2 {AI95-00327-01} No_Dynamic_Priorities
+                There are no semantic dependences on the package
+                Dynamic_Priorities, and no occurrences of the attribute
+                Priority. {Restrictions (No_Dynamic_Priorities)}
+
+10/2 {AI95-00305-01} {AI95-00394-01} {Restrictions (No_Dynamic_Attachment)}
+                No_Dynamic_Attachment
+                There is no call to any of the operations defined in package
+                Interrupts (Is_Reserved, Is_Attached, Current_Handler,
+                Attach_Handler, Exchange_Handler, Detach_Handler, and
+                Reference).
+
+10.1/2 {AI95-00305-01} {Restrictions (No_Local_Protected_Objects)}
+                No_Local_Protected_Objects
+                Protected objects shall be declared only at library level.
+
+10.2/2 {AI95-00297-01} {Restrictions (No_Local_Timing_Events)}
+                No_Local_Timing_Events
+                Timing_Events shall be declared only at library level.
+
+10.3/2 {AI95-00305-01} {Restrictions (No_Protected_Type_Allocators)}
+                No_Protected_Type_Allocators
+                There are no allocators for protected types or types
+                containing protected type subcomponents.
+
+10.4/2 {AI95-00305-01} {Restrictions (No_Relative_Delay)} No_Relative_Delay
+                There are no delay_relative_statements.
+
+10.5/2 {AI95-00305-01} {Restrictions (No_Requeue_Statements)}
+                No_Requeue_Statements
+                There are no requeue_statements.
+
+10.6/2 {AI95-00305-01} {Restrictions (No_Select_Statements)}
+                No_Select_Statements
+                There are no select_statements.
+
+10.7/2 {AI95-00394-01} {Restrictions (No_Specific_Termination_Handlers)}
+                No_Specific_Termination_Handlers
+                There are no calls to the Set_Specific_Handler and
+                Specific_Handler subprograms in Task_Termination.
+
+10.8/2 {AI95-00305-01} {Restrictions (Simple_Barriers)} Simple_Barriers
+                The Boolean expression in an entry barrier shall be either a
+                static Boolean expression or a Boolean component of the
+                enclosing protected object.
+
+11  The following restriction_parameter_identifiers are language defined:
+
+12  {Restrictions (Max_Select_Alternatives)} Max_Select_Alternatives
+                Specifies the maximum number of alternatives in a
+                selective_accept.
+
+13  {Restrictions (Max_Task_Entries)} Max_Task_Entries
+                Specifies the maximum number of entries per task. The bounds
+                of every entry family of a task unit shall be static, or shall
+                be defined by a discriminant of a subtype whose corresponding
+                bound is static. [A value of zero indicates that no rendezvous
+                are possible.]
+
+14  Max_Protected_Entries
+                Specifies the maximum number of entries per protected type.
+                The bounds of every entry family of a protected unit shall be
+                static, or shall be defined by a discriminant of a subtype
+                whose corresponding bound is static.
+                {Restrictions (Max_Protected_Entries)}
+
+
+                              Dynamic Semantics
+
+15/2 {8652/0076} {AI95-00067-01} {AI95-00305-01} The following
+restriction_identifier is language defined:
+
+15.1/2 {AI95-00305-01} {AI95-00394-01} {Restrictions (No_Task_Termination)}
+                No_Task_Termination
+                All tasks are non-terminating. It is implementation-defined
+                what happens if a task attempts to terminate. If there is a
+                fall-back handler (see C.7.3) set for the partition it should
+                be called when the first task attempts to terminate.
+
+15.a.1/2    Implementation defined: When restriction No_Task_Termination
+            applies to a partition, what happens when a task terminates.
+
+16  The following restriction_parameter_identifiers are language defined:
+
+17/1 {8652/0076} {AI95-00067-01} {Restrictions (Max_Storage_At_Blocking)}
+                Max_Storage_At_Blocking
+                Specifies the maximum portion [(in storage elements)] of a
+                task's Storage_Size that can be retained by a blocked task. If
+                an implementation chooses to detect a violation of this
+                restriction, Storage_Error should be raised; {Storage_Check
+                 [partial]} {check, language-defined (Storage_Check)}
+                {Storage_Error (raised by failure of run-time check)}
+                otherwise, the behavior is implementation defined.
+
+17.a.1/2    Implementation defined: The behavior when restriction
+            Max_Storage_At_Blocking is violated.
+
+18/1 {8652/0076} {AI95-00067-01}
+                {Restrictions (Max_Asynchronous_Select_Nesting)}
+                Max_Asynchronous_Select_Nesting
+                Specifies the maximum dynamic nesting level of
+                asynchronous_selects. A value of zero prevents the use of any
+                asynchronous_select and, if a program contains an asynchronous_-
+                select, it is illegal. If an implementation chooses to detect
+                a violation of this restriction for values other than zero,
+                Storage_Error should be raised; {Storage_Check [partial]}
+                {check, language-defined (Storage_Check)}
+                {Storage_Error (raised by failure of run-time check)}
+                otherwise, the behavior is implementation defined.
+
+18.a.1/2    Implementation defined: The behavior when restriction
+            Max_Asynchronous_Select_Nesting is violated.
+
+19/1 {8652/0076} {AI95-00067-01} {Restrictions (Max_Tasks)} Max_Tasks
+                Specifies the maximum number of task creations that may be
+                executed over the lifetime of a partition, not counting the
+                creation of the environment task. A value of zero prevents any
+                task creation and, if a program contains a task creation, it
+                is illegal. If an implementation chooses to detect a violation
+                of this restriction, Storage_Error should be raised;
+                {Storage_Check [partial]}
+                {check, language-defined (Storage_Check)}
+                {Storage_Error (raised by failure of run-time check)}
+                otherwise, the behavior is implementation defined.
+
+19.a        Ramification: Note that this is not a limit on the number of tasks
+            active at a given time; it is a limit on the total number of task
+            creations that occur.
+
+19.b        Implementation Note: We envision an implementation approach that
+            places TCBs or pointers to them in a fixed-size table, and never
+            reuses table elements.
+
+19.b.1/2    Implementation defined: The behavior when restriction Max_Tasks is
+            violated.
+
+19.1/2 {AI95-00305-01} {Restrictions (Max_Entry_Queue_Length)}
+                Max_Entry_Queue_Length
+                Max_Entry_Queue_Length defines the maximum number of calls
+                that are queued on an entry. Violation of this restriction
+                results in the raising of Program_Error at the point of the
+                call or
+                requeue.{Program_Error (raised by failure of run-time check)}
+
+20  It is implementation defined whether the use of pragma Restrictions
+results in a reduction in executable program size, storage requirements, or
+execution time. If possible, the implementation should provide quantitative
+descriptions of such effects for each restriction.
+
+20.a/2      Implementation defined: Whether the use of pragma Restrictions
+            results in a reduction in program code or data size or execution
+            time.
+
+
+                            Implementation Advice
+
+21  When feasible, the implementation should take advantage of the specified
+restrictions to produce a more efficient implementation.
+
+21.a/2      Implementation Advice: When feasible, specified restrictions
+            should be used to produce a more efficient implementation.
+
+        NOTES
+
+22      34  The above Storage_Checks can be suppressed with pragma Suppress.
+
+
+                        Incompatibilities With Ada 95
+
+22.a/2      {AI95-00360-01} {incompatibilities with Ada 95} Amendment
+            Correction: The No_Nested_Finalization is now defined in terms of
+            types that need finalization. These types include a variety of
+            language-defined types that might be implemented with a controlled
+            type. If the restriction No_Nested_Finalization (see D.7) applies
+            to the partition, and one of these language-defined types does not
+            have a controlled part, it will not be allowed in local objects in
+            Ada 2005 whereas it would be allowed in original Ada 95. Such code
+            is not portable, as other Ada compilers may have had a controlled
+            part, and thus would be illegal under the restriction.
+
+
+                            Extensions to Ada 95
+
+22.b/2      {AI95-00297-01} {AI95-00305-01} {AI95-00394-01}
+            {extensions to Ada 95} Restrictions No_Dynamic_Attachment,
+            No_Local_Protected_Objects, No_Protected_Type_Allocators,
+            No_Local_Timing_Events, No_Relative_Delay, No_Requeue_Statement,
+            No_Select_Statements, No_Specific_Termination_Handlers,
+            No_Task_Termination, Max_Entry_Queue_Length, and Simple_Barriers
+            are newly added to Ada.
+
+
+                         Wording Changes from Ada 95
+
+22.c/2      {8652/0042} {AI95-00130-01} Corrigendum: Clarified that
+            No_Nested_Finalization covered task and protected parts as well.
+
+22.d/2      {8652/0076} {AI95-00067-01} Corrigendum: Changed the description
+            of Max_Tasks and Max_Asynchronous_Select_Nested to eliminate
+            conflicts with the High Integrity Annex (see H.4).
+
+22.e/2      {AI95-00327-01} Added using of the new Priority attribute to the
+            restriction No_Dynamic_Priorities.
+
+22.f/2      {AI95-00394-01} Restriction No_Asynchronous_Control is now
+            obsolescent.
+
+
+D.8 Monotonic Time
+
+
+1   [This clause specifies a high-resolution, monotonic clock package.]
+
+
+                              Static Semantics
+
+2   The following language-defined library package exists:
+
+3       package Ada.Real_Time is
+
+4         type Time is private;
+          Time_First : constant Time;
+          Time_Last : constant Time;
+          Time_Unit : constant := implementation-defined-real-number;
+
+5         type Time_Span is private;
+          Time_Span_First : constant Time_Span;
+          Time_Span_Last : constant Time_Span;
+          Time_Span_Zero : constant Time_Span;
+          Time_Span_Unit : constant Time_Span;
+
+6         Tick : constant Time_Span;
+          function Clock return Time;
+
+7         function "+" (Left : Time; Right : Time_Span) return Time;
+          function "+" (Left : Time_Span; Right : Time) return Time;
+          function "-" (Left : Time; Right : Time_Span) return Time;
+          function "-" (Left : Time; Right : Time) return Time_Span;
+
+8         function "<" (Left, Right : Time) return Boolean;
+          function "<="(Left, Right : Time) return Boolean;
+          function ">" (Left, Right : Time) return Boolean;
+          function ">="(Left, Right : Time) return Boolean;
+
+9         function "+" (Left, Right : Time_Span) return Time_Span;
+          function "-" (Left, Right : Time_Span) return Time_Span;
+          function "-" (Right : Time_Span) return Time_Span;
+          function "*" (Left : Time_Span; Right : Integer) return Time_Span;
+          function "*" (Left : Integer; Right : Time_Span) return Time_Span;
+          function "/" (Left, Right : Time_Span) return Integer;
+          function "/" (Left : Time_Span; Right : Integer) return Time_Span;
+
+10        function "abs"(Right : Time_Span) return Time_Span;
+
+11/1    This paragraph was deleted.
+
+12        function "<" (Left, Right : Time_Span) return Boolean;
+          function "<="(Left, Right : Time_Span) return Boolean;
+          function ">" (Left, Right : Time_Span) return Boolean;
+          function ">="(Left, Right : Time_Span) return Boolean;
+
+13        function To_Duration (TS : Time_Span) return Duration;
+          function To_Time_Span (D : Duration) return Time_Span;
+
+14/2    {AI95-00386-01}   function Nanoseconds
+          (NS : Integer) return Time_Span;
+          function Microseconds (US : Integer) return Time_Span;
+          function Milliseconds (MS : Integer) return Time_Span;
+          function Seconds      (S  : Integer) return Time_Span;
+          function Minutes      (M  : Integer) return Time_Span;
+
+15        type Seconds_Count is range implementation-defined;
+
+16        procedure Split
+        (T : in Time; SC : out Seconds_Count; TS : out Time_Span);
+          function Time_Of(SC : Seconds_Count; TS : Time_Span) return Time;
+
+17      private
+           ... -- not specified by the language
+        end Ada.Real_Time;
+
+17.a/2      This paragraph was deleted.
+
+18  {real time} In this Annex, real time is defined to be the physical time as
+observed in the external environment. The type Time is a time type as defined
+by 9.6; [values of this type may be used in a delay_until_statement.] Values
+of this type represent segments of an ideal time line. The set of values of
+the type Time corresponds one-to-one with an implementation-defined range of
+mathematical integers.
+
+18.a        Discussion: Informally, real time is defined to be the
+            International Atomic Time (TAI) which is monotonic and
+            nondecreasing. We use it here for the purpose of discussing rate
+            of change and monotonic behavior only. It does not imply anything
+            about the absolute value of Real_Time.Clock, or about
+            Real_Time.Time being synchronized with TAI. It is also used for
+            real time in the metrics, for comparison purposes.
+
+18.b        Implementation Note: The specification of TAI as "real time" does
+            not preclude the use of a simulated TAI clock for simulated
+            execution environments.
+
+19  {epoch} {unspecified [partial]} The Time value I represents the half-open
+real time interval that starts with E+I*Time_Unit and is limited by
+E+(I+1)*Time_Unit, where Time_Unit is an implementation-defined real number
+and E is an unspecified origin point, the epoch, that is the same for all
+values of the type Time. It is not specified by the language whether the time
+values are synchronized with any standard time reference. [For example, E can
+correspond to the time of system initialization or it can correspond to the
+epoch of some time standard.]
+
+19.a        Discussion: E itself does not have to be a proper time value.
+
+19.b        This half-open interval I consists of all real numbers R such that
+            E+I*Time_Unit <= R < E+(I+1)*Time_Unit.
+
+20  Values of the type Time_Span represent length of real time duration. The
+set of values of this type corresponds one-to-one with an
+implementation-defined range of mathematical integers. The Time_Span value
+corresponding to the integer I represents the real-time duration I*Time_Unit.
+
+20.a        Reason: The purpose of this type is similar to Standard.Duration;
+            the idea is to have a type with a higher resolution.
+
+20.b        Discussion: We looked at many possible names for this type:
+            Real_Time.Duration, Fine_Duration, Interval, Time_Interval_Length,
+            Time_Measure, and more. Each of these names had some problems, and
+            we've finally settled for Time_Span.
+
+21  Time_First and Time_Last are the smallest and largest values of the Time
+type, respectively. Similarly, Time_Span_First and Time_Span_Last are the
+smallest and largest values of the Time_Span type, respectively.
+
+22  A value of type Seconds_Count represents an elapsed time, measured in
+seconds, since the epoch.
+
+
+                              Dynamic Semantics
+
+23  Time_Unit is the smallest amount of real time representable by the Time
+type; it is expressed in seconds. Time_Span_Unit is the difference between two
+successive values of the Time type. It is also the smallest positive value of
+type Time_Span. Time_Unit and Time_Span_Unit represent the same real time
+duration. {clock tick} A clock tick is a real time interval during which the
+clock value (as observed by calling the Clock function) remains constant. Tick
+is the average length of such intervals.
+
+24/2 {AI95-00432-01} The function To_Duration converts the value TS to a value
+of type Duration. Similarly, the function To_Time_Span converts the value D to
+a value of type Time_Span. For To_Duration, the result is rounded to the
+nearest value of type Duration (away from zero if exactly halfway between two
+values). If the result is outside the range of Duration, Constraint_Error is
+raised. For To_Time_Span, the value of D is first rounded to the nearest
+integral multiple of Time_Unit, away from zero if exactly halfway between two
+multiples. If the rounded value is outside the range of Time_Span,
+Constraint_Error is raised. Otherwise, the value is converted to the type
+Time_Span.
+
+25  To_Duration(Time_Span_Zero) returns 0.0, and To_Time_Span(0.0) returns
+Time_Span_Zero.
+
+26/2 {AI95-00386-01} {AI95-00432-01} The functions Nanoseconds, Microseconds,
+Milliseconds, Seconds, and Minutes convert the input parameter to a value of
+the type Time_Span. NS, US, MS, S, and M are interpreted as a number of
+nanoseconds, microseconds, milliseconds, seconds, and minutes respectively.
+The input parameter is first converted to seconds and rounded to the nearest
+integral multiple of Time_Unit, away from zero if exactly halfway between two
+multiples. If the rounded value is outside the range of Time_Span,
+Constraint_Error is raised. Otherwise, the rounded value is converted to the
+type Time_Span.
+
+26.a/2      This paragraph was deleted.{AI95-00432-01}
+
+27  The effects of the operators on Time and Time_Span are as for the
+operators defined for integer types.
+
+27.a        Implementation Note: Though time values are modeled by integers,
+            the types Time and Time_Span need not be implemented as integers.
+
+28  The function Clock returns the amount of time since the epoch.
+
+29  The effects of the Split and Time_Of operations are defined as follows,
+treating values of type Time, Time_Span, and Seconds_Count as mathematical
+integers. The effect of Split(T,SC,TS) is to set SC and TS to values such that
+T*Time_Unit = SC*1.0 + TS*Time_Unit, and 0.0 <= TS*Time_Unit < 1.0. The value
+returned by Time_Of(SC,TS) is the value T such that T*Time_Unit = SC*1.0 +
+TS*Time_Unit.
+
+
+                         Implementation Requirements
+
+30  The range of Time values shall be sufficient to uniquely represent the
+range of real times from program start-up to 50 years later. Tick shall be no
+greater than 1 millisecond. Time_Unit shall be less than or equal to 20
+microseconds.
+
+30.a        Implementation Note: The required range and accuracy of Time are
+            such that 32-bits worth of seconds and 32-bits worth of ticks in a
+            second could be used as the representation.
+
+31  Time_Span_First shall be no greater than -3600 seconds, and Time_Span_Last
+shall be no less than 3600 seconds.
+
+31.a        Reason: This is equivalent to ± one hour and there is still room
+            for a two-microsecond resolution.
+
+32  {clock jump} A clock jump is the difference between two successive
+distinct values of the clock (as observed by calling the Clock function).
+There shall be no backward clock jumps.
+
+
+                         Documentation Requirements
+
+33  The implementation shall document the values of Time_First, Time_Last,
+Time_Span_First, Time_Span_Last, Time_Span_Unit, and Tick.
+
+33.a/2      Documentation Requirement: The values of Time_First, Time_Last,
+            Time_Span_First, Time_Span_Last, Time_Span_Unit, and Tick for
+            package Real_Time.
+
+34  The implementation shall document the properties of the underlying time
+base used for the clock and for type Time, such as the range of values
+supported and any relevant aspects of the underlying hardware or operating
+system facilities used.
+
+34.a.1/2    Documentation Requirement: The properties of the underlying time
+            base used in package Real_Time.
+
+34.a        Discussion: If there is an underlying operating system, this might
+            include information about which system call is used to implement
+            the clock. Otherwise, it might include information about which
+            hardware clock is used.
+
+35  The implementation shall document whether or not there is any
+synchronization with external time references, and if such synchronization
+exists, the sources of synchronization information, the frequency of
+synchronization, and the synchronization method applied.
+
+35.a.1/2    Documentation Requirement: Any synchronization of package
+            Real_Time with external time references.
+
+36/1 The implementation shall document any aspects of the external environment
+that could interfere with the clock behavior as defined in this clause.
+
+36.a.1/2    Documentation Requirement: Any aspects of the external environment
+            that could interfere with package Real_Time.
+
+36.a        Discussion: For example, the implementation is allowed to rely on
+            the time services of an underlying operating system, and this
+            operating system clock can implement time zones or allow the clock
+            to be reset by an operator. This dependence has to be documented.
+
+
+                                   Metrics
+
+37  For the purpose of the metrics defined in this clause, real time is
+defined to be the International Atomic Time (TAI).
+
+38  The implementation shall document the following metrics:
+
+39    * An upper bound on the real-time duration of a clock tick. This is a
+        value D such that if t1 and t2 are any real times such that t1 < t2
+        and Clock(t1) = Clock(t2) then t2 - t1 <= D.
+
+40    * An upper bound on the size of a clock jump.
+
+41    * {drift rate} An upper bound on the drift rate of Clock with respect to
+        real time. This is a real number D such that
+
+42          E*(1-D) <= (Clock(t+E) - Clock(t)) <= E*(1+D)
+                    provided that: Clock(t) + E*(1+D) <= Time_Last.
+
+43    * where Clock(t) is the value of Clock at time t, and E is a real time
+        duration not less than 24 hours. The value of E used for this metric
+        shall be reported.
+
+43.a        Reason: This metric is intended to provide a measurement of the
+            long term (cumulative) deviation; therefore, 24 hours is the lower
+            bound on the measurement period. On some implementations, this is
+            also the maximum period, since the language does not require that
+            the range of the type Duration be more than 24 hours. On those
+            implementations that support longer-range Duration, longer
+            measurements should be performed.
+
+44    * An upper bound on the execution time of a call to the Clock function,
+        in processor clock cycles.
+
+45    * Upper bounds on the execution times of the operators of the types Time
+        and Time_Span, in processor clock cycles.
+
+45.a        Implementation Note: A fast implementation of the Clock function
+            involves repeated reading until you get the same value twice. It
+            is highly improbable that more than three reads will be necessary.
+            Arithmetic on time values should not be significantly slower than
+            64-bit arithmetic in the underlying machine instruction set.
+
+45.a.1/2    Documentation Requirement: The metrics for package Real_Time.
+
+
+                         Implementation Permissions
+
+46  Implementations targeted to machines with word size smaller than 32 bits
+need not support the full range and granularity of the Time and Time_Span
+types.
+
+46.a        Discussion: These requirements are based on machines with a word
+            size of 32 bits.
+
+46.b        Since the range and granularity are implementation defined, the
+            supported values need to be documented.
+
+
+                            Implementation Advice
+
+47  When appropriate, implementations should provide configuration mechanisms
+to change the value of Tick.
+
+47.a.1/2    Implementation Advice: When appropriate, mechanisms to change the
+            value of Tick should be provided.
+
+47.a        Reason: This is often needed when the compilation system was
+            originally targeted to a particular processor with a particular
+            interval timer, but the customer uses the same processor with a
+            different interval timer.
+
+47.b        Discussion: Tick is a deferred constant and not a named number
+            specifically for this purpose.
+
+47.c        Implementation Note: This can be achieved either by pre-run-time
+            configuration tools, or by having Tick be initialized (in the
+            package private part) by a function call residing in a board
+            specific module.
+
+48  It is recommended that Calendar.Clock and Real_Time.Clock be implemented
+as transformations of the same time base.
+
+48.a.1/2    Implementation Advice: Calendar.Clock and Real_Time.Clock should
+            be transformations of the same time base.
+
+49  It is recommended that the "best" time base which exists in the underlying
+system be available to the application through Clock. "Best" may mean highest
+accuracy or largest range.
+
+49.a.1/2    Implementation Advice: The "best" time base which exists in the
+            underlying system should be available to the application through
+            Real_Time.Clock.
+
+        NOTES
+
+50      35  The rules in this clause do not imply that the implementation can
+        protect the user from operator or installation errors which could
+        result in the clock being set incorrectly.
+
+51      36  Time_Unit is the granularity of the Time type. In contrast, Tick
+        represents the granularity of Real_Time.Clock. There is no requirement
+        that these be the same.
+
+
+                        Incompatibilities With Ada 95
+
+51.a/2      {AI95-00386-01} {incompatibilities with Ada 95} Functions Seconds
+            and Minutes are newly added to Real_Time. If Real_Time is
+            referenced in a use_clause, and an entity E with a
+            defining_identifier of Seconds or Minutes is defined in a package
+            that is also referenced in a use_clause, the entity E may no
+            longer be use-visible, resulting in errors. This should be rare
+            and is easily fixed if it does occur.
+
+
+                         Wording Changes from Ada 95
+
+51.b/2      {AI95-00432-01} Added wording explaining how and when many of
+            these functions can raise Constraint_Error. While there always was
+            an intent to raise Constraint_Error if the values did not fit,
+            there never was any wording to that effect, and since Time_Span
+            was a private type, the normal numeric type rules do not apply to
+            it.
+
+
+D.9 Delay Accuracy
+
+
+1   [This clause specifies performance requirements for the delay_statement.
+The rules apply both to delay_relative_statement and to delay_until_statement.
+Similarly, they apply equally to a simple delay_statement and to one which
+appears in a delay_alternative.]
+
+
+                              Dynamic Semantics
+
+2   The effect of the delay_statement for Real_Time.Time is defined in terms
+of Real_Time.Clock:
+
+3     * If C(1) is a value of Clock read before a task executes a
+        delay_relative_statement with duration D, and C(2) is a value of Clock
+        read after the task resumes execution following that delay_statement,
+        then C(2) - C(1) >= D.
+
+4     * If C is a value of Clock read after a task resumes execution following
+        a delay_until_statement with Real_Time.Time value T, then C >= T.
+
+5   {potentially blocking operation (delay_statement) [partial]}
+{blocking, potentially (delay_statement) [partial]} A simple delay_statement
+with a negative or zero value for the expiration time does not cause the
+calling task to be blocked; it is nevertheless a potentially blocking
+operation (see 9.5.1).
+
+6/2 When a delay_statement appears in a delay_alternative of a
+timed_entry_call the selection of the entry call is attempted, regardless of
+the specified expiration time. When a delay_statement appears in a
+select_alternative, and a call is queued on one of the open entries, the
+selection of that entry call proceeds, regardless of the value of the delay
+expression.
+
+6.a         Ramification: The effect of these requirements is that one has to
+            always attempt a rendezvous, regardless of the value of the delay
+            expression. This can be tested by issuing a timed_entry_call with
+            an expiration time of zero, to an open entry.
+
+
+                         Documentation Requirements
+
+7   The implementation shall document the minimum value of the delay
+expression of a delay_relative_statement that causes the task to actually be
+blocked.
+
+7.a/2       Documentation Requirement: The minimum value of the delay
+            expression of a delay_relative_statement that causes a task to
+            actually be blocked.
+
+8   The implementation shall document the minimum difference between the value
+of the delay expression of a delay_until_statement and the value of
+Real_Time.Clock, that causes the task to actually be blocked.
+
+8.a/2       This paragraph was deleted.
+
+8.b/2       Documentation Requirement: The minimum difference between the
+            value of the delay expression of a delay_until_statement and the
+            value of Real_Time.Clock, that causes the task to actually be
+            blocked.
+
+
+                                   Metrics
+
+9   The implementation shall document the following metrics:
+
+10    * An upper bound on the execution time, in processor clock cycles, of a
+        delay_relative_statement whose requested value of the delay expression
+        is less than or equal to zero.
+
+11    * An upper bound on the execution time, in processor clock cycles, of a
+        delay_until_statement whose requested value of the delay expression is
+        less than or equal to the value of Real_Time.Clock at the time of
+        executing the statement. Similarly, for Calendar.Clock.
+
+12    * {lateness} {actual duration} An upper bound on the lateness of a
+        delay_relative_statement, for a positive value of the delay
+        expression, in a situation where the task has sufficient priority to
+        preempt the processor as soon as it becomes ready, and does not need
+        to wait for any other execution resources. The upper bound is
+        expressed as a function of the value of the delay expression. The
+        lateness is obtained by subtracting the value of the delay expression
+        from the actual duration. The actual duration is measured from a point
+        immediately before a task executes the delay_statement to a point
+        immediately after the task resumes execution following this statement.
+
+13    * An upper bound on the lateness of a delay_until_statement, in a
+        situation where the value of the requested expiration time is after
+        the time the task begins executing the statement, the task has
+        sufficient priority to preempt the processor as soon as it becomes
+        ready, and it does not need to wait for any other execution resources.
+        The upper bound is expressed as a function of the difference between
+        the requested expiration time and the clock value at the time the
+        statement begins execution. The lateness of a delay_until_statement is
+        obtained by subtracting the requested expiration time from the real
+        time that the task resumes execution following this statement.
+
+13.a/2      Documentation Requirement: The metrics for delay statements.
+
+        NOTES
+
+14/2    This paragraph was deleted.{AI95-00355-01}
+
+
+                         Wording Changes from Ada 83
+
+14.a        The rules regarding a timed_entry_call with a very small positive
+            Duration value, have been tightened to always require the check
+            whether the rendezvous is immediately possible.
+
+
+                         Wording Changes from Ada 95
+
+14.b/2      {AI95-00355-01} The note about "voluntary round-robin', while
+            still true, has been deleted as potentially confusing as it is
+            describing a different kind of round-robin than is defined by the
+            round-robin dispatching policy.
+
+
+D.10 Synchronous Task Control
+
+
+1   [This clause describes a language-defined private semaphore (suspension
+object), which can be used for two-stage suspend operations and as a simple
+building block for implementing higher-level queues.]
+
+
+                              Static Semantics
+
+2   The following language-defined package exists:
+
+3/2     {AI95-00362-01} package Ada.Synchronous_Task_Control is
+          pragma Preelaborate(Synchronous_Task_Control);
+
+4         type Suspension_Object is limited private;
+          procedure Set_True(S : in out Suspension_Object);
+          procedure Set_False(S : in out Suspension_Object);
+          function Current_State(S : Suspension_Object) return Boolean;
+          procedure Suspend_Until_True(S : in out Suspension_Object);
+        private
+             ... -- not specified by the language
+        end Ada.Synchronous_Task_Control;
+
+5   The type Suspension_Object is a by-reference type.
+
+5.a/2       Implementation Note: {AI95-00318-02} The implementation can ensure
+            this by, for example, making the full view an explicitly limited
+            record type.
+
+
+                              Dynamic Semantics
+
+6/2 {AI95-00114-01} An object of the type Suspension_Object has two visible
+states: True and False. Upon initialization, its value is set to False.
+
+6.a         Discussion: This object is assumed to be private to the declaring
+            task, i.e. only that task will call Suspend_Until_True on this
+            object, and the count of callers is at most one. Other tasks can,
+            of course, change and query the state of this object.
+
+7/2 {AI95-00114-01} The operations Set_True and Set_False are atomic with
+respect to each other and with respect to Suspend_Until_True; they set the
+state to True and False respectively.
+
+8   Current_State returns the current state of the object.
+
+8.a         Discussion: This state can change immediately after the operation
+            returns.
+
+9/2 {AI95-00114-01} The procedure Suspend_Until_True blocks the calling task
+until the state of the object S is True; at that point the task becomes ready
+and the state of the object becomes False.
+
+10  {potentially blocking operation (Suspend_Until_True) [partial]}
+{blocking, potentially (Suspend_Until_True) [partial]}
+{Program_Error (raised by failure of run-time check)} Program_Error is raised
+upon calling Suspend_Until_True if another task is already waiting on that
+suspension object. Suspend_Until_True is a potentially blocking operation (see
+9.5.1).
+
+
+                         Implementation Requirements
+
+11  The implementation is required to allow the calling of Set_False and
+Set_True during any protected action, even one that has its ceiling priority
+in the Interrupt_Priority range.
+
+
+                            Extensions to Ada 95
+
+11.a/2      {AI95-00362-01} {extensions to Ada 95} Synchronous_Task_Control is
+            now Preelaborated, so it can be used in preelaborated units.
+
+
+D.11 Asynchronous Task Control
+
+
+1   [This clause introduces a language-defined package to do asynchronous
+suspend/resume on tasks. It uses a conceptual held priority value to represent
+the task's held state.]
+
+
+                              Static Semantics
+
+2   The following language-defined library package exists:
+
+3/2     {AI95-00362-01} with Ada.Task_Identification;
+        package Ada.Asynchronous_Task_Control is
+          pragma Preelaborate(Asynchronous_Task_Control);
+          procedure Hold(T : in Ada.Task_Identification.Task_Id);
+          procedure Continue(T : in Ada.Task_Identification.Task_Id);
+          function Is_Held(T : Ada.Task_Identification.Task_Id)
+           return Boolean;
+        end Ada.Asynchronous_Task_Control;
+
+
+                              Dynamic Semantics
+
+4/2 {AI95-00357-01} {task state (held) [partial]} {held priority} {idle task}
+After the Hold operation has been applied to a task, the task becomes held.
+For each processor there is a conceptual idle task, which is always ready. The
+base priority of the idle task is below System.Any_Priority'First. The held
+priority is a constant of the type Integer whose value is below the base
+priority of the idle task.
+
+4.a         Discussion: The held state should not be confused with the blocked
+            state as defined in 9.2; the task is still ready.
+
+4.1/2 {AI95-00357-01} For any priority below System.Any_Priority'First, the
+task dispatching policy is FIFO_Within_Priorities.
+
+4.b/2       To be honest: This applies even if a Task_Dispatching_Policy
+            specifies the policy for all of the priorities of the partition.
+
+4.c/2       Ramification: A task at the held priority never runs, so it is not
+            necessary to implement FIFO_Within_Priorities for systems that
+            have only one policy (such as EDF_Across_Priorities).
+
+5/2 {AI95-00357-01} The Hold operation sets the state of T to held. For a held
+task, the active priority is reevaluated as if the base priority of the task
+were the held priority.
+
+5.a         Ramification: For example, if T is currently inheriting priorities
+            from other sources (e.g. it is executing in a protected action),
+            its active priority does not change, and it continues to execute
+            until it leaves the protected action.
+
+6/2 {AI95-00357-01} The Continue operation resets the state of T to not-held;
+its active priority is then reevaluated as determined by the task dispatching
+policy associated with its base priority.
+
+7   The Is_Held function returns True if and only if T is in the held state.
+
+7.a         Discussion: Note that the state of T can be changed immediately
+            after Is_Held returns.
+
+8   As part of these operations, a check is made that the task identified by T
+is not terminated. {Tasking_Error (raised by failure of run-time check)}
+Tasking_Error is raised if the check fails.
+{Program_Error (raised by failure of run-time check)} Program_Error is raised
+if the value of T is Null_Task_Id.
+
+
+                             Erroneous Execution
+
+9   {erroneous execution (cause) [partial]} If any operation in this package
+is called with a parameter T that specifies a task object that no longer
+exists, the execution of the program is erroneous.
+
+
+                         Implementation Permissions
+
+10  An implementation need not support Asynchronous_Task_Control if it is
+infeasible to support it in the target environment.
+
+10.a        Reason: A direct implementation of the Asynchronous_Task_Control
+            semantics using priorities is not necessarily efficient enough.
+            Thus, we envision implementations that use some other mechanism to
+            set the "held" state. If there is no other such mechanism, support
+            for Asynchronous_Task_Control might be infeasible, because an
+            implementation in terms of priority would require one idle task
+            per processor. On some systems, programs are not supposed to know
+            how many processors are available, so creating enough idle tasks
+            would be problematic.
+
+        NOTES
+
+11      37  It is a consequence of the priority rules that held tasks cannot
+        be dispatched on any processor in a partition (unless they are
+        inheriting priorities) since their priorities are defined to be below
+        the priority of any idle task.
+
+12      38  The effect of calling Get_Priority and Set_Priority on a Held task
+        is the same as on any other task.
+
+13      39  Calling Hold on a held task or Continue on a non-held task has no
+        effect.
+
+14      40  The rules affecting queuing are derived from the above rules, in
+        addition to the normal priority rules:
+
+15        * When a held task is on the ready queue, its priority is so low as
+            to never reach the top of the queue as long as there are other
+            tasks on that queue.
+
+16        * If a task is executing in a protected action, inside a rendezvous,
+            or is inheriting priorities from other sources (e.g. when
+            activated), it continues to execute until it is no longer
+            executing the corresponding construct.
+
+17        * If a task becomes held while waiting (as a caller) for a
+            rendezvous to complete, the active priority of the accepting task
+            is not affected.
+
+18/1      * {8652/0077} {AI95-00111-01} If a task becomes held while waiting
+            in a selective_accept, and an entry call is issued to one of the
+            open entries, the corresponding accept_alternative executes. When
+            the rendezvous completes, the active priority of the accepting
+            task is lowered to the held priority (unless it is still
+            inheriting from other sources), and the task does not execute
+            until another Continue.
+
+19        * The same holds if the held task is the only task on a protected
+            entry queue whose barrier becomes open. The corresponding entry
+            body executes.
+
+
+                            Extensions to Ada 95
+
+19.a/2      {AI95-00362-01} {extensions to Ada 95} Asynchronous_Task_Control
+            is now Preelaborated, so it can be used in preelaborated units.
+
+
+                         Wording Changes from Ada 95
+
+19.b/2      {8652/0077} {AI95-00111-01} Corrigendum: Corrected to eliminate
+            the use of the undefined term "accept body".
+
+19.c/2      {AI95-00357-01} The description of held tasks was changed to
+            reflect that the calculation of active priorities depends on the
+            dispatching policy of the base priority. Thus, the policy of the
+            held priority was specified in order to avoid surprises
+            (especially when using the EDF policy).
+
+
+D.12 Other Optimizations and Determinism Rules
+
+
+1   [This clause describes various requirements for improving the response and
+determinism in a real-time system.]
+
+
+                         Implementation Requirements
+
+2   If the implementation blocks interrupts (see C.3) not as a result of
+direct user action (e.g. an execution of a protected action) there shall be an
+upper bound on the duration of this blocking.
+
+2.a         Ramification: The implementation shall not allow itself to be
+            interrupted when it is in a state where it is unable to support
+            all the language-defined operations permitted in the execution of
+            interrupt handlers. (see 9.5.1).
+
+3   The implementation shall recognize entry-less protected types. The
+overhead of acquiring the execution resource of an object of such a type (see
+9.5.1) shall be minimized. In particular, there should not be any overhead due
+to evaluating entry_barrier conditions.
+
+3.a         Implementation Note: Ideally the overhead should just be a
+            spin-lock.
+
+4   Unchecked_Deallocation shall be supported for terminated tasks that are
+designated by access types, and shall have the effect of releasing all the
+storage associated with the task. This includes any run-time system or heap
+storage that has been implicitly allocated for the task by the implementation.
+
+
+                         Documentation Requirements
+
+5   The implementation shall document the upper bound on the duration of
+interrupt blocking caused by the implementation. If this is different for
+different interrupts or interrupt priority levels, it should be documented for
+each case.
+
+5.a/2       This paragraph was deleted.
+
+5.b/2       Documentation Requirement: The upper bound on the duration of
+            interrupt blocking caused by the implementation.
+
+
+                                   Metrics
+
+6   The implementation shall document the following metric:
+
+7     * The overhead associated with obtaining a mutual-exclusive access to an
+        entry-less protected object. This shall be measured in the following
+        way:
+
+8       For a protected object of the form:
+
+9       protected Lock is
+           procedure Set;
+           function Read return Boolean;
+        private
+           Flag : Boolean := False;
+        end Lock;
+
+10      protected body Lock is
+           procedure Set is
+           begin
+              Flag := True;
+           end Set;
+           function Read return Boolean
+           Begin
+              return Flag;
+           end Read;
+        end Lock;
+
+11      The execution time, in processor clock cycles, of a call to Set. This
+        shall be measured between the point just before issuing the call, and
+        the point just after the call completes. The function Read shall be
+        called later to verify that Set was indeed called (and not optimized
+        away). The calling task shall have sufficiently high priority as to
+        not be preempted during the measurement period. The protected object
+        shall have sufficiently high ceiling priority to allow the task to
+        call Set.
+
+12      For a multiprocessor, if supported, the metric shall be reported for
+        the case where no contention (on the execution resource) exists [from
+        tasks executing on other processors].
+
+12.a/2      Documentation Requirement: The metrics for entry-less protected
+            objects.
+
+
+D.13 Run-time Profiles
+
+
+1/2 {AI95-00249-01} [This clause specifies a mechanism for defining run-time
+profiles.]
+
+
+                                   Syntax
+
+2/2     {AI95-00249-01} The form of a pragma Profile is as follows:
+
+3/2       pragma Profile (profile_identifier {,
+        profile_pragma_argument_association});
+
+
+                               Legality Rules
+
+4/2 {AI95-00249-01} The profile_identifier shall be the name of a run-time
+profile. The semantics of any profile_pragma_argument_associations are defined
+by the run-time profile specified by the profile_identifier.
+
+
+                              Static Semantics
+
+5/2 {AI95-00249-01} A profile is equivalent to the set of configuration
+pragmas that is defined for each run-time profile.
+
+
+                           Post-Compilation Rules
+
+6/2 {AI95-00249-01} {configuration pragma (Profile) [partial]}
+{pragma, configuration (Profile) [partial]} A pragma Profile is a configuration
+pragma. There may be more than one pragma Profile for a partition.
+
+
+                            Extensions to Ada 95
+
+6.a/2       {AI95-00249-01} {extensions to Ada 95} Pragma Profile is new.
+
+
+D.13.1 The Ravenscar Profile
+
+
+1/2 {AI95-00249-01} [This clause defines the Ravenscar profile.]{Ravenscar}
+
+
+                               Legality Rules
+
+2/2 {AI95-00249-01} The profile_identifier Ravenscar is a run-time profile.
+For run-time profile Ravenscar, there shall be no
+profile_pragma_argument_associations.
+
+
+                              Static Semantics
+
+3/2 {AI95-00249-01} The run-time profile Ravenscar is equivalent to the
+following set of pragmas:
+
+4/2     {AI95-00249-01} {AI95-00297-01} {AI95-00394-01}
+        pragma Task_Dispatching_Policy (FIFO_Within_Priorities);
+        pragma Locking_Policy (Ceiling_Locking);
+        pragma Detect_Blocking;
+        pragma Restrictions (
+                        No_Abort_Statements,
+                        No_Dynamic_Attachment,
+                        No_Dynamic_Priorities,
+                        No_Implicit_Heap_Allocations,
+                        No_Local_Protected_Objects,
+                        No_Local_Timing_Events,
+                        No_Protected_Type_Allocators,
+                        No_Relative_Delay,
+                        No_Requeue_Statements,
+                        No_Select_Statements,
+                        No_Specific_Termination_Handlers,
+                        No_Task_Allocators,
+                        No_Task_Hierarchy,
+                        No_Task_Termination,
+                        Simple_Barriers,
+                        Max_Entry_Queue_Length => 1,
+                        Max_Protected_Entries => 1,
+                        Max_Task_Entries => 0,
+                        No_Dependence => Ada.Asynchronous_Task_Control,
+                        No_Dependence => Ada.Calendar,
+                        No_Dependence => Ada.Execution_Time.Group_Budget,
+                        No_Dependence => Ada.Execution_Time.Timers,
+                        No_Dependence => Ada.Task_Attributes);
+
+4.a/2       Discussion: The Ravenscar profile is named for the location of the
+            meeting that defined its initial version. The name is now in
+            widespread use, so we stick with existing practice, rather than
+            using a more descriptive name.
+
+        NOTES
+
+5/2     41  {AI95-00249-01} The effect of the Max_Entry_Queue_Length => 1
+        restriction applies only to protected entry queues due to the
+        accompanying restriction of Max_Task_Entries => 0.
+
+
+                            Extensions to Ada 95
+
+5.a/2       {AI95-00296-01} {extensions to Ada 95} The Ravenscar profile is
+            new.
+
+
+D.14 Execution Time
+
+
+1/2 {AI95-00307-01} This clause describes a language-defined package to
+measure execution time.
+
+
+                              Static Semantics
+
+2/2 {AI95-00307-01} The following language-defined library package exists:
+
+3/2     with Ada.Task_Identification;
+        with Ada.Real_Time; use Ada.Real_Time;
+        package Ada.Execution_Time is
+
+4/2        type CPU_Time is private;
+           CPU_Time_First : constant CPU_Time;
+           CPU_Time_Last  : constant CPU_Time;
+           CPU_Time_Unit  : constant := implementation-defined-real-number;
+           CPU_Tick : constant Time_Span;
+
+5/2        function Clock
+             (T : Ada.Task_Identification.Task_Id
+                  := Ada.Task_Identification.Current_Task)
+             return CPU_Time;
+
+6/2        function "+"  (Left : CPU_Time; Right : Time_Span) return CPU_Time;
+           function "+"  (Left : Time_Span; Right : CPU_Time) return CPU_Time;
+           function "-"  (Left : CPU_Time; Right : Time_Span) return CPU_Time;
+           function "-"  (Left : CPU_Time; Right : CPU_Time)  return Time_Span;
+
+7/2        function "<"  (Left, Right : CPU_Time) return Boolean;
+           function "<=" (Left, Right : CPU_Time) return Boolean;
+           function ">"  (Left, Right : CPU_Time) return Boolean;
+           function ">=" (Left, Right : CPU_Time) return Boolean;
+
+8/2        procedure Split
+             (T : in CPU_Time; SC : out Seconds_Count; TS : out Time_Span);
+
+9/2        function Time_Of (SC : Seconds_Count;
+                             TS : Time_Span := Time_Span_Zero) return CPU_Time;
+
+10/2    private
+           ... -- not specified by the language
+        end Ada.Execution_Time;
+
+11/2 {AI95-00307-01} {execution time (of a task)} {CPU time (of a task)} The
+execution time or CPU time of a given task is defined as the time spent by the
+system executing that task, including the time spent executing run-time or
+system services on its behalf. The mechanism used to measure execution time is
+implementation defined. It is implementation defined which task, if any, is
+charged the execution time that is consumed by interrupt handlers and run-time
+services on behalf of the system.
+
+11.a/2      Discussion: The implementation-defined properties above and of the
+            values declared in the package are repeated in
+            Documentation Requirements, so we don't mark them as
+            implementation-defined.
+
+12/2 {AI95-00307-01} The type CPU_Time represents the execution time of a
+task. The set of values of this type corresponds one-to-one with an
+implementation-defined range of mathematical integers.
+
+13/2 {AI95-00307-01} The CPU_Time value I represents the half-open
+execution-time interval that starts with I*CPU_Time_Unit and is limited by
+(I+1)*CPU_Time_Unit, where CPU_Time_Unit is an implementation-defined real
+number. For each task, the execution time value is set to zero at the creation
+of the task.
+
+13.a/2      Ramification: Since it is implementation-defined which task is
+            charged execution time for system services, the execution time
+            value may become non-zero even before the start of the activation
+            of the task.
+
+14/2 {AI95-00307-01} CPU_Time_First and CPU_Time_Last are the smallest and
+largest values of the CPU_Time type, respectively.
+
+
+                              Dynamic Semantics
+
+15/2 {AI95-00307-01} {CPU clock tick} CPU_Time_Unit is the smallest amount of
+execution time representable by the CPU_Time type; it is expressed in seconds.
+A CPU clock tick is an execution time interval during which the clock value
+(as observed by calling the Clock function) remains constant. CPU_Tick is the
+average length of such intervals.
+
+16/2 {AI95-00307-01} The effects of the operators on CPU_Time and Time_Span
+are as for the operators defined for integer types.
+
+17/2 {AI95-00307-01} The function Clock returns the current execution time of
+the task identified by T; Tasking_Error is raised if that task has terminated;
+Program_Error is raised if the value of T is Task_Identification.Null_Task_Id.
+
+18/2 {AI95-00307-01} The effects of the Split and Time_Of operations are
+defined as follows, treating values of type CPU_Time, Time_Span, and
+Seconds_Count as mathematical integers. The effect of Split (T, SC, TS) is to
+set SC and TS to values such that T*CPU_Time_Unit = SC*1.0 + TS*CPU_Time_Unit,
+and 0.0 <= TS*CPU_Time_Unit < 1.0. The value returned by Time_Of(SC,TS) is the
+execution-time value T such that T*CPU_Time_Unit=SC*1.0 + TS*CPU_Time_Unit.
+
+
+                             Erroneous Execution
+
+19/2 {AI95-00307-01} {erroneous execution (cause) [partial]} For a call of
+Clock, if the task identified by T no longer exists, the execution of the
+program is erroneous.
+
+
+                         Implementation Requirements
+
+20/2 {AI95-00307-01} The range of CPU_Time values shall be sufficient to
+uniquely represent the range of execution times from the task start-up to 50
+years of execution time later. CPU_Tick shall be no greater than 1
+millisecond.
+
+
+                         Documentation Requirements
+
+21/2 {AI95-00307-01} The implementation shall document the values of
+CPU_Time_First, CPU_Time_Last, CPU_Time_Unit, and CPU_Tick.
+
+21.a/2      Documentation Requirement: The values of CPU_Time_First,
+            CPU_Time_Last, CPU_Time_Unit, and CPU_Tick of package
+            Execution_Time.
+
+22/2 {AI95-00307-01} The implementation shall document the properties of the
+underlying mechanism used to measure execution times, such as the range of
+values supported and any relevant aspects of the underlying hardware or
+operating system facilities used.
+
+22.a/2      Documentation Requirement: The properties of the mechanism used to
+            implement package Execution_Time.
+
+
+                                   Metrics
+
+23/2 {AI95-00307-01} The implementation shall document the following metrics:
+
+24/2   * An upper bound on the execution-time duration of a clock tick. This
+        is a value D such that if t1 and t2 are any execution times of a given
+        task such that t1 < t2 and Clock(t1) = Clock(t2) then t2 - t1 <= D.
+
+25/2   * An upper bound on the size of a clock jump. A clock jump is the
+        difference between two successive distinct values of an execution-time
+        clock (as observed by calling the Clock function with the same
+        Task_Id).
+
+26/2   * An upper bound on the execution time of a call to the Clock function,
+        in processor clock cycles.
+
+27/2   * Upper bounds on the execution times of the operators of the type
+        CPU_Time, in processor clock cycles.
+
+27.a/2      Documentation Requirement: The metrics for execution time.
+
+
+                         Implementation Permissions
+
+28/2 {AI95-00307-01} Implementations targeted to machines with word size
+smaller than 32 bits need not support the full range and granularity of the
+CPU_Time type.
+
+
+                            Implementation Advice
+
+29/2 {AI95-00307-01} When appropriate, implementations should provide
+configuration mechanisms to change the value of CPU_Tick.
+
+29.a/2      Implementation Advice: When appropriate, implementations should
+            provide configuration mechanisms to change the value of
+            Execution_Time.CPU_Tick.
+
+
+                            Extensions to Ada 95
+
+29.b/2      {AI95-00307-01} {extensions to Ada 95} The package Execution_Time
+            is new.
+
+
+D.14.1 Execution Time Timers
+
+
+1/2 {AI95-00307-01} This clause describes a language-defined package that
+provides a facility for calling a handler when a task has used a defined
+amount of CPU time.
+
+
+                              Static Semantics
+
+2/2 {AI95-00307-01} The following language-defined library package exists:
+
+3/2     with System;
+        package Ada.Execution_Time.Timers is
+
+4/2        type Timer (T : not null access constant
+                               Ada.Task_Identification.Task_Id) is
+              tagged limited private;
+
+5/2        type Timer_Handler is
+              access protected procedure (TM : in out Timer);
+
+6/2        Min_Handler_Ceiling : constant System.Any_Priority :=
+           implementation-defined;
+
+7/2        procedure Set_Handler (TM      : in out Timer;
+                                  In_Time : in Time_Span;
+                                  Handler : in Timer_Handler);
+           procedure Set_Handler (TM      : in out Timer;
+                                  At_Time : in CPU_Time;
+                                  Handler : in Timer_Handler);
+           function Current_Handler (TM : Timer) return Timer_Handler;
+           procedure Cancel_Handler (TM        : in out Timer;
+                                     Cancelled :    out Boolean);
+
+8/2        function Time_Remaining (TM : Timer) return Time_Span;
+
+9/2        Timer_Resource_Error : exception;
+
+10/2    private
+           ... --  not specified by the language
+        end Ada.Execution_Time.Timers;
+
+11/2 {AI95-00307-01} The type Timer represents an execution-time event for a
+single task and is capable of detecting execution-time overruns. The access
+discriminant T identifies the task concerned. The type Timer needs
+finalization (see 7.6).
+
+12/2 {AI95-00307-01} An object of type Timer is said to be set if it is
+associated with a non-null value of type Timer_Handler and cleared otherwise.
+All Timer objects are initially cleared. {set (execution timer object)
+ [partial]} {clear (execution timer object) [partial]}
+
+13/2 {AI95-00307-01} The type Timer_Handler identifies a protected procedure
+to be executed by the implementation when the timer expires. Such a protected
+procedure is called a handler. {handler (execution timer) [partial]}
+
+13.a/2      Discussion: Type Timer is tagged. This makes it possible to share
+            a handler between several events. In simple cases, 'Access can be
+            used to compare the parameter with a specific timer object (this
+            works because a tagged type is a by-reference type). In more
+            complex cases, a type extension of type Timer can be declared; a
+            double type conversion can be used to access the extension data.
+            An example of how this can be done can be found for the similar
+            type Timing_Event, see D.15.
+
+
+                              Dynamic Semantics
+
+14/2 {AI95-00307-01} When a Timer object is created, or upon the first call of
+a Set_Handler procedure with the timer as parameter, the resources required to
+operate an execution-time timer based on the associated execution-time clock
+are allocated and initialized. If this operation would exceed the available
+resources, Timer_Resource_Error is raised.
+
+15/2 {AI95-00307-01} The procedures Set_Handler associate the handler Handler
+with the timer TM; if Handler is null, the timer is cleared, otherwise it is
+set. The first procedure Set_Handler loads the timer TM with an interval
+specified by the Time_Span parameter. In this mode, the timer TM expires when
+the execution time of the task identified by TM.T.all has increased by
+In_Time; if In_Time is less than or equal to zero, the timer expires
+immediately. The second procedure Set_Handler loads the timer TM with the
+absolute value specified by At_Time. In this mode, the timer TM expires when
+the execution time of the task identified by TM.T.all reaches At_Time; if the
+value of At_Time has already been reached when Set_Handler is called, the
+timer expires immediately.{expires (execution timer)}
+
+15.a/2      Implementation Note: Since an access-to-constant can designate a
+            variable, the Task_Id value designated by the discriminant of a
+            Timer object can be changed after the object is created. Thus, an
+            implementation cannot use the value of the Task_Id other than
+            where this Standard specifies. For instance, the Task_Id should be
+            read when the timer is set, but it should not be used when the
+            timer expires (as it may designate a different task at that point.
+
+16/2 {AI95-00307-01} A call of a procedure Set_Handler for a timer that is
+already set replaces the handler and the (absolute or relative) execution
+time; if Handler is not null, the timer remains set.
+
+17/2 {AI95-00307-01} When a timer expires, the associated handler is executed,
+passing the timer as parameter. The initial action of the execution of the
+handler is to clear the event.
+
+18/2 {AI95-00307-01} The function Current_Handler returns the handler
+associated with the timer TM if that timer is set; otherwise it returns null.
+
+19/2 {AI95-00307-01} The procedure Cancel_Handler clears the timer if it is
+set. Cancelled is assigned True if the timer was set prior to it being
+cleared; otherwise it is assigned False.
+
+20/2 {AI95-00307-01} The function Time_Remaining returns the execution time
+interval that remains until the timer TM would expire, if that timer is set;
+otherwise it returns Time_Span_Zero.
+
+21/2 {AI95-00307-01} The constant Min_Handler_Ceiling is the minimum ceiling
+priority required for a protected object with a handler to ensure that no
+ceiling violation will occur when that handler is invoked.
+
+22/2 {AI95-00307-01} As part of the finalization of an object of type Timer,
+the timer is cleared.
+
+23/2 {AI95-00307-01} For all the subprograms defined in this package,
+Tasking_Error is raised if the task identified by TM.T.all has terminated, and
+Program_Error is raised if the value of TM.T.all is
+Task_Identification.Null_Task_Id.
+
+24/2 {AI95-00307-01} An exception propagated from a handler invoked as part of
+the expiration of a timer has no effect.
+
+
+                             Erroneous Execution
+
+25/2 {AI95-00307-01} {erroneous execution (cause) [partial]} For a call of any
+of the subprograms defined in this package, if the task identified by TM.T.all
+no longer exists, the execution of the program is erroneous.
+
+
+                         Implementation Requirements
+
+26/2 {AI95-00307-01} For a given Timer object, the implementation shall
+perform the operations declared in this package atomically with respect to any
+of these operations on the same Timer object. The replacement of a handler by
+a call of Set_Handler shall be performed atomically with respect to the
+execution of the handler.
+
+26.a/2      Reason: This prevents various race conditions. In particular it
+            ensures that if an event occurs when Set_Handler is changing the
+            handler then either the new or old handler is executed in response
+            to the appropriate event. It is never possible for a new handler
+            to be executed in response to an old event
+
+27/2 {AI95-00307-01} When an object of type Timer is finalized, the system
+resources used by the timer shall be deallocated.
+
+
+                         Implementation Permissions
+
+28/2 {AI95-00307-01} Implementations may limit the number of timers that can
+be defined for each task. If this limit is exceeded then Timer_Resource_Error
+is raised.
+
+        NOTES
+
+29/2    42  {AI95-00307-01} A Timer_Handler can be associated with several
+        Timer objects.
+
+
+                            Extensions to Ada 95
+
+29.a/2      {AI95-00307-01} {extensions to Ada 95} The package
+            Execution_Time.Timers is new.
+
+
+D.14.2 Group Execution Time Budgets
+
+
+1/2 {AI95-00354-01} This clause describes a language-defined package to assign
+execution time budgets to groups of tasks.
+
+
+                              Static Semantics
+
+2/2 {AI95-00354-01} The following language-defined library package exists:
+
+3/2     with System;
+        package Ada.Execution_Time.Group_Budgets is
+
+4/2       type Group_Budget is tagged limited private;
+
+5/2       type Group_Budget_Handler is access
+               protected procedure (GB : in out Group_Budget);
+
+6/2       type Task_Array is array (Positive range <>) of
+                                          Ada.Task_Identification.Task_Id;
+
+7/2       Min_Handler_Ceiling : constant System.Any_Priority :=
+            implementation-defined;
+
+8/2       procedure Add_Task (GB : in out Group_Budget;
+                              T  : in Ada.Task_Identification.Task_Id);
+          procedure Remove_Task (GB: in out Group_Budget;
+                                 T  : in Ada.Task_Identification.Task_Id);
+          function Is_Member (GB : Group_Budget;
+                              T : Ada.Task_Identification.Task_Id) return Boolean;
+          function Is_A_Group_Member
+             (T : Ada.Task_Identification.Task_Id) return Boolean;
+          function Members (GB : Group_Budget) return Task_Array;
+
+9/2       procedure Replenish (GB : in out Group_Budget; To : in Time_Span);
+          procedure Add (GB : in out Group_Budget; Interval : in Time_Span);
+          function Budget_Has_Expired (GB : Group_Budget) return Boolean;
+          function Budget_Remaining (GB : Group_Budget) return Time_Span;
+
+10/2      procedure Set_Handler (GB      : in out Group_Budget;
+                                 Handler : in Group_Budget_Handler);
+          function Current_Handler (GB : Group_Budget)
+             return Group_Budget_Handler;
+          procedure Cancel_Handler (GB        : in out Group_Budget;
+                                    Cancelled : out Boolean);
+
+11/2      Group_Budget_Error : exception;
+
+12/2    private
+            --  not specified by the language
+        end Ada.Execution_Time.Group_Budgets;
+
+13/2 {AI95-00354-01} The type Group_Budget represents an execution time budget
+to be used by a group of tasks. The type Group_Budget needs finalization (see
+7.6). A task can belong to at most one group. Tasks of any priority can be
+added to a group.
+
+14/2 {AI95-00354-01} An object of type Group_Budget has an associated
+nonnegative value of type Time_Span known as its budget, which is initially
+Time_Span_Zero. The type Group_Budget_Handler identifies a protected procedure
+to be executed by the implementation when the budget is exhausted, that is,
+reaches zero. Such a protected procedure is called a handler.{budget}
+{exhaust (a budget)} {handler (group budget) [partial]}
+
+15/2 {AI95-00354-01} An object of type Group_Budget also includes a handler,
+which is a value of type Group_Budget_Handler. The handler of the object is
+said to be set if it is not null and cleared otherwise. The handler of all
+Group_Budget objects is initially cleared. {set (group budget object)
+ [partial]} {clear (group budget object) [partial]}
+
+15.a/2      Discussion: Type Group_Budget is tagged. This makes it possible to
+            share a handler between several events. In simple cases, 'Access
+            can be used to compare the parameter with a specific group budget
+            object (this works because a tagged type is a by-reference type).
+            In more complex cases, a type extension of type Group_Budget can
+            be declared; a double type conversion can be used to access the
+            extension data. An example of how this can be done can be found
+            for the similar type Timing_Event, see D.15.
+
+
+                              Dynamic Semantics
+
+16/2 {AI95-00354-01} The procedure Add_Task adds the task identified by T to
+the group GB; if that task is already a member of some other group,
+Group_Budget_Error is raised.
+
+17/2 {AI95-00354-01} The procedure Remove_Task removes the task identified by
+T from the group GB; if that task is not a member of the group GB,
+Group_Budget_Error is raised. After successful execution of this procedure,
+the task is no longer a member of any group.
+
+18/2 {AI95-00354-01} The function Is_Member returns True if the task
+identified by T is a member of the group GB; otherwise it return False.
+
+19/2 {AI95-00354-01} The function Is_A_Group_Member returns True if the task
+identified by T is a member of some group; otherwise it returns False.
+
+20/2 {AI95-00354-01} The function Members returns an array of values of type
+Task_Identification.Task_Id identifying the members of the group GB. The order
+of the components of the array is unspecified.
+
+21/2 {AI95-00354-01} The procedure Replenish loads the group budget GB with To
+as the Time_Span value. The exception Group_Budget_Error is raised if the
+Time_Span value To is non-positive. Any execution of any member of the group
+of tasks results in the budget counting down, unless exhausted. When the
+budget becomes exhausted (reaches Time_Span_Zero), the associated handler is
+executed if the handler of group budget GB is set. Nevertheless, the tasks
+continue to execute.
+
+22/2 {AI95-00354-01} The procedure Add modifies the budget of the group GB. A
+positive value for Interval increases the budget. A negative value for
+Interval reduces the budget, but never below Time_Span_Zero. A zero value for
+Interval has no effect. A call of procedure Add that results in the value of
+the budget going to Time_Span_Zero causes the associated handler to be
+executed if the handler of the group budget GB is set.
+
+23/2 {AI95-00354-01} The function Budget_Has_Expired returns True if the
+budget of group GB is exhausted (equal to Time_Span_Zero); otherwise it
+returns False.
+
+24/2 {AI95-00354-01} The function Budget_Remaining returns the remaining
+budget for the group GB. If the budget is exhausted it returns Time_Span_Zero.
+This is the minimum value for a budget.
+
+25/2 {AI95-00354-01} The procedure Set_Handler associates the handler Handler
+with the Group_Budget GB; if Handler is null, the handler of Group_Budget is
+cleared, otherwise it is set.
+
+26/2 {AI95-00354-01} A call of Set_Handler for a Group_Budget that already has
+a handler set replaces the handler; if Handler is not null, the handler for
+Group_Budget remains set.
+
+27/2 {AI95-00354-01} The function Current_Handler returns the handler
+associated with the group budget GB if the handler for that group budget is
+set; otherwise it returns null.
+
+28/2 {AI95-00354-01} The procedure Cancel_Handler clears the handler for the
+group budget if it is set. Cancelled is assigned True if the handler for the
+group budget was set prior to it being cleared; otherwise it is assigned False.
+
+29/2 {AI95-00354-01} The constant Min_Handler_Ceiling is the minimum ceiling
+priority required for a protected object with a handler to ensure that no
+ceiling violation will occur when that handler is invoked.
+
+30/2 {AI95-00354-01} The precision of the accounting of task execution time to
+a Group_Budget is the same as that defined for execution-time clocks from the
+parent package.
+
+31/2 {AI95-00354-01} As part of the finalization of an object of type
+Group_Budget all member tasks are removed from the group identified by that
+object.
+
+32/2 {AI95-00354-01} If a task is a member of a Group_Budget when it
+terminates then as part of the finalization of the task it is removed from the
+group.
+
+33/2 {AI95-00354-01} For all the operations defined in this package,
+Tasking_Error is raised if the task identified by T has terminated, and
+Program_Error is raised if the value of T is Task_Identification.Null_Task_Id.
+
+34/2 {AI95-00354-01} An exception propagated from a handler invoked when the
+budget of a group of tasks becomes exhausted has no effect.
+
+
+                             Erroneous Execution
+
+35/2 {AI95-00354-01} {erroneous execution (cause) [partial]} For a call of any
+of the subprograms defined in this package, if the task identified by T no
+longer exists, the execution of the program is erroneous.
+
+
+                         Implementation Requirements
+
+36/2 {AI95-00354-01} For a given Group_Budget object, the implementation shall
+perform the operations declared in this package atomically with respect to any
+of these operations on the same Group_Budget object. The replacement of a
+handler, by a call of Set_Handler, shall be performed atomically with respect
+to the execution of the handler.
+
+36.a/2      Reason: This prevents various race conditions. In particular it
+            ensures that if the budget is exhausted when Set_Handler is
+            changing the handler then either the new or old handler is
+            executed and the exhausting event is not lost.
+
+        NOTES
+
+37/2    43  {AI95-00354-01} Clearing or setting of the handler of a group
+        budget does not change the current value of the budget. Exhaustion or
+        loading of a budget does not change whether the handler of the group
+        budget is set or cleared.
+
+38/2    44  {AI95-00354-01} A Group_Budget_Handler can be associated with
+        several Group_Budget objects.
+
+
+                            Extensions to Ada 95
+
+38.a/2      {AI95-00354-01} {extensions to Ada 95} The package
+            Execution_Time.Group_Budgets is new.
+
+
+D.15 Timing Events
+
+
+1/2 {AI95-00297-01} This clause describes a language-defined package to allow
+user-defined protected procedures to be executed at a specified time without
+the need for a task or a delay statement.
+
+
+                              Static Semantics
+
+2/2 {AI95-00297-01} The following language-defined library package exists:
+
+3/2     package Ada.Real_Time.Timing_Events is
+
+4/2       type Timing_Event is tagged limited private;
+          type Timing_Event_Handler
+               is access protected procedure (Event : in out Timing_Event);
+
+5/2       procedure Set_Handler (Event   : in out Timing_Event;
+                                 At_Time : in Time;
+                                 Handler : in Timing_Event_Handler);
+          procedure Set_Handler (Event   : in out Timing_Event;
+                                 In_Time : in Time_Span;
+                                 Handler : in Timing_Event_Handler);
+          function Current_Handler (Event : Timing_Event)
+               return Timing_Event_Handler;
+          procedure Cancel_Handler (Event     : in out Timing_Event;
+                                    Cancelled : out Boolean);
+
+6/2       function Time_Of_Event (Event : Timing_Event) return Time;
+
+7/2     private
+          ... -- not specified by the language
+        end Ada.Real_Time.Timing_Events;
+
+8/2 {AI95-00297-01} The type Timing_Event represents a time in the future when
+an event is to occur. The type Timing_Event needs finalization (see 7.6).
+
+9/2 {AI95-00297-01} An object of type Timing_Event is said to be set if it is
+associated with a non-null value of type Timing_Event_Handler and cleared
+otherwise. All Timing_Event objects are initially cleared.
+{set (timing event object) [partial]} {clear (timing event object) [partial]}
+
+10/2 {AI95-00297-01} The type Timing_Event_Handler identifies a protected
+procedure to be executed by the implementation when the timing event occurs.
+Such a protected procedure is called a handler. {handler (timing event)
+ [partial]}
+
+10.a/2      Discussion: Type Timing_Event is tagged. This makes it possible to
+            share a handler between several events. In simple cases, 'Access
+            can be used to compare the parameter with a specific timing event
+            object (this works because a tagged type is a by-reference type).
+            In more complex cases, a type extension of type Timing_Event can
+            be declared; a double type conversion can be used to access the
+            extension data. For example:
+
+10.b/2          type Toaster_Timing_Event is new Timing_Event with record
+                   Slot : Natural;
+                end record;
+
+10.c/2          ...
+
+10.d/2          protected body Toaster is
+
+10.e/2             procedure Timer(Event : in out Timing_Event) is
+                   begin
+                      Pop_Up_Toast (Toaster_Timing_Event(Timing_Event'Class(Event)).Slot);
+                   end Timer;
+
+10.f/2             ...
+                end Toaster;
+
+10.g/2      The extra conversion to the class-wide type is necessary to make
+            the conversions legal. While this usage is clearly ugly, we think
+            that the need for this sort of usage will be rare, so we can live
+            with it. It's certainly better than having no way to associate
+            data with an event.
+
+
+                              Dynamic Semantics
+
+11/2 {AI95-00297-01} The procedures Set_Handler associate the handler Handler
+with the event Event; if Handler is null, the event is cleared, otherwise it
+is set. The first procedure Set_Handler sets the execution time for the event
+to be At_Time. The second procedure Set_Handler sets the execution time for
+the event to be Real_Time.Clock + In_Time.
+
+12/2 {AI95-00297-01} A call of a procedure Set_Handler for an event that is
+already set replaces the handler and the time of execution; if Handler is not
+null, the event remains set.
+
+13/2 {AI95-00297-01} As soon as possible after the time set for the event, the
+handler is executed, passing the event as parameter. The handler is only
+executed if the timing event is in the set state at the time of execution. The
+initial action of the execution of the handler is to clear the event.
+
+13.a/2      Reason: The second sentence of this paragraph is because of a
+            potential race condition. The time might expire and yet before the
+            handler is executed, some task could call Cancel_Handler (or
+            equivalently call Set_Handler with a null parameter) and thus
+            clear the handler.
+
+14/2 {AI95-00297-01} If the Ceiling_Locking policy (see D.3) is in effect when
+a procedure Set_Handler is called, a check is made that the ceiling priority
+of Handler.all is Interrupt_Priority'Last. If the check fails, Program_Error
+is raised.
+
+15/2 {AI95-00297-01} If a procedure Set_Handler is called with zero or
+negative In_Time or with At_Time indicating a time in the past then the
+handler is executed immediately by the task executing the call of Set_Handler.
+The timing event Event is cleared.
+
+16/2 {AI95-00297-01} The function Current_Handler returns the handler
+associated with the event Event if that event is set; otherwise it returns
+null.
+
+17/2 {AI95-00297-01} The procedure Cancel_Handler clears the event if it is
+set. Cancelled is assigned True if the event was set prior to it being
+cleared; otherwise it is assigned False.
+
+18/2 {AI95-00297-01} The function Time_Of_Event returns the time of the event
+if the event is set; otherwise it returns Real_Time.Time_First.
+
+19/2 {AI95-00297-01} As part of the finalization of an object of type
+Timing_Event, the Timing_Event is cleared.
+
+19.a/2      Implementation Note: This is the only finalization defined by the
+            language that has a visible effect; but an implementation may have
+            other finalization that it needs to perform. Implementations need
+            to ensure that the event is cleared before anything else is
+            finalized that would prevent a set event from being triggered.
+
+20/2 {AI95-00297-01} If several timing events are set for the same time, they
+are executed in FIFO order of being set.
+
+21/2 {AI95-00297-01} An exception propagated from a handler invoked by a
+timing event has no effect.
+
+
+                         Implementation Requirements
+
+22/2 {AI95-00297-01} For a given Timing_Event object, the implementation shall
+perform the operations declared in this package atomically with respect to any
+of these operations on the same Timing_Event object. The replacement of a
+handler by a call of Set_Handler shall be performed atomically with respect to
+the execution of the handler.
+
+22.a/2      Reason: This prevents various race conditions. In particular it
+            ensures that if an event occurs when Set_Handler is changing the
+            handler then either the new or old handler is executed in response
+            to the appropriate event. It is never possible for a new handler
+            to be executed in response to an old event.
+
+
+                                   Metrics
+
+23/2 {AI95-00297-01} The implementation shall document the following metric:
+
+24/2   * An upper bound on the lateness of the execution of a handler. That
+        is, the maximum time between when a handler is actually executed and
+        the time specified when the event was set.
+
+24.a/2      Documentation Requirement: The metrics for timing events.
+
+
+                            Implementation Advice
+
+25/2 {AI95-00297-01} The protected handler procedure should be executed
+directly by the real-time clock interrupt mechanism.
+
+25.a/2      Implementation Advice: For a timing event, the handler should be
+            executed directly by the real-time clock interrupt mechanism.
+
+        NOTES
+
+26/2    45  {AI95-00297-01} Since a call of Set_Handler is not a potentially
+        blocking operation, it can be called from within a handler.
+
+27/2    46  {AI95-00297-01} A Timing_Event_Handler can be associated with
+        several Timing_Event objects.
+
+
+                            Extensions to Ada 95
+
+27.a/2      {AI95-00297-01} {extensions to Ada 95} The package
+            Real_Time.Timing_Events is new.
+

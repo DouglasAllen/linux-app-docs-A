@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Vault &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Playbooks: Special Topics" href="playbooks_special_topics.html" />
+    <link rel="next" title="About Modules" href="modules.html" />
+    <link rel="prev" title="Tags" href="playbooks_tags.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modules.html" title="About Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_tags.html" title="Tags"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" accesskey="U">Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="vault">
+<h1><a class="toc-backref" href="#id4">Vault</a><a class="headerlink" href="#vault" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#vault" id="id4">Vault</a><ul>
+<li><a class="reference internal" href="#what-can-be-encrypted-with-vault" id="id5">What Can Be Encrypted With Vault</a></li>
+<li><a class="reference internal" href="#creating-encrypted-files" id="id6">Creating Encrypted Files</a></li>
+<li><a class="reference internal" href="#editing-encrypted-files" id="id7">Editing Encrypted Files</a></li>
+<li><a class="reference internal" href="#rekeying-encrypted-files" id="id8">Rekeying Encrypted Files</a></li>
+<li><a class="reference internal" href="#encrypting-unencrypted-files" id="id9">Encrypting Unencrypted Files</a></li>
+<li><a class="reference internal" href="#decrypting-encrypted-files" id="id10">Decrypting Encrypted Files</a></li>
+<li><a class="reference internal" href="#running-a-playbook-with-vault" id="id11">Running a Playbook With Vault</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>New in Ansible 1.5, &#8220;Vault&#8221; is a feature of ansible that allows keeping encrypted data in source control.</p>
+<p>To enable this feature, a command line tool, <cite>ansible-vault</cite> is used to edit files, and a command line flag <cite>&#8211;ask-vault-pass</cite> or <cite>&#8211;vault-password-file</cite> is used.</p>
+<div class="section" id="what-can-be-encrypted-with-vault">
+<span id="id1"></span><h2><a class="toc-backref" href="#id5">What Can Be Encrypted With Vault</a><a class="headerlink" href="#what-can-be-encrypted-with-vault" title="Permalink to this headline">¶</a></h2>
+<p>The vault feature can encrypt any structured data file used by Ansible.  This can include &#8220;group_vars/&#8221; or &#8220;host_vars/&#8221; inventory variables, variables loaded by &#8220;include_vars&#8221; or &#8220;vars_files&#8221;, or variable files passed on the ansible-playbook command line with &#8220;-e &#64;file.yml&#8221; or &#8220;-e &#64;file.json&#8221;.  Role variables and defaults are also included!</p>
+<p>Because Ansible tasks, handlers, and so on are also data, these can also be encrypted with vault.  If you&#8217;d like to not betray what variables you are even using, you can go as far to keep an individual task file entirely encrypted.  However, that might be a little much and could annoy your coworkers :)</p>
+</div>
+<div class="section" id="creating-encrypted-files">
+<span id="creating-files"></span><h2><a class="toc-backref" href="#id6">Creating Encrypted Files</a><a class="headerlink" href="#creating-encrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>To create a new encrypted data file, run the following command:</p>
+<div class="highlight-python"><pre>ansible-vault create foo.yml</pre>
+</div>
+<p>First you will be prompted for a password.  The password used with vault currently must be the same for all files you wish to use together at the same time.</p>
+<p>After providing a password, the tool will launch whatever editor you have defined with $EDITOR, and defaults to vim.  Once you are done with the editor session, the file will be saved as encrypted data.</p>
+<p>The default cipher is AES (which is shared-secret based).</p>
+</div>
+<div class="section" id="editing-encrypted-files">
+<span id="id2"></span><h2><a class="toc-backref" href="#id7">Editing Encrypted Files</a><a class="headerlink" href="#editing-encrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>To edit an encrypted file in place, use the <cite>ansible-vault edit</cite> command.
+This command will decrypt the file to a temporary file and allow you to edit
+the file, saving it back when done and removing the temporary file:</p>
+<div class="highlight-python"><pre>ansible-vault edit foo.yml</pre>
+</div>
+</div>
+<div class="section" id="rekeying-encrypted-files">
+<span id="rekeying-files"></span><h2><a class="toc-backref" href="#id8">Rekeying Encrypted Files</a><a class="headerlink" href="#rekeying-encrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>Should you wish to change your password on a vault-encrypted file or files, you can do so with the rekey command:</p>
+<div class="highlight-python"><pre>ansible-vault rekey foo.yml bar.yml baz.yml</pre>
+</div>
+<p>This command can rekey multiple data files at once and will ask for the original
+password and also the new password.</p>
+</div>
+<div class="section" id="encrypting-unencrypted-files">
+<span id="encrypting-files"></span><h2><a class="toc-backref" href="#id9">Encrypting Unencrypted Files</a><a class="headerlink" href="#encrypting-unencrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>If you have existing files that you wish to encrypt, use the <cite>ansible-vault encrypt</cite> command.  This command can operate on multiple files at once:</p>
+<div class="highlight-python"><pre>ansible-vault encrypt foo.yml bar.yml baz.yml</pre>
+</div>
+</div>
+<div class="section" id="decrypting-encrypted-files">
+<span id="decrypting-files"></span><h2><a class="toc-backref" href="#id10">Decrypting Encrypted Files</a><a class="headerlink" href="#decrypting-encrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>If you have existing files that you no longer want to keep encrypted, you can permanently decrypt them by running the <cite>ansible-vault decrypt</cite> command.  This command will save them unencrypted to the disk, so be sure you do not want <cite>ansible-vault edit</cite> instead:</p>
+<div class="highlight-python"><pre>ansible-vault decrypt foo.yml bar.yml baz.yml</pre>
+</div>
+</div>
+<div class="section" id="running-a-playbook-with-vault">
+<span id="id3"></span><h2><a class="toc-backref" href="#id11">Running a Playbook With Vault</a><a class="headerlink" href="#running-a-playbook-with-vault" title="Permalink to this headline">¶</a></h2>
+<p>To run a playbook that contains vault-encrypted data files, you must pass one of two flags.  To specify the vault-password interactively:</p>
+<div class="highlight-python"><pre>ansible-playbook site.yml --ask-vault-pass</pre>
+</div>
+<p>This prompt will then be used to decrypt (in memory only) any vault encrypted files that are accessed.  Currently this requires that all passwords be encrypted with the same password.</p>
+<p>Alternatively, passwords can be specified with a file or a script, the script version will require Ansible 1.7 or later.  When using this flag, ensure permissions on the file are such that no one else can access your key and do not add your key to source control:</p>
+<div class="highlight-python"><pre>ansible-playbook site.yml --vault-password-file ~/.vault_pass.txt
+
+ansible-playbook site.yml --vault-password-file ~/.vault_pass.py</pre>
+</div>
+<p>The password should be a string stored as a single line in the file.</p>
+<p>If you are using a script instead of a flat file, ensure that it is marked as executable, and that the password is printed to standard output.  If your script needs to prompt for data, prompts can be sent to standard error.</p>
+<p>This is something you may wish to do if using Ansible from a continuous integration system like Jenkins.</p>
+<p>(The <cite>&#8211;vault-password-file</cite> option can also be used with the <a class="reference internal" href="playbooks_intro.html#ansible-pull"><em>Ansible-Pull</em></a> command if you wish, though this would require distributing the keys to your nodes, so understand the implications &#8211; vault is more intended for push mode).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Vault</a><ul>
+<li><a class="reference internal" href="#what-can-be-encrypted-with-vault">What Can Be Encrypted With Vault</a></li>
+<li><a class="reference internal" href="#creating-encrypted-files">Creating Encrypted Files</a></li>
+<li><a class="reference internal" href="#editing-encrypted-files">Editing Encrypted Files</a></li>
+<li><a class="reference internal" href="#rekeying-encrypted-files">Rekeying Encrypted Files</a></li>
+<li><a class="reference internal" href="#encrypting-unencrypted-files">Encrypting Unencrypted Files</a></li>
+<li><a class="reference internal" href="#decrypting-encrypted-files">Decrypting Encrypted Files</a></li>
+<li><a class="reference internal" href="#running-a-playbook-with-vault">Running a Playbook With Vault</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="playbooks_tags.html"
+                        title="previous chapter">Tags</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">About Modules</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modules.html" title="About Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="playbooks_tags.html" title="Tags"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks_special_topics.html" >Playbooks: Special Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

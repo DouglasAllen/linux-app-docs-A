@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>postgresql_privs - Grant or revoke privileges on PostgreSQL database objects. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Database Modules" href="list_of_database_modules.html" />
+    <link rel="next" title="postgresql_user - Adds or removes a users (roles) from a PostgreSQL database." href="postgresql_user_module.html" />
+    <link rel="prev" title="postgresql_db - Add or remove PostgreSQL databases from a remote host." href="postgresql_db_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="postgresql_user_module.html" title="postgresql_user - Adds or removes a users (roles) from a PostgreSQL database."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="postgresql_db_module.html" title="postgresql_db - Add or remove PostgreSQL databases from a remote host."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_database_modules.html" accesskey="U">Database Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="postgresql-privs-grant-or-revoke-privileges-on-postgresql-database-objects">
+<span id="postgresql-privs"></span><h1>postgresql_privs - Grant or revoke privileges on PostgreSQL database objects.<a class="headerlink" href="#postgresql-privs-grant-or-revoke-privileges-on-postgresql-database-objects" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Bernhard Weitzhofer</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.2.</span></p>
+<p>Grant or revoke privileges on PostgreSQL database objects.
+This module is basically a wrapper around most of the functionality of PostgreSQL&#8217;s GRANT and REVOKE statements with detection of changes (GRANT/REVOKE <em>privs</em> ON <em>type</em> <em>objs</em> TO/FROM <em>roles</em>)</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>database</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name of database to connect to.Alias: <em>db</em></td>
+</tr>
+        <tr>
+<td>grant_option</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Whether <code>role</code> may grant/revoke the specified privileges/group memberships to others.Set to <code>no</code> to revoke GRANT OPTION, leave unspecified to make no changes.<em>grant_option</em> only has an effect if <em>state</em> is <code>present</code>.Alias: <em>admin_option</em></td>
+</tr>
+        <tr>
+<td>host</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Database host address. If unspecified, connect via Unix socket.Alias: <em>login_host</em></td>
+</tr>
+        <tr>
+<td>login</td>
+<td>no</td>
+<td>postgres</td>
+    <td><ul></ul></td>
+    <td>The username to authenticate with.Alias: <em>login_user</em></td>
+</tr>
+        <tr>
+<td>objs</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Comma separated list of database objects to set privileges on.If <em>type</em> is <code>table</code> or <code>sequence</code>, the special value <code>ALL_IN_SCHEMA</code> can be provided instead to specify all database objects of type <em>type</em> in the schema specified via <em>schema</em>. (This also works with PostgreSQL &lt; 9.0.)If <em>type</em> is <code>database</code>, this parameter can be omitted, in which case privileges are set for the database specified via <em>database</em>.If <em>type</em> is <em>function</em>, colons (":") in object names will be replaced with commas (needed to specify function signatures, see examples)Alias: <em>obj</em></td>
+</tr>
+        <tr>
+<td>password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The password to authenticate with.Alias: <em>login_password</em>)</td>
+</tr>
+        <tr>
+<td>port</td>
+<td>no</td>
+<td>5432</td>
+    <td><ul></ul></td>
+    <td>Database port to connect to.</td>
+</tr>
+        <tr>
+<td>privs</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Comma separated list of privileges to grant/revoke.Alias: <em>priv</em></td>
+</tr>
+        <tr>
+<td>roles</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Comma separated list of role (user/group) names to set permissions for.The special value <code>PUBLIC</code> can be provided instead to set permissions for the implicitly defined PUBLIC group.Alias: <em>role</em></td>
+</tr>
+        <tr>
+<td>schema</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Schema that contains the database objects specified via <em>objs</em>.May only be provided if <em>type</em> is <code>table</code>, <code>sequence</code> or <code>function</code>. Defaults to  <code>public</code> in these cases.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>If <code>present</code>, the specified privileges are granted, if <code>absent</code> they are revoked.</td>
+</tr>
+        <tr>
+<td>type</td>
+<td>no</td>
+<td>table</td>
+    <td><ul><li>table</li><li>sequence</li><li>function</li><li>database</li><li>schema</li><li>language</li><li>tablespace</li><li>group</li></ul></td>
+    <td>Type of database object to set privileges on.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires psycopg2</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># On database "library":
+# GRANT SELECT, INSERT, UPDATE ON TABLE public.books, public.authors
+# TO librarian, reader WITH GRANT OPTION
+- postgresql_privs: &gt;
+    database=library
+    state=present
+    privs=SELECT,INSERT,UPDATE
+    type=table
+    objs=books,authors
+    schema=public
+    roles=librarian,reader
+    grant_option=yes
+
+# Same as above leveraging default values:
+- postgresql_privs: &gt;
+    db=library
+    privs=SELECT,INSERT,UPDATE
+    objs=books,authors
+    roles=librarian,reader
+    grant_option=yes
+
+# REVOKE GRANT OPTION FOR INSERT ON TABLE books FROM reader
+# Note that role "reader" will be *granted* INSERT privilege itself if this
+# isn't already the case (since state=present).
+- postgresql_privs: &gt;
+    db=library
+    state=present
+    priv=INSERT
+    obj=books
+    role=reader
+    grant_option=no
+
+# REVOKE INSERT, UPDATE ON ALL TABLES IN SCHEMA public FROM reader
+# "public" is the default schema. This also works for PostgreSQL 8.x.
+- postgresql_privs: &gt;
+    db=library
+    state=absent
+    privs=INSERT,UPDATE
+    objs=ALL_IN_SCHEMA
+    role=reader
+
+# GRANT ALL PRIVILEGES ON SCHEMA public, math TO librarian
+- postgresql_privs: &gt;
+    db=library
+    privs=ALL
+    type=schema
+    objs=public,math
+    role=librarian
+
+# GRANT ALL PRIVILEGES ON FUNCTION math.add(int, int) TO librarian, reader
+# Note the separation of arguments with colons.
+- postgresql_privs: &gt;
+    db=library
+    privs=ALL
+    type=function
+    obj=add(int:int)
+    schema=math
+    roles=librarian,reader
+
+# GRANT librarian, reader TO alice, bob WITH ADMIN OPTION
+# Note that group role memberships apply cluster-wide and therefore are not
+# restricted to database "library" here.
+- postgresql_privs: &gt;
+    db=library
+    type=group
+    objs=librarian,reader
+    roles=alice,bob
+    admin_option=yes
+
+# GRANT ALL PRIVILEGES ON DATABASE library TO librarian
+# Note that here "db=postgres" specifies the database to connect to, not the
+# database to grant privileges on (which is specified via the "objs" param)
+- postgresql_privs: &gt;
+    db=postgres
+    privs=ALL
+    type=database
+    obj=library
+    role=librarian
+
+# GRANT ALL PRIVILEGES ON DATABASE library TO librarian
+# If objs is omitted for type "database", it defaults to the database
+# to which the connection is established
+- postgresql_privs: &gt;
+    db=library
+    privs=ALL
+    type=database
+    role=librarian</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Default authentication assumes that postgresql_privs is run by the <tt class="docutils literal"><span class="pre">postgres</span></tt> user on the remote host. (Ansible&#8217;s <tt class="docutils literal"><span class="pre">user</span></tt> or <tt class="docutils literal"><span class="pre">sudo-user</span></tt>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module requires Python package <em>psycopg2</em> to be installed on the remote host. In the default case of the remote host also being the PostgreSQL server, PostgreSQL has to be installed there as well, obviously. For Debian/Ubuntu-based systems, install packages <em>postgresql</em> and <em>python-psycopg2</em>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Parameters that accept comma separated lists (<em>privs</em>, <em>objs</em>, <em>roles</em>) have singular alias names (<em>priv</em>, <em>obj</em>, <em>role</em>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To revoke only <tt class="docutils literal"><span class="pre">GRANT</span> <span class="pre">OPTION</span></tt> for a specific object, set <em>state</em> to <tt class="docutils literal"><span class="pre">present</span></tt> and <em>grant_option</em> to <tt class="docutils literal"><span class="pre">no</span></tt> (see examples).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that when revoking privileges from a role R, this role  may still have access via privileges granted to any role R is a member of including <tt class="docutils literal"><span class="pre">PUBLIC</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that when revoking privileges from a role R, you do so as the user specified via <em>login</em>. If R has been granted the same privileges by another user also, R can still access database objects via these privileges.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When revoking privileges, <tt class="docutils literal"><span class="pre">RESTRICT</span></tt> is assumed (see PostgreSQL docs).</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">postgresql_privs - Grant or revoke privileges on PostgreSQL database objects.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postgresql_db_module.html"
+                        title="previous chapter">postgresql_db - Add or remove PostgreSQL databases from a remote host.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="postgresql_user_module.html"
+                        title="next chapter">postgresql_user - Adds or removes a users (roles) from a PostgreSQL database.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="postgresql_user_module.html" title="postgresql_user - Adds or removes a users (roles) from a PostgreSQL database."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="postgresql_db_module.html" title="postgresql_db - Add or remove PostgreSQL databases from a remote host."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_database_modules.html" >Database Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

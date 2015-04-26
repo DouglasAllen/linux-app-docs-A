@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Search term reference</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s04.html" title="Search patterns"><link rel="prev" href="ch02s04s04.html" title="Explicit search targets"><link rel="next" href="ch02s05.html" title="Customizing aptitude"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Search term reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04s04.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Search patterns</th><td width="20%" align="right"> <a accesskey="n" href="ch02s05.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Search term reference"><div class="titlepage"><div><div><h3 class="title"><a name="secSearchTermReference"></a>Search term reference</h3></div></div></div><p>
+	  <a class="xref" href="ch02s04s05.html#tableSearchTermQuickGuide" title="Table 2.3. Quick guide to search terms">Table 2.3, “Quick guide to search terms”</a> provides a brief
+	  summary of all the search terms provided by <span class="command"><strong>aptitude</strong></span>.  A
+	  full description of each term can be found <a class="link" href="ch02s04s05.html#searchTermReferenceList">below</a>.
+	</p><div class="table"><a name="tableSearchTermQuickGuide"></a><p class="title"><b>Table 2.3. Quick guide to search terms</b></p><div class="table-contents"><table summary="Quick guide to search terms" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Long form</th><th>Short form</th><th>Description</th></tr></thead><tbody><tr><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchEqual">?=</a></code><em class="replaceable"><code>variable</code></em></code>
+		</td><td> </td><td>
+		  Select the package bound to
+		  <em class="replaceable"><code>variable</code></em>; see <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchNot">?not</a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">!<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select any package that does not match
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAction">?action</a></code>(<em class="replaceable"><code>action</code></em>)</code>
+		</td><td>~a<em class="replaceable"><code>action</code></em></td><td>
+		  Select packages that have been marked for the given
+		  <em class="replaceable"><code>action</code></em> (e.g.,
+		  <span class="quote">“<span class="quote"><code class="literal">install</code></span>”</span> or
+		  <span class="quote">“<span class="quote"><code class="literal">upgrade</code></span>”</span>).
+		</td></tr><tr class="oddrow"><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAllVersions">?all-versions</a></code>(<em class="replaceable"><code>pattern</code></em>)</code>
+		</td><td> </td><td>
+		  Select packages whose versions all match
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAnd">?and</a></code>(<em class="replaceable"><code>pattern1</code></em>, <em class="replaceable"><code>pattern2</code></em>)</code>
+		</td><td><em class="replaceable"><code>pattern1</code></em> <em class="replaceable"><code>pattern2</code></em></td><td>
+		  Select any package that matches both
+		  <em class="replaceable"><code>pattern1</code></em> and
+		  <em class="replaceable"><code>pattern2</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAnyVersion">?any-version</a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td> </td><td>
+		  Select packages for which at least one version
+		  matches <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchArchitecture">?architecture</a></code>(<em class="replaceable"><code>architecture</code></em>)</code>
+		</td><td>~r<em class="replaceable"><code>architecture</code></em></td><td>
+		  Select packages for the given architecture (such as
+		  <span class="quote">“<span class="quote"><code class="literal">amd64</code></span>”</span>, or
+		  <span class="quote">“<span class="quote"><code class="literal">all</code></span>”</span>).  Special values:
+		  <code class="literal">native</code> and <code class="literal">foreign</code>.
+		</td></tr><tr class="oddrow"><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchArchive">?archive</a></code>(<em class="replaceable"><code>archive</code></em>)</code>
+		</td><td>
+		  <code class="literal">~A<em class="replaceable"><code>archive</code></em></code>
+		</td><td>
+		  Select packages from the given archive (such as
+		  <span class="quote">“<span class="quote"><code class="literal">unstable</code></span>”</span>).
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAutomatic">?automatic</a></code></code></td><td><code class="literal">~M</code></td><td>
+		  Select packages that were automatically installed.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchBind">?bind</a></code>(<em class="replaceable"><code>variable</code></em>, <em class="replaceable"><code>pattern</code></em>)</code></td><td>
+		  <code class="literal">?<em class="replaceable"><code>variable</code></em>:<em class="replaceable"><code>term-name</code></em>[<span class="optional">(<em class="replaceable"><code>args</code></em>)</span>]</code>
+		</td><td>
+		  Selects anything if
+		  <em class="replaceable"><code>variable</code></em> matches
+		  <em class="replaceable"><code>pattern</code></em>; see <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchBroken">?broken</a></code></code></td><td><code class="literal">~b</code></td><td>
+		  Select packages that have a broken dependency.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchBrokenType">?broken-<em class="replaceable"><code>depType</code></em></a></code></code></td><td><code class="literal">~B<em class="replaceable"><code>depType</code></em></code></td><td>
+		  Select package that have a broken dependency of the
+		  given <em class="replaceable"><code>depType</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchBrokenTypeTerm">?broken-<em class="replaceable"><code>depType</code></em></a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~DB[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that have a broken dependency of the
+		  given <em class="replaceable"><code>depType</code></em> matching
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchReverseBrokenDep">?broken-reverse-<em class="replaceable"><code>depType</code></em></a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~RB<code class="option"><em class="replaceable"><code>depType</code></em>:</code><em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that a package matching
+		  <em class="replaceable"><code>pattern</code></em> declares a broken
+		  dependency of type <em class="replaceable"><code>depType</code></em>.
+		</td></tr><tr><td>
+		  <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchConflicts">?conflicts</a></code>(<em class="replaceable"><code>pattern</code></em>)</code>
+		</td><td><code class="literal">~C<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that conflict with a package
+		  matching <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchConfigFiles">?config-files</a></code></code></td><td><code class="literal">~c</code></td><td>
+		  Select packages that were removed but not purged.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?<em class="replaceable"><code>depType</code></em></a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~D[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Match packages that declare a dependency of type
+		  <em class="replaceable"><code>depType</code></em> on a package
+		  matching <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDescription">?description</a></code>(<em class="replaceable"><code>description</code></em>)</code></td><td><code class="literal">~d<em class="replaceable"><code>description</code></em></code></td><td>
+		  Select packages whose description matches
+		  <em class="replaceable"><code>description</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchEssential">?essential</a></code></code></td><td><code class="literal">~E</code></td><td>
+		  Select essential packages, those with
+		  <code class="literal">Essential: yes</code> in their control
+		  files.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchExactName">?exact-name</a></code>(<em class="replaceable"><code>name</code></em>)</code></td><td> </td><td>
+		  Select packages named
+		  <em class="replaceable"><code>name</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchFalse">?false</a></code></code></td><td><code class="literal">~F</code></td><td>
+		  Select no packages.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> <em class="replaceable"><code>variable</code></em>: <em class="replaceable"><code>pattern</code></em></code></td><td> </td><td>
+		  Select packages that match
+		  <em class="replaceable"><code>pattern</code></em> with
+		  <em class="replaceable"><code>variable</code></em> bound to the
+		  package being matched; see <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchGarbage">?garbage</a></code></code></td><td><code class="literal">~g</code></td><td>
+		  Select packages that are not required by any manually
+		  installed package.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code></code></td><td><code class="literal">~i</code></td><td>Select installed packages.</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>(<em class="replaceable"><code>maintainer</code></em>)</code></td><td><code class="literal">~m<em class="replaceable"><code>maintainer</code></em></code></td><td>
+		  Select packages maintained by
+		  <em class="replaceable"><code>maintainer</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMultiArch">?multiarch</a></code>(<em class="replaceable"><code>multiarch</code></em>)</code></td><td> </td><td>
+		  Select packages with a multi-arch capability of
+		  <em class="replaceable"><code>multiarch</code></em> (that is, either
+		  <span class="quote">“<span class="quote"><code class="literal">foreign</code></span>”</span>,
+		  <span class="quote">“<span class="quote"><code class="literal">same</code></span>”</span>,
+		  <span class="quote">“<span class="quote"><code class="literal">allowed</code></span>”</span>, or
+		  <span class="quote">“<span class="quote"><code class="literal">none</code></span>”</span>).
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>(<em class="replaceable"><code>filter</code></em>, <em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~S <em class="replaceable"><code>filter</code></em> <em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages for which a single version matches
+		  both <em class="replaceable"><code>filter</code></em> and
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>(<em class="replaceable"><code>name</code></em>)</code></td><td><code class="literal">~n<em class="replaceable"><code>name</code></em></code>, <code class="literal"><em class="replaceable"><code>name</code></em></code></td><td>
+		  Select packages with the given <em class="replaceable"><code>name</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchNew">?new</a></code></code></td><td><code class="literal">~N</code></td><td>
+		  Select new packages.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchObsolete">?obsolete</a></code></code></td><td><code class="literal">~o</code></td><td>
+		  Match installed packages that cannot be downloaded.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchOr">?or</a></code>(<em class="replaceable"><code>pattern1</code></em>, <em class="replaceable"><code>pattern2</code></em>)</code></td><td><code class="literal"><em class="replaceable"><code>pattern1</code></em> | <em class="replaceable"><code>pattern2</code></em></code></td><td>
+		  Select packages that match
+		  <em class="replaceable"><code>pattern1</code></em>,
+		  <em class="replaceable"><code>pattern2</code></em>, or both.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchOrigin">?origin</a></code>(<em class="replaceable"><code>origin</code></em>)</code></td><td><code class="literal">~O<em class="replaceable"><code>origin</code></em></code></td><td>
+		  Select packages with the given
+		  <em class="replaceable"><code>origin</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchProvides">?provides</a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~P<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that provide a package matching
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchPriority">?priority</a></code>(<em class="replaceable"><code>priority</code></em>)</code></td><td><code class="literal">~p<em class="replaceable"><code>priority</code></em></code></td><td>
+		  Select packages with the given <em class="replaceable"><code>priority</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchReverseDep">?reverse-<em class="replaceable"><code>depType</code></em></a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~R[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that are the targets of a dependency
+		  of type <em class="replaceable"><code>depType</code></em> declared
+		  by a package matching
+		  <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchReverseBrokenDep">?reverse-broken-<em class="replaceable"><code>depType</code></em></a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~RB<code class="option"><em class="replaceable"><code>depType</code></em>:</code><em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select packages that are the targets of a broken
+		  dependency of type
+		  <em class="replaceable"><code>depType</code></em> declared by a
+		  package matching <em class="replaceable"><code>pattern</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchSection">?section</a></code>(<em class="replaceable"><code>section</code></em>)</code></td><td><code class="literal">~s<em class="replaceable"><code>section</code></em></code></td><td>
+		  Select packages in the given <em class="replaceable"><code>section</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchSourcePackage">?source-package</a></code>(<em class="replaceable"><code>name</code></em>)</code></td><td> </td><td>
+		  Select packages whose source package name matches
+		  the regular expression
+		  <em class="replaceable"><code>name</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchSourceVersion">?source-version</a></code>(<em class="replaceable"><code>version</code></em>)</code></td><td> </td><td>
+		  Select packages whose source version matches the
+		  regular expression <em class="replaceable"><code>version</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTag">?tag</a></code>(<em class="replaceable"><code>tag</code></em>)</code></td><td><code class="literal">~G<em class="replaceable"><code>tag</code></em></code></td><td>
+		  Select packages that have the given debtags
+		  <em class="replaceable"><code>tag</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTerm">?term</a></code>(<em class="replaceable"><code>keyword</code></em>)</code></td><td> </td><td>
+		  Full-text search for packages that contain the given
+		  <em class="replaceable"><code>keyword</code></em>.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermPrefix">?term-prefix</a></code>(<em class="replaceable"><code>keyword</code></em>)</code></td><td> </td><td>
+		  Full-text search for packages that contain a keyword
+		  that begins with the given
+		  <em class="replaceable"><code>keyword</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code></code></td><td><code class="literal">~T</code></td><td>
+		  Select all packages.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTask">?task</a></code>(<em class="replaceable"><code>task</code></em>)</code></td><td><code class="literal">~t<em class="replaceable"><code>task</code></em></code></td><td>
+		  Select packages that are in the given
+		  <em class="replaceable"><code>task</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchUpgradable">?upgradable</a></code></code></td><td><code class="literal">~U</code></td><td>
+		  Select packages that are installed and can be
+		  upgraded.
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchUserTag">?user-tag</a></code></code></td><td> </td><td>
+		  Select packages that are marked with a user-tag
+		  matching the regular expression
+		  <em class="replaceable"><code>user-tag</code></em>.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermVersion">?version</a></code>(<em class="replaceable"><code>version</code></em>)</code></td><td><code class="literal">~V<em class="replaceable"><code>version</code></em></code></td><td>
+		  Select packages whose version matches
+		  <em class="replaceable"><code>version</code></em> (special values:
+		  <code class="literal">CURRENT</code>,
+		  <code class="literal">CANDIDATE</code>, and
+		  <code class="literal">TARGET</code>).
+		</td></tr><tr class="oddrow"><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchVirtual">?virtual</a></code></code></td><td><code class="literal">~v</code></td><td>
+		  Select virtual packages.
+		</td></tr><tr><td><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code>(<em class="replaceable"><code>pattern</code></em>)</code></td><td><code class="literal">~W<em class="replaceable"><code>pattern</code></em></code></td><td>
+		  Select versions for which
+		  <em class="replaceable"><code>pattern</code></em> matches any version
+		  of the corresponding package, discarding local
+		  version restrictions.
+		</td></tr></tbody></table></div></div><br class="table-break"><div class="variablelist"><a name="searchTermReferenceList"></a><dl><dt><span class="term"><em class="replaceable"><code>name</code></em></span></dt><dd><p>
+	      Matches packages whose names match the regular
+	      expression <em class="replaceable"><code>name</code></em>.  This is the
+	      <span class="quote">“<span class="quote">default</span>”</span> search mode and is used for patterns that
+	      don't start with <code class="literal">~</code>.
+	    </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		To match packages whose names contain several
+		different substrings, use the <code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code> term (described
+		below); for instance,
+		<span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>(apti)<code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>(tude)</code></span>”</span>
+		will match any package whose name contains
+		<span class="emphasis"><em>both</em></span>
+		<span class="quote">“<span class="quote"><code class="literal">apti</code></span>”</span> and
+		<span class="quote">“<span class="quote"><code class="literal">tude</code></span>”</span>.
+	      </p></td></tr></table></div></dd><dt><a name="searchEqual"></a><span class="term"><code class="literal">?=<em class="replaceable"><code>variable</code></em></code></span></dt><dd><p>
+	      Matches packages that correspond to the value of
+	      <em class="replaceable"><code>variable</code></em>, which must be bound
+	      by an enclosing <code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code>.  For instance, <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> x:
+	      <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>( <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?recommends</a></code>( ?=x ) )</code> will match any
+	      package <em class="replaceable"><code>x</code></em> that depends on a
+	      package which recommends <em class="replaceable"><code>x</code></em>.
+	    </p><p>
+	      For instance, the following search expression matches
+	      packages that conflict with themselves:
+	    </p><div class="example"><a name="exampleSearchEqual"></a><p class="title"><b>Example 2.2. 
+		Use of the <code class="literal">?=</code> term.
+	      </b></p><div class="example-contents"><p>
+		<code class="literal">
+		  <code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> x: <code class="literal"><a class="link" href="ch02s04s05.html#searchConflicts">?conflicts</a></code>(?=x)
+		</code>
+	      </p></div></div><br class="example-break"><p>
+	      See <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a> for more
+	      information.
+	    </p></dd><dt><a name="searchNot"></a><span class="term"><code class="literal">?not(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">!<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      Matches packages which do <span class="emphasis"><em>not</em></span> match
+	      the pattern <em class="replaceable"><code>pattern</code></em>.  For
+	      instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?not(<code class="literal"><a class="link" href="ch02s04s05.html#searchBroken">?broken</a></code>)</code></span>”</span>
+	      selects packages that are not <span class="quote">“<span class="quote">broken</span>”</span>.
+	    </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		To include a <span class="quote">“<span class="quote">!</span>”</span> in a search string, it
+		must be <span class="quote">“<span class="quote">escaped</span>”</span> by placing a tilde
+		(<span class="quote">“<span class="quote"><code class="literal">~</code></span>”</span>) in front of it;
+		otherwise, <span class="command"><strong>aptitude</strong></span> will consider it to be part of a
+		<code class="literal">?not</code> term.  For instance, to select
+		packages whose description contains
+		<span class="quote">“<span class="quote"><code class="literal">extra!</code></span>”</span>, use
+		<span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDescription">?description</a></code>(extra~!)</code></span>”</span>.
+	      </p></td></tr></table></div></dd><dt><a name="searchAnd"></a><span class="term"><code class="literal">?and(<em class="replaceable"><code>pattern1</code></em>, <em class="replaceable"><code>pattern2</code></em>)</code>, <em class="replaceable"><code>pattern1</code></em> <em class="replaceable"><code>pattern2</code></em></span></dt><dd><p>
+	      Matches packages that match both
+	      <em class="replaceable"><code>pattern1</code></em> and
+	      <em class="replaceable"><code>pattern2</code></em>.
+	    </p></dd><dt><a name="searchOr"></a><span class="term"><code class="literal">?or(<em class="replaceable"><code>pattern1</code></em>, <em class="replaceable"><code>pattern2</code></em>)</code>, <code class="literal"><em class="replaceable"><code>pattern1</code></em> | <em class="replaceable"><code>pattern2</code></em></code></span></dt><dd><p>
+	      Matches packages that match either
+	      <em class="replaceable"><code>pattern1</code></em> or
+	      <em class="replaceable"><code>pattern2</code></em>.
+	    </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		To use the character <span class="quote">“<span class="quote">|</span>”</span> in a regular expression, it
+		must be <span class="quote">“<span class="quote">escaped</span>”</span> to prevent <span class="command"><strong>aptitude</strong></span> from creating
+		an OR term from it: <span class="quote">“<span class="quote"><code class="literal">~|</code></span>”</span>.
+	      </p></td></tr></table></div></dd><dt><span class="term"><code class="literal">(<em class="replaceable"><code>pattern</code></em>)</code></span></dt><dd><p>
+	      Matches <em class="replaceable"><code>pattern</code></em>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">opengl (perl|python)</code></span>”</span>
+	      matches any package whose name contains
+	      <code class="literal">opengl</code>, and also contains either
+	      <code class="literal">perl</code> or <code class="literal">python</code>.
+	    </p></dd><dt><a name="searchAction"></a><span class="term"><code class="literal">?action(<em class="replaceable"><code>action</code></em>)</code>, <code class="literal">~a<em class="replaceable"><code>action</code></em></code></span></dt><dd><p>
+	      Matches packages upon which the given
+	      <em class="replaceable"><code>action</code></em> is going to be
+	      performed.  <em class="replaceable"><code>action</code></em> can be
+	      <span class="quote">“<span class="quote"><code class="literal">install</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">upgrade</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">downgrade</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">remove</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">purge</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">hold</code></span>”</span> (tests whether a
+	      package has been placed on hold), or
+	      <span class="quote">“<span class="quote"><code class="literal">keep</code></span>”</span> (tests whether a
+	      package will be unchanged).
+	      
+	    </p><p>
+	      Note that this only tests whether an action is actually
+	      queued up to be performed on a package, not whether it
+	      <span class="emphasis"><em>could</em></span> be performed.  Thus, for
+	      instance, <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchAction">?action</a></code>(upgrade)</code> matches
+	      exactly those packages that you have already decided to
+	      upgrade, not packages which <span class="emphasis"><em>could</em></span>
+	      be upgraded in the future (for that, use
+	      <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchUpgradable">?upgradable</a></code></code>).
+	    </p></dd><dt><a name="searchAllVersions"></a><span class="term"><code class="literal">?all-versions(<em class="replaceable"><code>pattern</code></em>)</code></span></dt><dd><p>
+	      Matches any package whose versions all match the given
+	      expression.  Each version of a package will be
+	      separately tested against
+	      <em class="replaceable"><code>pattern</code></em>, and the package will
+	      match if all of its versions match.  Packages without
+	      versions, such as virtual packages, will always be
+	      matched by this search term.
+	    </p><p>
+	      This term may not be used in a context in which the
+	      versions to match against have already been narrowed,
+	      such as within <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code> or <code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>.  However, it may
+	      always be used within <code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code>.
+	    </p></dd><dt><a name="searchAnyVersion"></a><span class="term"><code class="literal">?any-version(<em class="replaceable"><code>pattern</code></em>)</code></span></dt><dd><p>
+	      Matches a package if any one of its versions matches the
+	      enclosed pattern.  This is the dual to <code class="literal"><a class="link" href="ch02s04s05.html#searchAllVersions">?all-versions</a></code>.
+	    </p><p>
+	      This term may not be used in a context in which the
+	      versions to match against have already been narrowed,
+	      such as within <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code> or <code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>.  However, it may
+	      always be used within <code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code>.
+	    </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		This term is closely related to <code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>.
+		In fact,
+		<code class="literal">?any-version(<em class="replaceable"><code>pattern1</code></em>
+		<em class="replaceable"><code>pattern2</code></em>)</code> is exactly
+		the same as
+		<code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchNarrow">?narrow</a></code>(<em class="replaceable"><code>pattern1</code></em>,
+		<em class="replaceable"><code>pattern2</code></em>)</code>.
+	      </p></td></tr></table></div></dd><dt><a name="searchArchitecture"></a><span class="term"><code class="literal">?architecture(<em class="replaceable"><code>architecture</code></em>)</code>, <code class="literal">~r<em class="replaceable"><code>architecture</code></em></code></span></dt><dd><p>
+	      Matches package versions for the given
+	      <em class="replaceable"><code>architecture</code></em>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?architecture(amd64)</code></span>”</span>
+	      matches <code class="literal">amd64</code> packages, while
+	      <span class="quote">“<span class="quote"><code class="literal">?architecture(all)</code></span>”</span>
+	      matches arch-independent packages.  Also accepts the
+	      special values <code class="literal">native</code> and
+	      <code class="literal">foreign</code>.
+	    </p></dd><dt><a name="searchArchive"></a><span class="term"><code class="literal">?archive(<em class="replaceable"><code>archive</code></em>)</code>, <code class="literal">~A<em class="replaceable"><code>archive</code></em></code></span></dt><dd><p>
+	      Matches package versions which are available from an
+	      archive that matches the regular expression
+	      <em class="replaceable"><code>archive</code></em>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?archive(testing)</code></span>”</span>
+	      matches any package available from the
+	      <code class="literal">testing</code> archive.
+	    </p></dd><dt><a name="searchAutomatic"></a><span class="term"><code class="literal">?automatic</code>, <code class="literal">~M</code></span></dt><dd><p>
+	      Matches packages which were automatically installed.
+	    </p></dd><dt><a name="searchBind"></a><span class="term">
+	    <code class="literal">?bind(<em class="replaceable"><code>variable</code></em>,
+	    <em class="replaceable"><code>pattern</code></em>)</code>,
+	    <code class="literal">?<em class="replaceable"><code>variable</code></em>:<em class="replaceable"><code>term-name</code></em>[<span class="optional">(<em class="replaceable"><code>args</code></em>)</span>]</code>
+	  </span></dt><dd><p>
+	      Matches any package or version if the given
+	      <em class="replaceable"><code>pattern</code></em> matches the package or
+	      version bound to <em class="replaceable"><code>variable</code></em>,
+	      which must be defined in an enclosing <code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code>.
+	    </p><div class="example"><a name="exampleSearchBind"></a><p class="title"><b>Example 2.3. Use of the <code class="literal">?bind</code> term</b></p><div class="example-contents"><p>
+		<code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> x: <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> z: ?bind(x, <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchEqual">?=</a></code>z))))</code>
+	      </p><p>
+		<code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> x: <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchFor">?for</a></code> z: ?x:<a class="link" href="ch02s04s05.html#searchDep">depends</a>(<code class="literal"><a class="link" href="ch02s04s05.html#searchEqual">?=</a></code>z)))</code>
+	      </p></div></div><br class="example-break"><p>
+	      The two search patterns in the above example both match
+	      any package <code class="literal">x</code> such that
+	      <code class="literal">x</code> depends on a package
+	      <code class="literal">y</code> which in turn depends on a package
+	      <code class="literal">z</code> such that <code class="literal">x</code> also
+	      depends directly on <code class="literal">z</code>.  The first
+	      pattern uses <code class="literal">?bind</code> directly, while
+	      the second one uses an equivalent shorthand syntax.
+	    </p><p>
+	      See <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a> for more
+	      information.
+	    </p></dd><dt><a name="searchBroken"></a><span class="term"><code class="literal">?broken</code>, <code class="literal">~b</code></span></dt><dd><p>
+	      Matches packages that are <span class="quote">“<span class="quote">broken</span>”</span>: they have an
+	      unfulfilled dependency, predependency, breaks, or conflict.
+	    </p></dd><dt><a name="searchBrokenType"></a><span class="term"><code class="literal">?broken-<em class="replaceable"><code>depType</code></em></code>, <code class="literal">~B<em class="replaceable"><code>depType</code></em></code></span></dt><dd><p>
+	      Matches packages which have an unfulfilled (<span class="quote">“<span class="quote">broken</span>”</span>)
+	      dependency of the given <em class="replaceable"><code>depType</code></em>.
+	      <em class="replaceable"><code>depType</code></em> can be
+	      <span class="quote">“<span class="quote"><code class="literal">depends</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">predepends</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">recommends</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">suggests</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">breaks</code></span>”</span>,
+	      <span class="quote">“<span class="quote"><code class="literal">conflicts</code></span>”</span>, or
+	      <span class="quote">“<span class="quote"><code class="literal">replaces</code></span>”</span>.
+	    </p></dd><dt><a name="searchBrokenTypeTerm"></a><span class="term"><code class="literal">?broken-<em class="replaceable"><code>depType</code></em>(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~DB[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      Matches packages with an unsatisfied dependency of type
+	      <em class="replaceable"><code>depType</code></em> on a package matching
+	      <em class="replaceable"><code>pattern</code></em>.
+	      <em class="replaceable"><code>depType</code></em> may be any one of the
+	      dependency types listed in <a class="link" href="ch02s04s05.html#searchBrokenType">the documentation of
+	      <code class="literal">?broken-<em class="replaceable"><code>depType</code></em></code></a>.
+	    </p></dd><dt><a name="searchConflicts"></a><span class="term"><code class="literal">?conflicts(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~C<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      Matches packages which conflict with a package matching
+	      the given <em class="replaceable"><code>pattern</code></em>.  For
+	      instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?conflicts(<code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>(dburrows@debian.org))</code></span>”</span>
+	      matches any package which conflicts with a package I
+	      maintain.
+	    </p></dd><dt><a name="searchConfigFiles"></a><span class="term"><code class="literal">?config-files</code>, <code class="literal">~c</code></span></dt><dd><p>
+	      Matches packages which have been removed, but whose
+	      configuration files remain on the system (ie, they were
+	      removed but not purged).
+	    </p></dd><dt><a name="searchDep"></a><span class="term"><code class="literal">?<em class="replaceable"><code>depType</code></em>(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~D[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      <em class="replaceable"><code>depType</code></em> may be any one of the
+	      dependency types given in <a class="link" href="ch02s04s05.html#searchBrokenType">the documentation of
+	      <code class="literal">?broken-<em class="replaceable"><code>depType</code></em></code></a>,
+	      as well as <code class="literal">provides</code>: for instance,
+	      <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>(libpng3)</code> will match any
+	      package that depends on <code class="literal">libpng3</code>.  If
+	      the short form (<code class="literal">~D</code>) is used and
+	      <em class="replaceable"><code>depType</code></em> is not present, it
+	      defaults to <code class="literal">depends</code>.
+	    </p><p>
+	      If <em class="replaceable"><code>depType</code></em> is
+	      <span class="quote">“<span class="quote"><code class="literal">provides</code></span>”</span>, matches
+	      packages that provide a package matching
+	      <em class="replaceable"><code>pattern</code></em> (the equivalent of
+	      <code class="literal"><a class="link" href="ch02s04s05.html#searchProvides">?provides</a></code>).  Otherwise, matches packages which declare
+	      a dependency of type <em class="replaceable"><code>depType</code></em>
+	      upon a package version which matches
+	      <em class="replaceable"><code>pattern</code></em>.
+	    </p></dd><dt><a name="searchDescription"></a><span class="term"><code class="literal">?description(<em class="replaceable"><code>description</code></em>)</code>, <code class="literal">~d<em class="replaceable"><code>description</code></em></code></span></dt><dd><p>
+	      Matches packages whose description matches the regular
+	      expression <em class="replaceable"><code>description</code></em>.
+	    </p></dd><dt><a name="searchEssential"></a><span class="term"><code class="literal">?essential</code>, <code class="literal">~E</code></span></dt><dd><p>
+	      Matches Essential packages.
+	    </p></dd><dt><a name="searchExactName"></a><span class="term"><code class="literal">?exact-name(<em class="replaceable"><code>name</code></em>)</code></span></dt><dd><p>
+	      Matches packages named <em class="replaceable"><code>name</code></em>.
+	      This is similar to <code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>, but the name must match
+	      exactly.  For instance, the following pattern will match
+	      only the package <code class="systemitem">apt</code>; with
+	      <code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>, it would also match
+	      <code class="systemitem">aptitude</code>,
+	      <code class="systemitem">uvccapture</code>, etc.
+	    </p><div class="example"><a name="idSearchExactName"></a><p class="title"><b>Example 2.4. Use of the <code class="literal">?exact-name</code> term</b></p><div class="example-contents"><p>
+		<code class="literal">?exact-name(apt)</code>
+	      </p></div></div><br class="example-break"></dd><dt><a name="searchFalse"></a><span class="term"><code class="literal">?false</code>, <code class="literal">~F</code></span></dt><dd><p>
+	      This term does not match any package.
+	      <sup>[<a name="idp3967448" href="#ftn.idp3967448" class="footnote">18</a>]</sup>
+	    </p></dd><dt><a name="searchFor"></a><span class="term"><code class="literal">?for <em class="replaceable"><code>variable</code></em>: <em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      Matches <em class="replaceable"><code>pattern</code></em>, but the given
+	      <em class="replaceable"><code>variable</code></em> may be used inside
+	      <em class="replaceable"><code>pattern</code></em> to refer to the package
+	      or package version this term to.
+	    </p><p>
+	      You can use <em class="replaceable"><code>variable</code></em> in two
+	      ways.  To apply a <code class="literal">?</code>-style term to
+	      the variable, write
+	      <code class="literal">?<em class="replaceable"><code>variable</code></em>:<em class="replaceable"><code>term-name</code></em>(<em class="replaceable"><code>args</code></em>)</code>;
+	      for instance, <code class="literal">?x:<a class="link" href="ch02s04s05.html#searchDep">depends</a>(apt)</code>.  In
+	      addition, the term
+	      <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchEqual">?=</a></code><em class="replaceable"><code>variable</code></em></code>
+	      will select any package or version that matches the
+	      value of the given <em class="replaceable"><code>variable</code></em>.
+	    </p><p>
+	      For instance, the following term will match any package
+	      <code class="literal">x</code> that both depends and recommends a
+	      second package <code class="literal">y</code>.
+	    </p><div class="example"><a name="exampleSearchFor"></a><p class="title"><b>Example 2.5. Use of the <code class="literal">?for</code> term</b></p><div class="example-contents"><p>
+		<code class="literal">
+		  ?for x: <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>( ?for y: ?x:<a class="link" href="ch02s04s05.html#searchDep">recommends</a>( <code class="literal"><a class="link" href="ch02s04s05.html#searchEqual">?=</a></code>y ) )
+		</code>
+	      </p></div></div><br class="example-break"><p>
+	      See <a class="xref" href="ch02s04s04.html" title="Explicit search targets">the section called “Explicit search targets”</a> for more
+	      information.
+	    </p></dd><dt><a name="searchGarbage"></a><span class="term"><code class="literal">?garbage</code>, <code class="literal">~g</code></span></dt><dd><p>
+	      Matches packages which are not installed, or which were
+	      automatically installed and are not depended upon by any
+	      installed package.
+	    </p></dd><dt><a name="searchInstalled"></a><span class="term"><code class="literal">?installed</code>, <code class="literal">~i</code></span></dt><dd><p>
+	      Matches package versions which are currently installed.
+	    </p><p>
+	      Since all versions are tested by default, this normally
+	      matches packages which are currently installed.
+	    </p></dd><dt><a name="searchMaintainer"></a><span class="term"><code class="literal">?maintainer(<em class="replaceable"><code>maintainer</code></em>)</code>, <code class="literal">~m<em class="replaceable"><code>maintainer</code></em></code></span></dt><dd><p>
+	      Matches packages whose Maintainer field matches the
+	      regular expression
+	      <em class="replaceable"><code>maintainer</code></em>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>(joeyh)</code></span>”</span>
+	      will find all packages maintained by Joey Hess.
+	    </p></dd><dt><a name="searchMultiArch"></a><span class="term"><code class="literal">?multiarch(<em class="replaceable"><code>multiarch</code></em>)</code></span></dt><dd><p>
+	      Matches packages with the multi-arch capability
+	      specified by <em class="replaceable"><code>multiarch</code></em>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMultiArch">?multiarch</a></code>(foreign)</code></span>”</span>
+	      will find all packages which can satisfy dependencies of
+	      packages for another architecture.
+	      <span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchMultiArch">?multiarch</a></code>(none)</code></span>”</span>
+	      will select packages with no multi-arch capability.
+	    </p></dd><dt><a name="searchNarrow"></a><span class="term">
+	    <code class="literal">?narrow(<em class="replaceable"><code>filter</code></em>, <em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~S <em class="replaceable"><code>filter</code></em> <em class="replaceable"><code>pattern</code></em></code>
+	  </span></dt><dd><p>
+	      This term <span class="quote">“<span class="quote">narrows</span>”</span> the search to package
+	      versions matching <em class="replaceable"><code>filter</code></em>.  In
+	      particular, it matches any package version which matches
+	      both <em class="replaceable"><code>filter</code></em> and
+	      <em class="replaceable"><code>pattern</code></em>.  The string value of
+	      the match is the string value of
+	      <em class="replaceable"><code>pattern</code></em>.
+	    </p></dd><dt><a name="searchTermName"></a><span class="term"><code class="literal">?name(<em class="replaceable"><code>name</code></em>)</code>, <code class="literal">~n<em class="replaceable"><code>name</code></em></code></span></dt><dd><p>
+	      Matches packages whose name matches the regular
+	      expression <em class="replaceable"><code>name</code></em>.  For
+	      instance, most of the packages that match
+	      <span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchTermName">?name</a></code>(^lib)</code></span>”</span> are
+	      libraries of one sort or another.
+	    </p></dd><dt><a name="searchNew"></a><span class="term"><code class="literal">?new</code>, <code class="literal">~N</code></span></dt><dd><p>
+	      Matches packages which are <span class="quote">“<span class="quote">new</span>”</span>: that is,
+	      they have been added to the archive since the last time
+	      the list of packages was cleared using <span class="guimenu">Actions</span> → <span class="guimenuitem">Forget new packages</span> (<span class="shortcut"><strong><span class="keycap"><strong>f</strong></span></strong></span>)
+	      or the command-line action <code class="literal"><a class="link" href="rn01re01.html#cmdlineForgetNew">forget-new</a></code>.
+	    </p></dd><dt><a name="searchObsolete"></a><span class="term">
+	    <code class="literal">?obsolete</code>, <code class="literal">~o</code>
+	  </span></dt><dd><p>
+	      This term matches any installed package which is not
+	      available in any version from any archive.  These
+	      packages appear as <span class="quote">“<span class="quote">Obsolete or Locally
+	      Installed</span>”</span> in the visual interface.
+	    </p></dd><dt><a name="searchOrigin"></a><span class="term"><code class="literal">?origin(<em class="replaceable"><code>origin</code></em>)</code>, <code class="literal">~O<em class="replaceable"><code>origin</code></em></code></span></dt><dd><p>
+	      Matches package versions whose origin matches the
+	      regular expression <em class="replaceable"><code>origin</code></em>.
+	      For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">!?origin(debian)</code></span>”</span> will
+	      find any unofficial packages on your system (packages
+	      not from the Debian archive).
+	    </p></dd><dt><a name="searchProvides"></a><span class="term"><code class="literal">?provides(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~P<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      Matches package versions which provide a package that
+	      matches the <em class="replaceable"><code>pattern</code></em>.  For
+	      instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?provides(mail-transport-agent)</code></span>”</span>
+	      will match all the packages that provide
+	      <span class="quote">“<span class="quote"><code class="literal">mail-transport-agent</code></span>”</span>.
+	    </p></dd><dt><a name="searchPriority"></a><span class="term"><code class="literal">?priority(<em class="replaceable"><code>priority</code></em>)</code>, <code class="literal">~p<em class="replaceable"><code>priority</code></em></code></span></dt><dd><p>
+	      Matches packages whose priority is
+	      <em class="replaceable"><code>priority</code></em>;
+	      <em class="replaceable"><code>priority</code></em> must be
+	      <code class="literal">extra</code>, <code class="literal">important</code>,
+	      <code class="literal">optional</code>,
+	      <code class="literal">required</code>, or
+	      <code class="literal">standard</code>.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?priority(required)</code></span>”</span>
+	      matches packages whose priority is
+	      <span class="quote">“<span class="quote"><code class="literal">required</code></span>”</span>.
+	    </p></dd><dt><a name="searchReverseDep"></a><span class="term"><code class="literal">?reverse-<em class="replaceable"><code>depType</code></em>(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~R[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      <em class="replaceable"><code>depType</code></em> may be either
+	      <span class="quote">“<span class="quote"><code class="literal">provides</code></span>”</span> or one of the
+	      dependency types given in <a class="link" href="ch02s04s05.html#searchBrokenType">the documentation of
+	      <code class="literal">?broken-<em class="replaceable"><code>depType</code></em></code></a>.
+	      If <em class="replaceable"><code>depType</code></em> is not present, it
+	      defaults to <code class="literal">depends</code>.
+	    </p><p>
+	      If <em class="replaceable"><code>depType</code></em> is
+	      <span class="quote">“<span class="quote"><code class="literal">provides</code></span>”</span>, matches
+	      packages whose name is provided by a package version
+	      matching <em class="replaceable"><code>pattern</code></em>.  Otherwise,
+	      matches packages which a package version matching
+	      <em class="replaceable"><code>pattern</code></em> declares a dependency of
+	      type <em class="replaceable"><code>depType</code></em> upon.
+	    </p></dd><dt><a name="searchReverseBrokenDep"></a><span class="term"><code class="literal">?reverse-broken-<em class="replaceable"><code>depType</code></em>(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">?broken-reverse-<em class="replaceable"><code>depType</code></em>(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~RB[<span class="optional"><em class="replaceable"><code>depType</code></em>:</span>]<em class="replaceable"><code>pattern</code></em></code></span></dt><dd><p>
+	      <em class="replaceable"><code>depType</code></em> may be either
+	      <span class="quote">“<span class="quote"><code class="literal">provides</code></span>”</span> or one of the
+	      dependency types given in <a class="link" href="ch02s04s05.html#searchBrokenType">the documentation of
+	      <code class="literal">?broken-<em class="replaceable"><code>depType</code></em></code></a>.
+	      If <em class="replaceable"><code>depType</code></em> is not present, it
+	      defaults to <code class="literal">depends</code>.
+	    </p><p>
+	      Matches packages which a package version matching
+	      <em class="replaceable"><code>pattern</code></em> declares an unsatisfied
+	      dependency of type <em class="replaceable"><code>depType</code></em> upon.
+	    </p></dd><dt><a name="searchSection"></a><span class="term">
+	    <code class="literal">?section(<em class="replaceable"><code>section</code></em>)</code>, <code class="literal">~s<em class="replaceable"><code>section</code></em></code>
+	  </span></dt><dd><p>
+	      Matches packages whose section matches the regular
+	      expression <em class="replaceable"><code>section</code></em>.
+	    </p></dd><dt><a name="searchSourcePackage"></a><span class="term">
+	    <code class="literal">?source-package(<em class="replaceable"><code>name</code></em>)</code>
+	  </span></dt><dd><p>
+	      Matches packages whose source package name matches the
+	      regular expression <em class="replaceable"><code>name</code></em>.
+	    </p></dd><dt><a name="searchSourceVersion"></a><span class="term">
+	    <code class="literal">?source-version(<em class="replaceable"><code>version</code></em>)</code>
+	  </span></dt><dd><p>
+	      Matches packages whose source version matches the
+	      regular expression <em class="replaceable"><code>version</code></em>.
+	    </p></dd><dt><a name="searchTag"></a><span class="term"><code class="literal">?tag(<em class="replaceable"><code>tag</code></em>)</code>, <code class="literal">~G<em class="replaceable"><code>tag</code></em></code></span></dt><dd><p>
+	      Matches packages whose Tag field matches the regular
+	      expression <em class="replaceable"><code>tag</code></em>.  For
+	      instance, the pattern
+	      <code class="literal">?tag(game::strategy)</code> would match
+	      strategy games.
+	    </p><p>
+	      For more information on tags and debtags, see <a class="ulink" href="http://debtags.alioth.debian.org" target="_top">http://debtags.alioth.debian.org</a>.
+	    </p></dd><dt><a name="searchTask"></a><span class="term">
+	    <code class="literal">?task(<em class="replaceable"><code>task</code></em>)</code>, <code class="literal">~t<em class="replaceable"><code>task</code></em></code>
+	  </span></dt><dd><p>
+	      Matches packages that appear in a task whose name
+	      matches the regular expression
+	      <em class="replaceable"><code>task</code></em>.
+	    </p></dd><dt><a name="searchTerm"></a><span class="term">
+	    <code class="literal">?term(<em class="replaceable"><code>keyword</code></em>)</code>
+	  </span></dt><dd><p>
+	      This term performs a full-text search for
+	      <em class="replaceable"><code>keyword</code></em> in the apt package
+	      cache.  When used with <span class="quote">“<span class="quote"><code class="literal">aptitude
+	      search</code></span>”</span>, <a class="link" href="ch02s01s02.html#menuSearchLimit"><span class="guimenu">Search</span> → <span class="guimenuitem">Limit Display</span> (<span class="shortcut"><strong><span class="keycap"><strong>l</strong></span></strong></span>)</a> in the
+	      curses front-end, or typed into a package search box in
+	      the GTK+ front-end, this term will allow <span class="command"><strong>aptitude</strong></span> to
+	      accelerate the search using a Xapian index.
+	    </p></dd><dt><a name="searchTermPrefix"></a><span class="term">
+	    <code class="literal">?term-prefix(<em class="replaceable"><code>keyword</code></em>)</code>
+	  </span></dt><dd><p>
+	      This term performs a full-text search for any keyword
+	      beginning with <em class="replaceable"><code>keyword</code></em> in the
+	      apt package cache.  When used with
+	      <span class="quote">“<span class="quote"><code class="literal">aptitude search</code></span>”</span>, <a class="link" href="ch02s01s02.html#menuSearchLimit"><span class="guimenu">Search</span> → <span class="guimenuitem">Limit Display</span> (<span class="shortcut"><strong><span class="keycap"><strong>l</strong></span></strong></span>)</a> in the
+	      curses front-end, or typed into a package search box in
+	      the GTK+ front-end, this term will allow <span class="command"><strong>aptitude</strong></span> to
+	      accelerate the search using a Xapian index.
+	    </p><p>
+	      This is similar to <code class="literal"><a class="link" href="ch02s04s05.html#searchTerm">?term</a></code>, but matches extensions of
+	      the <em class="replaceable"><code>keyword</code></em>.  For instance,
+	      the following search pattern will match any package
+	      indexed under the keywords <code class="literal">hour</code>,
+	      <code class="literal">hourglass</code>, <code class="literal">hourly</code>,
+	      and so on:
+	    </p><div class="example"><a name="exampleTermPrefix"></a><p class="title"><b>Example 2.6. Use of the <code class="literal">?term-prefix</code> term</b></p><div class="example-contents"><p>
+		<code class="literal">
+		  ?term-prefix(hour)
+		</code>
+	      </p></div></div><br class="example-break"></dd><dt><a name="searchTrue"></a><span class="term">
+	    <code class="literal">?true</code>, <code class="literal">~T</code>
+	  </span></dt><dd><p>
+	      This term matches any package.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchInstalled">?installed</a></code><code class="literal"><a class="link" href="ch02s04s05.html#searchProvides">?provides</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code>)</code></span>”</span>
+	      matches installed packages which are provided by any
+	      package.
+	    </p></dd><dt><a name="searchUpgradable"></a><span class="term">
+	    <code class="literal">?upgradable</code>, <code class="literal">~U</code>
+	  </span></dt><dd><p>
+	      This term matches any installed package which can be
+	      upgraded.
+	    </p></dd><dt><a name="searchUserTag"></a><span class="term">
+	    <code class="literal">?user-tag(<em class="replaceable"><code>tag</code></em>)</code>
+	  </span></dt><dd><p>
+	      This term matches any package that is marked with a
+	      user-tag matching the regular expression
+	      <em class="replaceable"><code>tag</code></em>.
+	    </p></dd><dt><a name="searchTermVersion"></a><span class="term">
+	    <code class="literal">?version(<em class="replaceable"><code>version</code></em>)</code>, <code class="literal">~V<em class="replaceable"><code>version</code></em></code>
+	  </span></dt><dd><p>
+	      Matches any package version whose version number matches
+	      the regular expression
+	      <em class="replaceable"><code>version</code></em>, with the exceptions
+	      noted below.  For instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?version(debian)</code></span>”</span>
+	      matches packages whose version contains
+	      <span class="quote">“<span class="quote"><code class="literal">debian</code></span>”</span>.
+	    </p><p>
+	      The following values of
+	      <em class="replaceable"><code>version</code></em> are treated
+	      specially.  To search for version numbers containing
+	      these values, preface the value with a backslash; for
+	      instance, to find packages whose version number contains
+	      <code class="literal">CURRENT</code>, search for
+	      <code class="literal">\CURRENT</code>.
+
+	      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		    <code class="literal">CURRENT</code> matches the currently
+		    installed version of a package, if any.
+		  </p></li><li class="listitem"><p>
+		    <code class="literal">CANDIDATE</code> matches the version,
+		    if any, of the package that will be installed if
+		    you press <span class="keycap"><strong>+</strong></span> on the package or run
+		    <code class="literal">aptitude install</code> on it.
+		  </p></li><li class="listitem"><p>
+		    <code class="literal">TARGET</code> matches the version of a
+		    package that is currently targeted for
+		    installation, if any.
+		  </p></li></ul></div><p>
+	    </p></dd><dt><a name="searchVirtual"></a><span class="term">
+	    <code class="literal">?virtual</code>, <code class="literal">~v</code>
+	  </span></dt><dd><p>
+	      Matches any package which is purely virtual: that is,
+	      its name is provided by a package or mentioned in a
+	      dependency, but no package of that name exists.  For
+	      instance,
+	      <span class="quote">“<span class="quote"><code class="literal">?virtual!<code class="literal"><a class="link" href="ch02s04s05.html#searchProvides">?provides</a></code>(<code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code>)</code></span>”</span>
+	      matches packages which are virtual and are not provided
+	      by any package: ie, packages which are depended upon but
+	      do not exist.
+	    </p></dd><dt><a name="searchWiden"></a><span class="term">
+	    <code class="literal">?widen(<em class="replaceable"><code>pattern</code></em>)</code>, <code class="literal">~W<em class="replaceable"><code>pattern</code></em></code> 
+	  </span></dt><dd><p>
+	      <span class="quote">“<span class="quote">Widens</span>”</span> the match: if the versions to
+	      match against have been limited by an enclosing term
+	      (such as <code class="literal"><a class="link" href="ch02s04s05.html#searchDep">?depends</a></code>), these limits are dropped.  Thus,
+	      <code class="literal"><code class="literal"><a class="link" href="ch02s04s05.html#searchWiden">?widen</a></code>(<em class="replaceable"><code>pattern</code></em>)</code>
+	      matches a package version if
+	      <em class="replaceable"><code>pattern</code></em> matches
+	      <span class="emphasis"><em>any</em></span> version of that package.
+	    </p></dd></dl></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp3967448" href="#idp3967448" class="para">18</a>] </sup>
+		  This is provided largely for symmetry with <code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code>.
+		</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04s04.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s04.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s05.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Explicit search targets </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Customizing <span class="command"><strong>aptitude</strong></span></td></tr></table></div></body></html>

@@ -1,0 +1,185 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:47 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_thread</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_thread</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+&minus; commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+begin</b> <i>script</i></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+begindetached</b> <i>script</i></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+get</b></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+getid</b></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+wait</b> <i>tid</i></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_thread
+yield
+_________________________________________________________________</b></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+begin:</p>
+
+<p style="margin-left:22%;">begins a new thread which
+evaluates the specified script and then exits. It returns a
+thread ID that must eventually be passed to ns_thread wait.
+(Failing to call ns_thread wait will eventually result in no
+new threads being created.)</p>
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+begindetached:</p>
+
+<p style="margin-left:22%;">begins a detached thread that
+doesn&rsquo;t have to be (and can&rsquo;t be) waited
+for.</p>
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+get:</p>
+
+<p style="margin-left:22%;">gets the thread ID of the
+current thread. The result is a thread ID that can be passed
+to ns_thread wait and may look something like
+&quot;tid532&quot;.</p>
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+getid:</p>
+
+<p style="margin-left:22%;">gets the thread integer number
+for the current thread. The result is a small integer used
+for identifying threads is a human-readable way, such as
+&quot;1&quot; or &quot;1120&quot;, for example.</p>
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+wait:</p>
+
+<p style="margin-left:22%;">waits for the specified thread
+to exit. The tid argument is a thread ID returned by
+ns_thread begin or ns_thread get.</p>
+
+<p style="margin-left:11%; margin-top: 1em">ns_thread
+yield:</p>
+
+<p style="margin-left:22%;">causes the current thread to
+yield.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This example is
+similar to the example under the ns_sockselect function of
+connecting to the 10 servers and waiting to service them
+with the ns_sockselect command. In this case, though, each
+connection gets it&rsquo;s own thread.</p>
+
+<p style="margin-left:11%; margin-top: 1em"># This is the
+procedure which is evaluated for each thread and # handles a
+single connection to host number $i</p>
+
+<p style="margin-left:11%; margin-top: 1em">proc getpage
+{i} { <br>
+global pages <br>
+# new thread will start here - first connect to host <br>
+set host [format &quot;www%2d.foo.com&quot; $i] <br>
+set fds [ns_sockopen $host 80 <br>
+set r [lindex $fds 0] <br>
+set w [lindex $fds 1] <br>
+# next, send request 0r&quot; <br>
+puts $w &quot;GET /index.htm HTTP/1.0 <br>
+flush $w <br>
+# then read page <br>
+set pages($i) [read $r] <br>
+# and close sockets <br>
+close $w <br>
+close $r <br>
+# thread goes away here and other threads waiting <br>
+# on ns_thread wait will wakeup }</p>
+
+<p style="margin-left:11%; margin-top: 1em"># Here&rsquo;s
+the loop which creates the threads which run getpage. for
+{set i 1} {$i &lt; 9} {incr i} { <br>
+set tids($i) [ns_thread begin &quot;getpage $i&quot;] }</p>
+
+<p style="margin-left:11%; margin-top: 1em"># wait for the
+threads to exit and then process the pages for {set i 1} {$i
+&lt; 9} {incr i} { <br>
+ns_thread wait $tids($i) <br>
+# output page <br>
+... process the page in $pages($i) put there by other thread
+... }</p>
+
+<p style="margin-left:11%; margin-top: 1em">Note that the
+code here is much simpler to follow than the ns_sockselect
+example; that&rsquo;s the benefit of multithreaded
+programming. However, it uses more resources as threads need
+to be created and initialized. This can be a problem if you
+plan to create many threads.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+
+ 
+<p style="margin-left:11%; margin-top: 1em">threads</p>
+<hr>
+</body>
+</html>

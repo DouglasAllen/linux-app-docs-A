@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Přizpůsobení klávesových zkratek</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="ch02s04.html" title="Přizpůsobení aptitude"><link rel="prev" href="ch02s04s01.html" title="Přizpůsobení seznamu balíků"><link rel="next" href="ch02s04s03.html" title="Přizpůsobení barvy textu a úprava stylů"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Přizpůsobení klávesových zkratek</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04s01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Přizpůsobení <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s04s03.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="section" title="Přizpůsobení klávesových zkratek"><div class="titlepage"><div><div><h3 class="title"><a name="secKeybindings"></a>Přizpůsobení klávesových zkratek</h3></div></div></div><p>
+
+Klávesy pro spouštění příkazů v <span class="command"><strong>aptitude</strong></span> si můžete přizpůsobit v
+<a class="link" href="ch02s04s05.html" title="Konfigurační soubor">konfiguračním souboru</a>.
+Každý příkaz má svou konfigurační proměnnou, pomocí které můžete
+příkaz spojit s požadovanou klávesou. Například pokud chcete, aby
+klávesa <span class="keycap"><strong>s</strong></span> zahájila hledání, nastavte proměnnou
+<code class="literal">Aptitude::UI::Keybindings::Search</code> na hodnotu
+<span class="quote">„<span class="quote"><code class="literal">s</code></span>“</span>.
+
+Jestliže chcete použít modifikátor <span class="keycap"><strong>Control</strong></span>, předřaďte
+klávese řetězec <span class="quote">„<span class="quote"><code class="literal">C-</code></span>“</span>. Tj. když
+v předchozím příkladu nahradíte <span class="quote">„<span class="quote"><code class="literal">s</code></span>“</span> za
+<span class="quote">„<span class="quote"><code class="literal">C-s</code></span>“</span>, naváže se hledání na klávesovou
+zkratku <span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>s</strong></span>.
+
+Příkaz můžete dokonce spojit s více klávesovými zkratkami najednou,
+stačí jednotlivé zkratky oddělit čárkami. Například pokud se má
+hledání spustit klávesou <span class="keycap"><strong>s</strong></span> i <span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>s</strong></span>,
+použijte <span class="quote">„<span class="quote"><code class="literal">s,C-s</code></span>“</span>.
+
+</p><p>
+
+Následuje přehled příkazů, které můžete navázat na klávesové zkratky.
+Slouží k tomu proměnná
+<code class="literal">Aptitude::UI::Keybindings::<em class="replaceable"><code>příkaz</code></em></code>,
+kde <em class="replaceable"><code>příkaz</code></em> je jméno příkazu:
+
+</p><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Příkaz</th><th>Implicitně</th><th>Popis</th></tr></thead><tbody><tr><td><code class="literal">ApplySolution</code></td><td><code class="literal">!</code></td><td>
+
+V případě, že jsou některé balíky porušené a <span class="command"><strong>aptitude</strong></span> pro ně navrhla
+řešení, tak toto řešení okamžitě použije.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Begin</code></td><td><code class="literal">home,C-a</code></td><td>
+
+Přesune se na začátek aktuálního prvku: na začátek seznamu nebo na
+začátek textového pole.
+
+    </td></tr><tr><td><code class="literal">BugReport</code></td><td><code class="literal">B</code></td><td>
+
+Nahlásí chybu ve vybraném balíku; použije k tomu příkaz
+<span class="command"><strong>reportbug</strong></span>.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Cancel</code></td><td><code class="literal">C-g,escape,C-[</code></td><td>
+
+Zruší aktuální akci: například zavře dialog nebo opustí menu.
+
+    </td></tr><tr><td><code class="literal">Changelog</code></td><td><code class="literal">C</code></td><td>
+
+Zobrazí soubor <code class="filename">changelog.Debian</code> z vybraného
+balíku.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ChangePkgTreeGrouping</code></td><td><code class="literal">G</code></td><td>
+
+Nastaví <a class="link" href="ch02s04s01.html#secGroupingPolicy" title="Přizpůsobení hierarchie balíků">shlukovací pravidla</a>
+aktivního seznamu balíků.
+
+    </td></tr><tr><td><code class="literal">ChangePkgTreeLimit</code></td><td><code class="literal">l</code></td><td>
+
+Nastaví <a class="link" href="ch02s03.html" title="Vyhledávací vzory">omezení zobrazení</a>
+aktivního seznamu balíků.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ChangePkgTreeSorting</code></td><td><code class="literal">S</code></td><td>
+
+Nastaví <a class="link" href="ch02s04s01.html#secSortingPolicy" title="Změna řazení balíků">řadící pravidla</a>
+aktivního seznamu balíků.
+
+    </td></tr><tr><td><code class="literal">ClearAuto</code></td><td><code class="literal">m</code></td><td>
+
+Označí vybraný balík jako instalovaný ručně.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">CollapseAll</code></td><td><code class="literal">]</code></td><td>
+
+V hierarchickém seznamu sbalí vybraný strom a všechny jeho potomky.
+
+    </td></tr><tr><td><code class="literal">CollapseTree</code></td><td>nenavázáno</td><td>
+
+V hierarchickém seznamu sbalí vybraný strom.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Commit</code></td><td><code class="literal">N</code></td><td>
+
+V <a class="link" href="">editoru hierarchie</a> uloží pozici
+aktuálního balíku v hierarchii a přesune se k dalšímu balíku.
+
+    </td></tr><tr><td><code class="literal">Confirm</code></td><td><code class="literal">enter</code></td><td>
+
+V dialogovém okně je ekvivalentní se stisknutím tlačítka
+<span class="quote">„<span class="quote"><span class="guilabel">Ok</span></span>“</span>. Při výběru z několika možností
+vybere tu přednastavenou.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Cycle</code></td><td><code class="literal">tab</code></td><td>
+
+Přesune se na další <span class="quote">„<span class="quote">prvek uživatelského prostředí</span>“</span>.
+
+    </td></tr><tr><td><code class="literal">CycleNext</code></td><td><code class="literal">f6</code></td><td>
+
+Přepne se do dalšího aktivního pohledu.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">CycleOver</code></td><td><code class="literal">o</code></td><td>
+
+Cykluje mezi předdefinovanými rozloženími obrazovky.
+
+    </td></tr><tr><td><code class="literal">CyclePrev</code></td><td><code class="literal">f7</code></td><td>
+
+Přepne se do předchozího aktivního pohledu.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">DelBOL</code></td><td><code class="literal">C-u</code></td><td>
+
+Smaže text mezi	kurzorem a začátkem řádku.
+
+    </td></tr><tr><td><code class="literal">DelBack</code></td><td><code class="literal">backspace,C-h</code></td><td>
+
+Při zadávání textu smaže předchozí znak.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">DelEOL</code></td><td><code class="literal">C-k</code></td><td>
+
+Smaže text od kurzoru až do konce řádku.
+
+    </td></tr><tr><td><code class="literal">DelForward</code></td><td><code class="literal">delete,C-d</code></td><td>
+
+Při zadávání textu smaže znak pod kurzorem.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Dependencies</code></td><td><code class="literal">d</code></td><td>
+
+Zobrazí závislosti vybraného balíku.
+
+    </td></tr><tr><td><code class="literal">DescriptionCycle</code></td><td><code class="literal">i</code></td><td>
+
+Cykluje mezi dostupnými pohledy v informační oblasti seznamu balíků.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">DescriptionDown</code></td><td><code class="literal">z</code></td><td>
+
+Posune text v informační oblasti o jeden řádek dolů.
+
+    </td></tr><tr><td><code class="literal">DescriptionUp</code></td><td><code class="literal">a</code></td><td>
+
+Posune text v informační oblasti o jeden řádek nahoru.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">DoInstallRun</code></td><td><code class="literal">g</code></td><td>
+
+Při prvním spuštění zobrazí přehled před instalací <sup>[<a name="idp4303448" href="#ftn.idp4303448" class="footnote">a</a>]</sup>
+Při druhém spuštění <a class="link" href="ch02s02s05.html" title="Stažení, instalace a odstranění balíků">spustí samotnou
+instalaci</a>.
+
+    </td></tr><tr><td><code class="literal">Down</code></td><td><code class="literal">down,j</code></td><td>
+
+Posune <span class="quote">„<span class="quote">něco</span>“</span> dolů. Např. posune dolů text nápovědy, nebo
+v seznamu vybere další položku.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">DpkgReconfigure</code></td><td><code class="literal">R</code></td><td>
+
+Na vybraném balíku spustí <span class="quote">„<span class="quote">dpkg-reconfigure</span>“</span>.
+
+    </td></tr><tr><td><code class="literal">DumpResolver</code></td><td><code class="literal">*</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny, zapíše do souboru aktuální stav
+řešitele konfliktů (pro ladicí účely).
+
+    </td></tr><tr class="oddrow"><td><code class="literal">EditHier</code></td><td><code class="literal">E</code></td><td>
+
+Otevře <a class="link" href="">editor hierarchie</a>.
+
+    </td></tr><tr><td><code class="literal">End</code></td><td><code class="literal">end,C-e</code></td><td>
+
+Přesune se na konec aktuálního prvku: na konec seznamu nebo na konec
+textového pole.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ExamineSolution</code></td><td><code class="literal">e</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny a <span class="command"><strong>aptitude</strong></span> pro ně navrhla
+řešení, zobrazí okno s podrobným popisem navrhovaných změn.
+
+    </td></tr><tr><td><code class="literal">ExpandAll</code></td><td><code class="literal">[</code></td><td>
+
+V hierarchickém seznamu rozbalí vybraný strom a všechny jeho potomky.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ExpandTree</code></td><td>nenavázáno</td><td>
+
+V hierarchickém seznamu rozbalí vybraný strom.
+
+    </td></tr><tr><td><code class="literal">FirstSolution</code></td><td><code class="literal">&lt;</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny, přejde na první navrhované
+řešení.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ForbidUpgrade</code></td><td><code class="literal">F</code></td><td>
+
+<a class="link" href="ch02s02s03.html#pkgCmdForbid">Zabrání</a> balíku v aktualizaci na
+dostupnou verzi (nebo na konkrétní verzi).
+
+    </td></tr><tr><td><code class="literal">ForgetNewPackages</code></td><td><code class="literal">f</code></td><td>
+
+Zapomene, které balíky jsou <span class="quote">„<span class="quote">nové</span>“</span> (vyprázdní strom
+<span class="quote">„<span class="quote">Nové balíky</span>“</span>).
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Help</code></td><td><code class="literal">?</code></td><td>
+
+Zobrazí nápovědu.
+
+    </td></tr><tr><td><code class="literal">HistoryNext</code></td><td><code class="literal">down,C-n</code></td><td>
+
+V řádkovém editoru s historií se přesune na další položku v historii.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">HistoryPrev</code></td><td><code class="literal">up,C-p</code></td><td>
+
+V řádkovém editoru s historií se přesune na předchozí položku v historii.
+
+    </td></tr><tr><td><code class="literal">Hold</code></td><td><code class="literal">=</code></td><td>
+
+<a class="link" href="ch02s02s03.html#pkgCmdHold">Podrží</a> vybraný balík v aktuální verzi.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Install</code></td><td><code class="literal">+</code></td><td>
+
+Označí aktuálně vybraný balík pro <a class="link" href="ch02s02s03.html#pkgCmdInstall">instalaci</a>.
+
+    </td></tr><tr><td><code class="literal">InstallSingle</code></td><td><code class="literal">I</code></td><td>
+
+Označí vybraný (jediný) balík pro instalaci. Ostatní balíky jsou
+ponechány v aktuální verzi.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Keep</code></td><td><code class="literal">:</code></td><td>
+
+U vybraného balíku <a class="link" href="ch02s02s03.html#pkgCmdKeep">zruší</a> naplánované
+akce jako instalaci, aktualizaci, odstranění nebo podržení.
+
+    </td></tr><tr><td><code class="literal">LastSolution</code></td><td><code class="literal">&gt;</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny, přejde na poslední doposud
+navrhnuté řešení.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Left</code></td><td><code class="literal">left,h</code></td><td>
+
+Posune <span class="quote">„<span class="quote">něco</span>“</span> vlevo. Např. v menu se posune na položku
+vlevo, nebo při editaci textu posune kurzor o znak doleva.
+
+    </td></tr><tr><td><code class="literal">LevelDown</code></td><td><code class="literal">J</code></td><td>
+
+V hierarchickém seznamu vybere dalšího sourozence vybrané položky
+(tj. další položku se stejným rodičem).
+
+    </td></tr><tr class="oddrow"><td><code class="literal">LevelUp</code></td><td><code class="literal">K</code></td><td>
+
+V hierarchickém seznamu vybere předchozího sourozence vybrané položky
+(tj. předchozí položku se stejným rodičem).
+
+    </td></tr><tr><td><code class="literal">MarkUpgradable</code></td><td><code class="literal">U</code></td><td>
+
+Pokusí se aktualizovat všechny balíky kromě těch, které jsou podržené
+v aktuální verzi, nebo které mají aktualizaci zakázánu.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">MineFlagSquare</code></td><td><code class="literal">f</code></td><td>
+
+V <a class="link" href="ch02s05.html" title="Hraní minového pole">Minovém poli</a>, umístí nebo
+sebere vlajku.
+
+    </td></tr><tr><td><code class="literal">MineLoadGame</code></td><td><code class="literal">L</code></td><td>
+
+Nahraje uloženou hru<a class="link" href="ch02s05.html" title="Hraní minového pole">Minového
+pole</a>.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">MineSaveGame</code></td><td><code class="literal">S</code></td><td>
+
+Uloží hru <a class="link" href="ch02s05.html" title="Hraní minového pole">Minového pole</a>.
+
+    </td></tr><tr><td><code class="literal">MineSweepSquare</code></td><td>nenavázáno</td><td>
+
+Prohledá okolní pole ve hře <a class="link" href="ch02s05.html" title="Hraní minového pole">Minové
+pole</a>.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">MineUncoverSquare</code></td><td>nenavázáno</td><td>
+
+Odkryje políčko v <a class="link" href="ch02s05.html" title="Hraní minového pole">Minovém poli</a>.
+
+    </td></tr><tr><td><code class="literal">MineUncoverSweepSquare</code></td><td><code class="literal">enter</code></td><td>
+
+Pokud je zakryté, odkryje políčko v <a class="link" href="ch02s05.html" title="Hraní minového pole">Minovém poli</a>, jinak provede průzkum
+okolí.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">NextPage</code></td><td><code class="literal">pagedown,C-f</code></td><td>
+
+Posune zobrazení o stranu vpřed.
+
+    </td></tr><tr><td><code class="literal">NextSolution</code></td><td><code class="literal">.</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny, přesune se na další navrhované
+řešení.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">No</code></td><td>
+      <code class="literal">n</code><sup>[<a href="ch02s04s02.html#ftn.footnoteYesNoLocale" class="footnoteref">b</a>]</sup>
+    </td><td>
+
+Tato klávesa vybere v dialogových oknech tlačítko <span class="quote">„<span class="quote">Ne</span>“</span>.
+
+    </td></tr><tr><td><code class="literal">Parent</code></td><td><code class="literal">^</code></td><td>
+
+V hierarchickém seznamu vybere rodiče vybrané položky.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">PrevPage</code></td><td><code class="literal">pageup,C-b</code></td><td>
+
+Posune zobrazení o stranu zpět.
+
+    </td></tr><tr><td><code class="literal">PrevSolution</code></td><td><code class="literal">,</code></td><td>
+
+Jestliže jsou nějaké balíky porušeny, přesune se na předchozí
+navrhované řešení.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Purge</code></td><td><code class="literal">_</code></td><td>
+
+Označí aktuálně vybraný balík pro <a class="link" href="ch02s02s03.html#pkgCmdPurge">vyčištění</a>.
+
+    </td></tr><tr><td><code class="literal">PushButton</code></td><td><code class="literal">space,enter</code></td><td>
+
+Aktivuje vybrané tlačítko, nebo přepne přepínací pole.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Quit</code></td><td><code class="literal">q</code></td><td>
+
+Zavře aktuální pohled.
+
+    </td></tr><tr><td><code class="literal">QuitProgram</code></td><td><code class="literal">Q</code></td><td>
+
+Ukončí celý program.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">RejectBreakHolds</code></td><td> </td><td>
+
+Zamítne v řešiteli všechny akce, které by zrušily podržení nějakého
+balíku. Ekvivalentní s
+<a class="link" href="ch02s01s02.html#menuResolverRejectBreakHolds"><span class="guimenu">Řešitel</span> → <span class="guimenuitem">Zamítnout porušující podržení</span></a>.
+
+    </td></tr><tr><td><code class="literal">Refresh</code></td><td><code class="literal">C-l</code></td><td>
+
+Překreslí obrazovku.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Remove</code></td><td><code class="literal">-</code></td><td>
+
+Označí vybraný balík pro <a class="link" href="ch02s02s03.html#pkgCmdRemove">odstranění</a>.
+
+    </td></tr><tr><td><code class="literal">ReInstall</code></td><td><code class="literal">L</code></td><td>
+
+Označí vybraný balík pro <a class="link" href="ch02s02s03.html#pkgCmdReinstall">reinstalaci</a>.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">RepeatSearchBack</code></td><td><code class="literal">N</code></td><td>
+
+Zopakuje poslední hledání, ovšem v opačném směru.
+
+    </td></tr><tr><td><code class="literal">ReSearch</code></td><td><code class="literal">n</code></td><td>
+
+Zopakuje poslední hledání.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ReverseDependencies</code></td><td><code class="literal">r</code></td><td>
+
+Zobrazí balíky, které závisí na vybraném balíku.
+
+    </td></tr><tr><td><code class="literal">Right</code></td><td><code class="literal">right,l</code></td><td>
+
+Posune <span class="quote">„<span class="quote">něco</span>“</span> vpravo. Např. v menu se posune na položku
+vpravo, nebo při editaci textu posune kurzor o znak doprava.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">SaveHier</code></td><td><code class="literal">S</code></td><td>
+
+V <a class="link" href="">editoru hierarchie</a> uloží aktuální
+hierarchii.
+
+    </td></tr><tr><td><code class="literal">Search</code></td><td><code class="literal">/</code></td><td>
+
+Spustí funkci <span class="quote">„<span class="quote">vyhledat</span>“</span>.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">SearchBack</code></td><td><code class="literal">\</code></td><td>
+
+Spustí funkci <span class="quote">„<span class="quote">vyhledat předchozí</span>“</span>.
+
+    </td></tr><tr><td><code class="literal">SearchBroken</code></td><td><code class="literal">b</code></td><td>
+
+Ve stromu balíků bude hledat další porušený balík.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">SetAuto</code></td><td><code class="literal">M</code></td><td>
+
+Označí vybraný balík jako <a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">instalovaný
+automaticky</a>.
+
+    </td></tr><tr><td><a name="keyShowHideDescription"></a><code class="literal">ShowHideDescription</code></td><td><code class="literal">D</code></td><td>
+
+V seznamu balíků zapne/vypne zobrazení informační oblasti.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">SolutionActionApprove</code></td><td><code class="literal">a</code></td><td>
+
+Při prohlížení řešení označí aktuálně vybranou akci jako
+<span class="quote">„<span class="quote">schválenou</span>“</span> (tj. přednostně budou generována pouze
+řešení obsahující tuto akci).
+
+    </td></tr><tr><td><code class="literal">SolutionActionReject</code></td><td><code class="literal">r</code></td><td>
+
+Při prohlížení řešení označí aktuálně vybranou akci jako
+<span class="quote">„<span class="quote">odmítnutou</span>“</span> (tj. přednostně budou generována pouze
+řešení neobsahující tuto akci).
+
+    </td></tr><tr class="oddrow"><td><code class="literal">ToggleExpanded</code></td><td><code class="literal">enter</code></td><td>
+
+V hierarchickém seznamu rozbalí nebo sbalí vybraný strom.
+
+    </td></tr><tr><td><code class="literal">ToggleMenuActive</code></td><td><code class="literal">C-t,f10,C-space</code></td><td>
+
+Vstoupí do (vystoupí z) hlavního menu.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Undo</code></td><td><code class="literal">C-_,C-u</code></td><td>
+
+Zruší poslední akci. Vracet zpět se můžete až do výskytu jedné
+z následujících událostí: start <span class="command"><strong>aptitude</strong></span>, aktualizace seznamu balíků
+nebo instalace balíků.
+
+    </td></tr><tr><td><code class="literal">Up</code></td><td><code class="literal">up,k</code></td><td>
+
+Posune <span class="quote">„<span class="quote">něco</span>“</span> nahoru. Např. posune nahoru text nápovědy,
+nebo v seznamu vybere předchozí položku.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">UpdatePackageList</code></td><td><code class="literal">u</code></td><td>
+
+Aktualizuje seznam balíků. (Většinou si nové seznamy stáhne
+z Internetu.)
+
+    </td></tr><tr><td><code class="literal">Versions</code></td><td><code class="literal">v</code></td><td>
+
+Zobrazí dostupné verze vybraného balíku.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Yes</code></td><td>
+      <code class="literal">y</code>
+      <sup>[<a name="footnoteYesNoLocale" href="#ftn.footnoteYesNoLocale" class="footnote">b</a>]</sup>
+    </td><td>
+
+Tato klávesa vybere v dialogových oknech tlačítko <span class="quote">„<span class="quote">Ano</span>“</span>.
+
+    </td></tr></tbody><tbody class="footnotes"><tr><td colspan="3"><div class="footnote"><p><sup>[<a id="ftn.idp4303448" href="#idp4303448" class="para">a</a>] </sup>
+Pokud ovšem <code class="literal"><a class="link" href="ch02s04s05.html#configDisplay-Planned-Action">Aptitude::Display-Planned-Action</a></code>
+není nastaveno na hodnotu <span class="quote">„<span class="quote">false</span>“</span>. </p></div><div class="footnote"><p><sup>[<a id="ftn.footnoteYesNoLocale" href="#footnoteYesNoLocale" class="para">b</a>] </sup>
+
+Může se lišit v různých jazykových mutacích.
+
+      </p></div></td></tr></tbody></table></div><p>
+
+Kromě písmen, čísel a interpunkčních znaků můžete pro navázání použít
+i následující <span class="quote">„<span class="quote">speciální</span>“</span> klávesy:
+
+</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Název klávesy</th><th>Popis</th></tr></thead><tbody><tr><td><code class="literal">a1</code></td><td>Klávesa A1.</td></tr><tr class="oddrow"><td><code class="literal">a3</code></td><td>Klávesa A3.</td></tr><tr><td><code class="literal">b2</code></td><td>Klávesa B2.</td></tr><tr class="oddrow"><td><code class="literal">backspace</code></td><td>Klávesa Backspace.</td></tr><tr><td><code class="literal">backtab</code></td><td>Klávesa Back-tab</td></tr><tr class="oddrow"><td><code class="literal">begin</code></td><td>Klávesa Begin (ne Home)</td></tr><tr><td><code class="literal">break</code></td><td>Klávesa <span class="quote">„<span class="quote">break</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">c1</code></td><td>Klávesa C1.</td></tr><tr><td><code class="literal">c3</code></td><td>Klávesa C3.</td></tr><tr class="oddrow"><td><code class="literal">cancel</code></td><td>Klávesa Cancel.</td></tr><tr><td><code class="literal">create</code></td><td>Klávesa Create.</td></tr><tr class="oddrow"><td><code class="literal">comma</code></td><td>
+Čárka (,) -- protože se čárka používá pro oddělení seznamu
+kláves, je toto jediná možnost jak svázat příkaz s klávesou čárka.
+    </td></tr><tr><td><code class="literal">command</code></td><td>Klávesa Command.</td></tr><tr class="oddrow"><td><code class="literal">copy</code></td><td>Klávesa Copy.</td></tr><tr><td><code class="literal">delete</code></td><td>Klávesa Delete.</td></tr><tr class="oddrow"><td><code class="literal">delete_line</code></td><td>Klávesa <span class="quote">„<span class="quote">smaž řádek</span>“</span>.</td></tr><tr><td><code class="literal">down</code></td><td>Klávesa <span class="quote">„<span class="quote">šipka dolů</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">end</code></td><td>Klávesa End.</td></tr><tr><td><code class="literal">entry</code></td><td>Klávesa Enter.</td></tr><tr class="oddrow"><td><code class="literal">exit</code></td><td>Klávesa Exit.</td></tr><tr><td>
+      <code class="literal">f1</code>, <code class="literal">f2</code>, ...,
+      <code class="literal">f10</code>
+    </td><td>Klávesy F1 až F10.</td></tr><tr class="oddrow"><td><code class="literal">find</code></td><td>Klávesa Find.</td></tr><tr><td><code class="literal">home</code></td><td>Klávesa Home.</td></tr><tr class="oddrow"><td><code class="literal">insert</code></td><td>Klávesa Insert.</td></tr><tr><td><code class="literal">insert_exit</code></td><td>Klávesa <span class="quote">„<span class="quote">insert exit</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">clear</code></td><td>Klávesa <span class="quote">„<span class="quote">vymazat</span>“</span>.</td></tr><tr><td><code class="literal">clear_eol</code></td><td>Klávesa <span class="quote">„<span class="quote">vymazat do konce řádku</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">clear_eos</code></td><td>Klávesa <span class="quote">„<span class="quote">vymazat do konce obrazovky</span>“</span>.</td></tr><tr><td><code class="literal">insert_line</code></td><td>Klávesa <span class="quote">„<span class="quote">vložit řádek</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">left</code></td><td>Klávesa <span class="quote">„<span class="quote">levá šipka</span>“</span>.</td></tr><tr><td><code class="literal">mark</code></td><td>Klávesa Mark.</td></tr><tr class="oddrow"><td><code class="literal">message</code></td><td>Klávesa Message.</td></tr><tr><td><code class="literal">move</code></td><td>Klávesa Move.</td></tr><tr class="oddrow"><td><code class="literal">next</code></td><td>Klávesa Next.</td></tr><tr><td><code class="literal">open</code></td><td>Klávesa Open.</td></tr><tr class="oddrow"><td><code class="literal">previous</code></td><td>Klávesa Previous.</td></tr><tr><td><code class="literal">print</code></td><td>Klávesa Print.</td></tr><tr class="oddrow"><td><code class="literal">redo</code></td><td>Klávesa Redo.</td></tr><tr><td><code class="literal">reference</code></td><td>Klávesa Reference.</td></tr><tr class="oddrow"><td><code class="literal">refresh</code></td><td>Klávesa Refresh.</td></tr><tr><td><code class="literal">replace</code></td><td>Klávesa Replace.</td></tr><tr class="oddrow"><td><code class="literal">restart</code></td><td>Klávesa Restart.</td></tr><tr><td><code class="literal">resume</code></td><td>Klávesa Resume.</td></tr><tr class="oddrow"><td><code class="literal">return</code></td><td>Klávesa Return.</td></tr><tr><td><code class="literal">right</code></td><td>Klávesa <span class="quote">„<span class="quote">pravá šipka</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">save</code></td><td>Klávesa Save.</td></tr><tr><td><code class="literal">scrollf</code></td><td>Klávesa <span class="quote">„<span class="quote">rolovat vpřed</span>“</span>.</td></tr><tr class="oddrow"><td><code class="literal">scrollr</code></td><td>Klávesa <span class="quote">„<span class="quote">rolovat zpět</span>“</span>.</td></tr><tr><td><code class="literal">select</code></td><td>Klávesa Select.</td></tr><tr class="oddrow"><td><code class="literal">suspend</code></td><td>Klávesa Suspend.</td></tr><tr><td><code class="literal">pagedown</code></td><td>Klávesa Page Down.</td></tr><tr class="oddrow"><td><code class="literal">pageup</code></td><td>Klávesa Page Up.</td></tr><tr><td><code class="literal">space</code></td><td>Klávesa mezera</td></tr><tr class="oddrow"><td><code class="literal">tab</code></td><td>Klávesa Tab</td></tr><tr><td><code class="literal">undo</code></td><td>Klávesa Undo.</td></tr><tr class="oddrow"><td><code class="literal">up</code></td><td>Klávesa <span class="quote">„<span class="quote">šipka nahoru</span>“</span>.</td></tr></tbody></table></div><p>
+
+Mimo globálního vázání kláves můžete změnit klávesové zkratky i pouze
+pro jednu konkrétní část <span class="command"><strong>aptitude</strong></span>
+(tzv. <em class="firstterm">doménu</em>). Například aby se klávesa Tab
+v menu chovala stejně jako šipka vpravo, nastavte
+<code class="literal">Aptitude::UI::Keybindings::Menubar::Right</code> na
+hodnotu <span class="quote">„<span class="quote"><code class="literal">tab,right</code></span>“</span>. K dispozici jsou
+následující domény:
+
+</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Doména</th><th>Popis</th></tr></thead><tbody><tr><td><code class="literal">EditLine</code></td><td>
+
+Používá se pro prvky, kde se zadává text, například ve
+<span class="quote">„<span class="quote">vyhledávacím</span>“</span> dialogu.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Menu</code></td><td>
+
+Používá se pro rozbalovací menu programu.
+
+    </td></tr><tr><td><code class="literal">Menubar</code></td><td>
+
+Používá se pro pruh menu nahoře na obrazovce.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Minesweeper</code></td><td>
+
+Používá se v režimu <a class="link" href="ch02s05.html" title="Hraní minového pole">Minové pole</a>.
+
+    </td></tr><tr><td><code class="literal">MinibufChoice</code></td><td>
+
+Používá se ve stavové řádce pro výběr z několika hodnot. (Pouze pokud
+máte povolené <span class="quote">„<span class="quote">Používat výzvy ve stylu 'minibufferu'</span>“</span>.)
+
+    </td></tr><tr class="oddrow"><td><code class="literal">Pager</code></td><td>
+
+Používá se při zobrazování souboru na disku (například nápověda).
+
+    </td></tr><tr><td><code class="literal">PkgNode</code></td><td>
+
+Používá se u balíků, stromů balíků, verzí balíků a závislostech
+balíků, pokud se objeví v seznamu balíků.
+
+    </td></tr><tr class="oddrow"><td><code class="literal">PkgTree</code></td><td>
+
+Používá se v seznamu balíků.
+
+    </td></tr><tr><td><code class="literal">Table</code></td><td>
+
+Používá se u zobrazení prvků uživatelského rozhraní v tabulkách
+(např. v dialogových oknech).
+
+    </td></tr><tr class="oddrow"><td><code class="literal">TextLayout</code></td><td>
+
+Používá se pro zobrazení formátovaných textů, např. pro popisy balíků.
+
+    </td></tr><tr><td><code class="literal">Tree</code></td><td>
+
+Používá se u všech stromových zobrazení (včetně seznamů balíků, které
+však můžete nastavit pomocí <code class="literal">PkgTree</code>).
+
+    </td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04s01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s04.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s04s03.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Přizpůsobení seznamu balíků </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> Přizpůsobení barvy textu a úprava stylů</td></tr></table></div></body></html>

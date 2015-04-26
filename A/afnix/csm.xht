@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Cloud Session Management Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Cloud Session Management Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Cloud Session Management Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Cloud Session Management</em> module is an original implementation of various objects dedicated to the management of events eventually associated with a session controller. In its classical way, the objects can be used to manage an agenda, schedule events and perform associated actions. In a more elaborated way, a session group can be used to manage different group of objects bound to one or several users or groups. </p>
+<div class="section">
+General concepts</div>
+<p class="text">
+ The <tt class="code">afnix-csm</tt> provides the support for manipulating cloud session data. Information data are generally personal information that are used to manage time and constraints or global session information bound to one or several users. In the time domain, the session management is related to the concept of time slot and agenda. </p>
+<p class="subsect">
+Slot</p>
+<p class="text">
+ The concept of slot is central in the <em>csm</em> module. A slot is a combination of time and duration. A slot is allocated by an appointer to indicate the next available <em>slot</em>. For an agenda, the concept of slot can be derived to describe an appointment. </p>
+<p class="subsect">
+Appointer</p>
+<p class="text">
+ An <em>appointer</em> is a slot generator. The appointer can be designed to respond automatically with respect to a certain number of rules. Common rules found in an appointer are closed days like week-end and time allocation period. </p>
+<p class="subsect">
+Assistant</p>
+<p class="text">
+ An <em>assistant</em> is a combination of csm object like appointers. An assistant can be used for example, to manage several appointers. </p>
+<div class="section">
+Appointer operations</div>
+<p class="text">
+ The <tt class="code">Appointer</tt> class is designed to allocate slots with respect to a certain duration or from a certain time with a duration. The appointer operates with rules which describe the operating calendar and daily schedule. such rules are designed to mimic real-life situations like week-end blocked days or Christmas vacation day. </p>
+<p class="subsect">
+Slot allocation</p>
+<p class="text">
+ A slot is allocated with the <tt class="code">get-slot</tt> method. This method is common to the <tt class="code">Appointer</tt> and <tt class="code">Assistant</tt> classes. </p>
+<pre class="frame">
+<![CDATA[# allocate a 1 hour slot
+const slot (appt:get-slot 3600)
+
+]]></pre>
+<p class="text">
+ In the example above, a 1 hour slot is allocated at the current appointer time. Note that the time and duration are always given in seconds. If the slot needs to be allocated starting at a certain time, the 2 arguments form can be used. </p>
+<pre class="frame">
+<![CDATA[# allocate a 1 hour slot starting at 2AM
+const slot (appt:get-slot 7200 3600)
+
+]]></pre>
+<p class="text">
+ In the presence of an <tt class="code">Assistant</tt> object the <tt class="code">get-slot</tt> is the same but selects the appropriate appointer with the help of an internal index which rotated after each call. This method permits an equal distribution for all appointers within an assistant. </p>
+<p class="subsect">
+Appointer rules</p>
+<p class="text">
+ There are basically, two types of appointer's rules. The first type of rule is used for blocking a day as a whole. The second type of rule is designed to describe valid periods of allocation time. The first type of rules is called the <em>and rules</em> since all rules must be valid in order to allocate a slot at the requested time. The second type is a called the <em>or
+	rules</em> since only one rule needs to be valid in order to allocate a slot. </p>
+<pre class="frame">
+<![CDATA[# create a reference appointer
+const appt (afnix:csm:Appointer)
+# add a saturday and sunday blocked day rule
+appt:set-blocked-day 6
+appt:set-blocked-day 0
+# set the special days
+appt:set-special-day  1  1
+appt:set-special-day 12 25
+
+]]></pre>
+<p class="text">
+ The example above defines an appointer object. The first 2 rules defines Saturday and Sunday as blocked days. The other 2 rules, defines Jan 1st and Dec 25th as special days. No slot can be allocated in a blocked or special day. </p>
+<pre class="frame">
+<![CDATA[# set a valid block time between 8AM to 12AM
+const ambt (* 3600 8)
+const amet (* 3600 12)
+const pmbt (* 3600 14)
+# set a valid block time between 2PM to 6PM
+const pmet (* 3600 18)
+appt:set-valid-block-time ambt amet
+appt:set-valid-block-time pmbt pmet
+
+]]></pre>
+<p class="text">
+ the above example defines two valid periods for allocating time. The first period runs from 8AM to 12AM and the second one runs from 2PM to 6PM. Note that the time is also expressed in second. The time arguments are always rounded to the maximum number of seconds per day. </p>
+<div class="section">
+Assistant operations</div>
+<p class="text">
+ An assistant object is build by adding object to it. In general, a reference object is created, and several of them are added to the assistant by cloning the reference object. </p>
+<p class="subsect">
+Assistant integration</p>
+<p class="text">
+ Once an assistant object has been created, the object can be added by cloning. </p>
+<pre class="frame">
+<![CDATA[# create an assistant
+const name "Mr Smith"
+const info "The super assistant"
+const asst (afnix:csm:Assistant name info)
+# create a reference appointer
+const appt (afnix:csm:Appointer)
+# add 2 appointers by cloning
+asst:add-appointer (appt:clone)
+asst:add-appointer (appt:clone)
+
+]]></pre>
+<p class="text">
+ In the case of an <tt class="code">Appointer</tt> object, the appointer is cloned with all its rules attached to it. This method is particularly useful when an assistant needs to be setup for several person that shares the same calendar. </p>
+<hr/>
+<div class="appendix">
+Standard Cloud Session Management Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+Slot</div>
+<p class="text">
+ The <tt class="code">Slot</tt> class is a base class designed to handle a basic time slot event. The class is defined with a date and a duration. The slot class is primarily used to build an agenda. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>slot-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Slot</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Slot constructor creates an empty slot
+	  initialized at time 0 with duration 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Slot</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The Slot constructor creates a slot with a time and
+	  duration. The first argument is the slot time. The second
+	  argument is the slot duration.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the slot to time 0 with
+	  duration 0.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-time</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-time method sets the slot time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-time method returns the slot time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-duration</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-duration method sets the slot duration.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-duration</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-duration method returns the slot duration.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-slot</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-slot method sets the slot time and duration
+	  at once. The first argument is the slot time. The second
+	  argument is the slot duration.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Appointer</div>
+<p class="text">
+ The <tt class="code">Appointer</tt> class is a class design to allocate time slot in a calendar in order to fill an agenda. The appointer do not store the slot but rather acts as a generator. the appointer algorithm operates with rules that permits to allocate the next available slot. The basic rules permits to define regular blocked days and special blocked days. Another rule permits to define an operating time period. Multiple time periods are allowed. A maximum daily slots rule is also available. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>appointer-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Appointer</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Appointer constructor creates a default appointer
+	  initialized at time 0. There is no rule installed by the constructor.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Appointer</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The Appointer constructor creates an appointer with
+	  an initial time. The time is set as he starting time to allocate
+	  slots. There is no rule installed by the constructor.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the appointer slot number
+	  and daily slot counter. The rules are not touched by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-time</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-time method set the appointer time. During
+	  the next operation, the newly allocated slots have their time
+	  starting at least at this time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-time method returns the current appointer time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-date</i><i> (&rarr; none)</i><i> (Date)</i><hr/>
+<p class="text">
+
+	  The set-date method set the appointer time
+	  by converting the date argument to a time.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-date</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-date method returns the current appointer date.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-slot</i><i> (&rarr; Slot)</i><i> (Integer|Integer Integer)</i><hr/>
+<p class="text">
+
+	  The get-slot method returns a new slot allocated by
+	  the appointer. with one argument the argument is taken as the
+	  slot duration. With 2 arguments, the first arguments is the
+	  requested slot time and the second argument is the slot
+	  duration. The slot allocation algorithm operates by finding the
+	  appropriate day and time which satisfies the appointer rules. If
+	  the slot cannot be found within one week, the allocation is
+	  assumed to have failed.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-slot-number</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-slot-number method returns the total number
+	  of slots allocated by the appointer.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-blocked-day</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-blocked-day method sets a regular weekly
+	  block day. The method uses the week day index as its
+	  argument. Sunday has index 0 and Saturday has index 6. No slot
+	  is allocated in a blocked day.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-special-day</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-special-day method sets a special year
+	  day. The method uses the year month and the month day index as its
+	  arguments. The first argument is the year month which must be in
+	  the range of 1 to 12. The second argument is the month day which
+	  must be in the range of 1 to 31. No slot is allocated in a
+	  special day.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-maximum-slots</i><i> (&rarr; none)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The set-maximum-slots method sets a daily maximum
+	  slots number. When the daily maximum slot number is reached, the
+	  slot allocation proceed to the next day.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>set-valid-block-time</i><i> (&rarr; none)</i><i> (Integer Integer)</i><hr/>
+<p class="text">
+
+	  The set-valid-block-time method sets a valid block
+	  time in which the slot can be allocated. By default, a slot can
+	  be allocated anytime during the day. When this rule is set, at
+	  least once, the slot is allocated in this block. Multiple valid
+	  block time can be defined. The first argument is the valid block
+	  time lower bound expressed in seconds from 12PM. The second
+	  argument is the valid block time upper bound. All time are
+	  expressed in seconds and rounded to a day second which is 84600
+	  seconds in 24 hours. For example, a valid block time is from 8AM
+	  to 12AM. Another would be from 2PM to 6PM.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+Assistant</div>
+<p class="text">
+ The <tt class="code">Assistant</tt> class class is a generic class designed to hold various csm component and manage them like an assistant will do. For example, the class can store several <tt class="code">Appointer</tt> objects and distribute slot for all of them. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>assistant-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>Assistant</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The Assistant constructor creates a default assistant.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Assistant</i><i> (String)</i><hr/>
+<p class="text">
+
+	  The Assistant constructor creates a default
+	  assistant by name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>Assistant</i><i> (String String)</i><hr/>
+<p class="text">
+
+	  The Assistant constructor creates a default
+	  assistant by name and information. The first argument is the
+	  assistant name. the second argument is the assistant information
+	  string.
+	</p>
+</div>
+<p/>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>reset</i><i> (&rarr; none)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The reset method reset the assistant by. All
+	  objects attached to the assistant are reset by this method.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-name</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-name method returns the assistant name.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-info</i><i> (&rarr; String)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-info method returns the assistant
+	  information string.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>pushback</i><i> (&rarr; none)</i><i> (Slot)</i><hr/>
+<p class="text">
+
+	  The pushback method pushbaks a slot in the
+	  appointer list. The assistant manages internally an index which
+	  is used to select the appointer where the slot is pushed-back.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-slot</i><i> (&rarr; Slot)</i><i> (Integer|Integer Integer)</i><hr/>
+<p class="text">
+
+	  The get-slot method returns he next available slot
+	  from the appointer list. The assistant manages internally an
+	  index which is used to select the appointer from which the slot
+	  is obtained. With one argument, the method operates with a slot
+	  duration. with 2 arguments, the method operates by time and
+	  duration. The time is the minimum time for which the slot is
+	  allocated. If the slot cannot be allocated, an exception is
+	  raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>add-appointer</i><i> (&rarr; none)</i><i> (Appointer)</i><hr/>
+<p class="text">
+
+	  The add-appointer method adds an appointer object
+	  to the assistant.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-appointer</i><i> (&rarr; Appointer)</i><i> (Integer)</i><hr/>
+<p class="text">
+
+	  The get-appointer method returns an appointer object
+	  by index. If the appointer object cannot be found, an exception
+	  is raised.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>length-appointer</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The length-appointer method returns the number of
+	  appointers attached to the assistant.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-slot-number</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-slot-number method returns the total number
+	  of slot allocated by the assistant at the time of the call. The
+	  number is computed by summing all slot numbers for each appointers.
+	  attached to the assistant.
+	</p>
+</div>
+<p/>
+<div class="frame">
+<i>get-appointer-time</i><i> (&rarr; Integer)</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The get-appointer-time method returns the average
+	  appointer time for the attached appointers. At the time of the
+	  call, each appointer has a time which corresponds to the next
+	  slot available time. The average time for all appointers is the
+	  result of this method which corresponds to the average time of
+	  the next available slot.
+	</p>
+</div>
+<p/>
+</body>
+</html>

@@ -1,0 +1,1707 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+AFNIX installation guide</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+AFNIX installation guide</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Installation Guide</div>
+<hr/>
+<p class="text">
+ This chapter describes the installation procedures for the AFNIX writing system distribution. This chapter explains how to set and compile this distribution. </p>
+<div class="section">
+Software distribution</div>
+<p class="text">
+ The complete distribution can be downloaded from the <a href="http://www.afnix.org">
+AFNIX home page</a>
+. The result is a complete source tree that is ready for compilation. The distribution contains also the documentation as well as examples. The distribution is supported on a variety of platforms as indicated below that can be either 32 bits or 64 bits machines. The distribution is also available at the <a href="http://www.freebsd.org">
+FreeBSD port collection</a>
+. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Platform</th>
+<th class="text">
+Processor</th>
+<th class="text">
+Operating system</th>
+</tr>
+<tr class="text">
+<td class="text">
+Linux</td>
+<td class="text">
+X86-32, X86-64, IA64, SPARC-32, SPARC-64</td>
+<td class="text">
+Linux 2.4 and 2.6</td>
+</tr>
+<tr class="text">
+<td class="text">
+FreeBSD</td>
+<td class="text">
+X86-32, X86-64, IA-64, SPARC-32, SPARC-64</td>
+<td class="text">
+FreeBSD 6.x, 7.x, 8.x</td>
+</tr>
+<tr class="text">
+<td class="text">
+Darwin</td>
+<td class="text">
+PPC-32, PPC-64, X86-32, X86-64</td>
+<td class="text">
+MacOS X 10.4 Tiger, 10.5 Leopard, 10.6 S</td>
+</tr>
+<tr class="text">
+<td class="text">
+Gnu</td>
+<td class="text">
+X86-32, X86-64</td>
+<td class="text">
+GNU KBSD, GNU Hurd</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ Specific processors like the Alpha, M68K, ARM, MIPS and SUPERH are also supported on certain distributions. The PowerPC (PPC) processor is primarily supported with the Darwin platform (MACOS) and is also working with the Linux platform. The Solaris SPARC platform has been discontinued. Do not hesitate to contact the development team for specific processor or platform support. </p>
+<div class="section">
+Installation procedure</div>
+<p class="text">
+ The core software is written in C++. It has been successfully built with the <i class="package">GNU GCC 3</i> and <i class="package">GCC
+      4</i>. No other compiler have been tested. You will also need the <i class="package">GNU Make</i> package. With some distributions the command is called <tt class="command">gmake</tt>. Note that the <tt class="file">Makefile</tt> hierarchy is designed to operate safely with the <tt class="option">-j</tt><i class="package">GNU Make</i> option. </p>
+<p class="subsect">
+Unpacking the distribution</p>
+<p class="text">
+ The distribution is available as a compressed tar file. Note that the documentation is distributed in a separate file. The following command unpacks the distribution. </p>
+<pre class="frame">
+<![CDATA[zsh> gzip -d afnix-src-[version].tar.gz
+zsh> tar  xf afnix-src-[version].tar
+
+]]></pre>
+<p class="subsect">
+Quick command reference</p>
+<p class="text">
+ The list of commands to execute is given in the example below. A detailed description for each command is given hereafter. The <tt class="command">make world</tt> command is the default command that builds the whole tree with the default compiler. </p>
+<pre class="frame">
+<![CDATA[zsh> ./cnf/bin/afnix-setup -o --prefix=/usr/local/afnix
+zsh> make status
+zsh> make [-j]
+zsh> make test
+zsh> make install
+zsh> make clean
+
+]]></pre>
+<p class="text">
+ With some platforms, the <tt class="command">make</tt> command should be replaced by the <tt class="command">gmake</tt> command. The <tt class="command">make status</tt> command is optional and can be used to report the internal value contents. In particular, the version and the installation parameters are reported. </p>
+<p class="subsect">
+Configuration</p>
+<p class="text">
+ The <tt class="command">afnix-setup</tt> command can be invoked to setup a particular configuration. You should have your compiler on your search path. Normally, the command given below is enough. </p>
+<pre class="frame">
+<![CDATA[zsh> ./cnf/bin/afnix-setup -o --prefix=/usr/local/afnix
+
+]]></pre>
+<p class="text">
+ This command checks that the target platform can be detected and configured. The <tt class="option">-o</tt> option configures the compilation in optimized mode. Use the <tt class="option">-g</tt> option can be used to configure the build process in debug mode. The <tt class="option">--prefix</tt> option sets the installation directory. Note that the compilation process is done in the distribution tree and that the <tt class="option">--prefix</tt> option affects only the installation operations. The <tt class="option">-v</tt> option is the verbose option. Other options are available for fine tuning. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Option</th>
+<th class="text">
+Description</th>
+<th class="text">
+Default</th>
+</tr>
+<tr class="text">
+<td class="text">
+-h</td>
+<td class="text">
+Print a help message</td>
+<td class="text">
+n/a</td>
+</tr>
+<tr class="text">
+<td class="text">
+-v</td>
+<td class="text">
+Set the verbose mode</td>
+<td class="text">
+n/a</td>
+</tr>
+<tr class="text">
+<td class="text">
+-g</td>
+<td class="text">
+Set the debug mode</td>
+<td class="text">
+yes</td>
+</tr>
+<tr class="text">
+<td class="text">
+-o</td>
+<td class="text">
+Set the optimized mode</td>
+<td class="text">
+no</td>
+</tr>
+<tr class="text">
+<td class="text">
+--help</td>
+<td class="text">
+Same as -h</td>
+<td class="text">
+n/a</td>
+</tr>
+<tr class="text">
+<td class="text">
+--prefix</td>
+<td class="text">
+Set the target install directory</td>
+<td class="text">
+/usr/local</td>
+</tr>
+<tr class="text">
+<td class="text">
+--shrdir</td>
+<td class="text">
+Set the shared install directory</td>
+<td class="text">
+/usr/local/share</td>
+</tr>
+<tr class="text">
+<td class="text">
+--altdir</td>
+<td class="text">
+Set the alternate install directory</td>
+<td class="text">
+/usr/local</td>
+</tr>
+<tr class="text">
+<td class="text">
+--sdkdir</td>
+<td class="text">
+Set the system kit directory</td>
+<td class="text">
+platform dependent</td>
+</tr>
+<tr class="text">
+<td class="text">
+--compiler</td>
+<td class="text">
+Set the default compiler</td>
+<td class="text">
+platform dependent</td>
+</tr>
+<tr class="text">
+<td class="text">
+--proctype</td>
+<td class="text">
+Set the processor type</td>
+<td class="text">
+generic</td>
+</tr>
+<tr class="text">
+<td class="text">
+--dynamic</td>
+<td class="text">
+Compile and link dynamically</td>
+<td class="text">
+yes</td>
+</tr>
+<tr class="text">
+<td class="text">
+--static</td>
+<td class="text">
+Compile and link statically</td>
+<td class="text">
+no</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ The <tt class="option">prefix</tt> option set the root installation directory. The binary and library installation directories are derived from it. The <tt class="option">shrdir</tt> set the shared installation directory which is normally used for the installation of the manual pages on most popular systems. the <tt class="option">altdir</tt> sets the alternate installation directory. Normally this path should be empty as it affects the path for the <tt class="path">etc</tt> directory. This flag should be used when using a prefix to unusual destination. the <tt class="option">sdkdir</tt> option sets the path of the platform system development kit. This option is only used with the <em>Darwin</em> platform. The <tt class="option">compiler</tt> option can be used to force a particular compiler with the help of a compiler configuration file. The <tt class="option">proctype</tt> option can be used to force a particular processor architecture. The <tt class="option">-s</tt> or <tt class="option">--static</tt> option can be used to build a static executable. Normally, this option should not be used since it restrict the use of extension modules. The <tt class="option">dynamic</tt> controls whether or not the dynamic libraries should be built. This option is detected automatically for a particular platform and should be used only by package maintainer. </p>
+<p class="subsect">
+Compiling the distribution</p>
+<p class="text">
+ The compilation process is straightforward. With some platforms, the <tt class="command">make</tt> accepts the <tt class="option">-j</tt> that enables concurrent operations. </p>
+<pre class="frame">
+<![CDATA[zsh> make [-j]
+
+]]></pre>
+<p class="text">
+ This will build the complete distribution locally. If an error occurs, it is best to report it at the <a href="mailto:bugs@afnix.org">
+AFNIX bug
+	report</a>
+ mail address. </p>
+<p class="subsect">
+Testing the distribution</p>
+<p class="text">
+ The distribution contains all test suites. The test suites are compiled and executed with the following command. </p>
+<pre class="frame">
+<![CDATA[zsh> make test
+
+]]></pre>
+<p class="text">
+ This command run the test suites for each library as well as the test suites for each application client. Most of the base library test suites are written in C++ with the application test suites written in the core writing system. </p>
+<p class="subsect">
+Installing the distribution</p>
+<p class="text">
+ Once the system has been built and tested, it can be installed. By default, the distribution tree is installed into the <tt class="path">/usr/local</tt> directory. This can be overwritten with the <tt class="option">--prefix</tt> option during the configuration process. </p>
+<pre class="frame">
+<![CDATA[zsh> make install
+
+]]></pre>
+<p class="text">
+ There are several variables that controls the behavior of the <tt class="command">install</tt> rule. Each variable has its default value sets during the setup configuration. However, this variable can also be altered during the installation process </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Variable</th>
+<th class="text">
+Description</th>
+<th class="text">
+Default</th>
+</tr>
+<tr class="text">
+<td class="text">
+PREFIX</td>
+<td class="text">
+The root install directory</td>
+<td class="text">
+/usr/local</td>
+</tr>
+<tr class="text">
+<td class="text">
+SHRDIR</td>
+<td class="text">
+The shared install directory</td>
+<td class="text">
+/usr/local/share</td>
+</tr>
+<tr class="text">
+<td class="text">
+ALTDIR</td>
+<td class="text">
+The shared alternate directory</td>
+<td class="text">
+/usr/local/etc</td>
+</tr>
+<tr class="text">
+<td class="text">
+SDKDIR</td>
+<td class="text">
+The system  kit directory</td>
+<td class="text">
+platform dependent</td>
+</tr>
+<tr class="text">
+<td class="text">
+BINDIR</td>
+<td class="text">
+The binary install directory</td>
+<td class="text">
+prefix/bin</td>
+</tr>
+<tr class="text">
+<td class="text">
+LIBDIR</td>
+<td class="text">
+The library install directory</td>
+<td class="text">
+prefix/lib</td>
+</tr>
+<tr class="text">
+<td class="text">
+HDRDIR</td>
+<td class="text">
+The header files install directory</td>
+<td class="text">
+prefix/include/afnix</td>
+</tr>
+<tr class="text">
+<td class="text">
+ETCDIR</td>
+<td class="text">
+The extra files install directory</td>
+<td class="text">
+altdir/etc/afnix</td>
+</tr>
+</table>
+<p/>
+<p class="subsect">
+Installing the documentation</p>
+<p class="text">
+ The documentation is installed independently of the software. The <tt class="command">doc</tt> rule builds the documentation and the <tt class="command">publish</tt> rule installs the documentation. Several variables also control the documentation installation path. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Variable</th>
+<th class="text">
+Description</th>
+<th class="text">
+Default</th>
+</tr>
+<tr class="text">
+<td class="text">
+DOCDIR</td>
+<td class="text">
+The documentation install directory</td>
+<td class="text">
+shrdir/doc/afnix</td>
+</tr>
+<tr class="text">
+<td class="text">
+MANDIR</td>
+<td class="text">
+The manual pages install directory</td>
+<td class="text">
+shrdir/man</td>
+</tr>
+</table>
+<p/>
+<p class="subsect">
+Cleaning the distribution</p>
+<p class="text">
+ The distribution is cleaned with the <tt class="command">clean</tt> rule. </p>
+<pre class="frame">
+<![CDATA[zsh> make clean
+
+]]></pre>
+<p class="text">
+ This rule does not clean the configuration. For a complete cleaning the <tt class="command">reset</tt> rule is more appropriate. </p>
+<pre class="frame">
+<![CDATA[zsh> make reset
+
+]]></pre>
+<div class="section">
+Running AFNIX</div>
+<p class="text">
+ The <tt class="command">axi</tt> command invokes the interpreter. In order to operate properly, the <tt class="path">LD_LIBRARY_PATH</tt> environment variable must be configured with the directory containing the shared libraries. If the libraries have been installed in a standard location like <tt class="path">/usr/local/lib</tt>, there is nothing to do. </p>
+<p class="subsect">
+Running some example</p>
+<p class="text">
+ The directory <tt class="path">exp</tt> contains various examples which can be run. Each example is labeled according to their use in the volume 1 of the documentation set. Example <tt class="file">0101.als</tt> prints the message <em>hello world</em>. Example <tt class="file">0501.als</tt> prints various information about the system configuration. </p>
+<pre class="frame">
+<![CDATA[zsh> axi 0501
+major version number   : 2
+minor version number   : 2
+patch version number   : 0
+interpreter version    : 2.2.0
+operating system name  : linux
+operating system type  : unix
+afnix official uri     : http://www.afnix.org
+
+]]></pre>
+<div class="section">
+Special features</div>
+<p class="text">
+ The build process provides several features that permits to customize the compilation process as well as the nature of the final executable. Most of the time, these options are reserved for the package maintainer and are given below for illustration purpose. </p>
+<p class="subsect">
+Target customization</p>
+<p class="text">
+ The distribution can be configured to operate on a specific machine target. For example, a typical Linux box will be compiled with the default compiler target, which is the 386 processor. You can force the compilation to be optimized for a particular processor. This is done with the <tt class="option">--proctype</tt> option of the <tt class="command">afnix-setup</tt> command. Currently the distribution supports the <tt class="option">586</tt> and <tt class="option">686</tt> architectures for the Intel platform. The <tt class="option">ultra</tt> architecture is valid for the SPARC platform. </p>
+<pre class="frame">
+<![CDATA[zsh> cnf/bin/afnix-setup -o --prefix=/usr/local 
+--proctype=586
+
+]]></pre>
+<p class="text">
+ This command will configure the distribution to be compiled specifically for the Pentium architecture. </p>
+<p class="subsect">
+Special target extensions</p>
+<p class="text">
+ Extensions are specific libraries or executables which are not build automatically during the build process. The user is responsible to decide which extension is needed for the system All extensions are located under the <tt class="path">src/ext</tt> directory. Simply going into the appropriate directory and running the <tt class="command">make</tt> command will build the extension. </p>
+<p class="text">
+ The <tt class="path">asi</tt> extension creates a static interpreter with all libraries automatically included in the final executable. The extension is simply build with the following command. Note that this extension overwrite the previous executable in the <tt class="path">bld/bin</tt> directory. </p>
+<pre class="frame">
+<![CDATA[zsh> make -C src/ext/asi
+
+]]></pre>
+<p class="subsect">
+Extra files</p>
+<p class="text">
+ The distribution comes with some extra files. The most important is the Emacs mode <tt class="file">afnix-mode</tt>. The original source file is written in Emacs Lisp and is available in the <tt class="path">etc</tt> directory of the distribution. This file should be installed according to the current Emacs installation. </p>
+<hr/>
+<div class="chapter">
+Maintainer notes</div>
+<hr/>
+<p class="text">
+ This chapter contains additional notes for the package maintainer. They are also useful for anybody who is in charge of integrating the distribution in a build process. The chapter describes the distribution tree with more details. </p>
+<div class="section">
+The distribution tree</div>
+<p class="text">
+ The distribution tree is composed of various directories. Each of them has a <tt class="file">Makefile</tt> which can be called locally or from the top level. </p>
+<ul class="text">
+<li>
+<i class="item">cnf</i><br/>
+
+	This directory contains the configuration distribution and
+	various utilities. Normally you should not touch it, unless you
+	are using a compiler different than gcc.
+      </li>
+<li>
+<i class="item">src</i><br/>
+
+	This directory contains the complete source tree. The source
+	code is written in C++. Normally this directory is left
+	untouched. If there are good reasons to modify it, please
+	contact the development team.
+      </li>
+<li>
+<i class="item">tst</i><br/>
+
+	This directory contains the complete test suites. The  test suites
+	are used by various programs including the main interpreter, the
+	compiler and the debugger. It shall be noted that the library
+	distribution also includes specific test suites.
+      </li>
+<li>
+<i class="item">doc</i><br/>
+
+	This directory contains the complete documentation written in
+	in XML with a special DTD. It should be left untouched.
+      </li>
+<li>
+<i class="item">etc</i><br/>
+
+	This directory contains various files associated with the
+	distribution. Some files are useful to be copied.
+      </li>
+<li>
+<i class="item">exp</i><br/>
+
+	This directory contains various examples. They are included for
+	illustration purpose.
+      </li>
+</ul>
+<p class="text">
+ The process of building a package solely depends on the distribution type. Most likely, the standard distribution should contain the binary executables as well as some configuration file and the manual pages. The documentation and the development header files can put in separate packages. </p>
+<div class="section">
+Configuration and setup</div>
+<p class="text">
+ The configuration process involves the use of the <tt class="command">afnix-setup</tt> command located in the <tt class="path">cnf/bin</tt> directory. This command is used to configure the distribution. Package maintainers are encouraged to use it with specific options. </p>
+<p class="subsect">
+Platform detection</p>
+<p class="text">
+ The <tt class="command">afnix-guess</tt> command is used during the configuration process to detect a supported platform. This command can be run in stand-alone mode. Various options can be used to tune the type of information requested. </p>
+<table class="text">
+<tr class="text">
+<th class="text">
+Option</th>
+<th class="text">
+Description</th>
+</tr>
+<tr class="text">
+<td class="text">
+-h</td>
+<td class="text">
+Print a help message</td>
+</tr>
+<tr class="text">
+<td class="text">
+-n</td>
+<td class="text">
+Print the platform name</td>
+</tr>
+<tr class="text">
+<td class="text">
+-v</td>
+<td class="text">
+Print the platform version</td>
+</tr>
+<tr class="text">
+<td class="text">
+-M</td>
+<td class="text">
+Print the platform major number</td>
+</tr>
+<tr class="text">
+<td class="text">
+-m</td>
+<td class="text">
+Print the platform minor number</td>
+</tr>
+<tr class="text">
+<td class="text">
+-p</td>
+<td class="text">
+Print the platform patch number</td>
+</tr>
+<tr class="text">
+<td class="text">
+-t</td>
+<td class="text">
+Print the processor type</td>
+</tr>
+</table>
+<p/>
+<p class="text">
+ Without option, the utility prints a platform and processor description string. </p>
+<pre class="frame">
+<![CDATA[zsh> ./cnf/bin/afnix-guess
+linux-2.6-ia32-generic
+
+]]></pre>
+<p class="subsect">
+Platform defaults</p>
+<p class="text">
+ The directory <tt class="path">cnf/def</tt> contains a platform specific default file. The file determines what is the default compiler and linking mode. This file is used by the <tt class="command">afnix-setup</tt> command. For example, the <tt class="file">afnix-darwin.def</tt> file contains: </p>
+<pre class="frame">
+<![CDATA[compiler: gcc
+lktype  : dynamic
+lkmode  : dylib
+
+]]></pre>
+<p class="text">
+ Such options instructs the configuration utility, that the default compiler is <tt class="command">gcc</tt> and the linking mode should operates in dynamic mode by using the <tt class="option">dylib</tt> rule. These default values can be overwritten with the equivalent option of the <tt class="command">afnix-setup</tt> command. Note that the compiler version is automatically detected by the system. The <tt class="command">afnix-vcomp</tt> command will return the appropriate compiler version running on the target system. </p>
+<p class="subsect">
+C++ source file conventions</p>
+<p class="text">
+ THe source tree has two types of C++ files. The first type has the extension <tt class="extn">.cxx</tt> and the second type has the extension <tt class="extn">.cpp</tt>. The <tt class="extn">.cxx</tt> -- and the associated <tt class="extn">.hxx</tt> -- files are only used to indicate a system dependency. These files are found only in the <tt class="path">src/lib/plt</tt> directory. The <tt class="extn">.cxx</tt> extension indicates that the file might use system specific include files. The <tt class="extn">.cpp</tt> -- and the associated <tt class="extn">.hpp</tt> -- files are the normal C++ source files. The <tt class="extn">.cpp</tt> extension is used to indicate that these files will not use a system specific file. By default this rule is enforced in the compiler configuration file by specifying some compiler flags which do not authorize such access. </p>
+<p class="subsect">
+Configuration files</p>
+<p class="text">
+ The configurations files are located in the <tt class="path">cnf/mak</tt> directory. Normally they should be left untouched. The most important one is the <tt class="file">afnix-rule.mak</tt> file that defines most of the compilation and linking rules. Additionally, during the setup operation, the <tt class="command">afnix-setup</tt> command creates several files in the <tt class="path">bld/cnf</tt> directory. The <tt class="path">bld</tt> is the build directory. The <tt class="file">afnix-plat.mak</tt> file is the platform configuration file and the <tt class="file">afnix-comp.mak</tt> is a link to the appropriate compiler configuration file. </p>
+<div class="section">
+Compilation</div>
+<p class="text">
+ Normally, the compilation process is immediate. Just invoking the <tt class="command">make</tt> command will do the job. However, some package maintainer have the desire to overwrite some flags. Some options are provided to facilitate this task. </p>
+<ul class="text">
+<li>
+<i class="item">EXTCPPFLAGS</i><br/>
+
+	This flag can be used to add some compilation flags for all
+	.cpp files.
+      </li>
+<li>
+<i class="item">EXTCXXFLAGS</i><br/>
+
+	This flag can be used to add some compilation flags for all
+	.cxx files.
+      </li>
+<li>
+<i class="item">EXTCCDEFINE</i><br/>
+
+	This flag can be used to add some compilation definitions for all
+	source files.
+      </li>
+<li>
+<i class="item">EXTINCLUDES</i><br/>
+
+	This flag can be used to add some compilation paths for the
+	.cxx files.
+      </li>
+</ul>
+<p class="text">
+ For example, it is common to have some maintainer to compile with both the debug and optimize flags. This can be done with the following command (assuming an optimized configuration): </p>
+<pre class="frame">
+<![CDATA[make EXTCPPFLAGS=-g EXTCXXFLAGS=-g
+
+]]></pre>
+<p class="text">
+ All include files, compiled libraries and executables are placed in the <tt class="path">bld</tt> directory. This directory contains the <tt class="path">bld/bin</tt> for binaries, <tt class="path">bld/lib</tt> for libraries and <tt class="path">bld/hdr</tt> for the header files. </p>
+<div class="section">
+Building the package</div>
+<p class="text">
+ The package can be built by accessing the <tt class="path">bld</tt> directory or by invoking the <tt class="command">install</tt> rule. The second method is not recommended for package construction, since it might trigger some file installation without any control. </p>
+<p class="text">
+ The <tt class="path">etc</tt> directory contains some special files that might be used for the package construction. A sample list of them is given hereafter. </p>
+<ul class="text">
+<li>
+<i class="item">afnix-mode.el</i><br/>
+
+	This file is the Emacs mode.
+      </li>
+<li>
+<i class="item">afnix-gud.el</i><br/>
+
+	This file is the debugger Emacs gud mode.
+      </li>
+</ul>
+<div class="section">
+Specific makefile rules</div>
+<p class="text">
+ The top level <tt class="file">Makefile</tt> contains several rules that might be useful for the package maintainer. </p>
+<ul class="text">
+<li>
+<i class="item">status</i><br/>
+
+	This rule show the configuration status for each parameters with
+	the version.
+      </li>
+<li>
+<i class="item">debug</i><br/>
+
+	This rule invokes the default configuration in debug mode.
+      </li>
+<li>
+<i class="item">optimized</i><br/>
+
+	This rule invokes the default configuration in optimized mode.
+      </li>
+<li>
+<i class="item">build</i><br/>
+
+	This rule invokes the default configuration in debug mode and
+	compile the whole distribution. The default install directory
+	is /usr/local.
+      </li>
+<li>
+<i class="item">world</i><br/>
+
+	This rule invokes the default configuration in optimized mode and
+	compile the whole distribution. The default install directory
+	is /usr/local.
+      </li>
+<li>
+<i class="item">test</i><br/>
+
+	This rule runs all test suites.
+      </li>
+<li>
+<i class="item">doc</i><br/>
+
+	This rule builds the documentation.
+      </li>
+<li>
+<i class="item">distri</i><br/>
+
+	This rule builds the distribution.
+      </li>
+<li>
+<i class="item">install</i><br/>
+
+	This rule installs the distribution.
+      </li>
+<li>
+<i class="item">publish</i><br/>
+
+	This rule installs the documentation.
+      </li>
+<li>
+<i class="item">clean</i><br/>
+
+	This rule cleans the distribution but keep the configuration.
+      </li>
+<li>
+<i class="item">reset</i><br/>
+
+	This rule resets the distribution including the configuration.
+      </li>
+</ul>
+<hr/>
+<div class="chapter">
+Release notes</div>
+<hr/>
+<p class="text">
+ This chapter contains the release notes for the differents releases. Release notes are given in descending order for a particular version. The standard notation is <em>major.minor.patch</em> which represents respectively, the major, minor and patch number. A major version number changes indicates a substantial change in the distribution, including new tools, application interface and license. A minor version number change indicates noticeable change, with or without new tools but without application interface change nor license change. Finally, a patch number change indicates a simple change to fix problem. There is no additional features in a patch nor an application interface change. </p>
+<div class="section">
+Release 2.2</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: hurd platform</i><br/>
+
+	  The Hurd platform is now supported in this release. Thanks to
+	  our contributor for delivering this new platform.
+	</li>
+<li>
+<i class="item">Core engine: unicode 6.0.0</i><br/>
+
+	  The Unicode 6.0.0 database is now supported in this release.
+	</li>
+<li>
+<i class="item">Core engine: object updates</i><br/>
+
+	  The lexical analyzer is now an object in its own. It can be used
+	  to construct other object from a string description.
+	</li>
+<li>
+<i class="item">Core modules: mth module</i><br/>
+
+	  An automatic linear system verification has been added to the
+	  linear solver. Jacobi preconditionner have been added to the
+	  Krylov solvers and Newton solvers have been improved.
+	</li>
+<li>
+<i class="item">Core services: phy service</i><br/>
+
+	  The periodic table of the elements is under construction and should
+	  be completed soon. The table will provides the information for each
+	  elements, including name, symbol and other physical constants. The
+	  suport for intrinsic carrier concentration is now available. This is
+	  a cryptic feature for people working on semiconductors.
+	</li>
+</ul>
+<div class="section">
+Release 2.1</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: superh processor</i><br/>
+
+	  The SuperH processor is now supported in this release. The SuperH 
+	  is a 32 bits processor.
+	</li>
+<li>
+<i class="item">Core engine: nan real number</i><br/>
+
+	  The implementation now supports the concepts of Not a
+	  Number or NAN as a whole. A real object can set and
+	  tested for NAN.
+	</li>
+<li>
+<i class="item">Core engine: indirect librarian resolver</i><br/>
+
+	  The resolver has been enhanced to support indirect librarian
+	  reference.
+	</li>
+<li>
+<i class="item">Core modules: csm module</i><br/>
+
+	  The personnal information management module has been
+	  renamed into the cloud session management or
+	  afnix-csm module.
+	</li>
+<li>
+<i class="item">Core modules: mth module</i><br/>
+
+	  The math module has been dramatically enhanced. The
+	  Rsamples object has been added for storing data
+	  samples. Function and polynomial objects have added to
+	  support generic function computation. The non-linear Newton
+	  system solver has been added as an object.
+	</li>
+<li>
+<i class="item">Core services: svg service</i><br/>
+
+	  The Scalable Vector Graphic service has been
+	  added. The service provides the support for the SVG 1.1
+	  standard and allows the automatic generation of SVG
+	  compliant code.
+	</li>
+<li>
+<i class="item">Core services: phy service</i><br/>
+
+	  The Physics service has been added. The service
+	  provides the support for standard physics operations. In
+	  particular, the most common physical constants are defined
+	  in this service.
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">08/24/2011: release 2.1.1</i><br/>
+
+	  AFNIX 2.1.1 has been released. This is an emergency release that
+	  corrects a small problem in the clean rule with the static directory.
+	</li>
+</ul>
+<div class="section">
+Release 2.0</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: standard objects</i><br/>
+
+	  The BlockBuffer object has been added to the
+	  standard object library. Furthermore, the Buffer
+	  has been adapted to operate as a base class for the block
+	  buffer and the shl method has been added to the
+	  buffer object as a mean to shift the buffer. As consequence,
+	  the default operating mode for a buffer is
+	  the BYTE mode. When operating with strings,
+	  the UTF8 mode might be more suitable.
+	  The BitSet object has been renamed 
+	  to Bitset and the interface has been
+	  cleaned. The Vector has been cleaned.
+	  The object-p predicate has been
+	  fixed.
+	</li>
+<li>
+<i class="item">Core engine: thread engine</i><br/>
+
+	  The thread engine has been completly redesigned and
+	  extensivelly tested on 32 and 64 bits platforms. It is no
+	  longer a problem to operate with more than 32K threads
+	  simultanesouly. Furthermore, the concept of thread pool has
+	  been added to the engine. The end-p predicate has
+	  been added to the thread object to indicate a succesful thread
+	  completion.
+	</li>
+<li>
+<i class="item">Core engine: form reader</i><br/>
+
+	  The Reader object has been added as a form
+	  reader. The reader parses an input stream and produces a form
+	  until the end-of-stream. The Reader provides the
+	  support for string based execution.
+	</li>
+<li>
+<i class="item">Core engine: default librarian module</i><br/>
+
+	  The Librarian object has been enhanced to support
+	  the concept of default exeution module. When such module and
+	  when the interpreter is requested to do so, the module is
+	  automatically loaded during the execution.
+	</li>
+<li>
+<i class="item">Core modules: nwg module</i><br/>
+
+	  The HttpProto default version has been move to
+	  1.1 for both the request and response objects.
+	</li>
+<li>
+<i class="item">Core modules: sio module</i><br/>
+
+	  The InputMapped class has been enhanced to provide
+	  the facility for mapping buffer as well as acting as a null
+	  character generator. The OuputBuffer object has
+	  been added as a buffer output stream. With the addition of a
+	  form reader, the interpreter communication
+	  class Intercom has been added to the standard i/o
+	  module.
+	</li>
+<li>
+<i class="item">Core modules: xml module</i><br/>
+
+	  The XneCond object has been enhanced to support
+	  various xml object. The XmlPi has been enhanced to
+	  support attributes derivation from the string value.
+	</li>
+<li>
+<i class="item">Core modules: itu module</i><br/>
+
+	  The itu module is a new module. It has been added with
+	  a complete support for the ASN.1 standard. ASN.1 is essential for
+	  the support of certificates.
+	</li>
+<li>
+<i class="item">Core clients: axs client</i><br/>
+
+	  The axs client has been removed from the core
+	  distribution. All of the client functionalities are now
+	  available in the spreadsheet module.
+	</li>
+</ul>
+<div class="section">
+Release 1.9</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: object unreference</i><br/>
+
+	  The long awaited unref reserved keyword has been
+	  added as a mechanism to unreference a symbol.
+	</li>
+<li>
+<i class="item">Core engine: object predicate</i><br/>
+
+	  The object-p predicate has been added as a
+	  standard predicate. The predicate is the negation of
+	  the nil-p standard predicate. The 
+	  method-p predicate has also been added as a
+	  standard predicate.
+	</li>
+<li>
+<i class="item">Core engine: stop/resume parsing</i><br/>
+
+	  The file stream parsing has been enhanced with the help of the
+	  stop « and resume » characters. When the
+	  stop characters is found, all parsing operations are suspended
+	  until a resume character is found.
+	</li>
+<li>
+<i class="item">Core engine: extended exception attribute</i><br/>
+
+	  The about symbol has been added to the exception
+	  object as extended exception reason. For a given reason, the
+	  file name and line number is added to the exception reason.
+	</li>
+<li>
+<i class="item">Core engine: string objects</i><br/>
+
+	  The Strvec string vector class has been added to
+	  the core library. The class is similar to
+	  the Vector class except that it operates with
+	  strings and provides additional strings related methods.
+	</li>
+<li>
+<i class="item">Core engine: counter object</i><br/>
+
+	  The Counter object has been added as a reserved object.
+	  The counter is designed to be used directly in loop.
+	</li>
+<li>
+<i class="item">Core engine: library cleaning</i><br/>
+
+	  The core library has been extensively cleaned in preparation
+	  for the next major release. In particular, numerous memory
+	  leaks have been removed and some classes derivations have been
+	  fixed. A major bug in the closure argument counting has also been
+	  discovered and fixed during this process.
+	</li>
+<li>
+<i class="item">Core module: sio module</i><br/>
+
+	  The Pathname object has been enhanced to detect
+	  the type of path associated with the object. Additionally, a
+	  normalize method has been added.
+	</li>
+<li>
+<i class="item">Core module: sio module</i><br/>
+
+	  The FileInfo object has been added to the
+	  module. The class provides an immediate access to the principal
+	  file parameters such like it size or its modification time.
+	</li>
+<li>
+<i class="item">Core module: sio module</i><br/>
+
+	  The NamedFifo object has been added to the
+	  module. The class provides the support for a large string based
+	  fifo with file saving capabilities.
+	</li>
+<li>
+<i class="item">Core modules: nwg module</i><br/>
+
+	  Several predicates and functions related to media type
+	  conversion have been added to the module. In particular, a
+	  media type extension conversion has been implemented. The 
+	  HttpResponse class has been enhanced with
+	  several methods for status code checking.
+	</li>
+<li>
+<i class="item">Core modules: sec module</i><br/>
+
+	  Support for the Digital Standard Algorithm, (aka DSA) as
+	  specified by FIPS-PUB 186-3 has been added to the library. The
+	  implementation incorporates several new objects to manipulate
+	  signatures.
+	</li>
+<li>
+<i class="item">Core modules: sec module</i><br/>
+
+	  The RC2 block cipher algorithm has been added to
+	  the module.
+	</li>
+<li>
+<i class="item">Distribution: documentation</i><br/>
+
+	  The documentation distribution rules have been rewritten and
+	  the "publish" rule has been added.
+	</li>
+</ul>
+<div class="section">
+Release 1.8</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Build process: reset rule</i><br/>
+
+	  The distclean top level makefile rule has
+	  been renamed as reset. 
+	</li>
+<li>
+<i class="item">Core engine: stream object</i><br/>
+
+	  The stream engine has been cleaned with a new architecture. Two
+	  new objects InputStream and OutputStream
+	  acts as the foundation of this new design.
+	</li>
+<li>
+<i class="item">Core modules: nwg module</i><br/>
+
+	  The HttpProto, HttpRequest
+	  and HttpResponse objects have been completely
+	  rewritten. In the new model, both objects can operate on the
+	  server and client side. The HttpReply object has
+	  been removed.
+	</li>
+<li>
+<i class="item">Core modules: sec module</i><br/>
+
+	  The Sha224 hash function has been added. This class
+	  concludes the implementation of all SHA family hash functions.
+	  The Des class that supports the DES stream cipher
+	  has been added to the library.
+	</li>
+<li>
+<i class="item">Core modules: xml module</i><br/>
+
+	  The XmlRoot class has been enhanced in order to
+	  ease the declaration node existence verification as well as the
+	  encoding mode extraction.
+	</li>
+</ul>
+<div class="section">
+Release 1.7</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core clients: random engine seeding</i><br/>
+
+	  A new option controls the seeding of the random engine. By
+	  default, in debug mode, the random engine is not seeded unless
+	  requested by the user. In optimized mode, which is the normal
+	  mode, the random engine is seeded at initialization.
+	</li>
+<li>
+<i class="item">Core engine: base number object</i><br/>
+
+	  The long awaited base number object has been added. The
+	  Number object serves the Integer,
+	  Real, and Relatif objects. The base
+	  number object is designed to ease the task of formatting
+	  numbers.
+	</li>
+<li>
+<i class="item">Core engine: relatif number enhancements</i><br/>
+
+	  The relatif number object has been enhanced to support extra methods
+	  that are used for large number computation. This include the
+	  power and gcd computation which are used by the cryptographic
+	  engine. In addition, the base arithmetic relatif methods have
+	  been optimized and certain corner bugs in the division fixed.
+	</li>
+<li>
+<i class="item">Core engine: unicode database</i><br/>
+
+	  The core engine has been updated with the new Unicode 5.1.0
+	  database.
+	</li>
+<li>
+<i class="item">Core engine: serious bugs</i><br/>
+
+	  A serious bug in the form synchronize engine that would
+	  cause an engine crash when a form is nil has been fixed.
+	</li>
+<li>
+<i class="item">Core modules: sio module</i><br/>
+
+	  A new object called Pathlist has been added to
+	  support the manipulation of path list. The object is designed
+	  to ease the file name resolution in the presence of search
+	  path. The module has also been extensively cleaned.
+	</li>
+<li>
+<i class="item">Core modules: mth module</i><br/>
+
+	  A new module called afnix-mth has been added to the
+	  standard distribution. The module is designed to integrate the
+	  base mathematical functions and objects available in the
+	  engine. With such introduction, the random number generation
+	  has been moved into this module. Additionally, the functions needed
+	  to generate prime numbers have been added to this module.
+	</li>
+<li>
+<i class="item">Core modules: sec module</i><br/>
+
+	  A new module called afnix-sec has been added to the
+	  standard distribution. The module is designed to integrate the
+	  security functions and cryptographic objects.
+	  Two new hasher objects have been added to the security
+	  module. The Md2 object implements the MD2 message
+	  digest algorithm as described in RFC 1319. The Md4
+	  object implements the MD4 message digest algorithm as described
+	  in RFC 1320. The standard key derivation functions KDF1 and KDF2
+	  have been added to the security module. The asymmetric cipher
+	  RSA has also been added to the security module and
+	  the Key object has been updated to reflect this.
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">09/01/2008: release 1.7.1</i><br/>
+
+	  AFNIX 1.7.1, the « An Armor release » has been released. This is
+	  an emergency release that corrects a major problem within the
+	  evaluation process. Although, the problem has been fixed, it
+	  involves a large piece of code, with a major redesign of the
+	  evaluation engine. It is therefore recommended to upgrade the
+	  engine immediately.
+	</li>
+<li>
+<i class="item">08/08/2008: release 1.7.0</i><br/>
+
+	  AFNIX 1.7.0, the « An Armor release » has been released. This is
+	  a major release that incorporates numerous new features in the 
+	  field of cryptography. The release also incorporates the latest
+	  5.1.0 Unicode database.
+	</li>
+</ul>
+<div class="section">
+Release 1.6</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: object collection redesign</i><br/>
+
+	  The core engine has been seriously modified to accommodate for a
+	  new object collection system (aka garbage collection). The new
+	  system is more robust and provides new mechanism that will
+	  permit to reclaim cyclic structure as well as destroying global
+	  object on demand.
+	</li>
+<li>
+<i class="item">Core engine: macos x support</i><br/>
+
+	  The core engine has been adapted to support the new MACOS X
+	  Leopard operating system. 
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">01/01/2008: release 1.6.0</i><br/>
+
+	  AFNIX 1.6.0 has been released. This release provides is an
+	  intermediate candidate toward another major release. The most
+	  important thing is that the object collection engine has been
+	  redesigned and that MACOS X Leopard is now supported.
+	</li>
+</ul>
+<div class="section">
+Release 1.5</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: unicode 5.0 support</i><br/>
+
+	  The core engine continues to be updated in order to better
+	  support the Unicode 5.0 standard. With this release, the
+	  string normalization scheme is now in place and used by default
+	  internally. This implies among other things, a better support
+	  for multiple diacritics as well as the beginning of the
+	  standard collation algorithm.
+	</li>
+<li>
+<i class="item">Core engine: log file support</i><br/>
+
+	  The Logger base class has been enhanced to support
+	  the generation of a log file. An output stream can now be bound
+	  to the object.
+	</li>
+<li>
+<i class="item">Core engine: class defer support</i><br/>
+
+	  The concept of class defer object has been added to
+	  the Class object. The defer mode is the
+	  opposite of the infer mode and provides a
+	  mechanism for base class creation.
+	</li>
+<li>
+<i class="item">Core engine: print table header</i><br/>
+
+	  The PrintTable object has been enhanced to support
+	  the concept of table header.
+	</li>
+<li>
+<i class="item">Core engine: exception re-throwing</i><br/>
+
+	  The exception object what can be thrown with the
+	  reserved keyword throw. This provides a mechanism
+	  to re-throw an exception.
+	</li>
+<li>
+<i class="item">Core engine: critical bug with return form</i><br/>
+
+	  A critical bug in the core engine affecting the behavior of the
+	  return reserved keyword in a try
+	  block has been fixed. A return form inside a try block was
+	  incorrectly generating an exception which was subsequently
+	  caught by the try block.
+	</li>
+<li>
+<i class="item">Core modules: net module</i><br/>
+
+	  The base network module has been enhanced to better operate
+	  with IPV6. In particular, when both IPV4 and IPV6 stacks are
+	  present and a host name (typically localhost) have an address
+	  entry, the socket constructor make sure it can build an
+	  object. The IPV6 address display has been rewritten.
+	</li>
+<li>
+<i class="item">Core modules: sio module</i><br/>
+
+	  A new object called Pathname has been added to
+	  support the manipulation of system path. In addition, two new
+	  functions mkdir and mhdir have been
+	  also added to support the directory creation, both normally and
+	  hierarchically.       
+	</li>
+<li>
+<i class="item">Core modules: nwg module</i><br/>
+
+	  The Uri has been dramatically enhanced to conform
+	  to the RFC 3986. In particular, the path representation for urn
+	  is now working properly. The cookie object has been massaged to
+	  support the cookie version 1, although it does not seem to be
+	  supported (yet!) by the browsers.
+	</li>
+<li>
+<i class="item">Core modules: xml module</i><br/>
+
+	  The xml module has been enhanced with a new parsing system
+	  called the simple model. In the simple model, nodes are parsed
+	  in a linear fashion. The node content is available in the form
+	  of a string and its interpretation is at the user discretion.      
+	</li>
+<li>
+<i class="item">Core service: wax service</i><br/>
+
+	  The afnix-wam service has been renamed as
+	  afnix-wax. The service has also been updated with two
+	  new objects, namely the XmlMime and
+	  XhtmlMime which permits to build a mime
+	  representation of an xml tree. Several xhtml objects have also
+	  been added to complete the collection. This include the
+	  XhtmlScript for example.
+	</li>
+<li>
+<i class="item">Core service: xpe service</i><br/>
+
+	  The afnix-xpe service has been added as a new
+	  service. The xml processing environment (xpe) provides a xml
+	  processor that permits manipulate the whole xml tree with the
+	  help of various xml processor features. In particular, the
+	  service provides the support for the xml include extension.
+	</li>
+<li>
+<i class="item">Core projects: apx project</i><br/>
+
+	  This release incorporates for the first time, the concept of
+	  core project, which represents a librarian or an application.
+	  The first project is the AFNIX protocol extension or
+	  apx which is a message based protocol designed to
+	  transport request/reply messages within a 
+	  client/server environment. The message is built with the
+	  xml library and the librarian provides the
+	  encapsulation layer.
+	</li>
+<li>
+<i class="item">Core projects: amd project</i><br/>
+
+	  The AFNIX media dumper or amd project is a
+	  complete application designed to illustrate the design of an
+	  application. The application permits to dump an uri content
+	  into a file.
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">06/08/2007: release 1.5.2</i><br/>
+
+	  AFNIX 1.5.2 has been released. This is a minor release that
+	  fixes the build process with GCC 4.2.
+	</li>
+<li>
+<i class="item">04/21/2007: release 1.5.1</i><br/>
+
+	  AFNIX 1.5.1 has been released. This is a minor release that
+	  fixes the documentation targets during the build process.
+	</li>
+<li>
+<i class="item">04/18/2007: release 1.5.0</i><br/>
+
+	  AFNIX 1.5.0 has been released. This release provides
+	  a xml processor in the form of a new service module called
+	  'xml processing environment' or xpe. The whole documentation
+	  generation is now fully automated, thanks to the new xml
+	  processor. This release also provides a better support for
+	  the 'web application extension' or wax service. The support
+	  for the GNU/FreeBSD platform has also been added in this
+	  release. As usual, this release comes with its wagon of bug
+	  fixes, notably this time in the network field especially with
+	  IPV6 on the FreeBSD platform.
+	</li>
+</ul>
+<div class="section">
+Release 1.4</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core engine: unicode 5.0 support</i><br/>
+
+	  The core engine has been substantially changed to support the new
+	  Unicode 5.0 standard. As of now, the engine is in place
+	  internally, but not fully activated. In particular, the string
+	  normalization is implemented but not activated. The next release
+	  should incorporate the full system with a change that should be
+	  transparent to the user.
+	</li>
+<li>
+<i class="item">Core language: instance inference</i><br/>
+
+	  An instance inference mechanism -- which is equivalent to the
+	  concept of virtual constructor -- has been added to the core
+	  engine. Such system permits to derive top instance from a base
+	  instance construction. 
+	</li>
+<li>
+<i class="item">Core language: print table object</i><br/>
+
+	  The PrintTable object has been enhanced with a
+	  dump method similar to the format method.
+	</li>
+<li>
+<i class="item">Core language: property list object</i><br/>
+
+	  The Property and the Plist objects have
+	  been added to the standard library. a property is name/value
+	  pair. The property list object is an iterable object that stores
+	  property objects.
+	</li>
+<li>
+<i class="item">Core modules: xml module</i><br/>
+
+	  A new module called afnix-xml has been added. The module
+	  provides the foundation for a full xml 1.0/1.1 support. The
+	  module also includes a parser that permits to build xml tree. A
+	  xml tree writer is also part of the module functionality. A xml
+	  processor is not yet available and is expected in the next release.
+	</li>
+<li>
+<i class="item">Core modules: nwg module</i><br/>
+
+	  A new module called afnix-nwg has been added. The module
+	  provides the support for the network working group
+	  objects such like Uri object. The module also
+	  provides the foundation for the mime support.
+	</li>
+<li>
+<i class="item">Core modules: web module</i><br/>
+
+	  The afnix-web module has been removed and replaced
+	  by the afnix-wam service.
+	</li>
+<li>
+<i class="item">Core service: wam service</i><br/>
+
+	  The afnix-wam service has been added as the first
+	  service into the core distribution. A service differs from a
+	  module in the sense that it is a combination of different
+	  modules. The web application management service depends
+	  on the xml and nwg modules. The service provides all the
+	  functionality to support a http session, including xhtml page
+	  generation and cgi request reply.
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">01/28/2007: release 1.4.3</i><br/>
+
+	  This release is a minor release that fixes  the "install" rule
+	  in the etc directory.
+	</li>
+<li>
+<i class="item">01/01/2007: release 1.4.2</i><br/>
+
+	  This release is a minor release that fixes the tcp socket read
+	  method that incorrectly handles a connection reset by the
+	  peer. The Time class also incorporates a small fix
+	  for the to-rfc method.
+	</li>
+<li>
+<i class="item">11/09/2006: release 1.4.1</i><br/>
+
+	  This release is a minor release that fixes the lexer for not
+	  parsing correctly some floating point numbers. The standard i/o
+	  documentation is also fixed. A print media support is now
+	  available in the documentation.
+	</li>
+<li>
+<i class="item">11/06/2006: release 1.4.0</i><br/>
+
+	  This release incorporates the Unicode 5.0 standard as well
+	  as a brand new xml module. This release also introduces the
+	  concept of service module, which provides additional
+	  functionalities on top of regular modules. A new service
+	  module called web application management or
+	  wam is also introduced with this release. This service
+	  module is based on the newly created xml module and replaces
+	  the old web module which has been obsoleted immediately.
+	</li>
+</ul>
+<div class="section">
+Release 1.3</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core language: ISO-8859 transcoding support</i><br/>
+
+	  The core engine has been modified to integrate a character transcoder
+	  that permits the support all ISO-8859 codesets which are
+	  mostly used for the encoding of european and arabic
+	  characters. Depending on the locale settings, the transcoder 
+	  automatically remaps the 8 bits characters into their respective
+	  unicode character. All clients have been updated to detect
+	  their associated locale and to set automatically the appropriate
+	  transcoder. A new option -e has been added to
+	  force a particular encoding.
+	</li>
+<li>
+<i class="item">Core language: Logger base class</i><br/>
+
+	  A logging base class has been added. The logging facility provides
+	  the interface to store messages by time and level. This class is
+	  further extended in the modules.
+	</li>
+<li>
+<i class="item">Core language: Heap class</i><br/>
+
+	  A heap class has been added. The heap can operate in ascending or
+	  descending mode. This class can be used to support priority queue.
+	</li>
+<li>
+<i class="item">Core language: Option class</i><br/>
+
+	  An option class has been added in order to ease the option
+	  capture when designing an application. The class permits to define
+	  the valid options and offer a powerful retrieval mechanism.
+	</li>
+<li>
+<i class="item">Core language: Date class</i><br/>
+
+	  The Time class has been completely changed and a new
+	  Date class has been added. The new mechanism
+	  provides a better separation between the time and the date,
+	  increase the date range and authorizes the support for multiple
+	  calendar.
+	</li>
+<li>
+<i class="item">Client: cross spreadsheet client</i><br/>
+
+	  The axs client has been modified to support the
+	  axs:insert-marker, axs:insert-header and
+	  insert-footer control commands.
+	</li>
+<li>
+<i class="item">Core modules: speadsheet module</i><br/>
+
+	  The Folio and Sheet classes have been
+	  substantially updated to support additional information. The
+	  Sheet also supports the concept of markers that
+	  marks the sheet columns by literals. The concept of column
+	  tagging has been added with the associated search methods. All
+	  classes also contain an information field. The importation
+	  mechanism now supports a cons cell that defines both the cell
+	  name and the cell value.
+	</li>
+<li>
+<i class="item">Core modules: web module</i><br/>
+
+	  The Table class has been modified to support the
+	  concept of table data header. The associated methods have been
+	  added to the class and a new HtmlTh has been
+	  added. The concept of tag propagation has also been added. If a
+	  tag element already exists, this one is not added. This is
+	  particularly true for the class tag that is now part of
+	  the class constructor. The HtmlPage class has been
+	  put in strict conformance with xhtml 1.1 and the
+	  XHtmlpage class has been removed.
+	</li>
+<li>
+<i class="item">Core modules: pim module</i><br/>
+
+	  A new module called the afnix-pim module has been
+	  added to the base distribution. The personal information
+	  management or pim module is designed to ease the management
+	  of personal information and agenda.
+	</li>
+<li>
+<i class="item">Core modules: gfx module</i><br/>
+
+	  A new module called the afnix-gfx module has been
+	  added to the base distribution. The module contains the base class
+	  that supports the graph data structure which was previously part
+	  of the standard library.
+	</li>
+</ul>
+<div class="section">
+Release 1.2</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core language: Unicode support</i><br/>
+
+	  The core engine has been substantially modified to integrate the 
+	  support for Unicode characters. Depending on the system settings
+	  the reader automatically adjust itself to operate in byte mode or
+	  in UTF-8 mode. The String and Character
+	  classes are now operating with a Unicode representation. The
+	  design of an Unicode based engine also impacts several classes 
+	  like the Regex, Buffer and stream
+	  classes. A new class called Byte is also designed to
+	  handle byte character. A new stream model with a base
+	  Stream class has also been added. The full support
+	  with Unicode character is not yet completed. In particular,
+	  certain codesets are not supported at all. This is particularly
+	  true with case-conversion functions.
+	</li>
+<li>
+<i class="item">Core language: orphan instance and reparenting</i><br/>
+
+	  The object model now supports the creation of orphan
+	  instance which is an instance without a class attached to
+	  it. The instance can be later bound to a class and such class can
+	  even be changed during the course of the program execution.
+	</li>
+<li>
+<i class="item">Core modules: network module</i><br/>
+
+	  The Address class has been updated to reflect the
+	  access to address aliases.
+	</li>
+<li>
+<i class="item">Core modules: text processing module</i><br/>
+
+	  The Literate class has been updated to reflect the
+	  support of Unicode characters. The class can operate both in byte
+	  mode or in Unicode character mode.
+	</li>
+</ul>
+<div class="section">
+Release 1.1</div>
+<p class="subsect">
+Release features</p>
+<ul class="text">
+<li>
+<i class="item">Core language: Large file support</i><br/>
+
+	  Support for the large file system has been added in the base
+	  distribution. All input/output operations as long as they are
+	  supported by the operating system are now done in 64 bits mode.
+	</li>
+<li>
+<i class="item">Core libraries: Secure hash algorithm</i><br/>
+
+	  The cryptographic library incorporates the support for the SHA-1,
+	  SHA-256, SHA-384 and SHA-512 hash algorithms.
+	</li>
+<li>
+<i class="item">Core libraries: Standard symmetric cipher</i><br/>
+
+	  The cryptographic library incorporates the support for the
+	  Advanced Encryption Standard (AES) as a symmetric cipher.
+	</li>
+<li>
+<i class="item">Core libraries: ODC library renamed</i><br/>
+
+	  The ODC library has been renamed to SPS which stands for
+	  spreadsheet library. This new name is considered more appropriate
+	  for the function the library achieves.
+	</li>
+<li>
+<i class="item">Core libraries: xhtml 1.1 support</i><br/>
+
+	  The XhtmlPara class is now configured to support XHTML 1.1 with
+	  utf-8 encoding.
+	</li>
+<li>
+<i class="item">Documentation: XML based documentation</i><br/>
+
+	  The documentation has been rewritten completely in XML. A
+	  DTD as well as the necessary XSLT style sheets have also
+	  been designed to produce a professional documentation which can
+	  be used for printing or for online browsing.
+	</li>
+</ul>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">10/04/2005: release 1.1.2</i><br/>
+
+	  This release incorporates a fix for a terminal capability error.
+	</li>
+<li>
+<i class="item">08/25/2005: release 1.1.1</i><br/>
+
+	  This release incorporates fixes for several build problems with
+	  the FreeBSD platform.
+	</li>
+<li>
+<i class="item">08/19/2005: release 1.1.0</i><br/>
+
+	  The 1.1 release is yet another milestone that incorporates a
+	  full redesign of the documentation tree as well as the inclusion
+	  of the cryptographic library that features some original
+	  implementations. The full documentation is now available in XML
+	  format and can be accessed online. 
+	</li>
+</ul>
+<div class="section">
+Release 1.0</div>
+<p class="text">
+ The 1.0 release is the initial release. This release replaces the old <i class="package">ALEPH programming language</i> which has been discontinued. </p>
+<p class="subsect">
+Release history</p>
+<ul class="text">
+<li>
+<i class="item">04/19/2005: release 1.0.3</i><br/>
+
+	  This release incorporates the necessary files that support
+	  GCC 4. It also provides some minor fixes that
+	  were preventing the compilation on some 64 bits platforms.
+	</li>
+<li>
+<i class="item">03/02/2005: release 1.0.2</i><br/>
+
+	  This release incorporates a minor fix that could cause the build
+	  process to fail.
+	</li>
+<li>
+<i class="item">02/16/2005: release 1.0.1</i><br/>
+
+	  This release incorporates a minor fix that could cause the build
+	  process to fail.
+	</li>
+<li>
+<i class="item">01/16/2005: release 1.0.0</i><br/>
+
+	  This is the primary release 1.0.0 which originated from the
+	  ALEPH programming language and which has been
+	  discontinued. A complete history of the language is provided in
+	  the description page.
+	</li>
+</ul>
+</body>
+</html>

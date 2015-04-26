@@ -1,0 +1,75 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_TimedWaitForEvent</TITLE>
+<LINK rel=Previous href="c-ch411.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch413.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch411.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch413.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="215461">
+</a><h3>Ns_TimedWaitForEvent</h3>
+<a name="133490">
+</a><h4>Overview</h4>
+Wait for an event for a specified time
+<a name="133495">
+</a><a name="133492">
+</a><h4>Syntax</h4>
+<pre>    <a name="71896"></a>int Ns_TimedWaitForEvent(
+    <a name="71897"></a>Ns_Event * event, 
+    <a name="71898"></a>Ns_Mutex * lock, 
+    <a name="71899"></a>int usec
+    <a name="71900"></a>);
+</pre><p><a name="134880">
+</a><h4>Description</h4>
+<p><a name="71902">
+</a>Same as Ns_WaitForEvent except that it has a timeout in seconds. On timeout, the function returns NS_TIMEOUT.</p>
+<a name="214580">
+</a><h4>Examples</h4>
+<pre>    <a name="214578"></a>	Ns_LockMutex(&amp;lock);
+    <a name="214588"></a>	if (!ready) {
+    <a name="214589"></a>		result = Ns_TimedWaitForEvent(&amp;ev, &amp;lock, 10);
+    <a name="214594"></a>		if (result == NS_TIMEOUT) {
+    <a name="214600"></a>			... handle timeout ...
+    <a name="214601"></a>		} else if (result != NS_OK) {
+    <a name="214602"></a>			... handle error ...
+    <a name="214603"></a>		}
+    <a name="214604"></a>	}
+    <a name="214605"></a>	Ns_UnlockMutex(&amp;lock);
+    <a name="214591"></a>			
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch411.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch413.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

@@ -1,0 +1,71 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_SetSplit</TITLE>
+<LINK rel=Previous href="c-ch346.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch348.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch346.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch348.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="131439">
+</a><h3>Ns_SetSplit</h3>
+<a name="131440">
+</a><h4>Overview</h4>
+Split a set into an array of new sets
+<a name="41176">
+</a><a name="133398">
+</a><h4>Syntax</h4>
+<pre>    <a name="41178"></a>Ns_Set **Ns_SetSplit(
+    <a name="41179"></a>Ns_Set *set,
+    <a name="41180"></a>char sep
+    <a name="41181"></a>);
+</pre><p><a name="134820">
+</a><h4>Description</h4>
+<p><a name="41183">
+</a>The Ns_SetSplit function assumes that each key name in the fields of a set contains a separating character. The fields of the set are partitioned into new sets whose set names are the characters before the separator and whose field key names are the characters after the separator. For example, if the separator is `.' and the set has fields whose key names are the following:</p>
+<pre>    <a name="41184"></a>
+    <a name="41185"></a>dog.sound
+    <a name="41186"></a>dog.food
+    <a name="41187"></a>cat.sound
+    <a name="41188"></a>cat.food
+    <a name="41189"></a>
+</pre><p><p><a name="41190">
+</a>Ns_SetSplit would create two new sets named <code>dog</code> and <code>cat</code>, each containing two fields whose key names are <code>sound</code> and <code>food</code>.</p>
+<p><a name="41191">
+</a>Ns_SetSplit returns a newly allocated NULL-terminated array of new sets. The original set is left unaltered. The list of new sets can be freed at once with the Ns_SetListFree function.</p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch346.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch348.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

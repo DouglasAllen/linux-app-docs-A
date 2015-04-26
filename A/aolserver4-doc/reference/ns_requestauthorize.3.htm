@@ -1,0 +1,247 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:45 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>ns_requestauthorize</title>
+
+</head>
+<body>
+
+<h1 align="center">ns_requestauthorize</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_requestauthorize
+&minus; commands</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_requestauthorize</b>
+<i>option</i> ?<i>arg arg ...</i>?
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ns_requestauthorize</b>
+<i>method URL authuser authpassword ?ipaddr?</i> <br>
+Ask the server to check permissions using nsperm. This
+function does the same permission check that the AOLserver
+does before serving a URL. If the nsperm module is loaded,
+the algorithm is as follows.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>1.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>If the authuser is &quot;nsadmin&quot;, the password is
+correct, and the IP address of the client is allowed nsadmin
+access, then access is authorized.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>2.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>Find the relevant permission record. If an exact match
+for the method and URL combination is not found, the end of
+the URL is pared down until a match is found. For example,
+if there is no match for
+&rsquo;/products/cereals/raisin_bran.html,&rsquo; then the
+server looks for a permission record for the URL
+&rsquo;/products/cereals.&rsquo; If that permission record
+is specified as &quot;Exact URL match is NOT required&quot;,
+then that permission record is used.</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">By default, the
+server comes with a row that says GET on &rsquo;/&rsquo; is
+open to <br>
+the world. If no relevant permission record is found, access
+is denied <br>
+(forbidden).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>1.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>If the authuser is in the &quot;Allow Users&quot; list,
+access is permitted. If the authuser is a member of a group
+in the &quot;Allow Groups&quot; list and not in the
+&quot;Deny Users&quot; list, access is permitted.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>2.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>If the host is in the &quot;Hosts to allow&quot; list,
+access is permitted. If the host is in the &quot;Hosts to
+deny&quot; list, access is denied.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>3.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>If the request does not come in with authorization data,
+access is denied.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>4.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>The user and password are verified. If there is no
+password specified in the database, any password is
+accepted.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>5.</b></p></td>
+<td width="1%"></td>
+<td width="85%">
+
+
+<p>Otherwise, access is denied.</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Return
+Values:</b> <br>
+The following values can be returned by
+ns_requestauthorize.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="14%">
+
+
+<p style="margin-top: 1em"><b>OK</b></p></td>
+<td width="3%"></td>
+<td width="72%">
+
+
+<p style="margin-top: 1em">The user has permission to
+execute this URL and method.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="14%">
+
+
+<p><b>DENIED</b></p></td>
+<td width="3%"></td>
+<td width="72%">
+
+
+<p>The user does not have permission to execute this URL
+and method.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="14%">
+
+
+<p><b>FORBIDDEN</b></p></td>
+<td width="3%"></td>
+<td width="72%">
+
+
+<p>There is no possible user/password/IP Address
+combination that would give authorization.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="14%">
+
+
+<p><b>ERROR</b></p></td>
+<td width="3%"></td>
+<td width="72%">
+
+
+<p>There was an error.</p></td></tr>
+</table>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">ns_passwordcheck,
+ns_crypt</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

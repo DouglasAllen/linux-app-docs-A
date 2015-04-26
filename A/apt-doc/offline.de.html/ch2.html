@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>APT offline verwenden - APT auf beiden Maschinen benutzen</title>
+
+<link href="index.html" rel="start">
+<link href="ch1.html" rel="prev">
+<link href="ch3.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Einleitung">
+<link href="ch2.html" rel="chapter" title="2 APT auf beiden Maschinen benutzen">
+<link href="ch3.html" rel="chapter" title="3 APT und Wget benutzen">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Übersicht">
+<link href="ch2.html#s2.1" rel="section" title="2.1 Übersicht">
+<link href="ch2.html#s2.2" rel="section" title="2.2 Die Konfigurationsdatei">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Übersicht">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Betrieb">
+
+</head>
+
+<body>
+
+<p><a name="ch2"></a></p>
+<hr>
+
+<p>
+[ <a href="ch1.html">zurück</a> ]
+[ <a href="index.html#contents">Inhalt</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">weiter</a> ]
+</p>
+
+<hr>
+
+<h1>
+APT offline verwenden
+<br>Kapitel 2 - APT auf beiden Maschinen benutzen
+</h1>
+
+<hr>
+
+<h2><a name="s2.1"></a>2.1 Übersicht</h2>
+
+<p>
+Ein verfügbares APT auf beiden Maschinen stellt die einfachste Konfiguration
+dar.  Die Grundidee besteht darin, eine Kopie der Statusdatei auf der Platte zu
+platzieren und die ferne Maschine zu benutzen, um die neusten Paketdateien
+herunterzuladen und zu entscheiden, welche Pakete heruntergeladen werden.  Die
+Plattenverzeichnisstruktur sollte so aussehen:
+</p>
+
+<pre>
+       /Platte/
+         Archive/
+            partial/
+         lists/
+            partial/
+         status
+         sources.list
+         apt.conf
+</pre>
+
+<hr>
+
+<h2><a name="s2.2"></a>2.2 Die Konfigurationsdatei</h2>
+
+<p>
+Die Konfigurationsdatei sollte APT mitteilen, dass es seine Dateien auf der
+Platte speichert und obendrein die Konfigurationsdateien auf der Platte
+benutzt.  Die »sources.list« sollte genau die Sites enthalten, die Sie auf
+der fernen Maschine benutzen möchten und die Statusdatei sollte eine Kopie von
+<em>/var/lib/dpkg/status</em> vom <em>Zielrechner</em> sein.  Bitte beachten
+Sie, falls Sie lokale Archive benutzen, dass Sie »copy«-URIs benutzen
+müssen.  Die Syntax entspricht der von »file«-URIs.
+</p>
+
+<p>
+<em>apt.conf</em> muss die nötigen Informationen enthalten, damit APT die
+Platte benutzt:
+</p>
+
+<pre>
+      APT
+      {
+        /* Dies ist nicht nötig, falls die beiden Maschinen die gleiche
+           Architektur haben. Es teilt dem fernen APT mit, welche Architektur die
+           Zielmaschine hat */
+        Architecture &quot;i386&quot;;
+        
+        Get::Download-Only &quot;true&quot;;
+      };
+      
+      Dir
+      {
+        /* Die Platte für Statusinformationen benutzen und die Statusdatei
+           umleiten von /var/lib/dpkg default */
+        State &quot;/disc/&quot;;
+        State::status &quot;status&quot;;
+     
+        // Programmzwischenspeicher werden lokal gespeichert
+        Cache::archives &quot;/disc/archives/&quot;;
+        Cache &quot;/tmp/&quot;;
+        
+        // Ort der Quellenliste.
+        Etc &quot;/disc/&quot;;
+      };
+</pre>
+
+<p>
+Weitere Details finden sich in der apt.conf-Handbuchseite und der
+Musterkonfigurationsdatei in <em>/usr/share/doc/apt/examples/apt.conf</em>.
+</p>
+
+<p>
+Das Erste, was auf der Zielmaschine getan werden muss, ist das Einhängen der
+Platte und das Kopieren von <em>/var/lib/dpkg/status</em> dorthin.  Sie werden
+außerdem die in der Übersicht umrissenen Verzeichnisse
+<em>archives/partial/</em> und <em>lists/partial/</em> erstellen müssen.  Dann
+bringen Sie die Platte zu der fernen Maschine und konfigurieren Sie die
+»sources.list«.  Führen Sie das folgende aus:
+</p>
+
+<pre>
+      # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+      # apt-get update
+      [ APT lädt die Paketdateien herunter ]
+      # apt-get dist-upgrade
+      [ APT lädt all die Pakete herunter, die die Zielmaschine benötigt, um ein
+        Upgrade durchzuführen ]
+</pre>
+
+<p>
+Der Befehl »dist-upgrade« kann durch alle anderen Standard-APT-Befehle
+ersetzt werden, insbesondere »dselect-upgrade«.  Sie können sogar eine
+APT-Oberfläche, wie <em>dselect</em>, benutzen.  Jedoch stellt dies ein
+Problem dar, Ihre Auswahl zurück an den lokalen Rechner zu kommunizieren.
+</p>
+
+<p>
+Nun enthält die Platte alle Indexdateien und Archive, die nötig sind, um ein
+Upgrade der Zielmaschine druchzuführen.  Bringen Sie die Platte zurück und
+starten Sie:
+</p>
+
+<pre>
+       # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+       # apt-get check
+       [ APT generiert eine lokale Kopie der Zwischenspeicherdateien ]
+       # apt-get --no-d -o dir::state::status=/var/lib/dpkg/status dist-upgrade
+       [ Oder irgendeinen anderen APT-Befehl ]
+</pre>
+
+<p>
+Es ist für ordentliches Funktionieren notwendig, die Statusdatei erneut als
+die lokale anzugeben.  Dies ist sehr wichtig!
+</p>
+
+<p>
+Wenn Sie Dselect benutzen, können Sie die sehr riskante Operation
+durchführen, disc/status auf /var/lib/dpkg/status zu kopieren, so dass die von
+Ihnen gemachte Auswahl auf der fernen Maschine aktualisiert wird.  Es wird in
+höchstem Maße empfohlen, dass Leute nur auf der lokalen Maschine Auswahlen
+treffen – aber dies könnte manchmal unmöglich sein.  Kopieren Sie die
+Statusdatei NICHT, falls Dpkg oder APT in der Zwischenzeit benutzt wurden!
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch1.html">zurück</a> ]
+[ <a href="index.html#contents">Inhalt</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">weiter</a> ]
+</p>
+
+<hr>
+
+<p>
+APT offline verwenden
+</p>
+
+<address>
+$Id: offline.sgml,v 1.8 12.02.2003 15:06:41 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

@@ -1,0 +1,2776 @@
+
+
+                         Section 8: Visibility Rules
+
+
+1   [The rules defining the scope of declarations and the rules defining which
+identifiers, character_literals, and operator_symbols are visible at (or from)
+various places in the text of the program are described in this section. The
+formulation of these rules uses the notion of a declarative region.
+
+2   As explained in Section 3, a declaration declares a view of an entity and
+associates a defining name with that view. The view comprises an
+identification of the viewed entity, and possibly additional properties. A
+usage name denotes a declaration. It also denotes the view declared by that
+declaration, and denotes the entity of that view. Thus, two different usage
+names might denote two different views of the same entity; in this case they
+denote the same entity.]
+
+2.a         To be honest: In some cases, a usage name that denotes a
+            declaration does not denote the view declared by that declaration,
+            nor the entity of that view, but instead denotes a view of the
+            current instance of the entity, and denotes the current instance
+            of the entity. This sometimes happens when the usage name occurs
+            inside the declarative region of the declaration.
+
+
+                         Wording Changes from Ada 83
+
+2.b         We no longer define the term "basic operation;" thus we no longer
+            have to worry about the visibility of them. Since they were
+            essentially always visible in Ada 83, this change has no effect.
+            The reason for this change is that the definition in Ada 83 was
+            confusing, and not quite correct, and we found it difficult to
+            fix. For example, one wonders why an if_statement was not a basic
+            operation of type Boolean. For another example, one wonders what
+            it meant for a basic operation to be "inherent in" something.
+            Finally, this fixes the problem addressed by AI83-00027/07.
+
+
+8.1 Declarative Region
+
+
+
+                              Static Semantics
+
+1   {declarative region (of a construct)} For each of the following
+constructs, there is a portion of the program text called its declarative
+region, [within which nested declarations can occur]:
+
+2     * any declaration, other than that of an enumeration type, that is not a
+        completion [of a previous declaration];
+
+3     * a block_statement;
+
+4     * a loop_statement;
+
+4.1/2   * {AI95-00318-02} an extended_return_statement;
+
+5     * an accept_statement;
+
+6     * an exception_handler.
+
+7   The declarative region includes the text of the construct together with
+additional text determined [(recursively)], as follows:
+
+8     * If a declaration is included, so is its completion, if any.
+
+9     * If the declaration of a library unit [(including Standard - see
+        10.1.1)] is included, so are the declarations of any child units [(and
+        their completions, by the previous rule)]. The child declarations
+        occur after the declaration.
+
+10    * If a body_stub is included, so is the corresponding subunit.
+
+11    * If a type_declaration is included, then so is a corresponding
+        record_representation_clause, if any.
+
+11.a        Reason: This is so that the component_declarations can be directly
+            visible in the record_representation_clause.
+
+12  The declarative region of a declaration is also called the declarative
+region of any view or entity declared by the declaration.
+
+12.a        Reason: The constructs that have declarative regions are the
+            constructs that can have declarations nested inside them. Nested
+            declarations are declared in that declarative region. The one
+            exception is for enumeration literals; although they are nested
+            inside an enumeration type declaration, they behave as if they
+            were declared at the same level as the type.
+
+12.b        To be honest: A declarative region does not include
+            parent_unit_names.
+
+12.c        Ramification: A declarative region does not include
+            context_clauses.
+
+13  {occur immediately within} {immediately within} {within (immediately)}
+{immediately enclosing} {enclosing (immediately)} A declaration occurs
+immediately within a declarative region if this region is the innermost
+declarative region that encloses the declaration (the immediately enclosing
+declarative region), not counting the declarative region (if any) associated
+with the declaration itself.
+
+13.a        Discussion: Don't confuse the declarative region of a declaration
+            with the declarative region in which it immediately occurs.
+
+14  [{local to} A declaration is local to a declarative region if the
+declaration occurs immediately within the declarative region.] [An entity is
+local to a declarative region if the entity is declared by a declaration that
+is local to the declarative region.]
+
+14.a        Ramification: "Occurs immediately within" and "local to" are
+            synonyms (when referring to declarations).
+
+14.b        Thus, "local to" applies to both declarations and entities,
+            whereas "occurs immediately within" only applies to declarations.
+            We use this term only informally; for cases where precision is
+            required, we use the term "occurs immediately within", since it is
+            less likely to cause confusion.
+
+15  {global to} A declaration is global to a declarative region if the
+declaration occurs immediately within another declarative region that encloses
+the declarative region. An entity is global to a declarative region if the
+entity is declared by a declaration that is global to the declarative region.
+
+        NOTES
+
+16      1  The children of a parent library unit are inside the parent's
+        declarative region, even though they do not occur inside the parent's
+        declaration or body. This implies that one can use (for example) "P.Q"
+        to refer to a child of P whose defining name is Q, and that after "use
+        P;" Q can refer (directly) to that child.
+
+17      2  As explained above and in 10.1.1, "
+        Compilation Units - Library Units", all library units are descendants
+        of Standard, and so are contained in the declarative region of
+        Standard. They are not inside the declaration or body of Standard, but
+        they are inside its declarative region.
+
+18      3  For a declarative region that comes in multiple parts, the text of
+        the declarative region does not contain any text that might appear
+        between the parts. Thus, when a portion of a declarative region is
+        said to extend from one place to another in the declarative region,
+        the portion does not contain any text that might appear between the
+        parts of the declarative region.
+
+18.a        Discussion: It is necessary for the things that have a declarative
+            region to include anything that contains declarations (except for
+            enumeration type declarations). This includes any declaration that
+            has a profile (that is, subprogram_declaration, subprogram_body,
+            entry_declaration, subprogram_renaming_declaration,
+            formal_subprogram_declaration, access-to-subprogram
+            type_declaration), anything that has a discriminant_part (that is,
+            various kinds of type_declaration), anything that has a
+            component_list (that is, record type_declaration and record
+            extension type_declaration), and finally the declarations of task
+            and protected units and packages.
+
+
+                         Wording Changes from Ada 83
+
+18.b        It was necessary to extend Ada 83's definition of declarative
+            region to take the following Ada 95 features into account:
+
+18.c          * Child library units.
+
+18.d          * Derived types/type extensions - we need a declarative region
+                for inherited components and also for new components.
+
+18.e          * All the kinds of types that allow discriminants.
+
+18.f          * Protected units.
+
+18.g          * Entries that have bodies instead of accept statements.
+
+18.h          * The choice_parameter_specification of an exception_handler.
+
+18.i          * The formal parameters of access-to-subprogram types.
+
+18.j          * Renamings-as-body.
+
+18.k        Discriminated and access-to-subprogram type declarations need a
+            declarative region. Enumeration type declarations cannot have one,
+            because you don't have to say "Color.Red" to refer to the literal
+            Red of Color. For other type declarations, it doesn't really
+            matter whether or not there is an associated declarative region,
+            so for simplicity, we give one to all types except enumeration
+            types.
+
+18.l        We now say that an accept_statement has its own declarative
+            region, rather than being part of the declarative region of the
+            entry_declaration, so that declarative regions are properly nested
+            regions of text, so that it makes sense to talk about "inner
+            declarative regions," and "...extends to the end of a declarative
+            region." Inside an accept_statement, the name of one of the
+            parameters denotes the parameter_specification of the
+            accept_statement, not that of the entry_declaration. If the
+            accept_statement is nested within a block_statement, these
+            parameter_specifications can hide declarations of the
+            block_statement. The semantics of such cases was unclear in RM83.
+
+18.m        To be honest: Unfortunately, we have the same problem for the
+            entry name itself - it should denote the accept_statement, but
+            accept_statements are not declarations. They should be, and they
+            should hide the entry from all visibility within themselves.
+
+18.n        Note that we can't generalize this to entry_bodies, or other
+            bodies, because the declarative_part of a body is not supposed to
+            contain (explicit) homographs of things in the declaration. It
+            works for accept_statements only because an accept_statement does
+            not have a declarative_part.
+
+18.o        To avoid confusion, we use the term "local to" only informally in
+            Ada 95. Even RM83 used the term incorrectly (see, for example,
+            RM83-12.3(13)).
+
+18.p        In Ada 83, (root) library units were inside Standard; it was not
+            clear whether the declaration or body of Standard was meant. In
+            Ada 95, they are children of Standard, and so occur immediately
+            within Standard's declarative region, but not within either the
+            declaration or the body. (See RM83-8.6(2) and RM83-10.1.1(5).)
+
+
+                         Wording Changes from Ada 95
+
+18.q/2      {AI95-00318-02} Extended_return_statement (see 6.5) is added to
+            the list of constructs that have a declarative region.
+
+
+8.2 Scope of Declarations
+
+
+1   [For each declaration, the language rules define a certain portion of the
+program text called the scope of the declaration. The scope of a declaration
+is also called the scope of any view or entity declared by the declaration.
+Within the scope of an entity, and only there, there are places where it is
+legal to refer to the declared entity. These places are defined by the rules
+of visibility and overloading.]
+
+
+                              Static Semantics
+
+2   {immediate scope (of a declaration)} The immediate scope of a declaration
+is a portion of the declarative region immediately enclosing the declaration.
+The immediate scope starts at the beginning of the declaration, except in the
+case of an overloadable declaration, in which case the immediate scope starts
+just after the place where the profile of the callable entity is determined
+(which is at the end of the _specification for the callable entity, or at the
+end of the generic_instantiation if an instance). The immediate scope extends
+to the end of the declarative region, with the following exceptions:
+
+2.a         Reason: The reason for making overloadable declarations with
+            profiles special is to simplify compilation: until the compiler
+            has determined the profile, it doesn't know which other
+            declarations are homographs of this one, so it doesn't know which
+            ones this one should hide. Without this rule, two passes over the
+            _specification or generic_instantiation would be required to
+            resolve names that denote things with the same name as this one.
+
+3     * The immediate scope of a library_item includes only its semantic
+        dependents.
+
+3.a         Reason: Section 10 defines only a partial ordering of
+            library_items. Therefore, it is a good idea to restrict the
+            immediate scope (and the scope, defined below) to semantic
+            dependents.
+
+3.b         Consider also examples like this:
+
+3.c             package P is end P;
+
+3.d             package P.Q is
+                    I : Integer := 0;
+                end P.Q;
+
+3.e/1           with P;
+                package R is
+                    package X renames P;
+                    J : Integer := X.Q.I; -- Illegal!
+                end R;
+
+3.f         The scope of P.Q does not contain R. Hence, neither P.Q nor X.Q
+            are visible within R. However, the name R.X.Q would be visible in
+            some other library unit where both R and P.Q are visible (assuming
+            R were made legal by removing the offending declaration).
+
+3.g/2       Ramification: {AI95-00217-06} This rule applies to limited views
+            as well as "normal" library items. In that case, the semantic
+            dependents are the units that have a limited_with_clause for the
+            limited view.
+
+4     * The immediate scope of a declaration in the private part of a library
+        unit does not include the visible part of any public descendant of
+        that library unit. {descendant (relationship with scope) [partial]}
+
+4.a         Ramification: In other words, a declaration in the private part
+            can be visible within the visible part, private part and body of a
+            private child unit. On the other hand, such a declaration can be
+            visible within only the private part and body of a public child
+            unit.
+
+4.b         Reason: The purpose of this rule is to prevent children from
+            giving private information to clients.
+
+4.c/2       Ramification: {AI95-00231-01} For a public child subprogram, this
+            means that the parent's private part is not visible in the profile
+            of the declaration and of the body. This is true even for
+            subprogram_bodies that are not completions. For a public child
+            generic unit, it means that the parent's private part is not
+            visible in the generic_formal_part, as well as in the first list
+            of basic_declarative_items (for a generic package), or the
+            (syntactic) profile (for a generic subprogram).
+
+5   {visible part} [The visible part of (a view of) an entity is a portion of
+the text of its declaration containing declarations that are visible from
+outside.] {private part [distributed]} The private part of (a view of) an
+entity that has a visible part contains all declarations within the
+declaration of (the view of) the entity, except those in the visible part;
+[these are not visible from outside. Visible and private parts are defined
+only for these kinds of entities: callable entities, other program units, and
+composite types.]
+
+6     * {visible part (of a view of a callable entity) [partial]} The visible
+        part of a view of a callable entity is its profile.
+
+7     * {visible part (of a view of a composite type) [partial]} The visible
+        part of a composite type other than a task or protected type consists
+        of the declarations of all components declared [(explicitly or
+        implicitly)] within the type_declaration.
+
+8     * {visible part (of a generic unit) [partial]} The visible part of a
+        generic unit includes the generic_formal_part. For a generic package,
+        it also includes the first list of basic_declarative_items of the
+        package_specification. For a generic subprogram, it also includes the
+        profile.
+
+8.a         Reason: Although there is no way to reference anything but the
+            formals from outside a generic unit, they are still in the visible
+            part in the sense that the corresponding declarations in an
+            instance can be referenced (at least in some cases). In other
+            words, these declarations have an effect on the outside world. The
+            visible part of a generic unit needs to be defined this way in
+            order to properly support the rule that makes a parent's private
+            part invisible within a public child's visible part.
+
+8.b         Ramification: The visible part of an instance of a generic unit is
+            as defined for packages and subprograms; it is not defined in
+            terms of the visible part of a generic unit.
+
+9     * [The visible part of a package, task unit, or protected unit consists
+        of declarations in the program unit's declaration other than those
+        following the reserved word private, if any; see 7.1 and 12.7 for
+        packages, 9.1 for task units, and 9.4 for protected units.]
+
+10  {scope (of a declaration)} The scope of a declaration always contains the
+immediate scope of the declaration. In addition, for a given declaration that
+occurs immediately within the visible part of an outer declaration, or is a
+public child of an outer declaration, the scope of the given declaration
+extends to the end of the scope of the outer declaration, except that the
+scope of a library_item includes only its semantic dependents.
+
+10.a        Ramification: Note the recursion. If a declaration appears in the
+            visible part of a library unit, its scope extends to the end of
+            the scope of the library unit, but since that only includes
+            dependents of the declaration of the library unit, the scope of
+            the inner declaration also only includes those dependents. If X
+            renames library package P, which has a child Q, a with_clause
+            mentioning P.Q is necessary to be able to refer to X.Q, even if
+            P.Q is visible at the place where X is declared.
+
+10.1/2 {AI95-00408-01} {scope (of an attribute_definition_clause)} The scope
+of an attribute_definition_clause is identical to the scope of a declaration
+that would occur at the point of the attribute_definition_clause.
+
+11  {immediate scope (of (a view of) an entity)} The immediate scope of a
+declaration is also the immediate scope of the entity or view declared by the
+declaration. {scope (of (a view of) an entity)} Similarly, the scope of a
+declaration is also the scope of the entity or view declared by the
+declaration.
+
+11.a        Ramification: The rule for immediate scope implies the following:
+
+11.b          * If the declaration is that of a library unit, then the
+                immediate scope includes the declarative region of the
+                declaration itself, but not other places, unless they are
+                within the scope of a with_clause that mentions the library
+                unit.
+
+11.c            It is necessary to attach the semantics of with_clauses to
+                [immediate] scopes (as opposed to visibility), in order for
+                various rules to work properly. A library unit should hide a
+                homographic implicit declaration that appears in its parent,
+                but only within the scope of a with_clause that mentions the
+                library unit. Otherwise, we would violate the "legality
+                determinable via semantic dependences" rule of 10, "
+                Program Structure and Compilation Issues". The declaration of
+                a library unit should be allowed to be a homograph of an
+                explicit declaration in its parent's body, so long as that
+                body does not mention the library unit in a with_clause.
+
+11.d            This means that one cannot denote the declaration of the
+                library unit, but one might still be able to denote the
+                library unit via another view.
+
+11.e            A with_clause does not make the declaration of a library unit
+                visible; the lack of a with_clause prevents it from being
+                visible. Even if a library unit is mentioned in a
+                with_clause, its declaration can still be hidden.
+
+11.f          * The completion of the declaration of a library unit (assuming
+                that's also a declaration) is not visible, neither directly
+                nor by selection, outside that completion.
+
+11.g          * The immediate scope of a declaration immediately within the
+                body of a library unit does not include any child of that
+                library unit.
+
+11.h            This is needed to prevent children from looking inside their
+                parent's body. The children are in the declarative region of
+                the parent, and they might be after the parent's body.
+                Therefore, the scope of a declaration that occurs immediately
+                within the body might include some children.
+
+        NOTES
+
+12      4  There are notations for denoting visible declarations that are not
+        directly visible. For example, parameter_specifications are in the
+        visible part of a subprogram_declaration so that they can be used in
+        named-notation calls appearing outside the called subprogram. For
+        another example, declarations of the visible part of a package can be
+        denoted by expanded names appearing outside the package, and can be
+        made directly visible by a use_clause.
+
+12.a/2      Ramification: {AI95-00114-01} There are some obscure cases
+            involving generics in which there is no such notation. See Section
+            12.
+
+
+                            Extensions to Ada 83
+
+12.b        {extensions to Ada 83} The fact that the immediate scope of an
+            overloadable declaration does not include its profile is new to
+            Ada 95. It replaces RM83-8.3(16), which said that within a
+            subprogram specification and within the formal part of an entry
+            declaration or accept statement, all declarations with the same
+            designator as the subprogram or entry were hidden from all
+            visibility. The RM83-8.3(16) rule seemed to be overkill, and
+            created both implementation difficulties and unnecessary semantic
+            complexity.
+
+
+                         Wording Changes from Ada 83
+
+12.c        We no longer need to talk about the scope of notations,
+            identifiers, character_literals, and operator_symbols.
+
+12.d        The notion of "visible part" has been extended in Ada 95. The
+            syntax of task and protected units now allows private parts, thus
+            requiring us to be able to talk about the visible part as well. It
+            was necessary to extend the concept to subprograms and to generic
+            units, in order for the visibility rules related to child library
+            units to work properly. It was necessary to define the concept
+            separately for generic formal packages, since their visible part
+            is slightly different from that of a normal package. Extending the
+            concept to composite types made the definition of scope slightly
+            simpler. We define visible part for some things elsewhere, since
+            it makes a big difference to the user for those things. For
+            composite types and subprograms, however, the concept is used only
+            in arcane visibility rules, so we localize it to this clause.
+
+12.e        In Ada 83, the semantics of with_clauses was described in terms of
+            visibility. It is now described in terms of [immediate] scope.
+
+12.f        We have clarified that the following is illegal (where Q and R are
+            library units):
+
+12.g            package Q is
+                    I : Integer := 0;
+                end Q;
+
+12.h            package R is
+                    package X renames Standard;
+                    X.Q.I := 17; -- Illegal!
+                end R;
+
+12.i        even though Q is declared in the declarative region of Standard,
+            because R does not mention Q in a with_clause.
+
+
+                         Wording Changes from Ada 95
+
+12.j/2      {AI95-00408-01} The scope of an attribute_definition_clause is
+            defined so that it can be used to define the visibility of such a
+            clause, so that can be used by the stream attribute availability
+            rules (see 13.13.2).
+
+
+8.3 Visibility
+
+
+1   [{visibility rules} The visibility rules, given below, determine which
+declarations are visible and directly visible at each place within a program.
+The visibility rules apply to both explicit and implicit declarations.]
+
+
+                              Static Semantics
+
+2   {visibility (direct)} {directly visible} {directly visible} A declaration
+is defined to be directly visible at places where a name consisting of only an
+identifier or operator_symbol is sufficient to denote the declaration; that
+is, no selected_component notation or special context (such as preceding => in
+a named association) is necessary to denote the declaration. {visible} A
+declaration is defined to be visible wherever it is directly visible, as well
+as at other places where some name (such as a selected_component) can denote
+the declaration.
+
+3   The syntactic category direct_name is used to indicate contexts where
+direct visibility is required. The syntactic category selector_name is used to
+indicate contexts where visibility, but not direct visibility, is required.
+
+4   {visibility (immediate)} {visibility (use clause)} There are two kinds of
+direct visibility: immediate visibility and use-visibility.
+{immediately visible} A declaration is immediately visible at a place if it is
+directly visible because the place is within its immediate scope.
+{use-visible} A declaration is use-visible if it is directly visible because of
+a use_clause (see 8.4). Both conditions can apply.
+
+5   {hiding} A declaration can be hidden, either from direct visibility, or
+from all visibility, within certain parts of its scope.
+{hidden from all visibility} Where hidden from all visibility, it is not
+visible at all (neither using a direct_name nor a selector_name).
+{hidden from direct visibility} Where hidden from direct visibility, only
+direct visibility is lost; visibility using a selector_name is still possible.
+
+6   [{overloaded} Two or more declarations are overloaded if they all have the
+same defining name and there is a place where they are all directly visible.]
+
+6.a         Ramification: Note that a name can have more than one possible
+            interpretation even if it denotes a non-overloadable entity. For
+            example, if there are two functions F that return records, both
+            containing a component called C, then the name F.C has two
+            possible interpretations, even though component declarations are
+            not overloadable.
+
+7   {overloadable} The declarations of callable entities [(including
+enumeration literals)] are overloadable[, meaning that overloading is allowed
+for them].
+
+7.a         Ramification: A generic_declaration is not overloadable within its
+            own generic_formal_part. This follows from the rules about when a
+            name denotes a current instance. See AI83-00286. This implies that
+            within a generic_formal_part, outer declarations with the same
+            defining name are hidden from direct visibility. It also implies
+            that if a generic formal parameter has the same defining name as
+            the generic itself, the formal parameter hides the generic from
+            direct visibility.
+
+8   {homograph} Two declarations are homographs if they have the same defining
+name, and, if both are overloadable, their profiles are type conformant.
+{type conformance [partial]} [An inner declaration hides any outer homograph
+from direct visibility.]
+
+8.a/2       Glossary entry: {Overriding operation} An overriding operation is
+            one that replaces an inherited primitive operation. Operations may
+            be marked explicitly as overriding or not overriding.
+
+9/1 {8652/0025} {AI95-00044-01} [Two homographs are not generally allowed
+immediately within the same declarative region unless one overrides the other
+(see Legality Rules below).] {override} The only declarations that are
+{overridable} overridable are the implicit declarations for predefined
+operators and inherited primitive subprograms. A declaration overrides another
+homograph that occurs immediately within the same declarative region in the
+following cases:
+
+10/1   * {8652/0025} {AI95-00044-01} A declaration that is not overridable
+        overrides one that is overridable, [regardless of which declaration
+        occurs first];
+
+10.a/1      Ramification: {8652/0025} {AI95-00044-01} And regardless of
+            whether the non-overridable declaration is overloadable or not.
+            For example, statement_identifiers are covered by this rule.
+
+10.b        The "regardless of which declaration occurs first" is there
+            because the explicit declaration could be a primitive subprogram
+            of a partial view, and then the full view might inherit a
+            homograph. We are saying that the explicit one wins (within its
+            scope), even though the implicit one comes later.
+
+10.c        If the overriding declaration is also a subprogram, then it is a
+            primitive subprogram.
+
+10.d        As explained in 7.3.1, "Private Operations", some inherited
+            primitive subprograms are never declared. Such subprograms cannot
+            be overridden, although they can be reached by dispatching calls
+            in the case of a tagged type.
+
+11    * The implicit declaration of an inherited operator overrides that of a
+        predefined operator;
+
+11.a        Ramification: In a previous version of Ada 9X, we tried to avoid
+            the notion of predefined operators, and say that they were
+            inherited from some magical root type. However, this seemed like
+            too much mechanism. Therefore, a type can have a predefined "+" as
+            well as an inherited "+". The above rule says the inherited one
+            wins.
+
+11.b/2      {AI95-00114-01} The "regardless of which declaration occurs
+            first" applies here as well, in the case where
+            derived_type_definition in the visible part of a public library
+            unit derives from a private type declared in the parent unit, and
+            the full view of the parent type has additional predefined
+            operators, as explained in 7.3.1, "Private Operations". Those
+            predefined operators can be overridden by inherited subprograms
+            implicitly declared earlier.
+
+12    * An implicit declaration of an inherited subprogram overrides a
+        previous implicit declaration of an inherited subprogram.
+
+12.1/2   * {AI95-00251-01} If two or more homographs are implicitly declared
+        at the same place:
+
+12.2/2    * {AI95-00251-01} If at least one is a subprogram that is neither a
+            null procedure nor an abstract subprogram, and does not require
+            overriding (see 3.9.3), then they override those that are null
+            procedures, abstract subprograms, or require overriding. If more
+            than one such homograph remains that is not thus overridden, then
+            they are all hidden from all visibility.
+
+12.3/2    * {AI95-00251-01} Otherwise (all are null procedures, abstract
+            subprograms, or require overriding), then any null procedure
+            overrides all abstract subprograms and all subprograms that
+            require overriding; if more than one such homograph remains that
+            is not thus overridden, then if they are all fully conformant with
+            one another, one is chosen arbitrarily; if not, they are all
+            hidden from all visibility. {full conformance (required)}
+
+12.a/2      Discussion: In the case where the implementation arbitrarily
+            chooses one overrider from among a group of inherited subprograms,
+            users should not be able to determine which member was chosen, as
+            the set of inherited subprograms which are chosen from must be
+            fully conformant. This rule is needed in order to allow
+
+12.b/2          package Outer is
+                   package P1 is
+                      type Ifc1 is interface;
+                      procedure Null_Procedure (X : Ifc1) is null;
+                      procedure Abstract_Subp  (X : Ifc1) is abstract;
+                   end P1;
+
+12.c/2             package P2 is
+                      type Ifc2 is interface;
+                      procedure Null_Procedure (X : Ifc2) is null;
+                      procedure Abstract_Subp  (X : Ifc2) is abstract;
+                   end P2;
+
+12.d/2             type T is abstract new P1.Ifc1 and P2.Ifc2 with null record;
+                end Outer;
+
+12.e/2      without requiring that T explicitly override any of its inherited
+            operations.
+
+12.f/2      Full conformance is required here, as we cannot allow the
+            parameter names to differ. If they did differ, the routine which
+            was selected for overriding could be determined by using named
+            parameter notation in a call.
+
+12.g/2      When the subprograms do not conform, we chose not to adopt the "
+            use clause" rule which would make them all visible resulting in
+            likely ambiguity. If we had used such a rule, any successful calls
+            would be confusing; and the fact that there are no Beaujolais-like
+            effect to worry about means we can consider other rules. The
+            hidden-from-all-visibility homographs are still inherited by
+            further derivations, which avoids order-of-declaration
+            dependencies and other anomalies.
+
+12.h/2      We have to be careful to not include arbitrary selection if the
+            routines have real bodies. (This can happen in generics, see the
+            example in the incompatibilities section below.) We don't want the
+            ability to successfully call routines where the body executed
+            depends on the compiler or a phase of the moon.
+
+12.i/2      Note that if the type is concrete, abstract subprograms are
+            inherited as subprograms that require overriding. We include
+            functions that require overriding as well; these don't have real
+            bodies, so they can use the more liberal rules.
+
+13    * [For an implicit declaration of a primitive subprogram in a generic
+        unit, there is a copy of this declaration in an instance.] However, a
+        whole new set of primitive subprograms is implicitly declared for each
+        type declared within the visible part of the instance. These new
+        declarations occur immediately after the type declaration, and
+        override the copied ones. [The copied ones can be called only from
+        within the instance; the new ones can be called only from outside the
+        instance, although for tagged types, the body of a new one can be
+        executed by a call to an old one.]
+
+13.a        Discussion: In addition, this is also stated redundantly (again),
+            and is repeated, in 12.3, "Generic Instantiation". The rationale
+            for the rule is explained there.
+
+14  {visible} {hidden from all visibility [distributed]} A declaration is
+visible within its scope, except where hidden from all visibility, as follows:
+
+15    * {hidden from all visibility (for overridden declaration) [partial]} An
+        overridden declaration is hidden from all visibility within the scope
+        of the overriding declaration.
+
+15.a        Ramification: We have to talk about the scope of the overriding
+            declaration, not its visibility, because it hides even when it is
+            itself hidden.
+
+15.b        Note that the scope of an explicit subprogram_declaration does not
+            start until after its profile.
+
+16    * {hidden from all visibility (within the declaration itself)
+         [partial]} A declaration is hidden from all visibility until the end
+        of the declaration, except:
+
+17        * For a record type or record extension, the declaration is hidden
+            from all visibility only until the reserved word record;
+
+18/2      * {AI95-00345-01} For a package_declaration, generic_package_-
+            declaration, or subprogram_body, the declaration is hidden from
+            all visibility only until the reserved word is of the declaration;
+
+18.a        Ramification: We're talking about the is of the construct itself,
+            here, not some random is that might appear in a
+            generic_formal_part.
+
+18.1/2    * {AI95-00345-01} For a task declaration or protected declaration,
+            the declaration is hidden from all visibility only until the
+            reserved word with of the declaration if there is one, or the
+            reserved word is of the declaration if there is no with.
+
+18.b/2      To be honest: If there is neither a with nor is, then the
+            exception does not apply and the name is hidden from all
+            visibility until the end of the declaration. This oddity was
+            inherited from Ada 95.
+
+18.c/2      Reason: We need the "with or is" rule so that the visibility
+            within an interface_list does not vary by construct. That would
+            make it harder to complete private extensions and would complicate
+            implementations.
+
+19    * {hidden from all visibility (for a declaration completed   by a subsequent declaration)
+         [partial]} If the completion of a declaration is a declaration, then
+        within the scope of the completion, the first declaration is hidden
+        from all visibility. Similarly, a discriminant_specification or
+        parameter_specification is hidden within the scope of a corresponding
+        discriminant_specification or parameter_specification of a
+        corresponding completion, or of a corresponding accept_statement.
+
+19.a        Ramification: This rule means, for example, that within the scope
+            of a full_type_declaration that completes a
+            private_type_declaration, the name of the type will denote the
+            full_type_declaration, and therefore the full view of the type. On
+            the other hand, if the completion is not a declaration, then it
+            doesn't hide anything, and you can't denote it.
+
+20/2   * {AI95-00217-06} {AI95-00412-01}
+        {hidden from all visibility (by lack of a with_clause) [partial]} The
+        declaration of a library unit (including a
+        library_unit_renaming_declaration) is hidden from all visibility at
+        places outside its declarative region that are not within the scope of
+        a nonlimited_with_clause that mentions it. The limited view of a
+        library package is hidden from all visibility at places that are not
+        within the scope of a limited_with_clause that mentions it; in
+        addition, the limited view is hidden from all visibility within the
+        declarative region of the package, as well as within the scope of any
+        nonlimited_with_clause that mentions the package. Where the
+        declaration of the limited view of a package is visible, any name that
+        denotes the package denotes the limited view, including those provided
+        by a package renaming.
+
+20.a/2      Discussion: {AI95-00217-06} This is the rule that prevents
+            with_clauses from being transitive; the [immediate] scope includes
+            indirect semantic dependents. This rule also prevents the limited
+            view of a package from being visible in the same place as the full
+            view of the package, which prevents various ripple effects.
+
+20.1/2   * {AI95-00217-06} {AI95-00412-01} [For each declaration or renaming
+        of a generic unit as a child of some parent generic package, there is
+        a corresponding declaration nested immediately within each instance of
+        the parent.] Such a nested declaration is hidden from all visibility
+        except at places that are within the scope of a with_clause that
+        mentions the child.
+
+21  {directly visible} {immediately visible} {visibility (direct)}
+{visibility (immediate)} A declaration with a defining_identifier or
+defining_operator_symbol is immediately visible [(and hence directly visible)]
+within its immediate scope {hidden from direct visibility [distributed]}
+except where hidden from direct visibility, as follows:
+
+22    * {hidden from direct visibility (by an inner homograph) [partial]} A
+        declaration is hidden from direct visibility within the immediate
+        scope of a homograph of the declaration, if the homograph occurs
+        within an inner declarative region;
+
+23    * {hidden from direct visibility (where hidden from all visibility)
+         [partial]} A declaration is also hidden from direct visibility where
+        hidden from all visibility.
+
+23.1/2 {AI95-00195-01} {AI95-00408-01}
+{visible (attribute_definition_clause) [partial]} An
+attribute_definition_clause is visible everywhere within its scope.
+
+
+                            Name Resolution Rules
+
+24  {possible interpretation (for direct_names) [partial]} A direct_name shall
+resolve to denote a directly visible declaration whose defining name is the
+same as the direct_name. {possible interpretation (for selector_names)
+ [partial]} A selector_name shall resolve to denote a visible declaration
+whose defining name is the same as the selector_name.
+
+24.a        Discussion: "The same as" has the obvious meaning here, so for +,
+            the possible interpretations are declarations whose defining name
+            is "+" (an operator_symbol).
+
+25  These rules on visibility and direct visibility do not apply in a
+context_clause, a parent_unit_name, or a pragma that appears at the place of a
+compilation_unit. For those contexts, see the rules in 10.1.6, "
+Environment-Level Visibility Rules".
+
+25.a        Ramification: Direct visibility is irrelevant for
+            character_literals. In terms of overload resolution
+            character_literals are similar to other literals, like null - see
+            4.2. For character_literals, there is no need to worry about
+            hiding, since there is no way to declare homographs.
+
+
+                               Legality Rules
+
+26/2 {8652/0025} {8652/0026} {AI95-00044-01} {AI95-00150-01} {AI95-00377-01} A
+non-overridable declaration is illegal if there is a homograph occurring
+immediately within the same declarative region that is visible at the place of
+the declaration, and is not hidden from all visibility by the non-overridable
+declaration. In addition, a type extension is illegal if somewhere within its
+immediate scope it has two visible components with the same name. Similarly,
+the context_clause for a compilation unit is illegal if it mentions (in a
+with_clause) some library unit, and there is a homograph of the library unit
+that is visible at the place of the compilation unit, and the homograph and
+the mentioned library unit are both declared immediately within the same
+declarative region.{generic contract issue [partial]} These rules also apply
+to dispatching operations declared in the visible part of an instance of a
+generic unit. However, they do not apply to other overloadable declarations in
+an instance[; such declarations may have type conformant profiles in the
+instance, so long as the corresponding declarations in the generic were not
+type conformant]. {type conformance [partial]}
+
+26.a        Discussion: Normally, these rules just mean you can't explicitly
+            declare two homographs immediately within the same declarative
+            region. The wording is designed to handle the following special
+            cases:
+
+26.b          * If the second declaration completes the first one, the second
+                declaration is legal.
+
+26.c          * If the body of a library unit contains an explicit homograph
+                of a child of that same library unit, this is illegal only if
+                the body mentions the child in its context_clause, or if some
+                subunit mentions the child. Here's an example:
+
+26.d            package P is
+                end P;
+
+26.e            package P.Q is
+                end P.Q;
+
+26.f            package body P is
+                    Q : Integer; -- OK; we cannot see package P.Q here.
+                    procedure Sub is separate;
+                end P;
+
+26.g            with P.Q;
+                separate(P)
+                procedure Sub is -- Illegal.
+                begin
+                    null;
+                end Sub;
+
+26.h            If package body P said "with P.Q;", then it would be illegal
+                to declare the homograph Q: Integer. But it does not, so the
+                body of P is OK. However, the subunit would be able to see
+                both P.Q's, and is therefore illegal.
+
+26.i            A previous version of Ada 9X allowed the subunit, and said
+                that references to P.Q would tend to be ambiguous. However,
+                that was a bad idea, because it requires overload resolution
+                to resolve references to directly visible non-overloadable
+                homographs, which is something compilers have never before
+                been required to do.
+
+26.i.1/1      * {8652/0026} {8652/0102} {AI95-00150-01} {AI95-00157-01} If a
+                type extension contains a component with the same name as a
+                component in an ancestor type, there must be no place where
+                both components are visible. For instance:
+
+26.i.2/1        package A is
+                   type T is tagged private;
+                   package B is
+                      type NT is new T with record
+                         I: Integer; -- Illegal because T.I is visible in the body.
+                      end record; -- T.I is not visible here.
+                   end B;
+                private
+                   type T is tagged record
+                      I: Integer; -- Illegal because T.I is visible in the body.
+                   end record;
+                end A;
+
+26.i.3/2        {AI95-00114-01} package body A is
+                   package body B is
+                      -- T.I becomes visible here.
+                   end B;
+                end A;
+
+26.i.4/1        package A.C is
+                   type NT2 is new A.T with record
+                      I: Integer; -- Illegal because T.I is visible in the private part.
+                   end record; -- T.I is not visible here.
+                private
+                    -- T.I is visible here.
+                end A.C;
+
+26.i.5/1        with A;
+                package D is
+                   type NT3 is new A.T with record
+                      I: Integer; -- Legal because T.I is never visible in this package.
+                   end record;
+                end D;
+
+26.i.6/1        with D;
+                package A.E is
+                   type NT4 is new D.NT3 with null record;
+                   X : NT4;
+                   I1 : Integer := X.I;        -- D.NT3.I
+                   I2 : Integer := D.NT3(X).I; -- D.NT3.I
+                   I3 : Integer := A.T(X).I;   -- A.T.I
+                end A.E;
+
+26.i.7/1        {8652/0102} {AI95-00157-01} D.NT3 can have a component I
+                because the component I of the parent type is never visible.
+                The parent component exists, of course, but is never declared
+                for the type D.NT3. In the child package A.E, the component I
+                of A.T is visible, but that does not change the fact that the
+                A.T.I component was never declared for type D.NT3. Thus,
+                A.E.NT4 does not (visibly) inherit the component I from A.T,
+                while it does inherit the component I from D.NT3. Of course,
+                both components exist, and can be accessed by a type
+                conversion as shown above. This behavior stems from the fact
+                that every characteristic of a type (including components)
+                must be declared somewhere in the innermost declarative region
+                containing the type - if the characteristic is never visible
+                in that declarative region, it is never declared. Therefore,
+                such characteristics do not suddenly become available even if
+                they are in fact visible in some other scope. See 7.3.1 for
+                more on the rules.
+
+26.i.8/2      * {AI95-00377-01} It is illegal to mention both an explicit
+                child of an instance, and a child of the generic from which
+                the instance was instantiated. This is easier to understand
+                with an example:
+
+26.i.9/2        generic
+                package G1 is
+                end G1;
+
+26.i.10/2       generic
+                package G1.G2 is
+                end G1.G2;
+
+26.i.11/2       with G1;
+                package I1 is new G1;
+
+26.i.12/2       package I1.G2 renames ...
+
+26.i.13/2       with G1.G2;
+                with I1.G2;             -- Illegal
+                package Bad is ...
+
+26.i.14/2       The context clause for Bad is illegal as I1 has an implicit
+                declaration of I1.G2 based on the generic child G1.G2, as well
+                as the mention of the explicit child I1.G2. As in the previous
+                cases, this is illegal only if the context clause makes both
+                children visible; the explicit child can be mentioned as long
+                as the generic child is not (and vice-versa).
+
+26.j        Note that we need to be careful which things we make "hidden from
+            all visibility" versus which things we make simply illegal for
+            names to denote. The distinction is subtle. The rules that
+            disallow names denoting components within a type declaration (see
+            3.7) do not make the components invisible at those places, so that
+            the above rule makes components with the same name illegal. The
+            same is true for the rule that disallows names denoting formal
+            parameters within a formal_part (see 6.1).
+
+26.k        Discussion: The part about instances is from AI83-00012. The
+            reason it says "overloadable declarations" is because we don't
+            want it to apply to type extensions that appear in an instance;
+            components are not overloadable.
+
+        NOTES
+
+27      5  Visibility for compilation units follows from the definition of the
+        environment in 10.1.4, except that it is necessary to apply a
+        with_clause to obtain visibility to a library_unit_declaration or
+        library_unit_renaming_declaration.
+
+28      6  In addition to the visibility rules given above, the meaning of the
+        occurrence of a direct_name or selector_name at a given place in the
+        text can depend on the overloading rules (see 8.6).
+
+29      7  Not all contexts where an identifier, character_literal, or
+        operator_symbol are allowed require visibility of a corresponding
+        declaration. Contexts where visibility is not required are identified
+        by using one of these three syntactic categories directly in a syntax
+        rule, rather than using direct_name or selector_name.
+
+29.a        Ramification: An identifier, character_literal or
+            operator_symbol that occurs in one of the following contexts is
+            not required to denote a visible or directly visible declaration:
+
+29.b        1.  A defining name.
+
+29.c        2.  The identifiers or operator_symbol that appear after the
+                reserved word end in a proper_body. Similarly for "end loop",
+                etc.
+
+29.d        3.  An attribute_designator.
+
+29.e        4.  A pragma identifier.
+
+29.f        5.  A pragma_argument_identifier.
+
+29.g        6.  An identifier specific to a pragma used in a pragma argument.
+
+29.h        The visibility rules have nothing to do with the above cases; the
+            meanings of such things are defined elsewhere. Reserved words are
+            not identifiers; the visibility rules don't apply to them either.
+
+29.i        Because of the way we have defined "declaration", it is possible
+            for a usage name to denote a subprogram_body, either within that
+            body, or (for a non-library unit) after it (since the body hides
+            the corresponding declaration, if any). Other bodies do not work
+            that way. Completions of type_declarations and deferred constant
+            declarations do work that way. Accept_statements are never
+            denoted, although the parameter_specifications in their profiles
+            can be.
+
+29.j        The scope of a subprogram does not start until after its profile.
+            Thus, the following is legal:
+
+29.k            X : constant Integer := 17;
+                ...
+                package P is
+                    procedure X(Y : in Integer := X);
+                end P;
+
+29.l        The body of the subprogram will probably be illegal, however,
+            since the constant X will be hidden by then.
+
+29.m        The rule is different for generic subprograms, since they are not
+            overloadable; the following is illegal:
+
+29.n            X : constant Integer := 17;
+                package P is
+                    generic
+                      Z : Integer := X; -- Illegal!
+                    procedure X(Y : in Integer := X); -- Illegal!
+                end P;
+
+29.o        The constant X is hidden from direct visibility by the generic
+            declaration.
+
+
+                            Extensions to Ada 83
+
+29.p        {extensions to Ada 83} Declarations with the same defining name as
+            that of a subprogram or entry being defined are nevertheless
+            visible within the subprogram specification or entry declaration.
+
+
+                         Wording Changes from Ada 83
+
+29.q        The term "visible by selection" is no longer defined. We use the
+            terms "directly visible" and "visible" (among other things). There
+            are only two regions of text that are of interest, here: the
+            region in which a declaration is visible, and the region in which
+            it is directly visible.
+
+29.r        Visibility is defined only for declarations.
+
+
+                        Incompatibilities With Ada 95
+
+29.s/2      {AI95-00251-01} {incompatibilities with Ada 95} Added rules to
+            handle the inheritance and overriding of multiple homographs for a
+            single type declaration, in order to support multiple inheritance
+            from interfaces. The new rules are intended to be compatible with
+            the existing rules so that programs that do not use interfaces do
+            not change their legality. However, there is a very rare case
+            where this is not true:
+
+29.t/2          generic
+                   type T1 is private;
+                   type T2 is private;
+                package G is
+                   type T is null record;
+                   procedure P (X : T; Y : T1);
+                   procedure P (X : T; Z : T2);
+                end G;]
+
+29.u/2          package I is new G (Integer, Integer); -- Exports homographs of P.
+
+29.v/2          type D is new I.T; -- Both Ps are inherited.
+
+29.w/2          Obj : D;
+
+29.x/2          P (Obj, Z => 10); -- Legal in Ada 95, illegal in Ada 2005.
+
+29.y/2      The call to P would resolve in Ada 95 by using the parameter name,
+            while the procedures P would be hidden from all visibility in Ada
+            2005 and thus would not resolve. This case doesn't seem worth
+            making the rules any more complex than they already are.
+
+29.z/2      {AI95-00377-01} Amendment Correction: A with_clause is illegal if
+            it would create a homograph of an implicitly declared generic
+            child (see 10.1.1). An Ada 95 compiler could have allowed this,
+            but which unit of the two units involved would be denoted wasn't
+            specified, so any successful use isn't portable. Removing one of
+            the two with_clauses involved will fix the problem.
+
+
+                         Wording Changes from Ada 95
+
+29.aa/2     {8652/0025} {AI95-00044-01} Corrigendum: Clarified the overriding
+            rules so that "/=" and statement_identifiers are covered.
+
+29.bb/2     {8652/0026} {AI95-00150-01} Corrigendum: Clarified that is it
+            never possible for two components with the same name to be
+            visible; any such program is illegal.
+
+29.cc/2     {AI95-00195-01} {AI95-00408-01} The visibility of an
+            attribute_definition_clause is defined so that it can be used by
+            the stream attribute availability rules (see 13.13.2).
+
+29.dd/2     {AI95-00217-06} The visibility of a limited view of a library
+            package is defined (see 10.1.1).
+
+
+8.3.1 Overriding Indicators
+
+
+1/2 {AI95-00218-03} An overriding_indicator is used to declare that an
+operation is intended to override (or not override) an inherited operation.
+
+
+                                   Syntax
+
+2/2     {AI95-00218-03} overriding_indicator ::= [not] overriding
+
+
+                               Legality Rules
+
+3/2 {AI95-00218-03} {AI95-00348-01} {AI95-00397-01} If an abstract_subprogram_-
+declaration, null_procedure_declaration, subprogram_body,
+subprogram_body_stub, subprogram_renaming_declaration, generic_instantiation
+of a subprogram, or subprogram_declaration other than a protected subprogram
+has an overriding_indicator, then:
+
+4/2   * the operation shall be a primitive operation for some type;
+
+5/2   * if the overriding_indicator is overriding, then the operation shall
+        override a homograph at the place of the declaration or body;
+
+6/2   * if the overriding_indicator is not overriding, then the operation
+        shall not override any homograph (at any place).
+
+7/2 {generic contract issue [partial]} In addition to the places where
+Legality Rules normally apply, these rules also apply in the private part of
+an instance of a generic unit.
+
+7.a/2       Discussion: The overriding and not overriding rules differ
+            slightly. For overriding, we want the indicator to reflect the
+            overriding state at the place of the declaration; otherwise the
+            indicator would be "lying". Whether a homograph is implicitly
+            declared after the declaration (see 7.3.1 to see how this can
+            happen) has no impact on this check. However, not overriding is
+            different; "lying" would happen if a homograph declared later
+            actually is overriding. So, we require this check to take into
+            account later overridings. That can be implemented either by
+            looking ahead, or by rechecking when additional operations are
+            declared.
+
+7.b/2       The "no lying" rules are needed to prevent a
+            subprogram_declaration and subprogram_body from having
+            contradictory overriding_indicators.
+
+        NOTES
+
+8/2     8  {AI95-00397-01} Rules for overriding_indicators of task and
+        protected entries and of protected subprograms are found in 9.5.2 and
+        9.4, respectively.
+
+
+                                  Examples
+
+9/2 {AI95-00433-01} The use of overriding_indicators allows the detection of
+errors at compile-time that otherwise might not be detected at all. For
+instance, we might declare a security queue derived from the Queue interface
+of 3.9.4 as:
+
+10/2    type Security_Queue is new Queue with record ...;
+
+11/2    overriding
+        procedure Append(Q : in out Security_Queue; Person : in Person_Name);
+
+12/2    overriding
+        procedure Remove_First(Q : in out Security_Queue; Person : in Person_Name);
+
+13/2    overriding
+        function Cur_Count(Q : in Security_Queue) return Natural;
+
+14/2    overriding
+        function Max_Count(Q : in Security_Queue) return Natural;
+
+15/2    not overriding
+        procedure Arrest(Q : in out Security_Queue; Person : in Person_Name);
+
+16/2 The first four subprogram declarations guarantee that these subprograms
+will override the four subprograms inherited from the Queue interface. A
+misspelling in one of these subprograms will be detected by the
+implementation. Conversely, the declaration of Arrest guarantees that this is
+a new operation.
+
+16.a/2      Discussion: In this case, the subprograms are abstract, so
+            misspellings will get detected anyway. But for other subprograms
+            (especially when deriving from concrete types), the error might
+            never be detected, and a body other than the one the programmer
+            intended might be executed without warning. Thus our new motto:
+            "Overriding indicators - don't derive a type without them!"
+
+
+                            Extensions to Ada 95
+
+16.b/2      {AI95-00218-03} {extensions to Ada 95} Overriding_indicators are
+            new. These let the programmer state her overriding intentions to
+            the compiler; if the compiler disagrees, an error will be produced
+            rather than a hard to find bug.
+
+
+8.4 Use Clauses
+
+
+1   [A use_package_clause achieves direct visibility of declarations that
+appear in the visible part of a package; a use_type_clause achieves direct
+visibility of the primitive operators of a type.]
+
+
+                         Language Design Principles
+
+1.a         {equivalence of use_clauses and selected_components} If and only
+            if the visibility rules allow P.A, "use P;" should make A directly
+            visible (barring name conflicts). This means, for example, that
+            child library units, and generic formals of a formal package whose
+            formal_package_actual_part is (<>), should be made visible by a
+            use_clause for the appropriate package.
+
+1.b         {Beaujolais effect} The rules for use_clauses were carefully
+            constructed to avoid so-called Beaujolais effects, where the
+            addition or removal of a single use_clause, or a single
+            declaration in a "use"d package, would change the meaning of a
+            program from one legal interpretation to another.
+
+
+                                   Syntax
+
+2       use_clause ::= use_package_clause | use_type_clause
+
+3       use_package_clause ::= use package_name {, package_name};
+
+4       use_type_clause ::= use type subtype_mark {, subtype_mark};
+
+
+                               Legality Rules
+
+5/2 {AI95-00217-06} A package_name of a use_package_clause shall denote a
+nonlimited view of a package.
+
+5.a         Ramification: This includes formal packages.
+
+
+                              Static Semantics
+
+6   {scope (of a use_clause)} For each use_clause, there is a certain region
+of text called the scope of the use_clause. For a use_clause within a
+context_clause of a library_unit_declaration or
+library_unit_renaming_declaration, the scope is the entire declarative region
+of the declaration. For a use_clause within a context_clause of a body, the
+scope is the entire body [and any subunits (including multiply nested
+subunits). The scope does not include context_clauses themselves.]
+
+7   For a use_clause immediately within a declarative region, the scope is the
+portion of the declarative region starting just after the use_clause and
+extending to the end of the declarative region. However, the scope of a
+use_clause in the private part of a library unit does not include the visible
+part of any public descendant of that library unit.
+
+7.a         Reason: The exception echoes the similar exception for "immediate
+            scope (of a declaration)" (see 8.2). It makes use_clauses work
+            like this:
+
+7.b             package P is
+                    type T is range 1..10;
+                end P;
+
+7.c             with P;
+                package Parent is
+                private
+                    use P;
+                    X : T;
+                end Parent;
+
+7.d             package Parent.Child is
+                    Y : T; -- Illegal!
+                    Z : P.T;
+                private
+                    W : T;
+                end Parent.Child;
+
+7.e         The declaration of Y is illegal because the scope of the "use P"
+            does not include that place, so T is not directly visible there.
+            The declarations of X, Z, and W are legal.
+
+7.1/2 {AI95-00217-06} A package is named in a use_package_clause if it is
+denoted by a package_name of that clause. A type is named in a
+use_type_clause if it is determined by a subtype_mark of that
+clause.{named (in a use clause)}
+
+8/2 {AI95-00217-06} {potentially use-visible} For each package named in a
+use_package_clause whose scope encloses a place, each declaration that occurs
+immediately within the declarative region of the package is potentially
+use-visible at this place if the declaration is visible at this place. For
+each type T or T'Class named in a use_type_clause whose scope encloses a
+place, the declaration of each primitive operator of type T is potentially
+use-visible at this place if its declaration is visible at this place.
+
+8.a         Ramification: Primitive subprograms whose defining name is an
+            identifier are not made potentially visible by a use_type_clause.
+            A use_type_clause is only for operators.
+
+8.b         The semantics described here should be similar to the semantics
+            for expanded names given in 4.1.3, "Selected Components" so as to
+            achieve the effect requested by the "principle of equivalence of
+            use_clauses and selected_components." Thus, child library units
+            and generic formal parameters of a formal package are potentially
+            use-visible when their enclosing package is use'd.
+
+8.c         The "visible at that place" part implies that applying a
+            use_clause to a parent unit does not make all of its children
+            use-visible - only those that have been made visible by a
+            with_clause. It also implies that we don't have to worry about
+            hiding in the definition of "directly visible" - a declaration
+            cannot be use-visible unless it is visible.
+
+8.d         Note that "use type T'Class;" is equivalent to "use type T;",
+            which helps avoid breaking the generic contract model.
+
+9   {use-visible} {visibility (use clause)} A declaration is use-visible if it
+is potentially use-visible, except in these naming-conflict cases:
+
+10    * A potentially use-visible declaration is not use-visible if the place
+        considered is within the immediate scope of a homograph of the
+        declaration.
+
+11    * Potentially use-visible declarations that have the same identifier are
+        not use-visible unless each of them is an overloadable declaration.
+
+11.a        Ramification: Overloadable declarations don't cancel each other
+            out, even if they are homographs, though if they are not
+            distinguishable by formal parameter names or the presence or
+            absence of default_expressions, any use will be ambiguous. We only
+            mention identifiers here, because declarations named by
+            operator_symbols are always overloadable, and hence never cancel
+            each other. Direct visibility is irrelevant for
+            character_literals.
+
+
+                              Dynamic Semantics
+
+12  {elaboration (use_clause) [partial]} The elaboration of a use_clause has
+no effect.
+
+
+                                  Examples
+
+13  Example of a use clause in a context clause:
+
+14      with Ada.Calendar; use Ada;
+
+15  Example of a use type clause:
+
+16      use type Rational_Numbers.Rational; -- see 7.1
+        Two_Thirds: Rational_Numbers.Rational := 2/3;
+
+16.a        Ramification: In "use X, Y;", Y cannot refer to something made
+            visible by the "use" of X. Thus, it's not (quite) equivalent to
+            "use X; use Y;".
+
+16.b        If a given declaration is already immediately visible, then a
+            use_clause that makes it potentially use-visible has no effect.
+            Therefore, a use_type_clause for a type whose declaration appears
+            in a place other than the visible part of a package has no effect;
+            it cannot make a declaration use-visible unless that declaration
+            is already immediately visible.
+
+16.c        "Use type S1;" and "use type S2;" are equivalent if S1 and S2 are
+            both subtypes of the same type. In particular, "use type S;" and
+            "use type S'Base;" are equivalent.
+
+16.d        Reason: We considered adding a rule that prevented several
+            declarations of views of the same entity that all have the same
+            semantics from cancelling each other out. For example, if a
+            (possibly implicit) subprogram_declaration for "+" is potentially
+            use-visible, and a fully conformant renaming of it is also
+            potentially use-visible, then they (annoyingly) cancel each other
+            out; neither one is use-visible. The considered rule would have
+            made just one of them use-visible. We gave up on this idea due to
+            the complexity of the rule. It would have had to account for both
+            overloadable and non-overloadable renaming_declarations, the case
+            where the rule should apply only to some subset of the
+            declarations with the same defining name, and the case of
+            subtype_declarations (since they are claimed to be sufficient for
+            renaming of subtypes).
+
+
+                            Extensions to Ada 83
+
+16.e        {extensions to Ada 83} The use_type_clause is new to Ada 95.
+
+
+                         Wording Changes from Ada 83
+
+16.f        The phrase "omitting from this set any packages that enclose this
+            place" is no longer necessary to avoid making something visible
+            outside its scope, because we explicitly state that the
+            declaration has to be visible in order to be potentially
+            use-visible.
+
+
+                         Wording Changes from Ada 95
+
+16.g/2      {AI95-00217-06} Limited views of packages are not allowed in use
+            clauses. Defined named in a use clause for use in other limited
+            view rules (see 10.1.2).
+
+
+8.5 Renaming Declarations
+
+
+1   [A renaming_declaration declares another name for an entity, such as an
+object, exception, package, subprogram, entry, or generic unit. Alternatively,
+a subprogram_renaming_declaration can be the completion of a previous
+subprogram_declaration.]
+
+1.a.1/2     Glossary entry: {Renaming} A renaming_declaration is a declaration
+            that does not define a new entity, but instead defines a view of
+            an existing entity.
+
+
+                                   Syntax
+
+2       renaming_declaration ::= 
+              object_renaming_declaration
+            | exception_renaming_declaration
+            | package_renaming_declaration
+            | subprogram_renaming_declaration
+            | generic_renaming_declaration
+
+
+                              Dynamic Semantics
+
+3   {elaboration (renaming_declaration) [partial]} The elaboration of a
+renaming_declaration evaluates the name that follows the reserved word renames
+and thereby determines the view and entity denoted by this name
+{renamed view} {renamed entity} (the renamed view and renamed entity). [A
+name that denotes the renaming_declaration denotes (a new view of) the renamed
+entity.]
+
+        NOTES
+
+4       9  Renaming may be used to resolve name conflicts and to act as a
+        shorthand. Renaming with a different identifier or operator_symbol
+        does not hide the old name; the new name and the old name need not be
+        visible at the same places.
+
+5       10  A task or protected object that is declared by an explicit
+        object_declaration can be renamed as an object. However, a single task
+        or protected object cannot be renamed since the corresponding type is
+        anonymous (meaning it has no nameable subtypes). For similar reasons,
+        an object of an anonymous array or access type cannot be renamed.
+
+6       11  A subtype defined without any additional constraint can be used to
+        achieve the effect of renaming another subtype (including a task or
+        protected subtype) as in
+
+7              subtype Mode is Ada.Text_IO.File_Mode;
+
+
+                         Wording Changes from Ada 83
+
+7.a         The second sentence of RM83-8.5(3), "At any point where a renaming
+            declaration is visible, the identifier, or operator symbol of this
+            declaration denotes the renamed entity." is incorrect. It doesn't
+            say directly visible. Also, such an identifier might resolve to
+            something else.
+
+7.b         The verbiage about renamings being legal "only if exactly
+            one...", which appears in RM83-8.5(4) (for objects) and RM83-8.5(7) (for
+            subprograms) is removed, because it follows from the normal rules
+            about overload resolution. For language lawyers, these facts are
+            obvious; for programmers, they are irrelevant, since failing these
+            tests is highly unlikely.
+
+
+8.5.1 Object Renaming Declarations
+
+
+1   [An object_renaming_declaration is used to rename an object.]
+
+
+                                   Syntax
+
+2/2     {AI95-00230-01} {AI95-00423-01} object_renaming_declaration ::= 
+            defining_identifier : [null_exclusion] subtype_mark
+         renames object_name;
+          | defining_identifier : access_definition renames object_name;
+
+
+                            Name Resolution Rules
+
+3/2 {AI95-00230-01} {AI95-00254-01} {AI95-00409-01} The type of the
+object_name shall resolve to the type determined by the subtype_mark, or in the case
+where the type is defined by an access_definition, to an anonymous access
+type. If the anonymous access type is an access-to-object type, the type of
+the object_name shall have the same designated type as that of the
+access_definition. If the anonymous access type is an access-to-subprogram
+type, the type of the object_name shall have a designated profile that is type
+conformant with that of the access_definition.
+
+3.a         Reason: A previous version of Ada 9X used the usual "expected
+            type" wording:
+            "The expected type for the object_name is that determined by the
+            subtype_mark."
+            We changed it so that this would be illegal:
+
+3.b             X: T;
+                Y: T'Class renames X; -- Illegal!
+
+3.c         When the above was legal, it was unclear whether Y was of type T
+            or T'Class. Note that we still allow this:
+
+3.d             Z: T'Class := ...;
+                W: T renames F(Z);
+
+3.e         where F is a function with a controlling parameter and result.
+            This is admittedly a bit odd.
+
+3.f         Note that the matching rule for generic formal parameters of mode
+            in out was changed to keep it consistent with the rule for
+            renaming. That makes the rule different for in vs. in out.
+
+
+                               Legality Rules
+
+4   The renamed entity shall be an object.
+
+4.1/2 {AI95-00231-01} {AI95-00409-01} In the case where the type is defined by
+an access_definition, the type of the renamed object and the type defined by
+the access_definition:
+
+4.2/2   * {AI95-00231-01} {AI95-00409-01} shall both be access-to-object types
+        with statically matching designated subtypes and with both or neither
+        being access-to-constant types; or {statically matching (required)
+         [partial]}
+
+4.3/2   * {AI95-00409-01} shall both be access-to-subprogram types with
+        subtype conformant designated profiles.
+        {subtype conformance (required)}
+
+4.4/2 {AI95-00423-01} For an object_renaming_declaration with a
+null_exclusion or an access_definition that has a null_exclusion:
+
+4.5/2   * if the object_name denotes a generic formal object of a generic unit
+        G, and the object_renaming_declaration occurs within the body of G or
+        within the body of a generic unit declared within the declarative
+        region of G, then the declaration of the formal object of G shall have
+        a null_exclusion;
+
+4.6/2   * otherwise, the subtype of the object_name shall exclude null.
+        {generic contract issue [partial]} In addition to the places where
+        Legality Rules normally apply (see 12.3), this rule applies also in
+        the private part of an instance of a generic unit.
+
+4.a/2       Reason: This rule prevents "lying". Null must never be the value
+            of an object with an explicit null_exclusion. The first bullet is
+            an assume-the-worst rule which prevents trouble in one obscure
+            case:
+
+4.b/2           type Acc_I is access Integer;
+                subtype Acc_NN_I is not null Acc_I;
+                Obj : Acc_I := null;
+
+4.c/2           generic
+                   B : in out Acc_NN_I;
+                package Gen is
+                   ...
+                end Gen;
+
+4.d/2           package body Gen is
+                   D : not null Acc_I renames B;
+                end Gen;
+
+4.e/2           package Inst is new Gen (B => Obj);
+
+4.f/2       Without the first bullet rule, D would be legal, and contain the
+            value null, because the rule about lying is satisfied for generic
+            matching (Obj matches B; B does not explicitly state not null),
+            Legality Rules are not rechecked in the body of any instance, and
+            the template passes the lying rule as well. The rule is so complex
+            because it has to apply to formals used in bodies of child
+            generics as well as in the bodies of generics.
+
+5/2 {8652/0017} {AI95-00184-01} {AI95-00363-01} The renamed entity shall not
+be a subcomponent that depends on discriminants of a variable whose nominal
+subtype is unconstrained, unless this subtype is indefinite, or the variable
+is constrained by its initial value. A slice of an array shall not be renamed
+if this restriction disallows renaming of the array. In addition to the places
+where Legality Rules normally apply, these rules apply also in the private
+part of an instance of a generic unit. These rules also apply for a renaming
+that appears in the body of a generic unit, with the additional requirement
+that even if the nominal subtype of the variable is indefinite, its type shall
+not be a descendant of an untagged generic formal derived type.
+
+5.a         Reason: This prevents renaming of subcomponents that might
+            disappear, which might leave dangling references. Similar
+            restrictions exist for the Access attribute.
+
+5.a.1/1     {8652/0017} {AI95-00184-01} The "recheck on instantiation" and "
+            assume-the-worst in the body" restrictions on generics are
+            necessary to avoid renaming of components which could disappear
+            even when the nominal subtype would prevent the problem:
+
+5.a.2/1         type T1 (D1 : Boolean) is
+                   record
+                      case D1 is
+                         when False =>
+                            C1 : Integer;
+                         when True =>
+                            null;
+                         end case;
+                      end record;
+
+5.a.3/1         generic
+                   type F is new T1;
+                   X : in out F;
+                package G is
+                   C1_Ren : Integer renames X.C1;
+                end G;
+
+5.a.4/1         type T2 (D2 : Boolean := False) is new T1 (D1 => D2);
+                
+                Y : T2;
+                
+                package I is new G (T2, Y);
+                
+                Y := (D1 => True); -- Oops!  What happened to I.C1_Ren?
+
+5.b         Implementation Note: Note that if an implementation chooses to
+            deallocate-then-reallocate on assignment_statements assigning to
+            unconstrained definite objects, then it cannot represent renamings
+            and access values as simple addresses, because the above rule does
+            not apply to all components of such an object.
+
+5.c         Ramification: If it is a generic formal object, then the
+            assume-the-best or assume-the-worst rules are applied as
+            appropriate.
+
+5.d/2       To be honest: {AI95-00363-01} If renamed entity is a subcomponent
+            that depends on discriminants, and the subcomponent is a
+            dereference of a general access type whose designated type is
+            unconstrained and whose discriminants have defaults, the renaming
+            is illegal. Such a general access type can designate an
+            unconstrained (stack) object. Since such a type might not
+            designate an object constrained by its initial value, the renaming
+            is illegal - the rule says "is" constrained by its initial value,
+            not "might be" constrained by its initial value. No other
+            interpretation makes sense, as we can't have legality depending on
+            something (which object is designated) that is not known at
+            compile-time, and we surely can't allow this for unconstrained
+            objects. The wording of the rule should be much clearer on this
+            point, but this was discovered after the completion of Amendment 1
+            when it was too late to fix it.
+
+
+                              Static Semantics
+
+6/2 {AI95-00230-01} {AI95-00409-01} An object_renaming_declaration declares a
+new view [of the renamed object] whose properties are identical to those of
+the renamed view. [Thus, the properties of the renamed object are not affected
+by the renaming_declaration. In particular, its value and whether or not it is
+a constant are unaffected; similarly, the null exclusion or constraints that
+apply to an object are not affected by renaming (any constraint implied by the
+subtype_mark or access_definition of the object_renaming_declaration is
+ignored).]
+
+6.a         Discussion: Because the constraints are ignored, it is a good idea
+            to use the nominal subtype of the renamed object when writing an
+            object_renaming_declaration.
+
+6.b/2       {AI95-00409-01} If no null_exclusion is given in the renaming, the
+            object may or may not exclude null. This is similar to the way
+            that constraints need not match, and constant is not specified.
+            The renaming defines a view of the renamed entity, inheriting the
+            original properties.
+
+
+                                  Examples
+
+7   Example of renaming an object:
+
+8       declare
+           L : Person renames Leftmost_Person; -- see 3.10.1
+        begin
+           L.Age := L.Age + 1;
+        end;
+
+
+                         Wording Changes from Ada 83
+
+8.a         The phrase "subtype ... as defined in a corresponding object
+            declaration, component declaration, or component subtype
+            indication," from RM83-8.5(5), is incorrect in Ada 95; therefore
+            we removed it. It is incorrect in the case of an object with an
+            indefinite unconstrained nominal subtype.
+
+
+                        Incompatibilities With Ada 95
+
+8.b/2       {AI95-00363-01} {incompatibilities with Ada 95} Aliased variables
+            are not necessarily constrained in Ada 2005 (see 3.6). Therefore,
+            a subcomponent of an aliased variable may disappear or change
+            shape, and renaming such a subcomponent thus is illegal, while the
+            same operation would have been legal in Ada 95. Note that most
+            allocated objects are still constrained by their initial value
+            (see 4.8), and thus have no change in the legality of renaming for
+            them. For example, using the type T2 of the previous example:
+
+8.c/2              AT2 : aliased T2;
+                   C1_Ren : Integer renames AT2.C1; -- Illegal in Ada 2005, legal in Ada 95
+                   AT2 := (D1 => True);             -- Raised Constraint_Error in Ada 95,
+                                                    -- but does not in Ada 2005, so C1_Ren becomes
+                                                    -- invalid when this is assigned.
+
+
+                            Extensions to Ada 95
+
+8.d/2       {AI95-00230-01} {AI95-00231-01} {AI95-00254-01} {AI95-00409-01}
+            {extensions to Ada 95} A renaming can have an anonymous access
+            type. In that case, the accessibility of the renaming is that of
+            the original object (accessibility is not lost as it is for a
+            component or stand-alone object).
+
+8.e/2       {AI95-00231-01} {AI95-00423-01} A renaming can have a
+            null_exclusion; if so, the renamed object must also exclude null,
+            so that the null_exclusion does not lie. On the other hand, if the
+            renaming does not have a null_exclusion. it excludes null of the
+            renamed object does.
+
+
+                         Wording Changes from Ada 95
+
+8.f/2       {8652/0017} {AI95-00184-01} Corrigendum: Fixed to forbid renamings
+            of depends-on-discriminant components if the type might be
+            definite.
+
+
+8.5.2 Exception Renaming Declarations
+
+
+1   [An exception_renaming_declaration is used to rename an exception.]
+
+
+                                   Syntax
+
+2       exception_renaming_declaration ::= defining_identifier
+         : exception renames exception_name;
+
+
+                               Legality Rules
+
+3   The renamed entity shall be an exception.
+
+
+                              Static Semantics
+
+4   An exception_renaming_declaration declares a new view [of the renamed
+exception].
+
+
+                                  Examples
+
+5   Example of renaming an exception:
+
+6       EOF : exception renames Ada.IO_Exceptions.End_Error; -- see A.13
+
+
+8.5.3 Package Renaming Declarations
+
+
+1   [A package_renaming_declaration is used to rename a package.]
+
+
+                                   Syntax
+
+2       package_renaming_declaration ::= package defining_program_unit_name
+         renames package_name;
+
+
+                               Legality Rules
+
+3   The renamed entity shall be a package.
+
+3.1/2 {AI95-00217-06} {AI95-00412-01} If the package_name of a
+package_renaming_declaration denotes a limited view of a package P, then a
+name that denotes the package_renaming_declaration shall occur only within the
+immediate scope of the renaming or the scope of a with_clause that mentions
+the package P or, if P is a nested package, the innermost library package
+enclosing P.
+
+3.a.1/2     Discussion: The use of a renaming that designates a limited view
+            is restricted to locations where we know whether the view is
+            limited or nonlimited (based on a with_clause). We don't want to
+            make an implicit limited view, as those are not transitive like a
+            regular view. Implementations should be able to see all limited
+            views needed based on the context_clause.
+
+
+                              Static Semantics
+
+4   A package_renaming_declaration declares a new view [of the renamed
+package].
+
+4.1/2 {AI95-00412-01} [At places where the declaration of the limited view of
+the renamed package is visible, a name that denotes the
+package_renaming_declaration denotes a limited view of the package (see
+10.1.1).]
+
+4.a.1/2     Proof: This rule is found in 8.3, "Visibility".
+
+
+                                  Examples
+
+5   Example of renaming a package:
+
+6       package TM renames Table_Manager;
+
+
+                         Wording Changes from Ada 95
+
+6.a/2       {AI95-00217-06} {AI95-00412-01} Uses of renamed limited views of
+            packages can only be used within the scope of a with_clause for
+            the renamed package.
+
+
+8.5.4 Subprogram Renaming Declarations
+
+
+1   A subprogram_renaming_declaration can serve as the completion of a
+subprogram_declaration; {renaming-as-body} such a renaming_declaration is
+called a renaming-as-body. {renaming-as-declaration} A
+subprogram_renaming_declaration that is not a completion is called a
+renaming-as-declaration[, and is used to rename a subprogram (possibly an
+enumeration literal) or an entry].
+
+1.a         Ramification: A renaming-as-body is a declaration, as defined in
+            Section 3.
+
+
+                                   Syntax
+
+2/2     {AI95-00218-03} subprogram_renaming_declaration ::= 
+            [overriding_indicator]
+            subprogram_specification renames callable_entity_name;
+
+
+                            Name Resolution Rules
+
+3   {expected profile (subprogram_renaming_declaration) [partial]} The
+expected profile for the callable_entity_name is the profile given in the
+subprogram_specification.
+
+
+                               Legality Rules
+
+4   The profile of a renaming-as-declaration shall be mode-conformant with
+that of the renamed callable entity. {mode conformance (required)}
+
+4.1/2 {AI95-00423-01} For a parameter or result subtype of the
+subprogram_specification that has an explicit null_exclusion:
+
+4.2/2   * if the callable_entity_name denotes a generic formal subprogram of a
+        generic unit G, and the subprogram_renaming_declaration occurs within
+        the body of a generic unit G or within the body of a generic unit
+        declared within the declarative region of the generic unit G, then the
+        corresponding parameter or result subtype of the formal subprogram of
+        G shall have a null_exclusion;
+
+4.3/2   * otherwise, the subtype of the corresponding parameter or result type
+        of the renamed callable entity shall exclude null.
+        {generic contract issue [partial]} In addition to the places where
+        Legality Rules normally apply (see 12.3), this rule applies also in
+        the private part of an instance of a generic unit.
+
+4.a/2       Reason: This rule prevents "lying". Null must never be the value
+            of a parameter or result with an explicit null_exclusion. The
+            first bullet is an assume-the-worst rule which prevents trouble in
+            generic bodies (including bodies of child units) when the formal
+            subtype excludes null implicitly.
+
+5/1 {8652/0027} {8652/0028} {AI95-00135-01} {AI95-00145-01} The profile of a
+renaming-as-body shall conform fully to that of the declaration it completes.
+{full conformance (required)} If the renaming-as-body completes that
+declaration before the subprogram it declares is frozen, the profile shall be
+mode-conformant {mode conformance (required)} with that of the renamed
+callable entity and the subprogram it declares takes its convention from the
+renamed subprogram; otherwise, the profile shall be subtype-conformant with
+that of the renamed callable entity and the convention of the renamed
+subprogram shall not be Intrinsic. {subtype conformance (required)} A
+renaming-as-body is illegal if the declaration occurs before the subprogram
+whose declaration it completes is frozen, and the renaming renames the
+subprogram itself, through one or more subprogram renaming declarations, none
+of whose subprograms has been frozen.
+
+5.a/1       Reason: The otherwise part of the second sentence is to allow an
+            implementation of a renaming-as-body as a single jump instruction
+            to the target subprogram. Among other things, this prevents a
+            subprogram from being completed with a renaming of an entry. (In
+            most cases, the target of the jump can be filled in at link time.
+            In some cases, such as a renaming of a name like "A(I).all", an
+            indirect jump is needed. Note that the name is evaluated at
+            renaming time, not at call time.)
+
+5.a.1/1     {8652/0028} {AI95-00145-01} The first part of the second sentence
+            is intended to allow renaming-as-body of predefined operators
+            before the subprogram_declaration is frozen. For some types (such
+            as integer types), the parameter type for operators is the base
+            type, and it would be very strange for
+               function Equal (A, B : in T) return Boolean;
+               function Equal (A, B : in T) return Boolean renames "=";
+            to be illegal. (Note that predefined operators cannot be renamed
+            this way after the subprogram_declaration is frozen, as they have
+            convention Intrinsic.)
+
+5.b/1       The first sentence is the normal rule for completions of
+            subprogram_declarations.
+
+5.c         Ramification: An entry_declaration, unlike a
+            subprogram_declaration, cannot be completed with a renaming_-
+            declaration. Nor can a generic_subprogram_declaration.
+
+5.d         The syntax rules prevent a protected subprogram declaration from
+            being completed by a renaming. This is fortunate, because it
+            allows us to avoid worrying about whether the implicit protected
+            object parameter of a protected operation is involved in the
+            conformance rules.
+
+5.d.1/1     Reason: {8652/0027} {AI95-00135-01} Circular renames before
+            freezing is illegal, as the compiler would not be able to
+            determine the convention of the subprogram. Other circular renames
+            are handled below; see Bounded (Run-Time) Errors.
+
+5.1/2 {AI95-00228-01} The callable_entity_name of a renaming shall not denote
+a subprogram that requires overriding (see 3.9.3).
+
+5.d.2/2     Reason: {AI95-00228-01} Such a rename cannot be of the inherited
+            subprogram (which requires overriding because it cannot be
+            called), and thus cannot squirrel away a subprogram (see below).
+            That would be confusing, so we make it illegal. The renaming is
+            allowed after the overriding, as then the name will denote the
+            overriding subprogram, not the inherited one.
+
+5.2/2 {AI95-00228-01} The callable_entity_name of a renaming-as-body shall not
+denote an abstract subprogram.
+
+5.d.3/2     Reason: {AI95-00228-01} Such a subprogram has no body, so it
+            hardly can replace one in the program.
+
+6   A name that denotes a formal parameter of the subprogram_specification is
+not allowed within the callable_entity_name.
+
+6.a         Reason: This is to prevent things like this:
+
+6.b             function F(X : Integer) return Integer renames Table(X).all;
+
+6.c         A similar rule in 6.1 forbids things like this:
+
+6.d             function F(X : Integer; Y : Integer := X) return Integer;
+
+
+                              Static Semantics
+
+7   A renaming-as-declaration declares a new view of the renamed entity. The
+profile of this new view takes its subtypes, parameter modes, and calling
+convention from the original profile of the callable entity, while taking the
+formal parameter names and default_expressions from the profile given in the
+subprogram_renaming_declaration. The new view is a function or procedure,
+never an entry.
+
+7.a         To be honest: When renaming an entry as a procedure, the
+            compile-time rules apply as if the new view is a procedure, but
+            the run-time semantics of a call are that of an entry call.
+
+7.b         Ramification: For example, it is illegal for the
+            entry_call_statement of a timed_entry_call to call the new view.
+            But what looks like a procedure call will do things like barrier
+            waiting.
+
+7.b.1/2     {8652/0105} {AI95-00211-01} {AI95-00228-01} All properties of the
+            renamed entity are inherited by the new view unless otherwise
+            stated by this International Standard. In particular, if the
+            renamed entity is abstract, the new view also is abstract.
+
+
+                              Dynamic Semantics
+
+7.1/1 {8652/0014} {AI95-00064-01} For a call to a subprogram whose body is
+given as a renaming-as-body, the execution of the renaming-as-body is
+equivalent to the execution of a subprogram_body that simply calls the renamed
+subprogram with its formal parameters as the actual parameters and, if it is a
+function, returns the value of the call.
+
+7.b.2/1     Ramification: This implies that the subprogram completed by the
+            renaming-as-body has its own elaboration check.
+
+8   For a call on a renaming of a dispatching subprogram that is overridden,
+if the overriding occurred before the renaming, then the body executed is that
+of the overriding declaration, even if the overriding declaration is not
+visible at the place of the renaming; otherwise, the inherited or predefined
+subprogram is called.
+
+8.a         Discussion: Note that whether or not the renaming is itself
+            primitive has nothing to do with the renamed subprogram.
+
+8.b         Note that the above rule is only for tagged types.
+
+8.c         Consider the following example:
+
+8.d             package P is
+                    type T is tagged null record;
+                    function Predefined_Equal(X, Y : T) return Boolean renames "=";
+                private
+                    function "="(X, Y : T) return Boolean; -- Override predefined "=".
+                end P;
+
+8.e             with P; use P;
+                package Q is
+                    function User_Defined_Equal(X, Y : T) return Boolean renames P."=";
+                end Q;
+
+8.f         A call on Predefined_Equal will execute the predefined equality
+            operator of T, whereas a call on User_Defined_Equal will execute
+            the body of the overriding declaration in the private part of P.
+
+8.g         Thus a renaming allows one to squirrel away a copy of an inherited
+            or predefined subprogram before later overriding
+            it.{squirrel away}
+
+
+                          Bounded (Run-Time) Errors
+
+8.1/1 {8652/0027} {AI95-00135-01}
+{Program_Error (raised by failure of run-time check)}
+{Storage_Error (raised by failure of run-time check)} If a subprogram directly
+or indirectly renames itself, then it is a bounded error to call that
+subprogram. Possible consequences are that Program_Error or Storage_Error is
+raised, or that the call results in infinite recursion.
+
+8.g.1/1     Reason: {8652/0027} {AI95-00135-01} This has to be a bounded
+            error, as it is possible for a renaming-as-body appearing in a
+            package body to cause this problem. Thus it is not possible in
+            general to detect this problem at compile time.
+
+        NOTES
+
+9       12  A procedure can only be renamed as a procedure. A function whose
+        defining_designator is either an identifier or an operator_symbol can
+        be renamed with either an identifier or an operator_symbol; for
+        renaming as an operator, the subprogram specification given in the
+        renaming_declaration is subject to the rules given in 6.6 for operator
+        declarations. Enumeration literals can be renamed as functions;
+        similarly, attribute_references that denote functions (such as
+        references to Succ and Pred) can be renamed as functions. An entry can
+        only be renamed as a procedure; the new name is only allowed to appear
+        in contexts that allow a procedure name. An entry of a family can be
+        renamed, but an entry family cannot be renamed as a whole.
+
+10      13  The operators of the root numeric types cannot be renamed because
+        the types in the profile are anonymous, so the corresponding
+        specifications cannot be written; the same holds for certain
+        attributes, such as Pos.
+
+11      14  Calls with the new name of a renamed entry are
+        procedure_call_statements and are not allowed at places where the
+        syntax requires an entry_call_statement in conditional_ and
+        timed_entry_calls, nor in an asynchronous_select; similarly, the Count
+        attribute is not available for the new name.
+
+12      15  The primitiveness of a renaming-as-declaration is determined by
+        its profile, and by where it occurs, as for any declaration of (a view
+        of) a subprogram; primitiveness is not determined by the renamed view.
+        In order to perform a dispatching call, the subprogram name has to
+        denote a primitive subprogram, not a non-primitive renaming of a
+        primitive subprogram.
+
+12.a        Reason: A subprogram_renaming_declaration could more properly be
+            called renaming_as_subprogram_declaration, since you're renaming
+            something as a subprogram, but you're not necessarily renaming a
+            subprogram. But that's too much of a mouthful. Or, alternatively,
+            we could call it a callable_entity_renaming_declaration, but
+            that's even worse. Not only is it a mouthful, it emphasizes the
+            entity being renamed, rather than the new view, which we think is
+            a bad idea. We'll live with the oddity.
+
+
+                                  Examples
+
+13  Examples of subprogram renaming declarations:
+
+14      procedure My_Write(C : in Character) renames Pool(K).Write; --  see 4.1.3
+
+15      function Real_Plus(Left, Right : Real   ) return Real    renames "+";
+        function Int_Plus (Left, Right : Integer) return Integer renames "+";
+
+16      function Rouge return Color renames Red;  --  see 3.5.1
+        function Rot   return Color renames Red;
+        function Rosso return Color renames Rouge;
+
+17      function Next(X : Color) return Color renames Color'Succ; -- see 3.5.1
+
+18  Example of a subprogram renaming declaration with new parameter names:
+
+19      function "*" (X,Y : Vector) return Real renames Dot_Product; -- see 6.1
+
+20  Example of a subprogram renaming declaration with a new default
+expression:
+
+21      function Minimum(L : Link := Head) return Cell renames Min_Cell; -- see 6.1
+
+
+                            Extensions to Ada 95
+
+21.a/2      {8652/0028} {AI95-00145-01} {extensions to Ada 95} Corrigendum:
+            Allowed a renaming-as-body to be just mode conformant with the
+            specification if the subprogram is not yet frozen.
+
+21.b/2      {AI95-00218-03} Overriding_indicator (see 8.3.1) is optionally
+            added to subprogram renamings.
+
+
+                         Wording Changes from Ada 95
+
+21.c/2      {8652/0014} {AI95-00064-01} Corrigendum: Described the semantics
+            of renaming-as-body, so that the location of elaboration checks is
+            clear.
+
+21.d/2      {8652/0027} {AI95-00135-01} Corrigendum: Clarified that circular
+            renaming-as-body is illegal (if it can be detected in time) or a
+            bounded error.
+
+21.e/2      {AI95-00228-01} Amendment Correction: Clarified that renaming a
+            shall-be-overridden subprogram is illegal, as well as
+            renaming-as-body an abstract subprogram.
+
+21.f/2      {AI95-00423-01} Added matching rules for null_exclusions.
+
+
+8.5.5 Generic Renaming Declarations
+
+
+1   [A generic_renaming_declaration is used to rename a generic unit.]
+
+
+                                   Syntax
+
+2       generic_renaming_declaration ::= 
+            generic package       defining_program_unit_name
+         renames generic_package_name;
+          | generic procedure     defining_program_unit_name
+         renames generic_procedure_name;
+          | generic function      defining_program_unit_name
+         renames generic_function_name;
+
+
+                               Legality Rules
+
+3   The renamed entity shall be a generic unit of the corresponding kind.
+
+
+                              Static Semantics
+
+4   A generic_renaming_declaration declares a new view [of the renamed generic
+unit].
+
+        NOTES
+
+5       16  Although the properties of the new view are the same as those of
+        the renamed view, the place where the generic_renaming_declaration
+        occurs may affect the legality of subsequent renamings and
+        instantiations that denote the generic_renaming_declaration, in
+        particular if the renamed generic unit is a library unit (see 10.1.1
+        ).
+
+
+                                  Examples
+
+6   Example of renaming a generic unit:
+
+7       generic package Enum_IO renames Ada.Text_IO.Enumeration_IO;  -- see A.10.10
+
+
+                            Extensions to Ada 83
+
+7.a         {extensions to Ada 83} Renaming of generic units is new to Ada 95.
+            It is particularly important for renaming child library units that
+            are generic units. For example, it might be used to rename
+            Numerics.Generic_Elementary_Functions as simply
+            Generic_Elementary_Functions, to match the name for the
+            corresponding Ada-83-based package.
+
+
+                         Wording Changes from Ada 83
+
+7.b         The information in RM83-8.6, "The Package Standard," has been
+            updated for the child unit feature, and moved to Annex A, except
+            for the definition of "predefined type," which has been moved to
+            3.2.1.
+
+
+8.6 The Context of Overload Resolution
+
+
+1   [{overload resolution} Because declarations can be overloaded, it is
+possible for an occurrence of a usage name to have more than one possible
+interpretation; in most cases, ambiguity is disallowed. This clause describes
+how the possible interpretations resolve to the actual interpretation.
+
+2   {overloading rules} Certain rules of the language (the
+Name Resolution Rules) are considered "overloading rules". If a possible
+interpretation violates an overloading rule, it is assumed not to be the
+intended interpretation; some other possible interpretation is assumed to be
+the actual interpretation. On the other hand, violations of non-overloading
+rules do not affect which interpretation is chosen; instead, they cause the
+construct to be illegal. To be legal, there usually has to be exactly one
+acceptable interpretation of a construct that is a "complete context", not
+counting any nested complete contexts.
+
+3   {grammar (resolution of ambiguity)} The syntax rules of the language and
+the visibility rules given in 8.3 determine the possible interpretations. Most
+type checking rules (rules that require a particular type, or a particular
+class of types, for example) are overloading rules. Various rules for the
+matching of formal and actual parameters are overloading rules.]
+
+
+                         Language Design Principles
+
+3.a         The type resolution rules are intended to minimize the need for
+            implicit declarations and preference rules associated with
+            implicit conversion and dispatching operations.
+
+
+                            Name Resolution Rules
+
+4   {complete context} [Overload resolution is applied separately to each
+complete context, not counting inner complete contexts.] Each of the following
+constructs is a complete context:
+
+5     * A context_item.
+
+6     * A declarative_item or declaration.
+
+6.a         Ramification: A loop_parameter_specification is a declaration, and
+            hence a complete context.
+
+7     * A statement.
+
+8     * A pragma_argument_association.
+
+8.a         Reason: We would make it the whole pragma, except that certain
+            pragma arguments are allowed to be ambiguous, and ambiguity
+            applies to a complete context.
+
+9     * The expression of a case_statement.
+
+9.a         Ramification: This means that the expression is resolved without
+            looking at the choices.
+
+10  {interpretation (of a complete context)}
+{overall interpretation (of a complete context)} An (overall) interpretation of
+a complete context embodies its meaning, and includes the following
+information about the constituents of the complete context, not including
+constituents of inner complete contexts:
+
+11    * for each constituent of the complete context, to which syntactic
+        categories it belongs, and by which syntax rules; and
+
+11.a        Ramification: Syntactic categories is plural here, because there
+            are lots of trivial productions - an expression might also be all
+            of the following, in this order: identifier, name, primary,
+            factor, term, simple_expression, and relation. Basically, we're
+            trying to capture all the information in the parse tree here,
+            without using compiler-writer's jargon like "parse tree".
+
+12    * for each usage name, which declaration it denotes (and, therefore,
+        which view and which entity it denotes); and
+
+12.a/2      Ramification: {AI95-00382-01} In most cases, a usage name denotes
+            the view declared by the denoted declaration. However, in certain
+            cases, a usage name that denotes a declaration and appears inside
+            the declarative region of that same declaration, denotes the
+            current instance of the declaration. For example, within a
+            task_body other than in an access_definition, a usage name that
+            denotes the task_type_declaration denotes the object containing
+            the currently executing task, and not the task type declared by
+            the declaration.
+
+13    * for a complete context that is a declarative_item, whether or not it
+        is a completion of a declaration, and (if so) which declaration it
+        completes.
+
+13.a        Ramification: Unfortunately, we are not confident that the above
+            list is complete. We'll have to live with that.
+
+13.b        To be honest: For "possible" interpretations, the above
+            information is tentative.
+
+13.c        Discussion: A possible interpretation (an input to overload
+            resolution) contains information about what a usage name might
+            denote, but what it actually does denote requires overload
+            resolution to determine. Hence the term "tentative" is needed for
+            possible interpretations; otherwise, the definition would be
+            circular.
+
+14  {possible interpretation} A possible interpretation is one that obeys the
+syntax rules and the visibility rules. {acceptable interpretation}
+{resolve (overload resolution)} {interpretation (overload resolution)} An
+acceptable interpretation is a possible interpretation that obeys the
+overloading rules[, that is, those rules that specify an expected type or
+expected profile, or specify how a construct shall resolve or be interpreted.]
+
+14.a        To be honest: One rule that falls into this category, but does not
+            use the above-mentioned magic words, is the rule about numbers of
+            parameter associations in a call (see 6.4).
+
+14.b        Ramification: The Name Resolution Rules are the ones that appear
+            under the Name Resolution Rules heading. Some Syntax Rules are
+            written in English, instead of BNF. No rule is a Syntax Rule or
+            Name Resolution Rule unless it appears under the appropriate
+            heading.
+
+15  {interpretation (of a constituent of a complete context)} The
+interpretation of a constituent of a complete context is determined from the
+overall interpretation of the complete context as a whole. [Thus, for example,
+"interpreted as a function_call," means that the construct's interpretation
+says that it belongs to the syntactic category function_call.]
+
+16  {denote} [Each occurrence of] a usage name denotes the declaration
+determined by its interpretation. It also denotes the view declared by its
+denoted declaration, except in the following cases:
+
+16.a        Ramification: As explained below, a pragma argument is allowed to
+            be ambiguous, so it can denote several declarations, and all of
+            the views declared by those declarations.
+
+17/2   * {AI95-00382-01} {current instance (of a type)} If a usage name
+        appears within the declarative region of a type_declaration and
+        denotes that same type_declaration, then it denotes the current
+        instance of the type (rather than the type itself); the current
+        instance of a type is the object or value of the type that is
+        associated with the execution that evaluates the usage name. This rule
+        does not apply if the usage name appears within the subtype_mark of an
+        access_definition for an access-to-object type, or within the subtype
+        of a parameter or result of an access-to-subprogram type.
+
+17.a/2      Reason: {AI95-00382-01} This is needed, for example, for
+            references to the Access attribute from within the
+            type_declaration. Also, within a task_body or protected_body, we
+            need to be able to denote the current task or protected object.
+            (For a single_task_declaration or single_protected_declaration,
+            the rule about current instances is not needed.) We exclude
+            anonymous access types so that they can be used to create
+            self-referencing types in the natural manner (otherwise such types
+            would be illegal).
+
+17.b/2      Discussion: {AI95-00382-01} The phrase "within the subtype_mark
+            " in the "this rule does not apply" part is intended to cover a
+            case like access T'Class appearing within the declarative region
+            of T: here T denotes the type, not the current instance.
+
+18    * {current instance (of a generic unit)} If a usage name appears within
+        the declarative region of a generic_declaration (but not within its
+        generic_formal_part) and it denotes that same generic_declaration,
+        then it denotes the current instance of the generic unit (rather than
+        the generic unit itself). See also 12.3.
+
+18.a        To be honest: The current instance of a generic unit is the
+            instance created by whichever generic_instantiation is of interest
+            at any given time.
+
+18.b        Ramification: Within a generic_formal_part, a name that denotes
+            the generic_declaration denotes the generic unit, which implies
+            that it is not overloadable.
+
+19  A usage name that denotes a view also denotes the entity of that view.
+
+19.a        Ramification: Usually, a usage name denotes only one declaration,
+            and therefore one view and one entity.
+
+20/2 {AI95-00231-01} {expected type [distributed]} The expected type for a
+given expression, name, or other construct determines, according to the type
+resolution rules given below, the types considered for the construct during
+overload resolution. {type resolution rules} [ The type resolution rules
+provide support for class-wide programming, universal literals, dispatching
+operations, and anonymous access types:]
+
+20.a        Ramification: Expected types are defined throughout the RM95. The
+            most important definition is that, for a subprogram, the expected
+            type for the actual parameter is the type of the formal parameter.
+
+20.b        The type resolution rules are trivial unless either the actual or
+            expected type is universal, class-wide, or of an anonymous access
+            type.
+
+21    * {type resolution rules (if any type in a specified class of types is expected)
+         [partial]}
+        {type resolution rules (if expected type is universal or class-wide)
+         [partial]} If a construct is expected to be of any type in a class of
+        types, or of the universal or class-wide type for a class, then the
+        type of the construct shall resolve to a type in that class or to a
+        universal type that covers the class.
+
+21.a        Ramification: This matching rule handles (among other things)
+            cases like the Val attribute, which denotes a function that takes
+            a parameter of type universal_integer.
+
+21.b/1      The last part of the rule, "or to a universal type that covers the
+            class" implies that if the expected type for an expression is
+            universal_fixed, then an expression whose type is universal_real
+            (such as a real literal) is OK.
+
+22    * {type resolution rules (if expected type is specific) [partial]} If
+        the expected type for a construct is a specific type T, then the type
+        of the construct shall resolve either to T, or:
+
+22.a        Ramification: {Beaujolais effect [partial]} This rule is not
+            intended to create a preference for the specific type - such a
+            preference would cause Beaujolais effects.
+
+23        * to T'Class; or
+
+23.a        Ramification: This will only be legal as part of a call on a
+            dispatching operation; see 3.9.2, "
+            Dispatching Operations of Tagged Types". Note that that rule is
+            not a Name Resolution Rule.
+
+24        * to a universal type that covers T; or
+
+25/2      * {AI95-00230-01} {AI95-00231-01} {AI95-00254-01} {AI95-00409-01}
+            when T is a specific anonymous access-to-object type (see 3.10)
+            with designated type D, to an access-to-object type whose
+            designated type is D'Class or is covered by D; or
+
+25.a/2      This paragraph was deleted.{AI95-00409-01}
+
+25.b        Ramification: The case where the actual is access-to-D'Class will
+            only be legal as part of a call on a dispatching operation; see
+            3.9.2, "Dispatching Operations of Tagged Types". Note that that
+            rule is not a Name Resolution Rule.
+
+25.1/2    * {AI95-00254-01} {AI95-00409-01} when T is an anonymous
+            access-to-subprogram type (see 3.10), to an access-to-subprogram
+            type whose designated profile is type-conformant with that of T.
+
+26  {expected profile [distributed]} In certain contexts, [such as in a
+subprogram_renaming_declaration,] the Name Resolution Rules define an expected
+profile for a given name;
+{profile resolution rule (name with a given expected profile)} in such cases,
+the name shall resolve to the name of a callable entity whose profile is type
+conformant with the expected profile. {type conformance (required)}
+
+26.a        Ramification: The parameter and result subtypes are not used in
+            overload resolution. Only type conformance of profiles is
+            considered during overload resolution. Legality rules generally
+            require at least mode-conformance in addition, but those rules are
+            not used in overload resolution.
+
+
+                               Legality Rules
+
+27/2 {AI95-00332-01} {single (class expected type)} When a construct is one
+that requires that its expected type be a single type in a given class, the
+type of the construct shall be determinable solely from the context in which
+the construct appears, excluding the construct itself, but using the
+requirement that it be in the given class. Furthermore, the context shall not
+be one that expects any type in some class that contains types of the given
+class; in particular, the construct shall not be the operand of a
+type_conversion.
+
+27.a/2      Ramification: {AI95-00230-01} For example, the expected type for a
+            string literal is required to be a single string type. But the
+            expected type for the operand of a type_conversion is any type.
+            Therefore, a string literal is not allowed as the operand of a
+            type_conversion. This is true even if there is only one string
+            type in scope (which is never the case). The reason for these
+            rules is so that the compiler will not have to search "
+            everywhere" to see if there is exactly one type in a class in scope.
+
+27.b/2      Discussion: {AI95-00332-01} The first sentence is carefully worded
+            so that it only mentions "expected type" as part of identifying
+            the interesting case, but doesn't require that the context
+            actually provide such an expected type. This allows such
+            constructs to be used inside of constructs that don't provide an
+            expected type (like qualified expressions and renames). Otherwise,
+            such constructs wouldn't allow aggregates, 'Access, and so on.
+
+28  A complete context shall have at least one acceptable interpretation; if
+there is exactly one, then that one is chosen.
+
+28.a        Ramification: This, and the rule below about ambiguity, are the
+            ones that suck in all the Syntax Rules and Name Resolution Rules
+            as compile-time rules. Note that this and the ambiguity rule have
+            to be Legality Rules.
+
+29  {preference (for root numeric operators and ranges)} There is a preference
+for the primitive operators (and ranges) of the root numeric types
+root_integer and root_real. In particular, if two acceptable interpretations
+of a constituent of a complete context differ only in that one is for a
+primitive operator (or range) of the type root_integer or root_real, and the
+other is not, the interpretation using the primitive operator (or range) of
+the root numeric type is preferred.
+
+29.a        Reason: The reason for this preference is so that expressions
+            involving literals and named numbers can be unambiguous. For
+            example, without the preference rule, the following would be
+            ambiguous:
+
+29.b/1          N : constant := 123;
+                if N > 100 then -- Preference for root_integer ">" operator.
+                    ...
+                end if;
+
+30  For a complete context, if there is exactly one overall acceptable
+interpretation where each constituent's interpretation is the same as or
+preferred (in the above sense) over those in all other overall acceptable
+interpretations, then that one overall acceptable interpretation is chosen.
+{ambiguous} Otherwise, the complete context is ambiguous.
+
+31  A complete context other than a pragma_argument_association shall not be
+ambiguous.
+
+32  A complete context that is a pragma_argument_association is allowed to be
+ambiguous (unless otherwise specified for the particular pragma), but only if
+every acceptable interpretation of the pragma argument is as a name that
+statically denotes a callable entity.
+{denote (name used as a pragma argument) [partial]} Such a name denotes all of
+the declarations determined by its interpretations, and all of the views
+declared by these declarations.
+
+32.a/2      Ramification: {AI95-00224-01} This applies to Inline, Suppress,
+            Import, Export, and Convention pragmas. For example, it is OK to
+            say "pragma Export(C, Entity_Name => P.Q);", even if there are two
+            directly visible P's, and there are two Q's declared in the
+            visible part of each P. In this case, P.Q denotes four different
+            declarations. This rule also applies to certain pragmas defined in
+            the Specialized Needs Annexes. It almost applies to Pure,
+            Elaborate_Body, and Elaborate_All pragmas, but those can't have
+            overloading for other reasons.
+
+32.b        Note that if a pragma argument denotes a call to a callable
+            entity, rather than the entity itself, this exception does not
+            apply, and ambiguity is disallowed.
+
+32.c        Note that we need to carefully define which pragma-related rules
+            are Name Resolution Rules, so that, for example, a pragma Inline
+            does not pick up subprograms declared in enclosing declarative
+            regions, and therefore make itself illegal.
+
+32.d        We say "statically denotes" in the above rule in order to avoid
+            having to worry about how many times the name is evaluated, in
+            case it denotes more than one callable entity.
+
+        NOTES
+
+33      17  If a usage name has only one acceptable interpretation, then it
+        denotes the corresponding entity. However, this does not mean that the
+        usage name is necessarily legal since other requirements exist which
+        are not considered for overload resolution; for example, the fact that
+        an expression is static, whether an object is constant, mode and
+        subtype conformance rules, freezing rules, order of elaboration, and
+        so on.
+
+34      Similarly, subtypes are not considered for overload resolution (the
+        violation of a constraint does not make a program illegal but raises
+        an exception during program execution).
+
+
+                        Incompatibilities With Ada 83
+
+34.a        {incompatibilities with Ada 83} {Beaujolais effect [partial]} The
+            new preference rule for operators of root numeric types is upward
+            incompatible, but only in cases that involved Beaujolais effects
+            in Ada 83. Such cases are ambiguous in Ada 95.
+
+
+                            Extensions to Ada 83
+
+34.b        {extensions to Ada 83} The rule that allows an expected type to
+            match an actual expression of a universal type, in combination
+            with the new preference rule for operators of root numeric types,
+            subsumes the Ada 83 "implicit conversion" rules for universal
+            types.
+
+
+                         Wording Changes from Ada 83
+
+34.c        In Ada 83, it is not clear what the "syntax rules" are. AI83-00157
+            states that a certain textual rule is a syntax rule, but it's
+            still not clear how one tells in general which textual rules are
+            syntax rules. We have solved the problem by stating exactly which
+            rules are syntax rules - the ones that appear under the "Syntax
+            " heading.
+
+34.d        RM83 has a long list of the "forms" of rules that are to be used
+            in overload resolution (in addition to the syntax rules). It is
+            not clear exactly which rules fall under each form. We have solved
+            the problem by explicitly marking all rules that are used in
+            overload resolution. Thus, the list of kinds of rules is
+            unnecessary. It is replaced with some introductory (intentionally
+            vague) text explaining the basic idea of what sorts of rules are
+            overloading rules.
+
+34.e        It is not clear from RM83 what information is embodied in a "
+            meaning" or an "interpretation." "Meaning" and "interpretation"
+            were intended to be synonymous; we now use the latter only in
+            defining the rules about overload resolution. "Meaning" is used
+            only informally. This clause attempts to clarify what is meant by
+            "interpretation."
+
+34.f        For example, RM83 does not make it clear that overload resolution
+            is required in order to match subprogram_bodies with their
+            corresponding declarations (and even to tell whether a given
+            subprogram_body is the completion of a previous declaration).
+            Clearly, the information needed to do this is part of the "
+            interpretation" of a subprogram_body. The resolution of such
+            things is defined in terms of the "expected profile" concept. Ada
+            95 has some new cases where expected profiles are needed - the
+            resolution of P'Access, where P might denote a subprogram, is an
+            example.
+
+34.g        RM83-8.7(2) might seem to imply that an interpretation embodies
+            information about what is denoted by each usage name, but not
+            information about which syntactic category each construct belongs
+            to. However, it seems necessary to include such information, since
+            the Ada grammar is highly ambiguous. For example, X(Y) might be a
+            function_call or an indexed_component, and no
+            context-free/syntactic information can tell the difference. It
+            seems like we should view X(Y) as being, for example, "
+            interpreted as a function_call" (if that's what overload
+            resolution decides it is). Note that there are examples where the
+            denotation of each usage name does not imply the syntactic
+            category. However, even if that were not true, it seems that
+            intuitively, the interpretation includes that information. Here's
+            an example:
+
+34.h            type T;
+                type A is access T;
+                type T is array(Integer range 1..10) of A;
+                I : Integer := 3;
+                function F(X : Integer := 7) return A;
+                Y : A := F(I); -- Ambiguous? (We hope so.)
+
+34.i/1      Consider the declaration of Y (a complete context). In the above
+            example, overload resolution can easily determine the declaration,
+            and therefore the entity, denoted by Y, A, F, and I. However,
+            given all of that information, we still don't know whether F(I) is
+            a function_call or an indexed_component whose prefix is a
+            function_call. (In the latter case, it is equivalent to
+            F(7).all(I).)
+
+34.j        It seems clear that the declaration of Y ought to be considered
+            ambiguous. We describe that by saying that there are two
+            interpretations, one as a function_call, and one as an
+            indexed_component. These interpretations are both acceptable to
+            the overloading rules. Therefore, the complete context is
+            ambiguous, and therefore illegal.
+
+34.k        {Beaujolais effect [partial]} It is the intent that the Ada 95
+            preference rule for root numeric operators is more locally
+            enforceable than that of RM83-4.6(15). It should also eliminate
+            interpretation shifts due to the addition or removal of a
+            use_clause (the so called Beaujolais effect).
+
+34.l/2      {AI95-00114-01} RM83-8.7 seems to be missing some complete
+            contexts, such as pragma_argument_associations, declarative_items
+            that are not declarations or aspect_clauses, and context_items. We
+            have added these, and also replaced the "must be determinable"
+            wording of RM83-5.4(3) with the notion that the expression of a
+            case_statement is a complete context.
+
+34.m        Cases like the Val attribute are now handled using the normal type
+            resolution rules, instead of having special cases that explicitly
+            allow things like "any integer type."
+
+
+                        Incompatibilities With Ada 95
+
+34.n/2      {AI95-00409-01} {incompatibilities with Ada 95} Ada 95 allowed
+            name resolution to distinguish between anonymous
+            access-to-variable and access-to-constant types. This is similar
+            to distinguishing between subprograms with in and in out
+            parameters, which is known to be bad. Thus, that part of the rule
+            was dropped as we now have anonymous access-to-constant types,
+            making this much more likely.
+
+34.o/2          type Cacc is access constant Integer;
+                procedure Proc (Acc : access Integer) ...
+                procedure Proc (Acc : Cacc) ...
+                List : Cacc := ...;
+                Proc (List); -- OK in Ada 95, ambiguous in Ada 2005.
+
+34.p/2      If there is any code like this (such code should be rare), it will
+            be ambiguous in Ada 2005.
+
+
+                            Extensions to Ada 95
+
+34.q/2      {AI95-00230-01} {AI95-00231-01} {AI95-00254-01}
+            {extensions to Ada 95} Generalized the anonymous access resolution
+            rules to support the new capabilities of anonymous access types
+            (that is, access-to-subprogram and access-to-constant).
+
+34.r/2      {AI95-00382-01} We now allow the creation of self-referencing
+            types via anonymous access types. This is an extension in unusual
+            cases involving task and protected types. For example:
+
+34.s/2          task type T;
+
+34.t/2          task body T is
+                   procedure P (X : access T) is -- Illegal in Ada 95, legal in Ada 2005
+                      ...
+                   end P;
+                begin
+                   ...
+                end T;
+
+
+                         Wording Changes from Ada 95
+
+34.u/2      {AI95-00332-01} Corrected the "single expected type" so that it
+            works in contexts that don't have expected types (like object
+            renames and qualified expressions). This fixes a hole in Ada 95
+            that appears to prohibit using aggregates, 'Access, character
+            literals, string literals, and allocators in qualified
+            expressions.
+

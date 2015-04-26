@@ -1,0 +1,693 @@
+<html lang="en">
+<head>
+<title>three - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Base-modules.html#Base-modules" title="Base modules">
+<link rel="prev" href="palette.html#palette" title="palette">
+<link rel="next" href="obj.html#obj" title="obj">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="three"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="obj.html#obj">obj</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="palette.html#palette">palette</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Base-modules.html#Base-modules">Base modules</a>
+<hr>
+</div>
+
+<h3 class="section">8.29 <code>three</code></h3>
+
+<p><a name="index-g_t_0040code_007bthree_007d-1000"></a><a name="index-g_t_0040code_007bguide3_007d-1001"></a><a name="index-g_t_0040code_007bpath3_007d-1002"></a><a name="index-g_t_0040code_007bcycle_007d-1003"></a><a name="index-g_t_0040code_007bcurl_007d-1004"></a><a name="index-g_t_0040code_007btension_007d-1005"></a><a name="index-g_t_0040code_007bcontrols_007d-1006"></a>This module fully extends the notion of guides and paths in <code>Asymptote</code>
+to three dimensions. It introduces the new types guide3, path3, and surface. 
+Guides in three dimensions are specified with the same syntax as in two
+dimensions except that triples <code>(x,y,z)</code> are used in place of pairs
+<code>(x,y)</code> for the nodes and direction specifiers.  This
+generalization of John Hobby's spline algorithm is shape-invariant under
+three-dimensional rotation, scaling, and shifting, and reduces in the
+planar case to the two-dimensional algorithm used in <code>Asymptote</code>,
+<code>MetaPost</code>, and <code>MetaFont</code> [cf. J. C. Bowman, Proceedings in
+Applied Mathematics and Mechanics, 7:1, 2010021-2010022 (2007)].
+
+   <p>For example, a unit circle in the XY plane may be filled and
+drawn like this:
+
+<pre class="verbatim">import three;
+
+size(100);
+
+path3 g=(1,0,0)..(0,1,0)..(-1,0,0)..(0,-1,0)..cycle;
+draw(g);
+draw(O--Z,red+dashed,Arrow3);
+draw(((-1,-1,0)--(1,-1,0)--(1,1,0)--(-1,1,0)--cycle));
+dot(g,red);
+</pre>
+   <pre class="sp">
+
+</pre>
+<div align="center"><img src="unitcircle3.png" alt="unitcircle3.png"></div>
+<p class="noindent">and then distorted into a saddle:
+
+<pre class="verbatim">import three;
+
+size(100,0);
+path3 g=(1,0,0)..(0,1,1)..(-1,0,0)..(0,-1,1)..cycle;
+draw(g);
+draw(((-1,-1,0)--(1,-1,0)--(1,1,0)--(-1,1,0)--cycle));
+dot(g,red);
+</pre>
+   <pre class="sp">
+
+</pre>
+<div align="center"><img src="saddle.png" alt="saddle.png"></div>
+<p class="noindent">Module <code>three</code> provides constructors for converting two-dimensional
+paths to three-dimensional ones, and vice-versa:
+<a name="index-g_t_0040code_007bpath3_007d-1007"></a><a name="index-g_t_0040code_007bpath_007d-1008"></a>
+<pre class="verbatim">path3 path3(path p, triple plane(pair)=XYplane);
+path path(path3 p, pair P(triple)=xypart);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bsurface_007d-1009"></a><a name="index-g_t_0040code_007brender_007d-1010"></a><a name="index-g_t_0040code_007bdefaultrender_007d-1011"></a>A Bezier surface, the natural two-dimensional generalization of Bezier
+curves, is defined in <code>three_surface.asy</code> as a structure
+containing an array of Bezier patches. Surfaces may drawn with one of
+the routines
+<pre class="verbatim">void draw(picture pic=currentpicture, surface s, int nu=1, int nv=1,
+          material surfacepen=currentpen, pen meshpen=nullpen,
+          light light=currentlight, light meshlight=light, string name="",
+          render render=defaultrender);
+void draw(picture pic=currentpicture, surface s, int nu=1, int nv=1,
+          material[] surfacepen, pen meshpen,
+          light light=currentlight, light meshlight=light, string name="",
+          render render=defaultrender);
+void draw(picture pic=currentpicture, surface s, int nu=1, int nv=1,
+          material[] surfacepen, pen[] meshpen=nullpens,
+          light light=currentlight, light meshlight=light, string name="",
+          render render=defaultrender);
+
+</pre>
+The parameters <code>nu</code> and <code>nv</code> specify the number of subdivisions
+for drawing optional mesh lines for each Bezier patch. The optional
+<code>name</code> parameter is used as a prefix for naming the surface
+patches in the <acronym>PRC</acronym> model tree. 
+Here material is a structure defined in <code>three_light.asy</code>:
+<pre class="verbatim">struct material {
+  pen[] p; // diffusepen,ambientpen,emissivepen,specularpen
+  real opacity;
+  real shininess;  
+...
+}
+</pre>
+These material properties are used to implement <code>OpenGL</code>-style lighting,
+based on the Phong-Blinn specular model. Sample Bezier surfaces are
+contained in the example files <code>BezierSurface.asy</code>, <code>teapot.asy</code>,
+and <code>parametricsurface.asy</code>. The structure <code>render</code> contains
+specialized rendering options documented at the beginning of module
+<code>three.asy</code>.
+
+   <p><a name="index-patch_002ddependent-colors-1012"></a><a name="index-vertex_002ddependent-colors-1013"></a>The examples
+<code>elevation.asy</code> and <code>sphericalharmonic.asy</code>
+illustrate how to draw a surface with patch-dependent colors. 
+The examples <code>vertexshading</code> and <code>smoothelevation</code> illustrate
+vertex-dependent colors, which is supported for both
+<code>Asymptote</code>'s native <code>OpenGL</code> renderer and two-dimensional
+projections. Since the <acronym>PRC</acronym> output format does not currently support
+vertex shading of Bezier surfaces, <acronym>PRC</acronym> patches are shaded
+with the mean of the four vertex colors.
+
+   <p><a name="index-g_t_0040code_007bsurface_007d-1014"></a><a name="index-g_t_0040code_007bplanar_007d-1015"></a>A surface can be constructed from a cyclic <code>path3</code> with the constructor
+<pre class="verbatim">surface surface(path3 external, triple[] internal=new triple[],
+                triple[] normals=new triple[], pen[] colors=new pen[],
+                bool3 planar=default);
+</pre>
+and then filled:
+<pre class="verbatim">draw(surface(path3(polygon(5))),red,nolight);
+draw(surface(unitcircle3),red,nolight);
+draw(surface(unitcircle3,new pen[] {red,green,blue,black}),nolight);
+</pre>
+The last example constructs a patch with vertex-specific colors. 
+A three-dimensional planar surface in the plane <code>plane</code> can be
+constructed from a two-dimensional cyclic path <code>g</code> with the constructor
+<a name="index-g_t_0040code_007bsurface_007d-1016"></a>
+<pre class="verbatim">surface surface(path p, triple plane(pair)=XYplane);
+</pre>
+and then filled:
+<pre class="verbatim">draw(surface((0,0)--E+2N--2E--E+N..0.2E..cycle),red);
+</pre>
+<a name="index-g_t_0040code_007bbezulate_007d-1017"></a>Planar Bezier surfaces patches are constructed using Orest Shardt's
+<code>bezulate</code> routine, which decomposes (possibly nonsimply
+connected) regions bounded (according to the <code>zerowinding</code> fill rule)
+by simple cyclic paths (intersecting only at the endpoints)
+into subregions bounded by cyclic paths of length <code>4</code> or less.
+
+   <p><a name="index-g_t_0040code_007bthin_007d-1018"></a><a name="index-g_t_0040code_007bthick_007d-1019"></a><a name="index-g_t_0040code_007btube_007d-1020"></a>Arbitrary thick three-dimensional curves and line caps (which the
+<code>OpenGL</code> standard does not require implementations to provide) are
+constructed with
+<pre class="verbatim">tube tube(path3 p, real width, render render=defaultrender);
+</pre>
+this returns a tube structure representing a tube of diameter <code>width</code>
+centered approximately on <code>g</code>. The tube structure consists of a
+surface <code>s</code> and the actual tube center, path3 <code>center</code>. 
+Drawing thick lines as tubes can be slow to render,
+especially with the <code>Adobe Reader</code> renderer. The setting
+<code>thick=false</code> can be used to disable this feature and force all
+lines to be drawn with <code>linewidth(0)</code> (one pixel wide, regardless
+of the resolution). By default, mesh and contour lines in three-dimensions
+are always drawn thin, unless an explicit line width is given in the pen
+parameter or the setting <code>thin</code> is set to <code>false</code>. The pens
+<code>thin()</code> and <code>thick()</code> defined in plain_pens.asy can also be used
+to override these defaults for specific draw commands.
+
+<p class="noindent">There are four choices for viewing 3D <code>Asymptote</code> output:
+     <ol type=1 start=1>
+<a name="index-g_t_0040code_007bOpenGL_007d-1021"></a><a name="index-g_t_0040code_007brender_007d-1022"></a><a name="index-g_t_0040code_007boutformat_007d-1023"></a><a name="index-g_t_0040code_007bmultisample_007d-1024"></a><li>Use the native <code>Asymptote</code> adaptive <code>OpenGL</code>-based
+renderer (with the command-line option <code>-V</code> and the default settings
+<code>outformat=""</code> and <code>render=-1</code>). If you encounter warnings
+from your graphics card driver, try specifying <code>-glOptions=-indirect</code>
+on the command line. On <code>UNIX</code> systems with graphics support for
+multisampling, we recommend installing the latest SVN (antialiased)
+version of the <code>freeglut</code> library
+(see <a href="multisampling.html#multisampling">multisampling</a>); the sample width can be
+controlled with the setting <code>multisample</code>. An initial screen
+position can be specified with the pair setting <code>position</code>, where
+negative values are interpreted as relative to the corresponding
+maximum screen dimension. The default settings
+<a name="index-mouse-bindings-1025"></a><pre class="verbatim">     import settings;
+     leftbutton=new string[] {"rotate","zoom","shift","pan"};
+     middlebutton=new string[] {"menu"};
+     rightbutton=new string[] {"zoom/menu","rotateX","rotateY","rotateZ"};
+     wheelup=new string[] {"zoomin"};
+     wheeldown=new string[] {"zoomout"};
+</pre>
+bind the mouse buttons as follows:
+          <ul>
+<li>Left: rotate
+<li>Shift Left: zoom
+<li>Ctrl Left: shift viewport
+<li>Alt Left: pan
+<li>Middle: menu (must be unmodified; ignores Shift, Ctrl, and Alt)
+<li>Wheel Up: zoom in
+<li>Wheel Down: zoom out
+<li>Right: zoom/menu (must be unmodified)
+<li>Right double click: menu
+<li>Shift Right: rotate about the X axis
+<li>Ctrl Right: rotate about the Y axis
+<li>Alt Right: rotate about the Z axis
+</ul>
+
+     <p>The keyboard shortcuts are:
+<a name="index-keyboard-bindings_003a-1026"></a>
+          <ul>
+<li>h: home
+<li>f: toggle fitscreen
+<li>x: spin about the X axis
+<li>y: spin about the Y axis
+<li>z: spin about the Z axis
+<li>s: stop spinning
+<li>m: rendering mode (solid/mesh/patch)
+<li>e: export
+<li>c: show camera parameters
+<li>p: play animation
+<li>r: reverse animation
+<li>: step animation
+<li>+: expand
+<li>=: expand
+<li>&gt;: expand
+<li>-: shrink
+<li>_: shrink
+<li>&lt;: shrink
+<li>q: exit
+<li>Ctrl-q: exit
+</ul>
+
+     <p><a name="index-g_t_0040code_007bantialias_007d-1027"></a><a name="index-g_t_0040code_007bmaxviewport_007d-1028"></a><a name="index-g_t_0040code_007bmaxtile_007d-1029"></a><a name="index-g_t_0040code_007bglOptions_007d-1030"></a><a name="index-g_t_0040code_007biconic_007d-1031"></a><a name="index-g_t_0040code_007bblack-stripes_007d-1032"></a><li>Render the scene to a specified rasterized format <code>outformat</code>
+at the resolution of <code>n</code> pixels per <code>bp</code>, as specified by the
+setting <code>render=n</code>. A negative value of <code>n</code> is interpreted
+as <code>|2n|</code> for <acronym>EPS</acronym> and <acronym>PDF</acronym> formats and
+<code>|n|</code> for other formats. The default value of <code>render</code> is -1. 
+By default, the scene is internally rendered at twice the specified
+resolution; this can be disabled by setting <code>antialias=1</code>. 
+High resolution rendering is done by tiling the image. If your
+graphics card allows it, the rendering can be made more efficient by
+increasing the maximum tile size <code>maxtile</code> to your screen
+dimensions (indicated by <code>maxtile=(0,0)</code>. If your video card
+generates unwanted black stripes in the output, try setting the
+horizontal and vertical components of <code>maxtiles</code> to something
+less than your screen dimensions. The tile size is also limited by the
+setting <code>maxviewport</code>, which restricts the maximum width and
+height of the viewport. On <code>UNIX</code> systems some graphics
+drivers support batch mode (<code>-noV</code>) rendering in an
+iconified window; this can be enabled with the setting <code>iconify=true</code>. 
+Some (broken) <code>UNIX</code> graphics drivers may require the command line setting
+<code>-glOptions=-indirect</code>, which requests (slower) indirect rendering.
+
+     <p><a name="index-g_t_0040code_007bprc_007d-1033"></a><a name="index-g_t_0040code_007bviews_007d-1034"></a><li>Embed the 3D <acronym>PRC</acronym> format in a <acronym>PDF</acronym> file
+and view the resulting <acronym>PDF</acronym> file with
+version <code>9.0</code> or later of <code>Adobe Reader</code>. 
+In addition to the default <code>settings.prc=true</code>, this requires
+<code>settings.outformat="pdf"</code>, which can be specified by the command
+line option <code>-f pdf</code>, put in the <code>Asymptote</code> configuration
+file (see <a href="configuration-file.html#configuration-file">configuration file</a>), or specified in the script before
+<code>three.asy</code> (or <code>graph3.asy</code>) is imported. 
+Version 2008/10/08 or later of the <code>movie15</code> package is also
+required (see <a href="embed.html#embed">embed</a>). The example <code>pdb.asy</code> illustrates
+how one can generate a list of predefined views (see <code>100d.views</code>). 
+A stationary preview image with a resolution of <code>n</code> pixels per
+<code>bp</code> can be embedded with the setting <code>render=n</code>; this allows
+the file to be viewed with other <code>PDF</code> viewers. Alternatively, the
+file <code>externalprc.tex</code> illustrates how the resulting <acronym>PRC</acronym> and
+rendered image files can be extracted and processed in a separate
+<code>LaTeX</code> file. However, see <a href="LaTeX-usage.html#LaTeX-usage">LaTeX usage</a> for an easier way
+to embed three-dimensional <code>Asymptote</code> pictures within <code>LaTeX</code>. 
+The open-source <acronym>PRC</acronym> specification is available from
+<a href="http://livedocs.adobe.com/acrobat_sdk/9/Acrobat9_HTMLHelp/API_References/PRCReference/PRC_Format_Specification/">http://livedocs.adobe.com/acrobat_sdk/9/Acrobat9_HTMLHelp/API_References/PRCReference/PRC_Format_Specification/</a>.
+
+     <li>Project the scene to a two-dimensional vector (<acronym>EPS</acronym> or
+<acronym>PDF</acronym>) format with <code>render=0</code>. Only limited hidden surface
+removal facilities are currently available with this approach
+(see <a href="PostScript3D.html#PostScript3D">PostScript3D</a>).
+
+        </ol>
+
+   <p><a name="index-g_t_0040code_007bdouble-deferred-drawing_007d-1035"></a>Automatic picture sizing in three dimensions is accomplished with double
+deferred drawing. The maximal desired dimensions of the scene in each of
+the three dimensions can optionally be specified with the routine
+<a name="index-g_t_0040code_007bsize3_007d-1036"></a>
+<pre class="verbatim">void size3(picture pic=currentpicture, real x, real y=x, real z=y,
+          bool keepAspect=pic.keepAspect);
+</pre>
+<a name="index-margins-1037"></a><a name="index-g_t_0040code_007bviewportmargin_007d-1038"></a><a name="index-g_t_0040code_007bviewportsize_007d-1039"></a>The resulting simplex linear programming problem is then solved to
+produce a 3D version of a frame (actually implemented as a 3D picture). 
+The result is then fit with another application of deferred drawing
+to the viewport dimensions corresponding to the usual two-dimensional
+picture <code>size</code> parameters. The global pair <code>viewportmargin</code>
+may be used to add horizontal and vertical margins to the viewport
+dimensions. Alternatively, a minimum <code>viewportsize</code> may be specified. 
+A 3D picture <code>pic</code> can be explicitly fit to a 3D frame by calling
+<a name="index-g_t_0040code_007bfit3_007d-1040"></a>
+<pre class="verbatim">frame pic.fit3(projection P=currentprojection);
+</pre>
+and then added to picture <code>dest</code> about <code>position</code> with
+<a name="index-g_t_0040code_007badd_007d-1041"></a>
+<pre class="verbatim">void add(picture dest=currentpicture, frame src, triple position=(0,0,0));
+</pre>
+
+   <p><a name="index-g_t_0040code_007bO_007d-1042"></a><a name="index-g_t_0040code_007bX_007d-1043"></a><a name="index-g_t_0040code_007bY_007d-1044"></a><a name="index-g_t_0040code_007bZ_007d-1045"></a><a name="index-g_t_0040code_007bunitcircle_007d-1046"></a>For convenience, the <code>three</code> module defines <code>O=(0,0,0)</code>,
+<code>X=(1,0,0)</code>, <code>Y=(0,1,0)</code>, and <code>Z=(0,0,1)</code>, along with a
+unitcircle in the XY plane:
+<pre class="verbatim">path3 unitcircle3=X..Y..-X..-Y..cycle;
+</pre>
+
+   <p><a name="index-g_t_0040code_007bcircle_007d-1047"></a>A general (approximate) circle can be drawn perpendicular to the direction
+<code>normal</code> with the routine
+<pre class="verbatim">path3 circle(triple c, real r, triple normal=Z);
+</pre>
+
+   <p><a name="index-g_t_0040code_007barc_007d-1048"></a>A circular arc centered at <code>c</code> with radius <code>r</code> from
+<code>c+r*dir(theta1,phi1)</code> to <code>c+r*dir(theta2,phi2)</code>,
+drawing counterclockwise relative to the normal vector
+<code>cross(dir(theta1,phi1),dir(theta2,phi2))</code> if <code>theta2 &gt; theta1</code>
+or if <code>theta2 == theta1</code> and <code>phi2 &gt;= phi1</code>, can be constructed with
+<pre class="verbatim">path3 arc(triple c, real r, real theta1, real phi1, real theta2, real phi2,
+          triple normal=O);
+</pre>
+The normal must be explicitly specified if <code>c</code> and the endpoints
+are colinear. If <code>r</code> &lt; 0, the complementary arc of radius
+<code>|r|</code> is constructed. 
+For convenience, an arc centered at <code>c</code> from triple <code>v1</code> to
+<code>v2</code> (assuming <code>|v2-c|=|v1-c|</code>) in the direction CCW
+(counter-clockwise) or CW (clockwise) may also be constructed with
+<pre class="verbatim">path3 arc(triple c, triple v1, triple v2, triple normal=O,
+          bool direction=CCW);
+</pre>
+When high accuracy is needed, the routines <code>Circle</code> and
+<code>Arc</code> defined in <code>graph3</code> may be used instead. 
+See <a href="GaussianSurface.html#GaussianSurface">GaussianSurface</a> for an example of a three-dimensional circular arc.
+
+   <p><a name="index-g_t_0040code_007bplane_007d-1049"></a>The representation <code>O--O+u--O+u+v--O+v--cycle</code>
+of the plane passing through point <code>O</code> with normal
+<code>cross(u,v)</code> is returned by
+<pre class="verbatim">path3 plane(triple u, triple v, triple O=O);
+</pre>
+A three-dimensional box with opposite vertices at triples <code>v1</code>
+and <code>v2</code> may be drawn with the function
+<a name="index-g_t_0040code_007bbox_007d-1050"></a>
+<pre class="verbatim">path3[] box(triple v1, triple v2);
+</pre>
+For example, a unit box is predefined as
+<a name="index-g_t_0040code_007bbox_007d-1051"></a><a name="index-g_t_0040code_007bunitbox_007d-1052"></a>
+<pre class="verbatim">path3[] unitbox=box(O,(1,1,1));
+</pre>
+<code>Asymptote</code> also provides optimized definitions for the
+three-dimensional paths <code>unitsquare3</code> and <code>unitcircle3</code>,
+along with the surfaces <code>unitdisk</code>, <code>unitplane</code>, <code>unitcube</code>,
+<code>unitcylinder</code>, <code>unitcone</code>, <code>unitsolidcone</code>,
+<code>unitfrustum(real t1, real t2)</code>, <code>unitsphere</code>, and
+<code>unithemisphere</code>.
+
+<p class="noindent">These projections to two dimensions are predefined:
+     <dl>
+<dt><code>oblique</code><br><dt><code>oblique(real angle)</code><dd><a name="index-g_t_0040code_007boblique_007d-1053"></a><a name="index-g_t_0040code_007bobliqueZ_007d-1054"></a>The point <code>(x,y,z)</code> is projected to <code>(x-0.5z,y-0.5z)</code>. 
+If an optional real argument is given, the
+negative z axis is drawn at this angle in degrees. 
+The projection <code>obliqueZ</code> is a synonym for <code>oblique</code>.
+
+     <br><dt><code>obliqueX</code><br><dt><code>obliqueX(real angle)</code><dd><a name="index-g_t_0040code_007bobliqueX_007d-1055"></a>The point <code>(x,y,z)</code> is projected to <code>(y-0.5x,z-0.5x)</code>. 
+If an optional real argument is given, the
+negative x axis is drawn at this angle in degrees.
+
+     <br><dt><code>obliqueY</code><br><dt><code>obliqueY(real angle)</code><dd><a name="index-g_t_0040code_007bobliqueY_007d-1056"></a>The point <code>(x,y,z)</code> is projected to <code>(x+0.5y,z+0.5y)</code>. 
+If an optional real argument is given, the
+positive y axis is drawn at this angle in degrees.
+
+     <p><a name="index-g_t_0040code_007borthographic_007d-1057"></a><a name="index-g_t_0040code_007bup_007d-1058"></a><a name="index-g_t_0040code_007btarget_007d-1059"></a><a name="index-g_t_0040code_007bshowtarget_007d-1060"></a><a name="index-g_t_0040code_007bcenter_007d-1061"></a><br><dt><code>orthographic(triple camera, triple up=Z, triple target=O, <br>             real zoom=1, pair viewportshift=0, bool showtarget=true, <br>             bool center=false)</code><dd>This projects from three to two dimensions using the view as seen at a point
+infinitely far away in the direction <code>unit(camera)</code>, orienting the camera
+so that, if possible, the vector <code>up</code> points upwards. Parallel
+lines are projected to parallel lines. The bounding volume is expanded
+to include <code>target</code> if <code>showtarget=true</code>. 
+If <code>center=true</code>, the target will be adjusted to the center of the
+bounding volume.
+
+     <br><dt><code>orthographic(real x, real y, real z, triple up=Z, triple target=O, <br>             real zoom=1, pair viewportshift=0, bool showtarget=true, <br>             bool center=false)</code><dd>This is equivalent to
+<pre class="verbatim">     orthographic((x,y,z),up,target,zoom,viewportshift,showtarget,center)
+</pre>
+
+     <p><a name="index-g_t_0040code_007bautoadjust_007d-1062"></a><br><dt><code>perspective(triple camera, triple up=Z, triple target=O, <br>            real zoom=1, real angle=0, pair viewportshift=0, <br>            bool showtarget=true, bool autoadjust=true, <br>            bool center=autoadjust)</code><dd><a name="index-g_t_0040code_007bperspective_007d-1063"></a><a name="index-g_t_0040code_007bNURBS_007d-1064"></a>This projects from three to two dimensions, taking account of
+perspective, as seen from the location <code>camera</code> looking at <code>target</code>,
+orienting the camera so that, if possible, the vector <code>up</code> points upwards. 
+If <code>render=0</code>, projection of three-dimensional cubic Bezier splines
+is implemented by approximating a two-dimensional nonuniform rational B-spline
+(<acronym>NURBS</acronym>) with a two-dimensional Bezier curve containing
+additional nodes and control points. If <code>autoadjust=true</code>,
+the camera will automatically be adjusted to lie outside the bounding volume
+for all possible interactive rotations about <code>target</code>. 
+If <code>center=true</code>, the target will be adjusted to the center of the
+bounding volume.
+
+     <br><dt><code>perspective(real x, real y, real z, triple up=Z, triple target=O, <br>            real zoom=1, real angle=0, pair viewportshift=0, <br>            bool showtarget=true, bool autoadjust=true, <br>            bool center=autoadjust)</code><dd>This is equivalent to
+<pre class="verbatim">     perspective((x,y,z),up,target,zoom,angle,viewportshift,showtarget,
+                 autoadjust,center)
+</pre>
+</dl>
+
+   <p><a name="index-g_t_0040code_007bcurrentprojection_007d-1065"></a>The default projection, <code>currentprojection</code>, is initially set to
+<code>perspective(5,4,2)</code>.
+
+   <p><a name="index-g_t_0040code_007bLeftView_007d-1066"></a><a name="index-g_t_0040code_007bRightView_007d-1067"></a><a name="index-g_t_0040code_007bFrontView_007d-1068"></a><a name="index-g_t_0040code_007bBackView_007d-1069"></a><a name="index-g_t_0040code_007bBottomView_007d-1070"></a><a name="index-g_t_0040code_007bTopView_007d-1071"></a>We also define standard orthographic views used in technical drawing:
+<pre class="verbatim">projection LeftView=orthographic(-X,showtarget=true);
+projection RightView=orthographic(X,showtarget=true);
+projection FrontView=orthographic(-Y,showtarget=true);
+projection BackView=orthographic(Y,showtarget=true);
+projection BottomView=orthographic(-Z,showtarget=true);
+projection TopView=orthographic(Z,showtarget=true);
+</pre>
+The function
+<a name="index-g_t_0040code_007baddViews_007d-1072"></a>
+<pre class="verbatim">void addViews(picture dest=currentpicture, picture src,
+              projection[][] views=SixViewsUS,
+              bool group=true, filltype filltype=NoFill);
+</pre>
+adds to picture <code>dest</code> an array of views of picture <code>src</code>
+using the layout projection[][] <code>views</code>. The default layout
+<code>SixViewsUS</code> aligns the projection <code>FrontView</code> below
+<code>TopView</code> and above <code>BottomView</code>, to the right of
+<code>LeftView</code> and left of <code>RightView</code> and <code>BackView</code>. 
+The predefined layouts are:
+<a name="index-g_t_0040code_007bThreeViewsUS_007d-1073"></a><a name="index-g_t_0040code_007bSixViewsUS_007d-1074"></a><a name="index-g_t_0040code_007bThreeViewsFR_007d-1075"></a><a name="index-g_t_0040code_007bSixViewsFR_007d-1076"></a><a name="index-g_t_0040code_007bThreeViews_007d-1077"></a><a name="index-g_t_0040code_007bSixViews_007d-1078"></a>
+<pre class="verbatim">projection[][] ThreeViewsUS={{TopView},
+                             {FrontView,RightView}};
+
+projection[][] SixViewsUS={{null,TopView},
+                           {LeftView,FrontView,RightView,BackView},
+                           {null,BottomView}};
+
+projection[][] ThreeViewsFR={{RightView,FrontView},
+                             {null,TopView}};
+
+projection[][] SixViewsFR={{null,BottomView},
+                           {RightView,FrontView,LeftView,BackView},
+                           {null,TopView}};
+
+projection[][] ThreeViews={{FrontView,TopView,RightView}};
+
+projection[][] SixViews={{FrontView,TopView,RightView},
+                         {BackView,BottomView,LeftView}};
+
+</pre>
+
+   <p>A triple or path3 can be projected to a pair or path,
+with <code>project(triple, projection P=currentprojection)</code> or
+<code>project(path3, projection P=currentprojection)</code>.
+
+   <p>It is occasionally useful to be able to invert a projection, sending
+a pair <code>z</code> onto the plane perpendicular to <code>normal</code> and passing
+through <code>point</code>:
+<a name="index-g_t_0040code_007binvert_007d-1079"></a>
+<pre class="verbatim">triple invert(pair z, triple normal, triple point,
+              projection P=currentprojection);
+</pre>
+A pair <code>z</code> on the projection plane can be inverted to a triple
+with the routine
+<pre class="verbatim">triple invert(pair z, projection P=currentprojection);
+</pre>
+A pair direction <code>dir</code> on the projection plane can be inverted to
+a triple direction relative to a point <code>v</code> with the routine
+<pre class="verbatim">triple invert(pair dir, triple v, projection P=currentprojection).
+</pre>
+
+   <p><a name="index-g_t_0040code_007btransform3_007d-1080"></a><a name="index-g_t_0040code_007bidentity4_007d-1081"></a>Three-dimensional objects may be transformed with one of the following
+built-in transform3 types (the identity transformation is <code>identity4</code>):
+
+     <dl>
+<dt><code>shift(triple v)</code><dd><a name="index-g_t_0040code_007bshift_007d-1082"></a>translates by the triple <code>v</code>;
+<br><dt><code>xscale3(real x)</code><dd><a name="index-g_t_0040code_007bxscale3_007d-1083"></a>scales by <code>x</code> in the x direction;
+<br><dt><code>yscale3(real y)</code><dd><a name="index-g_t_0040code_007byscale3_007d-1084"></a>scales by <code>y</code> in the y direction;
+<br><dt><code>zscale3(real z)</code><dd><a name="index-g_t_0040code_007bzscale3_007d-1085"></a>scales by <code>z</code> in the z direction;
+<br><dt><code>scale3(real s)</code><dd><a name="index-g_t_0040code_007bscale3_007d-1086"></a>scales by <code>s</code> in the x, y, and z directions;
+<br><dt><code>scale(real x, real y, real z)</code><dd><a name="index-g_t_0040code_007bscale_007d-1087"></a>scales by <code>x</code> in the x direction,
+by <code>y</code> in the y direction, and by <code>z</code> in the z
+direction;
+<a name="index-g_t_0040code_007brotate_007d-1088"></a><br><dt><code>rotate(real angle, triple v)</code><dd>rotates by <code>angle</code> in degrees about an axis <code>v</code> through the origin;
+<br><dt><code>rotate(real angle, triple u, triple v)</code><dd>rotates by <code>angle</code> in degrees about the axis <code>u--v</code>;
+<br><dt><code>reflect(triple u, triple v, triple w)</code><dd>reflects about the plane through <code>u</code>, <code>v</code>, and <code>w</code>. 
+<a name="index-g_t_0040code_007bXY_007d-1089"></a></dl>
+
+   <p>When not multiplied on the left by a transform3, three-dimensional
+TeX Labels are drawn as Bezier surfaces directly on the projection plane:
+<a name="index-g_t_0040code_007blabel_007d-1090"></a>
+<pre class="verbatim">void label(picture pic=currentpicture, Label L, triple position,
+           align align=NoAlign, pen p=currentpen,
+           light light=nolight, string name="",
+           render render=defaultrender, interaction interaction=
+           settings.autobillboard ? Billboard : Embedded)
+</pre>
+<a name="index-g_t_0040code_007bBillboard_007d-1091"></a><a name="index-g_t_0040code_007bEmbedded_007d-1092"></a>The optional <code>name</code> parameter is used as a prefix for naming the label
+patches in the <acronym>PRC</acronym> model tree. 
+The default interaction is <code>Billboard</code>, which means that labels
+are rotated interactively so that they always face the camera. 
+The interaction <code>Embedded</code> means that the label interacts as a
+normal <code>3D</code> surface, as illustrated in the example <code>billboard.asy</code>. 
+<a name="index-g_t_0040code_007btransform_007d-1093"></a><a name="index-g_t_0040code_007bXY_007d-1094"></a><a name="index-g_t_0040code_007bYZ_007d-1095"></a><a name="index-g_t_0040code_007bZX_007d-1096"></a><a name="index-g_t_0040code_007bYX_007d-1097"></a><a name="index-g_t_0040code_007bZY_007d-1098"></a><a name="index-g_t_0040code_007bZX_007d-1099"></a>Alternatively, a label can be transformed from the <code>XY</code> plane by an
+explicit transform3 or mapped to a specified two-dimensional plane with
+the predefined transform3 types <code>XY</code>, <code>YZ</code>, <code>ZX</code>, <code>YX</code>,
+<code>ZY</code>, <code>ZX</code>. There are also modified versions of these
+transforms that take an optional argument <code>projection
+P=currentprojection</code> that rotate and/or flip the label so that it is
+more readable from the initial viewpoint.
+
+   <p><a name="index-g_t_0040code_007bplaneproject_007d-1100"></a>A transform3 that projects in the direction <code>dir</code> onto the plane
+with normal <code>n</code> through point <code>O</code> is returned by
+<pre class="verbatim">transform3 planeproject(triple n, triple O=O, triple dir=n);
+</pre>
+One can use
+<a name="index-g_t_0040code_007bnormal_007d-1101"></a>
+<pre class="verbatim">triple normal(path3 p);
+</pre>
+to find the unit normal vector to a planar three-dimensional path <code>p</code>. 
+As illustrated in the example <code>planeproject.asy</code>, a transform3
+that projects in the direction <code>dir</code> onto the plane defined by a
+planar path <code>p</code> is returned by
+<pre class="verbatim">transform3 planeproject(path3 p, triple dir=normal(p));
+</pre>
+
+   <p>The functions
+<a name="index-g_t_0040code_007bextrude_007d-1102"></a>
+<pre class="verbatim">surface extrude(path p, triple axis=Z);
+surface extrude(Label L, triple axis=Z);
+</pre>
+return the surface obtained by extruding path <code>p</code> or
+Label <code>L</code> along <code>axis</code>.
+
+   <p><a name="index-g_t_0040code_007blength_007d-1103"></a><a name="index-g_t_0040code_007bsize_007d-1104"></a><a name="index-g_t_0040code_007bpoint_007d-1105"></a><a name="index-g_t_0040code_007bdir_007d-1106"></a><a name="index-g_t_0040code_007baccel_007d-1107"></a><a name="index-g_t_0040code_007bradius_007d-1108"></a><a name="index-g_t_0040code_007bprecontrol_007d-1109"></a><a name="index-g_t_0040code_007bpostcontrol_007d-1110"></a><a name="index-g_t_0040code_007barclength_007d-1111"></a><a name="index-g_t_0040code_007barctime_007d-1112"></a><a name="index-g_t_0040code_007breverse_007d-1113"></a><a name="index-g_t_0040code_007bsubpath_007d-1114"></a><a name="index-g_t_0040code_007bintersect_007d-1115"></a><a name="index-g_t_0040code_007bintersections_007d-1116"></a><a name="index-g_t_0040code_007bintersectionpoint_007d-1117"></a><a name="index-g_t_0040code_007bintersectionpoints_007d-1118"></a><a name="index-g_t_0040code_007bmin_007d-1119"></a><a name="index-g_t_0040code_007bmax_007d-1120"></a><a name="index-g_t_0040code_007bcyclic_007d-1121"></a><a name="index-g_t_0040code_007bstraight_007d-1122"></a>Three-dimensional versions of the path functions <code>length</code>,
+<code>size</code>, <code>point</code>, <code>dir</code>, <code>accel</code>, <code>radius</code>,
+<code>precontrol</code>, <code>postcontrol</code>,
+<code>arclength</code>, <code>arctime</code>, <code>reverse</code>, <code>subpath</code>,
+<code>intersect</code>, <code>intersections</code>, <code>intersectionpoint</code>,
+<code>intersectionpoints</code>, <code>min</code>, <code>max</code>, <code>cyclic</code>, and
+<code>straight</code> are also defined.
+
+   <p>The routine
+<a name="index-g_t_0040code_007bintersections_007d-1123"></a>
+<pre class="verbatim">real[][] intersections(path3 p, surface s, real fuzz=-1);
+</pre>
+returns the intersection times of a path <code>p</code> with a surface
+<code>s</code> as a sorted array of real arrays of length 2, and
+<a name="index-g_t_0040code_007bintersectionpoints_007d-1124"></a>
+<pre class="verbatim">triple[] intersectionpoints(path3 p, surface s, real fuzz=-1);
+</pre>
+returns the corresponding intersection points. 
+Here, the computations are performed to the absolute error specified by
+<code>fuzz</code>, or if <code>fuzz &lt; 0</code>, to machine precision.
+
+   <p>Here is an example showing all five guide3 connectors:
+
+<pre class="verbatim">import graph3;
+
+size(200);
+
+currentprojection=orthographic(500,-500,500);
+
+triple[] z=new triple[10];
+
+z[0]=(0,100,0); z[1]=(50,0,0); z[2]=(180,0,0);
+
+for(int n=3; n &lt;= 9; ++n)
+  z[n]=z[n-3]+(200,0,0);
+
+path3 p=z[0]..z[1]---z[2]::{Y}z[3]
+&amp;z[3]..z[4]--z[5]::{Y}z[6]
+&amp;z[6]::z[7]---z[8]..{Y}z[9];
+
+draw(p,grey+linewidth(4mm),currentlight);
+
+xaxis3(Label(XY()*"$x$",align=-3Y),red,above=true);
+yaxis3(Label(XY()*"$y$",align=-3X),red,above=true);
+</pre>
+   <pre class="sp">
+
+</pre>
+<div align="center"><img src="join3.png" alt="join3.png"></div>
+
+<p><a name="index-g_t_0040code_007bBeginBar3_007d-1125"></a><a name="index-g_t_0040code_007bEndBar3_007d-1126"></a><a name="index-g_t_0040code_007bBar3_007d-1127"></a><a name="index-g_t_0040code_007bBars3_007d-1128"></a><a name="index-g_t_0040code_007bBeginArrow3_007d-1129"></a><a name="index-g_t_0040code_007bMidArrow3_007d-1130"></a><a name="index-g_t_0040code_007bEndArrow3_007d-1131"></a><a name="index-g_t_0040code_007bArrow3_007d-1132"></a><a name="index-g_t_0040code_007bArrows3_007d-1133"></a><a name="index-g_t_0040code_007bBeginArcArrow3_007d-1134"></a><a name="index-g_t_0040code_007bMidArcArrow3_007d-1135"></a><a name="index-g_t_0040code_007bEndArcArrow3_007d-1136"></a><a name="index-g_t_0040code_007bArcArrow3_007d-1137"></a><a name="index-g_t_0040code_007bArcArrows3_007d-1138"></a><a name="index-g_t_0040code_007bDefaultHead3_007d-1139"></a><a name="index-g_t_0040code_007bHookHead3_007d-1140"></a><a name="index-g_t_0040code_007bTeXHead3_007d-1141"></a>Three-dimensional versions of bars or arrows can be drawn with one of
+the specifiers <code>None</code>, <code>Blank</code>,
+<code>BeginBar3</code>, <code>EndBar3</code> (or equivalently <code>Bar3</code>), <code>Bars3</code>,
+<code>BeginArrow3</code>, <code>MidArrow3</code>,
+<code>EndArrow3</code> (or equivalently <code>Arrow3</code>), <code>Arrows3</code>,
+<code>BeginArcArrow3</code>, <code>EndArcArrow3</code> (or equivalently
+<code>ArcArrow3</code>), <code>MidArcArrow3</code>, and <code>ArcArrows3</code>. 
+Three-dimensional bars accept the optional arguments <code>(real size=0,
+triple dir=O)</code>. If <code>size=O</code>, the default bar length is used; if
+<code>dir=O</code>, the bar is drawn perpendicular to the path
+and the initial viewing direction. The predefined three-dimensional
+arrowhead styles are <code>DefaultHead3</code>, <code>HookHead3</code>, <code>TeXHead3</code>. 
+Versions of the two-dimensional arrowheads lifted to three-dimensional
+space and aligned according to the initial viewpoint (or an optionally
+specified <code>normal</code> vector) are also defined:
+<code>DefaultHead2(triple normal=O)</code>, <code>HookHead2(triple normal=O)</code>,
+<code>TeXHead2(triple normal=O)</code>. These are illustrated in the example
+<code>arrows3.asy</code>.
+
+   <p><a name="index-g_t_0040code_007bNoMargin3_007d-1142"></a><a name="index-g_t_0040code_007bBeginMargin3_007d-1143"></a><a name="index-g_t_0040code_007bEndMargin3_007d-1144"></a><a name="index-g_t_0040code_007bMargin3_007d-1145"></a><a name="index-g_t_0040code_007bMargins3_007d-1146"></a><a name="index-g_t_0040code_007bBeginPenMargin2_007d-1147"></a><a name="index-g_t_0040code_007bEndPenMargin2_007d-1148"></a><a name="index-g_t_0040code_007bPenMargin2_007d-1149"></a><a name="index-g_t_0040code_007bPenMargins2_007d-1150"></a><a name="index-g_t_0040code_007bBeginPenMargin3_007d-1151"></a><a name="index-g_t_0040code_007bEndPenMargin3_007d-1152"></a><a name="index-g_t_0040code_007bPenMargin3_007d-1153"></a><a name="index-g_t_0040code_007bPenMargins3_007d-1154"></a><a name="index-g_t_0040code_007bBeginDotMargin3_007d-1155"></a><a name="index-g_t_0040code_007bEndDotMargin3_007d-1156"></a><a name="index-g_t_0040code_007bDotMargin3_007d-1157"></a><a name="index-g_t_0040code_007bDotMargins3_007d-1158"></a><a name="index-g_t_0040code_007bMargin3_007d-1159"></a><a name="index-g_t_0040code_007bTrueMargin3_007d-1160"></a>Module <code>three</code> also defines the three-dimensional margins
+<code>NoMargin3</code>, <code>BeginMargin3</code>, <code>EndMargin3</code>,
+<code>Margin3</code>, <code>Margins3</code>,
+<code>BeginPenMargin2</code>, <code>EndPenMargin2</code>, <code>PenMargin2</code>,
+<code>PenMargins2</code>,
+<code>BeginPenMargin3</code>, <code>EndPenMargin3</code>, <code>PenMargin3</code>,
+<code>PenMargins3</code>,
+<code>BeginDotMargin3</code>, <code>EndDotMargin3</code>, <code>DotMargin3</code>,
+<code>DotMargins3</code>, <code>Margin3</code>, and <code>TrueMargin3</code>.
+
+   <p><a name="index-g_t_0040code_007bpixel_007d-1161"></a>The routine
+<pre class="verbatim">void pixel(picture pic=currentpicture, triple v, pen p=currentpen,
+           real width=1);
+</pre>
+can be used to draw on picture <code>pic</code> a pixel of width <code>width</code> at
+position <code>v</code> using pen <code>p</code>.
+
+   <p>Further three-dimensional examples are provided in the files
+<code>near_earth.asy</code>, <code>conicurv.asy</code>, and (in the <code>animations</code>
+subdirectory) <code>cube.asy</code>.
+
+   <p><a name="PostScript3D"></a><a name="index-g_t3D-_0040code_007bPostScript_007d-1162"></a>Limited support for projected vector graphics (effectively three-dimensional
+nonrendered <code>PostScript</code>) is available with the setting
+<code>render=0</code>. This currently only works for piecewise planar
+surfaces, such as those produced by the parametric <code>surface</code>
+routines in the <code>graph3</code> module. Surfaces produced by the
+<code>solids</code> package will also be properly rendered if the parameter
+<code>nslices</code> is sufficiently large.
+
+   <p><a name="index-hidden-surface-removal-1163"></a><a name="index-g_t_0040code_007bface_007d-1164"></a>In the module <code>bsp</code>, hidden surface removal of planar pictures is
+implemented using a binary space partition and picture clipping. 
+A planar path is first converted to a structure <code>face</code> derived from
+<code>picture</code>. A <code>face</code> may be given to a two-dimensional drawing
+routine in place of any <code>picture</code> argument.  An array of such faces
+may then be drawn, removing hidden surfaces:
+<pre class="verbatim">void add(picture pic=currentpicture, face[] faces,
+         projection P=currentprojection);
+</pre>
+Labels may be projected to two dimensions, using projection <code>P</code>,
+onto the plane passing through point <code>O</code> with normal
+<code>cross(u,v)</code> by multiplying it on the left by the transform
+<pre class="verbatim">transform transform(triple u, triple v, triple O=O,
+                    projection P=currentprojection);
+</pre>
+
+   <p>Here is an example that shows how a binary space partition may be used to draw a
+two-dimensional vector graphics projection of three orthogonal
+intersecting planes:
+
+<pre class="verbatim">size(6cm,0);
+import bsp;
+
+real u=2.5;
+real v=1;
+
+currentprojection=oblique;
+
+path3 y=plane((2u,0,0),(0,2v,0),(-u,-v,0));
+path3 l=rotate(90,Z)*rotate(90,Y)*y;
+path3 g=rotate(90,X)*rotate(90,Y)*y;
+
+face[] faces;
+filldraw(faces.push(y),project(y),yellow);
+filldraw(faces.push(l),project(l),lightgrey);
+filldraw(faces.push(g),project(g),green);
+
+add(faces);
+
+</pre>
+   <pre class="sp">
+
+</pre>
+<div align="center"><img src="planes.png" alt="planes.png"></div>
+
+</body></html>
+

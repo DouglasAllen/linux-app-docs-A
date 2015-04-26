@@ -1,0 +1,61 @@
+#
+# Database drivers
+#
+# Two pools are given here.  Sybase uses the Sybase client libraries,
+# obtained from Sybase.  Postgres is freely available at
+# www.postgresql.org.  Sybase uses an external proxy daemon while
+# Postgres uses an internal driver.  The Sybase driver requires some
+# configuration in ns/db/driver/sybase_driver to tell th "nsext.so"
+# driver where to find the nssybpd executable and some other things.
+# The Postgres driver doesn't need any of that because it's internal
+# and does not use nsext.so.
+#
+ns_section "ns/db/drivers"
+ns_param   sybase_driver   nsext.so       ;# Use nsext.so for a proxy daemon
+ns_param   postgres_driver nspostgres.so  ;# An internal driver
+
+ns_section "ns/db/driver/sybase_driver"
+ns_param   localdaemon     nssybpd        ;# Name of the proxy daemon executable
+ns_param   param           path_to_sybase ;# Usually the $SYBASE env var
+
+ns_section "ns/db/pools"
+ns_param   sybase_pool    "Sybase Pool"
+ns_param   postgres_pool  "Postgres Pool"
+
+ns_section "ns/db/pool/sybase_pool"
+ns_param   driver          sybase_driver
+ns_param   datasource      SERVER_NAME:database_name
+ns_param   user            user_name
+ns_param   password        password
+ns_param   connections     1
+ns_param   logsqlerrors    true      ;# Verbose SQL query error logging
+ns_param   verbose         false     ;# Verbose error logging
+ns_param   maxidle         600       ;# Max time to keep idle db conn open
+ns_param   maxopen         3600      ;# Max time to keep active db conn open
+
+ns_section "ns/db/pool/postgres_pool"
+ns_param   driver          postgres_driver
+ns_param   datasource      HOSTNAME:PORT:database_name
+ns_param   user            user_name
+ns_param   password        password
+ns_param   connections     1
+ns_param   logsqlerrors    true      ;# Verbose SQL query error logging
+ns_param   verbose         false     ;# Verbose error logging
+ns_param   maxidle         600       ;# Max time to keep idle db conn open
+ns_param   maxopen         3600      ;# Max time to keep active db conn open
+
+
+#
+# Accessing DB pools
+#
+# In the case of virtual servers you can give different virtual
+# servers access to different databases, or you can let them access
+# them all.  AOLserver 3.x does not use virtual servers so the only
+# useful value is "*", but if you use one config file for multiple nsd
+# processes, or you are using a version of AOLserver that supports
+# virtual servers, then you should list the pools you want to access.
+#
+ns_section "ns/server/${servername}/db"
+ns_param pools          *            ;# Wildcard gives access to all
+ns_param defaultpool    sybase_pool
+

@@ -1,0 +1,178 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_GetDriverProc</TITLE>
+<LINK rel=Previous href="c-ch199.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch201.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch199.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch201.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="587577">
+</a><h3>Ns_GetDriverProc</h3>
+<a name="791096">
+</a><h4>Overview</h4>
+Get a communications driver procedure
+<a name="791101">
+</a><a name="791098">
+</a><h4>Syntax</h4>
+<pre>    <a name="791108"></a>int Ns_GetDriverProc(
+    <a name="791117"></a>Ns_Driver driver, 
+    <a name="791118"></a>Ns_DrvId id, 
+    <a name="791119"></a>void **pprocPtrPtr
+    <a name="791120"></a>);
+</pre><p><a name="791099">
+</a><h4>Description</h4>
+<p><a name="791124">
+</a>Get a communications driver procedure for the specified ID. Valid ID values are listed in the left column of the table below.</p>
+<p><a name="791393">
+</a>The <code>procPtrPtr</code> will be filled in with the address of a registerd driver function. NS_ERROR will be returned if no registered function could be found. The resulting function is of the type shown in the right column below<Table Border = "3">
+<tr><th><p><a name="791400">
+</a><b>ID Value</b></p>
+<th><p><a name="791402">
+</a><b>Resulting Function Type</b></p>
+
+<tr><td><p><a name="791681">
+</a>Ns_DrvIdName</p>
+<td><p><a name="801722">
+</a>typedef char *(Ns_ConnDriverNameProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801712">
+</a>Ns_DrvIdStart</p>
+<td><p><a name="801730">
+</a>typedef int (Ns_DriverStartProc) (char *hServer, char *hDriver, void **ppDriverCtx);</p>
+
+<tr><td><p><a name="801697">
+</a>Ns_DrvIdAccept</p>
+<td><p><a name="801741">
+</a>typedef int (Ns_DriverAcceptProc) (void *pDriverCtx, void **ppConnCtx);</p>
+
+<tr><td><p><a name="801689">
+</a>Ns_DrvIdStop</p>
+<td><p><a name="801749">
+</a>typedef void (Ns_DriverStopProc) (void *pDriverCtx);</p>
+
+<tr><td><p><a name="801681">
+</a>Ns_DrvIdInit</p>
+<td><p><a name="806539">
+</a>typedef int (Ns_ConnInitProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801673">
+</a>Ns_DrvIdRead</p>
+<td><p><a name="811517">
+</a>typedef int (Ns_ConnReadProc) (void *pConnCtx, void *pvBuf, int iToRead);</p>
+
+<tr><td><p><a name="801665">
+</a>Ns_DrvIdWrite</p>
+<td><p><a name="816495">
+</a>typedef int (Ns_ConnWriteProc) (void *pConnCtx, void *pvBuf, int iToWrite);</p>
+
+<tr><td><p><a name="801657">
+</a>Ns_DrvIdClose</p>
+<td><p><a name="816503">
+</a>typedef int (Ns_ConnCloseProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801649">
+</a>Ns_DrvIdFree</p>
+<td><p><a name="816514">
+</a>typedef void (Ns_ConnFreeProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801641">
+</a>Ns_DrvIdPeer</p>
+<td><p><a name="816522">
+</a>typedef char *(Ns_ConnPeerProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801633">
+</a>Ns_DrvIdLocation</p>
+<td><p><a name="816530">
+</a>typedef char *(Ns_ConnLocationProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801625">
+</a>Ns_DrvIdHost</p>
+<td><p><a name="816538">
+</a>typedef char *(Ns_ConnHostProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801617">
+</a>Ns_DrvIdPort</p>
+<td><p><a name="816546">
+</a>typedef int (Ns_ConnPortProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="801609">
+</a>Ns_DrvIdSendFd</p>
+<td><p><a name="816554">
+</a>typedef int (Ns_ConnSendFdProc) (void *pConnCtx, int fd, int nsend);</p>
+
+<tr><td><p><a name="801601">
+</a>Ns_DrvIdSendFile</p>
+<td><p><a name="816562">
+</a>typedef int (Ns_ConnSendFileProc) (void *pConnCtx, char *file);</p>
+
+<tr><td><p><a name="796801">
+</a>Ns_DrvIdDetach</p>
+<td><p><a name="816570">
+</a>typedef void *(Ns_ConnDetachProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="796787">
+</a>Ns_DrvIdConnectionFd</p>
+<td><p><a name="816578">
+</a>typedef int (Ns_ConnConnectionFdProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="796773">
+</a>Ns_DrvIdMoveContext </p>
+<td><p><a name="816624">
+</a>(unsupported)</p>
+
+<tr><td><p><a name="796759">
+</a>Ns_DrvIdPeerPort</p>
+<td><p><a name="816615">
+</a>typedef int (Ns_ConnPeerPortProc) (void *pConnCtx);</p>
+
+<tr><td><p><a name="796745">
+</a>Ns_DrvIdSetSSLAuth</p>
+<td><p><a name="816606">
+</a>typedef int (Ns_SetSSLAuthProc) (void *pCtx, Ns_SSLAuthProc *, void *ctx, Ns_FreeAuthCtxProc *);</p>
+
+<tr><td><p><a name="796731">
+</a>Ns_DrvIdSSLHandshake</p>
+<td><p><a name="816632">
+</a>typedef void *(Ns_SSLHandshakeProc) (void *aCtx, int socket, char *DN, Ns_SSLAuthProc *auth, void *authctx, Ns_FreeAuthCtxProc *pFree);</p>
+
+
+</Table>:</p>
+<p><a name="791121">
+</a></p>
+
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch199.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch201.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

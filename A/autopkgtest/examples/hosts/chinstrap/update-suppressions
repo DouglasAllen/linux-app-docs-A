@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# This is an absolutely hideous hack.
+#
+# We scrape a suitable launchpad advanced search to find bugs we've
+# previously submitted.
+#
+# We have to run this on chinstrap instead of
+# cadmium because cadmium (being treated as a buildd from a security
+# point of view) is not permitted to make external requests other than
+# to the archive.
+#
+#
+# For the reasons described below this should be replaced ASAP!
+#
+# BUGS
+# 
+# This will break if the list gets too long for LP to display.
+#
+# Also, there is a problem with Duplicate bugs.  See LP #147754.  A
+# tedious workaround is needed for this case.  When an autopkgtest
+# bug, which was marked a duplicate and not the master, is fixed, the
+# duplicate target will be marked fixed.  To work around the LP bug,
+# it is necessary to adjust the status of the autopkgtest-filed bug:
+#  1. unduplicate the bug; 2. set it to Fix Released;
+#  3. duplicate it again.
+#
+# Occasionally LP seems to burp and give us an empty page.
+# This means that a cronmail is generated which reports
+#   NO SUPPRESSIONS - PROBABLY WENT WRONG
+# It is not clear whether the lack of any error message or nonzero
+# exit status from curl is a bug in curl or LP.
+
+# Furthermore, much of this functionality is now in
+# adt-openbugs-update and the LP part should be in a script called
+# adt-openbugs-fetch-launchpad.
+
+
+cd ${0%/*}
+
+url='https://launchpad.net/ubuntu/+bugs?field.searchtext=&orderby=-importance&field.status%3Alist=New&field.status%3Alist=Incomplete&field.status%3Alist=Confirmed&field.status%3Alist=Triaged&field.status%3Alist=In+Progress&field.status%3Alist=Fix+Committed&assignee_option=any&field.assignee=&field.bug_reporter=ian%2Bubuntu-autopkgtest&field.bug_contact=&field.bug_commenter=&field.subscriber=&field.status_upstream-empty-marker=1&field.omit_dupes.used=&field.has_patch.used=&field.tag=&field.has_cve.used=&search=Search'
+
+echo 'fetching'
+curl -s -S -k -o webpage "$url"
+
+echo 'grepping'
+perl -ne '
+    print "$1\n" or die $! if
+     m,"https://bugs.launchpad.net/ubuntu/\+source/([-+.0-9a-z]+)/\+bug/\d+",
+' <webpage >suppressions.new
+
+nl -ba suppressions.new
+
+if ! test -s suppressions.new;
+then
+	echo >&2 'NO SUPPRESSIONS - PROBABLY WENT WRONG
+
+webpage:'
+	cat webpage
+	exit 1
+fi
+
+echo 'uploading'
+
+mv suppressions.new suppressions
+RSYNC_RSH=ssh rsync suppressions cadmium.buildd:adt-play/.
+
+echo 'done.'

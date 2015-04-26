@@ -1,0 +1,231 @@
+<html lang="en">
+<head>
+<title>ax_rpm_init - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Macros.html#The-Macros" title="The Macros">
+<link rel="prev" href="ax_005frestore_005fflags.html#ax_005frestore_005fflags" title="ax_restore_flags">
+<link rel="next" href="ax_005fruby_005fdevel.html#ax_005fruby_005fdevel" title="ax_ruby_devel">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ax_rpm_init"></a>
+<a name="ax_005frpm_005finit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ax_005fruby_005fdevel.html#ax_005fruby_005fdevel">ax_ruby_devel</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ax_005frestore_005fflags.html#ax_005frestore_005fflags">ax_restore_flags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Macros.html#The-Macros">The Macros</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ax_rpm_init</h3>
+
+<h2 class="majorheading">Synopsis</h2>
+
+<pre class="smallexample">     AX_RPM_INIT
+</pre>
+<h2 class="majorheading">Description</h2>
+
+<p>Setup variables for creation of rpms. It will define several variables
+useful for creating rpms on a system where rpms are supported. 
+Currently, I requires changes to Makefile.am to function properly (see
+the example below).
+
+<p>Also note that I do not use any non-UNIX OSs (and for the most part, I
+only use RedHat), so this is probably generally not useful for other
+systems.
+
+<p>Required setup:
+
+<p>In configure.in:
+
+<pre class="smallexample">       dnl For my rpm.m4 macros
+       RPM_RELEASE=1
+       AC_SUBST(RPM_RELEASE)
+</pre>
+<pre class="smallexample">       AX_RPM_INIT
+       dnl Enable or disable the rpm making rules in Makefile.am
+       AM_CONDITIONAL(MAKE_RPMS, test x$make_rpms = xtrue)
+</pre>
+<p>Furthermore, the %GNUconfigure rpm macro has a problem in that it does
+not define CXXFLAGS for the target system correctly, so for compiling
+C++ code, add the following line _before_ calling AC_PROG_CXX:
+
+<pre class="smallexample">       dnl This is a little hack to make this work with rpm better (see mysql++.spec.in)
+       test -z "$CXXFLAGS" &amp;&amp; CXXFLAGS="${CFLAGS}"
+</pre>
+<p>Changes to Makefile.am (I am trying to get rid of this step; suggestions
+invited):
+
+<pre class="smallexample">       if MAKE_RPMS
+       rpm: @RPM_TARGET@
+</pre>
+<pre class="smallexample">       .PHONY: rpm
+</pre>
+<pre class="smallexample">       $(RPM_TARGET): $(DISTFILES)
+         ${MAKE} dist
+         -mkdir -p $(RPM_DIR)/SRPMS
+         -mkdir -p `dirname $(RPM_TARGET)`
+         $(RPM_PROG) $(RPM_ARGS) $(RPM_TARBALL)
+         @echo Congratulations, $(RPM_TARGET) "(and friends)" should now exist.
+       else
+       endif
+</pre>
+<p>Also, it works best with a XXXX.spec.in file like the following (this is
+way down on the wishlist, but a program to generate the skeleton spec.in
+much like autoscan would just kick butt!):
+
+<pre class="smallexample">       ---------- 8&lt; ----------
+       # -*- Mode:rpm-spec -*-
+       # mysql++.spec.in
+       Summary: Your package description goes here
+       %define rel @RPM_RELEASE@
+</pre>
+<pre class="smallexample">       %define version @VERSION@
+       %define pkgname @PACKAGE@
+       %define prefix /usr
+</pre>
+<pre class="smallexample">       %define lt_release @LT_RELEASE@
+       %define lt_version @LT_CURRENT@.@LT_REVISION@.@LT_AGE@
+</pre>
+<pre class="smallexample">       # This is a hack until I can figure out how to better handle replacing
+       # autoconf macros... (gotta love autoconf...)
+       %define __aclocal   aclocal || aclocal -I ./macros
+       %define configure_args  @RPM_CONFIGURE_ARGS@
+</pre>
+<pre class="smallexample">       Name: %{pkgname}
+       Version: %{version}
+       Release: %{rel}
+</pre>
+<pre class="smallexample">       Copyright: LGPL
+       Group: # your group name goes here
+       Source: %{pkgname}-%{version}.tar.gz
+       Requires: # additional requirements
+       Buildroot: /tmp/%{pkgname}-root
+       URL: http://yoururl.go.here
+       Prefix: %{prefix}
+       BuildArchitectures: # Target platforms, i.e., i586
+       Packager: Your Name &lt;youremail@your.address&gt;
+</pre>
+<pre class="smallexample">       %description
+       Your package description
+</pre>
+<pre class="smallexample">       %changelog
+</pre>
+<pre class="smallexample">       %prep
+       %setup
+       #%patch
+</pre>
+<pre class="smallexample">       %build
+       %GNUconfigure %{configure_args}
+       # This is why we copy the CFLAGS to the CXXFLAGS in configure.in
+       # CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" ./configure %{_target_platform} --prefix=%{prefix}
+       make
+</pre>
+<pre class="smallexample">       %install
+       # To make things work with BUILDROOT
+       if [ "$RPM_BUILD_ROOT" != "/tmp/%{pkgname}-root" ]
+       then
+         echo
+         echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         echo @                                                                    @
+         echo @  RPM_BUILD_ROOT is not what I expected.  Please clean it yourself. @
+         echo @                                                                    @
+         echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         echo
+       else
+         echo Cleaning RPM_BUILD_ROOT: "$RPM_BUILD_ROOT"
+         rm -rf "$RPM_BUILD_ROOT"
+       fi
+       make DESTDIR="$RPM_BUILD_ROOT" install
+</pre>
+<pre class="smallexample">       %clean
+       # Call me paranoid, but I do not want to be responsible for nuking
+       # someone's harddrive!
+       if [ "$RPM_BUILD_ROOT" != "/tmp/%{pkgname}-root" ]
+       then
+         echo
+         echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         echo @                                                                    @
+         echo @  RPM_BUILD_ROOT is not what I expected.  Please clean it yourself. @
+         echo @                                                                    @
+         echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         echo
+       else
+         echo Cleaning RPM_BUILD_ROOT: "$RPM_BUILD_ROOT"
+         rm -rf "$RPM_BUILD_ROOT"
+       fi
+</pre>
+<pre class="smallexample">       %files
+       %defattr(-, root, root)
+       # Your application file list goes here
+       # %{prefix}/lib/lib*.so*
+       %doc COPYRIGHT ChangeLog README AUTHORS NEWS
+       %doc doc/*
+</pre>
+<pre class="smallexample">       # If you install a library
+       %post -p /sbin/ldconfig
+</pre>
+<pre class="smallexample">       # If you install a library
+       %postun -p /sbin/ldconfig
+</pre>
+<pre class="smallexample">       %package devel
+       Summary: Development files for %{pkgname}
+       Group: Applications/Databases
+       %description devel
+       Development files for %{pkgname}.
+</pre>
+<pre class="smallexample">       %files devel
+       %defattr(-, root, root)
+       # Your development files go here
+       # Programmers documentation goes here
+       %doc doc
+</pre>
+<pre class="smallexample">       # end of file
+       ---------- &gt;8 ----------
+</pre>
+<h2 class="majorheading">Source Code</h2>
+
+<p>Download the
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_rpm_init.m4">latest version of <samp><span class="file">ax_rpm_init.m4</span></samp></a> or browse
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=history;f=m4/ax_rpm_init.m4">the macro's revision history</a>.
+
+<h2 class="majorheading">License</h2>
+
+<p>Copyright&nbsp;&copy;&nbsp;2008&nbsp;Dale&nbsp;K.&nbsp;Hawkins&nbsp;<a href="mailto:dhawkins@cdrgts.com">dhawkins@cdrgts.com</a><!-- /@w -->
+
+<p>Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved. This file is offered as-is, without any
+warranty.
+
+</body></html>
+

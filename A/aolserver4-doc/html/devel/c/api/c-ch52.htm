@@ -1,0 +1,70 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_ConfigGetInt</TITLE>
+<LINK rel=Previous href="c-ch51.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch53.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch51.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch53.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="205495">
+</a><h3>Ns_ConfigGetInt</h3>
+<a name="88408">
+</a><h4>Overview</h4>
+Get a configuration file integer variable
+<a name="61754">
+</a><a name="132305">
+</a><h4>Syntax</h4>
+<pre>    <a name="61756"></a>int Ns_ConfigGetInt(
+    <a name="61757"></a>char *sectionName,
+    <a name="61758"></a>char *key,
+    <a name="61759"></a>int *valuePtr
+    <a name="61760"></a>);
+</pre><p><a name="133639">
+</a><h4>Description</h4>
+<p><a name="61762">
+</a>This function converts the specified value into an int and stores it in <code>valuePtr</code>. If the <code>key</code> does not exist in the config file or it is not an integer, the function returns <code>NS_FALSE</code>. Otherwise it returns <code>NS_TRUE</code>.</p>
+<a name="205600">
+</a><h4>Examples</h4>
+<pre>    <a name="205612"></a>	int n;
+    <a name="205613"></a>
+    <a name="205614"></a>	if (Ns_ConfigGetInt("MySect", "MyKey", &amp;n) != NS_TRUE) {
+    <a name="205604"></a>		/* Integer was not present or invalid - set a default. */
+    <a name="205605"></a>		n = 5;	/* off */
+    <a name="205621"></a>	}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch51.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch53.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

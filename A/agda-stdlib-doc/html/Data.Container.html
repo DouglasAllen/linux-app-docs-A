@@ -1,0 +1,6752 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Data.Container</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="73"
+      >
+</a
+      ><a name="74" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="102"
+      >
+</a
+      ><a name="103" class="Comment"
+      >--</a
+      ><a name="105"
+      >
+</a
+      ><a name="106" class="Comment"
+      >-- Containers, based on the work of Abbott and others</a
+      ><a name="159"
+      >
+</a
+      ><a name="160" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="232"
+      >
+
+</a
+      ><a name="234" class="Keyword"
+      >module</a
+      ><a name="240"
+      > </a
+      ><a name="241" href="Data.Container.html#1" class="Module"
+      >Data</a
+      ><a name="245"
+      >.</a
+      ><a name="246" href="Data.Container.html#1" class="Module"
+      >Container</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Keyword"
+      >where</a
+      ><a name="261"
+      >
+
+</a
+      ><a name="263" class="Keyword"
+      >open</a
+      ><a name="267"
+      > </a
+      ><a name="268" class="Keyword"
+      >import</a
+      ><a name="274"
+      > </a
+      ><a name="275" href="Data.Product.html#1" class="Module"
+      >Data</a
+      ><a name="279"
+      >.</a
+      ><a name="280" href="Data.Product.html#1" class="Module"
+      >Product</a
+      ><a name="287"
+      > </a
+      ><a name="288" class="Symbol"
+      >as</a
+      ><a name="290"
+      > </a
+      ><a name="291" class="Module"
+      >Prod</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Keyword"
+      >hiding</a
+      ><a name="302"
+      > </a
+      ><a name="303" class="Symbol"
+      >(</a
+      ><a name="304"
+      >map</a
+      ><a name="307" class="Symbol"
+      >)</a
+      ><a name="308"
+      >
+</a
+      ><a name="309" class="Keyword"
+      >open</a
+      ><a name="313"
+      > </a
+      ><a name="314" class="Keyword"
+      >import</a
+      ><a name="320"
+      > </a
+      ><a name="321" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Keyword"
+      >renaming</a
+      ><a name="338"
+      > </a
+      ><a name="339" class="Symbol"
+      >(</a
+      ><a name="340"
+      >id </a
+      ><a name="343" class="Symbol"
+      >to</a
+      ><a name="345"
+      > &#10216;id&#10217;</a
+      ><a name="350" class="Symbol"
+      >;</a
+      ><a name="351"
+      > _&#8728;_ </a
+      ><a name="356" class="Symbol"
+      >to</a
+      ><a name="358"
+      > _&#10216;&#8728;&#10217;_</a
+      ><a name="364" class="Symbol"
+      >)</a
+      ><a name="365"
+      >
+</a
+      ><a name="366" class="Keyword"
+      >open</a
+      ><a name="370"
+      > </a
+      ><a name="371" class="Keyword"
+      >import</a
+      ><a name="377"
+      > </a
+      ><a name="378" href="Function.Equality.html#1" class="Module"
+      >Function</a
+      ><a name="386"
+      >.</a
+      ><a name="387" href="Function.Equality.html#1" class="Module"
+      >Equality</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Keyword"
+      >using</a
+      ><a name="401"
+      > </a
+      ><a name="402" class="Symbol"
+      >(</a
+      ><a name="403"
+      >_&#10216;$&#10217;_</a
+      ><a name="408" class="Symbol"
+      >)</a
+      ><a name="409"
+      >
+</a
+      ><a name="410" class="Keyword"
+      >open</a
+      ><a name="414"
+      > </a
+      ><a name="415" class="Keyword"
+      >import</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Function.Inverse.html#1" class="Module"
+      >Function</a
+      ><a name="430"
+      >.</a
+      ><a name="431" href="Function.Inverse.html#1" class="Module"
+      >Inverse</a
+      ><a name="438"
+      > </a
+      ><a name="439" class="Keyword"
+      >using</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="Symbol"
+      >(</a
+      ><a name="446"
+      >_&#8596;_</a
+      ><a name="449" class="Symbol"
+      >;</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Keyword"
+      >module</a
+      ><a name="457"
+      > Inverse</a
+      ><a name="465" class="Symbol"
+      >)</a
+      ><a name="466"
+      >
+</a
+      ><a name="467" class="Keyword"
+      >import</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Function.Related.html#1" class="Module"
+      >Function</a
+      ><a name="482"
+      >.</a
+      ><a name="483" href="Function.Related.html#1" class="Module"
+      >Related</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Symbol"
+      >as</a
+      ><a name="493"
+      > </a
+      ><a name="494" class="Module"
+      >Related</a
+      ><a name="501"
+      >
+</a
+      ><a name="502" class="Keyword"
+      >open</a
+      ><a name="506"
+      > </a
+      ><a name="507" class="Keyword"
+      >import</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="519"
+      >
+</a
+      ><a name="520" class="Keyword"
+      >open</a
+      ><a name="524"
+      > </a
+      ><a name="525" class="Keyword"
+      >import</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Relation.Binary.html#1" class="Module"
+      >Relation</a
+      ><a name="540"
+      >.</a
+      ><a name="541" href="Relation.Binary.html#1" class="Module"
+      >Binary</a
+      ><a name="547"
+      >
+  </a
+      ><a name="550" class="Keyword"
+      >using</a
+      ><a name="555"
+      > </a
+      ><a name="556" class="Symbol"
+      >(</a
+      ><a name="557"
+      >Setoid</a
+      ><a name="563" class="Symbol"
+      >;</a
+      ><a name="564"
+      > </a
+      ><a name="565" class="Keyword"
+      >module</a
+      ><a name="571"
+      > Setoid</a
+      ><a name="578" class="Symbol"
+      >;</a
+      ><a name="579"
+      > Preorder</a
+      ><a name="588" class="Symbol"
+      >;</a
+      ><a name="589"
+      > </a
+      ><a name="590" class="Keyword"
+      >module</a
+      ><a name="596"
+      > Preorder</a
+      ><a name="605" class="Symbol"
+      >)</a
+      ><a name="606"
+      >
+</a
+      ><a name="607" class="Keyword"
+      >open</a
+      ><a name="611"
+      > </a
+      ><a name="612" class="Keyword"
+      >import</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation</a
+      ><a name="627"
+      >.</a
+      ><a name="628" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Binary</a
+      ><a name="634"
+      >.</a
+      ><a name="635" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >PropositionalEquality</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Symbol"
+      >as</a
+      ><a name="659"
+      > </a
+      ><a name="660" class="Module"
+      >P</a
+      ><a name="661"
+      >
+  </a
+      ><a name="664" class="Keyword"
+      >using</a
+      ><a name="669"
+      > </a
+      ><a name="670" class="Symbol"
+      >(</a
+      ><a name="671"
+      >_&#8801;_</a
+      ><a name="674" class="Symbol"
+      >;</a
+      ><a name="675"
+      > _&#8791;_</a
+      ><a name="679" class="Symbol"
+      >;</a
+      ><a name="680"
+      > refl</a
+      ><a name="685" class="Symbol"
+      >)</a
+      ><a name="686"
+      >
+</a
+      ><a name="687" class="Keyword"
+      >open</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Keyword"
+      >import</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Relation.Unary.html#1" class="Module"
+      >Relation</a
+      ><a name="707"
+      >.</a
+      ><a name="708" href="Relation.Unary.html#1" class="Module"
+      >Unary</a
+      ><a name="713"
+      > </a
+      ><a name="714" class="Keyword"
+      >using</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >(</a
+      ><a name="721"
+      >_&#8838;_</a
+      ><a name="724" class="Symbol"
+      >)</a
+      ><a name="725"
+      >
+
+</a
+      ><a name="727" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="799"
+      >
+</a
+      ><a name="800" class="Comment"
+      >-- Containers</a
+      ><a name="813"
+      >
+
+</a
+      ><a name="815" class="Comment"
+      >-- A container is a set of shapes, and for every shape a set of</a
+      ><a name="878"
+      >
+</a
+      ><a name="879" class="Comment"
+      >-- positions.</a
+      ><a name="892"
+      >
+
+</a
+      ><a name="894" class="Keyword"
+      >infix</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Number"
+      >5</a
+      ><a name="901"
+      > _&#9655;_
+
+</a
+      ><a name="907" class="Keyword"
+      >record</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="923"
+      > </a
+      ><a name="924" class="Symbol"
+      >(</a
+      ><a name="925" href="Data.Container.html#925" class="Bound"
+      >&#8467;</a
+      ><a name="926"
+      > </a
+      ><a name="927" class="Symbol"
+      >:</a
+      ><a name="928"
+      > </a
+      ><a name="929" href="Level.html#257" class="Postulate"
+      >Level</a
+      ><a name="934" class="Symbol"
+      >)</a
+      ><a name="935"
+      > </a
+      ><a name="936" class="Symbol"
+      >:</a
+      ><a name="937"
+      > </a
+      ><a name="938" class="PrimitiveType"
+      >Set</a
+      ><a name="941"
+      > </a
+      ><a name="942" class="Symbol"
+      >(</a
+      ><a name="943" href="Level.html#287" class="Primitive"
+      >suc</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="Data.Container.html#925" class="Bound"
+      >&#8467;</a
+      ><a name="948" class="Symbol"
+      >)</a
+      ><a name="949"
+      > </a
+      ><a name="950" class="Keyword"
+      >where</a
+      ><a name="955"
+      >
+  </a
+      ><a name="958" class="Keyword"
+      >constructor</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Data.Container.html#970" class="InductiveConstructor Operator"
+      >_&#9655;_</a
+      ><a name="973"
+      >
+  </a
+      ><a name="976" class="Keyword"
+      >field</a
+      ><a name="981"
+      >
+    </a
+      ><a name="986" href="Data.Container.html#986" class="Field"
+      >Shape</a
+      ><a name="991"
+      >    </a
+      ><a name="995" class="Symbol"
+      >:</a
+      ><a name="996"
+      > </a
+      ><a name="997" class="PrimitiveType"
+      >Set</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Data.Container.html#925" class="Bound"
+      >&#8467;</a
+      ><a name="1002"
+      >
+    </a
+      ><a name="1007" href="Data.Container.html#1007" class="Field"
+      >Position</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" class="Symbol"
+      >:</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Data.Container.html#986" class="Bound"
+      >Shape</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >&#8594;</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" class="PrimitiveType"
+      >Set</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Data.Container.html#925" class="Bound"
+      >&#8467;</a
+      ><a name="1031"
+      >
+
+</a
+      ><a name="1033" class="Keyword"
+      >open</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Data.Container.html#914" class="Module"
+      >Container</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" class="Keyword"
+      >public</a
+      ><a name="1054"
+      >
+
+</a
+      ><a name="1056" class="Comment"
+      >-- The semantics (&quot;extension&quot;) of a container.</a
+      ><a name="1102"
+      >
+
+</a
+      ><a name="1104" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;_&#10215;</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" class="Symbol"
+      >:</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" class="Symbol"
+      >&#8704;</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" class="Symbol"
+      >{</a
+      ><a name="1113" href="Data.Container.html#1113" class="Bound"
+      >&#8467;</a
+      ><a name="1114" class="Symbol"
+      >}</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >&#8594;</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Data.Container.html#1113" class="Bound"
+      >&#8467;</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" class="Symbol"
+      >&#8594;</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" class="PrimitiveType"
+      >Set</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Data.Container.html#1113" class="Bound"
+      >&#8467;</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" class="Symbol"
+      >&#8594;</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" class="PrimitiveType"
+      >Set</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Data.Container.html#1113" class="Bound"
+      >&#8467;</a
+      ><a name="1145"
+      >
+</a
+      ><a name="1146" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" href="Data.Container.html#1148" class="Bound"
+      >C</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" href="Data.Container.html#1152" class="Bound"
+      >X</a
+      ><a name="1153"
+      > </a
+      ><a name="1154" class="Symbol"
+      >=</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" href="Data.Product.html#439" class="Record"
+      >&#931;[</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Data.Container.html#1159" class="Bound"
+      >s</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Data.Product.html#439" class="Record"
+      >&#8758;</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Data.Container.html#986" class="Function"
+      >Shape</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Data.Container.html#1148" class="Bound"
+      >C</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" href="Data.Product.html#439" class="Record"
+      >]</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Symbol"
+      >(</a
+      ><a name="1174" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" href="Data.Container.html#1148" class="Bound"
+      >C</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="Data.Container.html#1159" class="Bound"
+      >s</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" class="Symbol"
+      >&#8594;</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Data.Container.html#1152" class="Bound"
+      >X</a
+      ><a name="1190" class="Symbol"
+      >)</a
+      ><a name="1191"
+      >
+
+</a
+      ><a name="1193" class="Comment"
+      >-- Equality, parametrised on an underlying relation.</a
+      ><a name="1245"
+      >
+
+</a
+      ><a name="1247" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" class="Symbol"
+      >:</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" class="Symbol"
+      >&#8704;</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" class="Symbol"
+      >{</a
+      ><a name="1255" href="Data.Container.html#1255" class="Bound"
+      >c</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" href="Data.Container.html#1257" class="Bound"
+      >&#8467;</a
+      ><a name="1258" class="Symbol"
+      >}</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >{</a
+      ><a name="1261" href="Data.Container.html#1261" class="Bound"
+      >C</a
+      ><a name="1262"
+      > </a
+      ><a name="1263" class="Symbol"
+      >:</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Data.Container.html#1255" class="Bound"
+      >c</a
+      ><a name="1276" class="Symbol"
+      >}</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" class="Symbol"
+      >{</a
+      ><a name="1279" href="Data.Container.html#1279" class="Bound"
+      >X</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Data.Container.html#1281" class="Bound"
+      >Y</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >:</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" class="PrimitiveType"
+      >Set</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Data.Container.html#1255" class="Bound"
+      >c</a
+      ><a name="1290" class="Symbol"
+      >}</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" class="Symbol"
+      >&#8594;</a
+      ><a name="1293"
+      >
+     </a
+      ><a name="1299" class="Symbol"
+      >(</a
+      ><a name="1300" href="Data.Container.html#1279" class="Bound"
+      >X</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" class="Symbol"
+      >&#8594;</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" href="Data.Container.html#1281" class="Bound"
+      >Y</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" class="Symbol"
+      >&#8594;</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" class="PrimitiveType"
+      >Set</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Data.Container.html#1257" class="Bound"
+      >&#8467;</a
+      ><a name="1313" class="Symbol"
+      >)</a
+      ><a name="1314"
+      > </a
+      ><a name="1315" class="Symbol"
+      >&#8594;</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Data.Container.html#1261" class="Bound"
+      >C</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Data.Container.html#1279" class="Bound"
+      >X</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >&#8594;</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="Data.Container.html#1261" class="Bound"
+      >C</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" href="Data.Container.html#1281" class="Bound"
+      >Y</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" class="Symbol"
+      >&#8594;</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" class="PrimitiveType"
+      >Set</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" class="Symbol"
+      >(</a
+      ><a name="1342" href="Data.Container.html#1255" class="Bound"
+      >c</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="Level.html#311" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" href="Data.Container.html#1257" class="Bound"
+      >&#8467;</a
+      ><a name="1347" class="Symbol"
+      >)</a
+      ><a name="1348"
+      >
+</a
+      ><a name="1349" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" class="Symbol"
+      >{</a
+      ><a name="1353"
+      >C </a
+      ><a name="1355" class="Symbol"
+      >=</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" href="Data.Container.html#1357" class="Bound"
+      >C</a
+      ><a name="1358" class="Symbol"
+      >}</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" href="Data.Container.html#1360" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" class="Symbol"
+      >(</a
+      ><a name="1365" href="Data.Container.html#1365" class="Bound"
+      >s</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" href="Data.Container.html#1369" class="Bound"
+      >f</a
+      ><a name="1370" class="Symbol"
+      >)</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" class="Symbol"
+      >(</a
+      ><a name="1373" href="Data.Container.html#1373" class="Bound"
+      >s&#8242;</a
+      ><a name="1375"
+      > </a
+      ><a name="1376" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" href="Data.Container.html#1378" class="Bound"
+      >f&#8242;</a
+      ><a name="1380" class="Symbol"
+      >)</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" class="Symbol"
+      >=</a
+      ><a name="1383"
+      >
+  </a
+      ><a name="1386" href="Data.Product.html#439" class="Record"
+      >&#931;[</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" href="Data.Container.html#1389" class="Bound"
+      >eq</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Data.Product.html#439" class="Record"
+      >&#8758;</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" href="Data.Container.html#1365" class="Bound"
+      >s</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1397"
+      > </a
+      ><a name="1398" href="Data.Container.html#1373" class="Bound"
+      >s&#8242;</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" href="Data.Product.html#439" class="Record"
+      >]</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" class="Symbol"
+      >(&#8704;</a
+      ><a name="1405"
+      > </a
+      ><a name="1406" href="Data.Container.html#1406" class="Bound"
+      >p</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" class="Symbol"
+      >&#8594;</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" href="Data.Container.html#1369" class="Bound"
+      >f</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" href="Data.Container.html#1406" class="Bound"
+      >p</a
+      ><a name="1413"
+      > </a
+      ><a name="1414" href="Data.Container.html#1360" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" href="Data.Container.html#1378" class="Bound"
+      >f&#8242;</a
+      ><a name="1418"
+      > </a
+      ><a name="1419" class="Symbol"
+      >(</a
+      ><a name="1420" href="Relation.Binary.PropositionalEquality.Core.html#705" class="Function"
+      >P</a
+      ><a name="1421"
+      >.</a
+      ><a name="1422" href="Relation.Binary.PropositionalEquality.Core.html#705" class="Function"
+      >subst</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" class="Symbol"
+      >(</a
+      ><a name="1429" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="Data.Container.html#1357" class="Bound"
+      >C</a
+      ><a name="1439" class="Symbol"
+      >)</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" href="Data.Container.html#1389" class="Bound"
+      >eq</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" href="Data.Container.html#1406" class="Bound"
+      >p</a
+      ><a name="1445" class="Symbol"
+      >))</a
+      ><a name="1447"
+      >
+
+</a
+      ><a name="1449" class="Keyword"
+      >private</a
+      ><a name="1456"
+      >
+
+  </a
+      ><a name="1460" class="Comment"
+      >-- Note that, if propositional equality were extensional, then</a
+      ><a name="1522"
+      >
+  </a
+      ><a name="1525" class="Comment"
+      >-- Eq&#160;_&#8801;_ and _&#8801;_ would coincide.</a
+      ><a name="1558"
+      >
+
+  </a
+      ><a name="1562" href="Data.Container.html#1562" class="Function"
+      >Eq&#8658;&#8801;</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" class="Symbol"
+      >:</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" class="Symbol"
+      >&#8704;</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" class="Symbol"
+      >{</a
+      ><a name="1572" href="Data.Container.html#1572" class="Bound"
+      >c</a
+      ><a name="1573" class="Symbol"
+      >}</a
+      ><a name="1574"
+      > </a
+      ><a name="1575" class="Symbol"
+      >{</a
+      ><a name="1576" href="Data.Container.html#1576" class="Bound"
+      >C</a
+      ><a name="1577"
+      > </a
+      ><a name="1578" class="Symbol"
+      >:</a
+      ><a name="1579"
+      > </a
+      ><a name="1580" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" href="Data.Container.html#1572" class="Bound"
+      >c</a
+      ><a name="1591" class="Symbol"
+      >}</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" class="Symbol"
+      >{</a
+      ><a name="1594" href="Data.Container.html#1594" class="Bound"
+      >X</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" class="Symbol"
+      >:</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="PrimitiveType"
+      >Set</a
+      ><a name="1601"
+      > </a
+      ><a name="1602" href="Data.Container.html#1572" class="Bound"
+      >c</a
+      ><a name="1603" class="Symbol"
+      >}</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" class="Symbol"
+      >{</a
+      ><a name="1606" href="Data.Container.html#1606" class="Bound"
+      >xs</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" href="Data.Container.html#1609" class="Bound"
+      >ys</a
+      ><a name="1611"
+      > </a
+      ><a name="1612" class="Symbol"
+      >:</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" href="Data.Container.html#1576" class="Bound"
+      >C</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" href="Data.Container.html#1594" class="Bound"
+      >X</a
+      ><a name="1621" class="Symbol"
+      >}</a
+      ><a name="1622"
+      > </a
+      ><a name="1623" class="Symbol"
+      >&#8594;</a
+      ><a name="1624"
+      >
+         </a
+      ><a name="1634" href="Relation.Binary.PropositionalEquality.html#5236" class="Function"
+      >P</a
+      ><a name="1635"
+      >.</a
+      ><a name="1636" href="Relation.Binary.PropositionalEquality.html#5236" class="Function"
+      >Extensionality</a
+      ><a name="1650"
+      > </a
+      ><a name="1651" href="Data.Container.html#1572" class="Bound"
+      >c</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" href="Data.Container.html#1572" class="Bound"
+      >c</a
+      ><a name="1654"
+      > </a
+      ><a name="1655" class="Symbol"
+      >&#8594;</a
+      ><a name="1656"
+      > </a
+      ><a name="1657" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="1659"
+      > </a
+      ><a name="1660" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Data.Container.html#1606" class="Bound"
+      >xs</a
+      ><a name="1666"
+      > </a
+      ><a name="1667" href="Data.Container.html#1609" class="Bound"
+      >ys</a
+      ><a name="1669"
+      > </a
+      ><a name="1670" class="Symbol"
+      >&#8594;</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Data.Container.html#1606" class="Bound"
+      >xs</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Data.Container.html#1609" class="Bound"
+      >ys</a
+      ><a name="1679"
+      >
+  </a
+      ><a name="1682" href="Data.Container.html#1562" class="Function"
+      >Eq&#8658;&#8801;</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" class="Symbol"
+      >{</a
+      ><a name="1688"
+      >xs </a
+      ><a name="1691" class="Symbol"
+      >=</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Data.Container.html#1693" class="Bound"
+      >s</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1696"
+      > </a
+      ><a name="1697" href="Data.Container.html#1697" class="Bound"
+      >f</a
+      ><a name="1698" class="Symbol"
+      >}</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" class="Symbol"
+      >{</a
+      ><a name="1701"
+      >ys </a
+      ><a name="1704" class="Symbol"
+      >=</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" class="DottedPattern Symbol"
+      >.</a
+      ><a name="1707" href="Data.Container.html#1693" class="DottedPattern Bound"
+      >s</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Data.Container.html#1711" class="Bound"
+      >f&#8242;</a
+      ><a name="1713" class="Symbol"
+      >}</a
+      ><a name="1714"
+      > </a
+      ><a name="1715" href="Data.Container.html#1715" class="Bound"
+      >ext</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" class="Symbol"
+      >(</a
+      ><a name="1720" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1724"
+      > </a
+      ><a name="1725" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1726"
+      > </a
+      ><a name="1727" href="Data.Container.html#1727" class="Bound"
+      >f&#8776;f&#8242;</a
+      ><a name="1731" class="Symbol"
+      >)</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" class="Symbol"
+      >=</a
+      ><a name="1734"
+      >
+    </a
+      ><a name="1739" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >P</a
+      ><a name="1740"
+      >.</a
+      ><a name="1741" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="1745"
+      > </a
+      ><a name="1746" class="Symbol"
+      >(</a
+      ><a name="1747" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >_,_</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Data.Container.html#1693" class="Bound"
+      >s</a
+      ><a name="1752" class="Symbol"
+      >)</a
+      ><a name="1753"
+      > </a
+      ><a name="1754" class="Symbol"
+      >(</a
+      ><a name="1755" href="Data.Container.html#1715" class="Bound"
+      >ext</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Data.Container.html#1727" class="Bound"
+      >f&#8776;f&#8242;</a
+      ><a name="1763" class="Symbol"
+      >)</a
+      ><a name="1764"
+      >
+
+</a
+      ><a name="1766" href="Data.Container.html#1766" class="Function"
+      >setoid</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" class="Symbol"
+      >:</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" class="Symbol"
+      >&#8704;</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" class="Symbol"
+      >{</a
+      ><a name="1778" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1779" class="Symbol"
+      >}</a
+      ><a name="1780"
+      > </a
+      ><a name="1781" class="Symbol"
+      >&#8594;</a
+      ><a name="1782"
+      > </a
+      ><a name="1783" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" class="Symbol"
+      >&#8594;</a
+      ><a name="1796"
+      > </a
+      ><a name="1797" href="Relation.Binary.html#1852" class="Record"
+      >Setoid</a
+      ><a name="1803"
+      > </a
+      ><a name="1804" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1807"
+      > </a
+      ><a name="1808" class="Symbol"
+      >&#8594;</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Relation.Binary.html#1852" class="Record"
+      >Setoid</a
+      ><a name="1816"
+      > </a
+      ><a name="1817" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1818"
+      > </a
+      ><a name="1819" href="Data.Container.html#1778" class="Bound"
+      >&#8467;</a
+      ><a name="1820"
+      >
+</a
+      ><a name="1821" href="Data.Container.html#1766" class="Function"
+      >setoid</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" href="Data.Container.html#1828" class="Bound"
+      >C</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Data.Container.html#1830" class="Bound"
+      >X</a
+      ><a name="1831"
+      > </a
+      ><a name="1832" class="Symbol"
+      >=</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" class="Keyword"
+      >record</a
+      ><a name="1840"
+      >
+  </a
+      ><a name="1843" class="Symbol"
+      >{</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" class="Field"
+      >Carrier</a
+      ><a name="1852"
+      >       </a
+      ><a name="1859" class="Symbol"
+      >=</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="1862"
+      > </a
+      ><a name="1863" href="Data.Container.html#1828" class="Bound"
+      >C</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="1866"
+      > </a
+      ><a name="1867" href="Relation.Binary.html#1915" class="Function"
+      >X</a
+      ><a name="1868"
+      >.</a
+      ><a name="1869" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="1876"
+      >
+  </a
+      ><a name="1879" class="Symbol"
+      >;</a
+      ><a name="1880"
+      > </a
+      ><a name="1881" class="Field Operator"
+      >_&#8776;_</a
+      ><a name="1884"
+      >           </a
+      ><a name="1895" class="Symbol"
+      >=</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" href="Data.Container.html#2061" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="1900"
+      >
+  </a
+      ><a name="1903" class="Symbol"
+      >;</a
+      ><a name="1904"
+      > </a
+      ><a name="1905" class="Field"
+      >isEquivalence</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" class="Symbol"
+      >=</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" class="Keyword"
+      >record</a
+      ><a name="1927"
+      >
+    </a
+      ><a name="1932" class="Symbol"
+      >{</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" class="Field"
+      >refl</a
+      ><a name="1938"
+      >  </a
+      ><a name="1940" class="Symbol"
+      >=</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" class="Symbol"
+      >(</a
+      ><a name="1943" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1947"
+      > </a
+      ><a name="1948" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1949"
+      > </a
+      ><a name="1950" class="Symbol"
+      >&#955;</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" href="Data.Container.html#1952" class="Bound"
+      >_</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >&#8594;</a
+      ><a name="1955"
+      > </a
+      ><a name="1956" href="Relation.Binary.Core.html#5185" class="Function"
+      >X</a
+      ><a name="1957"
+      >.</a
+      ><a name="1958" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="1962" class="Symbol"
+      >)</a
+      ><a name="1963"
+      >
+    </a
+      ><a name="1968" class="Symbol"
+      >;</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" class="Field"
+      >sym</a
+      ><a name="1973"
+      >   </a
+      ><a name="1976" class="Symbol"
+      >=</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Data.Container.html#2079" class="Function"
+      >sym</a
+      ><a name="1981"
+      >
+    </a
+      ><a name="1986" class="Symbol"
+      >;</a
+      ><a name="1987"
+      > </a
+      ><a name="1988" class="Field"
+      >trans</a
+      ><a name="1993"
+      > </a
+      ><a name="1994" class="Symbol"
+      >=</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >&#955;</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" class="Symbol"
+      >{</a
+      ><a name="1999" href="Data.Container.html#1999" class="Bound"
+      >_</a
+      ><a name="2000"
+      > </a
+      ><a name="2001" href="Data.Container.html#2001" class="Bound"
+      >_</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" href="Data.Container.html#2003" class="Bound"
+      >zs</a
+      ><a name="2005" class="Symbol"
+      >}</a
+      ><a name="2006"
+      > </a
+      ><a name="2007" class="Symbol"
+      >&#8594;</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Data.Container.html#2191" class="Function"
+      >trans</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" href="Data.Container.html#2003" class="Bound"
+      >zs</a
+      ><a name="2017"
+      >
+    </a
+      ><a name="2022" class="Symbol"
+      >}</a
+      ><a name="2023"
+      >
+  </a
+      ><a name="2026" class="Symbol"
+      >}</a
+      ><a name="2027"
+      >
+  </a
+      ><a name="2030" class="Keyword"
+      >where</a
+      ><a name="2035"
+      >
+  </a
+      ><a name="2038" class="Keyword"
+      >module</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" href="Data.Container.html#2045" class="Module"
+      >X</a
+      ><a name="2046"
+      > </a
+      ><a name="2047" class="Symbol"
+      >=</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="Relation.Binary.html#1852" class="Module"
+      >Setoid</a
+      ><a name="2055"
+      > </a
+      ><a name="2056" href="Data.Container.html#1830" class="Bound"
+      >X</a
+      ><a name="2057"
+      >
+
+  </a
+      ><a name="2061" href="Data.Container.html#2061" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="2064"
+      > </a
+      ><a name="2065" class="Symbol"
+      >=</a
+      ><a name="2066"
+      > </a
+      ><a name="2067" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" href="Relation.Binary.html#1941" class="Function Operator"
+      >X</a
+      ><a name="2071"
+      >.</a
+      ><a name="2072" href="Relation.Binary.html#1941" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="2075"
+      >
+
+  </a
+      ><a name="2079" href="Data.Container.html#2079" class="Function"
+      >sym</a
+      ><a name="2082"
+      > </a
+      ><a name="2083" class="Symbol"
+      >:</a
+      ><a name="2084"
+      > </a
+      ><a name="2085" class="Symbol"
+      >{</a
+      ><a name="2086" href="Data.Container.html#2086" class="Bound"
+      >xs</a
+      ><a name="2088"
+      > </a
+      ><a name="2089" href="Data.Container.html#2089" class="Bound"
+      >ys</a
+      ><a name="2091"
+      > </a
+      ><a name="2092" class="Symbol"
+      >:</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2095"
+      > </a
+      ><a name="2096" href="Data.Container.html#1828" class="Bound"
+      >C</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2099"
+      > </a
+      ><a name="2100" href="Relation.Binary.html#1915" class="Function"
+      >X</a
+      ><a name="2101"
+      >.</a
+      ><a name="2102" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="2109" class="Symbol"
+      >}</a
+      ><a name="2110"
+      > </a
+      ><a name="2111" class="Symbol"
+      >&#8594;</a
+      ><a name="2112"
+      > </a
+      ><a name="2113" href="Data.Container.html#2086" class="Bound"
+      >xs</a
+      ><a name="2115"
+      > </a
+      ><a name="2116" href="Data.Container.html#2061" class="Function Operator"
+      >&#8776;</a
+      ><a name="2117"
+      > </a
+      ><a name="2118" href="Data.Container.html#2089" class="Bound"
+      >ys</a
+      ><a name="2120"
+      > </a
+      ><a name="2121" class="Symbol"
+      >&#8594;</a
+      ><a name="2122"
+      > </a
+      ><a name="2123" href="Data.Container.html#2089" class="Bound"
+      >ys</a
+      ><a name="2125"
+      > </a
+      ><a name="2126" href="Data.Container.html#2061" class="Function Operator"
+      >&#8776;</a
+      ><a name="2127"
+      > </a
+      ><a name="2128" href="Data.Container.html#2086" class="Bound"
+      >xs</a
+      ><a name="2130"
+      >
+  </a
+      ><a name="2133" href="Data.Container.html#2079" class="Function"
+      >sym</a
+      ><a name="2136"
+      > </a
+      ><a name="2137" class="Symbol"
+      >{_</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2141"
+      > </a
+      ><a name="2142" class="Symbol"
+      >_}</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" class="Symbol"
+      >{</a
+      ><a name="2146" class="DottedPattern Symbol"
+      >._</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" class="Symbol"
+      >_}</a
+      ><a name="2153"
+      > </a
+      ><a name="2154" class="Symbol"
+      >(</a
+      ><a name="2155" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2159"
+      > </a
+      ><a name="2160" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2161"
+      > </a
+      ><a name="2162" href="Data.Container.html#2162" class="Bound"
+      >f</a
+      ><a name="2163" class="Symbol"
+      >)</a
+      ><a name="2164"
+      > </a
+      ><a name="2165" class="Symbol"
+      >=</a
+      ><a name="2166"
+      > </a
+      ><a name="2167" class="Symbol"
+      >(</a
+      ><a name="2168" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2172"
+      > </a
+      ><a name="2173" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2174"
+      > </a
+      ><a name="2175" href="Relation.Binary.Core.html#5211" class="Function"
+      >X</a
+      ><a name="2176"
+      >.</a
+      ><a name="2177" href="Relation.Binary.Core.html#5211" class="Function"
+      >sym</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="2184"
+      > </a
+      ><a name="2185" href="Data.Container.html#2162" class="Bound"
+      >f</a
+      ><a name="2186" class="Symbol"
+      >)</a
+      ><a name="2187"
+      >
+
+  </a
+      ><a name="2191" href="Data.Container.html#2191" class="Function"
+      >trans</a
+      ><a name="2196"
+      > </a
+      ><a name="2197" class="Symbol"
+      >:</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" class="Symbol"
+      >&#8704;</a
+      ><a name="2200"
+      > </a
+      ><a name="2201" class="Symbol"
+      >{</a
+      ><a name="2202" href="Data.Container.html#2202" class="Bound"
+      >xs</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Data.Container.html#2205" class="Bound"
+      >ys</a
+      ><a name="2207"
+      > </a
+      ><a name="2208" class="Symbol"
+      >:</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" href="Data.Container.html#1828" class="Bound"
+      >C</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" href="Relation.Binary.html#1915" class="Function"
+      >X</a
+      ><a name="2217"
+      >.</a
+      ><a name="2218" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="2225" class="Symbol"
+      >}</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" href="Data.Container.html#2227" class="Bound"
+      >zs</a
+      ><a name="2229"
+      > </a
+      ><a name="2230" class="Symbol"
+      >&#8594;</a
+      ><a name="2231"
+      > </a
+      ><a name="2232" href="Data.Container.html#2202" class="Bound"
+      >xs</a
+      ><a name="2234"
+      > </a
+      ><a name="2235" href="Data.Container.html#2061" class="Function Operator"
+      >&#8776;</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="Data.Container.html#2205" class="Bound"
+      >ys</a
+      ><a name="2239"
+      > </a
+      ><a name="2240" class="Symbol"
+      >&#8594;</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" href="Data.Container.html#2205" class="Bound"
+      >ys</a
+      ><a name="2244"
+      > </a
+      ><a name="2245" href="Data.Container.html#2061" class="Function Operator"
+      >&#8776;</a
+      ><a name="2246"
+      > </a
+      ><a name="2247" href="Data.Container.html#2227" class="Bound"
+      >zs</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" class="Symbol"
+      >&#8594;</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" href="Data.Container.html#2202" class="Bound"
+      >xs</a
+      ><a name="2254"
+      > </a
+      ><a name="2255" href="Data.Container.html#2061" class="Function Operator"
+      >&#8776;</a
+      ><a name="2256"
+      > </a
+      ><a name="2257" href="Data.Container.html#2227" class="Bound"
+      >zs</a
+      ><a name="2259"
+      >
+  </a
+      ><a name="2262" href="Data.Container.html#2191" class="Function"
+      >trans</a
+      ><a name="2267"
+      > </a
+      ><a name="2268" class="Symbol"
+      >{_</a
+      ><a name="2270"
+      > </a
+      ><a name="2271" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2272"
+      > </a
+      ><a name="2273" class="Symbol"
+      >_}</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" class="Symbol"
+      >{</a
+      ><a name="2277" class="DottedPattern Symbol"
+      >._</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" class="Symbol"
+      >_}</a
+      ><a name="2284"
+      > </a
+      ><a name="2285" class="Symbol"
+      >(</a
+      ><a name="2286" class="DottedPattern Symbol"
+      >._</a
+      ><a name="2288"
+      > </a
+      ><a name="2289" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2290"
+      > </a
+      ><a name="2291" class="Symbol"
+      >_)</a
+      ><a name="2293"
+      > </a
+      ><a name="2294" class="Symbol"
+      >(</a
+      ><a name="2295" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2299"
+      > </a
+      ><a name="2300" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2301"
+      > </a
+      ><a name="2302" href="Data.Container.html#2302" class="Bound"
+      >f&#8321;</a
+      ><a name="2304" class="Symbol"
+      >)</a
+      ><a name="2305"
+      > </a
+      ><a name="2306" class="Symbol"
+      >(</a
+      ><a name="2307" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" href="Data.Container.html#2314" class="Bound"
+      >f&#8322;</a
+      ><a name="2316" class="Symbol"
+      >)</a
+      ><a name="2317"
+      > </a
+      ><a name="2318" class="Symbol"
+      >=</a
+      ><a name="2319"
+      >
+    </a
+      ><a name="2324" class="Symbol"
+      >(</a
+      ><a name="2325" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2329"
+      > </a
+      ><a name="2330" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" class="Symbol"
+      >&#955;</a
+      ><a name="2333"
+      > </a
+      ><a name="2334" href="Data.Container.html#2334" class="Bound"
+      >p</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" class="Symbol"
+      >&#8594;</a
+      ><a name="2337"
+      > </a
+      ><a name="2338" href="Relation.Binary.Core.html#5237" class="Function"
+      >X</a
+      ><a name="2339"
+      >.</a
+      ><a name="2340" href="Relation.Binary.Core.html#5237" class="Function"
+      >trans</a
+      ><a name="2345"
+      > </a
+      ><a name="2346" class="Symbol"
+      >(</a
+      ><a name="2347" href="Data.Container.html#2302" class="Bound"
+      >f&#8321;</a
+      ><a name="2349"
+      > </a
+      ><a name="2350" href="Data.Container.html#2334" class="Bound"
+      >p</a
+      ><a name="2351" class="Symbol"
+      >)</a
+      ><a name="2352"
+      > </a
+      ><a name="2353" class="Symbol"
+      >(</a
+      ><a name="2354" href="Data.Container.html#2314" class="Bound"
+      >f&#8322;</a
+      ><a name="2356"
+      > </a
+      ><a name="2357" href="Data.Container.html#2334" class="Bound"
+      >p</a
+      ><a name="2358" class="Symbol"
+      >))</a
+      ><a name="2360"
+      >
+
+</a
+      ><a name="2362" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="2434"
+      >
+</a
+      ><a name="2435" class="Comment"
+      >-- Functoriality</a
+      ><a name="2451"
+      >
+
+</a
+      ><a name="2453" class="Comment"
+      >-- Containers are functors.</a
+      ><a name="2480"
+      >
+
+</a
+      ><a name="2482" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="2485"
+      > </a
+      ><a name="2486" class="Symbol"
+      >:</a
+      ><a name="2487"
+      > </a
+      ><a name="2488" class="Symbol"
+      >&#8704;</a
+      ><a name="2489"
+      > </a
+      ><a name="2490" class="Symbol"
+      >{</a
+      ><a name="2491" href="Data.Container.html#2491" class="Bound"
+      >c</a
+      ><a name="2492" class="Symbol"
+      >}</a
+      ><a name="2493"
+      > </a
+      ><a name="2494" class="Symbol"
+      >{</a
+      ><a name="2495" href="Data.Container.html#2495" class="Bound"
+      >C</a
+      ><a name="2496"
+      > </a
+      ><a name="2497" class="Symbol"
+      >:</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" href="Data.Container.html#2491" class="Bound"
+      >c</a
+      ><a name="2510" class="Symbol"
+      >}</a
+      ><a name="2511"
+      > </a
+      ><a name="2512" class="Symbol"
+      >{</a
+      ><a name="2513" href="Data.Container.html#2513" class="Bound"
+      >X</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" href="Data.Container.html#2515" class="Bound"
+      >Y</a
+      ><a name="2516" class="Symbol"
+      >}</a
+      ><a name="2517"
+      > </a
+      ><a name="2518" class="Symbol"
+      >&#8594;</a
+      ><a name="2519"
+      > </a
+      ><a name="2520" class="Symbol"
+      >(</a
+      ><a name="2521" href="Data.Container.html#2513" class="Bound"
+      >X</a
+      ><a name="2522"
+      > </a
+      ><a name="2523" class="Symbol"
+      >&#8594;</a
+      ><a name="2524"
+      > </a
+      ><a name="2525" href="Data.Container.html#2515" class="Bound"
+      >Y</a
+      ><a name="2526" class="Symbol"
+      >)</a
+      ><a name="2527"
+      > </a
+      ><a name="2528" class="Symbol"
+      >&#8594;</a
+      ><a name="2529"
+      > </a
+      ><a name="2530" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2531"
+      > </a
+      ><a name="2532" href="Data.Container.html#2495" class="Bound"
+      >C</a
+      ><a name="2533"
+      > </a
+      ><a name="2534" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2535"
+      > </a
+      ><a name="2536" href="Data.Container.html#2513" class="Bound"
+      >X</a
+      ><a name="2537"
+      > </a
+      ><a name="2538" class="Symbol"
+      >&#8594;</a
+      ><a name="2539"
+      > </a
+      ><a name="2540" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2541"
+      > </a
+      ><a name="2542" href="Data.Container.html#2495" class="Bound"
+      >C</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2545"
+      > </a
+      ><a name="2546" href="Data.Container.html#2515" class="Bound"
+      >Y</a
+      ><a name="2547"
+      >
+</a
+      ><a name="2548" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="2551"
+      > </a
+      ><a name="2552" href="Data.Container.html#2552" class="Bound"
+      >f</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" class="Symbol"
+      >=</a
+      ><a name="2555"
+      > </a
+      ><a name="2556" href="Data.Product.html#1657" class="Function"
+      >Prod</a
+      ><a name="2560"
+      >.</a
+      ><a name="2561" href="Data.Product.html#1657" class="Function"
+      >map</a
+      ><a name="2564"
+      > </a
+      ><a name="2565" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" class="Symbol"
+      >(&#955;</a
+      ><a name="2572"
+      > </a
+      ><a name="2573" href="Data.Container.html#2573" class="Bound"
+      >g</a
+      ><a name="2574"
+      > </a
+      ><a name="2575" class="Symbol"
+      >&#8594;</a
+      ><a name="2576"
+      > </a
+      ><a name="2577" href="Data.Container.html#2552" class="Bound"
+      >f</a
+      ><a name="2578"
+      > </a
+      ><a name="2579" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="2582"
+      > </a
+      ><a name="2583" href="Data.Container.html#2573" class="Bound"
+      >g</a
+      ><a name="2584" class="Symbol"
+      >)</a
+      ><a name="2585"
+      >
+
+</a
+      ><a name="2587" class="Keyword"
+      >module</a
+      ><a name="2593"
+      > </a
+      ><a name="2594" href="Data.Container.html#2594" class="Module"
+      >Map</a
+      ><a name="2597"
+      > </a
+      ><a name="2598" class="Keyword"
+      >where</a
+      ><a name="2603"
+      >
+
+  </a
+      ><a name="2607" href="Data.Container.html#2607" class="Function"
+      >identity</a
+      ><a name="2615"
+      > </a
+      ><a name="2616" class="Symbol"
+      >:</a
+      ><a name="2617"
+      > </a
+      ><a name="2618" class="Symbol"
+      >&#8704;</a
+      ><a name="2619"
+      > </a
+      ><a name="2620" class="Symbol"
+      >{</a
+      ><a name="2621" href="Data.Container.html#2621" class="Bound"
+      >c</a
+      ><a name="2622" class="Symbol"
+      >}</a
+      ><a name="2623"
+      > </a
+      ><a name="2624" class="Symbol"
+      >{</a
+      ><a name="2625" href="Data.Container.html#2625" class="Bound"
+      >C</a
+      ><a name="2626"
+      > </a
+      ><a name="2627" class="Symbol"
+      >:</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="2638"
+      > </a
+      ><a name="2639" href="Data.Container.html#2621" class="Bound"
+      >c</a
+      ><a name="2640" class="Symbol"
+      >}</a
+      ><a name="2641"
+      > </a
+      ><a name="2642" href="Data.Container.html#2642" class="Bound"
+      >X</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" class="Symbol"
+      >&#8594;</a
+      ><a name="2645"
+      >
+             </a
+      ><a name="2659" class="Keyword"
+      >let</a
+      ><a name="2662"
+      > </a
+      ><a name="2663" class="Keyword"
+      >module</a
+      ><a name="2669"
+      > </a
+      ><a name="2670" href="Data.Container.html#2670" class="Module"
+      >X</a
+      ><a name="2671"
+      > </a
+      ><a name="2672" class="Symbol"
+      >=</a
+      ><a name="2673"
+      > </a
+      ><a name="2674" href="Relation.Binary.html#1852" class="Module"
+      >Setoid</a
+      ><a name="2680"
+      > </a
+      ><a name="2681" href="Data.Container.html#2642" class="Bound"
+      >X</a
+      ><a name="2682"
+      > </a
+      ><a name="2683" class="Keyword"
+      >in</a
+      ><a name="2685"
+      >
+             </a
+      ><a name="2699" class="Symbol"
+      >(</a
+      ><a name="2700" href="Data.Container.html#2700" class="Bound"
+      >xs</a
+      ><a name="2702"
+      > </a
+      ><a name="2703" class="Symbol"
+      >:</a
+      ><a name="2704"
+      > </a
+      ><a name="2705" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" href="Data.Container.html#2625" class="Bound"
+      >C</a
+      ><a name="2708"
+      > </a
+      ><a name="2709" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2710"
+      > </a
+      ><a name="2711" href="Relation.Binary.html#1915" class="Function"
+      >X</a
+      ><a name="2712"
+      >.</a
+      ><a name="2713" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="2720" class="Symbol"
+      >)</a
+      ><a name="2721"
+      > </a
+      ><a name="2722" class="Symbol"
+      >&#8594;</a
+      ><a name="2723"
+      > </a
+      ><a name="2724" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="2726"
+      > </a
+      ><a name="2727" href="Relation.Binary.html#1941" class="Function Operator"
+      >X</a
+      ><a name="2728"
+      >.</a
+      ><a name="2729" href="Relation.Binary.html#1941" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="2732"
+      > </a
+      ><a name="2733" class="Symbol"
+      >(</a
+      ><a name="2734" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="2737"
+      > </a
+      ><a name="2738" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="2742"
+      > </a
+      ><a name="2743" href="Data.Container.html#2700" class="Bound"
+      >xs</a
+      ><a name="2745" class="Symbol"
+      >)</a
+      ><a name="2746"
+      > </a
+      ><a name="2747" href="Data.Container.html#2700" class="Bound"
+      >xs</a
+      ><a name="2749"
+      >
+  </a
+      ><a name="2752" href="Data.Container.html#2607" class="Function"
+      >identity</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" class="Symbol"
+      >{</a
+      ><a name="2762"
+      >C </a
+      ><a name="2764" class="Symbol"
+      >=</a
+      ><a name="2765"
+      > </a
+      ><a name="2766" href="Data.Container.html#2766" class="Bound"
+      >C</a
+      ><a name="2767" class="Symbol"
+      >}</a
+      ><a name="2768"
+      > </a
+      ><a name="2769" href="Data.Container.html#2769" class="Bound"
+      >X</a
+      ><a name="2770"
+      > </a
+      ><a name="2771" href="Data.Container.html#2771" class="Bound"
+      >xs</a
+      ><a name="2773"
+      > </a
+      ><a name="2774" class="Symbol"
+      >=</a
+      ><a name="2775"
+      > </a
+      ><a name="2776" href="Relation.Binary.Core.html#5185" class="Function"
+      >Setoid</a
+      ><a name="2782"
+      >.</a
+      ><a name="2783" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="2787"
+      > </a
+      ><a name="2788" class="Symbol"
+      >(</a
+      ><a name="2789" href="Data.Container.html#1766" class="Function"
+      >setoid</a
+      ><a name="2795"
+      > </a
+      ><a name="2796" href="Data.Container.html#2766" class="Bound"
+      >C</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" href="Data.Container.html#2769" class="Bound"
+      >X</a
+      ><a name="2799" class="Symbol"
+      >)</a
+      ><a name="2800"
+      >
+
+  </a
+      ><a name="2804" href="Data.Container.html#2804" class="Function"
+      >composition</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" class="Symbol"
+      >:</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" class="Symbol"
+      >&#8704;</a
+      ><a name="2819"
+      > </a
+      ><a name="2820" class="Symbol"
+      >{</a
+      ><a name="2821" href="Data.Container.html#2821" class="Bound"
+      >c</a
+      ><a name="2822" class="Symbol"
+      >}</a
+      ><a name="2823"
+      > </a
+      ><a name="2824" class="Symbol"
+      >{</a
+      ><a name="2825" href="Data.Container.html#2825" class="Bound"
+      >C</a
+      ><a name="2826"
+      > </a
+      ><a name="2827" class="Symbol"
+      >:</a
+      ><a name="2828"
+      > </a
+      ><a name="2829" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="2838"
+      > </a
+      ><a name="2839" href="Data.Container.html#2821" class="Bound"
+      >c</a
+      ><a name="2840" class="Symbol"
+      >}</a
+      ><a name="2841"
+      > </a
+      ><a name="2842" class="Symbol"
+      >{</a
+      ><a name="2843" href="Data.Container.html#2843" class="Bound"
+      >X</a
+      ><a name="2844"
+      > </a
+      ><a name="2845" href="Data.Container.html#2845" class="Bound"
+      >Y</a
+      ><a name="2846"
+      > </a
+      ><a name="2847" class="Symbol"
+      >:</a
+      ><a name="2848"
+      > </a
+      ><a name="2849" class="PrimitiveType"
+      >Set</a
+      ><a name="2852"
+      > </a
+      ><a name="2853" href="Data.Container.html#2821" class="Bound"
+      >c</a
+      ><a name="2854" class="Symbol"
+      >}</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="Data.Container.html#2856" class="Bound"
+      >Z</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" class="Symbol"
+      >&#8594;</a
+      ><a name="2859"
+      >
+                </a
+      ><a name="2876" class="Keyword"
+      >let</a
+      ><a name="2879"
+      > </a
+      ><a name="2880" class="Keyword"
+      >module</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Data.Container.html#2887" class="Module"
+      >Z</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" class="Symbol"
+      >=</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Relation.Binary.html#1852" class="Module"
+      >Setoid</a
+      ><a name="2897"
+      > </a
+      ><a name="2898" href="Data.Container.html#2856" class="Bound"
+      >Z</a
+      ><a name="2899"
+      > </a
+      ><a name="2900" class="Keyword"
+      >in</a
+      ><a name="2902"
+      >
+                </a
+      ><a name="2919" class="Symbol"
+      >(</a
+      ><a name="2920" href="Data.Container.html#2920" class="Bound"
+      >f</a
+      ><a name="2921"
+      > </a
+      ><a name="2922" class="Symbol"
+      >:</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Data.Container.html#2845" class="Bound"
+      >Y</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" class="Symbol"
+      >&#8594;</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" href="Relation.Binary.html#1915" class="Function"
+      >Z</a
+      ><a name="2929"
+      >.</a
+      ><a name="2930" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="2937" class="Symbol"
+      >)</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" class="Symbol"
+      >(</a
+      ><a name="2940" href="Data.Container.html#2940" class="Bound"
+      >g</a
+      ><a name="2941"
+      > </a
+      ><a name="2942" class="Symbol"
+      >:</a
+      ><a name="2943"
+      > </a
+      ><a name="2944" href="Data.Container.html#2843" class="Bound"
+      >X</a
+      ><a name="2945"
+      > </a
+      ><a name="2946" class="Symbol"
+      >&#8594;</a
+      ><a name="2947"
+      > </a
+      ><a name="2948" href="Data.Container.html#2845" class="Bound"
+      >Y</a
+      ><a name="2949" class="Symbol"
+      >)</a
+      ><a name="2950"
+      > </a
+      ><a name="2951" class="Symbol"
+      >(</a
+      ><a name="2952" href="Data.Container.html#2952" class="Bound"
+      >xs</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" class="Symbol"
+      >:</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Data.Container.html#2825" class="Bound"
+      >C</a
+      ><a name="2960"
+      > </a
+      ><a name="2961" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="2962"
+      > </a
+      ><a name="2963" href="Data.Container.html#2843" class="Bound"
+      >X</a
+      ><a name="2964" class="Symbol"
+      >)</a
+      ><a name="2965"
+      > </a
+      ><a name="2966" class="Symbol"
+      >&#8594;</a
+      ><a name="2967"
+      >
+                </a
+      ><a name="2984" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="2986"
+      > </a
+      ><a name="2987" href="Relation.Binary.html#1941" class="Function Operator"
+      >Z</a
+      ><a name="2988"
+      >.</a
+      ><a name="2989" href="Relation.Binary.html#1941" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="2992"
+      > </a
+      ><a name="2993" class="Symbol"
+      >(</a
+      ><a name="2994" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="2997"
+      > </a
+      ><a name="2998" href="Data.Container.html#2920" class="Bound"
+      >f</a
+      ><a name="2999"
+      > </a
+      ><a name="3000" class="Symbol"
+      >(</a
+      ><a name="3001" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="3004"
+      > </a
+      ><a name="3005" href="Data.Container.html#2940" class="Bound"
+      >g</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" href="Data.Container.html#2952" class="Bound"
+      >xs</a
+      ><a name="3009" class="Symbol"
+      >))</a
+      ><a name="3011"
+      > </a
+      ><a name="3012" class="Symbol"
+      >(</a
+      ><a name="3013" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="3016"
+      > </a
+      ><a name="3017" class="Symbol"
+      >(</a
+      ><a name="3018" href="Data.Container.html#2920" class="Bound"
+      >f</a
+      ><a name="3019"
+      > </a
+      ><a name="3020" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="3023"
+      > </a
+      ><a name="3024" href="Data.Container.html#2940" class="Bound"
+      >g</a
+      ><a name="3025" class="Symbol"
+      >)</a
+      ><a name="3026"
+      > </a
+      ><a name="3027" href="Data.Container.html#2952" class="Bound"
+      >xs</a
+      ><a name="3029" class="Symbol"
+      >)</a
+      ><a name="3030"
+      >
+  </a
+      ><a name="3033" href="Data.Container.html#2804" class="Function"
+      >composition</a
+      ><a name="3044"
+      > </a
+      ><a name="3045" class="Symbol"
+      >{</a
+      ><a name="3046"
+      >C </a
+      ><a name="3048" class="Symbol"
+      >=</a
+      ><a name="3049"
+      > </a
+      ><a name="3050" href="Data.Container.html#3050" class="Bound"
+      >C</a
+      ><a name="3051" class="Symbol"
+      >}</a
+      ><a name="3052"
+      > </a
+      ><a name="3053" href="Data.Container.html#3053" class="Bound"
+      >Z</a
+      ><a name="3054"
+      > </a
+      ><a name="3055" href="Data.Container.html#3055" class="Bound"
+      >f</a
+      ><a name="3056"
+      > </a
+      ><a name="3057" href="Data.Container.html#3057" class="Bound"
+      >g</a
+      ><a name="3058"
+      > </a
+      ><a name="3059" href="Data.Container.html#3059" class="Bound"
+      >xs</a
+      ><a name="3061"
+      > </a
+      ><a name="3062" class="Symbol"
+      >=</a
+      ><a name="3063"
+      > </a
+      ><a name="3064" href="Relation.Binary.Core.html#5185" class="Function"
+      >Setoid</a
+      ><a name="3070"
+      >.</a
+      ><a name="3071" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="3075"
+      > </a
+      ><a name="3076" class="Symbol"
+      >(</a
+      ><a name="3077" href="Data.Container.html#1766" class="Function"
+      >setoid</a
+      ><a name="3083"
+      > </a
+      ><a name="3084" href="Data.Container.html#3050" class="Bound"
+      >C</a
+      ><a name="3085"
+      > </a
+      ><a name="3086" href="Data.Container.html#3053" class="Bound"
+      >Z</a
+      ><a name="3087" class="Symbol"
+      >)</a
+      ><a name="3088"
+      >
+
+</a
+      ><a name="3090" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="3162"
+      >
+</a
+      ><a name="3163" class="Comment"
+      >-- Container morphisms</a
+      ><a name="3185"
+      >
+
+</a
+      ><a name="3187" class="Comment"
+      >-- Representation of container morphisms.</a
+      ><a name="3228"
+      >
+
+</a
+      ><a name="3230" class="Keyword"
+      >record</a
+      ><a name="3236"
+      > </a
+      ><a name="3237" href="Data.Container.html#3237" class="Record Operator"
+      >_&#8658;_</a
+      ><a name="3240"
+      > </a
+      ><a name="3241" class="Symbol"
+      >{</a
+      ><a name="3242" href="Data.Container.html#3242" class="Bound"
+      >c</a
+      ><a name="3243" class="Symbol"
+      >}</a
+      ><a name="3244"
+      > </a
+      ><a name="3245" class="Symbol"
+      >(</a
+      ><a name="3246" href="Data.Container.html#3246" class="Bound"
+      >C&#8321;</a
+      ><a name="3248"
+      > </a
+      ><a name="3249" href="Data.Container.html#3249" class="Bound"
+      >C&#8322;</a
+      ><a name="3251"
+      > </a
+      ><a name="3252" class="Symbol"
+      >:</a
+      ><a name="3253"
+      > </a
+      ><a name="3254" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" href="Data.Container.html#3242" class="Bound"
+      >c</a
+      ><a name="3265" class="Symbol"
+      >)</a
+      ><a name="3266"
+      > </a
+      ><a name="3267" class="Symbol"
+      >:</a
+      ><a name="3268"
+      > </a
+      ><a name="3269" class="PrimitiveType"
+      >Set</a
+      ><a name="3272"
+      > </a
+      ><a name="3273" href="Data.Container.html#3242" class="Bound"
+      >c</a
+      ><a name="3274"
+      > </a
+      ><a name="3275" class="Keyword"
+      >where</a
+      ><a name="3280"
+      >
+  </a
+      ><a name="3283" class="Keyword"
+      >field</a
+      ><a name="3288"
+      >
+    </a
+      ><a name="3293" href="Data.Container.html#3293" class="Field"
+      >shape</a
+      ><a name="3298"
+      >    </a
+      ><a name="3302" class="Symbol"
+      >:</a
+      ><a name="3303"
+      > </a
+      ><a name="3304" href="Data.Container.html#986" class="Function"
+      >Shape</a
+      ><a name="3309"
+      > </a
+      ><a name="3310" href="Data.Container.html#3246" class="Bound"
+      >C&#8321;</a
+      ><a name="3312"
+      > </a
+      ><a name="3313" class="Symbol"
+      >&#8594;</a
+      ><a name="3314"
+      > </a
+      ><a name="3315" href="Data.Container.html#986" class="Function"
+      >Shape</a
+      ><a name="3320"
+      > </a
+      ><a name="3321" href="Data.Container.html#3249" class="Bound"
+      >C&#8322;</a
+      ><a name="3323"
+      >
+    </a
+      ><a name="3328" href="Data.Container.html#3328" class="Field"
+      >position</a
+      ><a name="3336"
+      > </a
+      ><a name="3337" class="Symbol"
+      >:</a
+      ><a name="3338"
+      > </a
+      ><a name="3339" class="Symbol"
+      >&#8704;</a
+      ><a name="3340"
+      > </a
+      ><a name="3341" class="Symbol"
+      >{</a
+      ><a name="3342" href="Data.Container.html#3342" class="Bound"
+      >s</a
+      ><a name="3343" class="Symbol"
+      >}</a
+      ><a name="3344"
+      > </a
+      ><a name="3345" class="Symbol"
+      >&#8594;</a
+      ><a name="3346"
+      > </a
+      ><a name="3347" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="3355"
+      > </a
+      ><a name="3356" href="Data.Container.html#3249" class="Bound"
+      >C&#8322;</a
+      ><a name="3358"
+      > </a
+      ><a name="3359" class="Symbol"
+      >(</a
+      ><a name="3360" href="Data.Container.html#3293" class="Bound"
+      >shape</a
+      ><a name="3365"
+      > </a
+      ><a name="3366" href="Data.Container.html#3342" class="Bound"
+      >s</a
+      ><a name="3367" class="Symbol"
+      >)</a
+      ><a name="3368"
+      > </a
+      ><a name="3369" class="Symbol"
+      >&#8594;</a
+      ><a name="3370"
+      > </a
+      ><a name="3371" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="3379"
+      > </a
+      ><a name="3380" href="Data.Container.html#3246" class="Bound"
+      >C&#8321;</a
+      ><a name="3382"
+      > </a
+      ><a name="3383" href="Data.Container.html#3342" class="Bound"
+      >s</a
+      ><a name="3384"
+      >
+
+</a
+      ><a name="3386" class="Keyword"
+      >open</a
+      ><a name="3390"
+      > </a
+      ><a name="3391" href="Data.Container.html#3237" class="Module Operator"
+      >_&#8658;_</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" class="Keyword"
+      >public</a
+      ><a name="3401"
+      >
+
+</a
+      ><a name="3403" class="Comment"
+      >-- Interpretation of _&#8658;_.</a
+      ><a name="3428"
+      >
+
+</a
+      ><a name="3430" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;_&#10219;</a
+      ><a name="3433"
+      > </a
+      ><a name="3434" class="Symbol"
+      >:</a
+      ><a name="3435"
+      > </a
+      ><a name="3436" class="Symbol"
+      >&#8704;</a
+      ><a name="3437"
+      > </a
+      ><a name="3438" class="Symbol"
+      >{</a
+      ><a name="3439" href="Data.Container.html#3439" class="Bound"
+      >c</a
+      ><a name="3440" class="Symbol"
+      >}</a
+      ><a name="3441"
+      > </a
+      ><a name="3442" class="Symbol"
+      >{</a
+      ><a name="3443" href="Data.Container.html#3443" class="Bound"
+      >C&#8321;</a
+      ><a name="3445"
+      > </a
+      ><a name="3446" href="Data.Container.html#3446" class="Bound"
+      >C&#8322;</a
+      ><a name="3448"
+      > </a
+      ><a name="3449" class="Symbol"
+      >:</a
+      ><a name="3450"
+      > </a
+      ><a name="3451" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="3460"
+      > </a
+      ><a name="3461" href="Data.Container.html#3439" class="Bound"
+      >c</a
+      ><a name="3462" class="Symbol"
+      >}</a
+      ><a name="3463"
+      > </a
+      ><a name="3464" class="Symbol"
+      >&#8594;</a
+      ><a name="3465"
+      >
+      </a
+      ><a name="3472" href="Data.Container.html#3443" class="Bound"
+      >C&#8321;</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="3476"
+      > </a
+      ><a name="3477" href="Data.Container.html#3446" class="Bound"
+      >C&#8322;</a
+      ><a name="3479"
+      > </a
+      ><a name="3480" class="Symbol"
+      >&#8594;</a
+      ><a name="3481"
+      > </a
+      ><a name="3482" class="Symbol"
+      >&#8704;</a
+      ><a name="3483"
+      > </a
+      ><a name="3484" class="Symbol"
+      >{</a
+      ><a name="3485" href="Data.Container.html#3485" class="Bound"
+      >X</a
+      ><a name="3486" class="Symbol"
+      >}</a
+      ><a name="3487"
+      > </a
+      ><a name="3488" class="Symbol"
+      >&#8594;</a
+      ><a name="3489"
+      > </a
+      ><a name="3490" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3491"
+      > </a
+      ><a name="3492" href="Data.Container.html#3443" class="Bound"
+      >C&#8321;</a
+      ><a name="3494"
+      > </a
+      ><a name="3495" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3496"
+      > </a
+      ><a name="3497" href="Data.Container.html#3485" class="Bound"
+      >X</a
+      ><a name="3498"
+      > </a
+      ><a name="3499" class="Symbol"
+      >&#8594;</a
+      ><a name="3500"
+      > </a
+      ><a name="3501" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3502"
+      > </a
+      ><a name="3503" href="Data.Container.html#3446" class="Bound"
+      >C&#8322;</a
+      ><a name="3505"
+      > </a
+      ><a name="3506" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3507"
+      > </a
+      ><a name="3508" href="Data.Container.html#3485" class="Bound"
+      >X</a
+      ><a name="3509"
+      >
+</a
+      ><a name="3510" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="3511"
+      > </a
+      ><a name="3512" href="Data.Container.html#3512" class="Bound"
+      >m</a
+      ><a name="3513"
+      > </a
+      ><a name="3514" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="3515"
+      > </a
+      ><a name="3516" href="Data.Container.html#3516" class="Bound"
+      >xs</a
+      ><a name="3518"
+      > </a
+      ><a name="3519" class="Symbol"
+      >=</a
+      ><a name="3520"
+      > </a
+      ><a name="3521" class="Symbol"
+      >(</a
+      ><a name="3522" href="Data.Container.html#3293" class="Function"
+      >shape</a
+      ><a name="3527"
+      > </a
+      ><a name="3528" href="Data.Container.html#3512" class="Bound"
+      >m</a
+      ><a name="3529"
+      > </a
+      ><a name="3530" class="Symbol"
+      >(</a
+      ><a name="3531" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="3536"
+      > </a
+      ><a name="3537" href="Data.Container.html#3516" class="Bound"
+      >xs</a
+      ><a name="3539" class="Symbol"
+      >)</a
+      ><a name="3540"
+      > </a
+      ><a name="3541" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3542"
+      > </a
+      ><a name="3543" href="Data.Product.html#539" class="Function"
+      >proj&#8322;</a
+      ><a name="3548"
+      > </a
+      ><a name="3549" href="Data.Container.html#3516" class="Bound"
+      >xs</a
+      ><a name="3551"
+      > </a
+      ><a name="3552" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="3555"
+      > </a
+      ><a name="3556" href="Data.Container.html#3328" class="Function"
+      >position</a
+      ><a name="3564"
+      > </a
+      ><a name="3565" href="Data.Container.html#3512" class="Bound"
+      >m</a
+      ><a name="3566" class="Symbol"
+      >)</a
+      ><a name="3567"
+      >
+
+</a
+      ><a name="3569" class="Keyword"
+      >module</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" href="Data.Container.html#3576" class="Module"
+      >Morphism</a
+      ><a name="3584"
+      > </a
+      ><a name="3585" class="Keyword"
+      >where</a
+      ><a name="3590"
+      >
+
+  </a
+      ><a name="3594" class="Comment"
+      >-- Naturality.</a
+      ><a name="3608"
+      >
+
+  </a
+      ><a name="3612" href="Data.Container.html#3612" class="Function"
+      >Natural</a
+      ><a name="3619"
+      > </a
+      ><a name="3620" class="Symbol"
+      >:</a
+      ><a name="3621"
+      > </a
+      ><a name="3622" class="Symbol"
+      >&#8704;</a
+      ><a name="3623"
+      > </a
+      ><a name="3624" class="Symbol"
+      >{</a
+      ><a name="3625" href="Data.Container.html#3625" class="Bound"
+      >c</a
+      ><a name="3626" class="Symbol"
+      >}</a
+      ><a name="3627"
+      > </a
+      ><a name="3628" class="Symbol"
+      >{</a
+      ><a name="3629" href="Data.Container.html#3629" class="Bound"
+      >C&#8321;</a
+      ><a name="3631"
+      > </a
+      ><a name="3632" href="Data.Container.html#3632" class="Bound"
+      >C&#8322;</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" class="Symbol"
+      >:</a
+      ><a name="3636"
+      > </a
+      ><a name="3637" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="3646"
+      > </a
+      ><a name="3647" href="Data.Container.html#3625" class="Bound"
+      >c</a
+      ><a name="3648" class="Symbol"
+      >}</a
+      ><a name="3649"
+      > </a
+      ><a name="3650" class="Symbol"
+      >&#8594;</a
+      ><a name="3651"
+      >
+            </a
+      ><a name="3664" class="Symbol"
+      >(&#8704;</a
+      ><a name="3666"
+      > </a
+      ><a name="3667" class="Symbol"
+      >{</a
+      ><a name="3668" href="Data.Container.html#3668" class="Bound"
+      >X</a
+      ><a name="3669" class="Symbol"
+      >}</a
+      ><a name="3670"
+      > </a
+      ><a name="3671" class="Symbol"
+      >&#8594;</a
+      ><a name="3672"
+      > </a
+      ><a name="3673" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3674"
+      > </a
+      ><a name="3675" href="Data.Container.html#3629" class="Bound"
+      >C&#8321;</a
+      ><a name="3677"
+      > </a
+      ><a name="3678" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3679"
+      > </a
+      ><a name="3680" href="Data.Container.html#3668" class="Bound"
+      >X</a
+      ><a name="3681"
+      > </a
+      ><a name="3682" class="Symbol"
+      >&#8594;</a
+      ><a name="3683"
+      > </a
+      ><a name="3684" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3685"
+      > </a
+      ><a name="3686" href="Data.Container.html#3632" class="Bound"
+      >C&#8322;</a
+      ><a name="3688"
+      > </a
+      ><a name="3689" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3690"
+      > </a
+      ><a name="3691" href="Data.Container.html#3668" class="Bound"
+      >X</a
+      ><a name="3692" class="Symbol"
+      >)</a
+      ><a name="3693"
+      > </a
+      ><a name="3694" class="Symbol"
+      >&#8594;</a
+      ><a name="3695"
+      > </a
+      ><a name="3696" class="PrimitiveType"
+      >Set</a
+      ><a name="3699"
+      > </a
+      ><a name="3700" class="Symbol"
+      >(</a
+      ><a name="3701" href="Level.html#287" class="Primitive"
+      >suc</a
+      ><a name="3704"
+      > </a
+      ><a name="3705" href="Data.Container.html#3625" class="Bound"
+      >c</a
+      ><a name="3706" class="Symbol"
+      >)</a
+      ><a name="3707"
+      >
+  </a
+      ><a name="3710" href="Data.Container.html#3612" class="Function"
+      >Natural</a
+      ><a name="3717"
+      > </a
+      ><a name="3718" class="Symbol"
+      >{</a
+      ><a name="3719" href="Data.Container.html#3719" class="Bound"
+      >c</a
+      ><a name="3720" class="Symbol"
+      >}</a
+      ><a name="3721"
+      > </a
+      ><a name="3722" class="Symbol"
+      >{</a
+      ><a name="3723" href="Data.Container.html#3723" class="Bound"
+      >C&#8321;</a
+      ><a name="3725" class="Symbol"
+      >}</a
+      ><a name="3726"
+      > </a
+      ><a name="3727" href="Data.Container.html#3727" class="Bound"
+      >m</a
+      ><a name="3728"
+      > </a
+      ><a name="3729" class="Symbol"
+      >=</a
+      ><a name="3730"
+      >
+    </a
+      ><a name="3735" class="Symbol"
+      >&#8704;</a
+      ><a name="3736"
+      > </a
+      ><a name="3737" class="Symbol"
+      >{</a
+      ><a name="3738" href="Data.Container.html#3738" class="Bound"
+      >X</a
+      ><a name="3739" class="Symbol"
+      >}</a
+      ><a name="3740"
+      > </a
+      ><a name="3741" class="Symbol"
+      >(</a
+      ><a name="3742" href="Data.Container.html#3742" class="Bound"
+      >Y</a
+      ><a name="3743"
+      > </a
+      ><a name="3744" class="Symbol"
+      >:</a
+      ><a name="3745"
+      > </a
+      ><a name="3746" href="Relation.Binary.html#1852" class="Record"
+      >Setoid</a
+      ><a name="3752"
+      > </a
+      ><a name="3753" href="Data.Container.html#3719" class="Bound"
+      >c</a
+      ><a name="3754"
+      > </a
+      ><a name="3755" href="Data.Container.html#3719" class="Bound"
+      >c</a
+      ><a name="3756" class="Symbol"
+      >)</a
+      ><a name="3757"
+      > </a
+      ><a name="3758" class="Symbol"
+      >&#8594;</a
+      ><a name="3759"
+      > </a
+      ><a name="3760" class="Keyword"
+      >let</a
+      ><a name="3763"
+      > </a
+      ><a name="3764" class="Keyword"
+      >module</a
+      ><a name="3770"
+      > </a
+      ><a name="3771" href="Data.Container.html#3771" class="Module"
+      >Y</a
+      ><a name="3772"
+      > </a
+      ><a name="3773" class="Symbol"
+      >=</a
+      ><a name="3774"
+      > </a
+      ><a name="3775" href="Relation.Binary.html#1852" class="Module"
+      >Setoid</a
+      ><a name="3781"
+      > </a
+      ><a name="3782" href="Data.Container.html#3742" class="Bound"
+      >Y</a
+      ><a name="3783"
+      > </a
+      ><a name="3784" class="Keyword"
+      >in</a
+      ><a name="3786"
+      >
+    </a
+      ><a name="3791" class="Symbol"
+      >(</a
+      ><a name="3792" href="Data.Container.html#3792" class="Bound"
+      >f</a
+      ><a name="3793"
+      > </a
+      ><a name="3794" class="Symbol"
+      >:</a
+      ><a name="3795"
+      > </a
+      ><a name="3796" href="Data.Container.html#3738" class="Bound"
+      >X</a
+      ><a name="3797"
+      > </a
+      ><a name="3798" class="Symbol"
+      >&#8594;</a
+      ><a name="3799"
+      > </a
+      ><a name="3800" href="Relation.Binary.html#1915" class="Function"
+      >Y</a
+      ><a name="3801"
+      >.</a
+      ><a name="3802" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="3809" class="Symbol"
+      >)</a
+      ><a name="3810"
+      > </a
+      ><a name="3811" class="Symbol"
+      >(</a
+      ><a name="3812" href="Data.Container.html#3812" class="Bound"
+      >xs</a
+      ><a name="3814"
+      > </a
+      ><a name="3815" class="Symbol"
+      >:</a
+      ><a name="3816"
+      > </a
+      ><a name="3817" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3818"
+      > </a
+      ><a name="3819" href="Data.Container.html#3723" class="Bound"
+      >C&#8321;</a
+      ><a name="3821"
+      > </a
+      ><a name="3822" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3823"
+      > </a
+      ><a name="3824" href="Data.Container.html#3738" class="Bound"
+      >X</a
+      ><a name="3825" class="Symbol"
+      >)</a
+      ><a name="3826"
+      > </a
+      ><a name="3827" class="Symbol"
+      >&#8594;</a
+      ><a name="3828"
+      >
+    </a
+      ><a name="3833" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="3835"
+      > </a
+      ><a name="3836" href="Relation.Binary.html#1941" class="Function Operator"
+      >Y</a
+      ><a name="3837"
+      >.</a
+      ><a name="3838" href="Relation.Binary.html#1941" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3841"
+      > </a
+      ><a name="3842" class="Symbol"
+      >(</a
+      ><a name="3843" href="Data.Container.html#3727" class="Bound"
+      >m</a
+      ><a name="3844"
+      > </a
+      ><a name="3845" href="Function.html#1840" class="Function Operator"
+      >$</a
+      ><a name="3846"
+      > </a
+      ><a name="3847" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="3850"
+      > </a
+      ><a name="3851" href="Data.Container.html#3792" class="Bound"
+      >f</a
+      ><a name="3852"
+      > </a
+      ><a name="3853" href="Data.Container.html#3812" class="Bound"
+      >xs</a
+      ><a name="3855" class="Symbol"
+      >)</a
+      ><a name="3856"
+      > </a
+      ><a name="3857" class="Symbol"
+      >(</a
+      ><a name="3858" href="Data.Container.html#2482" class="Function"
+      >map</a
+      ><a name="3861"
+      > </a
+      ><a name="3862" href="Data.Container.html#3792" class="Bound"
+      >f</a
+      ><a name="3863"
+      > </a
+      ><a name="3864" href="Function.html#1840" class="Function Operator"
+      >$</a
+      ><a name="3865"
+      > </a
+      ><a name="3866" href="Data.Container.html#3727" class="Bound"
+      >m</a
+      ><a name="3867"
+      > </a
+      ><a name="3868" href="Data.Container.html#3812" class="Bound"
+      >xs</a
+      ><a name="3870" class="Symbol"
+      >)</a
+      ><a name="3871"
+      >
+
+  </a
+      ><a name="3875" class="Comment"
+      >-- Natural transformations.</a
+      ><a name="3902"
+      >
+
+  </a
+      ><a name="3906" href="Data.Container.html#3906" class="Function"
+      >NT</a
+      ><a name="3908"
+      > </a
+      ><a name="3909" class="Symbol"
+      >:</a
+      ><a name="3910"
+      > </a
+      ><a name="3911" class="Symbol"
+      >&#8704;</a
+      ><a name="3912"
+      > </a
+      ><a name="3913" class="Symbol"
+      >{</a
+      ><a name="3914" href="Data.Container.html#3914" class="Bound"
+      >c</a
+      ><a name="3915" class="Symbol"
+      >}</a
+      ><a name="3916"
+      > </a
+      ><a name="3917" class="Symbol"
+      >(</a
+      ><a name="3918" href="Data.Container.html#3918" class="Bound"
+      >C&#8321;</a
+      ><a name="3920"
+      > </a
+      ><a name="3921" href="Data.Container.html#3921" class="Bound"
+      >C&#8322;</a
+      ><a name="3923"
+      > </a
+      ><a name="3924" class="Symbol"
+      >:</a
+      ><a name="3925"
+      > </a
+      ><a name="3926" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="3935"
+      > </a
+      ><a name="3936" href="Data.Container.html#3914" class="Bound"
+      >c</a
+      ><a name="3937" class="Symbol"
+      >)</a
+      ><a name="3938"
+      > </a
+      ><a name="3939" class="Symbol"
+      >&#8594;</a
+      ><a name="3940"
+      > </a
+      ><a name="3941" class="PrimitiveType"
+      >Set</a
+      ><a name="3944"
+      > </a
+      ><a name="3945" class="Symbol"
+      >(</a
+      ><a name="3946" href="Level.html#287" class="Primitive"
+      >suc</a
+      ><a name="3949"
+      > </a
+      ><a name="3950" href="Data.Container.html#3914" class="Bound"
+      >c</a
+      ><a name="3951" class="Symbol"
+      >)</a
+      ><a name="3952"
+      >
+  </a
+      ><a name="3955" href="Data.Container.html#3906" class="Function"
+      >NT</a
+      ><a name="3957"
+      > </a
+      ><a name="3958" href="Data.Container.html#3958" class="Bound"
+      >C&#8321;</a
+      ><a name="3960"
+      > </a
+      ><a name="3961" href="Data.Container.html#3961" class="Bound"
+      >C&#8322;</a
+      ><a name="3963"
+      > </a
+      ><a name="3964" class="Symbol"
+      >=</a
+      ><a name="3965"
+      > </a
+      ><a name="3966" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="3967"
+      > </a
+      ><a name="3968" class="Symbol"
+      >&#955;</a
+      ><a name="3969"
+      > </a
+      ><a name="3970" class="Symbol"
+      >(</a
+      ><a name="3971" href="Data.Container.html#3971" class="Bound"
+      >m</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" class="Symbol"
+      >:</a
+      ><a name="3974"
+      > </a
+      ><a name="3975" class="Symbol"
+      >&#8704;</a
+      ><a name="3976"
+      > </a
+      ><a name="3977" class="Symbol"
+      >{</a
+      ><a name="3978" href="Data.Container.html#3978" class="Bound"
+      >X</a
+      ><a name="3979" class="Symbol"
+      >}</a
+      ><a name="3980"
+      > </a
+      ><a name="3981" class="Symbol"
+      >&#8594;</a
+      ><a name="3982"
+      > </a
+      ><a name="3983" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3984"
+      > </a
+      ><a name="3985" href="Data.Container.html#3958" class="Bound"
+      >C&#8321;</a
+      ><a name="3987"
+      > </a
+      ><a name="3988" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="3989"
+      > </a
+      ><a name="3990" href="Data.Container.html#3978" class="Bound"
+      >X</a
+      ><a name="3991"
+      > </a
+      ><a name="3992" class="Symbol"
+      >&#8594;</a
+      ><a name="3993"
+      > </a
+      ><a name="3994" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="3995"
+      > </a
+      ><a name="3996" href="Data.Container.html#3961" class="Bound"
+      >C&#8322;</a
+      ><a name="3998"
+      > </a
+      ><a name="3999" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="4000"
+      > </a
+      ><a name="4001" href="Data.Container.html#3978" class="Bound"
+      >X</a
+      ><a name="4002" class="Symbol"
+      >)</a
+      ><a name="4003"
+      > </a
+      ><a name="4004" class="Symbol"
+      >&#8594;</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" href="Data.Container.html#3612" class="Function"
+      >Natural</a
+      ><a name="4013"
+      > </a
+      ><a name="4014" href="Data.Container.html#3971" class="Bound"
+      >m</a
+      ><a name="4015"
+      >
+
+  </a
+      ><a name="4019" class="Comment"
+      >-- Container morphisms are natural.</a
+      ><a name="4054"
+      >
+
+  </a
+      ><a name="4058" href="Data.Container.html#4058" class="Function"
+      >natural</a
+      ><a name="4065"
+      > </a
+      ><a name="4066" class="Symbol"
+      >:</a
+      ><a name="4067"
+      > </a
+      ><a name="4068" class="Symbol"
+      >&#8704;</a
+      ><a name="4069"
+      > </a
+      ><a name="4070" class="Symbol"
+      >{</a
+      ><a name="4071" href="Data.Container.html#4071" class="Bound"
+      >c</a
+      ><a name="4072" class="Symbol"
+      >}</a
+      ><a name="4073"
+      > </a
+      ><a name="4074" class="Symbol"
+      >{</a
+      ><a name="4075" href="Data.Container.html#4075" class="Bound"
+      >C&#8321;</a
+      ><a name="4077"
+      > </a
+      ><a name="4078" href="Data.Container.html#4078" class="Bound"
+      >C&#8322;</a
+      ><a name="4080"
+      > </a
+      ><a name="4081" class="Symbol"
+      >:</a
+      ><a name="4082"
+      > </a
+      ><a name="4083" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="4092"
+      > </a
+      ><a name="4093" href="Data.Container.html#4071" class="Bound"
+      >c</a
+      ><a name="4094" class="Symbol"
+      >}</a
+      ><a name="4095"
+      >
+            </a
+      ><a name="4108" class="Symbol"
+      >(</a
+      ><a name="4109" href="Data.Container.html#4109" class="Bound"
+      >m</a
+      ><a name="4110"
+      > </a
+      ><a name="4111" class="Symbol"
+      >:</a
+      ><a name="4112"
+      > </a
+      ><a name="4113" href="Data.Container.html#4075" class="Bound"
+      >C&#8321;</a
+      ><a name="4115"
+      > </a
+      ><a name="4116" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="4117"
+      > </a
+      ><a name="4118" href="Data.Container.html#4078" class="Bound"
+      >C&#8322;</a
+      ><a name="4120" class="Symbol"
+      >)</a
+      ><a name="4121"
+      > </a
+      ><a name="4122" class="Symbol"
+      >&#8594;</a
+      ><a name="4123"
+      > </a
+      ><a name="4124" href="Data.Container.html#3612" class="Function"
+      >Natural</a
+      ><a name="4131"
+      > </a
+      ><a name="4132" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="4133"
+      > </a
+      ><a name="4134" href="Data.Container.html#4109" class="Bound"
+      >m</a
+      ><a name="4135"
+      > </a
+      ><a name="4136" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="4137"
+      >
+  </a
+      ><a name="4140" href="Data.Container.html#4058" class="Function"
+      >natural</a
+      ><a name="4147"
+      > </a
+      ><a name="4148" class="Symbol"
+      >{</a
+      ><a name="4149"
+      >C&#8322; </a
+      ><a name="4152" class="Symbol"
+      >=</a
+      ><a name="4153"
+      > </a
+      ><a name="4154" href="Data.Container.html#4154" class="Bound"
+      >C&#8322;</a
+      ><a name="4156" class="Symbol"
+      >}</a
+      ><a name="4157"
+      > </a
+      ><a name="4158" href="Data.Container.html#4158" class="Bound"
+      >m</a
+      ><a name="4159"
+      > </a
+      ><a name="4160" href="Data.Container.html#4160" class="Bound"
+      >Y</a
+      ><a name="4161"
+      > </a
+      ><a name="4162" href="Data.Container.html#4162" class="Bound"
+      >f</a
+      ><a name="4163"
+      > </a
+      ><a name="4164" href="Data.Container.html#4164" class="Bound"
+      >xs</a
+      ><a name="4166"
+      > </a
+      ><a name="4167" class="Symbol"
+      >=</a
+      ><a name="4168"
+      > </a
+      ><a name="4169" href="Relation.Binary.Core.html#5185" class="Function"
+      >Setoid</a
+      ><a name="4175"
+      >.</a
+      ><a name="4176" href="Relation.Binary.Core.html#5185" class="Function"
+      >refl</a
+      ><a name="4180"
+      > </a
+      ><a name="4181" class="Symbol"
+      >(</a
+      ><a name="4182" href="Data.Container.html#1766" class="Function"
+      >setoid</a
+      ><a name="4188"
+      > </a
+      ><a name="4189" href="Data.Container.html#4154" class="Bound"
+      >C&#8322;</a
+      ><a name="4191"
+      > </a
+      ><a name="4192" href="Data.Container.html#4160" class="Bound"
+      >Y</a
+      ><a name="4193" class="Symbol"
+      >)</a
+      ><a name="4194"
+      >
+
+  </a
+      ><a name="4198" class="Comment"
+      >-- In fact, all natural functions of the right type are container</a
+      ><a name="4263"
+      >
+  </a
+      ><a name="4266" class="Comment"
+      >-- morphisms.</a
+      ><a name="4279"
+      >
+
+  </a
+      ><a name="4283" href="Data.Container.html#4283" class="Function"
+      >complete</a
+      ><a name="4291"
+      > </a
+      ><a name="4292" class="Symbol"
+      >:</a
+      ><a name="4293"
+      > </a
+      ><a name="4294" class="Symbol"
+      >&#8704;</a
+      ><a name="4295"
+      > </a
+      ><a name="4296" class="Symbol"
+      >{</a
+      ><a name="4297" href="Data.Container.html#4297" class="Bound"
+      >c</a
+      ><a name="4298" class="Symbol"
+      >}</a
+      ><a name="4299"
+      > </a
+      ><a name="4300" class="Symbol"
+      >{</a
+      ><a name="4301" href="Data.Container.html#4301" class="Bound"
+      >C&#8321;</a
+      ><a name="4303"
+      > </a
+      ><a name="4304" href="Data.Container.html#4304" class="Bound"
+      >C&#8322;</a
+      ><a name="4306"
+      > </a
+      ><a name="4307" class="Symbol"
+      >:</a
+      ><a name="4308"
+      > </a
+      ><a name="4309" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="4318"
+      > </a
+      ><a name="4319" href="Data.Container.html#4297" class="Bound"
+      >c</a
+      ><a name="4320" class="Symbol"
+      >}</a
+      ><a name="4321"
+      > </a
+      ><a name="4322" class="Symbol"
+      >&#8594;</a
+      ><a name="4323"
+      >
+             </a
+      ><a name="4337" class="Symbol"
+      >(</a
+      ><a name="4338" href="Data.Container.html#4338" class="Bound"
+      >nt</a
+      ><a name="4340"
+      > </a
+      ><a name="4341" class="Symbol"
+      >:</a
+      ><a name="4342"
+      > </a
+      ><a name="4343" href="Data.Container.html#3906" class="Function"
+      >NT</a
+      ><a name="4345"
+      > </a
+      ><a name="4346" href="Data.Container.html#4301" class="Bound"
+      >C&#8321;</a
+      ><a name="4348"
+      > </a
+      ><a name="4349" href="Data.Container.html#4304" class="Bound"
+      >C&#8322;</a
+      ><a name="4351" class="Symbol"
+      >)</a
+      ><a name="4352"
+      > </a
+      ><a name="4353" class="Symbol"
+      >&#8594;</a
+      ><a name="4354"
+      >
+             </a
+      ><a name="4368" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="4369"
+      > </a
+      ><a name="4370" class="Symbol"
+      >&#955;</a
+      ><a name="4371"
+      > </a
+      ><a name="4372" href="Data.Container.html#4372" class="Bound"
+      >m</a
+      ><a name="4373"
+      > </a
+      ><a name="4374" class="Symbol"
+      >&#8594;</a
+      ><a name="4375"
+      > </a
+      ><a name="4376" class="Symbol"
+      >(</a
+      ><a name="4377" href="Data.Container.html#4377" class="Bound"
+      >X</a
+      ><a name="4378"
+      > </a
+      ><a name="4379" class="Symbol"
+      >:</a
+      ><a name="4380"
+      > </a
+      ><a name="4381" href="Relation.Binary.html#1852" class="Record"
+      >Setoid</a
+      ><a name="4387"
+      > </a
+      ><a name="4388" href="Data.Container.html#4297" class="Bound"
+      >c</a
+      ><a name="4389"
+      > </a
+      ><a name="4390" href="Data.Container.html#4297" class="Bound"
+      >c</a
+      ><a name="4391" class="Symbol"
+      >)</a
+      ><a name="4392"
+      > </a
+      ><a name="4393" class="Symbol"
+      >&#8594;</a
+      ><a name="4394"
+      >
+                     </a
+      ><a name="4416" class="Keyword"
+      >let</a
+      ><a name="4419"
+      > </a
+      ><a name="4420" class="Keyword"
+      >module</a
+      ><a name="4426"
+      > </a
+      ><a name="4427" href="Data.Container.html#4427" class="Module"
+      >X</a
+      ><a name="4428"
+      > </a
+      ><a name="4429" class="Symbol"
+      >=</a
+      ><a name="4430"
+      > </a
+      ><a name="4431" href="Relation.Binary.html#1852" class="Module"
+      >Setoid</a
+      ><a name="4437"
+      > </a
+      ><a name="4438" href="Data.Container.html#4377" class="Bound"
+      >X</a
+      ><a name="4439"
+      > </a
+      ><a name="4440" class="Keyword"
+      >in</a
+      ><a name="4442"
+      >
+                     </a
+      ><a name="4464" class="Symbol"
+      >(</a
+      ><a name="4465" href="Data.Container.html#4465" class="Bound"
+      >xs</a
+      ><a name="4467"
+      > </a
+      ><a name="4468" class="Symbol"
+      >:</a
+      ><a name="4469"
+      > </a
+      ><a name="4470" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="4471"
+      > </a
+      ><a name="4472" href="Data.Container.html#4301" class="Bound"
+      >C&#8321;</a
+      ><a name="4474"
+      > </a
+      ><a name="4475" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="4476"
+      > </a
+      ><a name="4477" href="Relation.Binary.html#1915" class="Function"
+      >X</a
+      ><a name="4478"
+      >.</a
+      ><a name="4479" href="Relation.Binary.html#1915" class="Function"
+      >Carrier</a
+      ><a name="4486" class="Symbol"
+      >)</a
+      ><a name="4487"
+      > </a
+      ><a name="4488" class="Symbol"
+      >&#8594;</a
+      ><a name="4489"
+      >
+                     </a
+      ><a name="4511" href="Data.Container.html#1247" class="Function"
+      >Eq</a
+      ><a name="4513"
+      > </a
+      ><a name="4514" href="Relation.Binary.html#1941" class="Function Operator"
+      >X</a
+      ><a name="4515"
+      >.</a
+      ><a name="4516" href="Relation.Binary.html#1941" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="4519"
+      > </a
+      ><a name="4520" class="Symbol"
+      >(</a
+      ><a name="4521" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="4526"
+      > </a
+      ><a name="4527" href="Data.Container.html#4338" class="Bound"
+      >nt</a
+      ><a name="4529"
+      > </a
+      ><a name="4530" href="Data.Container.html#4465" class="Bound"
+      >xs</a
+      ><a name="4532" class="Symbol"
+      >)</a
+      ><a name="4533"
+      > </a
+      ><a name="4534" class="Symbol"
+      >(</a
+      ><a name="4535" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="4536"
+      > </a
+      ><a name="4537" href="Data.Container.html#4372" class="Bound"
+      >m</a
+      ><a name="4538"
+      > </a
+      ><a name="4539" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="4540"
+      > </a
+      ><a name="4541" href="Data.Container.html#4465" class="Bound"
+      >xs</a
+      ><a name="4543" class="Symbol"
+      >)</a
+      ><a name="4544"
+      >
+  </a
+      ><a name="4547" href="Data.Container.html#4283" class="Function"
+      >complete</a
+      ><a name="4555"
+      > </a
+      ><a name="4556" class="Symbol"
+      >(</a
+      ><a name="4557" href="Data.Container.html#4557" class="Bound"
+      >nt</a
+      ><a name="4559"
+      > </a
+      ><a name="4560" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4561"
+      > </a
+      ><a name="4562" href="Data.Container.html#4562" class="Bound"
+      >nat</a
+      ><a name="4565" class="Symbol"
+      >)</a
+      ><a name="4566"
+      > </a
+      ><a name="4567" class="Symbol"
+      >=</a
+      ><a name="4568"
+      >
+    </a
+      ><a name="4573" class="Symbol"
+      >(</a
+      ><a name="4574" href="Data.Container.html#4637" class="Function"
+      >m</a
+      ><a name="4575"
+      > </a
+      ><a name="4576" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4577"
+      > </a
+      ><a name="4578" class="Symbol"
+      >&#955;</a
+      ><a name="4579"
+      > </a
+      ><a name="4580" href="Data.Container.html#4580" class="Bound"
+      >X</a
+      ><a name="4581"
+      > </a
+      ><a name="4582" href="Data.Container.html#4582" class="Bound"
+      >xs</a
+      ><a name="4584"
+      > </a
+      ><a name="4585" class="Symbol"
+      >&#8594;</a
+      ><a name="4586"
+      > </a
+      ><a name="4587" href="Data.Container.html#4562" class="Bound"
+      >nat</a
+      ><a name="4590"
+      > </a
+      ><a name="4591" href="Data.Container.html#4580" class="Bound"
+      >X</a
+      ><a name="4592"
+      > </a
+      ><a name="4593" class="Symbol"
+      >(</a
+      ><a name="4594" href="Data.Product.html#539" class="Function"
+      >proj&#8322;</a
+      ><a name="4599"
+      > </a
+      ><a name="4600" href="Data.Container.html#4582" class="Bound"
+      >xs</a
+      ><a name="4602" class="Symbol"
+      >)</a
+      ><a name="4603"
+      > </a
+      ><a name="4604" class="Symbol"
+      >(</a
+      ><a name="4605" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="4610"
+      > </a
+      ><a name="4611" href="Data.Container.html#4582" class="Bound"
+      >xs</a
+      ><a name="4613"
+      > </a
+      ><a name="4614" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4615"
+      > </a
+      ><a name="4616" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="4620" class="Symbol"
+      >))</a
+      ><a name="4622"
+      >
+    </a
+      ><a name="4627" class="Keyword"
+      >where</a
+      ><a name="4632"
+      >
+    </a
+      ><a name="4637" href="Data.Container.html#4637" class="Function"
+      >m</a
+      ><a name="4638"
+      > </a
+      ><a name="4639" class="Symbol"
+      >=</a
+      ><a name="4640"
+      > </a
+      ><a name="4641" class="Keyword"
+      >record</a
+      ><a name="4647"
+      > </a
+      ><a name="4648" class="Symbol"
+      >{</a
+      ><a name="4649"
+      > </a
+      ><a name="4650" class="Field"
+      >shape</a
+      ><a name="4655"
+      >    </a
+      ><a name="4659" class="Symbol"
+      >=</a
+      ><a name="4660"
+      > </a
+      ><a name="4661" class="Symbol"
+      >&#955;</a
+      ><a name="4662"
+      >  </a
+      ><a name="4664" href="Data.Container.html#4664" class="Bound"
+      >s</a
+      ><a name="4665"
+      >  </a
+      ><a name="4667" class="Symbol"
+      >&#8594;</a
+      ><a name="4668"
+      > </a
+      ><a name="4669" href="Data.Product.html#525" class="Function"
+      >proj&#8321;</a
+      ><a name="4674"
+      > </a
+      ><a name="4675" class="Symbol"
+      >(</a
+      ><a name="4676" href="Data.Container.html#4557" class="Bound"
+      >nt</a
+      ><a name="4678"
+      > </a
+      ><a name="4679" class="Symbol"
+      >(</a
+      ><a name="4680" href="Data.Container.html#4664" class="Bound"
+      >s</a
+      ><a name="4681"
+      > </a
+      ><a name="4682" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4683"
+      > </a
+      ><a name="4684" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="4688" class="Symbol"
+      >))</a
+      ><a name="4690"
+      >
+               </a
+      ><a name="4706" class="Symbol"
+      >;</a
+      ><a name="4707"
+      > </a
+      ><a name="4708" class="Field"
+      >position</a
+      ><a name="4716"
+      > </a
+      ><a name="4717" class="Symbol"
+      >=</a
+      ><a name="4718"
+      > </a
+      ><a name="4719" class="Symbol"
+      >&#955;</a
+      ><a name="4720"
+      > </a
+      ><a name="4721" class="Symbol"
+      >{</a
+      ><a name="4722" href="Data.Container.html#4722" class="Bound"
+      >s</a
+      ><a name="4723" class="Symbol"
+      >}</a
+      ><a name="4724"
+      > </a
+      ><a name="4725" class="Symbol"
+      >&#8594;</a
+      ><a name="4726"
+      > </a
+      ><a name="4727" href="Data.Product.html#539" class="Function"
+      >proj&#8322;</a
+      ><a name="4732"
+      > </a
+      ><a name="4733" class="Symbol"
+      >(</a
+      ><a name="4734" href="Data.Container.html#4557" class="Bound"
+      >nt</a
+      ><a name="4736"
+      > </a
+      ><a name="4737" class="Symbol"
+      >(</a
+      ><a name="4738" href="Data.Container.html#4722" class="Bound"
+      >s</a
+      ><a name="4739"
+      > </a
+      ><a name="4740" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4741"
+      > </a
+      ><a name="4742" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="4746" class="Symbol"
+      >))</a
+      ><a name="4748"
+      >
+               </a
+      ><a name="4764" class="Symbol"
+      >}</a
+      ><a name="4765"
+      >
+
+  </a
+      ><a name="4769" class="Comment"
+      >-- Identity.</a
+      ><a name="4781"
+      >
+
+  </a
+      ><a name="4785" href="Data.Container.html#4785" class="Function"
+      >id</a
+      ><a name="4787"
+      > </a
+      ><a name="4788" class="Symbol"
+      >:</a
+      ><a name="4789"
+      > </a
+      ><a name="4790" class="Symbol"
+      >&#8704;</a
+      ><a name="4791"
+      > </a
+      ><a name="4792" class="Symbol"
+      >{</a
+      ><a name="4793" href="Data.Container.html#4793" class="Bound"
+      >c</a
+      ><a name="4794" class="Symbol"
+      >}</a
+      ><a name="4795"
+      > </a
+      ><a name="4796" class="Symbol"
+      >(</a
+      ><a name="4797" href="Data.Container.html#4797" class="Bound"
+      >C</a
+      ><a name="4798"
+      > </a
+      ><a name="4799" class="Symbol"
+      >:</a
+      ><a name="4800"
+      > </a
+      ><a name="4801" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="4810"
+      > </a
+      ><a name="4811" href="Data.Container.html#4793" class="Bound"
+      >c</a
+      ><a name="4812" class="Symbol"
+      >)</a
+      ><a name="4813"
+      > </a
+      ><a name="4814" class="Symbol"
+      >&#8594;</a
+      ><a name="4815"
+      > </a
+      ><a name="4816" href="Data.Container.html#4797" class="Bound"
+      >C</a
+      ><a name="4817"
+      > </a
+      ><a name="4818" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="4819"
+      > </a
+      ><a name="4820" href="Data.Container.html#4797" class="Bound"
+      >C</a
+      ><a name="4821"
+      >
+  </a
+      ><a name="4824" href="Data.Container.html#4785" class="Function"
+      >id</a
+      ><a name="4826"
+      > </a
+      ><a name="4827" class="Symbol"
+      >_</a
+      ><a name="4828"
+      > </a
+      ><a name="4829" class="Symbol"
+      >=</a
+      ><a name="4830"
+      > </a
+      ><a name="4831" class="Keyword"
+      >record</a
+      ><a name="4837"
+      > </a
+      ><a name="4838" class="Symbol"
+      >{</a
+      ><a name="4839" class="Field"
+      >shape</a
+      ><a name="4844"
+      > </a
+      ><a name="4845" class="Symbol"
+      >=</a
+      ><a name="4846"
+      > </a
+      ><a name="4847" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="4851" class="Symbol"
+      >;</a
+      ><a name="4852"
+      > </a
+      ><a name="4853" class="Field"
+      >position</a
+      ><a name="4861"
+      > </a
+      ><a name="4862" class="Symbol"
+      >=</a
+      ><a name="4863"
+      > </a
+      ><a name="4864" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="4868" class="Symbol"
+      >}</a
+      ><a name="4869"
+      >
+
+  </a
+      ><a name="4873" class="Comment"
+      >-- Composition.</a
+      ><a name="4888"
+      >
+
+  </a
+      ><a name="4892" class="Keyword"
+      >infixr</a
+      ><a name="4898"
+      > </a
+      ><a name="4899" class="Number"
+      >9</a
+      ><a name="4900"
+      > _&#8728;_
+
+  </a
+      ><a name="4908" href="Data.Container.html#4908" class="Function Operator"
+      >_&#8728;_</a
+      ><a name="4911"
+      > </a
+      ><a name="4912" class="Symbol"
+      >:</a
+      ><a name="4913"
+      > </a
+      ><a name="4914" class="Symbol"
+      >&#8704;</a
+      ><a name="4915"
+      > </a
+      ><a name="4916" class="Symbol"
+      >{</a
+      ><a name="4917" href="Data.Container.html#4917" class="Bound"
+      >c</a
+      ><a name="4918" class="Symbol"
+      >}</a
+      ><a name="4919"
+      > </a
+      ><a name="4920" class="Symbol"
+      >{</a
+      ><a name="4921" href="Data.Container.html#4921" class="Bound"
+      >C&#8321;</a
+      ><a name="4923"
+      > </a
+      ><a name="4924" href="Data.Container.html#4924" class="Bound"
+      >C&#8322;</a
+      ><a name="4926"
+      > </a
+      ><a name="4927" href="Data.Container.html#4927" class="Bound"
+      >C&#8323;</a
+      ><a name="4929"
+      > </a
+      ><a name="4930" class="Symbol"
+      >:</a
+      ><a name="4931"
+      > </a
+      ><a name="4932" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="4941"
+      > </a
+      ><a name="4942" href="Data.Container.html#4917" class="Bound"
+      >c</a
+      ><a name="4943" class="Symbol"
+      >}</a
+      ><a name="4944"
+      > </a
+      ><a name="4945" class="Symbol"
+      >&#8594;</a
+      ><a name="4946"
+      > </a
+      ><a name="4947" href="Data.Container.html#4924" class="Bound"
+      >C&#8322;</a
+      ><a name="4949"
+      > </a
+      ><a name="4950" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="4951"
+      > </a
+      ><a name="4952" href="Data.Container.html#4927" class="Bound"
+      >C&#8323;</a
+      ><a name="4954"
+      > </a
+      ><a name="4955" class="Symbol"
+      >&#8594;</a
+      ><a name="4956"
+      > </a
+      ><a name="4957" href="Data.Container.html#4921" class="Bound"
+      >C&#8321;</a
+      ><a name="4959"
+      > </a
+      ><a name="4960" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="4961"
+      > </a
+      ><a name="4962" href="Data.Container.html#4924" class="Bound"
+      >C&#8322;</a
+      ><a name="4964"
+      > </a
+      ><a name="4965" class="Symbol"
+      >&#8594;</a
+      ><a name="4966"
+      > </a
+      ><a name="4967" href="Data.Container.html#4921" class="Bound"
+      >C&#8321;</a
+      ><a name="4969"
+      > </a
+      ><a name="4970" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="4971"
+      > </a
+      ><a name="4972" href="Data.Container.html#4927" class="Bound"
+      >C&#8323;</a
+      ><a name="4974"
+      >
+  </a
+      ><a name="4977" href="Data.Container.html#4977" class="Bound"
+      >f</a
+      ><a name="4978"
+      > </a
+      ><a name="4979" href="Data.Container.html#4908" class="Function Operator"
+      >&#8728;</a
+      ><a name="4980"
+      > </a
+      ><a name="4981" href="Data.Container.html#4981" class="Bound"
+      >g</a
+      ><a name="4982"
+      > </a
+      ><a name="4983" class="Symbol"
+      >=</a
+      ><a name="4984"
+      > </a
+      ><a name="4985" class="Keyword"
+      >record</a
+      ><a name="4991"
+      >
+    </a
+      ><a name="4996" class="Symbol"
+      >{</a
+      ><a name="4997"
+      > </a
+      ><a name="4998" class="Field"
+      >shape</a
+      ><a name="5003"
+      >    </a
+      ><a name="5007" class="Symbol"
+      >=</a
+      ><a name="5008"
+      > </a
+      ><a name="5009" href="Data.Container.html#3293" class="Function"
+      >shape</a
+      ><a name="5014"
+      >    </a
+      ><a name="5018" href="Data.Container.html#4977" class="Bound"
+      >f</a
+      ><a name="5019"
+      > </a
+      ><a name="5020" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="5023"
+      > </a
+      ><a name="5024" href="Data.Container.html#3293" class="Function"
+      >shape</a
+      ><a name="5029"
+      >    </a
+      ><a name="5033" href="Data.Container.html#4981" class="Bound"
+      >g</a
+      ><a name="5034"
+      >
+    </a
+      ><a name="5039" class="Symbol"
+      >;</a
+      ><a name="5040"
+      > </a
+      ><a name="5041" class="Field"
+      >position</a
+      ><a name="5049"
+      > </a
+      ><a name="5050" class="Symbol"
+      >=</a
+      ><a name="5051"
+      > </a
+      ><a name="5052" href="Data.Container.html#3328" class="Function"
+      >position</a
+      ><a name="5060"
+      > </a
+      ><a name="5061" href="Data.Container.html#4981" class="Bound"
+      >g</a
+      ><a name="5062"
+      > </a
+      ><a name="5063" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="5066"
+      > </a
+      ><a name="5067" href="Data.Container.html#3328" class="Function"
+      >position</a
+      ><a name="5075"
+      > </a
+      ><a name="5076" href="Data.Container.html#4977" class="Bound"
+      >f</a
+      ><a name="5077"
+      >
+    </a
+      ><a name="5082" class="Symbol"
+      >}</a
+      ><a name="5083"
+      >
+
+  </a
+      ><a name="5087" class="Comment"
+      >-- Identity and composition commute with &#10218;_&#10219;.</a
+      ><a name="5132"
+      >
+
+  </a
+      ><a name="5136" href="Data.Container.html#5136" class="Function"
+      >id-correct</a
+      ><a name="5146"
+      > </a
+      ><a name="5147" class="Symbol"
+      >:</a
+      ><a name="5148"
+      > </a
+      ><a name="5149" class="Symbol"
+      >&#8704;</a
+      ><a name="5150"
+      > </a
+      ><a name="5151" class="Symbol"
+      >{</a
+      ><a name="5152" href="Data.Container.html#5152" class="Bound"
+      >c</a
+      ><a name="5153" class="Symbol"
+      >}</a
+      ><a name="5154"
+      > </a
+      ><a name="5155" class="Symbol"
+      >{</a
+      ><a name="5156" href="Data.Container.html#5156" class="Bound"
+      >C</a
+      ><a name="5157"
+      > </a
+      ><a name="5158" class="Symbol"
+      >:</a
+      ><a name="5159"
+      > </a
+      ><a name="5160" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="5169"
+      > </a
+      ><a name="5170" href="Data.Container.html#5152" class="Bound"
+      >c</a
+      ><a name="5171" class="Symbol"
+      >}</a
+      ><a name="5172"
+      > </a
+      ><a name="5173" class="Symbol"
+      >{</a
+      ><a name="5174" href="Data.Container.html#5174" class="Bound"
+      >X</a
+      ><a name="5175"
+      > </a
+      ><a name="5176" class="Symbol"
+      >:</a
+      ><a name="5177"
+      > </a
+      ><a name="5178" class="PrimitiveType"
+      >Set</a
+      ><a name="5181"
+      > </a
+      ><a name="5182" href="Data.Container.html#5152" class="Bound"
+      >c</a
+      ><a name="5183" class="Symbol"
+      >}</a
+      ><a name="5184"
+      > </a
+      ><a name="5185" class="Symbol"
+      >&#8594;</a
+      ><a name="5186"
+      >
+               </a
+      ><a name="5202" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="5203"
+      > </a
+      ><a name="5204" href="Data.Container.html#4785" class="Function"
+      >id</a
+      ><a name="5206"
+      > </a
+      ><a name="5207" href="Data.Container.html#5156" class="Bound"
+      >C</a
+      ><a name="5208"
+      > </a
+      ><a name="5209" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="5210"
+      > </a
+      ><a name="5211" class="Symbol"
+      >{</a
+      ><a name="5212" href="Data.Container.html#5174" class="Bound"
+      >X</a
+      ><a name="5213" class="Symbol"
+      >}</a
+      ><a name="5214"
+      > </a
+      ><a name="5215" href="Relation.Binary.PropositionalEquality.html#2312" class="Function Operator"
+      >&#8791;</a
+      ><a name="5216"
+      > </a
+      ><a name="5217" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="5221"
+      >
+  </a
+      ><a name="5224" href="Data.Container.html#5136" class="Function"
+      >id-correct</a
+      ><a name="5234"
+      > </a
+      ><a name="5235" href="Data.Container.html#5235" class="Bound"
+      >xs</a
+      ><a name="5237"
+      > </a
+      ><a name="5238" class="Symbol"
+      >=</a
+      ><a name="5239"
+      > </a
+      ><a name="5240" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="5244"
+      >
+
+  </a
+      ><a name="5248" href="Data.Container.html#5248" class="Function"
+      >&#8728;-correct</a
+      ><a name="5257"
+      > </a
+      ><a name="5258" class="Symbol"
+      >:</a
+      ><a name="5259"
+      > </a
+      ><a name="5260" class="Symbol"
+      >&#8704;</a
+      ><a name="5261"
+      > </a
+      ><a name="5262" class="Symbol"
+      >{</a
+      ><a name="5263" href="Data.Container.html#5263" class="Bound"
+      >c</a
+      ><a name="5264" class="Symbol"
+      >}</a
+      ><a name="5265"
+      > </a
+      ><a name="5266" class="Symbol"
+      >{</a
+      ><a name="5267" href="Data.Container.html#5267" class="Bound"
+      >C&#8321;</a
+      ><a name="5269"
+      > </a
+      ><a name="5270" href="Data.Container.html#5270" class="Bound"
+      >C&#8322;</a
+      ><a name="5272"
+      > </a
+      ><a name="5273" href="Data.Container.html#5273" class="Bound"
+      >C&#8323;</a
+      ><a name="5275"
+      > </a
+      ><a name="5276" class="Symbol"
+      >:</a
+      ><a name="5277"
+      > </a
+      ><a name="5278" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="5287"
+      > </a
+      ><a name="5288" href="Data.Container.html#5263" class="Bound"
+      >c</a
+      ><a name="5289" class="Symbol"
+      >}</a
+      ><a name="5290"
+      >
+              </a
+      ><a name="5305" class="Symbol"
+      >(</a
+      ><a name="5306" href="Data.Container.html#5306" class="Bound"
+      >f</a
+      ><a name="5307"
+      > </a
+      ><a name="5308" class="Symbol"
+      >:</a
+      ><a name="5309"
+      > </a
+      ><a name="5310" href="Data.Container.html#5270" class="Bound"
+      >C&#8322;</a
+      ><a name="5312"
+      > </a
+      ><a name="5313" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="5314"
+      > </a
+      ><a name="5315" href="Data.Container.html#5273" class="Bound"
+      >C&#8323;</a
+      ><a name="5317" class="Symbol"
+      >)</a
+      ><a name="5318"
+      > </a
+      ><a name="5319" class="Symbol"
+      >(</a
+      ><a name="5320" href="Data.Container.html#5320" class="Bound"
+      >g</a
+      ><a name="5321"
+      > </a
+      ><a name="5322" class="Symbol"
+      >:</a
+      ><a name="5323"
+      > </a
+      ><a name="5324" href="Data.Container.html#5267" class="Bound"
+      >C&#8321;</a
+      ><a name="5326"
+      > </a
+      ><a name="5327" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="5328"
+      > </a
+      ><a name="5329" href="Data.Container.html#5270" class="Bound"
+      >C&#8322;</a
+      ><a name="5331" class="Symbol"
+      >)</a
+      ><a name="5332"
+      > </a
+      ><a name="5333" class="Symbol"
+      >{</a
+      ><a name="5334" href="Data.Container.html#5334" class="Bound"
+      >X</a
+      ><a name="5335"
+      > </a
+      ><a name="5336" class="Symbol"
+      >:</a
+      ><a name="5337"
+      > </a
+      ><a name="5338" class="PrimitiveType"
+      >Set</a
+      ><a name="5341"
+      > </a
+      ><a name="5342" href="Data.Container.html#5263" class="Bound"
+      >c</a
+      ><a name="5343" class="Symbol"
+      >}</a
+      ><a name="5344"
+      > </a
+      ><a name="5345" class="Symbol"
+      >&#8594;</a
+      ><a name="5346"
+      >
+              </a
+      ><a name="5361" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="5362"
+      > </a
+      ><a name="5363" href="Data.Container.html#5306" class="Bound"
+      >f</a
+      ><a name="5364"
+      > </a
+      ><a name="5365" href="Data.Container.html#4908" class="Function Operator"
+      >&#8728;</a
+      ><a name="5366"
+      > </a
+      ><a name="5367" href="Data.Container.html#5320" class="Bound"
+      >g</a
+      ><a name="5368"
+      > </a
+      ><a name="5369" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="5370"
+      > </a
+      ><a name="5371" class="Symbol"
+      >{</a
+      ><a name="5372" href="Data.Container.html#5334" class="Bound"
+      >X</a
+      ><a name="5373" class="Symbol"
+      >}</a
+      ><a name="5374"
+      > </a
+      ><a name="5375" href="Relation.Binary.PropositionalEquality.html#2312" class="Function Operator"
+      >&#8791;</a
+      ><a name="5376"
+      > </a
+      ><a name="5377" class="Symbol"
+      >(</a
+      ><a name="5378" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="5379"
+      > </a
+      ><a name="5380" href="Data.Container.html#5306" class="Bound"
+      >f</a
+      ><a name="5381"
+      > </a
+      ><a name="5382" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="5383"
+      > </a
+      ><a name="5384" href="Function.html#724" class="Function Operator"
+      >&#10216;&#8728;&#10217;</a
+      ><a name="5387"
+      > </a
+      ><a name="5388" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="5389"
+      > </a
+      ><a name="5390" href="Data.Container.html#5320" class="Bound"
+      >g</a
+      ><a name="5391"
+      > </a
+      ><a name="5392" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="5393" class="Symbol"
+      >)</a
+      ><a name="5394"
+      >
+  </a
+      ><a name="5397" href="Data.Container.html#5248" class="Function"
+      >&#8728;-correct</a
+      ><a name="5406"
+      > </a
+      ><a name="5407" href="Data.Container.html#5407" class="Bound"
+      >f</a
+      ><a name="5408"
+      > </a
+      ><a name="5409" href="Data.Container.html#5409" class="Bound"
+      >g</a
+      ><a name="5410"
+      > </a
+      ><a name="5411" href="Data.Container.html#5411" class="Bound"
+      >xs</a
+      ><a name="5413"
+      > </a
+      ><a name="5414" class="Symbol"
+      >=</a
+      ><a name="5415"
+      > </a
+      ><a name="5416" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="5420"
+      >
+
+</a
+      ><a name="5422" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="5494"
+      >
+</a
+      ><a name="5495" class="Comment"
+      >-- Linear container morphisms</a
+      ><a name="5524"
+      >
+
+</a
+      ><a name="5526" class="Keyword"
+      >record</a
+      ><a name="5532"
+      > </a
+      ><a name="5533" href="Data.Container.html#5533" class="Record Operator"
+      >_&#8888;_</a
+      ><a name="5536"
+      > </a
+      ><a name="5537" class="Symbol"
+      >{</a
+      ><a name="5538" href="Data.Container.html#5538" class="Bound"
+      >c</a
+      ><a name="5539" class="Symbol"
+      >}</a
+      ><a name="5540"
+      > </a
+      ><a name="5541" class="Symbol"
+      >(</a
+      ><a name="5542" href="Data.Container.html#5542" class="Bound"
+      >C&#8321;</a
+      ><a name="5544"
+      > </a
+      ><a name="5545" href="Data.Container.html#5545" class="Bound"
+      >C&#8322;</a
+      ><a name="5547"
+      > </a
+      ><a name="5548" class="Symbol"
+      >:</a
+      ><a name="5549"
+      > </a
+      ><a name="5550" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="5559"
+      > </a
+      ><a name="5560" href="Data.Container.html#5538" class="Bound"
+      >c</a
+      ><a name="5561" class="Symbol"
+      >)</a
+      ><a name="5562"
+      > </a
+      ><a name="5563" class="Symbol"
+      >:</a
+      ><a name="5564"
+      > </a
+      ><a name="5565" class="PrimitiveType"
+      >Set</a
+      ><a name="5568"
+      > </a
+      ><a name="5569" href="Data.Container.html#5538" class="Bound"
+      >c</a
+      ><a name="5570"
+      > </a
+      ><a name="5571" class="Keyword"
+      >where</a
+      ><a name="5576"
+      >
+  </a
+      ><a name="5579" class="Keyword"
+      >field</a
+      ><a name="5584"
+      >
+    </a
+      ><a name="5589" href="Data.Container.html#5589" class="Field"
+      >shape&#8888;</a
+      ><a name="5595"
+      >    </a
+      ><a name="5599" class="Symbol"
+      >:</a
+      ><a name="5600"
+      > </a
+      ><a name="5601" href="Data.Container.html#986" class="Function"
+      >Shape</a
+      ><a name="5606"
+      > </a
+      ><a name="5607" href="Data.Container.html#5542" class="Bound"
+      >C&#8321;</a
+      ><a name="5609"
+      > </a
+      ><a name="5610" class="Symbol"
+      >&#8594;</a
+      ><a name="5611"
+      > </a
+      ><a name="5612" href="Data.Container.html#986" class="Function"
+      >Shape</a
+      ><a name="5617"
+      > </a
+      ><a name="5618" href="Data.Container.html#5545" class="Bound"
+      >C&#8322;</a
+      ><a name="5620"
+      >
+    </a
+      ><a name="5625" href="Data.Container.html#5625" class="Field"
+      >position&#8888;</a
+      ><a name="5634"
+      > </a
+      ><a name="5635" class="Symbol"
+      >:</a
+      ><a name="5636"
+      > </a
+      ><a name="5637" class="Symbol"
+      >&#8704;</a
+      ><a name="5638"
+      > </a
+      ><a name="5639" class="Symbol"
+      >{</a
+      ><a name="5640" href="Data.Container.html#5640" class="Bound"
+      >s</a
+      ><a name="5641" class="Symbol"
+      >}</a
+      ><a name="5642"
+      > </a
+      ><a name="5643" class="Symbol"
+      >&#8594;</a
+      ><a name="5644"
+      > </a
+      ><a name="5645" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="5653"
+      > </a
+      ><a name="5654" href="Data.Container.html#5545" class="Bound"
+      >C&#8322;</a
+      ><a name="5656"
+      > </a
+      ><a name="5657" class="Symbol"
+      >(</a
+      ><a name="5658" href="Data.Container.html#5589" class="Bound"
+      >shape&#8888;</a
+      ><a name="5664"
+      > </a
+      ><a name="5665" href="Data.Container.html#5640" class="Bound"
+      >s</a
+      ><a name="5666" class="Symbol"
+      >)</a
+      ><a name="5667"
+      > </a
+      ><a name="5668" href="Function.Inverse.html#1823" class="Function Operator"
+      >&#8596;</a
+      ><a name="5669"
+      > </a
+      ><a name="5670" href="Data.Container.html#1007" class="Function"
+      >Position</a
+      ><a name="5678"
+      > </a
+      ><a name="5679" href="Data.Container.html#5542" class="Bound"
+      >C&#8321;</a
+      ><a name="5681"
+      > </a
+      ><a name="5682" href="Data.Container.html#5640" class="Bound"
+      >s</a
+      ><a name="5683"
+      >
+
+  </a
+      ><a name="5687" href="Data.Container.html#5687" class="Function"
+      >morphism</a
+      ><a name="5695"
+      > </a
+      ><a name="5696" class="Symbol"
+      >:</a
+      ><a name="5697"
+      > </a
+      ><a name="5698" href="Data.Container.html#5542" class="Bound"
+      >C&#8321;</a
+      ><a name="5700"
+      > </a
+      ><a name="5701" href="Data.Container.html#3237" class="Record Operator"
+      >&#8658;</a
+      ><a name="5702"
+      > </a
+      ><a name="5703" href="Data.Container.html#5545" class="Bound"
+      >C&#8322;</a
+      ><a name="5705"
+      >
+  </a
+      ><a name="5708" href="Data.Container.html#5687" class="Function"
+      >morphism</a
+      ><a name="5716"
+      > </a
+      ><a name="5717" class="Symbol"
+      >=</a
+      ><a name="5718"
+      > </a
+      ><a name="5719" class="Keyword"
+      >record</a
+      ><a name="5725"
+      >
+    </a
+      ><a name="5730" class="Symbol"
+      >{</a
+      ><a name="5731"
+      > </a
+      ><a name="5732" class="Field"
+      >shape</a
+      ><a name="5737"
+      >    </a
+      ><a name="5741" class="Symbol"
+      >=</a
+      ><a name="5742"
+      > </a
+      ><a name="5743" href="Data.Container.html#5589" class="Function"
+      >shape&#8888;</a
+      ><a name="5749"
+      >
+    </a
+      ><a name="5754" class="Symbol"
+      >;</a
+      ><a name="5755"
+      > </a
+      ><a name="5756" class="Field"
+      >position</a
+      ><a name="5764"
+      > </a
+      ><a name="5765" class="Symbol"
+      >=</a
+      ><a name="5766"
+      > </a
+      ><a name="5767" href="Function.Equality.html#699" class="Function Operator"
+      >_&#10216;$&#10217;_</a
+      ><a name="5772"
+      > </a
+      ><a name="5773" class="Symbol"
+      >(</a
+      ><a name="5774" href="Function.Inverse.html#1042" class="Function"
+      >Inverse</a
+      ><a name="5781"
+      >.</a
+      ><a name="5782" href="Function.Inverse.html#1042" class="Function"
+      >to</a
+      ><a name="5784"
+      > </a
+      ><a name="5785" href="Data.Container.html#5625" class="Function"
+      >position&#8888;</a
+      ><a name="5794" class="Symbol"
+      >)</a
+      ><a name="5795"
+      >
+    </a
+      ><a name="5800" class="Symbol"
+      >}</a
+      ><a name="5801"
+      >
+
+  </a
+      ><a name="5805" href="Data.Container.html#5805" class="Function Operator"
+      >&#10218;_&#10219;&#8888;</a
+      ><a name="5809"
+      > </a
+      ><a name="5810" class="Symbol"
+      >:</a
+      ><a name="5811"
+      > </a
+      ><a name="5812" class="Symbol"
+      >&#8704;</a
+      ><a name="5813"
+      > </a
+      ><a name="5814" class="Symbol"
+      >{</a
+      ><a name="5815" href="Data.Container.html#5815" class="Bound"
+      >X</a
+      ><a name="5816" class="Symbol"
+      >}</a
+      ><a name="5817"
+      > </a
+      ><a name="5818" class="Symbol"
+      >&#8594;</a
+      ><a name="5819"
+      > </a
+      ><a name="5820" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="5821"
+      > </a
+      ><a name="5822" href="Data.Container.html#5542" class="Bound"
+      >C&#8321;</a
+      ><a name="5824"
+      > </a
+      ><a name="5825" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="5826"
+      > </a
+      ><a name="5827" href="Data.Container.html#5815" class="Bound"
+      >X</a
+      ><a name="5828"
+      > </a
+      ><a name="5829" class="Symbol"
+      >&#8594;</a
+      ><a name="5830"
+      > </a
+      ><a name="5831" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="5832"
+      > </a
+      ><a name="5833" href="Data.Container.html#5545" class="Bound"
+      >C&#8322;</a
+      ><a name="5835"
+      > </a
+      ><a name="5836" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="5837"
+      > </a
+      ><a name="5838" href="Data.Container.html#5815" class="Bound"
+      >X</a
+      ><a name="5839"
+      >
+  </a
+      ><a name="5842" href="Data.Container.html#5805" class="Function Operator"
+      >&#10218;_&#10219;&#8888;</a
+      ><a name="5846"
+      > </a
+      ><a name="5847" class="Symbol"
+      >=</a
+      ><a name="5848"
+      > </a
+      ><a name="5849" href="Data.Container.html#3430" class="Function Operator"
+      >&#10218;</a
+      ><a name="5850"
+      > </a
+      ><a name="5851" href="Data.Container.html#5687" class="Function"
+      >morphism</a
+      ><a name="5859"
+      > </a
+      ><a name="5860" href="Data.Container.html#3430" class="Function Operator"
+      >&#10219;</a
+      ><a name="5861"
+      >
+
+</a
+      ><a name="5863" class="Keyword"
+      >open</a
+      ><a name="5867"
+      > </a
+      ><a name="5868" href="Data.Container.html#5533" class="Module Operator"
+      >_&#8888;_</a
+      ><a name="5871"
+      > </a
+      ><a name="5872" class="Keyword"
+      >public</a
+      ><a name="5878"
+      > </a
+      ><a name="5879" class="Keyword"
+      >using</a
+      ><a name="5884"
+      > </a
+      ><a name="5885" class="Symbol"
+      >(</a
+      ><a name="5886"
+      >shape&#8888;</a
+      ><a name="5892" class="Symbol"
+      >;</a
+      ><a name="5893"
+      > position&#8888;</a
+      ><a name="5903" class="Symbol"
+      >;</a
+      ><a name="5904"
+      > &#10218;_&#10219;&#8888;</a
+      ><a name="5909" class="Symbol"
+      >)</a
+      ><a name="5910"
+      >
+
+</a
+      ><a name="5912" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="5984"
+      >
+</a
+      ><a name="5985" class="Comment"
+      >-- All and any</a
+      ><a name="5999"
+      >
+
+</a
+      ><a name="6001" class="Comment"
+      >-- All.</a
+      ><a name="6008"
+      >
+
+</a
+      ><a name="6010" href="Data.Container.html#6010" class="Function"
+      >&#9633;</a
+      ><a name="6011"
+      > </a
+      ><a name="6012" class="Symbol"
+      >:</a
+      ><a name="6013"
+      > </a
+      ><a name="6014" class="Symbol"
+      >&#8704;</a
+      ><a name="6015"
+      > </a
+      ><a name="6016" class="Symbol"
+      >{</a
+      ><a name="6017" href="Data.Container.html#6017" class="Bound"
+      >c</a
+      ><a name="6018" class="Symbol"
+      >}</a
+      ><a name="6019"
+      > </a
+      ><a name="6020" class="Symbol"
+      >{</a
+      ><a name="6021" href="Data.Container.html#6021" class="Bound"
+      >C</a
+      ><a name="6022"
+      > </a
+      ><a name="6023" class="Symbol"
+      >:</a
+      ><a name="6024"
+      > </a
+      ><a name="6025" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="6034"
+      > </a
+      ><a name="6035" href="Data.Container.html#6017" class="Bound"
+      >c</a
+      ><a name="6036" class="Symbol"
+      >}</a
+      ><a name="6037"
+      > </a
+      ><a name="6038" class="Symbol"
+      >{</a
+      ><a name="6039" href="Data.Container.html#6039" class="Bound"
+      >X</a
+      ><a name="6040"
+      > </a
+      ><a name="6041" class="Symbol"
+      >:</a
+      ><a name="6042"
+      > </a
+      ><a name="6043" class="PrimitiveType"
+      >Set</a
+      ><a name="6046"
+      > </a
+      ><a name="6047" href="Data.Container.html#6017" class="Bound"
+      >c</a
+      ><a name="6048" class="Symbol"
+      >}</a
+      ><a name="6049"
+      > </a
+      ><a name="6050" class="Symbol"
+      >&#8594;</a
+      ><a name="6051"
+      >
+    </a
+      ><a name="6056" class="Symbol"
+      >(</a
+      ><a name="6057" href="Data.Container.html#6039" class="Bound"
+      >X</a
+      ><a name="6058"
+      > </a
+      ><a name="6059" class="Symbol"
+      >&#8594;</a
+      ><a name="6060"
+      > </a
+      ><a name="6061" class="PrimitiveType"
+      >Set</a
+      ><a name="6064"
+      > </a
+      ><a name="6065" href="Data.Container.html#6017" class="Bound"
+      >c</a
+      ><a name="6066" class="Symbol"
+      >)</a
+      ><a name="6067"
+      > </a
+      ><a name="6068" class="Symbol"
+      >&#8594;</a
+      ><a name="6069"
+      > </a
+      ><a name="6070" class="Symbol"
+      >(</a
+      ><a name="6071" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="6072"
+      > </a
+      ><a name="6073" href="Data.Container.html#6021" class="Bound"
+      >C</a
+      ><a name="6074"
+      > </a
+      ><a name="6075" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="6076"
+      > </a
+      ><a name="6077" href="Data.Container.html#6039" class="Bound"
+      >X</a
+      ><a name="6078"
+      > </a
+      ><a name="6079" class="Symbol"
+      >&#8594;</a
+      ><a name="6080"
+      > </a
+      ><a name="6081" class="PrimitiveType"
+      >Set</a
+      ><a name="6084"
+      > </a
+      ><a name="6085" href="Data.Container.html#6017" class="Bound"
+      >c</a
+      ><a name="6086" class="Symbol"
+      >)</a
+      ><a name="6087"
+      >
+</a
+      ><a name="6088" href="Data.Container.html#6010" class="Function"
+      >&#9633;</a
+      ><a name="6089"
+      > </a
+      ><a name="6090" href="Data.Container.html#6090" class="Bound"
+      >P</a
+      ><a name="6091"
+      > </a
+      ><a name="6092" class="Symbol"
+      >(</a
+      ><a name="6093" href="Data.Container.html#6093" class="Bound"
+      >s</a
+      ><a name="6094"
+      > </a
+      ><a name="6095" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="6096"
+      > </a
+      ><a name="6097" href="Data.Container.html#6097" class="Bound"
+      >f</a
+      ><a name="6098" class="Symbol"
+      >)</a
+      ><a name="6099"
+      > </a
+      ><a name="6100" class="Symbol"
+      >=</a
+      ><a name="6101"
+      > </a
+      ><a name="6102" class="Symbol"
+      >&#8704;</a
+      ><a name="6103"
+      > </a
+      ><a name="6104" href="Data.Container.html#6104" class="Bound"
+      >p</a
+      ><a name="6105"
+      > </a
+      ><a name="6106" class="Symbol"
+      >&#8594;</a
+      ><a name="6107"
+      > </a
+      ><a name="6108" href="Data.Container.html#6090" class="Bound"
+      >P</a
+      ><a name="6109"
+      > </a
+      ><a name="6110" class="Symbol"
+      >(</a
+      ><a name="6111" href="Data.Container.html#6097" class="Bound"
+      >f</a
+      ><a name="6112"
+      > </a
+      ><a name="6113" href="Data.Container.html#6104" class="Bound"
+      >p</a
+      ><a name="6114" class="Symbol"
+      >)</a
+      ><a name="6115"
+      >
+
+</a
+      ><a name="6117" href="Data.Container.html#6117" class="Function"
+      >&#9633;-map</a
+      ><a name="6122"
+      > </a
+      ><a name="6123" class="Symbol"
+      >:</a
+      ><a name="6124"
+      > </a
+      ><a name="6125" class="Symbol"
+      >&#8704;</a
+      ><a name="6126"
+      > </a
+      ><a name="6127" class="Symbol"
+      >{</a
+      ><a name="6128" href="Data.Container.html#6128" class="Bound"
+      >c</a
+      ><a name="6129" class="Symbol"
+      >}</a
+      ><a name="6130"
+      > </a
+      ><a name="6131" class="Symbol"
+      >{</a
+      ><a name="6132" href="Data.Container.html#6132" class="Bound"
+      >C</a
+      ><a name="6133"
+      > </a
+      ><a name="6134" class="Symbol"
+      >:</a
+      ><a name="6135"
+      > </a
+      ><a name="6136" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="6145"
+      > </a
+      ><a name="6146" href="Data.Container.html#6128" class="Bound"
+      >c</a
+      ><a name="6147" class="Symbol"
+      >}</a
+      ><a name="6148"
+      > </a
+      ><a name="6149" class="Symbol"
+      >{</a
+      ><a name="6150" href="Data.Container.html#6150" class="Bound"
+      >X</a
+      ><a name="6151"
+      > </a
+      ><a name="6152" class="Symbol"
+      >:</a
+      ><a name="6153"
+      > </a
+      ><a name="6154" class="PrimitiveType"
+      >Set</a
+      ><a name="6157"
+      > </a
+      ><a name="6158" href="Data.Container.html#6128" class="Bound"
+      >c</a
+      ><a name="6159" class="Symbol"
+      >}</a
+      ><a name="6160"
+      > </a
+      ><a name="6161" class="Symbol"
+      >{</a
+      ><a name="6162" href="Data.Container.html#6162" class="Bound"
+      >P</a
+      ><a name="6163"
+      > </a
+      ><a name="6164" href="Data.Container.html#6164" class="Bound"
+      >Q</a
+      ><a name="6165"
+      > </a
+      ><a name="6166" class="Symbol"
+      >:</a
+      ><a name="6167"
+      > </a
+      ><a name="6168" href="Data.Container.html#6150" class="Bound"
+      >X</a
+      ><a name="6169"
+      > </a
+      ><a name="6170" class="Symbol"
+      >&#8594;</a
+      ><a name="6171"
+      > </a
+      ><a name="6172" class="PrimitiveType"
+      >Set</a
+      ><a name="6175"
+      > </a
+      ><a name="6176" href="Data.Container.html#6128" class="Bound"
+      >c</a
+      ><a name="6177" class="Symbol"
+      >}</a
+      ><a name="6178"
+      > </a
+      ><a name="6179" class="Symbol"
+      >&#8594;</a
+      ><a name="6180"
+      >
+        </a
+      ><a name="6189" href="Data.Container.html#6162" class="Bound"
+      >P</a
+      ><a name="6190"
+      > </a
+      ><a name="6191" href="Relation.Unary.html#1714" class="Function Operator"
+      >&#8838;</a
+      ><a name="6192"
+      > </a
+      ><a name="6193" href="Data.Container.html#6164" class="Bound"
+      >Q</a
+      ><a name="6194"
+      > </a
+      ><a name="6195" class="Symbol"
+      >&#8594;</a
+      ><a name="6196"
+      > </a
+      ><a name="6197" href="Data.Container.html#6010" class="Function"
+      >&#9633;</a
+      ><a name="6198"
+      > </a
+      ><a name="6199" class="Symbol"
+      >{</a
+      ><a name="6200"
+      >C </a
+      ><a name="6202" class="Symbol"
+      >=</a
+      ><a name="6203"
+      > </a
+      ><a name="6204" href="Data.Container.html#6132" class="Bound"
+      >C</a
+      ><a name="6205" class="Symbol"
+      >}</a
+      ><a name="6206"
+      > </a
+      ><a name="6207" href="Data.Container.html#6162" class="Bound"
+      >P</a
+      ><a name="6208"
+      > </a
+      ><a name="6209" href="Relation.Unary.html#1714" class="Function Operator"
+      >&#8838;</a
+      ><a name="6210"
+      > </a
+      ><a name="6211" href="Data.Container.html#6010" class="Function"
+      >&#9633;</a
+      ><a name="6212"
+      > </a
+      ><a name="6213" href="Data.Container.html#6164" class="Bound"
+      >Q</a
+      ><a name="6214"
+      >
+</a
+      ><a name="6215" href="Data.Container.html#6117" class="Function"
+      >&#9633;-map</a
+      ><a name="6220"
+      > </a
+      ><a name="6221" href="Data.Container.html#6221" class="Bound"
+      >P&#8838;Q</a
+      ><a name="6224"
+      > </a
+      ><a name="6225" class="Symbol"
+      >=</a
+      ><a name="6226"
+      > </a
+      ><a name="6227" href="Function.html#724" class="Function Operator"
+      >_&#10216;&#8728;&#10217;_</a
+      ><a name="6232"
+      > </a
+      ><a name="6233" href="Data.Container.html#6221" class="Bound"
+      >P&#8838;Q</a
+      ><a name="6236"
+      >
+
+</a
+      ><a name="6238" class="Comment"
+      >-- Any.</a
+      ><a name="6245"
+      >
+
+</a
+      ><a name="6247" href="Data.Container.html#6247" class="Function"
+      >&#9671;</a
+      ><a name="6248"
+      > </a
+      ><a name="6249" class="Symbol"
+      >:</a
+      ><a name="6250"
+      > </a
+      ><a name="6251" class="Symbol"
+      >&#8704;</a
+      ><a name="6252"
+      > </a
+      ><a name="6253" class="Symbol"
+      >{</a
+      ><a name="6254" href="Data.Container.html#6254" class="Bound"
+      >c</a
+      ><a name="6255" class="Symbol"
+      >}</a
+      ><a name="6256"
+      > </a
+      ><a name="6257" class="Symbol"
+      >{</a
+      ><a name="6258" href="Data.Container.html#6258" class="Bound"
+      >C</a
+      ><a name="6259"
+      > </a
+      ><a name="6260" class="Symbol"
+      >:</a
+      ><a name="6261"
+      > </a
+      ><a name="6262" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="6271"
+      > </a
+      ><a name="6272" href="Data.Container.html#6254" class="Bound"
+      >c</a
+      ><a name="6273" class="Symbol"
+      >}</a
+      ><a name="6274"
+      > </a
+      ><a name="6275" class="Symbol"
+      >{</a
+      ><a name="6276" href="Data.Container.html#6276" class="Bound"
+      >X</a
+      ><a name="6277"
+      > </a
+      ><a name="6278" class="Symbol"
+      >:</a
+      ><a name="6279"
+      > </a
+      ><a name="6280" class="PrimitiveType"
+      >Set</a
+      ><a name="6283"
+      > </a
+      ><a name="6284" href="Data.Container.html#6254" class="Bound"
+      >c</a
+      ><a name="6285" class="Symbol"
+      >}</a
+      ><a name="6286"
+      > </a
+      ><a name="6287" class="Symbol"
+      >&#8594;</a
+      ><a name="6288"
+      >
+    </a
+      ><a name="6293" class="Symbol"
+      >(</a
+      ><a name="6294" href="Data.Container.html#6276" class="Bound"
+      >X</a
+      ><a name="6295"
+      > </a
+      ><a name="6296" class="Symbol"
+      >&#8594;</a
+      ><a name="6297"
+      > </a
+      ><a name="6298" class="PrimitiveType"
+      >Set</a
+      ><a name="6301"
+      > </a
+      ><a name="6302" href="Data.Container.html#6254" class="Bound"
+      >c</a
+      ><a name="6303" class="Symbol"
+      >)</a
+      ><a name="6304"
+      > </a
+      ><a name="6305" class="Symbol"
+      >&#8594;</a
+      ><a name="6306"
+      > </a
+      ><a name="6307" class="Symbol"
+      >(</a
+      ><a name="6308" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="6309"
+      > </a
+      ><a name="6310" href="Data.Container.html#6258" class="Bound"
+      >C</a
+      ><a name="6311"
+      > </a
+      ><a name="6312" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="6313"
+      > </a
+      ><a name="6314" href="Data.Container.html#6276" class="Bound"
+      >X</a
+      ><a name="6315"
+      > </a
+      ><a name="6316" class="Symbol"
+      >&#8594;</a
+      ><a name="6317"
+      > </a
+      ><a name="6318" class="PrimitiveType"
+      >Set</a
+      ><a name="6321"
+      > </a
+      ><a name="6322" href="Data.Container.html#6254" class="Bound"
+      >c</a
+      ><a name="6323" class="Symbol"
+      >)</a
+      ><a name="6324"
+      >
+</a
+      ><a name="6325" href="Data.Container.html#6247" class="Function"
+      >&#9671;</a
+      ><a name="6326"
+      > </a
+      ><a name="6327" href="Data.Container.html#6327" class="Bound"
+      >P</a
+      ><a name="6328"
+      > </a
+      ><a name="6329" class="Symbol"
+      >(</a
+      ><a name="6330" href="Data.Container.html#6330" class="Bound"
+      >s</a
+      ><a name="6331"
+      > </a
+      ><a name="6332" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="6333"
+      > </a
+      ><a name="6334" href="Data.Container.html#6334" class="Bound"
+      >f</a
+      ><a name="6335" class="Symbol"
+      >)</a
+      ><a name="6336"
+      > </a
+      ><a name="6337" class="Symbol"
+      >=</a
+      ><a name="6338"
+      > </a
+      ><a name="6339" href="Data.Product.html#608" class="Function"
+      >&#8707;</a
+      ><a name="6340"
+      > </a
+      ><a name="6341" class="Symbol"
+      >&#955;</a
+      ><a name="6342"
+      > </a
+      ><a name="6343" href="Data.Container.html#6343" class="Bound"
+      >p</a
+      ><a name="6344"
+      > </a
+      ><a name="6345" class="Symbol"
+      >&#8594;</a
+      ><a name="6346"
+      > </a
+      ><a name="6347" href="Data.Container.html#6327" class="Bound"
+      >P</a
+      ><a name="6348"
+      > </a
+      ><a name="6349" class="Symbol"
+      >(</a
+      ><a name="6350" href="Data.Container.html#6334" class="Bound"
+      >f</a
+      ><a name="6351"
+      > </a
+      ><a name="6352" href="Data.Container.html#6343" class="Bound"
+      >p</a
+      ><a name="6353" class="Symbol"
+      >)</a
+      ><a name="6354"
+      >
+
+</a
+      ><a name="6356" href="Data.Container.html#6356" class="Function"
+      >&#9671;-map</a
+      ><a name="6361"
+      > </a
+      ><a name="6362" class="Symbol"
+      >:</a
+      ><a name="6363"
+      > </a
+      ><a name="6364" class="Symbol"
+      >&#8704;</a
+      ><a name="6365"
+      > </a
+      ><a name="6366" class="Symbol"
+      >{</a
+      ><a name="6367" href="Data.Container.html#6367" class="Bound"
+      >c</a
+      ><a name="6368" class="Symbol"
+      >}</a
+      ><a name="6369"
+      > </a
+      ><a name="6370" class="Symbol"
+      >{</a
+      ><a name="6371" href="Data.Container.html#6371" class="Bound"
+      >C</a
+      ><a name="6372"
+      > </a
+      ><a name="6373" class="Symbol"
+      >:</a
+      ><a name="6374"
+      > </a
+      ><a name="6375" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="6384"
+      > </a
+      ><a name="6385" href="Data.Container.html#6367" class="Bound"
+      >c</a
+      ><a name="6386" class="Symbol"
+      >}</a
+      ><a name="6387"
+      > </a
+      ><a name="6388" class="Symbol"
+      >{</a
+      ><a name="6389" href="Data.Container.html#6389" class="Bound"
+      >X</a
+      ><a name="6390"
+      > </a
+      ><a name="6391" class="Symbol"
+      >:</a
+      ><a name="6392"
+      > </a
+      ><a name="6393" class="PrimitiveType"
+      >Set</a
+      ><a name="6396"
+      > </a
+      ><a name="6397" href="Data.Container.html#6367" class="Bound"
+      >c</a
+      ><a name="6398" class="Symbol"
+      >}</a
+      ><a name="6399"
+      > </a
+      ><a name="6400" class="Symbol"
+      >{</a
+      ><a name="6401" href="Data.Container.html#6401" class="Bound"
+      >P</a
+      ><a name="6402"
+      > </a
+      ><a name="6403" href="Data.Container.html#6403" class="Bound"
+      >Q</a
+      ><a name="6404"
+      > </a
+      ><a name="6405" class="Symbol"
+      >:</a
+      ><a name="6406"
+      > </a
+      ><a name="6407" href="Data.Container.html#6389" class="Bound"
+      >X</a
+      ><a name="6408"
+      > </a
+      ><a name="6409" class="Symbol"
+      >&#8594;</a
+      ><a name="6410"
+      > </a
+      ><a name="6411" class="PrimitiveType"
+      >Set</a
+      ><a name="6414"
+      > </a
+      ><a name="6415" href="Data.Container.html#6367" class="Bound"
+      >c</a
+      ><a name="6416" class="Symbol"
+      >}</a
+      ><a name="6417"
+      > </a
+      ><a name="6418" class="Symbol"
+      >&#8594;</a
+      ><a name="6419"
+      >
+        </a
+      ><a name="6428" href="Data.Container.html#6401" class="Bound"
+      >P</a
+      ><a name="6429"
+      > </a
+      ><a name="6430" href="Relation.Unary.html#1714" class="Function Operator"
+      >&#8838;</a
+      ><a name="6431"
+      > </a
+      ><a name="6432" href="Data.Container.html#6403" class="Bound"
+      >Q</a
+      ><a name="6433"
+      > </a
+      ><a name="6434" class="Symbol"
+      >&#8594;</a
+      ><a name="6435"
+      > </a
+      ><a name="6436" href="Data.Container.html#6247" class="Function"
+      >&#9671;</a
+      ><a name="6437"
+      > </a
+      ><a name="6438" class="Symbol"
+      >{</a
+      ><a name="6439"
+      >C </a
+      ><a name="6441" class="Symbol"
+      >=</a
+      ><a name="6442"
+      > </a
+      ><a name="6443" href="Data.Container.html#6371" class="Bound"
+      >C</a
+      ><a name="6444" class="Symbol"
+      >}</a
+      ><a name="6445"
+      > </a
+      ><a name="6446" href="Data.Container.html#6401" class="Bound"
+      >P</a
+      ><a name="6447"
+      > </a
+      ><a name="6448" href="Relation.Unary.html#1714" class="Function Operator"
+      >&#8838;</a
+      ><a name="6449"
+      > </a
+      ><a name="6450" href="Data.Container.html#6247" class="Function"
+      >&#9671;</a
+      ><a name="6451"
+      > </a
+      ><a name="6452" href="Data.Container.html#6403" class="Bound"
+      >Q</a
+      ><a name="6453"
+      >
+</a
+      ><a name="6454" href="Data.Container.html#6356" class="Function"
+      >&#9671;-map</a
+      ><a name="6459"
+      > </a
+      ><a name="6460" href="Data.Container.html#6460" class="Bound"
+      >P&#8838;Q</a
+      ><a name="6463"
+      > </a
+      ><a name="6464" class="Symbol"
+      >=</a
+      ><a name="6465"
+      > </a
+      ><a name="6466" href="Data.Product.html#1657" class="Function"
+      >Prod</a
+      ><a name="6470"
+      >.</a
+      ><a name="6471" href="Data.Product.html#1657" class="Function"
+      >map</a
+      ><a name="6474"
+      > </a
+      ><a name="6475" href="Function.html#1017" class="Function"
+      >&#10216;id&#10217;</a
+      ><a name="6479"
+      > </a
+      ><a name="6480" href="Data.Container.html#6460" class="Bound"
+      >P&#8838;Q</a
+      ><a name="6483"
+      >
+
+</a
+      ><a name="6485" class="Comment"
+      >-- Membership.</a
+      ><a name="6499"
+      >
+
+</a
+      ><a name="6501" class="Keyword"
+      >infix</a
+      ><a name="6506"
+      > </a
+      ><a name="6507" class="Number"
+      >4</a
+      ><a name="6508"
+      > _&#8712;_
+
+</a
+      ><a name="6514" href="Data.Container.html#6514" class="Function Operator"
+      >_&#8712;_</a
+      ><a name="6517"
+      > </a
+      ><a name="6518" class="Symbol"
+      >:</a
+      ><a name="6519"
+      > </a
+      ><a name="6520" class="Symbol"
+      >&#8704;</a
+      ><a name="6521"
+      > </a
+      ><a name="6522" class="Symbol"
+      >{</a
+      ><a name="6523" href="Data.Container.html#6523" class="Bound"
+      >c</a
+      ><a name="6524" class="Symbol"
+      >}</a
+      ><a name="6525"
+      > </a
+      ><a name="6526" class="Symbol"
+      >{</a
+      ><a name="6527" href="Data.Container.html#6527" class="Bound"
+      >C</a
+      ><a name="6528"
+      > </a
+      ><a name="6529" class="Symbol"
+      >:</a
+      ><a name="6530"
+      > </a
+      ><a name="6531" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="6540"
+      > </a
+      ><a name="6541" href="Data.Container.html#6523" class="Bound"
+      >c</a
+      ><a name="6542" class="Symbol"
+      >}</a
+      ><a name="6543"
+      > </a
+      ><a name="6544" class="Symbol"
+      >{</a
+      ><a name="6545" href="Data.Container.html#6545" class="Bound"
+      >X</a
+      ><a name="6546"
+      > </a
+      ><a name="6547" class="Symbol"
+      >:</a
+      ><a name="6548"
+      > </a
+      ><a name="6549" class="PrimitiveType"
+      >Set</a
+      ><a name="6552"
+      > </a
+      ><a name="6553" href="Data.Container.html#6523" class="Bound"
+      >c</a
+      ><a name="6554" class="Symbol"
+      >}</a
+      ><a name="6555"
+      > </a
+      ><a name="6556" class="Symbol"
+      >&#8594;</a
+      ><a name="6557"
+      >
+      </a
+      ><a name="6564" href="Data.Container.html#6545" class="Bound"
+      >X</a
+      ><a name="6565"
+      > </a
+      ><a name="6566" class="Symbol"
+      >&#8594;</a
+      ><a name="6567"
+      > </a
+      ><a name="6568" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="6569"
+      > </a
+      ><a name="6570" href="Data.Container.html#6527" class="Bound"
+      >C</a
+      ><a name="6571"
+      > </a
+      ><a name="6572" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="6573"
+      > </a
+      ><a name="6574" href="Data.Container.html#6545" class="Bound"
+      >X</a
+      ><a name="6575"
+      > </a
+      ><a name="6576" class="Symbol"
+      >&#8594;</a
+      ><a name="6577"
+      > </a
+      ><a name="6578" class="PrimitiveType"
+      >Set</a
+      ><a name="6581"
+      > </a
+      ><a name="6582" href="Data.Container.html#6523" class="Bound"
+      >c</a
+      ><a name="6583"
+      >
+</a
+      ><a name="6584" href="Data.Container.html#6584" class="Bound"
+      >x</a
+      ><a name="6585"
+      > </a
+      ><a name="6586" href="Data.Container.html#6514" class="Function Operator"
+      >&#8712;</a
+      ><a name="6587"
+      > </a
+      ><a name="6588" href="Data.Container.html#6588" class="Bound"
+      >xs</a
+      ><a name="6590"
+      > </a
+      ><a name="6591" class="Symbol"
+      >=</a
+      ><a name="6592"
+      > </a
+      ><a name="6593" href="Data.Container.html#6247" class="Function"
+      >&#9671;</a
+      ><a name="6594"
+      > </a
+      ><a name="6595" class="Symbol"
+      >(</a
+      ><a name="6596" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="6599"
+      > </a
+      ><a name="6600" href="Data.Container.html#6584" class="Bound"
+      >x</a
+      ><a name="6601" class="Symbol"
+      >)</a
+      ><a name="6602"
+      > </a
+      ><a name="6603" href="Data.Container.html#6588" class="Bound"
+      >xs</a
+      ><a name="6605"
+      >
+
+</a
+      ><a name="6607" class="Comment"
+      >-- Bag and set equality and related preorders. Two containers xs and</a
+      ><a name="6675"
+      >
+</a
+      ><a name="6676" class="Comment"
+      >-- ys are equal when viewed as sets if, whenever x&#160;&#8712;&#160;xs, we also have</a
+      ><a name="6745"
+      >
+</a
+      ><a name="6746" class="Comment"
+      >-- x&#160;&#8712;&#160;ys, and vice versa. They are equal when viewed as bags if,</a
+      ><a name="6811"
+      >
+</a
+      ><a name="6812" class="Comment"
+      >-- additionally, the sets x&#160;&#8712;&#160;xs and x&#160;&#8712;&#160;ys have the same size.</a
+      ><a name="6875"
+      >
+
+</a
+      ><a name="6877" class="Keyword"
+      >open</a
+      ><a name="6881"
+      > </a
+      ><a name="6882" href="Function.Related.html#1" class="Module"
+      >Related</a
+      ><a name="6889"
+      > </a
+      ><a name="6890" class="Keyword"
+      >public</a
+      ><a name="6896"
+      >
+  </a
+      ><a name="6899" class="Keyword"
+      >using</a
+      ><a name="6904"
+      > </a
+      ><a name="6905" class="Symbol"
+      >(</a
+      ><a name="6906"
+      >Kind</a
+      ><a name="6910" class="Symbol"
+      >;</a
+      ><a name="6911"
+      > Symmetric-kind</a
+      ><a name="6926" class="Symbol"
+      >)</a
+      ><a name="6927"
+      >
+  </a
+      ><a name="6930" class="Keyword"
+      >renaming</a
+      ><a name="6938"
+      > </a
+      ><a name="6939" class="Symbol"
+      >(</a
+      ><a name="6940"
+      > implication         </a
+      ><a name="6961" class="Symbol"
+      >to</a
+      ><a name="6963"
+      > subset
+           </a
+      ><a name="6982" class="Symbol"
+      >;</a
+      ><a name="6983"
+      > reverse-implication </a
+      ><a name="7004" class="Symbol"
+      >to</a
+      ><a name="7006"
+      > superset
+           </a
+      ><a name="7027" class="Symbol"
+      >;</a
+      ><a name="7028"
+      > equivalence         </a
+      ><a name="7049" class="Symbol"
+      >to</a
+      ><a name="7051"
+      > set
+           </a
+      ><a name="7067" class="Symbol"
+      >;</a
+      ><a name="7068"
+      > injection           </a
+      ><a name="7089" class="Symbol"
+      >to</a
+      ><a name="7091"
+      > subbag
+           </a
+      ><a name="7110" class="Symbol"
+      >;</a
+      ><a name="7111"
+      > reverse-injection   </a
+      ><a name="7132" class="Symbol"
+      >to</a
+      ><a name="7134"
+      > superbag
+           </a
+      ><a name="7155" class="Symbol"
+      >;</a
+      ><a name="7156"
+      > bijection           </a
+      ><a name="7177" class="Symbol"
+      >to</a
+      ><a name="7179"
+      > bag
+           </a
+      ><a name="7195" class="Symbol"
+      >)</a
+      ><a name="7196"
+      >
+
+</a
+      ><a name="7198" href="Data.Container.html#7198" class="Function Operator"
+      >[_]-Order</a
+      ><a name="7207"
+      > </a
+      ><a name="7208" class="Symbol"
+      >:</a
+      ><a name="7209"
+      > </a
+      ><a name="7210" class="Symbol"
+      >&#8704;</a
+      ><a name="7211"
+      > </a
+      ><a name="7212" class="Symbol"
+      >{</a
+      ><a name="7213" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7214" class="Symbol"
+      >}</a
+      ><a name="7215"
+      > </a
+      ><a name="7216" class="Symbol"
+      >&#8594;</a
+      ><a name="7217"
+      > </a
+      ><a name="7218" href="Function.Related.html#1613" class="Datatype"
+      >Kind</a
+      ><a name="7222"
+      > </a
+      ><a name="7223" class="Symbol"
+      >&#8594;</a
+      ><a name="7224"
+      > </a
+      ><a name="7225" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="7234"
+      > </a
+      ><a name="7235" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7236"
+      > </a
+      ><a name="7237" class="Symbol"
+      >&#8594;</a
+      ><a name="7238"
+      > </a
+      ><a name="7239" class="PrimitiveType"
+      >Set</a
+      ><a name="7242"
+      > </a
+      ><a name="7243" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7244"
+      > </a
+      ><a name="7245" class="Symbol"
+      >&#8594;</a
+      ><a name="7246"
+      > </a
+      ><a name="7247" href="Relation.Binary.html#1414" class="Record"
+      >Preorder</a
+      ><a name="7255"
+      > </a
+      ><a name="7256" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7257"
+      > </a
+      ><a name="7258" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7259"
+      > </a
+      ><a name="7260" href="Data.Container.html#7213" class="Bound"
+      >&#8467;</a
+      ><a name="7261"
+      >
+</a
+      ><a name="7262" href="Data.Container.html#7198" class="Function Operator"
+      >[</a
+      ><a name="7263"
+      > </a
+      ><a name="7264" href="Data.Container.html#7264" class="Bound"
+      >k</a
+      ><a name="7265"
+      > </a
+      ><a name="7266" href="Data.Container.html#7198" class="Function Operator"
+      >]-Order</a
+      ><a name="7273"
+      > </a
+      ><a name="7274" href="Data.Container.html#7274" class="Bound"
+      >C</a
+      ><a name="7275"
+      > </a
+      ><a name="7276" href="Data.Container.html#7276" class="Bound"
+      >X</a
+      ><a name="7277"
+      > </a
+      ><a name="7278" class="Symbol"
+      >=</a
+      ><a name="7279"
+      > </a
+      ><a name="7280" href="Function.Related.html#11329" class="Function"
+      >Related</a
+      ><a name="7287"
+      >.</a
+      ><a name="7288" href="Function.Related.html#11329" class="Function"
+      >InducedPreorder&#8322;</a
+      ><a name="7304"
+      > </a
+      ><a name="7305" href="Data.Container.html#7264" class="Bound"
+      >k</a
+      ><a name="7306"
+      > </a
+      ><a name="7307" class="Symbol"
+      >(</a
+      ><a name="7308" href="Data.Container.html#6514" class="Function Operator"
+      >_&#8712;_</a
+      ><a name="7311"
+      > </a
+      ><a name="7312" class="Symbol"
+      >{</a
+      ><a name="7313"
+      >C </a
+      ><a name="7315" class="Symbol"
+      >=</a
+      ><a name="7316"
+      > </a
+      ><a name="7317" href="Data.Container.html#7274" class="Bound"
+      >C</a
+      ><a name="7318" class="Symbol"
+      >}</a
+      ><a name="7319"
+      > </a
+      ><a name="7320" class="Symbol"
+      >{</a
+      ><a name="7321"
+      >X </a
+      ><a name="7323" class="Symbol"
+      >=</a
+      ><a name="7324"
+      > </a
+      ><a name="7325" href="Data.Container.html#7276" class="Bound"
+      >X</a
+      ><a name="7326" class="Symbol"
+      >})</a
+      ><a name="7328"
+      >
+
+</a
+      ><a name="7330" href="Data.Container.html#7330" class="Function Operator"
+      >[_]-Equality</a
+      ><a name="7342"
+      > </a
+      ><a name="7343" class="Symbol"
+      >:</a
+      ><a name="7344"
+      > </a
+      ><a name="7345" class="Symbol"
+      >&#8704;</a
+      ><a name="7346"
+      > </a
+      ><a name="7347" class="Symbol"
+      >{</a
+      ><a name="7348" href="Data.Container.html#7348" class="Bound"
+      >&#8467;</a
+      ><a name="7349" class="Symbol"
+      >}</a
+      ><a name="7350"
+      > </a
+      ><a name="7351" class="Symbol"
+      >&#8594;</a
+      ><a name="7352"
+      > </a
+      ><a name="7353" href="Function.Related.html#3339" class="Datatype"
+      >Symmetric-kind</a
+      ><a name="7367"
+      > </a
+      ><a name="7368" class="Symbol"
+      >&#8594;</a
+      ><a name="7369"
+      > </a
+      ><a name="7370" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="7379"
+      > </a
+      ><a name="7380" href="Data.Container.html#7348" class="Bound"
+      >&#8467;</a
+      ><a name="7381"
+      > </a
+      ><a name="7382" class="Symbol"
+      >&#8594;</a
+      ><a name="7383"
+      > </a
+      ><a name="7384" class="PrimitiveType"
+      >Set</a
+      ><a name="7387"
+      > </a
+      ><a name="7388" href="Data.Container.html#7348" class="Bound"
+      >&#8467;</a
+      ><a name="7389"
+      > </a
+      ><a name="7390" class="Symbol"
+      >&#8594;</a
+      ><a name="7391"
+      > </a
+      ><a name="7392" href="Relation.Binary.html#1852" class="Record"
+      >Setoid</a
+      ><a name="7398"
+      > </a
+      ><a name="7399" href="Data.Container.html#7348" class="Bound"
+      >&#8467;</a
+      ><a name="7400"
+      > </a
+      ><a name="7401" href="Data.Container.html#7348" class="Bound"
+      >&#8467;</a
+      ><a name="7402"
+      >
+</a
+      ><a name="7403" href="Data.Container.html#7330" class="Function Operator"
+      >[</a
+      ><a name="7404"
+      > </a
+      ><a name="7405" href="Data.Container.html#7405" class="Bound"
+      >k</a
+      ><a name="7406"
+      > </a
+      ><a name="7407" href="Data.Container.html#7330" class="Function Operator"
+      >]-Equality</a
+      ><a name="7417"
+      > </a
+      ><a name="7418" href="Data.Container.html#7418" class="Bound"
+      >C</a
+      ><a name="7419"
+      > </a
+      ><a name="7420" href="Data.Container.html#7420" class="Bound"
+      >X</a
+      ><a name="7421"
+      > </a
+      ><a name="7422" class="Symbol"
+      >=</a
+      ><a name="7423"
+      > </a
+      ><a name="7424" href="Function.Related.html#11872" class="Function"
+      >Related</a
+      ><a name="7431"
+      >.</a
+      ><a name="7432" href="Function.Related.html#11872" class="Function"
+      >InducedEquivalence&#8322;</a
+      ><a name="7451"
+      > </a
+      ><a name="7452" href="Data.Container.html#7405" class="Bound"
+      >k</a
+      ><a name="7453"
+      > </a
+      ><a name="7454" class="Symbol"
+      >(</a
+      ><a name="7455" href="Data.Container.html#6514" class="Function Operator"
+      >_&#8712;_</a
+      ><a name="7458"
+      > </a
+      ><a name="7459" class="Symbol"
+      >{</a
+      ><a name="7460"
+      >C </a
+      ><a name="7462" class="Symbol"
+      >=</a
+      ><a name="7463"
+      > </a
+      ><a name="7464" href="Data.Container.html#7418" class="Bound"
+      >C</a
+      ><a name="7465" class="Symbol"
+      >}</a
+      ><a name="7466"
+      > </a
+      ><a name="7467" class="Symbol"
+      >{</a
+      ><a name="7468"
+      >X </a
+      ><a name="7470" class="Symbol"
+      >=</a
+      ><a name="7471"
+      > </a
+      ><a name="7472" href="Data.Container.html#7420" class="Bound"
+      >X</a
+      ><a name="7473" class="Symbol"
+      >})</a
+      ><a name="7475"
+      >
+
+</a
+      ><a name="7477" class="Keyword"
+      >infix</a
+      ><a name="7482"
+      > </a
+      ><a name="7483" class="Number"
+      >4</a
+      ><a name="7484"
+      > _&#8764;[_]_
+
+</a
+      ><a name="7493" href="Data.Container.html#7493" class="Function Operator"
+      >_&#8764;[_]_</a
+      ><a name="7499"
+      > </a
+      ><a name="7500" class="Symbol"
+      >:</a
+      ><a name="7501"
+      > </a
+      ><a name="7502" class="Symbol"
+      >&#8704;</a
+      ><a name="7503"
+      > </a
+      ><a name="7504" class="Symbol"
+      >{</a
+      ><a name="7505" href="Data.Container.html#7505" class="Bound"
+      >c</a
+      ><a name="7506" class="Symbol"
+      >}</a
+      ><a name="7507"
+      > </a
+      ><a name="7508" class="Symbol"
+      >{</a
+      ><a name="7509" href="Data.Container.html#7509" class="Bound"
+      >C</a
+      ><a name="7510"
+      > </a
+      ><a name="7511" class="Symbol"
+      >:</a
+      ><a name="7512"
+      > </a
+      ><a name="7513" href="Data.Container.html#914" class="Record"
+      >Container</a
+      ><a name="7522"
+      > </a
+      ><a name="7523" href="Data.Container.html#7505" class="Bound"
+      >c</a
+      ><a name="7524" class="Symbol"
+      >}</a
+      ><a name="7525"
+      > </a
+      ><a name="7526" class="Symbol"
+      >{</a
+      ><a name="7527" href="Data.Container.html#7527" class="Bound"
+      >X</a
+      ><a name="7528"
+      > </a
+      ><a name="7529" class="Symbol"
+      >:</a
+      ><a name="7530"
+      > </a
+      ><a name="7531" class="PrimitiveType"
+      >Set</a
+      ><a name="7534"
+      > </a
+      ><a name="7535" href="Data.Container.html#7505" class="Bound"
+      >c</a
+      ><a name="7536" class="Symbol"
+      >}</a
+      ><a name="7537"
+      > </a
+      ><a name="7538" class="Symbol"
+      >&#8594;</a
+      ><a name="7539"
+      >
+         </a
+      ><a name="7549" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="7550"
+      > </a
+      ><a name="7551" href="Data.Container.html#7509" class="Bound"
+      >C</a
+      ><a name="7552"
+      > </a
+      ><a name="7553" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="7554"
+      > </a
+      ><a name="7555" href="Data.Container.html#7527" class="Bound"
+      >X</a
+      ><a name="7556"
+      > </a
+      ><a name="7557" class="Symbol"
+      >&#8594;</a
+      ><a name="7558"
+      > </a
+      ><a name="7559" href="Function.Related.html#1613" class="Datatype"
+      >Kind</a
+      ><a name="7563"
+      > </a
+      ><a name="7564" class="Symbol"
+      >&#8594;</a
+      ><a name="7565"
+      > </a
+      ><a name="7566" href="Data.Container.html#1104" class="Function Operator"
+      >&#10214;</a
+      ><a name="7567"
+      > </a
+      ><a name="7568" href="Data.Container.html#7509" class="Bound"
+      >C</a
+      ><a name="7569"
+      > </a
+      ><a name="7570" href="Data.Container.html#1104" class="Function Operator"
+      >&#10215;</a
+      ><a name="7571"
+      > </a
+      ><a name="7572" href="Data.Container.html#7527" class="Bound"
+      >X</a
+      ><a name="7573"
+      > </a
+      ><a name="7574" class="Symbol"
+      >&#8594;</a
+      ><a name="7575"
+      > </a
+      ><a name="7576" class="PrimitiveType"
+      >Set</a
+      ><a name="7579"
+      > </a
+      ><a name="7580" href="Data.Container.html#7505" class="Bound"
+      >c</a
+      ><a name="7581"
+      >
+</a
+      ><a name="7582" href="Data.Container.html#7493" class="Function Operator"
+      >_&#8764;[_]_</a
+      ><a name="7588"
+      > </a
+      ><a name="7589" class="Symbol"
+      >{</a
+      ><a name="7590"
+      >C </a
+      ><a name="7592" class="Symbol"
+      >=</a
+      ><a name="7593"
+      > </a
+      ><a name="7594" href="Data.Container.html#7594" class="Bound"
+      >C</a
+      ><a name="7595" class="Symbol"
+      >}</a
+      ><a name="7596"
+      > </a
+      ><a name="7597" class="Symbol"
+      >{</a
+      ><a name="7598" href="Data.Container.html#7598" class="Bound"
+      >X</a
+      ><a name="7599" class="Symbol"
+      >}</a
+      ><a name="7600"
+      > </a
+      ><a name="7601" href="Data.Container.html#7601" class="Bound"
+      >xs</a
+      ><a name="7603"
+      > </a
+      ><a name="7604" href="Data.Container.html#7604" class="Bound"
+      >k</a
+      ><a name="7605"
+      > </a
+      ><a name="7606" href="Data.Container.html#7606" class="Bound"
+      >ys</a
+      ><a name="7608"
+      > </a
+      ><a name="7609" class="Symbol"
+      >=</a
+      ><a name="7610"
+      > </a
+      ><a name="7611" href="Relation.Binary.html#1577" class="Function Operator"
+      >Preorder</a
+      ><a name="7619"
+      >.</a
+      ><a name="7620" href="Relation.Binary.html#1577" class="Function Operator"
+      >_&#8764;_</a
+      ><a name="7623"
+      > </a
+      ><a name="7624" class="Symbol"
+      >(</a
+      ><a name="7625" href="Data.Container.html#7198" class="Function Operator"
+      >[</a
+      ><a name="7626"
+      > </a
+      ><a name="7627" href="Data.Container.html#7604" class="Bound"
+      >k</a
+      ><a name="7628"
+      > </a
+      ><a name="7629" href="Data.Container.html#7198" class="Function Operator"
+      >]-Order</a
+      ><a name="7636"
+      > </a
+      ><a name="7637" href="Data.Container.html#7594" class="Bound"
+      >C</a
+      ><a name="7638"
+      > </a
+      ><a name="7639" href="Data.Container.html#7598" class="Bound"
+      >X</a
+      ><a name="7640" class="Symbol"
+      >)</a
+      ><a name="7641"
+      > </a
+      ><a name="7642" href="Data.Container.html#7601" class="Bound"
+      >xs</a
+      ><a name="7644"
+      > </a
+      ><a name="7645" href="Data.Container.html#7606" class="Bound"
+      >ys</a
+      ><a name="7647"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): History</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): History">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): History">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="History"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_3.html#Intro" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_5.html#Overview" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_3.html#Intro" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_5.html#Overview" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="History-1"></a>
+<h1 class="unnumbered">History</h1>
+<a name="index-History"></a>
+
+<p>The <i>Amd</i> package has been without an official maintainer since 1992.
+Several people have stepped in to maintain it unofficially.  Most
+notable were the &lsquo;upl&rsquo; (Unofficial Patch Level) releases of <i>Amd</i>,
+created by me (<a href="http://www.cs.sunysb.edu/~ezk">Erez Zadok</a>), and available from
+<a href="ftp://ftp.am-utils.org/pub/amd/">ftp://ftp.am-utils.org/pub/amd/</a>.  The last such unofficial
+release was &lsquo;upl102&rsquo;.
+</p>
+<p>Through the process of patching and aging, it was becoming more and more
+apparent that <i>Amd</i> was in much need of revitalizing.  Maintaining
+<i>Amd</i> had become a difficult task.  I took it upon myself to cleanup
+the code, so that it would be easier to port to new platforms, add new
+features, keep up with the many new feature requests, and deal with the
+never ending stream of bug reports.
+</p>
+<p>I have been working on such a release of <i>Amd</i> on and off since
+January of 1996.  The new suite of tools is currently named &quot;am-utils&quot;
+(AutoMounter Utilities), in line with GNU naming conventions, befitting
+the contents of the package.  In October of 1996 I had received enough
+offers to help me with this task that I decided to make a mailing list
+for this group of people.  Around the same time, <i>Amd</i> had become a
+necessary part of my PhD thesis work, resulting in more work performed
+on am-utils.
+</p>
+<p>Am-utils version 6.0 was numbered with a major new release number to
+distinguish it from the last official release of <i>Amd</i> (5.x).  Many
+new features have been added such as a GNU <code>configure</code> system, NFS
+Version 3, a run-time configuration file (&lsquo;amd.conf&rsquo;), many new ports,
+more scripts and programs, as well as numerous bug fixes.  Another
+reason for the new major release number was to alert users of am-utils
+that user-visible interfaces may have changed.  In order to make <i>Amd</i>
+work well for the next 10 years, and be easier to maintain, it was
+necessary to remove old or unused features, change various syntax files,
+etc.  However, great care was taken to ensure the maximum possible
+backwards compatibility.
+</p>
+<p>Am-utils version 6.1 has autofs support for Linux and Solaris 2.5+ as
+<i>the</i> major new feature, in addition to several other minor new
+features.  The autofs support is completely transparent to the
+end-user, aside from the fact that <code>/bin/pwd</code> now always returns
+the correct amd-ified path.  The administrator can easily switch
+between NFS and autofs mounts by changing one parameter in
+<code>amd.conf</code>.  Autofs support and maintenance was developed in
+conjunction with <a href="mailto:ionut AT badula.org">Ion Badulescu</a>.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_3.html#Intro" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_5.html#Overview" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

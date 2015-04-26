@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sns - Send Amazon Simple Notification Service (SNS) messages &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Notification Modules" href="list_of_notification_modules.html" />
+    <link rel="next" title="twilio - Sends a text message to a mobile phone through Twilio." href="twilio_module.html" />
+    <link rel="prev" title="slack - Send Slack notifications" href="slack_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="twilio_module.html" title="twilio - Sends a text message to a mobile phone through Twilio."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="slack_module.html" title="slack - Send Slack notifications"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_notification_modules.html" accesskey="U">Notification Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sns-send-amazon-simple-notification-service-sns-messages">
+<span id="sns"></span><h1>sns - Send Amazon Simple Notification Service (SNS) messages<a class="headerlink" href="#sns-send-amazon-simple-notification-service-sns-messages" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Michael J. Schultz</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+<p>The <tt class="docutils literal"><span class="pre">sns</span></tt> module sends notifications to a topic on your Amazon SNS account</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>aws_access_key</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>aws_secret_key</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>email</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send to email-only subscription</td>
+</tr>
+        <tr>
+<td>http</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send to HTTP-only subscription</td>
+</tr>
+        <tr>
+<td>https</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send to HTTPS-only subscription</td>
+</tr>
+        <tr>
+<td>msg</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Default message to send.</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.</td>
+</tr>
+        <tr>
+<td>sms</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send to SMS-only subscription</td>
+</tr>
+        <tr>
+<td>sqs</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send to SQS-only subscription</td>
+</tr>
+        <tr>
+<td>subject</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Subject line for email delivery.</td>
+</tr>
+        <tr>
+<td>topic</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The topic you want to publish to.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- name: Send default notification message via SNS
+  local_action:
+    module: sns
+    msg: "{{ inventory_hostname }} has completed the play."
+    subject: "Deploy complete!"
+    topic: "deploy"
+
+- name: Send notification messages via SNS with short message for SMS
+  local_action:
+    module: sns
+    msg: "{{ inventory_hostname }} has completed the play."
+    sms: "deployed!"
+    subject: "Deploy complete!"
+    topic: "deploy"</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">sns - Send Amazon Simple Notification Service (SNS) messages</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="slack_module.html"
+                        title="previous chapter">slack - Send Slack notifications</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="twilio_module.html"
+                        title="next chapter">twilio - Sends a text message to a mobile phone through Twilio.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="twilio_module.html" title="twilio - Sends a text message to a mobile phone through Twilio."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="slack_module.html" title="slack - Send Slack notifications"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_notification_modules.html" >Notification Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

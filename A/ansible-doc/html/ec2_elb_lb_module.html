@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ec2_elb_lb - Creates or destroys Amazon ELB. - Returns information about the load balancer. - Will be marked changed when called only if state is changed. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="ec2_facts - Gathers facts about remote hosts within ec2 (aws)" href="ec2_facts_module.html" />
+    <link rel="prev" title="ec2_elb - De-registers or registers instances from EC2 ELBs" href="ec2_elb_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ec2_facts_module.html" title="ec2_facts - Gathers facts about remote hosts within ec2 (aws)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ec2_elb_module.html" title="ec2_elb - De-registers or registers instances from EC2 ELBs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ec2-elb-lb-creates-or-destroys-amazon-elb-returns-information-about-the-load-balancer-will-be-marked-changed-when-called-only-if-state-is-changed">
+<span id="ec2-elb-lb"></span><h1>ec2_elb_lb - Creates or destroys Amazon ELB. - Returns information about the load balancer. - Will be marked changed when called only if state is changed.<a class="headerlink" href="#ec2-elb-lb-creates-or-destroys-amazon-elb-returns-information-about-the-load-balancer-will-be-marked-changed-when-called-only-if-state-is-changed" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jim Dalton</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.</span></p>
+<p>C
+r
+e
+a
+t
+e
+s</p>
+<p>o
+r</p>
+<p>d
+e
+s
+t
+r
+o
+y
+s</p>
+<p>A
+m
+a
+z
+o
+n</p>
+<p>E
+L
+B
+.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>aws_access_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>aws_secret_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>ec2_url</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Url to use to connect to EC2 or your Eucalyptus cloud (by default the module will use EC2 endpoints).  Must be specified if region is not used. If not set then the value of the EC2_URL environment variable, if any, is used</td>
+</tr>
+        <tr>
+<td>health_check</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>An associative array of health check configuration settigs (see example)</td>
+</tr>
+        <tr>
+<td>listeners</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>List of ports/protocols for this ELB to listen on (see example)</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The name of the ELB</td>
+</tr>
+        <tr>
+<td>profile</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>uses a boto profile. Only works with boto &gt;= 2.24.0 (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>purge_listeners</td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td>Purge existing listeners on ELB that are not found in listeners</td>
+</tr>
+        <tr>
+<td>purge_subnets</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Purge existing subnet on ELB that are not found in subnets (added in Ansible 1.7)</td>
+</tr>
+        <tr>
+<td>purge_zones</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Purge existing availability zones on ELB that are not found in zones</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.</td>
+</tr>
+        <tr>
+<td>scheme</td>
+<td>no</td>
+<td>internet-facing</td>
+    <td><ul></ul></td>
+    <td>The scheme to use when creating the ELB. For a private VPC-visible ELB use 'internal'. (added in Ansible 1.7)</td>
+</tr>
+        <tr>
+<td>security_group_ids</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>A list of security groups to apply to the elb (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>security_token</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>security token to authenticate against AWS (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Create or destroy the ELB</td>
+</tr>
+        <tr>
+<td>subnets</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>A list of VPC subnets to use when creating ELB. Zones should be empty if using this. (added in Ansible 1.7)</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>When set to "no", SSL certificates will not be validated for boto versions &gt;= 2.6.0. (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>zones</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>List of availability zones to enable on this ELB</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Note: None of these examples set aws_access_key, aws_secret_key, or region.
+# It is assumed that their matching environment variables are set.
+
+# Basic provisioning example
+- local_action:
+    module: ec2_elb_lb
+    name: "test-please-delete"
+    state: present
+    zones:
+      - us-east-1a
+      - us-east-1d
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 80
+      - protocol: https
+        load_balancer_port: 443
+        instance_protocol: http # optional, defaults to value of protocol setting
+        instance_port: 80
+        # ssl certificate required for https or ssl
+        ssl_certificate_id: "arn:aws:iam::123456789012:server-certificate/company/servercerts/ProdServerCert"
+
+
+# Basic VPC provisioning example
+- local_action:
+    module: ec2_elb_lb
+    name: "test-vpc"
+    scheme: internal
+    state: present
+    subnets:
+      - subnet-abcd1234
+      - subnet-1a2b3c4d
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 80
+
+# Configure a health check
+- local_action:
+    module: ec2_elb_lb
+    name: "test-please-delete"
+    state: present
+    zones:
+      - us-east-1d
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+    health_check:
+        ping_protocol: http # options are http, https, ssl, tcp
+        ping_port: 80
+        ping_path: "/index.html" # not required for tcp or ssl
+        response_timeout: 5 # seconds
+        interval: 30 # seconds
+        unhealthy_threshold: 2
+        healthy_threshold: 10
+
+# Ensure ELB is gone
+- local_action:
+    module: ec2_elb_lb
+    name: "test-please-delete"
+    state: absent
+
+# Normally, this module will purge any listeners that exist on the ELB
+# but aren't specified in the listeners parameter. If purge_listeners is
+# false it leaves them alone
+- local_action:
+    module: ec2_elb_lb
+    name: "test-please-delete"
+    state: present
+    zones:
+      - us-east-1a
+      - us-east-1d
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+    purge_listeners: no
+
+# Normally, this module will leave availability zones that are enabled
+# on the ELB alone. If purge_zones is true, then any extreneous zones
+# will be removed
+- local_action:
+    module: ec2_elb_lb
+    name: "test-please-delete"
+    state: present
+    zones:
+      - us-east-1a
+      - us-east-1d
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+    purge_zones: yes
+
+# Creates a ELB and assigns a list of subnets to it.
+- local_action:
+    module: ec2_elb_lb
+    state: present
+    name: 'New ELB'
+    security_group_ids: 'sg-123456, sg-67890'
+    region: us-west-2
+    subnets: 'subnet-123456, subnet-67890'
+    purge_subnets: yes
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following environment variables can be used <tt class="docutils literal"><span class="pre">AWS_ACCESS_KEY</span></tt> or <tt class="docutils literal"><span class="pre">EC2_ACCESS_KEY</span></tt> or <tt class="docutils literal"><span class="pre">AWS_ACCESS_KEY_ID</span></tt>, <tt class="docutils literal"><span class="pre">AWS_SECRET_KEY</span></tt> or <tt class="docutils literal"><span class="pre">EC2_SECRET_KEY</span></tt> or <tt class="docutils literal"><span class="pre">AWS_SECRET_ACCESS_KEY</span></tt>, <tt class="docutils literal"><span class="pre">AWS_REGION</span></tt> or <tt class="docutils literal"><span class="pre">EC2_REGION</span></tt>, <tt class="docutils literal"><span class="pre">AWS_SECURITY_TOKEN</span></tt></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ansible uses the boto configuration file (typically ~/.boto) if no credentials are provided. See <a class="reference external" href="http://boto.readthedocs.org/en/latest/boto_config_tut.html">http://boto.readthedocs.org/en/latest/boto_config_tut.html</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">AWS_REGION</span></tt> or <tt class="docutils literal"><span class="pre">EC2_REGION</span></tt> can be typically be used to specify the AWS region, when required, but this can also be configured in the boto config file</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ec2_elb_lb - Creates or destroys Amazon ELB. - Returns information about the load balancer. - Will be marked changed when called only if state is changed.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ec2_elb_module.html"
+                        title="previous chapter">ec2_elb - De-registers or registers instances from EC2 ELBs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ec2_facts_module.html"
+                        title="next chapter">ec2_facts - Gathers facts about remote hosts within ec2 (aws)</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ec2_facts_module.html" title="ec2_facts - Gathers facts about remote hosts within ec2 (aws)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ec2_elb_module.html" title="ec2_elb - De-registers or registers instances from EC2 ELBs"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

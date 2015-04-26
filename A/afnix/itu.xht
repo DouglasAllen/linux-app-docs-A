@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- afnix web application extension (wax) service -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- page head -->
+<head>
+<title>
+Standard Telecom Module</title>
+<meta http-equiv="context-type" content="text/html; charset=utf-8"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<meta name="author" content="Amaury Darsch"/>
+<meta name="copyright" content="1999-2012"/>
+</head>
+<!-- page body -->
+<body>
+<table>
+<tr>
+<td class="logo">
+<img src="afnix.png" alt="AFNIX Writing System" width="120" height="120"/>
+</td>
+<td class="title">
+Standard Telecom Module</td>
+</tr>
+</table>
+<hr/>
+<div class="chapter">
+Standard Telecom Module</div>
+<hr/>
+<p class="text">
+ The <em>Standard Telecom</em> module is an original implementation of various standards managed by the International Telecommunictaion Union (ITU). At the heart of this module is the <em>Abstract Syntax
+    Notation</em> (ANS.1) which is widely used to model data records and store certificates. </p>
+<hr/>
+<div class="appendix">
+Standard Telecom Reference</div>
+<hr/>
+<p/>
+<div class="elem">
+AsnNode</div>
+<p class="text">
+ The <tt class="code">AsnNode</tt> class is the base class used to represent the asn tree. The structure of the node is defined in ITU-T X.690 recommendation. This implementation supports 64 bits tag number with natural machine length encoding. The Canonical Encoding Rule (CER) and Distinguished Encoding Rule (DER) are defined by the class. Since ASN.1 provides several encoding schemes, the class is designed to be as generic as possible but does not provides the mechanism for changing from one representation to another although it is perfectly valid to read a DER representation and write it in the CER form. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>asn-node-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>Object
+</i>
+</pre>
+<p class="elem">
+Methods</p>
+<div class="frame">
+<i>write</i><i> (&rarr; none)</i><i> (none|OutputStream|Buffer)</i><hr/>
+<p class="text">
+
+	  The write method write the asn node contents as well as
+	  the child nodes to an output stream argument or a
+	  buffer. Without argument, the node is written to the
+	  interpreter output stream. With one argument, the node is
+	  written to the specified stream or buffer.
+	</p>
+</div>
+<p/>
+<p/>
+<div class="elem">
+AsnEoc</div>
+<p class="text">
+ The <tt class="code">AsnEoc</tt> class is is the asn object class that encodes the eoc or end-of-content primitive. This primitive is almost never used but its encoding is used with the indefinite length encoding. </p>
+<p class="elem">
+Predicate</p>
+<pre class="frame">
+<i>asn-eoc-p
+
+</i></pre>
+<p class="elem">
+Inheritance</p>
+<pre class="frame">
+<i>AsnNode
+</i>
+</pre>
+<p class="elem">
+Constructors</p>
+<div class="frame">
+<i>AsnEoc</i><i> (none)</i><hr/>
+<p class="text">
+
+	  The AsnEoc constructor creates a default asn eoc node.
+	</p>
+</div>
+<p/>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sat May  5 10:27:27 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>Ns_Pathname</title>
+
+</head>
+<body>
+
+<h1 align="center">Ns_Pathname</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#KEYWORDS">KEYWORDS</a><br>
+
+<hr>
+
+
+
+<p style="margin-top: 1em">______________________________________________________________________________</p>
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Ns_HomePath,
+Ns_LibPath, Ns_MakePath, Ns_ModulePath, Ns_NormalizePath,
+Ns_PathIsAbsolute &minus; Pathname procedures</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>#include
+&quot;ns.h&quot;</b></p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_HomePath</b>(<i>Ns_DString *dest, ...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_LibPath</b>(<i>Ns_DString *dest, ...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_MakePath</b>(<i>Ns_DString *dest, ...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_ModulePath</b>(<i>Ns_DString *dest, char *server, char
+*module, ...</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">char * <b><br>
+Ns_NormalizePath</b>(<i>Ns_DString *dsPtr, char
+*path</i>)</p>
+
+<p style="margin-left:11%; margin-top: 1em">int <b><br>
+Ns_PathIsAbsolute</b>(<i>char *path</i>)
+_________________________________________________________________</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">These functions
+operate on file pathnames. They work with Unix and Windows
+pathnames on their respective hosts. <b><br>
+Ns_HomePath</b>(<i>dest, ...</i>)</p>
+
+<p style="margin-left:22%;">Construct a path name relative
+to the home directory of the server. The full path is
+constructed by appending the library directory followed by
+each of the variable number of string elements after the
+<i>dest</i> argument. The elements will be separated by a
+<i>/</i> character. The list must be terminated with a NULL
+string.</p>
+
+<p style="margin-left:11%;"><b>Ns_LibPath</b>(<i>dest,
+...</i>)</p>
+
+<p style="margin-left:22%;">Construct a path name relative
+to the library directory of the server, normally the
+<i>lib/</i> subdirectory of the home directory. The full
+path is constructed by appending the library directory
+followed by each of the variable number of string elements
+after the <i>dest</i> argument. The elements will be
+separated by a <i>/</i> character. The list must be
+terminated with a NULL string.</p>
+
+<p style="margin-left:11%;"><b>Ns_MakePath</b>(<i>dest,
+...</i>)</p>
+
+<p style="margin-left:22%;">Construct a path name from a
+list of path elements. The Ns_MakePath function constructs a
+path name by appending a list of path elements to the given
+Ns_DString. The path elements are separated by single
+slashes, and the resulting path name is appended to the
+given Ns_DString. The last argument needs to be NULL to
+indicate the end of the argument list.</p>
+
+<p style="margin-left:11%;"><b>Ns_ModulePath</b>(<i>dest,
+char *server, char *module, ...</i>)</p>
+
+<p style="margin-left:22%;">Construct a server and/or
+module specific pathname relative to the server home
+directory. The path in constructed by first appending the
+server home directory. Next, if the <i>server</i> argument
+is not NULL, &quot;server/<i>servere appended to the
+destination and if the module</i> argument is not NULL,
+&quot;module/<i>module</i>&quot; will be appended. Finally,
+all other string elements, if any, will be appended to the
+destination with separating <i>/</i> characters. The list
+must be terminated with a NULL string.</p>
+
+
+<p style="margin-left:11%;"><b>Ns_NormalizePath</b>(<i>dsPtr,
+path</i>)</p>
+
+<p style="margin-left:22%;">Normalize a path name. This
+function removes any extraneous slashes from the path and
+resolves &quot;.&quot; and &quot;..&quot; references. The
+result is appended to the given Ns_DString. The following
+code appends &quot;/dog&quot; to the Ns_DString:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">Ns_NormalizePath(&amp;ds,
+<br>
+&quot;/dog/cat/../../rat/../../dog//mouse/..&quot;);</p>
+
+
+<p style="margin-left:11%;"><b>Ns_PathIsAbsolute</b>(<i>path</i>)</p>
+
+<p style="margin-left:22%;">Check for an absolute path
+name. Return NS_TRUE if the path is absolute and NS_FALSE
+otherwise. Under Unix, an absolute path starts with a
+&quot;/&quot;. On Windows, it starts with a drive letter
+followed immediately by a &quot;:&quot;.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">nsd(1),
+info(n)</p>
+
+<h2>KEYWORDS
+<a name="KEYWORDS"></a>
+</h2>
+<hr>
+</body>
+</html>

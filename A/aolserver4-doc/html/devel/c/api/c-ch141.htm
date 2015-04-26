@@ -1,0 +1,96 @@
+<!--plsfield:text-->
+<HTML><HEAD>
+<TITLE>C API Reference  -- Ns_DbGetRow</TITLE>
+<LINK rel=Previous href="c-ch140.htm">
+<LINK rel=ToC href="toc.htm">
+<LINK rel=Index href="master.htm">
+<LINK rel=Next href="c-ch142.htm">
+</HEAD><BODY BGCOLOR="#ffffff"><A NAME="topofpage"></A>
+<TABLE WIDTH=100%>
+  <TR>
+    <TD ALIGN=LEFT>
+      <A NAME="topofpage"></A> <IMG  SRC="as-c-sm.gif">
+    </TD>
+    <TD ALIGN=RIGHT>
+      <A href="c-ch140.htm"><IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+      <A href=toc.htm> <IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+      <A href=master.htm> <IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+      <A href="c-ch142.htm"> <IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+      <A name="7983"> </A>
+    </TD>
+  </TR>
+</TABLE>
+
+<a name="112826">
+</a><h3>Ns_DbGetRow</h3>
+<a name="112827">
+</a><h4>Overview</h4>
+Fetch the next waiting row after an Ns_DbSelect
+<a name="77890">
+</a><a name="132724">
+</a><h4>Syntax</h4>
+<pre>    <a name="77892"></a>int Ns_DbGetRow(
+    <a name="77893"></a>Ns_DbHandle *handle,
+    <a name="77894"></a>Ns_Set *row
+    <a name="77895"></a>);
+</pre><p><a name="134063">
+</a><h4>Description</h4>
+<p><a name="77897">
+</a>The Ns_DbGetRow function fetches the next row waiting to be retrieved after an Ns_DbSelect. The row Ns_Set must be the result of a previous Ns_DbSelect. Ns_DbGetRow frees any existing values of the set and sets the values to the next row fetched from the database. Possible return values are:<Table Border = "3">
+<tr><td><p><a name="77900">
+</a><code>NS_OK</code></p>
+<td><p><a name="77902">
+</a>A row has been fetched and more rows may be waiting.</p>
+
+<tr><td><p><a name="77904">
+</a><code>NS_END_DATA</code></p>
+<td><p><a name="77906">
+</a>No row has been fetched and there are no more rows waiting.</p>
+
+<tr><td><p><a name="77908">
+</a><code>NS_ERROR</code></p>
+<td><p><a name="77910">
+</a>A database error occurred, or the function has already returned NS_END_DATA but has been called again anyway.</p>
+
+
+</Table></p>
+<p><a name="222102">
+</a>You cannot call Ns_DbDML, Ns_Db1Row, or Ns_Db0or1Row with the same database handle while fetching rows from the database in an Ns_DbGetRow loop. Doing so flushes any waiting rows and a subsequent call to Ns_DbGetRow will fail. You <i>can</i> do so if you use separate database handles.</p>
+<a name="222093">
+</a><h4>Examples</h4>
+<pre>    <a name="222094"></a>	Ns_DbHandle *handle;
+    <a name="77913"></a>	Ns_Set *row;
+    <a name="77914"></a>	int		status;
+    <a name="77916"></a>	handle = Ns_DbPoolGetHandle("mypool");
+    <a name="77917"></a>	row = Ns_DbSelect(handle, "select * from mytable");
+    <a name="77918"></a>	if (row == NULL) {
+    <a name="77919"></a>		/*... handle select error ...*/
+    <a name="77920"></a>	}
+    <a name="77921"></a>	while ((status = Ns_DbGetRow(handle, row)) == NS_OK) {
+    <a name="77922"></a>		/*... process the row fetched from the database ...*/
+    <a name="77923"></a>	}
+    <a name="77924"></a>	if (status != NS_END_DATA) {
+    <a name="77925"></a>		/*... handle get row error ...*/
+    <a name="77926"></a>	}
+</pre><p>
+
+<TABLE BORDER="2" CELLPADDING="1" width="100%">
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<IMG SRC="bluebult.gif">
+<A HREF="#topofpage">
+<FONT SIZE=-1>Top of Page</FONT></A>
+<IMG SRC="bluebult.gif">
+</TD></TR>
+<TR><TD COLSPAN=3><P ALIGN=Center>
+<A href="c-ch140.htm">
+<IMG  BORDER="0" src=navbprev.gif alt="[ Previous ]"></A>
+<A href=toc.htm>
+<IMG  BORDER="0" src=navbhome.gif alt="[ Contents ]"></A>
+<A href=master.htm>
+<IMG  BORDER="0" src=navbhelp.gif alt="[ Index ]"></A>
+<A href="c-ch142.htm">
+<IMG  BORDER="0" src=navbnext.gif alt="[ Next ]"></A>
+<BR align=center>
+<FONT size=-1>Copyright &copy; 1998-99 America Online,
+Inc.</FONT>
+</TD></TR></TABLE></BODY></HTML><!--plsfield:end-->

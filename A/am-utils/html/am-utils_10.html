@@ -1,0 +1,2531 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 6. Amd Configuration File</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 6. Amd Configuration File">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 6. Amd Configuration File">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Amd-Configuration-File"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_9.html#Inheritance-Filesystem" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#File-Format" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amd-Configuration-File-1"></a>
+<h1 class="chapter">6. Amd Configuration File</h1>
+<a name="index-Amd-Configuration-File"></a>
+<a name="index-amd_002econf"></a>
+
+<p>The &lsquo;<samp>amd.conf</samp>&rsquo; file is the configuration file for <i>Amd</i>, as part
+of the am-utils suite.  This file contains runtime configuration
+information for the <i>Amd</i> automounter program.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#File-Format">6.1 File Format</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#The-Global-Section">6.2 The Global Section</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Regular-Map-Sections">6.3 Regular Map Sections</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Common-Parameters">6.4 Common Parameters</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Global-Parameters">6.5 Global Parameters</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Regular-Map-Parameters">6.6 Regular Map Parameters</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#amd_002econf-Examples">6.7 amd.conf Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="File-Format"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#The-Global-Section" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="File-Format-1"></a>
+<h2 class="section">6.1 File Format</h2>
+<a name="index-amd_002econf-file-format"></a>
+
+<p>The &lsquo;<samp>amd.conf</samp>&rsquo; file consists of sections and parameters.  A section
+begins with the name of the section in square brackets &lsquo;<samp>[]</samp>&rsquo; and
+continues until the next section begins or the end of the file is reached.
+Sections contain parameters of the form &lsquo;<samp>name = value</samp>&rsquo;.
+</p>
+<p>The file is line-based &mdash; that is, each newline-terminated line
+represents either a comment, a section name or a parameter.  No
+line-continuation syntax is available.
+</p>
+<p>Section names, parameter names and their values are case sensitive.
+</p>
+<p>Only the first equals sign in a parameter is significant.  Whitespace
+before or after the first equals sign is discarded.  Leading, trailing
+and internal whitespace in section and parameter names is irrelevant.
+Leading and trailing whitespace in a parameter value is discarded.
+Internal whitespace within a parameter value is not allowed, unless the
+whole parameter value is quoted with double quotes as in &lsquo;<samp>name =
+&quot;some value&quot;</samp>&rsquo;.
+</p>
+<p>Any line beginning with a pound sign &lsquo;<samp>#</samp>&rsquo; is ignored, as are lines
+containing only whitespace.
+</p>
+<p>The values following the equals sign in parameters are all either a
+string (no quotes needed if string does not include spaces) or a
+boolean, which may be given as &lsquo;<samp>yes</samp>&rsquo;/&lsquo;<samp>no</samp>&rsquo;.  Case is significant in all
+values.  Some items such as cache timeouts are numeric.
+</p>
+<hr size="6">
+<a name="The-Global-Section"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#File-Format" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Regular-Map-Sections" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="The-Global-Section-1"></a>
+<h2 class="section">6.2 The Global Section</h2>
+<a name="index-amd_002econf-global-section"></a>
+
+<p>The global section must be specified as &lsquo;<samp>[global]</samp>&rsquo;.  Parameters in
+this section either apply to <i>Amd</i> as a whole, or to all other regular map
+sections which follow.  There should be only one global section defined
+in one configuration file.
+</p>
+<p>It is highly recommended that this section be specified first in the
+configuration file.  If it is not, then regular map sections which
+precede it will not use global values defined later.
+</p>
+<hr size="6">
+<a name="Regular-Map-Sections"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#The-Global-Section" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Regular-Map-Sections-1"></a>
+<h2 class="section">6.3 Regular Map Sections</h2>
+<a name="index-amd_002econf-regular-map-sections"></a>
+
+<p>Parameters in regular (non-global) sections apply to a single map entry.
+For example, if the map section &lsquo;<samp>[/homes]</samp>&rsquo; is defined, then all
+parameters following it will be applied to the &lsquo;<tt>/homes</tt>&rsquo;
+<i>Amd</i>-managed mount point.
+</p>
+<hr size="6">
+<a name="Common-Parameters"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Regular-Map-Sections" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#autofs_005fuse_005flofs-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Common-Parameters-1"></a>
+<h2 class="section">6.4 Common Parameters</h2>
+<a name="index-amd_002econf-common-parameters"></a>
+
+<p>These parameters can be specified either in the global or a map-specific
+section.  Entries specified in a map-specific section override the default
+value or one defined in the global section.   If such a common parameter is
+specified only in the global section, it is applicable to all regular map
+sections that follow.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#autofs_005fuse_005flofs-Parameter">6.4.1 <tt>autofs_use_lofs</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#browsable_005fdirs-Parameter">6.4.2 <tt>browsable_dirs</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#map_005fdefaults-Parameter">6.4.3 <tt>map_defaults</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#map_005foptions-Parameter">6.4.4 <tt>map_options</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#map_005ftype-Parameter">6.4.5 <tt>map_type</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#mount_005ftype-Parameter">6.4.6 <tt>mount_type</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#search_005fpath-Parameter">6.4.7 <tt>search_path</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#selectors_005fin_005fdefaults-Parameter">6.4.8 <tt>selectors_in_defaults</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#sun_005fmap_005fsyntax-Parameter">6.4.9 <tt>sun_map_syntax</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="autofs_005fuse_005flofs-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Common-Parameters" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#browsable_005fdirs-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="autofs_005fuse_005flofs-Parameter-1"></a>
+<h3 class="subsection">6.4.1 <tt>autofs_use_lofs</tt> Parameter</h3>
+<a name="index-autofs_005fuse_005flofs-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>yes</samp>&rsquo;).
+When set to &lsquo;<samp>yes</samp>&rsquo;, <i>Amd</i>&rsquo;s autofs code will use lofs-type
+(loopback) mounts for <code>type:=link</code> mounts, as well as several
+other cases that require local references.  This has the advantage
+that <i>Amd</i> does not use a secondary mount point and users do not see
+external pathnames (the infamous <code>/bin/pwd</code> problem, where it
+reports a different path than the user chdir&rsquo;ed into).  One of the
+disadvantages of using this option is that the autofs code is
+relatively new and the in-place mounts have not been throughly tested.
+</p>
+<p>If this option is set to &lsquo;<samp>no</samp>&rsquo;, then <i>Amd</i>&rsquo;s autofs code will
+use symlinks instead of lofs-type mounts for local references.  This
+has the advantage of using simpler (more stable) code, but at the
+expense of negating one of autofs&rsquo;s big advantages: the hiding of
+<i>Amd</i>&rsquo;s internal paths.  Note that symlinks are not supported in all
+autofs implementations, especially those derived from Solaris Autofs
+v1.  Also, on Solaris 2.6 and newer, autofs symlinks are not cached,
+resulting in repeated up-call requests to <i>Amd</i>.
+</p>
+<hr size="6">
+<a name="browsable_005fdirs-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#autofs_005fuse_005flofs-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#map_005fdefaults-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="browsable_005fdirs-Parameter-1"></a>
+<h3 class="subsection">6.4.2 <tt>browsable_dirs</tt> Parameter</h3>
+<a name="index-browsable_005fdirs-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then <i>Amd</i>&rsquo;s top-level
+mount points will be browsable to <b>readdir</b>(3) calls.  This means you
+could run for example <b>ls</b>(1) and see what keys are available to mount
+in that directory.  Not all entries are made visible to <b>readdir</b>(3):
+the &lsquo;<samp>/defaults</samp>&rsquo; entry, wildcard entries, and those with a &lsquo;<tt>/</tt>&rsquo;
+in them are not included.  If you specify &lsquo;<samp>full</samp>&rsquo; to this option,
+all but the &lsquo;<samp>/defaults</samp>&rsquo; entry will be visible.  Note that if you run
+a command which will attempt to <b>stat</b>(2) the entries, such as often
+done by &lsquo;<samp>ls -l</samp>&rsquo; or &lsquo;<samp>ls -F</samp>&rsquo;, <i>Amd</i> will attempt to mount
+<i>every</i> entry in that map.  This is often called a &ldquo;mount storm&rdquo;.
+</p>
+<p>Note that mount storms are mostly avoided by using autofs mounts
+(&lsquo;<samp>mount_type = autofs</samp>&rsquo;).
+</p>
+<hr size="6">
+<a name="map_005fdefaults-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#browsable_005fdirs-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#map_005foptions-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="map_005fdefaults-Parameter-1"></a>
+<h3 class="subsection">6.4.3 <tt>map_defaults</tt> Parameter</h3>
+<a name="index-map_005fdefaults-Parameter"></a>
+
+<p>(type=string, default to empty).  This option sets a string to be used
+as the map&rsquo;s <code>/defaults</code> entry, overriding any <code>/defaults</code>
+specified in the map.  This allows local users to override a given
+map&rsquo;s defaults without modifying maps globally (which is impossible in
+sites where the maps are managed by a different administrative group).
+</p>
+<hr size="6">
+<a name="map_005foptions-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#map_005fdefaults-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#map_005ftype-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="map_005foptions-Parameter-1"></a>
+<h3 class="subsection">6.4.4 <tt>map_options</tt> Parameter</h3>
+<a name="index-map_005foptions-Parameter"></a>
+
+<p>(type=string, default no options).  This option is the same as
+specifying map options on the command line to <i>Amd</i>, such as
+&lsquo;<samp>cache:=all</samp>&rsquo;.
+</p>
+<hr size="6">
+<a name="map_005ftype-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#map_005foptions-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#mount_005ftype-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="map_005ftype-Parameter-1"></a>
+<h3 class="subsection">6.4.5 <tt>map_type</tt> Parameter</h3>
+<a name="index-map_005ftype-Parameter"></a>
+
+<p>(type=string, default search all map types).  If specified, <i>Amd</i> will
+initialize the map only for the type given.  This is useful to avoid the
+default map search type used by <i>Amd</i> which takes longer and can have
+undesired side-effects such as initializing NIS even if not used.
+Possible values are
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>file</samp>&rsquo;</dt>
+<dd><p>plain files
+</p></dd>
+<dt> &lsquo;<samp>hesiod</samp>&rsquo;</dt>
+<dd><p>Hesiod name service from MIT
+</p></dd>
+<dt> &lsquo;<samp>ldap</samp>&rsquo;</dt>
+<dd><p>Lightweight Directory Access Protocol
+</p></dd>
+<dt> &lsquo;<samp>ndbm</samp>&rsquo;</dt>
+<dd><p>(New) dbm style hash files
+</p></dd>
+<dt> &lsquo;<samp>nis</samp>&rsquo;</dt>
+<dd><p>Network Information Services (version 2)
+</p></dd>
+<dt> &lsquo;<samp>nisplus</samp>&rsquo;</dt>
+<dd><p>Network Information Services Plus (version 3)
+</p></dd>
+<dt> &lsquo;<samp>passwd</samp>&rsquo;</dt>
+<dd><p>local password files
+</p></dd>
+<dt> &lsquo;<samp>union</samp>&rsquo;</dt>
+<dd><p>union maps
+</p></dd>
+</dl>
+
+<hr size="6">
+<a name="mount_005ftype-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#map_005ftype-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#search_005fpath-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="mount_005ftype-Parameter-1"></a>
+<h3 class="subsection">6.4.6 <tt>mount_type</tt> Parameter</h3>
+<a name="index-mount_005ftype-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>nfs</samp>&rsquo;).  All <i>Amd</i> mount types default to NFS.
+That is, <i>Amd</i> is an NFS server on the map mount points, for the local
+host it is running on.  If &lsquo;<samp>autofs</samp>&rsquo; is specified, <i>Amd</i> will be
+an autofs server for those mount points.
+</p>
+<hr size="6">
+<a name="search_005fpath-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#mount_005ftype-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#selectors_005fin_005fdefaults-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="search_005fpath-Parameter-1"></a>
+<h3 class="subsection">6.4.7 <tt>search_path</tt> Parameter</h3>
+<a name="index-search_005fpath-Parameter"></a>
+
+<p>(type=string, default no search path).  This provides a
+(colon-delimited) search path for file maps.  Using a search path,
+sites can allow for local map customizations and overrides, and can
+distributed maps in several locations as needed.
+</p>
+<hr size="6">
+<a name="selectors_005fin_005fdefaults-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#search_005fpath-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#sun_005fmap_005fsyntax-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="selectors_005fin_005fdefaults-Parameter-1"></a>
+<h3 class="subsection">6.4.8 <tt>selectors_in_defaults</tt> Parameter</h3>
+<a name="index-selectors_005fin_005fdefaults-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then the
+&lsquo;<samp>/defaults</samp>&rsquo; entry of maps will search for and process any
+selectors before setting defaults for all other keys in that map.
+Useful when you want to set different options for a complete map based
+on some parameters.  For example, you may want to better the NFS
+performance over slow slip-based networks as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults \
+    wire==slip-net;opts:=intr,rsize=1024,wsize=1024 \
+    wire!=slip-net;opts:=intr,rsize=8192,wsize=8192
+</pre></td></tr></table>
+
+<p>Deprecated form: selectors_on_default.
+</p>
+<hr size="6">
+<a name="sun_005fmap_005fsyntax-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#selectors_005fin_005fdefaults-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Common-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="sun_005fmap_005fsyntax-Parameter-1"></a>
+<h3 class="subsection">6.4.9 <tt>sun_map_syntax</tt> Parameter</h3>
+<a name="index-sun_005fmap_005fsyntax-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then <i>Amd</i> will
+parse the map according to the Sun Automount syntax.
+</p>
+
+<hr size="6">
+<a name="Global-Parameters"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#sun_005fmap_005fsyntax-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#arch-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Global-Parameters-1"></a>
+<h2 class="section">6.5 Global Parameters</h2>
+<a name="index-amd_002econf-global-parameters"></a>
+
+<p>The following parameters are applicable to the &lsquo;<samp>[global]</samp>&rsquo; section only.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#arch-Parameter">6.5.1 <tt>arch</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#auto_005fattrcache-Parameter">6.5.2 <tt>auto_attrcache</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#auto_005fdir-Parameter">6.5.3 <tt>auto_dir</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#cache_005fduration-Parameter">6.5.4 <tt>cache_duration</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#cluster-Parameter">6.5.5 <tt>cluster</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#debug_005fmtab_005ffile-Parameter">6.5.6 <tt>debug_mtab_file</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#debug_005foptions-Parameter">6.5.7 <tt>debug_options</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#dismount_005finterval-Parameter">6.5.8 <tt>dismount_interval</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#domain_005fstrip-Parameter">6.5.9 <tt>domain_strip</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#exec_005fmap_005ftimeout-Parameter">6.5.10 <tt>exec_map_timeout</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#forced_005funmounts-Parameter">6.5.11 <tt>forced_unmounts</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#full_005fos-Parameter">6.5.12 <tt>full_os</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#fully_005fqualified_005fhosts-Parameter">6.5.13 <tt>fully_qualified_hosts</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#hesiod_005fbase-Parameter">6.5.14 <tt>hesiod_base</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#karch-Parameter">6.5.15 <tt>karch</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ldap_005fbase-Parameter">6.5.16 <tt>ldap_base</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ldap_005fcache_005fmaxmem-Parameter">6.5.17 <tt>ldap_cache_maxmem</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ldap_005fcache_005fseconds-Parameter">6.5.18 <tt>ldap_cache_seconds</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ldap_005fhostports-Parameter">6.5.19 <tt>ldap_hostports</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ldap_005fproto_005fversion-Parameter">6.5.20 <tt>ldap_proto_version</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#local_005fdomain-Parameter">6.5.21 <tt>local_domain</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#localhost_005faddress-Parameter">6.5.22 <tt>localhost_address</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#log_005ffile-Parameter">6.5.23 <tt>log_file</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#log_005foptions-Parameter">6.5.24 <tt>log_options</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#map_005freload_005finterval-Parameter">6.5.25 <tt>map_reload_interval</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fallow_005fany_005finterface-Parameter">6.5.26 <tt>nfs_allow_any_interface</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fallow_005finsecure_005fport-Parameter">6.5.27 <tt>nfs_allow_insecure_port</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fproto-Parameter">6.5.28 <tt>nfs_proto</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretransmit_005fcounter-Parameter">6.5.29 <tt>nfs_retransmit_counter</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretransmit_005fcounter_005fudp-Parameter">6.5.30 <tt>nfs_retransmit_counter_udp</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretransmit_005fcounter_005ftcp-Parameter">6.5.31 <tt>nfs_retransmit_counter_tcp</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretransmit_005fcounter_005ftoplvl-Parameter">6.5.32 <tt>nfs_retransmit_counter_toplvl</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretry_005finterval-Parameter">6.5.33 <tt>nfs_retry_interval</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretry_005finterval_005fudp-Parameter">6.5.34 <tt>nfs_retry_interval_udp</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretry_005finterval_005ftcp-Parameter">6.5.35 <tt>nfs_retry_interval_tcp</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fretry_005finterval_005ftoplvl-Parameter">6.5.36 <tt>nfs_retry_interval_toplvl</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nfs_005fvers-Parameter">6.5.37 <tt>nfs_vers</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#nis_005fdomain-Parameter">6.5.38 <tt>nis_domain</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#normalize_005fhostnames-Parameter">6.5.39 <tt>normalize_hostnames</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#normalize_005fslashes-Parameter">6.5.40 <tt>normalize_slashes</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#os-Parameter">6.5.41 <tt>os</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#osver-Parameter">6.5.42 <tt>osver</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#pid_005ffile-Parameter">6.5.43 <tt>pid_file</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#plock-Parameter">6.5.44 <tt>plock</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#portmap_005fprogram-Parameter">6.5.45 <tt>portmap_program</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#preferred_005famq_005fport-Parameter">6.5.46 <tt>preferred_amq_port</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#print_005fpid-Parameter">6.5.47 <tt>print_pid</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#print_005fversion-Parameter">6.5.48 <tt>print_version</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#restart_005fmounts-Parameter">6.5.49 <tt>restart_mounts</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#show_005fstatfs_005fentries-Parameter">6.5.50 <tt>show_statfs_entries</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#truncate_005flog-Parameter">6.5.51 <tt>truncate_log</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#unmount_005fon_005fexit-Parameter">6.5.52 <tt>unmount_on_exit</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#use_005ftcpwrappers-Parameter">6.5.53 <tt>use_tcpwrappers</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#vendor-Parameter">6.5.54 <tt>vendor</tt> Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="arch-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Global-Parameters" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#auto_005fattrcache-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="arch-Parameter-1"></a>
+<h3 class="subsection">6.5.1 <tt>arch</tt> Parameter</h3>
+<a name="index-arch-Parameter"></a>
+
+<p>(type=string, default to compiled in value).  Same as the <code>-A</code>
+option to <i>Amd</i>.  Allows you to override the value of the <i>arch</i>
+<i>Amd</i> variable.
+</p>
+<hr size="6">
+<a name="auto_005fattrcache-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#arch-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#auto_005fdir-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="auto_005fattrcache-Parameter-1"></a>
+<h3 class="subsection">6.5.2 <tt>auto_attrcache</tt> Parameter</h3>
+<a name="index-auto_005fattrcache-Parameter"></a>
+
+<p>(type=numeric, default=0).  Specify in seconds (or units of 0.1
+seconds, depending on the OS), what is the (kernel-side) NFS attribute
+cache timeout for <i>Amd</i>&rsquo;s own automount points.  A value of 0 is
+supposed to turn off attribute caching, meaning that <i>Amd</i> will be
+consulted via a kernel-RPC each time someone stat()&rsquo;s the mount point
+(which could be abused as a denial-of-service attack).
+</p>
+<p><em>WARNING</em>: <i>Amd</i> depends on being able to turn off the NFS
+attribute cache of the client OS.  If it cannot be turned off, then
+users may get ESTALE errors or symlinks that point to the wrong
+places.  This is more likely under heavy use of <i>Amd</i>, for example
+if your system is experiencing frequent map changes or frequent
+mounts/unmounts.  Therefore, under normal circumstances, this
+parameter should remain set to 0, to ensure that the attribute cache
+is indeed off.
+</p>
+<p>Unfortunately, some kernels (e.g., certain BSDs) don&rsquo;t have a way to
+turn off the NFS attribute cache.  Setting this parameter to 0 is
+supposed to turn off attribute caching entirely, but unfortunately it
+does not; instead, the attribute cache is set to some internal
+hard-coded default (usually anywhere from 5-30 seconds).  If you
+suspect that your OS doesn&rsquo;t have a reliable way of turning off the
+attribute cache, then it is better to set this parameter to the
+smallest possible non-zero value (set &lsquo;<samp>auto_attrcache=1</samp>&rsquo; in your
+<code>amd.conf</code>).  This will not eliminate the problem, but reduce the
+risk window somewhat.  The best solutions are (1) to use <i>Amd</i> in
+Autofs mode, if it&rsquo;s supported in your OS, and (2) talk to your OS
+vendor to support a true &lsquo;<samp>noac</samp>&rsquo; flag.  See the
+<a href="http://www.am-utils.org/docs/am-utils/attrcache.txt">README.attrcache</a>
+document for more details.
+</p>
+<p>If you are able to turn off the attribute cache on your OS, alas,
+<i>Amd</i>&rsquo;s performance may degrade (when not using Autofs) because
+every traversal of an automounter-controlled pathname will result in a
+lookup request from the kernel to <i>Amd</i>.  Under heavy loads, for
+example when using recursive tools like &lsquo;<samp>find</samp>&rsquo;, &lsquo;<samp>rdist</samp>&rsquo;, or
+&lsquo;<samp>rsync</samp>&rsquo;, this performance degradation can be noticeable.  There
+are two possible solutions that some administrators have chosen to
+improve performance:
+</p>
+<ol>
+<li>
+First, you can turn off unmounting using the &lsquo;<samp>nounmount</samp>&rsquo; mount
+option.  This will ensure that no <i>Amd</i> symlink could ever change,
+thereby the kernel&rsquo;s attribute cache and <i>Amd</i> will always be in
+sync.  However, this method will cause the number of mounts to keep
+growing, even if some are no longer in use; this has the disadvantage
+that your system could be more susceptible to hangs if even one of
+those accumulating mounts hangs due to a downed server.
+
+</li><li>
+Second, you can turn on attribute caching carefully by setting a small
+automounter attribute cache value (say, one second), and a relatively
+large dismount interval (say, one hour).  (See section <a href="#dismount_005finterval-Parameter"><tt>dismount_interval</tt> Parameter</a>.)  For example, you can set this in your <code>amd.conf</code>:
+
+<table><tr><td>&nbsp;</td><td><pre class="example">[global]
+auto_attrcache = 1
+dismount_interval = 3600
+</pre></td></tr></table>
+
+<p>This has the benefit of using the kernel&rsquo;s attribute cache and thus
+improving performance.  The disadvantage with this option is that the
+window of vulnerability is not eliminated entirely: it is only made
+smaller.
+</p>
+</li></ol>
+
+<hr size="6">
+<a name="auto_005fdir-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#auto_005fattrcache-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#cache_005fduration-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="auto_005fdir-Parameter-1"></a>
+<h3 class="subsection">6.5.3 <tt>auto_dir</tt> Parameter</h3>
+<a name="index-auto_005fdir-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>/a</samp>&rsquo;).  Same as the <code>-a</code> option to <i>Amd</i>.
+This sets the private directory where <i>Amd</i> will create
+sub-directories for its real mount points.
+</p>
+<hr size="6">
+<a name="cache_005fduration-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#auto_005fdir-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#cluster-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="cache_005fduration-Parameter-1"></a>
+<h3 class="subsection">6.5.4 <tt>cache_duration</tt> Parameter</h3>
+<a name="index-cache_005fduration-Parameter"></a>
+
+<p>(type=numeric, default=300).  Same as the <code>-c</code> option to <i>Amd</i>.
+Sets the duration in seconds that looked-up or mounted map entries
+remain in the cache.
+</p>
+<hr size="6">
+<a name="cluster-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#cache_005fduration-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#debug_005fmtab_005ffile-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="cluster-Parameter-1"></a>
+<h3 class="subsection">6.5.5 <tt>cluster</tt> Parameter</h3>
+<a name="index-cluster-Parameter"></a>
+
+<p>(type=string, default no cluster).  Same as the <code>-C</code> option to
+<i>Amd</i>.  Specifies the alternate HP-UX cluster to use.
+</p>
+<hr size="6">
+<a name="debug_005fmtab_005ffile-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#cluster-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#debug_005foptions-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="debug_005fmtab_005ffile-Parameter-1"></a>
+<h3 class="subsection">6.5.6 <tt>debug_mtab_file</tt> Parameter</h3>
+<a name="index-debug_005fmtab_005ffile-Parameter"></a>
+
+<p>(type=string, default=&quot;/tmp/mtab&quot;).  Path to mtab file that is used
+by <i>Amd</i> to store a list of mounted file systems during debug-mtab mode.
+This option only applies to systems that store mtab information on disk.
+</p>
+<hr size="6">
+<a name="debug_005foptions-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#debug_005fmtab_005ffile-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#dismount_005finterval-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="debug_005foptions-Parameter-1"></a>
+<h3 class="subsection">6.5.7 <tt>debug_options</tt> Parameter</h3>
+<a name="index-debug_005foptions-Parameter"></a>
+
+<p>(type=string, default no debug options).  Same as the <code>-D</code> option
+to <i>Amd</i>.  Specify any debugging options for <i>Amd</i>.  Works only if
+am-utils was configured for debugging using the <code>--enable-debug</code>
+option.  The additional &lsquo;<samp>mem</samp>&rsquo; option can be turned on via
+<code>--enable-debug=mem</code>.  Otherwise debugging options are ignored.
+Options are comma delimited, and can be preceded by the string
+&lsquo;<samp>no</samp>&rsquo; to negate their meaning.  You can get the list of supported
+debugging and logging options by running <code>amd -H</code>.  Possible
+values those listed for the -D option.  See section <a href="am-utils_8.html#g_t_002dD-Option"><code>-D</code> <var>opts</var></a>.
+</p>
+<hr size="6">
+<a name="dismount_005finterval-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#debug_005foptions-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#domain_005fstrip-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="dismount_005finterval-Parameter-1"></a>
+<h3 class="subsection">6.5.8 <tt>dismount_interval</tt> Parameter</h3>
+<a name="index-dismount_005finterval-Parameter"></a>
+
+<p>(type=numeric, default=120).  Same as the <code>-w</code> option to
+<i>Amd</i>.  Specify in seconds, the time between attempts to dismount file
+systems that have exceeded their cached times.
+</p>
+<hr size="6">
+<a name="domain_005fstrip-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#dismount_005finterval-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#exec_005fmap_005ftimeout-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="domain_005fstrip-Parameter-1"></a>
+<h3 class="subsection">6.5.9 <tt>domain_strip</tt> Parameter</h3>
+<a name="index-domain_005fstrip-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>yes</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then the domain
+name part referred to by <code>${rhost}</code> is stripped off.  This is
+useful to keep logs and smaller.  If &lsquo;<samp>no</samp>&rsquo;, then the domain name
+part is left changed.  This is useful when using multiple domains with
+the same maps (as you may have hosts whose domain-stripped name is
+identical).
+</p>
+<hr size="6">
+<a name="exec_005fmap_005ftimeout-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#domain_005fstrip-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#forced_005funmounts-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="exec_005fmap_005ftimeout-Parameter-1"></a>
+<h3 class="subsection">6.5.10 <tt>exec_map_timeout</tt> Parameter</h3>
+<a name="index-exec_005fmap_005ftimeout-Parameter"></a>
+
+<p>(type=numeric, default=10).  The timeout in seconds that <i>Amd</i> will
+wait for an executable map program before an answer is returned from
+that program (or script).  This value should be set to as small as
+possible while still allowing normal replies to be returned before the
+timer expires, because during the time that the executable map program
+is queried, <i>Amd</i> is essentially waiting and is thus not responding
+to any other queries.  See section <a href="am-utils_7.html#Executable-maps">Executable maps</a>.
+</p>
+<hr size="6">
+<a name="forced_005funmounts-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#exec_005fmap_005ftimeout-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#full_005fos-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="forced_005funmounts-Parameter-1"></a>
+<h3 class="subsection">6.5.11 <tt>forced_unmounts</tt> Parameter</h3>
+<a name="index-forced_005funmounts-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).
+Sometimes, mount points are hung due to unrecoverable conditions, such
+as when NFS servers migrate, change their IP address, are down
+permanently, or due to hardware failures, and more.  In this case,
+attempting to unmount an existing mount point, or even just to
+<b>stat</b>(2) it, results in one of three fatal errors: EIO, ESTALE, or
+EBUSY.  At that point, <i>Amd</i> can do little to recover that hung
+point (in fact, the OS cannot automatically recover either).  For that
+reason, some OSs support special kinds of forced unmounts, which must
+be used very carefully: they will force an unmount immediately (or
+lazily on Linux), which could result in application data loss.
+However, that may be the only way to recover the entire host (without
+rebooting).  Once a hung mount point is forced out, <i>Amd</i> can then
+re-mount a replacement one (if available), bringing a mostly-hung
+system back to operation and avoiding a potentially costly reboot.
+</p>
+<p>If the &lsquo;<samp>forced_unmounts</samp>&rsquo; option is set to &lsquo;<samp>yes</samp>&rsquo;, and the
+client OS supports forced or lazy unmounts, then <i>Amd</i> will attempt
+to use them if it gets any of the three serious error conditions
+listed above.  Note that <i>Amd</i> will force the unmount of mount
+points that returned EBUSY only for &lsquo;<samp>type:=toplvl</samp>&rsquo; mounts
+(see section <a href="am-utils_9.html#Top_002dlevel-Filesystem">Top-level Filesystem (&lsquo;<samp>toplvl</samp>&rsquo;)</a>): that is, <i>Amd</i>&rsquo;s own mount points.
+This is useful to recover from a previously hung <i>Amd</i>, and to
+ensure that an existing <i>Amd</i> can shutdown cleanly even if some
+processes are keeping its mount points busy (i.e., when a user&rsquo;s shell
+process uses <code>cd</code> to set its CWD to <i>Amd</i>&rsquo;s own mount point).
+</p>
+<p>If this option is set to &lsquo;<samp>no</samp>&rsquo; (the default), then <i>Amd</i> will
+not attempt this special recovery procedure.
+</p>
+<hr size="6">
+<a name="full_005fos-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#forced_005funmounts-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#fully_005fqualified_005fhosts-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="full_005fos-Parameter-1"></a>
+<h3 class="subsection">6.5.12 <tt>full_os</tt> Parameter</h3>
+<a name="index-full_005fos-Parameter"></a>
+
+<p>(type=string, default to compiled in value).  The full name of the
+operating system, along with its version.  Allows you to override the
+compiled-in full name and version of the operating system.  Useful when
+the compiled-in name is not desired.  For example, the full operating
+system name on linux comes up as &lsquo;<samp>linux</samp>&rsquo;, but you can override it
+to &lsquo;<samp>linux-2.2.5</samp>&rsquo;.
+</p>
+<hr size="6">
+<a name="fully_005fqualified_005fhosts-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#full_005fos-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#hesiod_005fbase-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="fully_005fqualified_005fhosts-Parameter-1"></a>
+<h3 class="subsection">6.5.13 <tt>fully_qualified_hosts</tt> Parameter</h3>
+<a name="index-fully_005fqualified_005fhosts-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, <i>Amd</i> will perform RPC
+authentication using fully-qualified host names.  This is necessary for
+some systems, and especially when performing cross-domain mounting.  For
+this function to work, the <i>Amd</i> variable &lsquo;<samp>${hostd}</samp>&rsquo; is used,
+requiring that &lsquo;<samp>${domain}</samp>&rsquo; not be null.
+</p>
+<hr size="6">
+<a name="hesiod_005fbase-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#fully_005fqualified_005fhosts-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#karch-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="hesiod_005fbase-Parameter-1"></a>
+<h3 class="subsection">6.5.14 <tt>hesiod_base</tt> Parameter</h3>
+<a name="index-hesiod_005fbase-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>automount</samp>&rsquo;).  Specify the base name for
+hesiod maps.
+</p>
+<hr size="6">
+<a name="karch-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#hesiod_005fbase-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ldap_005fbase-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="karch-Parameter-1"></a>
+<h3 class="subsection">6.5.15 <tt>karch</tt> Parameter</h3>
+<a name="index-karch-Parameter"></a>
+
+<p>(type=string, default to karch of the system).  Same as the <code>-k</code>
+option to <i>Amd</i>.  Allows you to override the kernel-architecture of
+your system.  Useful for example on Sun (Sparc) machines, where you can
+build one <i>Amd</i> binary, and run it on multiple machines, yet you want
+each one to get the correct <i>karch</i> variable set (for example, sun4c,
+sun4m, sun4u, etc.)  Note that if not specified, <i>Amd</i> will use
+<b>uname</b>(2) to figure out the kernel architecture of the machine.
+</p>
+<hr size="6">
+<a name="ldap_005fbase-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#karch-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ldap_005fcache_005fmaxmem-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ldap_005fbase-Parameter-1"></a>
+<h3 class="subsection">6.5.16 <tt>ldap_base</tt> Parameter</h3>
+<a name="index-ldap_005fbase-Parameter"></a>
+
+<p>(type=string, default not set).
+Specify the base name for LDAP.  This often includes LDAP-specific
+values such as country and organization.
+</p>
+<hr size="6">
+<a name="ldap_005fcache_005fmaxmem-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ldap_005fbase-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ldap_005fcache_005fseconds-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ldap_005fcache_005fmaxmem-Parameter-1"></a>
+<h3 class="subsection">6.5.17 <tt>ldap_cache_maxmem</tt> Parameter</h3>
+<a name="index-ldap_005fcache_005fmaxmem-Parameter"></a>
+
+<p>(type=numeric, default=131072).  Specify the maximum memory <i>Amd</i>
+should use to cache LDAP entries.
+</p>
+<hr size="6">
+<a name="ldap_005fcache_005fseconds-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ldap_005fcache_005fmaxmem-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ldap_005fhostports-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ldap_005fcache_005fseconds-Parameter-1"></a>
+<h3 class="subsection">6.5.18 <tt>ldap_cache_seconds</tt> Parameter</h3>
+<a name="index-ldap_005fcache_005fseconds-Parameter"></a>
+
+<p>(type=numeric, default=0).  Specify the number of seconds to keep
+entries in the cache.
+</p>
+<hr size="6">
+<a name="ldap_005fhostports-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ldap_005fcache_005fseconds-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ldap_005fproto_005fversion-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ldap_005fhostports-Parameter-1"></a>
+<h3 class="subsection">6.5.19 <tt>ldap_hostports</tt> Parameter</h3>
+<a name="index-ldap_005fhostports-Parameter"></a>
+
+<p>(type=string, default not set).
+Specify the LDAP host and port values.
+</p>
+<hr size="6">
+<a name="ldap_005fproto_005fversion-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ldap_005fhostports-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#local_005fdomain-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ldap_005fproto_005fversion-Parameter-1"></a>
+<h3 class="subsection">6.5.20 <tt>ldap_proto_version</tt> Parameter</h3>
+<a name="index-ldap_005fproto_005fversion-Parameter"></a>
+
+<p>(type=numeric, default=2).  Specify the LDAP protocol version to use.
+With a value of 3 will use LDAPv3 protocol.
+</p>
+<hr size="6">
+<a name="local_005fdomain-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ldap_005fproto_005fversion-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#localhost_005faddress-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="local_005fdomain-Parameter-1"></a>
+<h3 class="subsection">6.5.21 <tt>local_domain</tt> Parameter</h3>
+<a name="index-local_005fdomain-Parameter"></a>
+
+<p>(type=string, default no sub-domain).  Same as the <code>-d</code> option
+to <i>Amd</i>.  Specify the local domain name.  If this option is not given
+the domain name is determined from the hostname, by removing the first
+component of the fully-qualified host name.
+</p>
+<hr size="6">
+<a name="localhost_005faddress-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#local_005fdomain-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#log_005ffile-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="localhost_005faddress-Parameter-1"></a>
+<h3 class="subsection">6.5.22 <tt>localhost_address</tt> Parameter</h3>
+<a name="index-localhost_005faddress-Parameter"></a>
+
+<p>(type=string, default to localhost or 127.0.0.1).  Specify the name or
+IP address for <i>Amd</i> to use when connecting the sockets for the
+local NFS server and the RPC server.  This defaults to 127.0.0.1 or
+whatever the host reports as its local address.  This parameter is
+useful on hosts with multiple addresses where you want to force
+<i>Amd</i> to connect to a specific address.
+</p>
+<hr size="6">
+<a name="log_005ffile-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#localhost_005faddress-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#log_005foptions-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="log_005ffile-Parameter-1"></a>
+<h3 class="subsection">6.5.23 <tt>log_file</tt> Parameter</h3>
+<a name="index-log_005ffile-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>stderr</samp>&rsquo;).  Same as the <code>-l</code> option to
+<i>Amd</i>.  Specify a file name to log <i>Amd</i> events to.
+If the string &lsquo;<samp>/dev/stderr</samp>&rsquo; is specified,
+<i>Amd</i> will send its events to the standard error file descriptor.
+</p>
+<p>If the string &lsquo;<samp>syslog</samp>&rsquo; is given, <i>Amd</i> will record its events
+with the system logger <b>syslogd</b>(8).  If your system supports syslog
+facilities, then the default facility used is &lsquo;<samp>LOG_DAEMON</samp>&rsquo;.
+</p>
+<p>When using syslog, if you wish to change the facility, append its name
+to the option name, delimited by a single colon.  For example, if it is
+the string &lsquo;<samp>syslog:local7</samp>&rsquo; then <i>Amd</i> will log messages via
+<b>syslog</b>(3) using the &lsquo;<samp>LOG_LOCAL7</samp>&rsquo; facility.  If the facility
+name specified is not recognized, <i>Amd</i> will default to &lsquo;<samp>LOG_DAEMON</samp>&rsquo;.
+Note: while you can use any syslog facility available on your system, it
+is generally a bad idea to use those reserved for other services such as
+&lsquo;<samp>kern</samp>&rsquo;, &lsquo;<samp>lpr</samp>&rsquo;, &lsquo;<samp>cron</samp>&rsquo;, etc.
+</p>
+<hr size="6">
+<a name="log_005foptions-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#log_005ffile-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#map_005freload_005finterval-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="log_005foptions-Parameter-1"></a>
+<h3 class="subsection">6.5.24 <tt>log_options</tt> Parameter</h3>
+<a name="index-log_005foptions-Parameter"></a>
+
+<p>(type=string, default=&ldquo;defaults&rdquo;).  Same as the <code>-x</code>
+option to <i>Amd</i>.  Specify any logging options for <i>Amd</i>.  Options
+are comma delimited, and can be preceded by the string &lsquo;<samp>no</samp>&rsquo; to
+negate their meaning.  The &lsquo;<samp>debug</samp>&rsquo; logging option is only available
+if am-utils was configured with <code>--enable-debug</code>.  You can get the
+list of supported debugging options by running <code>amd -H</code>.  Possible
+values are:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>all</samp>&rsquo;</dt>
+<dd><p>all messages
+</p></dd>
+<dt> &lsquo;<samp>defaults</samp>&rsquo;</dt>
+<dd><p>an alias for &quot;fatal,error,user,warning,info&quot;
+</p></dd>
+<dt> &lsquo;<samp>debug</samp>&rsquo;</dt>
+<dd><p>debug messages
+</p></dd>
+<dt> &lsquo;<samp>error</samp>&rsquo;</dt>
+<dd><p>non-fatal system errors (cannot be turned off)
+</p></dd>
+<dt> &lsquo;<samp>fatal</samp>&rsquo;</dt>
+<dd><p>fatal errors (cannot be turned off)
+</p></dd>
+<dt> &lsquo;<samp>info</samp>&rsquo;</dt>
+<dd><p>information
+</p></dd>
+<dt> &lsquo;<samp>map</samp>&rsquo;</dt>
+<dd><p>map errors
+</p></dd>
+<dt> &lsquo;<samp>stats</samp>&rsquo;</dt>
+<dd><p>additional statistical information
+</p></dd>
+<dt> &lsquo;<samp>user</samp>&rsquo;</dt>
+<dd><p>non-fatal user errors
+</p></dd>
+<dt> &lsquo;<samp>warn</samp>&rsquo;</dt>
+<dd><p>warnings
+</p></dd>
+<dt> &lsquo;<samp>warning</samp>&rsquo;</dt>
+<dd><p>warnings
+</p></dd>
+</dl>
+
+<hr size="6">
+<a name="map_005freload_005finterval-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#log_005foptions-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fallow_005fany_005finterface-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="map_005freload_005finterval-Parameter-1"></a>
+<h3 class="subsection">6.5.25 <tt>map_reload_interval</tt> Parameter</h3>
+<a name="index-map_005freload_005finterval-Parameter"></a>
+
+<p>(type=numeric, default=3600).  The number of seconds that <i>Amd</i> will
+wait before it checks to see if any maps have changed at their source
+(NIS servers, LDAP servers, files, etc.).  <i>Amd</i> will reload only
+those maps that have changed.
+</p>
+<hr size="6">
+<a name="nfs_005fallow_005fany_005finterface-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#map_005freload_005finterval-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fallow_005finsecure_005fport-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fallow_005fany_005finterface-Parameter-1"></a>
+<h3 class="subsection">6.5.26 <tt>nfs_allow_any_interface</tt> Parameter</h3>
+<a name="index-nfs_005fallow_005fany_005finterface-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>no</samp>&rsquo;).  Normally <i>Amd</i> accepts local NFS
+packets only from 127.0.0.1.  If this parameter is set to &lsquo;<samp>yes</samp>&rsquo;,
+then <i>amd</i> will accept local NFS packets from any local interface;
+this is useful on hosts that may have multiple interfaces where the
+system is forced to send all outgoing packets (even those bound to the
+same host) via an address other than 127.0.0.1.
+</p>
+<hr size="6">
+<a name="nfs_005fallow_005finsecure_005fport-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fallow_005fany_005finterface-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fproto-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fallow_005finsecure_005fport-Parameter-1"></a>
+<h3 class="subsection">6.5.27 <tt>nfs_allow_insecure_port</tt> Parameter</h3>
+<a name="index-nfs_005fallow_005finsecure_005fport-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>no</samp>&rsquo;).  Normally <i>Amd</i> will refuse requests
+coming from unprivileged ports (i.e., ports &gt;= 1024 on Unix systems),
+so that only privileged users and the kernel can send NFS requests to
+it.  However, some kernels (certain versions of Darwin, MacOS X, and
+Linux) have bugs that cause them to use unprivileged ports in certain
+situations, which causes <i>Amd</i> to stop dead in its tracks.  This
+parameter allows <i>Amd</i> to operate normally even on such systems, at the
+expense of a slight decrease in the security of its operations.  If
+you see messages like &ldquo;ignoring request from foo:1234, port not
+reserved&rdquo; in your <i>Amd</i> log, try enabling this parameter and give it
+another go.
+</p>
+<hr size="6">
+<a name="nfs_005fproto-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fallow_005finsecure_005fport-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fproto-Parameter-1"></a>
+<h3 class="subsection">6.5.28 <tt>nfs_proto</tt> Parameter</h3>
+<a name="index-nfs_005fproto-Parameter"></a>
+
+<p>(type=string, default to trying version tcp then udp).  By default,
+<i>Amd</i> tries <code>tcp</code> and then <code>udp</code>.  This option forces the
+overall NFS protocol used to TCP or UDP.  It overrides what is in the
+<i>Amd</i> maps, and is useful when <i>Amd</i> is compiled with TCP support
+in NFSv2/NFSv3 that may not be stable.  With this option you can turn
+off the complete usage of TCP for NFS dynamically (without having to
+recompile <i>Amd</i>), and use UDP only, until such time as TCP support
+is desired again.
+</p>
+<hr size="6">
+<a name="nfs_005fretransmit_005fcounter-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fproto-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005fudp-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretransmit_005fcounter-Parameter-1"></a>
+<h3 class="subsection">6.5.29 <tt>nfs_retransmit_counter</tt> Parameter</h3>
+<a name="index-nfs_005fretransmit_005fcounter-Parameter"></a>
+
+<p>(type=numeric, default=11).  Same as the <i>retransmit</i> part of the
+<code>-t</code> <i>timeout.retransmit</i> option to <i>Amd</i>.  Specifies the
+number of NFS retransmissions that the kernel will use to communicate
+with <i>Amd</i> using either UDP or TCP mounts.  See section <a href="am-utils_8.html#g_t_002dt-Option"><code>-t</code> <var>timeout.retransmit</var></a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretransmit_005fcounter_005fudp-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005ftcp-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretransmit_005fcounter_005fudp-Parameter-1"></a>
+<h3 class="subsection">6.5.30 <tt>nfs_retransmit_counter_udp</tt> Parameter</h3>
+<a name="index-nfs_005fretransmit_005fcounter_005fudp-Parameter"></a>
+<a name="index-nfs_005fretransmit_005fcounter-Parameter-1"></a>
+<a name="index-UDP"></a>
+
+<p>(type=numeric, default=11).  Same as the <i>nfs_retransmit_counter</i>
+parameter, but applied globally only to UDP mounts.
+See section <a href="#nfs_005fretransmit_005fcounter-Parameter"><tt>nfs_retransmit_counter</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretransmit_005fcounter_005ftcp-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005fudp-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005ftoplvl-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretransmit_005fcounter_005ftcp-Parameter-1"></a>
+<h3 class="subsection">6.5.31 <tt>nfs_retransmit_counter_tcp</tt> Parameter</h3>
+<a name="index-nfs_005fretransmit_005fcounter_005ftcp-Parameter"></a>
+<a name="index-nfs_005fretransmit_005fcounter-Parameter-2"></a>
+<a name="index-TCP"></a>
+
+<p>(type=numeric, default=11).  Same as the <i>nfs_retransmit_counter</i>
+parameter, but applied globally only to TCP mounts.
+See section <a href="#nfs_005fretransmit_005fcounter-Parameter"><tt>nfs_retransmit_counter</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretransmit_005fcounter_005ftoplvl-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005ftcp-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretransmit_005fcounter_005ftoplvl-Parameter-1"></a>
+<h3 class="subsection">6.5.32 <tt>nfs_retransmit_counter_toplvl</tt> Parameter</h3>
+<a name="index-nfs_005fretransmit_005fcounter_005ftoplvl-Parameter"></a>
+<a name="index-nfs_005fretransmit_005fcounter-Parameter-3"></a>
+<a name="index-UDP-1"></a>
+
+<p>(type=numeric, default=11).  Same as the <i>nfs_retransmit_counter</i>
+parameter, applied only for <i>Amd</i>&rsquo;s top-level UDP mounts.  On some
+systems it is useful to set this differently than the OS default, so
+as to better tune <i>Amd</i>&rsquo;s responsiveness under heavy scheduler
+loads.  See section <a href="#nfs_005fretransmit_005fcounter-Parameter"><tt>nfs_retransmit_counter</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretry_005finterval-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretransmit_005fcounter_005ftoplvl-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005fudp-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretry_005finterval-Parameter-1"></a>
+<h3 class="subsection">6.5.33 <tt>nfs_retry_interval</tt> Parameter</h3>
+<a name="index-nfs_005fretry_005finterval-Parameter"></a>
+
+<p>(type=numeric, default=8).  Same as the <i>timeout</i> part of the
+<code>-t</code> <i>timeout.retransmit</i> option to <i>Amd</i>.  Specifies the NFS
+timeout interval, in <em>tenths</em> of seconds, between NFS/RPC retries
+(for UDP or TCP).  This is the value that the kernel will use to
+communicate with <i>Amd</i>.  See section <a href="am-utils_8.html#g_t_002dt-Option"><code>-t</code> <var>timeout.retransmit</var></a>.
+</p>
+<p><i>Amd</i> relies on the kernel RPC retransmit mechanism to trigger mount
+retries.  The values of the <i>nfs_retransmit_counter</i> and the
+<i>nfs_retry_interval</i> parameters change the overall retry interval.
+Too long an interval gives poor interactive response; too short an
+interval causes excessive retries.
+</p>
+<hr size="6">
+<a name="nfs_005fretry_005finterval_005fudp-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005ftcp-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretry_005finterval_005fudp-Parameter-1"></a>
+<h3 class="subsection">6.5.34 <tt>nfs_retry_interval_udp</tt> Parameter</h3>
+<a name="index-nfs_005fretry_005finterval_005fudp-Parameter"></a>
+<a name="index-nfs_005fretry_005finterval-Parameter-1"></a>
+<a name="index-UDP-2"></a>
+
+<p>(type=numeric, default=8).  Same as the <i>nfs_retry_interval</i>
+parameter, but applied globally only to UDP mounts.
+See section <a href="#nfs_005fretry_005finterval-Parameter"><tt>nfs_retry_interval</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretry_005finterval_005ftcp-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005fudp-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005ftoplvl-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretry_005finterval_005ftcp-Parameter-1"></a>
+<h3 class="subsection">6.5.35 <tt>nfs_retry_interval_tcp</tt> Parameter</h3>
+<a name="index-nfs_005fretry_005finterval_005ftcp-Parameter"></a>
+<a name="index-nfs_005fretry_005finterval-Parameter-2"></a>
+<a name="index-TCP-1"></a>
+
+<p>(type=numeric, default=8).  Same as the <i>nfs_retry_interval</i>
+parameter, but applied globally only to TCP mounts.
+See section <a href="#nfs_005fretry_005finterval-Parameter"><tt>nfs_retry_interval</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fretry_005finterval_005ftoplvl-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005ftcp-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nfs_005fvers-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fretry_005finterval_005ftoplvl-Parameter-1"></a>
+<h3 class="subsection">6.5.36 <tt>nfs_retry_interval_toplvl</tt> Parameter</h3>
+<a name="index-nfs_005fretry_005finterval_005ftoplvl-Parameter"></a>
+<a name="index-nfs_005fretry_005finterval-Parameter-3"></a>
+<a name="index-UDP-3"></a>
+
+<p>(type=numeric, default=8).  Same as the <i>nfs_retry_interval</i>
+parameter, applied only for <i>Amd</i>&rsquo;s top-level UDP mounts.  On some
+systems it is useful to set this differently than the OS default, so
+as to better tune <i>Amd</i>&rsquo;s responsiveness under heavy scheduler
+loads.  See section <a href="#nfs_005fretry_005finterval-Parameter"><tt>nfs_retry_interval</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="nfs_005fvers-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fretry_005finterval_005ftoplvl-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#nis_005fdomain-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nfs_005fvers-Parameter-1"></a>
+<h3 class="subsection">6.5.37 <tt>nfs_vers</tt> Parameter</h3>
+<a name="index-nfs_005fvers-Parameter"></a>
+
+<p>(type=numeric, default to trying version 3 then 2).  By default,
+<i>Amd</i> tries version 3 and then version 2.  This option forces the
+overall NFS protocol used to version 3 or 2.  It overrides what is in
+the <i>Amd</i> maps, and is useful when <i>Amd</i> is compiled with NFSv3
+support that may not be stable.  With this option you can turn off the
+complete usage of NFSv3 dynamically (without having to recompile
+<i>Amd</i>), and use NFSv2 only, until such time as NFSv3 support is
+desired again.
+</p>
+<hr size="6">
+<a name="nis_005fdomain-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nfs_005fvers-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#normalize_005fhostnames-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="nis_005fdomain-Parameter-1"></a>
+<h3 class="subsection">6.5.38 <tt>nis_domain</tt> Parameter</h3>
+<a name="index-nis_005fdomain-Parameter"></a>
+
+<p>(type=string, default to local NIS domain name).  Same as the
+<code>-y</code> option to <i>Amd</i>.  Specify an alternative NIS domain from
+which to fetch the NIS maps.  The default is the system domain name.
+This option is ignored if NIS support is not available.
+</p>
+<hr size="6">
+<a name="normalize_005fhostnames-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#nis_005fdomain-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#normalize_005fslashes-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="normalize_005fhostnames-Parameter-1"></a>
+<h3 class="subsection">6.5.39 <tt>normalize_hostnames</tt> Parameter</h3>
+<a name="index-normalize_005fhostnames-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  Same as the <code>-n</code> option to <i>Amd</i>.
+If &lsquo;<samp>yes</samp>&rsquo;, then the name referred to by <code>${rhost}</code> is normalized
+relative to the host database before being used.  The effect is to
+translate aliases into &ldquo;official&rdquo; names.
+</p>
+<hr size="6">
+<a name="normalize_005fslashes-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#normalize_005fhostnames-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#os-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="normalize_005fslashes-Parameter-1"></a>
+<h3 class="subsection">6.5.40 <tt>normalize_slashes</tt> Parameter</h3>
+<a name="index-normalize_005fslashes-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>yes</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo; then amd will
+condense all multiple <code>/</code> (slash) characters into one and remove
+all trailing slashes.  If &lsquo;<samp>no</samp>&rsquo;, then amd will not touch strings
+that may contain repeated or trailing slashes.  The latter is
+sometimes useful with SMB mounts, which often require multiple slash
+characters in pathnames.
+</p>
+<hr size="6">
+<a name="os-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#normalize_005fslashes-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#osver-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="os-Parameter-1"></a>
+<h3 class="subsection">6.5.41 <tt>os</tt> Parameter</h3>
+<a name="index-os-Parameter"></a>
+
+<p>(type=string, default to compiled in value).  Same as the <code>-O</code>
+option to <i>Amd</i>.  Allows you to override the compiled-in name of the
+operating system.  Useful when the built-in name is not desired for
+backward compatibility reasons.  For example, if the built-in name is
+&lsquo;<samp>sunos5</samp>&rsquo;, you can override it to &lsquo;<samp>sos5</samp>&rsquo;, and use older maps
+which were written with the latter in mind.
+</p>
+
+<hr size="6">
+<a name="osver-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#os-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#pid_005ffile-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="osver-Parameter-1"></a>
+<h3 class="subsection">6.5.42 <tt>osver</tt> Parameter</h3>
+<a name="index-osver-Parameter"></a>
+
+<p>(type=string, default to compiled in value).  Same as the <code>-o</code>
+option to <i>Amd</i>.  Allows you to override the compiled-in version
+number of the operating system.  Useful when the built-in version is not
+desired for backward compatibility reasons.  For example, if the build
+in version is &lsquo;<samp>2.5.1</samp>&rsquo;, you can override it to &lsquo;<samp>5.5.1</samp>&rsquo;, and use
+older maps that were written with the latter in mind.
+</p>
+<hr size="6">
+<a name="pid_005ffile-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#osver-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#plock-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="pid_005ffile-Parameter-1"></a>
+<h3 class="subsection">6.5.43 <tt>pid_file</tt> Parameter</h3>
+<a name="index-pid_005ffile-Parameter"></a>
+
+<p>(type=string, default=&lsquo;<samp>/dev/stdout</samp>&rsquo;).  Specify a file to store the process
+ID of the running daemon into.  If not specified, <i>Amd</i> will print its
+process id onto the standard output.  Useful for killing <i>Amd</i> after
+it had run.  Note that the PID of a running <i>Amd</i> can also be
+retrieved via <i>Amq</i> (see section <a href="am-utils_11.html#Amq-_002dp-option"><i>Amq</i> <code>-p</code> option</a>).
+</p>
+<p>This file is used only if the &lsquo;<samp>print_pid</samp>&rsquo; option is on
+(see section <a href="#print_005fpid-Parameter"><tt>print_pid</tt> Parameter</a>).
+</p>
+<hr size="6">
+<a name="plock-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#pid_005ffile-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#portmap_005fprogram-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="plock-Parameter-1"></a>
+<h3 class="subsection">6.5.44 <tt>plock</tt> Parameter</h3>
+<a name="index-plock-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>yes</samp>&rsquo;).  Same as the <code>-S</code> option to <i>Amd</i>.
+If &lsquo;<samp>yes</samp>&rsquo;, lock the running executable pages of <i>Amd</i> into memory.
+To improve <i>Amd</i>&rsquo;s performance, systems that support the <b>plock</b>(3)
+or <b>mlockall</b>(2)
+call can lock the <i>Amd</i> process into memory.  This way there is less
+chance the operating system will schedule, page out, and swap the
+<i>Amd</i> process as needed.  This improves <i>Amd</i>&rsquo;s performance, at the
+cost of reserving the memory used by the <i>Amd</i> process (making it
+unavailable for other processes).
+</p>
+<hr size="6">
+<a name="portmap_005fprogram-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#plock-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#preferred_005famq_005fport-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="portmap_005fprogram-Parameter-1"></a>
+<h3 class="subsection">6.5.45 <tt>portmap_program</tt> Parameter</h3>
+<a name="index-portmap_005fprogram-Parameter"></a>
+
+<p>(type=numeric, default=300019).  Specify an alternate Port-mapper RPC
+program number, other than the official number.  This is useful when
+running multiple <i>Amd</i> processes.  For example, you can run another
+<i>Amd</i> in &ldquo;test&rdquo; mode, without affecting the primary <i>Amd</i> process
+in any way.  For safety reasons, the alternate program numbers that can
+be specified must be in the range 300019-300029, inclusive.  <i>Amq</i> has
+an option <code>-P</code> which can be used to specify an alternate program
+number of an <i>Amd</i> to contact.  In this way, amq can fully control any
+number of <i>Amd</i> processes running on the same host.
+</p>
+<hr size="6">
+<a name="preferred_005famq_005fport-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#portmap_005fprogram-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#print_005fpid-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="preferred_005famq_005fport-Parameter-1"></a>
+<h3 class="subsection">6.5.46 <tt>preferred_amq_port</tt> Parameter</h3>
+<a name="index-preferred_005famq_005fport-Parameter"></a>
+
+<p>(type=numeric, default=0).  Specify an alternate Port-mapper RPC port
+number for <i>Amd</i>&rsquo;s <i>Amq</i> service.  This is used for both UDP and
+TCP.  Setting this value to 0 (or not defining it) will cause <i>Amd</i>
+to select an arbitrary port number.  Setting the <i>Amq</i> RPC service
+port to a specific number is useful in firewalled or NAT&rsquo;ed
+environments, where you need to know which port <i>Amd</i> will listen
+on.
+</p>
+<hr size="6">
+<a name="print_005fpid-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#preferred_005famq_005fport-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#print_005fversion-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="print_005fpid-Parameter-1"></a>
+<h3 class="subsection">6.5.47 <tt>print_pid</tt> Parameter</h3>
+<a name="index-print_005fpid-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  Same as the <code>-p</code> option to <i>Amd</i>.
+If &lsquo;<samp>yes</samp>&rsquo;, <i>Amd</i> will print its process ID upon starting.
+</p>
+<hr size="6">
+<a name="print_005fversion-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#print_005fpid-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#restart_005fmounts-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="print_005fversion-Parameter-1"></a>
+<h3 class="subsection">6.5.48 <tt>print_version</tt> Parameter</h3>
+<a name="index-print_005fversion-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  Same as the <code>-v</code> option to <i>Amd</i>,
+but the version prints and <i>Amd</i> continues to run.  If &lsquo;<samp>yes</samp>&rsquo;, <i>Amd</i>
+will print its version information string, which includes some
+configuration and compilation values.
+</p>
+<hr size="6">
+<a name="restart_005fmounts-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#print_005fversion-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#show_005fstatfs_005fentries-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="restart_005fmounts-Parameter-1"></a>
+<h3 class="subsection">6.5.49 <tt>restart_mounts</tt> Parameter</h3>
+<a name="index-restart_005fmounts-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  Same as the <code>-r</code> option to <i>Amd</i>.
+If &lsquo;<samp>yes</samp>&rsquo; <i>Amd</i> will scan the mount table to determine which file
+systems are currently mounted.  Whenever one of these would have been
+auto-mounted, <i>Amd</i> inherits it.
+</p>
+<hr size="6">
+<a name="show_005fstatfs_005fentries-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#restart_005fmounts-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#truncate_005flog-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="show_005fstatfs_005fentries-Parameter-1"></a>
+<h3 class="subsection">6.5.50 <tt>show_statfs_entries</tt> Parameter</h3>
+<a name="index-show_005fstatfs_005fentries-Parameter"></a>
+
+<p>(type=boolean), default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then all maps which are
+browsable will also show the number of entries (keys) they have when
+<b>df</b>(1) runs. (This is accomplished by returning non-zero values to
+the <b>statfs</b>(2) system call).
+</p>
+<hr size="6">
+<a name="truncate_005flog-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#show_005fstatfs_005fentries-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#unmount_005fon_005fexit-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="truncate_005flog-Parameter-1"></a>
+<h3 class="subsection">6.5.51 <tt>truncate_log</tt> Parameter</h3>
+<a name="index-truncate_005flog-Parameter"></a>
+
+<p>(type=boolean), default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then <i>Amd</i> will
+truncate the log file (if it&rsquo;s a regular file) on startup.  This could
+be useful when conducting extensive testing on <i>Amd</i> maps (or
+<i>Amd</i> itself) and you don&rsquo;t want to see log data from a previous run
+in the same file.
+</p>
+<hr size="6">
+<a name="unmount_005fon_005fexit-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#truncate_005flog-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#use_005ftcpwrappers-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="unmount_005fon_005fexit-Parameter-1"></a>
+<h3 class="subsection">6.5.52 <tt>unmount_on_exit</tt> Parameter</h3>
+<a name="index-unmount_005fon_005fexit-Parameter"></a>
+
+<p>(type=boolean, default=&lsquo;<samp>no</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then <i>Amd</i> will attempt
+to unmount all file systems which it knows about.  Normally it leaves
+all (esp. NFS) mounted file systems intact.  Note that <i>Amd</i> does not
+know about file systems mounted before it starts up, unless the
+&lsquo;<samp>restart_mounts</samp>&rsquo; option is used (see section <a href="#restart_005fmounts-Parameter"><tt>restart_mounts</tt> Parameter</a>).
+</p>
+<hr size="6">
+<a name="use_005ftcpwrappers-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#unmount_005fon_005fexit-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#vendor-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="use_005ftcpwrappers-Parameter-1"></a>
+<h3 class="subsection">6.5.53 <tt>use_tcpwrappers</tt> Parameter</h3>
+<a name="index-use_005ftcpwrappers-Parameter"></a>
+
+<p>(type=boolean), default=&lsquo;<samp>yes</samp>&rsquo;).  If &lsquo;<samp>yes</samp>&rsquo;, then amd will use
+the tcpwrappers (tcpd/librwap) library (if available) to control
+access to <i>Amd</i> via the <code>/etc/hosts.allow</code> and
+<code>/etc/hosts.deny</code> files.  <i>Amd</i> will verify that the host
+running <i>Amq</i> is authorized to connect.  The <code>amd</code> service name
+must used in the <code>/etc/hosts.allow</code> and <code>/etc/hosts.deny</code>
+files.  For example, to allow only localhost to connect to <i>Amd</i>,
+add this line to <code>/etc/hosts.allow</code>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd: localhost
+</pre></td></tr></table>
+
+<p>and this line to <code>/etc/hosts.deny</code>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd: ALL
+</pre></td></tr></table>
+
+<p>Consult the man pages for <b>hosts_access</b>(5) for more information on using
+the tcpwrappers access-control library.
+</p>
+<p>Note that in particular, you should not configure your <code>hosts.allow</code>
+file to spawn a command for <i>Amd</i>: that will cause <i>Amd</i> to not be able
+to <code>waitpid</code> on the child process ID of any background un/mount that
+<i>Amd</i> issued, resulting in a confused <i>Amd</i> that does not know what
+happened to those background un/mount requests.
+</p>
+<hr size="6">
+<a name="vendor-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#use_005ftcpwrappers-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Regular-Map-Parameters" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Global-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="vendor-Parameter-1"></a>
+<h3 class="subsection">6.5.54 <tt>vendor</tt> Parameter</h3>
+<a name="index-vendor-Parameter"></a>
+
+<p>(type=string, default to compiled in value).  The name of the vendor of
+the operating system.  Overrides the compiled-in vendor name.  Useful
+when the compiled-in name is not desired.  For example, most Intel based
+systems set the vendor name to &lsquo;<samp>unknown</samp>&rsquo;, but you can set it to
+&lsquo;<samp>redhat</samp>&rsquo;.
+</p>
+<hr size="6">
+<a name="Regular-Map-Parameters"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#vendor-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#map_005fname-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Regular-Map-Parameters-1"></a>
+<h2 class="section">6.6 Regular Map Parameters</h2>
+<a name="index-amd_002econf-regular-map-parameters"></a>
+
+<p>The following parameters are applicable only to regular map sections.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#map_005fname-Parameter">6.6.1 map_name Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#tag-Parameter">6.6.2 tag Parameter</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="map_005fname-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Regular-Map-Parameters" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#tag-Parameter" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Regular-Map-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="map_005fname-Parameter-1"></a>
+<h3 class="subsection">6.6.1 map_name Parameter</h3>
+<a name="index-map_005fname-Parameter"></a>
+
+<p>(type=string, must be specified).  Name of the map where the keys are
+located.
+</p>
+<hr size="6">
+<a name="tag-Parameter"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#map_005fname-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#amd_002econf-Examples" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Regular-Map-Parameters" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="tag-Parameter-1"></a>
+<h3 class="subsection">6.6.2 tag Parameter</h3>
+<a name="index-tag-Parameter"></a>
+
+<p>(type=string, default no tag).  Each map entry in the configuration file
+can be tagged.  If no tag is specified, that map section will always be
+processed by <i>Amd</i>.  If it is specified, then <i>Amd</i> will process the map
+if the <code>-T</code> option was given to <i>Amd</i>, and the value given to that
+command-line option matches that in the map section.
+</p>
+<hr size="6">
+<a name="amd_002econf-Examples"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#tag-Parameter" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="amd_002econf-Examples-1"></a>
+<h2 class="section">6.7 amd.conf Examples</h2>
+<a name="index-amd_002econf-examples"></a>
+
+<p>The following is the actual <code>amd.conf</code> file I used at the
+Computer Science Department of Columbia University.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># GLOBAL OPTIONS SECTION
+[ global ]
+normalize_hostnames =    no
+print_pid =              no
+#pid_file =              /var/run/amd.pid
+restart_mounts =         yes
+#unmount_on_exit =       yes
+auto_dir =               /n
+log_file =               /var/log/amd
+log_options =            all
+#debug_options =         defaults
+plock =                  no
+selectors_in_defaults =  yes
+# config.guess picks up &quot;sunos5&quot; and I don't want to edit my maps yet
+os =                     sos5
+# if you print_version after setting up &quot;os&quot;, it will show it.
+print_version =          no
+map_type =               file
+search_path =            /etc/amdmaps:/usr/lib/amd:/usr/local/AMD/lib
+browsable_dirs =         yes
+fully_qualified_hosts =  no
+
+# DEFINE AN AMD MOUNT POINT
+[ /u ]
+map_name =               amd.u
+
+[ /proj ]
+map_name =               amd.proj
+
+[ /src ]
+map_name =               amd.src
+
+[ /misc ]
+map_name =               amd.misc
+
+[ /import ]
+map_name =               amd.import
+
+[ /tftpboot/.amd ]
+tag =                    tftpboot
+map_name =               amd.tftpboot
+</pre></td></tr></table>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_11.html#Run_002dtime-Administration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

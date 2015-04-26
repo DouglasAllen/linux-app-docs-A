@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bigip_pool_member - Manages F5 BIG-IP LTM pool members &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Net Infrastructure Modules" href="list_of_net_infrastructure_modules.html" />
+    <link rel="next" title="dnsimple - Interface with dnsimple.com (a DNS hosting service)." href="dnsimple_module.html" />
+    <link rel="prev" title="bigip_pool - Manages F5 BIG-IP LTM pools" href="bigip_pool_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dnsimple_module.html" title="dnsimple - Interface with dnsimple.com (a DNS hosting service)."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bigip_pool_module.html" title="bigip_pool - Manages F5 BIG-IP LTM pools"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_net_infrastructure_modules.html" accesskey="U">Net Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bigip-pool-member-manages-f5-big-ip-ltm-pool-members">
+<span id="bigip-pool-member"></span><h1>bigip_pool_member - Manages F5 BIG-IP LTM pool members<a class="headerlink" href="#bigip-pool-member-manages-f5-big-ip-ltm-pool-members" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matt Hite</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>Manages F5 BIG-IP LTM pool members via iControl SOAP API</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>connection_limit</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member connection limit. Setting this to 0 disables the limit.</td>
+</tr>
+        <tr>
+<td>description</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member description</td>
+</tr>
+        <tr>
+<td>host</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member IP</td>
+</tr>
+        <tr>
+<td>partition</td>
+<td>no</td>
+<td>Common</td>
+    <td><ul></ul></td>
+    <td>Partition</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>BIG-IP password</td>
+</tr>
+        <tr>
+<td>pool</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool name. This pool must exist.</td>
+</tr>
+        <tr>
+<td>port</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member port</td>
+</tr>
+        <tr>
+<td>rate_limit</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member rate limit (connections-per-second). Setting this to 0 disables the limit.</td>
+</tr>
+        <tr>
+<td>ratio</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Pool member ratio weight. Valid values range from 1 through 100. New pool members -- unless overriden with this value -- default to 1.</td>
+</tr>
+        <tr>
+<td>server</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>BIG-IP host</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>yes</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Pool member state</td>
+</tr>
+        <tr>
+<td>user</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>BIG-IP username</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires bigsuds</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>## playbook task examples:
+
+---
+# file bigip-test.yml
+# ...
+- hosts: bigip-test
+  tasks:
+  - name: Add pool member
+    local_action: &gt;
+      bigip_pool_member
+      server=lb.mydomain.com
+      user=admin
+      password=mysecret
+      state=present
+      pool=matthite-pool
+      partition=matthite
+      host="{{ ansible_default_ipv4["address"] }}"
+      port=80
+      description="web server"
+      connection_limit=100
+      rate_limit=50
+      ratio=2
+
+  - name: Modify pool member ratio and description
+    local_action: &gt;
+      bigip_pool_member
+      server=lb.mydomain.com
+      user=admin
+      password=mysecret
+      state=present
+      pool=matthite-pool
+      partition=matthite
+      host="{{ ansible_default_ipv4["address"] }}"
+      port=80
+      ratio=1
+      description="nginx server"
+
+  - name: Remove pool member from pool
+    local_action: &gt;
+      bigip_pool_member
+      server=lb.mydomain.com
+      user=admin
+      password=mysecret
+      state=absent
+      pool=matthite-pool
+      partition=matthite
+      host="{{ ansible_default_ipv4["address"] }}"
+      port=80</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires BIG-IP software version &gt;= 11</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">F5 developed module &#8216;bigsuds&#8217; required (see <a class="reference external" href="http://devcentral.f5.com">http://devcentral.f5.com</a>)</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Best run as a local_action in your playbook</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Supersedes bigip_pool for managing pool members</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">bigip_pool_member - Manages F5 BIG-IP LTM pool members</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bigip_pool_module.html"
+                        title="previous chapter">bigip_pool - Manages F5 BIG-IP LTM pools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dnsimple_module.html"
+                        title="next chapter">dnsimple - Interface with dnsimple.com (a DNS hosting service).</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dnsimple_module.html" title="dnsimple - Interface with dnsimple.com (a DNS hosting service)."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bigip_pool_module.html" title="bigip_pool - Manages F5 BIG-IP LTM pools"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_net_infrastructure_modules.html" >Net Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
