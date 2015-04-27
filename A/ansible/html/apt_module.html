@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>apt - Manages apt-packages &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="apt_key - Add or remove an apt key" href="apt_key_module.html" />
+    <link rel="prev" title="Packaging Modules" href="list_of_packaging_modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="apt_key_module.html" title="apt_key - Add or remove an apt key"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="list_of_packaging_modules.html" title="Packaging Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="apt-manages-apt-packages">
+<span id="apt"></span><h1>apt - Manages apt-packages<a class="headerlink" href="#apt-manages-apt-packages" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matthew Williams</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Manages <em>apt</em> packages (such as for Debian/Ubuntu).</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>cache_valid_time</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>If <code>update_cache</code> is specified and the last run is less or equal than <em>cache_valid_time</em> seconds ago, the <code>update_cache</code> gets skipped.</td>
+</tr>
+        <tr>
+<td>deb</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Path to a .deb package on the remote machine. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>default_release</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Corresponds to the <code>-t</code> option for <em>apt</em> and sets pin priorities</td>
+</tr>
+        <tr>
+<td>dpkg_options</td>
+<td>no</td>
+<td>force-confdef,force-confold</td>
+    <td><ul></ul></td>
+    <td>Add dpkg options to apt command. Defaults to '-o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"'Options should be supplied as comma separated list</td>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>yes</code>, force installs/removes.</td>
+</tr>
+        <tr>
+<td>install_recommends</td>
+<td>no</td>
+<td>True</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Corresponds to the <code>--no-install-recommends</code> option for <em>apt</em>. Default behavior (<code>yes</code>) replicates apt's default behavior; <code>no</code> does not install recommended packages. Suggested packages are never installed.</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A package name, like <code>foo</code>, or package specifier with version, like <code>foo=1.0</code>. Wildcards (fnmatch) like apt* are also supported.</td>
+</tr>
+        <tr>
+<td>purge</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Will force purging of configuration files if the module state is set to <em>absent</em>.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>latest</li><li>absent</li><li>present</li></ul></td>
+    <td>Indicates the desired package state. <code>latest</code> ensures that the latest version is installed.</td>
+</tr>
+        <tr>
+<td>update_cache</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Run the equivalent of <code>apt-get update</code> before the operation. Can be run as part of the package installation or as a separate step.</td>
+</tr>
+        <tr>
+<td>upgrade</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>safe</li><li>full</li><li>dist</li></ul></td>
+    <td>If yes or safe, performs an aptitude safe-upgrade.If full, performs an aptitude full-upgrade.If dist, performs an apt-get dist-upgrade.Note: This does not upgrade a specific package, use state=latest for that. (added in Ansible 1.1)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires python-apt</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires aptitude</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Update repositories cache and install "foo" package
+- apt: name=foo update_cache=yes
+
+# Remove "foo" package
+- apt: name=foo state=absent
+
+# Install the package "foo"
+- apt: name=foo state=present
+
+# Install the version '1.00' of package "foo"
+- apt: name=foo=1.00 state=present
+
+# Update the repository cache and update package "nginx" to latest version using default release squeeze-backport
+- apt: name=nginx state=latest default_release=squeeze-backports update_cache=yes
+
+# Install latest version of "openjdk-6-jdk" ignoring "install-recommends"
+- apt: name=openjdk-6-jdk state=latest install_recommends=no
+
+# Update all packages to the latest version
+- apt: upgrade=dist
+
+# Run the equivalent of "apt-get update" as a separate step
+- apt: update_cache=yes
+
+# Only run "update_cache=yes" if the last one is more than 3600 seconds ago
+- apt: update_cache=yes cache_valid_time=3600
+
+# Pass options to dpkg on run
+- apt: upgrade=dist update_cache=yes dpkg_options='force-confold,force-confdef'
+
+# Install a .deb package
+- apt: deb=/tmp/mypackage.deb</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Three of the upgrade modes (<tt class="docutils literal"><span class="pre">full</span></tt>, <tt class="docutils literal"><span class="pre">safe</span></tt> and its alias <tt class="docutils literal"><span class="pre">yes</span></tt>) require <tt class="docutils literal"><span class="pre">aptitude</span></tt>, otherwise <tt class="docutils literal"><span class="pre">apt-get</span></tt> suffices.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">apt - Manages apt-packages</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="list_of_packaging_modules.html"
+                        title="previous chapter">Packaging Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="apt_key_module.html"
+                        title="next chapter">apt_key - Add or remove an apt key</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="apt_key_module.html" title="apt_key - Add or remove an apt key"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="list_of_packaging_modules.html" title="Packaging Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

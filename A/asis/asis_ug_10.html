@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT User's Guide: 10. Compiling, Binding and Linking Applications with ASIS-for-GNAT</title>
+
+<meta name="description" content="ASIS-for-GNAT User's Guide: 10. Compiling, Binding and Linking Applications with ASIS-for-GNAT">
+<meta name="keywords" content="ASIS-for-GNAT User's Guide: 10. Compiling, Binding and Linking Applications with ASIS-for-GNAT">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Compiling-Binding-and-Linking-Applications-with-ASIS_002dfor_002dGNAT"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Compiling_002c-Binding-and-Linking-Applications-with-ASIS_002dfor_002dGNAT"></a>
+<h1 class="chapter">10. Compiling, Binding and Linking Applications with ASIS-for-GNAT</h1>
+<a name="index-ASIS_002dfor_002dGNAT-7"></a>
+
+<p>If you have installed ASIS-for-GNAT as an Ada library and added the directory
+containing all source, &lsquo;<tt>ALI</tt>&rsquo; and library files of this library to the values
+of the <code>ADA_INCLUDE_PATH</code> and <code>ADA_OBJECTS_PATH</code> environment
+variables (which is a recommended way to install ASIS-for-GNAT), you do not
+need to supply any ASIS-specific options for <code>gcc</code>
+or for <code>gnatbind</code> when working with your ASIS applications.
+However for <code>gnatlink</code> you have to provide an additional parameter
+&lsquo;<samp>-lasis</samp>&rsquo;:
+<a name="index-_002dlasis-option"></a>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gnatlink my_application -lasis
+</pre></td></tr></table>
+
+<p>When using <code>gnatmake</code>, you also have to provide this linker parameter
+whenever a call to <code>gnatmake</code> invokes <code>gnatlink</code>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gnatmake ... my_application -largs -lasis
+</pre></td></tr></table>
+
+<p>You do not need these linker parameters if a call to <code>gnatmake</code> is not
+creating the executable:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gnatmake -c ... my_application
+</pre></td></tr></table>
+
+<p>If you have installed ASIS-for-GNAT without building an ASIS library, then you
+have to do the following when working with your ASIS application code:
+</p>
+<ul>
+<li>
+When compiling, you have to put catalogs with ASIS-for-GNAT implementation
+  sources
+  (<code>asis-[version#]-src/asis</code> and <code>asis-[version#]-src/gnat</code>) in the
+  search path for the source files. You may do this either by the &lsquo;<samp>-I</samp>&rsquo;
+  option to <code>gcc</code> or by adding these directories to the <code>ADA_INCLUDE_PATH</code>
+<a name="index-ADA_005fINCLUDE_005fPATH-environment-variable"></a>
+  environment variable.
+
+</li><li>
+When binding, you have to put the directory where all the object and &lsquo;<tt>ALI</tt>&rsquo;
+ files for the ASIS-for-GNAT components were created
+ (<code>asis-[version#]-src/obj</code>, if you followed the manual installation procedure
+ described in the top-level ASIS &lsquo;<tt>README</tt>&rsquo; file) in the search path for
+ <code>gnatbind</code>. You can do this either with the &lsquo;<samp>-aO</samp>&rsquo; option to
+ <code>gnatbind</code> or by
+ adding this directory to the <code>ADA_OBJECTS_PATH</code> environment variable.
+<a name="index-ADA_005fOBJECTS_005fPATH-environment-variable"></a>
+</li></ul>
+
+<p>If you have added directories with ASIS-for-GNAT source, object and &lsquo;<tt>ALI</tt>&rsquo; files
+to the values of the GNAT-specific environment variables, you do not
+have to provide any ASIS-specific parameter when using <code>gnatmake</code> for your
+ASIS application.
+</p>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_9.html#Processing-an-Ada-Library-by-an-ASIS_002dBased-Tool" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

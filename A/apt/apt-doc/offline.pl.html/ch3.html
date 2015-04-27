@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Używanie APT w trybie offline - Używanie programów APT i wget</title>
+
+<link href="index.html" rel="start">
+<link href="ch2.html" rel="prev">
+<link href="index.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Wstęp">
+<link href="ch2.html" rel="chapter" title="2 Używanie programu APT na obu komputerach">
+<link href="ch3.html" rel="chapter" title="3 Używanie programów APT i wget">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Wprowadzenie">
+<link href="ch2.html#s2.1" rel="section" title="2.1 Wprowadzenie">
+<link href="ch2.html#s2.2" rel="section" title="2.2 Plik konfiguracyjny">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Wprowadzenie">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Kolejne kroki">
+
+</head>
+
+<body>
+
+<p><a name="ch3"></a></p>
+<hr>
+
+<p>
+[ <a href="ch2.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ 3 ]
+[ <a href="index.html">dalej</a> ]
+</p>
+
+<hr>
+
+<h1>
+Używanie APT w trybie offline
+<br>Część 3 - Używanie programów APT i wget
+</h1>
+
+<hr>
+
+<h2><a name="s3.1"></a>3.1 Wprowadzenie</h2>
+
+<p>
+<em>wget</em> jest popularnym i przenośnym programem narzędziowym pobierania
+plików, który działa prawie na każdym komputerze.  W przeciwieństwie do
+metody opisanej powyżej ta wymaga, aby na lokalnym komputerze była aktualna
+lista dostępnych pakietów.
+</p>
+
+<p>
+Należy stworzyć katalog disc tylko na pakiety do pobrania z innego komputera.
+Użyta zostanie do tego opcja --print-uris programu apt-get, a następnie
+przygotujemy skrypt dla programu wget, który pobierze właściwe pakiety.
+</p>
+
+<hr>
+
+<h2><a name="s3.2"></a>3.2 Kolejne kroki</h2>
+
+<p>
+W odróżnieniu od poprzedniej metody działania ta nie wymaga specjalnych
+plików konfiguracyjnych.  Używamy jedynie podstawowych poleceń APT, by
+wygenerować listę plików.
+</p>
+
+<pre>
+      # apt-get dist-upgrade 
+      [ Wybierz &quot;no&quot; po znaku zachęty, upewnij się, czy to właściwy wybór ]
+      # apt-get -qq --print-uris dist-upgrade &gt; uris
+      # awk '{print &quot;wget -O &quot; $2 &quot; &quot; $1}' &lt; uris &gt; /disc/wget-script
+</pre>
+
+<p>
+Można tu użyć także polecenia innego niż dist-upgrade, na przykład
+dselect-upgrade.
+</p>
+
+<p>
+Plik skryptu /disc/wget-script będzie teraz zawierać listę wywołań
+programu wget, niezbędnych do pobrania potrzebnych archiwów.  Skrypt ten
+należy uruchomić w bieżącym katalogu o punkcie montowania disc, tak aby
+zapisywał dane na tym dysku.
+</p>
+
+<p>
+Na oddalonym komputerze należy wykonać coś takiego
+</p>
+
+<pre>
+       # cd /disc
+       # sh -x ./wget-script
+       [ czekaj.. ]
+</pre>
+
+<p>
+Gdy archiwa zostaną pobrane i dysk wróci do komputera z Debianem,
+instalowanie można prowadzić dalej poleceniem:
+</p>
+
+<pre>
+       # apt-get -o dir::cache::archives=&quot;/disc/&quot; dist-upgrade
+</pre>
+
+<p>
+Które użyje pobranych uprzednio archiwów z dysku.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch2.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ 3 ]
+[ <a href="index.html">dalej</a> ]
+</p>
+
+<hr>
+
+<p>
+Używanie APT w trybie offline
+</p>
+
+<address>
+$Id: offline.sgml,v 1.8 2003/02/12 15:06:41 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

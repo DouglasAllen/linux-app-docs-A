@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Přizpůsobení rozložení obrazovky</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="ch02s04.html" title="Přizpůsobení aptitude"><link rel="prev" href="ch02s04s03.html" title="Přizpůsobení barvy textu a úprava stylů"><link rel="next" href="ch02s04s05.html" title="Konfigurační soubor"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s04s04.html#idp4564256" title="Prvky na obrazovce"><link rel="subsection" href="ch02s04s04.html#secWidgetPlacement" title="Umístění prvků na obrazovce"><link rel="subsection" href="ch02s04s04.html#idp4599648" title="Možnosti umístění prvků na obrazovce"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Přizpůsobení rozložení obrazovky</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04s03.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Přizpůsobení <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s04s05.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="section" title="Přizpůsobení rozložení obrazovky"><div class="titlepage"><div><div><h3 class="title"><a name="secDisplayLayout"></a>Přizpůsobení rozložení obrazovky</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s04s04.html#idp4564256">Prvky na obrazovce</a></span></dt><dt><span class="section"><a href="ch02s04s04.html#secWidgetPlacement">Umístění prvků na obrazovce</a></span></dt><dt><span class="section"><a href="ch02s04s04.html#idp4599648">Možnosti umístění prvků na obrazovce</a></span></dt></dl></div><p>
+
+V <span class="command"><strong>aptitude</strong></span> je možné přeskládat prvky na obrazovce pomocí úprav <a class="link" href="ch02s04s05.html" title="Konfigurační soubor">konfiguračního souboru</a>.
+
+</p><div class="section" title="Prvky na obrazovce"><div class="titlepage"><div><div><h4 class="title"><a name="idp4564256"></a>Prvky na obrazovce</h4></div></div></div><p>
+
+Rozložení obrazovky je uloženo v konfigurační skupině
+<code class="literal">Aptitude::UI::Default-Package-View</code> a skládá se ze
+seznamu definic grafických prvků:
+
+</p><pre class="synopsis"><em class="replaceable"><code>Název</code></em> <em class="replaceable"><code>typ</code></em> {
+  Row <em class="replaceable"><code>řádek</code></em>;
+  Column <em class="replaceable"><code>sloupec</code></em>;
+  Width <em class="replaceable"><code>šířka</code></em>;
+  Height <em class="replaceable"><code>výška</code></em>;
+
+  <em class="replaceable"><code>dodatečné volby...</code></em>
+};</pre><p>
+
+Tímto se vytvoří grafický prvek pojmenovaný
+<em class="replaceable"><code>Název</code></em>.  Položky <code class="literal"><a class="link" href="ch02s04s04.html#layoutRow">Row</a></code>, <code class="literal"><a class="link" href="ch02s04s04.html#layoutColumn">Column</a></code>, <code class="literal"><a class="link" href="ch02s04s04.html#layoutWidth">Width</a></code> a <code class="literal"><a class="link" href="ch02s04s04.html#layoutHeight">Height</a></code> jsou povinné a určují
+umístění prvku na obrazovce (viz <a class="link" href="ch02s04s04.html#secWidgetPlacement" title="Umístění prvků na obrazovce">podrobné vysvětlení</a> dále v textu).
+
+</p><p>
+
+Pro konkrétní příklady různých rozložení nahlédněte do definic <a class="link" href="ch02s04s06.html" title="Témata">témat</a> v souboru
+<code class="filename">/usr/share/aptitude/aptitude-defaults</code>.
+
+</p><p>
+
+K dispozici máte následující typy grafických prvků:
+
+</p><div class="variablelist"><dl><dt><a name="layoutDescription"></a><span class="term"><code class="literal">Description</code></span></dt><dd><p>
+
+Tento prvek obsahuje <span class="quote">„<span class="quote">informační oblast</span>“</span> (typicky popis
+vybraného balíku).
+
+  </p><p>
+
+Volbou <code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownKey">PopUpDownKey</a></code> můžete
+zadat název příkazu, kterým se prvek zobrazí nebo skryje. Například
+nastavením na hodnotu <code class="literal"><a class="link" href="ch02s04s02.html#keyShowHideDescription">ShowHideDescription</a></code>
+docílíte toho, že se prvek bude chovat jako standardní informační
+oblast. Volba <code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownKey">PopUpDownLinked</a></code>
+akceptuje název jiného elementu, se kterým se <span class="quote">„<span class="quote">sváže</span>“</span>. To
+znamená že, se element zobrazí nebo skryje podle toho, zda je vázaný
+element zobrazen nebo ne.
+
+  </p></dd><dt><span class="term"><code class="literal">MainWidget</code></span></dt><dd><p>
+
+Toto je oblast, ve které je umístěno <span class="quote">„<span class="quote">hlavní</span>“</span> zobrazení -
+typicky seznam balíků. Na obrazovce musí existovat právě jeden prvek
+<code class="literal">MainWidget</code> - ne více, ne méně.
+
+  </p></dd><dt><a name="layoutStatic"></a><span class="term"><code class="literal">Static</code></span></dt><dd><p>
+
+Oblast obrazovky, která zobrazuje nějaký text (může obsahovat
+i formátovací znaky popsané v <a class="xref" href="ch02s04s01.html#secDisplayFormat" title="Přizpůsobení zobrazení balíků">„Přizpůsobení zobrazení balíků“</a>). Text můžete zadat přímo volbou
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutColumns">Columns</a></code>, nebo
+ho můžete uložit do jiné konfigurační proměnné, jejíž název zadáte
+volbou <code class="literal"><a class="link" href="ch02s04s04.html#layoutColumnsCfg">ColumnsCfg</a></code>. Barva textu je
+určena volbou <code class="literal"><a class="link" href="ch02s04s04.html#layoutColor">Color</a></code>.
+
+  </p><p>
+
+Zobrazování a skrývání <code class="literal">static</code>kých položek se děje
+stejně jako u položek <code class="literal"><a class="link" href="ch02s04s04.html#layoutDescription">Description</a></code> volbami
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownKey">PopUpDownKey</a></code>
+a <code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownLinked">PopUpDownLinked</a></code>.
+
+  </p></dd></dl></div></div><div class="section" title="Umístění prvků na obrazovce"><div class="titlepage"><div><div><h4 class="title"><a name="secWidgetPlacement"></a>Umístění prvků na obrazovce</h4></div></div></div><p>
+
+Prvky jsou na obrazovce umístěny v <span class="quote">„<span class="quote">tabulce</span>“</span>. Horní levý
+roh prvku leží v buňce zadané <code class="literal"><a class="link" href="ch02s04s04.html#layoutRow">řádkem</a></code> a <code class="literal"><a class="link" href="ch02s04s04.html#layoutColumn">sloupcem</a></code> (obvykle na
+souřadnicích 0, 0, ale není to podmínkou). Šířka a výška prvku jsou
+zadány volbami <code class="literal"><a class="link" href="ch02s04s04.html#layoutWidth">šířka</a></code> a <code class="literal"><a class="link" href="ch02s04s04.html#layoutHeight">výška</a></code>.
+
+</p><p>
+
+Je pravděpodobné, že poté co jsou prvky připraveny, na obrazovce stále
+zůstává nevyužité místo. O zbylý vertikální prostor se podělí prvky,
+jež mají volbu <code class="literal"><a class="link" href="ch02s04s04.html#layoutRowExpand">RowExpand</a></code> nastavenou na
+hodnotu <code class="literal">true</code>. Obdobně se o volné horizontální místo
+podělí prvky s nastavenou proměnnou <code class="literal"><a class="link" href="ch02s04s04.html#layoutColExpand">ColExpand</a></code>.
+
+</p><p>
+
+V případě, že na obrazovce není dostatek místa, zmenší se všechny
+sloupce a řádky, jejichž <span class="emphasis"><em>každý</em></span> prvek má
+pravdivé hodnoty u proměnných
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutRowShrink">RowShrink</a></code>
+resp.
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutColShrink">ColShrink</a></code>.
+Pokud to nestačí, budou zmenšeny všechny řádky a sloupce tak, aby se
+celá tabulka vešla do dostupného místa.
+
+</p><p>
+
+Pokud prvek samotný není roztažen, ale jeho řádek nebo sloupec
+roztažen je, pak můžete určit, kam se má prvek zarovnat v rámci řádku
+nebo sloupce. To je určeno volbami <code class="literal"><a class="link" href="ch02s04s04.html#layoutRowAlign">RowAlign</a></code> a <code class="literal"><a class="link" href="ch02s04s04.html#layoutColAlign">ColAlign</a></code>, které mohou
+nabývat hodnot <code class="literal">Left</code> (vlevo),
+<code class="literal">Right</code> (vpravo), <code class="literal">Top</code> (nahoře),
+<code class="literal">Bottom</code> (dole) nebo <code class="literal">Center</code>
+(uprostřed).
+
+
+</p><p>
+
+Například následující konfigurační skupina vytvoří statický prvek
+nazvaný <span class="quote">„<span class="quote"><code class="literal">Hlavicka</code></span>“</span>, který je široký
+tři buňky a bude se rozpínat horizontálně, ale ne vertikálně. Má
+stejnou barvu jako ostatní řádky hlavičky  a používá standardní formát
+hlaviček:
+
+</p><pre class="screen">Hlavicka Static {
+  Row 0;
+  Column 0;
+  Width 3;
+  Height 1;
+
+  ColExpand true;
+  ColAlign Center;
+
+  RowAlign Center;
+
+  Color ScreenHeaderColor;
+  ColumnsCfg HEADER;
+};</pre></div><div class="section" title="Možnosti umístění prvků na obrazovce"><div class="titlepage"><div><div><h4 class="title"><a name="idp4599648"></a>Možnosti umístění prvků na obrazovce</h4></div></div></div><p>
+
+Pro prvky uživatelského rozhraní můžete použít následující volby:
+
+</p><div class="variablelist"><dl><dt><a name="layoutColAlign"></a><span class="term">
+    <code class="literal">ColAlign</code>
+    <em class="replaceable"><code>zarovnání</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+<em class="replaceable"><code>zarovnání</code></em> musí být jedno z
+<code class="literal">Left</code>, <code class="literal">Right</code> nebo
+<code class="literal">Center</code>. Pokud je řádek obsahující aktuální prvek
+uživatelského rozhraní širší než samotný prvek a
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutColExpand">ColExpand</a></code>
+má hodnotu <code class="literal">false</code>, bude prvek umístěn do řádku právě
+podle hodnoty <em class="replaceable"><code>zarovnání</code></em>.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota
+<code class="literal">Left</code>.
+
+  </p></dd><dt><a name="layoutColExpand"></a><span class="term">
+    <code class="literal">ColExpand</code>
+    <code class="literal">true</code>|<code class="literal">false;</code>
+  </span></dt><dd><p>
+
+Pokud má volba hodnotu <code class="literal">true</code>, pak sloupec obsahující
+tento prvek získá část neobsazeného horizontálního místa.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota
+<code class="literal">false</code>.
+
+  </p></dd><dt><a name="layoutColor"></a><span class="term">
+    <code class="literal">Color</code>
+    <em class="replaceable"><code>barva</code></em><code class="literal">;</code>
+   </span></dt><dd><p>
+
+Tato volba se vztahuje na <code class="literal"><a class="link" href="ch02s04s04.html#layoutStatic">Static</a></code>ké prvky.
+<em class="replaceable"><code>barva</code></em> je název barvy (např. <code class="literal"><a class="link" href="ch02s04s03.html#colorScreenStatusColor">ScreenStatusColor</a></code>),
+která se <span class="quote">„<span class="quote">implicitně</span>“</span> použije pro tento prvek
+uživatelského rozhraní.
+
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota <code class="literal"><a class="link" href="ch02s04s03.html#colorDefaultWidgetBackground">DefaultWidgetBackground</a></code>.
+
+  </p></dd><dt><a name="layoutColShrink"></a><span class="term">
+    <code class="literal">ColShrink</code>
+    <code class="literal">true</code>|<code class="literal">false;</code>
+  </span></dt><dd><p>
+
+Mají-li tuto volbu nastaveny všechny prvky ve sloupci na hodnotu
+<code class="literal">true</code> a nastane nedostatek horizontálního místa,
+sloupec se zmenší tak, aby se vešel do dostupného místa. Poznamenejme,
+že ke zmenšení sloupce může dojít, i když má
+<code class="literal">ColShrink</code> hodnotu <code class="literal">false</code>.  To
+nastane tehdy, kdy už není jiná možnost.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota
+<code class="literal">false</code>.
+
+  </p></dd><dt><a name="layoutColumn"></a><span class="term">
+    <code class="literal">Column</code>
+    <em class="replaceable"><code>sloupec</code></em><code class="literal">;</code>
+   </span></dt><dd><p>
+
+Zadá nejlevější <em class="replaceable"><code>sloupec</code></em>, který obsahuje
+tento prvek uživatelského rozhraní.
+
+  </p></dd><dt><a name="layoutColumns"></a><span class="term">
+    <code class="literal">Columns</code>
+    <em class="replaceable"><code>formát</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+Tato volba se vztahuje na <code class="literal"><a class="link" href="ch02s04s04.html#layoutStatic">Static</a></code>ké prvky, které
+nepoužívají volbu <code class="literal"><a class="link" href="ch02s04s04.html#layoutColumnsCfg">ColumnsCfg</a></code>.  Popis
+formátovacího řetězce naleznete v <a class="xref" href="ch02s04s01.html#secDisplayFormat" title="Přizpůsobení zobrazení balíků">„Přizpůsobení zobrazení balíků“</a>.
+
+  </p></dd><dt><a name="layoutColumnsCfg"></a><span class="term">
+    <code class="literal">ColumnsCfg</code>
+    <code class="literal">HEADER</code>|<code class="literal">STATUS</code>|<em class="replaceable"><code>název</code></em><code class="literal">;</code>
+    </span></dt><dd><p>
+
+Tato volba se vztahuje na <code class="literal"><a class="link" href="ch02s04s04.html#layoutStatic">Static</a></code>ké prvky. Nastaví formát
+aktuálního prvku na hodnotu jiné konfigurační proměnné. Podle hodnoty
+<code class="literal">HEADER</code> nebo <code class="literal">STATUS</code> se převezmou
+nastavení z <code class="literal"><a class="link" href="ch02s04s05.html#configPackage-Header-Format">Aptitude::UI::Package-Header-Format</a></code>
+nebo <code class="literal"><a class="link" href="ch02s04s05.html#configPackage-Status-Format">Aptitude::UI::Package-Status-Format</a></code>.
+Jinak se nastavení převezme z volby nazvané
+<em class="replaceable"><code>název</code></em>.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota z volby
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutColumns">Columns</a></code>.
+
+  </p></dd><dt><a name="layoutHeight"></a><span class="term">
+    <code class="literal">Height</code>
+    <em class="replaceable"><code>výška</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+Zadá <em class="replaceable"><code>výšku</code></em> prvku.
+
+  </p></dd><dt><a name="layoutPopUpDownKey"></a><span class="term">
+    <code class="literal">PopUpDownKey</code>
+    <em class="replaceable"><code>příkaz</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+Tato volba se vztahuje na prvky typu <code class="literal"><a class="link" href="ch02s04s04.html#layoutDescription">Description</a></code>
+a <code class="literal"><a class="link" href="ch02s04s04.html#layoutStatic">Static</a></code>.
+
+  </p><p>
+
+<em class="replaceable"><code>příkaz</code></em> je název klávesového příkazu
+(např. <code class="literal"><a class="link" href="ch02s04s02.html#keyShowHideDescription">ShowHideDescription</a></code>).
+Opakovaným stiskem klávesy se prvek zobrazí/skryje.
+
+  </p></dd><dt><a name="layoutPopUpDownLinked"></a><span class="term">
+    <code class="literal">PopUpDownLinked
+    <em class="replaceable"><code>prvek</code></em>;</code>
+  </span></dt><dd><p>
+
+Tato volba se vztahuje na prvky typu <code class="literal"><a class="link" href="ch02s04s04.html#layoutDescription">Description</a></code>
+a <code class="literal"><a class="link" href="ch02s04s04.html#layoutStatic">Static</a></code>.
+
+  </p><p>
+
+<em class="replaceable"><code>prvek</code></em> je název prvku uživatelského
+rozhraní. Když je <em class="replaceable"><code>prvek</code></em> zobrazen, je
+zobrazen i aktuální prvek. Analogicky, je-li
+<em class="replaceable"><code>prvek</code></em> skryt, je skryt i aktuální prvek.
+
+  </p></dd><dt><a name="layoutRow"></a><span class="term">
+    <code class="literal">Row</code>
+    <em class="replaceable"><code>řádek</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+Zadá nejhornější <em class="replaceable"><code>řádek</code></em>, který obsahuje
+tento prvek uživatelského rozhraní.
+
+  </p></dd><dt><a name="layoutRowAlign"></a><span class="term">
+    <code class="literal">RowAlign</code>
+    <em class="replaceable"><code>zarovnání</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+<em class="replaceable"><code>zarovnání</code></em> musí být jedno
+z <code class="literal">Top</code>, <code class="literal">Bottom</code> nebo
+<code class="literal">Center</code>. Pokud je řádek obsahující aktuální prvek
+uživatelského rozhraní vyšší než samotný prvek a <code class="literal"><a class="link" href="ch02s04s04.html#layoutRowExpand">RowExpand</a></code> má hodnotu
+<code class="literal">false</code>, bude prvek umístěn do řádku právě podle
+hodnoty <em class="replaceable"><code>zarovnání</code></em>.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota <code class="literal">Top</code>.
+
+  </p></dd><dt><a name="layoutRowExpand"></a><span class="term">
+    <code class="literal">RowExpand</code>
+    <code class="literal">true</code>|<code class="literal">false;</code>
+  </span></dt><dd><p>
+
+Pokud má volba hodnotu <code class="literal">true</code>, pak řádek obsahující
+tento prvek získá část neobsazeného vertikálního místa.
+
+  </p><p>
+
+Pokud volbu vynecháte, použije se výchozí hodnota
+<code class="literal">false</code>.
+
+  </p></dd><dt><a name="layoutRowShrink"></a><span class="term">
+    <code class="literal">RowShrink</code>
+    <code class="literal">true</code>|<code class="literal">false;</code>
+  </span></dt><dd><p>
+
+Mají-li tuto volbu nastaveny všechny prvky v řádku na hodnotu
+<code class="literal">true</code> a nastane nedostatek vertikálního místa, řádek
+se zmenší tak, aby se vešel do dostupného místa. Poznamenejme, že ke
+zmenšení řádku může dojít, i když má <code class="literal">RowShrink</code>
+hodnotu <code class="literal">false</code>.  To nastane tehdy, kdy už není jiná
+možnost.
+
+  </p><p>
+
+Pokud volbu vynecháte, implicitně se použije <code class="literal">false</code>.
+
+  </p></dd><dt><a name="layoutVisible"></a><span class="term">
+    <code class="literal">Visible</code>
+    <code class="literal">true</code>|<code class="literal">false;</code>
+  </span></dt><dd><p>
+
+Pokud má hodnotu <code class="literal">false</code>, bude tento prvek
+skryt. Pravděpodobně užitečné jen ve spojení s <code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownKey">PopUpDownKey</a></code> a/nebo
+<code class="literal"><a class="link" href="ch02s04s04.html#layoutPopUpDownLinked">PopUpDownLinked</a></code>.
+
+  </p><p>
+
+Pokud volbu vynecháte, implicitně se použije <code class="literal">true</code>.
+
+  </p></dd><dt><a name="layoutWidth"></a><span class="term">
+    <code class="literal">Width</code>
+    <em class="replaceable"><code>šířka</code></em><code class="literal">;</code>
+  </span></dt><dd><p>
+
+Zadá <em class="replaceable"><code>šířku</code></em> prvku.
+
+  </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04s03.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s04.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s04s05.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Přizpůsobení barvy textu a úprava stylů </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> Konfigurační soubor</td></tr></table></div></body></html>

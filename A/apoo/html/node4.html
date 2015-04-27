@@ -1,0 +1,530 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Apoo assembly language</TITLE>
+<META NAME="description" CONTENT="Apoo assembly language">
+<META NAME="keywords" CONTENT="apoo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="apoo.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="node3.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFF0" TEXT="DARKBLUE" LINK="RED" VLINK="DARKRED"
+  ALINK="#FF0000" ALINK="YELLOW">
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html119"
+  HREF="node5.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html117"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html111"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html120"
+  HREF="node5.html">Manipulation of activation records</A>
+<B> Up:</B> <A NAME="tex2html118"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html112"
+  HREF="node3.html">How to use</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><UL>
+<LI><A NAME="tex2html121"
+  HREF="node4.html#SECTION00031010000000000000">Memory Management</A>
+<LI><A NAME="tex2html122"
+  HREF="node4.html#SECTION00031020000000000000">Pseudo-instructions</A>
+<LI><A NAME="tex2html123"
+  HREF="node4.html#SECTION00031030000000000000">System Stack</A>
+<LI><A NAME="tex2html124"
+  HREF="node4.html#SECTION00031040000000000000">Instruction form</A>
+<LI><A NAME="tex2html125"
+  HREF="node4.html#SECTION00031050000000000000">Comments</A>
+<LI><A NAME="tex2html126"
+  HREF="node4.html#SECTION00031060000000000000">Basic Instruction Set</A>
+<LI><A NAME="tex2html127"
+  HREF="node4.html#SECTION00031070000000000000">Memory- mapped instructions</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html128"
+  HREF="node4.html#SECTION00031100000000000000">Examples</A>
+<UL>
+<LI><A NAME="tex2html129"
+  HREF="node4.html#SECTION00031110000000000000">Memory- mapped instructions</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION00031000000000000000"></A>
+<A NAME="sec:vpu"></A>
+<BR>
+<TT>Apoo</TT> assembly language
+</H2>
+<TT>Apoo</TT> has a set of general purpose 
+registers (32 by default), a data memory area, a program memory 
+area, a system stack and a program counter register.
+
+<P>
+All memory cells and registers have 32 bits.
+
+<P>
+Registers are named R0,R1,R2,R3,R4,R5,R6,R7,...
+
+<P>
+
+<H4><A NAME="SECTION00031010000000000000">
+Memory Management</A>
+</H4>
+
+<P>
+The size of the RAM is predefined (e.g. 1K) and divided into two
+areas: static memory and system stack.  The static memory, begins at
+address 0 and it is allocated when a <TT>Apoo</TT> program is loaded. Static
+memory cells can be reserved in in two ways, using the following
+pseudo-instructions:
+
+<P>
+
+<H4><A NAME="SECTION00031020000000000000">
+Pseudo-instructions</A>
+</H4>
+
+<P>
+ 
+<P>
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>&nbsp;</TD>
+<TH ALIGN="LEFT" VALIGN="TOP" WIDTH=170><SPAN  CLASS="textbf">Meaning</SPAN></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Label:&gt;</TT></TD>
+<TD ALIGN="LEFT"><TT>mem</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>n</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>reserves n memory addresses</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>Label:</TT></TD>
+<TD ALIGN="LEFT"><TT>const</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>n1</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT"><TT>const</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>n2</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>contents of memory
+address <TT>Label</TT> is <TT>n1</TT>, of Label+1 is <TT>n2</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>....</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>ni</TT> can be a character <TT>'c'</TT>.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Label:&gt;</TT></TD>
+<TD ALIGN="LEFT"><TT>equ</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>n</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>Allows a symbolic
+name for a number</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Label:&gt;</TT></TD>
+<TD ALIGN="LEFT"><TT>string</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170><TT>"seqNWSCharacteres"</TT></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=170>Allocates memory
+addresses and set them to the correspondent characters ASCII
+codes. The  characters cannot  be  whitespaces: use <code></code> for
+<TT>space</TT>, <code></code> for <TT>tab</TT> and <code></code> for <TT>newline</TT>.</TD>
+</TR>
+</TABLE>
+
+<P>
+<TT>Label</TT> is any string beginning with a letter and containing only letters
+and digits with the exception of legal register names. If exists, must
+begin in the first column of a line
+
+<P>
+<SPAN  CLASS="textbf">NOTE:</SPAN> Every memory address refered, must have been reserved by 
+one of the previous pseudo-instructions.
+
+<P>
+E.g. the instruction <TT>load 3 R2</TT>, will cause an <TT>Out of
+  Memory</TT> error, if at least <TT>mem 3</TT> or three <TT>const</TT>
+pseudo-instructions were not given...
+If a <TT>equ</TT> value is used as a memory address, that address must
+be already reserved or be a known memory-mapped instruction. The
+<TT>string</TT> argument must be quoted and is converted to a sequence of ascii
+codes ending with <TT>0</TT>.
+
+<P>
+
+<H4><A NAME="SECTION00031030000000000000">
+System Stack</A>
+</H4>
+
+<P>
+The system stack occupies the rest
+of the RAM (growing for higher addresses). Since <TT>Apoo</TT>version 3.0  it can be used in an
+advanced way to implement  activation records (see section <A HREF="node5.html#apooar">3.2</A>).
+
+<P>
+However in can be used in a simpler way to implement subroutines.  We can only push
+a value to the Stack and pop a value from it (the one in the
+top of the Stack).  It
+is used by  the instructions <TT>jsr</TT> and <TT>rtn</TT>. 
+
+<P>
+It can be manipulated by means of the <TT>push</TT> and <TT>pop</TT> instructions.
+
+<P>
+
+<H4><A NAME="SECTION00031040000000000000">
+Instruction form</A>
+</H4>
+
+<P>
+<PRE>
+&lt;Label:&gt; Operation &lt;Operand1&gt; &lt;Operand2&gt;
+</PRE>
+
+<P>
+<TT>Label</TT> is any string of letters or digits; if exists, must begin in the
+first column of a line
+
+<P>
+
+<H4><A NAME="SECTION00031050000000000000">
+Comments</A>
+</H4>
+
+<P>
+A line beginning with # will be ignored by the parser; so it can be
+used to write comments of the program
+
+<P>
+
+<H4><A NAME="SECTION00031060000000000000">
+Basic Instruction Set</A>
+</H4>
+ 
+<P>
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="LEFT">Operation</TD>
+<TD ALIGN="LEFT">Operand1</TD>
+<TD ALIGN="LEFT">Operand2</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>Meanning</TD>
+</TR>
+<TR><TD ALIGN="LEFT">load</TD>
+<TD ALIGN="LEFT">Mem</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>loads contents of memory 
+                                       address Mem into register Ri;
+                                       Mem can be a label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">loadn</TD>
+<TD ALIGN="LEFT">Num</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>loads number Num into register
+                                       Ri; Num can be a label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">loadi</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>loads contents of memory 
+                                       which address is the contents
+                                       of Ri into Rj (indirect load)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">store</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Mem</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stores contents of Ri at memory
+                                       address Mem; Mem can be a label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">storer</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stores contents of Ri into Rj</TD>
+</TR>
+<TR><TD ALIGN="LEFT">storei</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stores contents of Ri
+                                       into at  memory address, which is the
+                                       contents of Rj</TD>
+</TR>
+<TR><TD ALIGN="LEFT">add</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>add contents of register Ri to 
+                                       contents of register Rj, and 
+                                       stores into Rj (Rj=Ri+Rj)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">sub</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>subtracts contents of register
+                                       Rj from contents of register Rj
+                                       and stores into Rj (Rj=Ri-Rj)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">mul</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>multiplies  contents of register
+                                       Ri and contents of register
+                                       Rj, and stores into Rj (Rj=Ri*Rj)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">div</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stores into Rj the quotient of integer 
+                                       division of contents  register
+                                       Ri by the contents of register 
+                                       Rj, and stores into Rj (Rj=Ri/Rj)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">mod</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Rj</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stores into Rj the rest of integer 
+                                       division of contents of register
+                                       Ri by the contents of register 
+                                       Rj, and stores into Rj (Rj=Ri%Rj)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">zero</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>the contents of Ri becomes 0 (Ri=0)</TD>
+</TR>
+<TR><TD ALIGN="LEFT">inc</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>increments by 1 the contents of Ri</TD>
+</TR>
+<TR><TD ALIGN="LEFT">dec</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>decrements by 1 the contents of Ri</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jump</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>jumps to instruction address Addr;
+                                       Addr can be a Label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jzero</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>jumps to instruction address Addr,
+                                       if contents of Ri is zero;
+                                       Addr can be a Label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jpos</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>jumps to instruction address Addr,
+                                       if contents of Ri is positiv;
+                                       Addr can be a Label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jneg</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>jumps to instruction address Addr,
+                                       if contents of Ri is
+                                       negativ</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jnzero</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>jumps to instruction address Addr,
+                                       if contents of Ri is different
+                                       from zero;
+                                       Addr can be a Label</TD>
+</TR>
+<TR><TD ALIGN="LEFT">jsr</TD>
+<TD ALIGN="LEFT">Addr</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>pushes the PC into the stack and 
+                                       jumps to instruction address Addr</TD>
+</TR>
+<TR><TD ALIGN="LEFT">rtn</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>pops an address from the stack 
+                                       into the PC</TD>
+</TR>
+<TR><TD ALIGN="LEFT">push</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>pushes the contents of Ri into the 
+                                       system stack</TD>
+</TR>
+<TR><TD ALIGN="LEFT">pop</TD>
+<TD ALIGN="LEFT">Ri</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>pops at element from the system stack
+                                       into Ri</TD>
+</TR>
+<TR><TD ALIGN="LEFT">halt</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=227>stops execution; Every program
+                                       must have this instruction in order
+                                       to end properly; otherwise an
+                                       'Out of Program' error will occur</TD>
+</TR>
+</TABLE>
+
+<P>
+
+<H4><A NAME="SECTION00031070000000000000">
+Memory- mapped instructions</A>
+</H4>
+
+<P>
+<TT>Apoo</TT>  allows the configuration of a set of memory positions for
+special purposes. The memory values and its functionality are given as
+a parameter of the Apoo virtual machine. 
+The default values allow the simulation of input/output:
+
+<P>
+
+<P><P>
+<BR>
+
+<P>
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">Memory Position</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Load</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Store</SPAN></TH>
+</TR>
+<TR><TD ALIGN="CENTER">50000</TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>load  50000 Ri</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT">loads 0 in <TT>Ri</TT></TD>
+</TR>
+</TABLE></TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142><TT>store Ri 50000</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142>writes the character which ascii code is
+<TT>Ri%256</TT> in the Output Window (in graphical interface) or in stdout,
+in text mode.</TD>
+</TR>
+</TABLE></TD>
+</TR>
+<TR><TD ALIGN="CENTER">50001</TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142><TT>load  50001 Ri</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142>reads an integer and stores it in Ri</TD>
+</TR>
+</TABLE></TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142><TT>store Ri 50001</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142>writes the contents of Ri as an integer</TD>
+</TR>
+</TABLE></TD>
+</TR>
+<TR><TD ALIGN="CENTER">50010</TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142><TT>load  50010 Ri</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142>loads 0 in <TT>Ri</TT></TD>
+</TR>
+</TABLE></TD>
+<TD ALIGN="LEFT"><TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142><TT>store Ri 50010</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=142>writes a CR  in the Output Window (in graphical interface) or in stdout,
+in text mode.</TD>
+</TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+
+<P>
+
+<P>
+<BR>
+Here is an example:
+<DIV ALIGN="CENTER">
+</DIV>
+<P>
+<DIV ALIGN="CENTER"></DIV><PRE>
+	loadn	97	R0
+	store	R0	50000
+	store 	R0	50010
+	store	R0	50001
+	store	R0	50010
+	load	50001	R0
+	loadn	5	R1
+	add	R0	R1
+	store	R0	50001
+	store 	R0	50010
+	halt
+</PRE>
+<DIV ALIGN="CENTER">
+</DIV>
+<P>
+<DIV ALIGN="CENTER">
+</DIV>
+<H3><A NAME="SECTION00031100000000000000">
+Examples</A>
+</H3>
+
+<P>
+Some <TT>Apoo</TT> programs can be found <A NAME="tex2html11"
+  HREF="examples">here</A>
+<P>
+
+<H4><A NAME="SECTION00031110000000000000">
+Memory- mapped instructions</A>
+</H4>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html119"
+  HREF="node5.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html117"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html111"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html120"
+  HREF="node5.html">Manipulation of activation records</A>
+<B> Up:</B> <A NAME="tex2html118"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html112"
+  HREF="node3.html">How to use</A></DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<a href="http://www.ncc.up.pt/~rvr">Rogério Reis</a>,<a href="http://www.ncc.up.pt/~nam">Nelma Moreira</a> <I>2008-01-22</I>
+</ADDRESS>
+</BODY>
+</HTML>

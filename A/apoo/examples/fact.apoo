@@ -1,0 +1,25 @@
+#
+#	fact(n) if n==0 then 1 else fact(n-1)*n
+#
+n:	const	5
+fn:	mem	1
+	load n	r1
+	jsr fact
+	store r1	fn
+	halt
+
+fact:	jzero r1	fim
+	push r1
+	dec r1
+	jsr fact
+	pop  r2
+	mul  r2 r1
+	rtn
+fim:	loadn 1 r1
+	rtn		
+
+
+
+
+
+

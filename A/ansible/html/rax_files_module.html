@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rax_files - Manipulate Rackspace Cloud Files Containers &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="rax_files_objects - Upload, download, and delete objects in Rackspace Cloud Files" href="rax_files_objects_module.html" />
+    <link rel="prev" title="rax_facts - Gather facts for Rackspace Cloud Servers" href="rax_facts_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rax_files_objects_module.html" title="rax_files_objects - Upload, download, and delete objects in Rackspace Cloud Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rax_facts_module.html" title="rax_facts - Gather facts for Rackspace Cloud Servers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rax-files-manipulate-rackspace-cloud-files-containers">
+<span id="rax-files"></span><h1>rax_files - Manipulate Rackspace Cloud Files Containers<a class="headerlink" href="#rax-files-manipulate-rackspace-cloud-files-containers" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Paul Durivage</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.</span></p>
+<p>Manipulate Rackspace Cloud Files Containers</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>api_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace API key (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>clear_meta</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Optionally clear existing metadata when applying metadata to existing containers. Selecting this option is only appropriate when setting type=meta</td>
+</tr>
+        <tr>
+<td>container</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The container to use for container or metadata operations.</td>
+</tr>
+        <tr>
+<td>credentials</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>File to find the Rackspace credentials in (ignored if <em>api_key</em> and <em>username</em> are provided)</td>
+</tr>
+        <tr>
+<td>env</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Environment as configured in ~/.pyrax.cfg, see <a href='https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration'>https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration</a> (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>meta</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A hash of items to set as metadata values on a container</td>
+</tr>
+        <tr>
+<td>private</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Used to set a container as private, removing it from the CDN.  <b>Warning!</b> Private containers, if previously made public, can have live objects available until the TTL on cached objects expires</td>
+</tr>
+        <tr>
+<td>public</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Used to set a container as public, available via the Cloud Files CDN</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td>DFW</td>
+    <td><ul></ul></td>
+    <td>Region to create an instance in</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Indicate desired state of the resource</td>
+</tr>
+        <tr>
+<td>ttl</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>In seconds, set a container-wide TTL for all objects cached on CDN edge nodes. Setting a TTL is only appropriate for containers that are public</td>
+</tr>
+        <tr>
+<td>type</td>
+<td>no</td>
+<td>file</td>
+    <td><ul><li>file</li><li>meta</li></ul></td>
+    <td>Type of object to do work on, i.e. metadata object or a container object</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace username (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>verify_ssl</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Whether or not to require SSL validation of API endpoints (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>web_error</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Sets an object to be presented as the HTTP error page when accessed by the CDN URL</td>
+</tr>
+        <tr>
+<td>web_index</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Sets an object to be presented as the HTTP index page when accessed by the CDN URL</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires pyrax</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- name: "Test Cloud Files Containers"
+  hosts: local
+  gather_facts: no
+  tasks:
+    - name: "List all containers"
+      rax_files: state=list
+
+    - name: "Create container called 'mycontainer'"
+      rax_files: container=mycontainer
+
+    - name: "Create container 'mycontainer2' with metadata"
+      rax_files:
+        container: mycontainer2
+        meta:
+          key: value
+          file_for: someuser@example.com
+
+    - name: "Set a container's web index page"
+      rax_files: container=mycontainer web_index=index.html
+
+    - name: "Set a container's web error page"
+      rax_files: container=mycontainer web_error=error.html
+
+    - name: "Make container public"
+      rax_files: container=mycontainer public=yes
+
+    - name: "Make container public with a 24 hour TTL"
+      rax_files: container=mycontainer public=yes ttl=86400
+
+    - name: "Make container private"
+      rax_files: container=mycontainer private=yes
+
+- name: "Test Cloud Files Containers Metadata Storage"
+  hosts: local
+  gather_facts: no
+  tasks:
+    - name: "Get mycontainer2 metadata"
+      rax_files:
+        container: mycontainer2
+        type: meta
+
+    - name: "Set mycontainer2 metadata"
+      rax_files:
+        container: mycontainer2
+        type: meta
+        meta:
+          uploaded_by: someuser@example.com
+
+    - name: "Remove mycontainer2 metadata"
+      rax_files:
+        container: "mycontainer2"
+        type: meta
+        state: absent
+        meta:
+          key: ""
+          file_for: ""</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following environment variables can be used, <tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt>, <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt>, <tt class="docutils literal"><span class="pre">RAX_REGION</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt> and <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt> points to a credentials file appropriate for pyrax. See <a class="reference external" href="https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating">https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt> and <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt> obviate the use of a credentials file</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_REGION</span></tt> defines a Rackspace Public Cloud region (DFW, ORD, LON, ...)</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rax_files - Manipulate Rackspace Cloud Files Containers</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rax_facts_module.html"
+                        title="previous chapter">rax_facts - Gather facts for Rackspace Cloud Servers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rax_files_objects_module.html"
+                        title="next chapter">rax_files_objects - Upload, download, and delete objects in Rackspace Cloud Files</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rax_files_objects_module.html" title="rax_files_objects - Upload, download, and delete objects in Rackspace Cloud Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rax_facts_module.html" title="rax_facts - Gather facts for Rackspace Cloud Servers"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

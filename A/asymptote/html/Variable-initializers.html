@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Variable initializers - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Files.html#Files" title="Files">
+<link rel="next" href="Structures.html#Structures" title="Structures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Variable-initializers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Structures.html#Structures">Structures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Files.html#Files">Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">6.7 Variable initializers</h3>
+
+<p><a name="index-variable-initializers-561"></a><a name="index-g_t_0040code_007boperator-init_007d-562"></a><a name="index-initializers-563"></a>
+A variable can be assigned a value when it is declared, as in
+<code>int x=3;</code> where the variable <code>x</code> is assigned the value <code>3</code>. 
+As well as literal constants such as <code>3</code>, arbitary expressions can be used
+as initializers, as in <code>real x=2*sin(pi/2);</code>.
+
+   <p>A variable is not added to the namespace until after the initializer is
+evaluated, so for example, in
+<pre class="verbatim">int x=2;
+int x=5*x;
+</pre>
+the <code>x</code> in the initializer on the second line refers to the variable
+<code>x</code> declared on the first line.  The second line, then, declares a variable
+<code>x</code> shadowing the original <code>x</code> and initializes it to the value
+<code>10</code>.
+
+   <p>Variables of most types can be declared without an explicit initializer and they
+will be initialized by the default initializer of that type:
+
+     <ul>
+<li>Variables of the numeric types <code>int</code>, <code>real</code>, and <code>pair</code>
+are all initialized to zero; variables of type <code>triple</code> are
+initialized to <code>O=(0,0,0)</code>. 
+<li><code>boolean</code> variables are initialized to <code>false</code>. 
+<li><code>string</code> variables are initialized to the empty string. 
+<li><code>transform</code> variables are initialized to the identity transformation. 
+<li><code>path</code> and <code>guide</code> variables are initialized to
+<code>nullpath</code>. 
+<li><code>pen</code> variables are initialized to the default pen. 
+<li><code>frame</code> and <code>picture</code> variables are initialized to empty
+frames and pictures, respectively. 
+<li><code>file</code> variables are initialized to <code>null</code>. 
+</ul>
+
+   <p>The default initializers for user-defined array, structure, and function types
+are explained in their respective sections.  Some types, such as
+<code>code</code>, do not have default initializers.  When a variable of such
+a type is introduced, the user must initialize it by explicitly giving
+it a value.
+
+   <p>The default initializer for any type <code>T</code> can be redeclared by defining the
+function <code>T operator init()</code>.  For instance, <code>int</code> variables are
+usually initialized to zero, but in
+<pre class="verbatim">int operator init() {
+  return 3;
+}
+int y;
+</pre>
+
+<p class="noindent">the variable <code>y</code> is initialized to <code>3</code>.  This example was given for
+illustrative purposes; redeclaring the initializers of built-in types is not
+recommended. Typically, <code>operator init</code> is used to define sensible
+defaults for user-defined types.
+
+   <p><a name="index-g_t_0040code_007bvar_007d-564"></a>The special type <code>var</code> may be used to infer the type of a variable from
+its initializer.  If the initializer is an expression of a unique type, then
+the variable will be defined with that type.  For instance,
+<pre class="verbatim">var x=5;
+var y=4.3;
+var reddash=red+dashed;
+</pre>
+is equivalent to
+<pre class="verbatim">int x=5;
+real y=4.3;
+pen reddash=red+dashed;
+</pre>
+
+   <p><code>var</code> may also be used with the extended <code>for</code> loop syntax.
+
+<pre class="verbatim">int[] a = {1,2,3};
+for (var x : a)
+  write(x);
+</pre>
+
+   </body></html>
+

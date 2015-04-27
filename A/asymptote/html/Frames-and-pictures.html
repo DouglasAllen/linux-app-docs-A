@@ -1,0 +1,395 @@
+<html lang="en">
+<head>
+<title>Frames and pictures - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Transforms.html#Transforms" title="Transforms">
+<link rel="next" href="Files.html#Files" title="Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Frames-and-pictures"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Files.html#Files">Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Transforms.html#Transforms">Transforms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">6.5 Frames and pictures</h3>
+
+     <dl>
+<dt><code>frame</code><dd><a name="index-g_t_0040code_007bframe_007d-445"></a><a name="index-g_t_0040code_007bnewframe_007d-446"></a><a name="index-g_t_0040code_007bempty_007d-447"></a><a name="index-g_t_0040code_007berase_007d-448"></a><a name="index-g_t_0040code_007bmin_007d-449"></a><a name="index-g_t_0040code_007bmax_007d-450"></a>Frames are canvases for drawing in <code>PostScript</code> coordinates. While working
+with frames directly is occasionally necessary for constructing deferred
+drawing routines, pictures are usually more convenient to work with. 
+The implicit initializer for frames is <code>newframe</code>. The function
+<code>bool empty(frame f)</code> returns <code>true</code> only if the frame <code>f</code>
+is empty. A frame may be erased with the <code>erase(frame)</code> routine. 
+The functions <code>pair min(frame)</code> and <code>pair max(frame)</code>
+return the (left,bottom) and (right,top) coordinates of the frame
+bounding box, respectively. The contents of frame <code>src</code> may be
+appended to frame <code>dest</code> with the command
+<pre class="verbatim">     void add(frame dest, frame src);
+</pre>
+or prepended with
+<pre class="verbatim">     void prepend(frame dest, frame src);
+</pre>
+A frame obtained by aligning frame <code>f</code> in the direction
+<code>align</code>, in a manner analogous to the <code>align</code> argument of
+<code>label</code> (see <a href="label.html#label">label</a>), is returned by
+<pre class="verbatim">     frame align(frame f, pair align);
+</pre>
+
+     <p><a name="index-g_t_0040code_007bbox_007d-451"></a><a name="index-g_t_0040code_007bellipse_007d-452"></a><a name="envelope"></a><a name="index-g_t_0040code_007benvelope_007d-453"></a>To draw or fill a box or ellipse around a label or frame and return the
+boundary as a path, use one of the predefined <code>envelope</code> routines
+<pre class="verbatim">     path box(frame f, Label L="", real xmargin=0,
+              real ymargin=xmargin, pen p=currentpen,
+              filltype filltype=NoFill, bool above=true);
+     path roundbox(frame f, Label L="", real xmargin=0,
+                   real ymargin=xmargin, pen p=currentpen,
+                   filltype filltype=NoFill, bool above=true);
+     path ellipse(frame f, Label L="", real xmargin=0,
+                  real ymargin=xmargin, pen p=currentpen,
+                  filltype filltype=NoFill, bool above=true);
+</pre>
+
+     <br><dt><code>picture</code><dd><a name="index-g_t_0040code_007bpicture_007d-454"></a>Pictures are high-level structures (see <a href="Structures.html#Structures">Structures</a>) defined in
+the module <code>plain</code> that provide canvases for drawing in user coordinates. 
+The default picture is called <code>currentpicture</code>. A new picture
+can be created like this:
+<pre class="verbatim">     picture pic;
+</pre>
+     Anonymous pictures can be made by the expression <code>new picture</code>.
+
+     <p>The <code>size</code> routine specifies the dimensions of the desired picture:
+
+     <p><a name="size"></a><a name="index-g_t_0040code_007bsize_007d-455"></a><pre class="verbatim">     void size(picture pic=currentpicture, real x, real y=x,
+               bool keepAspect=Aspect);
+</pre>
+
+     <p>If the <code>x</code> and <code>y</code> sizes are both 0, user coordinates will be
+interpreted as <code>PostScript</code> coordinates. In this case, the transform
+mapping <code>pic</code> to the final output frame is <code>identity()</code>.
+
+     <p>If exactly one of <code>x</code> or <code>y</code> is 0, no size restriction
+is imposed in that direction; it will be scaled the same as the other
+direction.
+
+     <p><a name="index-g_t_0040code_007bkeepAspect_007d-456"></a><a name="index-g_t_0040code_007bAspect_007d-457"></a>If <code>keepAspect</code> is set to <code>Aspect</code> or <code>true</code>,
+the picture will be scaled with its aspect ratio preserved such that
+the final width is no more than <code>x</code> and the final height is
+no more than <code>y</code>.
+
+     <p><a name="index-g_t_0040code_007bkeepAspect_007d-458"></a><a name="index-g_t_0040code_007bIgnoreAspect_007d-459"></a>If <code>keepAspect</code> is set to <code>IgnoreAspect</code> or <code>false</code>,
+the picture will be scaled in both directions so that the final width
+is <code>x</code> and the height is <code>y</code>.
+
+     <p>To make the user coordinates of picture <code>pic</code>
+represent multiples of <code>x</code> units in the x direction and
+<code>y</code> units in the y direction, use
+<a name="unitsize"></a><a name="index-g_t_0040code_007bunitsize_007d-460"></a><pre class="verbatim">     void unitsize(picture pic=currentpicture, real x, real y=x);
+</pre>
+When nonzero, these <code>x</code> and <code>y</code> values override the
+corresponding size parameters of picture <code>pic</code>.
+
+     <p>The routine
+<a name="index-g_t_0040code_007bsize_007d-461"></a><pre class="verbatim">     void size(picture pic=currentpicture, real xsize, real ysize,
+               pair min, pair max);
+</pre>
+forces the final picture scaling to map the user coordinates
+<code>box(min,max)</code> to a region of width <code>xsize</code> and height <code>ysize</code>
+(when these parameters are nonzero).
+
+     <p>Alternatively, calling the routine
+<a name="index-g_t_0040code_007bfixedscaling_007d-462"></a><pre class="verbatim">     transform fixedscaling(picture pic=currentpicture, pair min,
+                            pair max, pen p=nullpen, bool warn=false);
+</pre>
+will cause picture <code>pic</code> to use a fixed scaling to map user
+coordinates in <code>box(min,max)</code> to the (already specified) picture size,
+taking account of the width of pen <code>p</code>. A warning will be issued if
+the final picture exceeds the specified size.
+
+     <p>A picture <code>pic</code> can be fit to a frame and output to a file
+<code>prefix</code>.<code>format</code> using image format <code>format</code>
+by calling the <code>shipout</code> function:
+<a name="shipout"></a><a name="index-g_t_0040code_007bshipout_007d-463"></a><a name="index-g_t_0040code_007boutprefix_007d-464"></a><pre class="verbatim">     void shipout(string prefix=defaultfilename, picture pic=currentpicture,
+                  orientation orientation=orientation,
+                  string format="", bool wait=false, bool view=true,
+                  string options="", string script="",
+                  light light=currentlight, projection P=currentprojection)
+</pre>
+     The default output format, <code>PostScript</code>, may be changed
+with the <code>-f</code> or <code>-tex</code> command-line options. 
+The <code>options</code>, <code>script</code>, and <code>projection</code> parameters
+are only relevant for 3D pictures. If <code>defaultfilename</code> is an
+empty string, the prefix <code>outprefix()</code> will be used.
+
+     <p>A <code>shipout()</code> command is added implicitly at file exit if no
+previous <code>shipout</code> commands have been executed. 
+<a name="index-g_t_0040code_007borientation_007d-465"></a><a name="index-g_t_0040code_007bPortrait_007d-466"></a><a name="index-g_t_0040code_007bLandscape_007d-467"></a><a name="index-g_t_0040code_007bUpsideDown_007d-468"></a>The default page orientation is <code>Portrait</code>; this may be modified
+by changing the variable <code>orientation</code>. To output in landscape
+mode, simply set the variable <code>orientation=Landscape</code> or issue
+the command
+<pre class="verbatim">     shipout(Landscape);
+</pre>
+
+     <p><a name="index-g_t_0040code_007bSeascape_007d-469"></a>To rotate the page by -90 degrees, use the orientation <code>Seascape</code>. 
+<a name="index-g_t_0040code_007bUpsideDown_007d-470"></a>The orientation <code>UpsideDown</code> rotates the page by 180 degrees.
+
+     <p><a name="index-subpictures-471"></a><a name="index-g_t_0040code_007bfit_007d-472"></a>A picture <code>pic</code> can be explicitly fit to a frame by calling
+<pre class="verbatim">     frame pic.fit(real xsize=pic.xsize, real ysize=pic.ysize,
+                   bool keepAspect=pic.keepAspect);
+</pre>
+The default size and aspect ratio settings are those given to the
+<code>size</code> command (which default to <code>0</code>, <code>0</code>, and
+<code>true</code>, respectively). 
+<a name="index-g_t_0040code_007bcalculateTransform_007d-473"></a>The transformation that would currently be used to fit a picture
+<code>pic</code> to a frame is returned by the member function
+<code>pic.calculateTransform()</code>.
+
+     <p>In certain cases (e.g. 2D graphs) where only an approximate size
+estimate for <code>pic</code> is available, the picture fitting routine
+<pre class="verbatim">     frame pic.scale(real xsize=this.xsize, real ysize=this.ysize,
+                     bool keepAspect=this.keepAspect);
+</pre>
+(which scales the resulting frame, including labels and fixed-size
+objects) will enforce perfect compliance with the requested size
+specification, but should not normally be required.
+
+     <p><a name="index-g_t_0040code_007bbox_007d-474"></a>To draw a bounding box with margins around a picture, fit the
+picture to a frame using the function
+<pre class="verbatim">     frame bbox(picture pic=currentpicture, real xmargin=0,
+                real ymargin=xmargin, pen p=currentpen,
+                filltype filltype=NoFill);
+</pre>
+<a name="filltype"></a>Here <code>filltype</code> specifies one of the following fill types:
+          
+<a name="index-g_t_0040code_007bFillDraw_007d-475"></a>
+<dl><dt><code>FillDraw</code><dd>Fill the interior and draw the boundary.
+
+          <br><dt><code>FillDraw(real xmargin=0, real ymargin=xmargin, pen fillpen=nullpen,</code><dd>               <code>pen drawpen=nullpen)</code>
+<a name="index-g_t_0040code_007bnullpen_007d-476"></a>If <code>fillpen</code> is <code>nullpen</code>, fill with the drawing pen;
+otherwise fill with pen <code>fillpen</code>. 
+If <code>drawpen</code> is <code>nullpen</code>, draw the boundary with <code>fillpen</code>;
+otherwise with <code>drawpen</code>. An optional margin of
+<code>xmargin</code> and <code>ymargin</code> can be specified.
+
+          <p><a name="index-g_t_0040code_007bFill_007d-477"></a><br><dt><code>Fill</code><dd>Fill the interior.
+
+          <p><a name="index-g_t_0040code_007bnullpen_007d-478"></a><br><dt><code>Fill(real xmargin=0, real ymargin=xmargin, pen p=nullpen)</code><dd>If <code>p</code> is <code>nullpen</code>, fill with the drawing pen;
+otherwise fill with pen <code>p</code>. An optional margin of
+<code>xmargin</code> and <code>ymargin</code> can be specified.
+
+          <p><a name="index-g_t_0040code_007bNoFill_007d-479"></a><br><dt><code>NoFill</code><dd>Do not fill.
+
+          <br><dt><code>Draw</code><dd>Draw only the boundary.
+
+          <p><a name="index-g_t_0040code_007bDraw_007d-480"></a><br><dt><code>Draw(real xmargin=0, real ymargin=xmargin, pen p=nullpen)</code><dd>If <code>p</code> is <code>nullpen</code>, draw the boundary with the drawing pen;
+otherwise draw with pen <code>p</code>. An optional margin of
+<code>xmargin</code> and <code>ymargin</code> can be specified.
+
+          <p><a name="index-g_t_0040code_007bUnFill_007d-481"></a><br><dt><code>UnFill</code><dd>Clip the region.
+
+          <p><a name="index-g_t_0040code_007bUnFill_007d-482"></a><br><dt><code>UnFill(real xmargin=0, real ymargin=xmargin)</code><dd>Clip the region and surrounding margins <code>xmargin</code> and <code>ymargin</code>.
+
+          <p><a name="index-g_t_0040code_007bRadialShade_007d-483"></a><br><dt><code>RadialShade(pen penc, pen penr)</code><dd>Fill varying radially from <code>penc</code> at the center of the bounding
+box to <code>penr</code> at the edge.
+
+          <p><a name="index-g_t_0040code_007bRadialShadeDraw_007d-484"></a><br><dt><code>RadialShadeDraw(real xmargin=0, real ymargin=xmargin, pen penc,</code><dd>                      <code>pen penr, pen drawpen=nullpen)</code>
+Fill with RadialShade and draw the boundary.
+
+     </dl>
+
+     <p><a name="index-bounding-box-485"></a><a name="index-background-color-486"></a>For example, to draw a bounding box around a picture with a 0.25 cm
+margin and output the resulting frame, use the command:
+<pre class="verbatim">     shipout(bbox(0.25cm));
+</pre>
+A <code>picture</code> may be fit to a frame with the background color
+pen <code>p</code>, using the function <code>bbox(p,Fill)</code>.
+
+     <p>The functions
+<pre class="verbatim">     pair min(picture pic, user=false);
+     pair max(picture pic, user=false);
+     pair size(picture pic, user=false);
+</pre>
+calculate the bounds that picture <code>pic</code> would
+have if it were currently fit to a frame using its default size specification. 
+If <code>user</code> is <code>false</code> the returned value is in
+<code>PostScript</code> coordinates, otherwise it is in user coordinates.
+
+     <p>The function
+<pre class="verbatim">     pair point(picture pic=currentpicture, pair dir, bool user=true);
+</pre>
+is a convenient way of determining the point on the bounding box of
+<code>pic</code> in the direction <code>dir</code> relative to its center, ignoring
+the contributions from fixed-size objects (such as labels and arrowheads). 
+If <code>user</code> is <code>true</code> the returned value is in user coordinates,
+otherwise it is in <code>PostScript</code> coordinates.
+
+     <p>The function
+<pre class="verbatim">     pair truepoint(picture pic=currentpicture, pair dir, bool user=true);
+</pre>
+is identical to <code>point</code>, except that it also accounts for
+fixed-size objects, using the scaling transform that picture <code>pic</code>
+would have if currently fit to a frame using its default size
+specification. If <code>user</code> is <code>true</code> the returned value is in
+user coordinates, otherwise it is in <code>PostScript</code> coordinates.
+
+     <p><a name="add"></a>Sometimes it is useful to draw objects on separate pictures and add one
+picture to another using the <code>add</code> function:
+<a name="index-g_t_0040code_007badd_007d-487"></a><pre class="verbatim">     void add(picture src, bool group=true,
+              filltype filltype=NoFill, bool above=true);
+     void add(picture dest, picture src, bool group=true,
+              filltype filltype=NoFill, bool above=true);
+</pre>
+     The first example adds <code>src</code> to <code>currentpicture</code>; the second
+one adds <code>src</code> to <code>dest</code>. 
+The <code>group</code> option specifies whether or not the graphical user
+interface <code>xasy</code> should treat all of the elements of <code>src</code>
+as a single entity (see <a href="GUI.html#GUI">GUI</a>), <code>filltype</code> requests optional
+background filling or clipping, and <code>above</code> specifies
+whether to add <code>src</code> above or below existing objects.
+
+     <p>There are also routines to add a picture or frame <code>src</code> specified
+in postscript coordinates to another picture <code>dest</code> (or
+<code>currentpicture</code>) about the user coordinate
+<code>position</code>:
+<a name="add-about"></a><a name="index-g_t_0040code_007badd_007d-488"></a><a name="index-picture-alignment-489"></a><pre class="verbatim">     void add(picture src, pair position, bool group=true,
+              filltype filltype=NoFill, bool above=true);
+     void add(picture dest, picture src, pair position,
+              bool group=true, filltype filltype=NoFill, bool above=true);
+     void add(picture dest=currentpicture, frame src, pair position=0,
+              bool group=true, filltype filltype=NoFill, bool above=true);
+     void add(picture dest=currentpicture, frame src, pair position,
+              pair align, bool group=true, filltype filltype=NoFill,
+              bool above=true);
+</pre>
+
+     <p>The optional <code>align</code> argument in the last form specifies a
+direction to use for aligning the frame, in a manner analogous to the
+<code>align</code> argument of <code>label</code> (see <a href="label.html#label">label</a>). However, one key
+difference is that when <code>align</code> is not specified, labels are
+centered, whereas frames and pictures are aligned so that their origin is
+at <code>position</code>. Illustrations of frame alignment can be found in
+the examples <a href="errorbars.html#errorbars">errorbars</a> and <a href="image.html#image">image</a>. If you want to align three
+or more subpictures, group them two at a time:
+
+     <pre class="verbatim">     picture pic1;
+     real size=50;
+     size(pic1,size);
+     fill(pic1,(0,0)--(50,100)--(100,0)--cycle,red);
+     
+     picture pic2;
+     size(pic2,size);
+     fill(pic2,unitcircle,green);
+     
+     picture pic3;
+     size(pic3,size);
+     fill(pic3,unitsquare,blue);
+     
+     picture pic;
+     add(pic,pic1.fit(),(0,0),N);
+     add(pic,pic2.fit(),(0,0),10S);
+     
+     add(pic.fit(),(0,0),N);
+     add(pic3.fit(),(0,0),10S);
+     
+</pre>
+     <pre class="sp">
+     
+     </pre>
+     <div align="center"><img src="subpictures.png" alt="subpictures.png"></div>
+
+     <p>Alternatively, one can use <code>attach</code> to automatically increase the
+size of picture <code>dest</code> to accommodate adding a frame <code>src</code>
+about the user coordinate <code>position</code>:
+<pre class="verbatim">     void attach(picture dest=currentpicture, frame src,
+                      pair position=0, bool group=true,
+                      filltype filltype=NoFill, bool above=true);
+     void attach(picture dest=currentpicture, frame src,
+                      pair position, pair align, bool group=true,
+                      filltype filltype=NoFill, bool above=true);
+</pre>
+
+     <p><a name="index-g_t_0040code_007berase_007d-490"></a>To erase the contents of a picture (but not the size specification), use
+the function
+<pre class="verbatim">     void erase(picture pic=currentpicture);
+</pre>
+
+     <p><a name="index-g_t_0040code_007bsave_007d-491"></a>To save a snapshot of <code>currentpicture</code>, <code>currentpen</code>, and
+<code>currentprojection</code>, use the function <code>save()</code>.
+
+     <p><a name="index-g_t_0040code_007brestore_007d-492"></a>To restore a snapshot of <code>currentpicture</code>, <code>currentpen</code>, and
+<code>currentprojection</code>, use the function <code>restore()</code>.
+
+     <p>Many further examples of picture and frame operations are provided in
+the base module <code>plain</code>.
+
+     <p><a name="index-verbatim-493"></a><a name="index-g_t_0040code_007bpostscript_007d-494"></a>It is possible to insert verbatim <code>PostScript</code> commands in a picture with
+one of the routines
+<pre class="verbatim">     void postscript(picture pic=currentpicture, string s);
+     void postscript(picture pic=currentpicture, string s, pair min,
+                     pair max)
+</pre>
+Here <code>min</code> and <code>max</code> can be used to specify explicit bounds
+associated with the resulting <code>PostScript</code> code.
+
+     <p><a name="tex"></a><a name="index-g_t_0040code_007btex_007d-495"></a>Verbatim TeX commands can be inserted in the intermediate
+<code>LaTeX</code> output file with one of the functions
+<pre class="verbatim">     void tex(picture pic=currentpicture, string s);
+     void tex(picture pic=currentpicture, string s, pair min, pair max)
+</pre>
+Here <code>min</code> and <code>max</code> can be used to specify explicit bounds
+associated with the resulting TeX code.
+
+     <p>To issue a global TeX command (such as a TeX macro definition) in the
+TeX preamble (valid for the remainder of the top-level module) use:
+<a name="index-g_t_0040code_007btexpreamble_007d-496"></a><pre class="verbatim">     void texpreamble(string s);
+</pre>
+
+     <p>The TeX environment can be reset to its initial state, clearing all
+macro definitions, with the function
+<a name="index-g_t_0040code_007btexreset_007d-497"></a><pre class="verbatim">     void texreset();
+</pre>
+
+     <p><a name="index-g_t_0040code_007busepackage_007d-498"></a>The routine
+<pre class="verbatim">     void usepackage(string s, string options="");
+</pre>
+provides a convenient abbreviation for
+<pre class="verbatim">     texpreamble("\usepackage["+options+"]{"+s+"}"); 
+</pre>
+     that can be used for importing <code>LaTeX</code> packages.
+
+</dl>
+
+   </body></html>
+

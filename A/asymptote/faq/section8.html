@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head><title>
+Asymptote FAQ - Section 8
+</title>
+<link rev="made" href="mailto:">
+<link rel="Contents" href="index.html">
+<link rel="Start" href="index.html">
+<link rel="Next" href="section9.html"><link rel="Previous" href="section7.html"><link rel="Bookmark" title="Asymptote FAQ" href="index.html">
+</head><body text="#000000" bgcolor="#FFFFFF"><h1>
+Asymptote FAQ - Section 8 <br>
+Questions about differences between Asymptote and
+MetaPost
+</h1>
+
+<ul>
+<li><a href="#interp" rel=subdocument>Q8.1. What is the equivalent of the MetaPost c[a,b] interpolation operator?
+</a>
+<li><a href="#automaticscaling" rel=subdocument>Q8.2. How does picture scaling differ in Asymptote and
+MetaPost?</a>
+<li><a href="#manualscaling" rel=subdocument>Q8.3. How can I avoid automatic scaling of a picture?</a>
+<li><a href="#mp3dots" rel=subdocument>Q8.4. What is the equivalent of MetaPost ... command?</a>
+<li><a href="#mppickup" rel=subdocument>Q8.5. What is the equivalent of the MetaPost pickup
+command?</a>
+<li><a href="#whatever" rel=subdocument>Q8.6. What is the equivalent of the MetaPost whatever
+command?</a>
+<li><a href="#lray" rel=subdocument>Q8.7. What is the equivalent for the MetaPost command for
+<code>lray - horiz*v - verti*u = whatever*(LightSource -
+R)</code>, a system of three linear equations for three unknowns:
+<code>horiz, verti, whatever</code>?</a>
+<li><a href="#unitsizes" rel=subdocument>Q8.8. In MetaPost, it is possible to have a drawing remain the same size in
+different pictures by defining a unit <code>u</code> and explicitly multiply all the coordinates by
+<code>u</code>. Is there a better way to do this in Asymptote?</a>
+<li><a href="#tiles" rel=subdocument>Q8.9. In MetaPost, one could produce tiling pictures by generating a
+picture, and then clipping the picture to a rectangle of fixed
+dimensions around the center of the picture. How is that done in
+Asymptote?</a>
+</ul><hr>
+
+<h2><A name="interp">
+Question 8.1.  What is the equivalent of the MetaPost c[a,b]
+interpolation operator? 
+</A></h2>
+
+<pre>
+interp(a,b,c);
+</pre>
+
+<h2><A name="automaticscaling">
+Question 8.2.  How does picture scaling differ in Asymptote and
+MetaPost?
+</A></h2>
+
+Asymptote includes an optional facility to do automatic scaling of
+pictures to achieve a given overall picture size, whereas Metapost only
+supports manual scaling. Asymptote defers drawing of objects drawn to pictures and
+distinguishes between true-size objects and objects that should scale
+with the picture size. The resulting linear programming problem is solved
+via the Simplex method.  
+<p>
+See the <A href="http://asymptote.sourceforge.net/gallery/dimension.asy">http://asymptote.sourceforge.net/gallery/dimension.asy</A> example for an example of how deferred drawing is
+used to accomodate both user and true-size (PostScript) coordinates. 
+
+<h2><A name="manualscaling">
+Question 8.3.  How can I avoid automatic scaling of a
+picture?
+</A></h2>
+
+If you really like Metapost-style manual (hard-wired) scaling either: 
+
+<p>
+(i) use the default size(0,0) for the entire picture and do all of the
+ scaling by hand, just like in MetaPost; 
+<p>
+(ii) draw to a separate picture pic and add(pic.fit());
+
+<p>
+(iii) use frames.  
+<h2><A name="mp3dots">
+Question 8.4.  What is the equivalent of MetaPost ...
+command?
+</A></h2>
+
+The connector <code>::</code> is a macro for tension atleast 1: <pre>
+size(100);
+pair z0=(0,0);
+pair z1=(1,0.25);
+pair z2=(2,0);
+draw(z0{up}::z1{right}::z2{down});
+</pre>
+
+<h2><A name="mppickup">
+Question 8.5.  What is the equivalent of the MetaPost pickup
+command?
+</A></h2>
+
+Just say, for example: <pre>
+currentpen=red;
+</pre>
+
+<h2><A name="whatever">
+Question 8.6.  What is the equivalent of the MetaPost whatever
+command?
+</A></h2>
+
+Asymptote does not implicitly solve linear equations and therefore
+does not have the notion of a <code>whatever</code> unknown. Such a facility could certainly be added (perhaps using the notation
+<code>?=</code> since <code>=</code> means assignment).  However, the most common uses of <code>whatever</code> in MetaPost are covered by functions like <code>extension</code> in <code>math.asy</code>:  <pre>
+pair extension(pair P, pair Q, pair p, pair q);
+</pre>
+this returns the intersection point of the extensions of the line
+segments  <code>PQ</code> and <code>pq</code>. We find using routines like <code>extension</code> more explicit and less confusing to new users. But we
+could be persuaded to add something similar if someone can justify the
+need. In the meantime, one can always use the explicit built-in linear
+solver <code>solve</code> (see <A href="http://asymptote.sourceforge.net/doc/solve.html">http://asymptote.sourceforge.net/doc/solve.html</A>), which uses LU decomposition.  
+<h2><A name="lray">
+Question 8.7.  What is the equivalent for the MetaPost command for
+<code>lray - horiz*v - verti*u = whatever*(LightSource -
+R)</code>, a system of three linear equations for three unknowns:
+<code>horiz, verti, whatever</code>?
+</A></h2>
+
+Since <code>horiz*v+verti*u</code> spans a plane, you could use <pre>
+real intersect(vector P, vector Q, vector n, vector Z);
+</pre>
+to find the intersection time for the line 
+<code>lray-whatever*(LightSource - R)</code> and then extract the three desired values from there. (You'll still
+need to use the built-in explicit linear solver to solve a 2x2 system to get 
+<code>horiz</code> and <code>verti</code>.) 
+<h2><A name="unitsizes">
+Question 8.8.  In MetaPost, it is possible to have a drawing remain
+the same size in different pictures by defining a unit
+<code>u</code> and explicitly multiply all the coordinates by
+<code>u</code>. Is there a better way to do this in Asymptote?
+</A></h2>
+
+Yes, Asymptote has a better way: you definitely don't want to manually
+scale  all of your coordinates. To make the user coordinates represent
+multiples of exactly <code>1cm</code>: <pre>
+unitsize(1cm);
+draw(unitsquare);
+</pre>
+One can also specify different x and y unit sizes:
+<pre>
+unitsize(x=1cm,y=2cm);
+draw(unitsquare);
+</pre>
+Another way is to draw your fixed size object to a frame and add it to
+currentpicture like this: <pre>
+path p=(0,0)--(1,0);
+frame object;
+draw(object,scale(100)*p);
+ 
+add(object);
+add(object,(0,-10));
+</pre>
+To understand the difference between frames and pictures, try this: 
+<pre>
+size(300,300);
+ 
+path p=(0,0)--(1,0);
+picture object;
+draw(object,scale(100)*p);
+ 
+add(object);
+add(object,(0,-10)); // Adds truesize object to currentpicture 
+</pre>
+
+<h2><A name="tiles">
+Question 8.9.  In MetaPost, one could produce tiling pictures by
+generating a picture, and then clipping the picture to a rectangle of
+fixed dimensions around the center of the picture. How is that done in
+Asymptote?
+</A></h2>
+
+If you are using currentpicture the way one would in MetaPost (drawing
+in  raw PostScript coordinates), you can simply do something like: 
+<pre>
+fill((0,0)--(100,100)--(200,0)--cycle);
+ 
+pair center(picture pic=currentpicture) {return 0.5*(pic.min()+pic.max());} 
+ 
+real height=100;
+real width=100;
+pair delta=0.5(width,height);
+pair c=center();
+clip(box(c-delta,c+delta));
+</pre>
+However, drawing in PostScript coordinates is often inconvenient.
+Here's the  Asymptote way of doing the same thing, using deferred drawing: 
+<pre>
+size(200,100);
+fill((0,0)--(1,1)--(2,0)--cycle);
+ 
+void clip(picture pic=currentpicture, real width, real height) 
+{
+  pic.clip(new void (frame f, transform) { 
+    pair center=0.5(min(f)+max(f));
+    pair delta=0.5(width,height);
+    clip(f,box(center-delta,center+delta));
+  });
+} 
+ 
+clip(100,100);
+</pre>
+See also the discussion of tilings in the documentation: 
+<A href="http://asymptote.sourceforge.net/doc/Pens.html">http://asymptote.sourceforge.net/doc/Pens.html</A>.  <hr>
+Next: <a href="section9.html" rel=precedes>Questions about output</a>.<br>
+Back: <a href="section7.html" rev=precedes>Questions about programming</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+<A href="http://asymptote.sourceforge.net">Asymptote</A> 
+- 26 August 2012
+</address><br>
+Extracted from Asymptote Frequently Asked Questions,
+Copyright &copy; 2012 .
+</body></html>

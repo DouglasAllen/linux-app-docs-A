@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>quantum_router - Create or Remove router from openstack &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="quantum_router_gateway - set/unset a gateway interface for the router with the specified external network" href="quantum_router_gateway_module.html" />
+    <link rel="prev" title="quantum_network - Creates/Removes networks from OpenStack" href="quantum_network_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quantum_router_gateway_module.html" title="quantum_router_gateway - set/unset a gateway interface for the router with the specified external network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quantum_network_module.html" title="quantum_network - Creates/Removes networks from OpenStack"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="quantum-router-create-or-remove-router-from-openstack">
+<span id="quantum-router"></span><h1>quantum_router - Create or Remove router from openstack<a class="headerlink" href="#quantum-router-create-or-remove-router-from-openstack" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.2.</span></p>
+<p>Create or Delete routers from OpenStack</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>admin_state_up</td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td>desired admin state of the created router .</td>
+</tr>
+        <tr>
+<td>auth_url</td>
+<td>no</td>
+<td>http://127.0.0.1:35357/v2.0/</td>
+    <td><ul></ul></td>
+    <td>The keystone url for authentication</td>
+</tr>
+        <tr>
+<td>login_password</td>
+<td>yes</td>
+<td>yes</td>
+    <td><ul></ul></td>
+    <td>Password of login user</td>
+</tr>
+        <tr>
+<td>login_tenant_name</td>
+<td>yes</td>
+<td>yes</td>
+    <td><ul></ul></td>
+    <td>The tenant name of the login user</td>
+</tr>
+        <tr>
+<td>login_username</td>
+<td>yes</td>
+<td>admin</td>
+    <td><ul></ul></td>
+    <td>login username to authenticate to keystone</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Name to be give to the router</td>
+</tr>
+        <tr>
+<td>region_name</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Name of the region</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Indicate desired state of the resource</td>
+</tr>
+        <tr>
+<td>tenant_name</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Name of the tenant for which the router has to be created, if none router would be created for the login tenant.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires quantumclient</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires neutronclient</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires keystoneclient</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Creates a router for tenant admin
+- quantum_router: state=present
+                login_username=admin
+                login_password=admin
+                login_tenant_name=admin
+                name=router1"</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">quantum_router - Create or Remove router from openstack</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="quantum_network_module.html"
+                        title="previous chapter">quantum_network - Creates/Removes networks from OpenStack</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quantum_router_gateway_module.html"
+                        title="next chapter">quantum_router_gateway - set/unset a gateway interface for the router with the specified external network</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="quantum_router_gateway_module.html" title="quantum_router_gateway - set/unset a gateway interface for the router with the specified external network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quantum_network_module.html" title="quantum_network - Creates/Removes networks from OpenStack"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ec2_key - maintain an ec2 key pair. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="ec2_lc - Create or delete AWS Autoscaling Launch Configurations" href="ec2_lc_module.html" />
+    <link rel="prev" title="ec2_group - maintain an ec2 VPC security group." href="ec2_group_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ec2_lc_module.html" title="ec2_lc - Create or delete AWS Autoscaling Launch Configurations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ec2_group_module.html" title="ec2_group - maintain an ec2 VPC security group."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ec2-key-maintain-an-ec2-key-pair">
+<span id="ec2-key"></span><h1>ec2_key - maintain an ec2 key pair.<a class="headerlink" href="#ec2-key-maintain-an-ec2-key-pair" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Vincent Viallet</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.</span></p>
+<p>maintains ec2 key pairs. This module has a dependency on python-boto &gt;= 2.5</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>aws_access_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>aws_secret_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>ec2_url</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Url to use to connect to EC2 or your Eucalyptus cloud (by default the module will use EC2 endpoints).  Must be specified if region is not used. If not set then the value of the EC2_URL environment variable, if any, is used</td>
+</tr>
+        <tr>
+<td>key_material</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Public key material.</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name of the key pair.</td>
+</tr>
+        <tr>
+<td>profile</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>uses a boto profile. Only works with boto &gt;= 2.24.0 (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>the EC2 region to use</td>
+</tr>
+        <tr>
+<td>security_token</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>security token to authenticate against AWS (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul></ul></td>
+    <td>create or delete keypair</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>When set to "no", SSL certificates will not be validated for boto versions &gt;= 2.6.0. (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>wait</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Wait for the specified action to complete before returning. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>wait_timeout</td>
+<td>no</td>
+<td>300</td>
+    <td><ul></ul></td>
+    <td>How long before wait gives up, in seconds (added in Ansible 1.6)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Note: None of these examples set aws_access_key, aws_secret_key, or region.
+# It is assumed that their matching environment variables are set.
+
+# Creates a new ec2 key pair named `example` if not present, returns generated
+# private key
+- name: example ec2 key
+  local_action:
+    module: ec2_key
+    name: example
+
+# Creates a new ec2 key pair named `example` if not present using provided key
+# material
+- name: example2 ec2 key
+  local_action:
+    module: ec2_key
+    name: example2
+    key_material: 'ssh-rsa AAAAxyz...== me@example.com'
+    state: present
+
+# Creates a new ec2 key pair named `example` if not present using provided key
+# material
+- name: example3 ec2 key
+  local_action:
+    module: ec2_key
+    name: example3
+    key_material: "{{ item }}"
+  with_file: /path/to/public_key.id_rsa.pub
+
+# Removes ec2 key pair by name
+- name: remove example key
+  local_action:
+    module: ec2_key
+    name: example
+    state: absent</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following environment variables can be used <tt class="docutils literal"><span class="pre">AWS_ACCESS_KEY</span></tt> or <tt class="docutils literal"><span class="pre">EC2_ACCESS_KEY</span></tt> or <tt class="docutils literal"><span class="pre">AWS_ACCESS_KEY_ID</span></tt>, <tt class="docutils literal"><span class="pre">AWS_SECRET_KEY</span></tt> or <tt class="docutils literal"><span class="pre">EC2_SECRET_KEY</span></tt> or <tt class="docutils literal"><span class="pre">AWS_SECRET_ACCESS_KEY</span></tt>, <tt class="docutils literal"><span class="pre">AWS_REGION</span></tt> or <tt class="docutils literal"><span class="pre">EC2_REGION</span></tt>, <tt class="docutils literal"><span class="pre">AWS_SECURITY_TOKEN</span></tt></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ansible uses the boto configuration file (typically ~/.boto) if no credentials are provided. See <a class="reference external" href="http://boto.readthedocs.org/en/latest/boto_config_tut.html">http://boto.readthedocs.org/en/latest/boto_config_tut.html</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">AWS_REGION</span></tt> or <tt class="docutils literal"><span class="pre">EC2_REGION</span></tt> can be typically be used to specify the AWS region, when required, but this can also be configured in the boto config file</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ec2_key - maintain an ec2 key pair.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ec2_group_module.html"
+                        title="previous chapter">ec2_group - maintain an ec2 VPC security group.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ec2_lc_module.html"
+                        title="next chapter">ec2_lc - Create or delete AWS Autoscaling Launch Configurations</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ec2_lc_module.html" title="ec2_lc - Create or delete AWS Autoscaling Launch Configurations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ec2_group_module.html" title="ec2_group - maintain an ec2 VPC security group."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

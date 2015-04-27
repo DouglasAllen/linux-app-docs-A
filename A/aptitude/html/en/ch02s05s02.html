@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Customizing keybindings</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s05.html" title="Customizing aptitude"><link rel="prev" href="ch02s05s01.html" title="Customizing the package list"><link rel="next" href="ch02s05s03.html" title="Customizing text colors and styles"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Customizing keybindings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05s01.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Customizing <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s05s03.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Customizing keybindings"><div class="titlepage"><div><div><h3 class="title"><a name="secKeybindings"></a>Customizing keybindings</h3></div></div></div><p>
+	  The keys used to activate commands in <span class="command"><strong>aptitude</strong></span> can be
+	  customized in the <a class="link" href="ch02s05s05.html" title="Configuration file reference">configuration file</a>.  Every
+	  command has an associated configuration variable under
+	  <code class="literal">Aptitude::UI::Keybindings</code>; to change the
+	  keystroke bound to a command, just set the corresponding
+	  variable to the keystroke.  For instance, to make the key
+	  <span class="keycap"><strong>s</strong></span> perform a search, set
+	  <code class="literal">Aptitude::UI::Keybindings::Search</code> to
+	  <span class="quote">“<span class="quote"><code class="literal">s</code></span>”</span>.  You can require the Control key to
+	  be pressed by placing <span class="quote">“<span class="quote"><code class="literal">C-</code></span>”</span> in front of
+	  the key: for instance, using <span class="quote">“<span class="quote"><code class="literal">C-s</code></span>”</span>
+	  instead of <span class="quote">“<span class="quote"><code class="literal">s</code></span>”</span> would bind Search to
+	  <span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>s</strong></span>
+	  instead of <span class="keycap"><strong>s</strong></span>.  Finally, you can bind a
+	  command to several keys at once using a comma-separated
+	  list: for instance, using <span class="quote">“<span class="quote"><code class="literal">s,C-s</code></span>”</span> would
+	  cause both <span class="keycap"><strong>s</strong></span> and <span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>s</strong></span>
+	  to perform a search.
+	</p><p>
+	  The following commands can be bound to keys by setting the
+	  variable
+	  <code class="literal">Aptitude::UI::Keybindings::<em class="replaceable"><code>command</code></em></code>,
+	  where <em class="replaceable"><code>command</code></em> is the name of the
+	  command to be bound:
+	</p><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Command</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">ApplySolution</code></td><td><code class="literal">!</code></td><td>
+		  If packages are broken and <span class="command"><strong>aptitude</strong></span> has suggested
+		  a solution to the problem, immediately apply the
+		  solution.
+		</td></tr><tr class="oddrow"><td><code class="literal">Begin</code></td><td><code class="literal">home,C-a</code></td><td>
+		  Move to the beginning of the current display: to the
+		  top of a list, or to the left of a text entry field.
+		</td></tr><tr><td><code class="literal">BugReport</code></td><td><code class="literal">B</code></td><td>
+		  Reports a bug in the currently selected package,
+		  using <span class="command"><strong>reportbug</strong></span>.
+		</td></tr><tr class="oddrow"><td><code class="literal">Cancel</code></td><td><code class="literal">C-g,escape,C-[</code></td><td>
+		  Cancels the current interaction: for instance,
+		  discards a dialog box or deactivates the menu.
+		</td></tr><tr><td><code class="literal">Changelog</code></td><td><code class="literal">C</code></td><td>
+		  Displays the <code class="filename">changelog.Debian</code>
+		  of the currently selected package or package
+		  version.
+		</td></tr><tr class="oddrow"><td><code class="literal">ChangePkgTreeGrouping</code></td><td><code class="literal">G</code></td><td>
+		  Changes the <a class="link" href="ch02s05s01.html#secGroupingPolicy" title="Customizing the package hierarchy">grouping policy</a>
+		  of the currently active package list.
+		</td></tr><tr><td><code class="literal">ChangePkgTreeLimit</code></td><td><code class="literal">l</code></td><td>
+		  Changes the <a class="link" href="ch02s04.html" title="Search patterns">limit</a> of the
+		  currently active package list.
+		</td></tr><tr class="oddrow"><td><code class="literal">ChangePkgTreeSorting</code></td><td><code class="literal">S</code></td><td>
+		  Changes the <a class="link" href="ch02s05s01.html#secSortingPolicy" title="Customizing how packages are sorted">sorting
+		  policy</a> of the currently active package list.
+		</td></tr><tr><td><code class="literal">ClearAuto</code></td><td><code class="literal">m</code></td><td>
+		  Marks the currently selected package as having been
+		  manually installed.
+		</td></tr><tr class="oddrow"><td><code class="literal">CollapseAll</code></td><td><code class="literal">]</code></td><td>
+		  Collapses the selected tree and all its children in
+		  a hierarchical list.
+		</td></tr><tr><td><code class="literal">CollapseTree</code></td><td>No binding</td><td>
+		  Collapses the selected tree in a hierarchical list.
+		</td></tr><tr class="oddrow"><td><code class="literal">Commit</code></td><td><code class="literal">N</code></td><td>
+		  In the hierarchy editor, stores the hierarchy location
+		  of the current package and proceeds to the next
+		  package.
+		</td></tr><tr><td><code class="literal">Confirm</code></td><td><code class="literal">enter</code></td><td>
+		  In dialog boxes, this is equivalent to pressing
+		  <span class="quote">“<span class="quote"><span class="guilabel">Ok</span></span>”</span>; when
+		  interacting with a status-line multiple choice
+		  question, it chooses the default option.
+		</td></tr><tr class="oddrow"><td><code class="literal">Cycle</code></td><td><code class="literal">tab</code></td><td>
+		  Switches the keyboard focus to the next <span class="quote">“<span class="quote">widget</span>”</span>.
+		</td></tr><tr><td><code class="literal">CycleNext</code></td><td><code class="literal">f6</code></td><td>
+		  Switches to the next active view.
+		</td></tr><tr class="oddrow"><td><code class="literal">CycleOrder</code></td><td><code class="literal">o</code></td><td>
+		  Cycles through predefined arrangements of the display.
+		</td></tr><tr><td><code class="literal">CyclePrev</code></td><td><code class="literal">f7</code></td><td>
+		  Switches to the previous active view.
+		</td></tr><tr class="oddrow"><td><code class="literal">DelBOL</code></td><td><code class="literal">C-u</code></td><td>
+		  Deletes all text between the cursor and the
+		  beginning of the line.
+		</td></tr><tr><td><code class="literal">DelBack</code></td><td><code class="literal">backspace,C-h</code></td><td>
+		  Deletes the previous character when entering text.
+		</td></tr><tr class="oddrow"><td><code class="literal">DelEOL</code></td><td><code class="literal">C-k</code></td><td>
+		  Deletes all text from the cursor to the end of the
+		  line.
+		</td></tr><tr><td><code class="literal">DelForward</code></td><td><code class="literal">delete,C-d</code></td><td>
+		  Deletes the character under the cursor when entering text.
+		</td></tr><tr class="oddrow"><td><code class="literal">Dependencies</code></td><td><code class="literal">d</code></td><td>
+		  Displays the dependencies of the currently selected
+		  package.
+		</td></tr><tr><td><code class="literal">DescriptionCycle</code></td><td><code class="literal">i</code></td><td>
+		  When browsing the package list, cycles through the
+		  available views in the information area.
+		</td></tr><tr class="oddrow"><td><code class="literal">DescriptionDown</code></td><td><code class="literal">z</code></td><td>
+		  When browsing the package list, scrolls the
+		  information area down one line.
+		</td></tr><tr><td><code class="literal">DescriptionUp</code></td><td><code class="literal">a</code></td><td>
+		  When browsing the package list, scrolls the
+		  information area up one line.
+		</td></tr><tr class="oddrow"><td><code class="literal">DoInstallRun</code></td><td><code class="literal">g</code></td><td>
+		  If not in a preview screen, display the preview
+		  screen
+		  <sup>[<a name="idp4273896" href="#ftn.idp4273896" class="footnote">a</a>]</sup>; if in a preview screen, perform an
+		  <a class="link" href="ch02s02s04.html" title="Downloading, installing, and removing packages">install run.</a>
+		</td></tr><tr><td><code class="literal">Down</code></td><td><code class="literal">down,j</code></td><td>
+		  Moves down: for instance, scrolls a text display
+		  down or selects the next item in a list.
+		</td></tr><tr class="oddrow"><td><code class="literal">DpkgReconfigure</code></td><td><code class="literal">R</code></td><td>
+		  Runs <span class="quote">“<span class="quote">dpkg-reconfigure</span>”</span> on the currently selected
+		  package.
+		</td></tr><tr><td><code class="literal">DumpResolver</code></td><td><code class="literal">*</code></td><td>
+		  If packages are broken, writes the current state of
+		  the problem-resolver to a file (for debugging
+		  purposes).
+		</td></tr><tr class="oddrow"><td><code class="literal">EditHier</code></td><td><code class="literal">E</code></td><td>
+		  Opens the hierarchy editor.
+		</td></tr><tr><td><code class="literal">End</code></td><td><code class="literal">end,C-e</code></td><td>
+		  Move to the end of the current display: to the
+		  bottom of a list, or to the right of a text entry
+		  field.
+		</td></tr><tr class="oddrow"><td><code class="literal">ExamineSolution</code></td><td><code class="literal">e</code></td><td>
+		  If some packages are broken and <span class="command"><strong>aptitude</strong></span> has
+		  suggested a solution, display a dialog box with a
+		  detailed description of the proposed solution.
+		</td></tr><tr><td><code class="literal">ExpandAll</code></td><td><code class="literal">[</code></td><td>
+		  Expands the selected tree and all its children in a
+		  hierarchical list.
+		</td></tr><tr class="oddrow"><td><code class="literal">ExpandTree</code></td><td>No binding</td><td>
+		  Expands the selected tree in a hierarchical list.
+		</td></tr><tr><td><code class="literal">FirstSolution</code></td><td><code class="literal">&lt;</code></td><td>
+		  Select the first solution produced by the problem
+		  resolver.
+		</td></tr><tr class="oddrow"><td><code class="literal">ForbidUpgrade</code></td><td><code class="literal">F</code></td><td>
+		  <a class="link" href="ch02s02s03.html#pkgCmdForbid">Forbids</a> a
+		  package from being upgraded to the currently
+		  available version (or a particular version).
+		</td></tr><tr><td><code class="literal">ForgetNewPackages</code></td><td><code class="literal">f</code></td><td>
+		  Discards all information about which packages are
+		  <span class="quote">“<span class="quote">new</span>”</span> (causes the list of <span class="quote">“<span class="quote">new</span>”</span> packages to become
+		  empty).
+		</td></tr><tr class="oddrow"><td><code class="literal">Help</code></td><td><code class="literal">?</code></td><td>
+		  Displays the on-line help screen.
+		</td></tr><tr><td><code class="literal">HistoryNext</code></td><td><code class="literal">down,C-n</code></td><td>
+		  In a line editor with history, moves forwards in
+		  the history.
+		</td></tr><tr class="oddrow"><td><code class="literal">HistoryPrev</code></td><td><code class="literal">up,C-p</code></td><td>
+		  In a line editor with history, moves backwards in
+		  the history.
+		</td></tr><tr><td><code class="literal">Hold</code></td><td><code class="literal">=</code></td><td>
+		  Places a package on <a class="link" href="ch02s02s03.html#pkgCmdHold">hold</a>.
+		</td></tr><tr class="oddrow"><td><code class="literal">Install</code></td><td><code class="literal">+</code></td><td>
+		  Flags a package for <a class="link" href="ch02s02s03.html#pkgCmdInstall">installation</a>.
+		</td></tr><tr><td><code class="literal">InstallSingle</code></td><td><code class="literal">I</code></td><td>
+		  Marks a single package for installation; all other
+		  packages are kept at their current version.
+		</td></tr><tr class="oddrow"><td><code class="literal">Keep</code></td><td><code class="literal">:</code></td><td>
+		  <a class="link" href="ch02s02s03.html#pkgCmdKeep">Cancels</a> all
+		  installation or removal requests and all holds for a
+		  package.
+		</td></tr><tr><td><code class="literal">LastSolution</code></td><td><code class="literal">&lt;</code></td><td>
+		  Select the last solution produced by the problem
+		  resolver.
+		</td></tr><tr class="oddrow"><td><code class="literal">Left</code></td><td><code class="literal">left,h</code></td><td>
+		  Moves left: for instance, moves one menu to the left
+		  in the menu bar, or moves the cursor to the left
+		  when editing text.
+		</td></tr><tr><td><code class="literal">LevelDown</code></td><td><code class="literal">J</code></td><td>
+		  In a hierarchical list, selects the next sibling of
+		  the currently selected item (the next item at the
+		  same level with the same parent).
+		</td></tr><tr class="oddrow"><td><code class="literal">LevelUp</code></td><td><code class="literal">K</code></td><td>
+		  In a hierarchical list, selects the previous sibling
+		  of the currently selected item (the previous item at
+		  the same level with the same parent).
+		</td></tr><tr><td><code class="literal">MarkUpgradable</code></td><td><code class="literal">U</code></td><td>
+		  Attempts to upgrade all packages which are not held
+		  back or forbidden from upgrading.
+		</td></tr><tr class="oddrow"><td><code class="literal">MineFlagSquare</code></td><td><code class="literal">f</code></td><td>
+		  In <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a>, places
+		  or removes a flag on a square.
+		</td></tr><tr><td><code class="literal">MineLoadGame</code></td><td><code class="literal">L</code></td><td>
+		  Loads a <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a> game.
+		</td></tr><tr class="oddrow"><td><code class="literal">MineSaveGame</code></td><td><code class="literal">S</code></td><td>
+		  Saves a <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a> game.
+		</td></tr><tr><td><code class="literal">MineSweepSquare</code></td><td>No binding</td><td>
+		  Sweeps around the current square in <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a>.
+		</td></tr><tr class="oddrow"><td><code class="literal">MineUncoverSquare</code></td><td>No binding</td><td>
+		  Uncovers the current square in <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a>
+		</td></tr><tr><td><code class="literal">MineUncoverSweepSquare</code></td><td><code class="literal">enter</code></td><td>
+		  Uncovers the current square in <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a> if it is
+		  covered; otherwise, sweeps around it.
+		</td></tr><tr class="oddrow"><td><code class="literal">NextPage</code></td><td><code class="literal">pagedown,C-f</code></td><td>
+		  Moves the current display one page forward.
+		</td></tr><tr><td><code class="literal">NextSolution</code></td><td><code class="literal">.</code></td><td>
+		  Advance the dependency resolver to the next solution.
+		</td></tr><tr class="oddrow"><td><code class="literal">No</code></td><td><code class="literal">n</code><sup>[<a href="ch02s05s02.html#ftn.footnoteYesNoLocale" class="footnoteref">b</a>]</sup></td><td>
+		  This key will select the <span class="quote">“<span class="quote">no</span>”</span> button in
+		  yes/no dialog boxes.
+		</td></tr><tr><td><code class="literal">Parent</code></td><td><code class="literal">^</code></td><td>
+		  Selects the parent of the selected item in a
+		  hierarchical list.
+		</td></tr><tr class="oddrow"><td><code class="literal">PrevPage</code></td><td><code class="literal">pageup,C-b</code></td><td>
+		  Moves the current display one page backward.
+		</td></tr><tr><td><code class="literal">PrevSolution</code></td><td><code class="literal">,</code></td><td>
+		  Return the dependency resolver to the previous solution.
+		</td></tr><tr class="oddrow"><td><code class="literal">Purge</code></td><td><code class="literal">_</code></td><td>
+		  Flags the currently selected package to be <a class="link" href="ch02s02s03.html#pkgCmdPurge">purged</a>.
+		</td></tr><tr><td><code class="literal">PushButton</code></td><td><code class="literal">space,enter</code></td><td>
+		  Activates the currently selected button, or toggles
+		  a checkbox.
+		</td></tr><tr class="oddrow"><td><code class="literal">Quit</code></td><td><code class="literal">q</code></td><td>
+		  Close the current view.
+		</td></tr><tr><td><code class="literal">QuitProgram</code></td><td><code class="literal">Q</code></td><td>
+		  Quit the entire program.
+		</td></tr><tr class="oddrow"><td><code class="literal">RejectBreakHolds</code></td><td> </td><td>
+		  Reject all resolver actions that would break a hold;
+		  equivalent to <a class="link" href="ch02s01s02.html#menuResolverRejectBreakHolds"><span class="guimenu">Resolver</span> → <span class="guimenuitem">Reject Breaking Holds</span></a>.
+		</td></tr><tr><td><code class="literal">Refresh</code></td><td><code class="literal">C-l</code></td><td>
+		  Redraws the screen from scratch.
+		</td></tr><tr class="oddrow"><td><code class="literal">Remove</code></td><td><code class="literal">-</code></td><td>
+		  Flags a package for <a class="link" href="ch02s02s03.html#pkgCmdRemove">removal</a>.
+		</td></tr><tr><td><code class="literal">ReInstall</code></td><td><code class="literal">L</code></td><td>
+		  Flags the currently selected package to be
+		  <a class="link" href="ch02s02s03.html#pkgCmdReinstall">reinstalled</a>.
+		</td></tr><tr class="oddrow"><td><code class="literal">RepeatSearchBack</code></td><td><code class="literal">N</code></td><td>
+		  Repeats the last search, but searches in the
+		  opposite direction.
+		</td></tr><tr><td><code class="literal">ReSearch</code></td><td><code class="literal">n</code></td><td>
+		  Repeats the last search.
+		</td></tr><tr class="oddrow"><td><code class="literal">ReverseDependencies</code></td><td><code class="literal">r</code></td><td>
+		  Displays packages which depend upon the currently
+		  selected package.
+		</td></tr><tr><td><code class="literal">Right</code></td><td><code class="literal">right,l</code></td><td>
+		  Moves right: for instance, moves one menu to the
+		  right in the menu bar, or moves the cursor to the
+		  right when editing text.
+		</td></tr><tr class="oddrow"><td><code class="literal">SaveHier</code></td><td><code class="literal">S</code></td><td>
+		  In the hierarchy editor, saves the current hierarchy.
+		</td></tr><tr><td><code class="literal">Search</code></td><td><code class="literal">/</code></td><td>
+		  Activate the <span class="quote">“<span class="quote">search</span>”</span> function of the
+		  currently active interface element.
+		</td></tr><tr class="oddrow"><td><code class="literal">SearchBack</code></td><td><code class="literal">\</code></td><td>
+		  Activate the <span class="quote">“<span class="quote">search backwards</span>”</span> function of the
+		  currently active interface element.
+		</td></tr><tr><td><code class="literal">SearchBroken</code></td><td><code class="literal">b</code></td><td>
+		  In a package tree, search for the next broken
+		  package.
+		</td></tr><tr class="oddrow"><td><code class="literal">SetAuto</code></td><td><code class="literal">M</code></td><td>
+		  Marks the current package as having been <a class="link" href="ch02s02s06.html" title="Managing automatically installed packages">automatically
+		  installed</a>.
+		</td></tr><tr><td><a name="keyShowHideDescription"></a><code class="literal">ShowHideDescription</code></td><td><code class="literal">D</code></td><td>
+		  In a package list, toggles whether the information
+		  area is visible.
+		</td></tr><tr class="oddrow"><td><code class="literal">SolutionActionApprove</code></td><td><code class="literal">a</code></td><td>
+		  When viewing a solution, marks the currently
+		  selected action as "approved" (it will be included
+		  in future solutions whenever possible).
+		</td></tr><tr><td><code class="literal">SolutionActionReject</code></td><td><code class="literal">r</code></td><td>
+		  When viewing a solution, marks the currently
+		  selected action as "rejected" (future solutions will
+		  not contain it).
+		</td></tr><tr class="oddrow"><td><code class="literal">ToggleExpanded</code></td><td><code class="literal">enter</code></td><td>
+		  Expands or collapses the currently selected tree in
+		  a hierarchical list.
+		</td></tr><tr><td><code class="literal">ToggleMenuActive</code></td><td><code class="literal">C-m,f10,C-space</code></td><td>
+		  Activates or deactivates the main menu.
+		</td></tr><tr class="oddrow"><td><code class="literal">Undo</code></td><td><code class="literal">C-_,C-u</code></td><td>
+		  Cancels the last action, up to when <span class="command"><strong>aptitude</strong></span> was
+		  started OR the last time you update the package
+		  lists or installed packages.
+		</td></tr><tr><td><code class="literal">Up</code></td><td><code class="literal">up,k</code></td><td>
+		  Moves up: for instance, scrolls a text display
+		  up or selects the previous item in a list.
+		</td></tr><tr class="oddrow"><td><code class="literal">UpdatePackageList</code></td><td><code class="literal">u</code></td><td>
+		  Updates the list of packages by fetching new lists
+		  from the Internet if necessary.
+		</td></tr><tr><td><code class="literal">Versions</code></td><td><code class="literal">v</code></td><td>
+		  Displays the available versions of the currently
+		  selected package.
+		</td></tr><tr class="oddrow"><td><code class="literal">Yes</code></td><td>
+		  <code class="literal">y</code>
+		  <sup>[<a name="footnoteYesNoLocale" href="#ftn.footnoteYesNoLocale" class="footnote">b</a>]</sup>
+		</td><td>
+		  This key will select the <span class="quote">“<span class="quote">Yes</span>”</span> button
+		  in yes/no dialog boxes.
+		</td></tr></tbody><tbody class="footnotes"><tr><td colspan="3"><div class="footnote"><p><sup>[<a id="ftn.idp4273896" href="#idp4273896" class="para">a</a>] </sup>
+		      unless <code class="literal"><a class="link" href="ch02s05s05.html#configDisplay-Planned-Action">Aptitude::Display-Planned-Action</a></code>
+		      is false.
+		    </p></div><div class="footnote"><p><sup>[<a id="ftn.footnoteYesNoLocale" href="#footnoteYesNoLocale" class="para">b</a>] </sup>
+		      This default may be different in different locales.
+		    </p></div></td></tr></tbody></table></div><p>
+	  In addition to letter keys, number keys, and punctuation,
+	  the following <span class="quote">“<span class="quote">special</span>”</span> keys can be bound:
+	</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Key name</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">a1</code></td><td>The A1 key.</td></tr><tr class="oddrow"><td><code class="literal">a3</code></td><td>The A3 key.</td></tr><tr><td><code class="literal">b2</code></td><td>The B2 key.</td></tr><tr class="oddrow"><td><code class="literal">backspace</code></td><td>The Backspace key.</td></tr><tr><td><code class="literal">backtab</code></td><td>The back-tab key</td></tr><tr class="oddrow"><td><code class="literal">begin</code></td><td>The Begin key (not Home)</td></tr><tr><td><code class="literal">break</code></td><td>
+		  The <span class="quote">“<span class="quote">break</span>”</span> key.
+		</td></tr><tr class="oddrow"><td><code class="literal">c1</code></td><td>The C1 key.</td></tr><tr><td><code class="literal">c3</code></td><td>The C3 key.</td></tr><tr class="oddrow"><td><code class="literal">cancel</code></td><td>The Cancel key.</td></tr><tr><td><code class="literal">create</code></td><td>The Create key.</td></tr><tr class="oddrow"><td><code class="literal">comma</code></td><td>
+		  Comma (,) -- note that because commas are used to
+		  list keys, this is the only way to bind to a comma.
+		</td></tr><tr><td><code class="literal">command</code></td><td>The Command key.</td></tr><tr class="oddrow"><td><code class="literal">copy</code></td><td>The Copy key.</td></tr><tr><td><code class="literal">delete</code></td><td>The Delete key.</td></tr><tr class="oddrow"><td><code class="literal">delete_line</code></td><td>The <span class="quote">“<span class="quote">delete line</span>”</span> key.</td></tr><tr><td><code class="literal">down</code></td><td>The <span class="quote">“<span class="quote">down</span>”</span> arrow key.</td></tr><tr class="oddrow"><td><code class="literal">end</code></td><td>The End key.</td></tr><tr><td><code class="literal">entry</code></td><td>The Enter key.</td></tr><tr class="oddrow"><td><code class="literal">exit</code></td><td>The Exit key.</td></tr><tr><td><code class="literal">f1</code>, <code class="literal">f2</code>, ..., <code class="literal">f10</code></td><td>The F1 through F10 keys.</td></tr><tr class="oddrow"><td><code class="literal">find</code></td><td>The Find key.</td></tr><tr><td><code class="literal">home</code></td><td>The Home key.</td></tr><tr class="oddrow"><td><code class="literal">insert</code></td><td>The Insert key.</td></tr><tr><td><code class="literal">insert_exit</code></td><td>The <span class="quote">“<span class="quote">insert exit</span>”</span> key.</td></tr><tr class="oddrow"><td><code class="literal">clear</code></td><td>The <span class="quote">“<span class="quote">clear</span>”</span> key.</td></tr><tr><td><code class="literal">clear_eol</code></td><td>The <span class="quote">“<span class="quote">clear to end of line</span>”</span> key.</td></tr><tr class="oddrow"><td><code class="literal">clear_eos</code></td><td>The <span class="quote">“<span class="quote">clear to end of screen</span>”</span> key.</td></tr><tr><td><code class="literal">insert_line</code></td><td>The <span class="quote">“<span class="quote">insert line</span>”</span> key.</td></tr><tr class="oddrow"><td><code class="literal">left</code></td><td>The <span class="quote">“<span class="quote">left</span>”</span> arrow key.</td></tr><tr><td><code class="literal">mark</code></td><td>The Mark key.</td></tr><tr class="oddrow"><td><code class="literal">message</code></td><td>The Message key.</td></tr><tr><td><code class="literal">move</code></td><td>The Move key.</td></tr><tr class="oddrow"><td><code class="literal">next</code></td><td>The Next key.</td></tr><tr><td><code class="literal">open</code></td><td>The Open key.</td></tr><tr class="oddrow"><td><code class="literal">previous</code></td><td>The Previous key.</td></tr><tr><td><code class="literal">print</code></td><td>The Print key.</td></tr><tr class="oddrow"><td><code class="literal">redo</code></td><td>The Redo key.</td></tr><tr><td><code class="literal">reference</code></td><td>The Reference key.</td></tr><tr class="oddrow"><td><code class="literal">refresh</code></td><td>The Refresh key.</td></tr><tr><td><code class="literal">replace</code></td><td>The Replace key.</td></tr><tr class="oddrow"><td><code class="literal">restart</code></td><td>The Restart key.</td></tr><tr><td><code class="literal">resume</code></td><td>The Resume key.</td></tr><tr class="oddrow"><td><code class="literal">return</code></td><td>The Return key.</td></tr><tr><td><code class="literal">right</code></td><td>The <span class="quote">“<span class="quote">right</span>”</span> arrow key.</td></tr><tr class="oddrow"><td><code class="literal">save</code></td><td>The Save key.</td></tr><tr><td><code class="literal">scrollf</code></td><td>The <span class="quote">“<span class="quote">scroll forward</span>”</span> key.</td></tr><tr class="oddrow"><td><code class="literal">scrollr</code></td><td>The <span class="quote">“<span class="quote">scroll backwards</span>”</span> key.</td></tr><tr><td><code class="literal">select</code></td><td>The Select key.</td></tr><tr class="oddrow"><td><code class="literal">suspend</code></td><td>The Suspend key.</td></tr><tr><td><code class="literal">pagedown</code></td><td>The <span class="quote">“<span class="quote">Page Down</span>”</span> key.</td></tr><tr class="oddrow"><td><code class="literal">pageup</code></td><td>The <span class="quote">“<span class="quote">Page Up</span>”</span> key.</td></tr><tr><td><code class="literal">space</code></td><td>The Space key</td></tr><tr class="oddrow"><td><code class="literal">tab</code></td><td>The Tab key</td></tr><tr><td><code class="literal">undo</code></td><td>The Undo key.</td></tr><tr class="oddrow"><td><code class="literal">up</code></td><td>The <span class="quote">“<span class="quote">up</span>”</span> arrow key.</td></tr></tbody></table></div><p>
+	  In addition to binding keys globally, it is possible to
+	  change key bindings for one particular part (or
+	  <em class="firstterm">domain</em>) of <span class="command"><strong>aptitude</strong></span>: for instance,
+	  to make Tab the equivalent of the right arrow key in menu
+	  bars, set
+	  <code class="literal">Aptitude::UI::Keybindings::Menubar::Right</code>
+	  to <span class="quote">“<span class="quote"><code class="literal">tab,right</code></span>”</span>.  The
+	  following domains are available:
+	</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Domain</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">EditLine</code></td><td>
+		   Used by line-editing widgets, such as the entry
+		   field in a <span class="quote">“<span class="quote">search</span>”</span> dialog.
+		</td></tr><tr class="oddrow"><td><code class="literal">Menu</code></td><td>
+		  Used by drop-down menus.
+		</td></tr><tr><td><code class="literal">Menubar</code></td><td>
+		  Used by the menu bar at the top of the screen.
+		</td></tr><tr class="oddrow"><td><code class="literal">Minesweeper</code></td><td>
+		  Used by the <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a> mode.
+		</td></tr><tr><td><code class="literal">MinibufChoice</code></td><td>
+		  Used by the multiple-choice prompts that appear if
+		  you have chosen to have some prompts appear in the
+		  status line.
+		</td></tr><tr class="oddrow"><td><code class="literal">Pager</code></td><td>
+		  Used when displaying a file on disk (for instance,
+		  the help text).
+		</td></tr><tr><td><code class="literal">PkgNode</code></td><td>
+		  Used by packages, trees of packages, package
+		  versions, and package dependencies when they appear
+		  in package lists.
+		</td></tr><tr class="oddrow"><td><code class="literal">PkgTree</code></td><td>
+		  Used by package lists.
+		</td></tr><tr><td><code class="literal">Table</code></td><td>
+		  Used by tables of widgets (for instance, dialog boxes).
+		</td></tr><tr class="oddrow"><td><code class="literal">TextLayout</code></td><td>
+		  Used by formatted text displays, such as package
+		  descriptions.
+		</td></tr><tr><td><code class="literal">Tree</code></td><td>
+		  Used by all tree displays (including package lists,
+		  for which it can be overridden by
+		  <code class="literal">PkgTree</code>).
+		</td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05s01.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s05s03.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Customizing the package list </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Customizing text colors and styles</td></tr></table></div></body></html>

@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>openbsd_pkg - Manage packages on OpenBSD. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="opkg - Package manager for OpenWrt" href="opkg_module.html" />
+    <link rel="prev" title="npm - Manage node.js packages with npm" href="npm_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="opkg_module.html" title="opkg - Package manager for OpenWrt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="npm_module.html" title="npm - Manage node.js packages with npm"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="openbsd-pkg-manage-packages-on-openbsd">
+<span id="openbsd-pkg"></span><h1>openbsd_pkg - Manage packages on OpenBSD.<a class="headerlink" href="#openbsd-pkg-manage-packages-on-openbsd" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Patrik Lundin</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+<p>Manage packages on OpenBSD using the pkg tools.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name of the package.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>present</li><li>latest</li><li>absent</li></ul></td>
+    <td><code>present</code> will make sure the package is installed. <code>latest</code> will make sure the latest version of the package is installed. <code>absent</code> will make sure the specified package is not installed.</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Make sure nmap is installed
+- openbsd_pkg: name=nmap state=present
+
+# Make sure nmap is the latest version
+- openbsd_pkg: name=nmap state=latest
+
+# Make sure nmap is not installed
+- openbsd_pkg: name=nmap state=absent
+
+# Specify a pkg flavour with '--'
+- openbsd_pkg: name=vim--nox11 state=present
+
+# Specify the default flavour to avoid ambiguity errors
+- openbsd_pkg: name=vim-- state=present</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">openbsd_pkg - Manage packages on OpenBSD.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="npm_module.html"
+                        title="previous chapter">npm - Manage node.js packages with npm</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="opkg_module.html"
+                        title="next chapter">opkg - Package manager for OpenWrt</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="opkg_module.html" title="opkg - Package manager for OpenWrt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="npm_module.html" title="npm - Manage node.js packages with npm"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

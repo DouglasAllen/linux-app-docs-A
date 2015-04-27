@@ -1,0 +1,2279 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The AspectJtm Development Environment Guide</title><link rel="stylesheet" type="text/css" href="aspectj-docs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><meta name="description" content="This guide describes how to build and deploy AspectJ programs using the AspectJ tools and facilities. See also The AspectJ Programming Guide, the documentation available with the AspectJ support available for various integrated development environments (e.g., Eclipse AJDT), and the most-recent documentation available from the AspectJ project page, at http://eclipse.org/aspectj."></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="The AspectJtm Development Environment Guide"><div class="titlepage"><div><div><h1 class="title"><a name="idp52832"></a>The AspectJ<sup>tm</sup> Development Environment Guide</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="othername">the AspectJ Team</span></h3></div></div></div><div><div class="legalnotice" title="Legal Notice"><a name="idp159888"></a><p>Copyright (c) 1998-2001 Xerox Corporation, 
+         2002 Palo Alto Research Center, Incorporated,
+         2003-2005 Contributors.  
+         All rights reserved.
+        </p></div></div><div><div class="abstract" title="Abstract"><p class="title"><b>Abstract</b></p><p>
+        This guide describes how to build and deploy AspectJ programs
+          using the AspectJ tools and facilities.  See also 
+              <a class="ulink" href="../progguide/index.html" target="_top">The
+        				AspectJ Programming Guide</a>,       				
+              the documentation available with the AspectJ support available for
+		        various integrated development environments (e.g., 
+              <a class="ulink" href="http://eclipse.org/ajdt" target="_top">Eclipse AJDT</a>), 
+              and the most-recent documentation available from 
+              the AspectJ project page, at
+              	<a class="ulink" href="http://eclipse.org/aspectj" target="_top">
+              				http://eclipse.org/aspectj</a>.
+      </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#tools-intro">1. Introduction to the AspectJ tools</a></span></dt><dd><dl><dt><span class="sect1"><a href="#eclipse-aspectj">The Eclipse AspectJ implementation</a></span></dt><dt><span class="sect1"><a href="#bytecode-concepts">Bytecode weaving, incremental compilation, and memory usage</a></span></dt><dd><dl><dt><span class="sect2"><a href="#classpathInpathAndAspectpath">Classpath, inpath, and aspectpath</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#command-line-tools">2. AspectJ command-line tools</a></span></dt><dd><dl><dt><span class="sect1"><a href="#ajc-ref-top"><code class="literal">ajc</code>, the AspectJ compiler/weaver</a></span></dt><dt><span class="sect1"><a href="#ajdoc-ref-top"><code class="literal">ajdoc</code>, the AspectJ documentation tool</a></span></dt><dt><span class="sect1"><a href="#aj-ref-top"><code class="literal">aj</code>, the AspectJ load-time weaving script</a></span></dt></dl></dd><dt><span class="chapter"><a href="#ajbrowser">3. AspectJ Browser</a></span></dt><dd><dl><dt><span class="sect1"><a href="#ajbrowser-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#ajbrowser-building">Building Programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#build-configurations">Build Configurations</a></span></dt><dt><span class="sect2"><a href="#compiling-a-program-build-configuration">Compiling a Program Build Configuration</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ajbrowser-navigating">Navigating Program Structure</a></span></dt><dd><dl><dt><span class="sect2"><a href="#example">Example: Exploring the "Spacewar" sample code </a></span></dt></dl></dd><dt><span class="sect1"><a href="#ajbrowser-running">Running Programs</a></span></dt><dt><span class="sect1"><a href="#ajbrowser-problems">Isolating problems running the AspectJ browser</a></span></dt><dd><dl><dt><span class="sect2"><a href="#ajbrowser-knownProblems">Known issues with the AspectJ browser</a></span></dt><dt><span class="sect2"><a href="#ajbrowser-limitations">Limitations</a></span></dt><dt><span class="sect2"><a href="#ajbrowser-feedback">AspectJ Browser questions and bugs</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#antTasks">4. AspectJ Ant Tasks</a></span></dt><dd><dl><dt><span class="sect1"><a href="#antTasks-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#antTasks-install">Installing Ant Tasks</a></span></dt><dt><span class="sect1"><a href="#antTasks-iajc">AjcTask (iajc)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-iajc-options">AjcTask (iajc) Options</a></span></dt><dt><span class="sect2"><a href="#antTasks-nested-includes">AjcTask matching parameters specified as nested elements</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-paths">AjcTask Path-like Structures</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-sample">Sample of iajc task</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-uptodate">Avoiding clean compiles</a></span></dt><dt><span class="sect2"><a href="#programmatically-handling-compiler-messages">Programmatically handling compiler messages</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-adapter">Ajc11CompilerAdapter (javac)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-adapter-sample">Sample of compiler adapter</a></span></dt><dt><span class="sect2"><a href="#antTasks-adapter-options">Compiler adapter compilerarg options</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-ajc">Ajc10 (ajc)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-ajc-options">Ajc10 (ajc) Options</a></span></dt><dt><span class="sect2"><a href="#antTasks-ajc-nested">Ajc10 parameters specified as nested elements</a></span></dt><dt><span class="sect2"><a href="#antTasks-ajc-sample">Sample of ajc task</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-problems">Isolating problems running the Ant tasks</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-knownProblems">Known issues with the Ant tasks</a></span></dt><dt><span class="sect2"><a href="#antTasks-feedback">Ant task questions and bugs</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#ltw">5. Load-Time Weaving</a></span></dt><dd><dl><dt><span class="sect1"><a href="#ltw-introduction">Introduction</a></span></dt><dd><dl><dt><span class="sect2"><a href="#weaving-class-files-more-than-once">Weaving class files more than once</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ltw-rules">Load-time Weaving Requirements</a></span></dt><dt><span class="sect1"><a href="#ltw-configuration">Configuration</a></span></dt><dd><dl><dt><span class="sect2"><a href="#enabling-load-time-weaving">Enabling Load-time Weaving</a></span></dt><dt><span class="sect2"><a href="#configuring-load-time-weaving-with-aopxml-files">Configuring Load-time Weaving with aop.xml files</a></span></dt><dt><span class="sect2"><a href="#concrete-aspect">Using Concrete Aspects</a></span></dt><dt><span class="sect2"><a href="#concrete-aspect-precedence">Using Concrete Aspects to define precedence</a></span></dt><dt><span class="sect2"><a href="#weaver-options">Weaver Options</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ltw-specialcases">Special cases</a></span></dt><dt><span class="sect1"><a href="#ltw-packaging">Runtime Requirements for Load-time Weaving</a></span></dt><dt><span class="sect1"><a href="#ltw-agents">Supported Agents</a></span></dt><dd><dl><dt><span class="sect2"><a href="#jvmti">JVMTI</a></span></dt><dt><span class="sect2"><a href="#jrockit">JRockit with Java 1.3/1.4 (use JVMTI on Java 5)</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#compatibility">6. AspectJ version compatibility</a></span></dt><dd><dl><dt><span class="sect1"><a href="#versionCompatibility">Version Compatibility</a></span></dt><dd><dl><dt><span class="sect2"><a href="#javaCompatibility">Java compatibility</a></span></dt><dt><span class="sect2"><a href="#runtimeCompatibility">Runtime library compatibility</a></span></dt><dt><span class="sect2"><a href="#binaryCompatibility">Aspect binary compatibility</a></span></dt><dt><span class="sect2"><a href="#sourceCompatibility">Aspect source compatibility</a></span></dt><dt><span class="sect2"><a href="#upgrading">Problems when upgrading to new AspectJ versions</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#idp5769616">AjcTask (ajc) options for specifying sources</a></dt><dt>4.2. <a href="#idp5798688">Parameters ignored by the old ajc taskdef, 
+				but now supported or buggy</a></dt><dt>4.3. <a href="#idp5817392">Parameters unique to ajc</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>2.1. <a href="#simpleexample">A simple example</a></dt><dt>2.2. <a href="#exampleusingargfile">An example using -argfile/@</a></dt><dt>2.3. <a href="#examplebytecode">An example using -inpath and -aspectpath</a></dt><dt>2.4. <a href="#ajdocdocumentingspacewar">Documenting Spacewar</a></dt><dt>2.5. <a href="#simpleajexample">A simple example</a></dt></dl></div><div class="chapter" title="Chapter 1. Introduction to the AspectJ tools"><div class="titlepage"><div><div><h2 class="title"><a name="tools-intro"></a>Chapter 1. Introduction to the AspectJ tools</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#eclipse-aspectj">The Eclipse AspectJ implementation</a></span></dt><dt><span class="sect1"><a href="#bytecode-concepts">Bytecode weaving, incremental compilation, and memory usage</a></span></dt><dd><dl><dt><span class="sect2"><a href="#classpathInpathAndAspectpath">Classpath, inpath, and aspectpath</a></span></dt></dl></dd></dl></div><div class="sect1" title="The Eclipse AspectJ implementation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eclipse-aspectj"></a>The Eclipse AspectJ implementation</h2></div></div></div><p>The <a class="ulink" href="../progguide/index.html" target="_top">AspectJ Programming Guide</a>
+        describes the AspectJ language.  This guide describes the AspectJ
+        tools produced by the AspectJ
+        team on 
+         <a class="ulink" href="http://eclipse.org/aspectj" target="_top">http://eclipse.org/aspectj</a>.
+        The AspectJ tools include
+        - ajc, the compiler/weaver;
+        ajdoc, a documentation tool; ajbrowser, a crosscutting code viewer;
+        Ant support for ajc; and load-time weaving support.
+        These tools are delivered in the library folder of the AspectJ tools
+        installation, mainly in <code class="literal">aspectjtools.jar</code> (tools) and
+        <code class="literal">aspectjrt.jar</code> (runtime).
+        This guide does not describe the Eclipse AspectJ development tools
+        (AJDT).  That is produced by another team (sharing some members) on
+         <a class="ulink" href="http://eclipse.org/aspectj" target="_top">http://eclipse.org/ajdt</a>.
+        AJDT is delivered as an Eclipse plugin, incorporating the classes in
+        the AspectJ tools libraries along with the Eclipse plugin interface
+        classes.
+       </p><p>
+        Since AspectJ 1.1, the tools have implemented the AspectJ language 
+        using bytecode weaving, which combines aspects and classes to produce
+        .class files that run in a Java VM.  There are other ways to implement the
+        language (e.g., compiler preprocessor, VM support); the AspectJ team
+        has always tried to distinguish the language and the implementation
+        so other groups could build alternative implementations of AspectJ.
+        To that end,
+         
+    <a class="ulink" href="../progguide/implementation.html" target="_top">The AspectJ Programming Guide,
+    Implementation Notes</a> describes how the Java bytecode form affects
+        language semantics.  VM- or source-based implementations may be free
+        of these limits or impose limits of their own, but most should be
+        fairly close to what's possible in Java bytecode.
+    </p><p> 
+        Please be careful not to confuse any description of
+        weaving or of this implementation of the AspectJ language with
+        the AspectJ language semantics.
+        If you do, you might find yourself writing code that doesn't work as
+        expected when you compile or run it on other systems.  
+        More importantly, if you
+        think about aspects in terms of weaving or of inserting or merging
+        code, then you can lose many of the design benefits of thinking
+        about an aspect as a single crosscutting module. 
+        When the text below introduces an implementation detail, it will warn if
+        users make mistakes by applying it in lieu of the language semantics.
+    </p></div><div class="sect1" title="Bytecode weaving, incremental compilation, and memory usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bytecode-concepts"></a>Bytecode weaving, incremental compilation, and memory usage</h2></div></div></div><p>Bytecode weaving takes classes and aspects in .class form
+        and weaves them together to produce binary-compatible .class files that 
+        run in any Java VM and implement the AspectJ semantics.
+        This process supports not only the compiler but also IDE's.
+        The compiler, given an aspect in source form, produces a binary
+        aspect and runs the weaver.  IDE's can get information about
+        crosscutting in the program by subscribing to information 
+        produced by weaver as a side-effect of weaving.
+    </p><p>Incremental compilation involves recompiling only what is necessary
+        to bring the binary form of a program up-to-date with the source form
+        in the shortest time possible.
+        Incremental weaving supports this by weaving on a per-class basis.
+        (Some implementations of AOP (including AspectJ 1.0) make use
+        of whole-program analysis that can't be done in incremental mode.)
+        Weaving per-class means that if the source for a pure Java class 
+        is updated, only that class needs to be produced.  However, if
+        some crosscutting specification may have been updated, then all
+        code potentially affected by it may need to be woven.  The AspectJ
+        tools are getting better at minimizing this effect, but it is to
+        some degree unavoidable due to the crosscutting semantics.
+    </p><p>
+        Memory usage can seem higher with AspectJ tools.
+        Some aspects are written to potentially affect many classes, so each
+        class must be checked during the process of weaving.  Programmers can
+        minimize this by writing the crosscutting specifications as narrowly
+        as possible while maintaining correctness.
+        (While it may seem like more memory, the proper comparison
+        would with with a Java program that had the same crosscutting,
+        with changes made to each code segment.  That would likely require
+        more memory and more time to recompile than the corresponding 
+        AspectJ program.)
+    </p><div class="sect2" title="Classpath, inpath, and aspectpath"><div class="titlepage"><div><div><h3 class="title"><a name="classpathInpathAndAspectpath"></a>Classpath, inpath, and aspectpath</h3></div></div></div><p>AspectJ introduces two new paths for the binary input to the
+        weaver which you'll find referenced in <a class="xref" href="#ajc-ref" title="ajc">The ajc Command-line Reference</a>,
+        <a class="xref" href="#ajbrowser" title="Chapter 3. AspectJ Browser">AspectJ Browser</a>, 
+        <a class="xref" href="#antTasks" title="Chapter 4. AspectJ Ant Tasks">AspectJ Ant Tasks</a>,
+        and <a class="xref" href="#ltw" title="Chapter 5. Load-Time Weaving">Load-Time Weaving</a>.
+    </p><p>As in Java, the <code class="literal">classpath</code> is where the AspectJ
+        tools resolve types specified in the program. When running an AspectJ
+        program, the classpath should contain the classes and aspects along with
+        the AspectJ runtime library, <code class="literal">aspectjrt.jar</code>.
+        </p><p>
+        In AspectJ tools, the <code class="literal">aspectpath</code> is where to find binary
+        aspects.  Like the classpath, it can include archives (.jar and .zip files) 
+        and directories containing .class files in a package layout (since 
+        binary aspects are in .class files).  These aspects affect other
+        classes in exactly the same way as source-level aspects, but are themselves
+        not affected.  When deploying programs, the original aspects must be included 
+        on the runtime classpath.
+    </p><p>
+        In AspectJ tools, the <code class="literal">inpath</code> is where to find binary
+        input - aspects and classes that weave and may be woven.  
+        Like the classpath, it can include archives and class directories. 
+        Like the aspectpath, it can include aspects that affect other classes
+        and aspects.
+        However, unlike the aspectpath, an aspect on the inpath may itself be
+        affected by aspects, as if the source were all compiled together.
+        When deploying aspects that were put on the inpath, only the woven output 
+        should be on the runtime classpath.
+    </p><p>
+        Although types in the inpath and the aspectpath need to be resolved by
+        the AspectJ tools, you usually do not need to place them on the classpath
+        because this is done automatically by the compiler/weaver.  But when using 
+        the <code class="literal">WeavingURLClassLoader</code>, your code must explicitly add the aspects
+        to the classpath so they can be resolved (as you'll see in the sample
+        code and the <code class="literal">aj.bat</code> script).
+    </p><p>The most common mistake is failing to add
+        <code class="literal">aspectjrt.jar</code> to the classpath. Also, when
+        weaving with binary aspects, users forget to deploy the aspect itself
+        along with any classes it requires. A more subtle mistake is putting a
+        binary aspect (BA) on the inpath instead of the aspectpath.  In this case
+        the aspect BA might be affected by an aspect, even itself; this can 
+        cause the program to fail, e.g., when an aspect uses exclusion to 
+        avoid infinite recursion but fails to exclude advice in aspect BA.
+        </p><p>The latter is one of many ways that mistakes in the build process
+            can affect aspects that are written poorly.  Aspects should never
+            rely on the boundaries of the build specification to narrow the
+            scope of their crosscutting, since the build can be changed 
+            without notice to the aspect developer.  Careful users might even
+            avoid relying on the implementation scope, to ensure their
+            AspectJ code will run on other implementations.
+        </p></div></div></div><div class="chapter" title="Chapter 2. AspectJ command-line tools"><div class="titlepage"><div><div><h2 class="title"><a name="command-line-tools"></a>Chapter 2. AspectJ command-line tools</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#ajc-ref-top"><code class="literal">ajc</code>, the AspectJ compiler/weaver</a></span></dt><dt><span class="sect1"><a href="#ajdoc-ref-top"><code class="literal">ajdoc</code>, the AspectJ documentation tool</a></span></dt><dt><span class="sect1"><a href="#aj-ref-top"><code class="literal">aj</code>, the AspectJ load-time weaving script</a></span></dt></dl></div><div class="sect1" title="ajc, the AspectJ compiler/weaver"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajc-ref-top"></a><code class="literal">ajc</code>, the AspectJ compiler/weaver</h2></div></div></div><div class="refentry" title="ajc"><a name="ajc-ref"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ajc &#8212; compiler and bytecode weaver for the AspectJ and Java languages</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">ajc</code>  [<em class="replaceable"><code>Options</code></em>] [[<em class="replaceable"><code>file...</code></em>] |  [@<em class="replaceable"><code>file...</code></em>] |  [-argfile <em class="replaceable"><code>file...</code></em>]]</p></div></div><div class="refsect1" title="Description"><a name="ajc"></a><h2>Description</h2><p>The <span class="command"><strong>ajc</strong></span> command compiles and weaves AspectJ and 
+      Java source and .class files, producing .class files compliant with any 
+      Java VM (1.1 or later).  It combines compilation and bytecode weaving
+      and supports incremental builds; you can also weave bytecode
+      at run-time using <a class="xref" href="#ltw" title="Chapter 5. Load-Time Weaving">Load-Time Weaving</a>.
+      </p><p> The arguments after the options specify the source file(s) to compile.
+        To specify source classes, use <em class="parameter"><code>-inpath</code></em> (below).
+        Files may be listed directly on the command line or in a file.
+        The <em class="parameter"><code>-argfile <em class="replaceable"><code>file</code></em></code></em> 
+        and <em class="parameter"><code>@<em class="replaceable"><code>file</code></em></code></em> forms
+        are equivalent, and are interpreted as meaning all the arguments 
+        listed in the specified file. 
+    </p><p>	
+        <span class="command"><strong>Note:</strong></span> 
+        You must explicitly pass <span class="command"><strong>ajc</strong></span> all necessary sources.
+        Be sure to include the source not only for the
+        aspects or pointcuts but also for any affected types.  
+        Specifying all sources is necessary because, unlike javac, ajc does not 
+        search the sourcepath for classes.
+        (For a discussion of what affected types might be required,
+         see <a class="ulink" href="../progguide/implementation.html" target="_top">The AspectJ
+         Programming Guide, Implementation Appendix</a>.)
+    </p><p>
+        To specify sources, you can list source files as arguments or use the 
+        options <em class="parameter"><code>-sourceroots</code></em> or <em class="parameter"><code>-inpath</code></em>.
+        If there are multiple sources for any type, the result is undefined
+        since ajc has no way to determine which source is correct.  (This 
+        happens most often when users include the destination directory
+        on the inpath and rebuild.)
+    </p><div class="refsect2" title="Options"><a name="ajc_options"></a><h3>Options</h3><div class="variablelist"><dl><dt><span class="term">-injars <em class="replaceable"><code>JarList</code></em></span></dt><dd><p>
+        deprecated: since 1.2, use -inpath, which also takes
+        directories.
+        </p></dd><dt><span class="term">-inpath <em class="replaceable"><code>Path</code></em></span></dt><dd><p>
+        Accept as source bytecode any .class files in the 
+        .jar files or directories on Path.  
+        The output will include these
+        classes, possibly as woven with any applicable aspects.
+        Path is a single argument containing
+        a list of paths to zip files or directories, 
+        delimited by the platform-specific path delimiter.
+        </p></dd><dt><span class="term">-aspectpath <em class="replaceable"><code>Path</code></em></span></dt><dd><p>
+        Weave binary aspects from jar files and directories on path into all sources.
+        The aspects should have been output by the same version
+        of the compiler.
+        When running the output classes, the run classpath should contain 
+        all aspectpath entries.
+        Path, like classpath, is a single argument containing
+        a list of paths to jar files, delimited by the platform-
+        specific classpath delimiter.
+        </p></dd><dt><span class="term">-argfile <em class="replaceable"><code>File</code></em></span></dt><dd><p>
+          The file contains a line-delimited list of arguments.
+		  Each line in the file should contain one option, filename, or
+		  argument string (e.g., a classpath or inpath). 
+		  Arguments read from the file are inserted into the argument list
+		  for the command.  Relative paths in the file are calculated from
+		  the directory containing the file (not the current working directory).
+		  Comments, as in Java, start with <code class="literal">//</code> and
+          extend to the end of the line.  Options specified in argument
+          files may override rather than extending existing option values,
+          so avoid specifying options like <em class="replaceable"><code>-classpath</code></em>
+          in argument files unlike the argument file is the only build
+          specification.  The form <em class="replaceable"><code>@file</code></em> is the same
+          as specifying <em class="replaceable"><code>-argfile file</code></em>.
+        </p></dd><dt><span class="term">-outjar <em class="replaceable"><code>output.jar</code></em></span></dt><dd><p>Put output classes in zip file output.jar.
+        </p></dd><dt><span class="term">-outxml</span></dt><dd><p>Generate aop.xml file for load-time weaving with default name.
+        </p></dd><dt><span class="term">-outxmlfile <em class="replaceable"><code>custom/aop.xml</code></em></span></dt><dd><p>Generate aop.xml file for load-time weaving with custom name.
+        </p></dd><dt><span class="term">-incremental</span></dt><dd><p>Run the compiler continuously.
+        After the initial compilation, the compiler will
+        wait to recompile until it reads a newline from the standard
+        input, and will quit when it reads a 'q'.
+        It will only recompile necessary components, so a recompile
+        should be much faster than doing a second compile.
+        This requires -sourceroots.
+        </p></dd><dt><span class="term">-sourceroots <em class="replaceable"><code>DirPaths</code></em></span></dt><dd><p>Find and build all .java or .aj source files under 
+        any directory listed in DirPaths. 
+        DirPaths, like classpath, is a single argument containing
+        a list of paths to directories, delimited by the platform-
+        specific classpath delimiter.
+        Required by -incremental.
+        </p></dd><dt><span class="term">-crossrefs</span></dt><dd><p>
+          Generate a build .ajsym file into the output directory.  Used for
+          viewing crosscutting references by tools like the AspectJ
+          Browser.
+        </p></dd><dt><span class="term">-emacssym</span></dt><dd><p>
+          Generate .ajesym symbol files for emacs support (deprecated).
+        </p></dd><dt><span class="term">-Xlint</span></dt><dd><p>Same as -Xlint:warning (enabled by default)
+        </p></dd><dt><span class="term">-Xlint:{level}</span></dt><dd><p>Set default level for messages about potential
+           programming mistakes in crosscutting code.
+           {level} may be ignore, warning, or error.
+           This overrides entries in 
+	       org/aspectj/weaver/XlintDefault.properties
+           from aspectjtools.jar, but does not override levels set
+           using the -Xlintfile option.
+        </p></dd><dt><span class="term">-Xlintfile <em class="replaceable"><code>PropertyFile</code></em></span></dt><dd><p>Specify properties file to set levels for
+           specific crosscutting messages.   
+           PropertyFile is a path to a Java .properties file that
+           takes the same property names and values as
+	       org/aspectj/weaver/XlintDefault.properties
+           from aspectjtools.jar, which it also overrides.
+        </p></dd><dt><span class="term">-help</span></dt><dd><p>
+          Emit information on compiler options and usage
+        </p></dd><dt><span class="term">-version</span></dt><dd><p>
+          Emit the version of the AspectJ compiler
+        </p></dd><dt><span class="term">-classpath <em class="replaceable"><code>Path</code></em></span></dt><dd><p>
+          Specify where to find user class files.
+        Path is a single argument containing
+        a list of paths to zip files or directories, 
+        delimited by the platform-specific path delimiter.
+        </p></dd><dt><span class="term">-bootclasspath <em class="replaceable"><code>Path</code></em></span></dt><dd><p>
+          Override location of VM's bootclasspath 
+          for purposes of evaluating types when compiling.
+        Path is a single argument containing
+        a list of paths to zip files or directories, 
+        delimited by the platform-specific path delimiter.
+        </p></dd><dt><span class="term">-extdirs <em class="replaceable"><code>Path</code></em></span></dt><dd><p>
+          Override location of VM's extension directories 
+          for purposes of evaluating types when compiling.
+        Path is a single argument containing
+        a list of paths to directories, 
+        delimited by the platform-specific path delimiter.
+        </p></dd><dt><span class="term">-d <em class="replaceable"><code>Directory</code></em></span></dt><dd><p>
+          Specify where to place generated .class files.
+          If not specified, <em class="replaceable"><code>Directory</code></em> 
+          defaults to the current working dir.
+        </p></dd><dt><span class="term">-target <em class="replaceable"><code>[1.1 to 1.5]</code></em></span></dt><dd><p>Specify classfile target setting (1.1 to 1.5, default is 1.2)
+        </p></dd><dt><span class="term">-1.3</span></dt><dd><p>Set compliance level to 1.3 
+            This implies -source 1.3 and -target 1.1.
+        </p></dd><dt><span class="term">-1.4</span></dt><dd><p>Set compliance level to 1.4 (default)
+            This implies -source 1.4 and -target 1.2.
+        </p></dd><dt><span class="term">-1.5</span></dt><dd><p>Set compliance level to 1.5.
+            This implies -source 1.5 and -target 1.5.
+        </p></dd><dt><span class="term">-source <em class="replaceable"><code>[1.3|1.4|1.5]</code></em></span></dt><dd><p>Toggle assertions (1.3, 1.4, or 1.5 - default is 1.4).
+            When using -source 1.3, an assert() statement valid under
+            Java 1.4 will result in a compiler error.
+          When using -source 1.4, 
+          treat <code class="literal">assert</code> as a keyword and 
+          implement assertions according to the 1.4 language spec.
+          When using -source 1.5,
+            Java 5 language features are permitted. 
+        </p></dd><dt><span class="term">-nowarn</span></dt><dd><p>Emit no warnings (equivalent to '-warn:none')
+        This does not suppress messages
+        generated by <code class="literal">declare warning</code> or
+        <code class="literal">Xlint</code>.
+        </p></dd><dt><span class="term">-warn: <em class="replaceable"><code>items</code></em></span></dt><dd><p>Emit warnings for any instances of
+        the comma-delimited list of questionable code 
+        (eg '-warn:unusedLocals,deprecation'):
+        </p><pre class="programlisting">
+    constructorName        method with constructor name
+    packageDefaultMethod   attempt to override package-default method
+    deprecation            usage of deprecated type or member
+    maskedCatchBlocks      hidden catch block
+    unusedLocals           local variable never read
+    unusedArguments        method argument never read
+    unusedImports          import statement not used by code in file
+    none                   suppress all compiler warnings
+        </pre><p>
+        <code class="literal">-warn:none</code> does not suppress messages
+        generated by <code class="literal">declare warning</code> or
+        <code class="literal">Xlint</code>.
+        
+        </p></dd><dt><span class="term">-deprecation</span></dt><dd><p>Same as -warn:deprecation
+        </p></dd><dt><span class="term">-noImportError</span></dt><dd><p>Emit no errors for unresolved imports
+        </p></dd><dt><span class="term">-proceedOnError</span></dt><dd><p>Keep compiling after error, 
+                        dumping class files with problem methods
+        </p></dd><dt><span class="term">-g<em class="replaceable"><code>:[lines,vars,source]</code></em></span></dt><dd><p>debug attributes level, that may take three forms:
+        </p><pre class="programlisting">
+    -g         all debug info ('-g:lines,vars,source')
+    -g:none    no debug info
+    -g:{items} debug info for any/all of [lines, vars, source], e.g.,
+               -g:lines,source
+        </pre><p>
+            
+        </p></dd><dt><span class="term">-preserveAllLocals</span></dt><dd><p>Preserve all local variables during code generation
+        (to facilitate debugging).
+        </p></dd><dt><span class="term">-referenceInfo</span></dt><dd><p>Compute reference information.
+        </p></dd><dt><span class="term">-encoding <em class="replaceable"><code>format</code></em></span></dt><dd><p>Specify default source encoding format.
+            Specify custom encoding on a per file basis by suffixing
+			each input source file/folder name with '[encoding]'.
+        </p></dd><dt><span class="term">-verbose</span></dt><dd><p>Emit messages about accessed/processed compilation units 
+        </p></dd><dt><span class="term">-showWeaveInfo</span></dt><dd><p>Emit messages about weaving 
+        </p></dd><dt><span class="term">-log <em class="replaceable"><code>file</code></em></span></dt><dd><p>Specify a log file for compiler messages.
+        </p></dd><dt><span class="term">-progress</span></dt><dd><p>Show progress (requires -log mode).
+        </p></dd><dt><span class="term">-time</span></dt><dd><p>Display speed information.
+        </p></dd><dt><span class="term">-noExit</span></dt><dd><p>Do not call System.exit(n) at end of compilation
+			(n=0 if no error)
+        </p></dd><dt><span class="term">-repeat <em class="replaceable"><code>N</code></em></span></dt><dd><p>Repeat compilation process N times 
+        (typically to do performance analysis).
+        </p></dd><dt><span class="term">-XterminateAfterCompilation</span></dt><dd><p>Causes compiler to terminate before weaving
+        </p></dd><dt><span class="term">-XaddSerialVersionUID</span></dt><dd><p>Causes the compiler to calculate and add
+        the SerialVersionUID field to any type implementing
+        Serializable that is affected by an aspect.  The field
+        is calculated based on the class before weaving has
+        taken place.
+        </p></dd><dt><span class="term">-Xreweavable[:compress]</span></dt><dd><p>(Experimental - deprecated as now default) 
+            Runs weaver in reweavable mode which causes
+        it to create woven classes that can be rewoven, subject to the restriction that
+        on attempting a reweave all the types that advised the woven type must be accessible.
+        </p></dd><dt><span class="term">-XnoInline</span></dt><dd><p>(Experimental) do not inline around advice
+        </p></dd><dt><span class="term">-XincrementalFile <em class="replaceable"><code>file</code></em></span></dt><dd><p>(Experimental) This works like incremental mode, 
+        but using a file rather than standard input to control the compiler.  
+        It will recompile each time file is changed and
+        and halt when file is deleted.
+        </p></dd><dt><span class="term">-XserializableAspects</span></dt><dd><p>
+        (Experimental) Normally it is an error to declare
+        aspects Serializable.  This option removes that restriction.
+        </p></dd><dt><span class="term">-XnotReweavable</span></dt><dd><p>
+    (Experimental) Create class files that can't be subsequently rewoven by AspectJ.
+        </p></dd><dt><span class="term">-Xajruntimelevel:1.2, ajruntimelevel:1.5</span></dt><dd><p>
+        (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
+         </p></dd></dl></div></div><div class="refsect2" title="File names"><a name="idp4957456"></a><h3>File names</h3><p>ajc accepts source files with either the <code class="filename">.java</code>
+    extension or the <code class="filename">.aj</code> extension.  We normally use
+    <code class="filename">.java</code> for all of our files in an AspectJ system -- files
+    that contain aspects as well as files that contain classes.  However, if
+    you have a need to mechanically distinguish files that use AspectJ's
+    additional functionality from those that are pure Java we recommend using
+    the <code class="filename">.aj</code> extension for those files.</p><p>We'd like to discourage other means of mechanical distinction such as
+    naming conventions or sub-packages in favor of the <code class="filename">.aj</code>
+    extension.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Filename conventions are hard to enforce and lead to awkward names
+    for your aspects.  Instead of <code class="filename">TracingAspect.java</code> we
+    recommend using <code class="filename">Tracing.aj</code> (or just
+    <code class="filename">Tracing.java</code>) instead.</p></li><li class="listitem"><p>Sub-packages move aspects out of their natural place in a system
+    and can create an artificial need for privileged aspects.  Instead of
+    adding a sub-package like <code class="filename">aspects</code> we recommend using the
+    <code class="filename">.aj</code> extension and including these files in your existing
+    packages instead.</p></li></ul></div></div><div class="refsect2" title="Compatibility"><a name="idp4967376"></a><h3>Compatibility</h3><p>
+        AspectJ is a compatible extension to the Java programming language. The
+        AspectJ compiler adheres to the <a class="ulink" href="http://java.sun.com/docs/books/jls/index.html" target="_top"> <em class="citetitle">The Java Language Specfication, Second
+        Edition</em></a> and to the <a class="ulink" href="http://java.sun.com/docs/books/vmspec/index.html" target="_top"><em class="citetitle">The Java Virtual Machine Specification, Second
+        Edition</em></a> and runs on any Java 2 compatible
+        platform. The code it generates runs on any Java 1.1 or later
+        compatible platform.
+        For more information on compatibility with
+          Java and with previous releases of AspectJ,
+          see
+          <a class="xref" href="#versionCompatibility" title="Version Compatibility">AspectJ Version Compatibility</a>.
+      </p></div><div class="refsect2" title="Examples"><a name="idp4971632"></a><h3>Examples</h3><div class="example"><a name="simpleexample"></a><p class="title"><b>Example 2.1. A simple example</b></p><div class="example-contents"><p>Compile two files:</p><pre class="programlisting">
+        ajc HelloWorld.java Trace.java
+        </pre></div></div><br class="example-break"><div class="example"><a name="exampleusingargfile"></a><p class="title"><b>Example 2.2. An example using -argfile/@</b></p><div class="example-contents"><p>
+          To avoid specifying file names on the command line, 
+          list source files in a line-delimited text argfile.
+          Source file paths may be absolute or relative to the argfile,
+          and may include other argfiles by @-reference.
+          The following file <code class="literal">sources.lst</code>
+          contains absolute and relative files and @-references:
+          </p><pre class="programlisting">
+Gui.java
+/home/user/src/Library.java
+data/Repository.java
+data/Access.java
+@../../common/common.lst
+@/home/user/src/lib.lst
+view/body/ArrayView.java</pre><p>Compile the files using either the -argfile or @ form:</p><pre class="programlisting">
+ajc -argfile sources.lst
+ajc @sources.lst</pre><p>
+        Argfiles are also supported by jikes and javac, so you 
+        can use the files in hybrid builds.  However, the support varies:
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Only ajc accepts command-line options</p></li><li class="listitem"><p>Jikes and Javac do not accept internal @argfile references.
+            </p></li><li class="listitem"><p>Jikes and Javac only accept the @file form on the command line.</p></li></ul></div></div></div><br class="example-break"><div class="example"><a name="examplebytecode"></a><p class="title"><b>Example 2.3. An example using -inpath and -aspectpath</b></p><div class="example-contents"><p>Bytecode weaving using -inpath:
+          AspectJ 1.2 supports weaving .class files in input zip/jar files 
+          and directories. 
+          Using input jars is like compiling the corresponding 
+          source files, and all binaries are emitted to output.  Although 
+          Java-compliant compilers may differ in their output, ajc should 
+          take as input any class files produced by javac, jikes, eclipse, 
+          and, of course, ajc.  Aspects included in -inpath will be woven into
+          like other .class files, and they will affect other types as usual.
+        </p><p>Aspect libraries using -aspectpath:
+          AspectJ 1.1 supports weaving from read-only libraries containing 
+          aspects.  Like input jars, they affect all input; unlike input 
+          jars, they themselves are not affected or emitted as output.  
+          Sources compiled with aspect libraries must be run with the same 
+          aspect libraries on their classpath. 
+        </p><p>The following example builds the tracing example in a 
+        command-line environment; it creates a read-only aspect library, 
+      compiles some classes for use as input bytecode, and 
+       compiles the classes and other sources with the aspect library.
+        </p><p>The tracing example is in the AspectJ distribution 
+        ({aspectj}/doc/examples/tracing).  This uses the following files:
+        </p><pre class="programlisting">
+ aspectj1.1/ 
+   bin/ 
+     ajc 
+   lib/ 
+     aspectjrt.jar 
+   examples/ 
+     tracing/ 
+       Circle.java 
+       ExampleMain.java 
+       lib/ 
+         AbstractTrace.java 
+         TraceMyClasses.java 
+       notrace.lst 
+       Square.java 
+       tracelib.lst 
+       tracev3.lst 
+       TwoDShape.java 
+       version3/ 
+         Trace.java 
+         TraceMyClasses.java 
+        </pre><p>Below, the path separator is taken as ";", but file separators 
+are "/".  All commands are on one line.  Adjust paths and 
+commands to your environment as needed. 
+
+</p><p>Setup the path, classpath, and current directory:</p><pre class="programlisting">
+    cd examples 
+    export ajrt=../lib/aspectjrt.jar 
+    export CLASSPATH="$ajrt" 
+    export PATH="../bin:$PATH" 
+        </pre><p>Build a read-only tracing library:</p><pre class="programlisting">
+    ajc -argfile tracing/tracelib.lst -outjar tracelib.jar 
+        </pre><p>Build the application with tracing in one step:</p><pre class="programlisting">
+    ajc -aspectpath tracelib.jar -argfile tracing/notrace.lst -outjar tracedapp.jar 
+        </pre><p>Run the application with tracing:</p><pre class="programlisting">
+    java -classpath "$ajrt;tracedapp.jar;tracelib.jar" tracing.ExampleMain 
+        </pre><p>Build the application with tracing from binaries in two steps:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+(a) Build the application classes (using javac for demonstration's sake):</p><pre class="programlisting">
+    mkdir classes 
+    javac -d classes tracing/*.java 
+    jar cfM app.jar -C classes . 
+        </pre></li><li class="listitem"><p>
+(b) Build the application with tracing:</p><pre class="programlisting">
+    ajc -inpath app.jar -aspectpath tracelib.jar -outjar tracedapp.jar 
+        </pre></li></ul></div><p>Run the application with tracing (same as above):</p><pre class="programlisting">
+    java -classpath "$ajrt;tracedapp.jar;tracelib.jar" tracing.ExampleMain 
+        </pre><p>Run the application without tracing:</p><pre class="programlisting">
+    java -classpath "app.jar" tracing.ExampleMain
+        </pre></div></div><br class="example-break"></div><div class="refsect2" title="The AspectJ compiler API"><a name="idp4996912"></a><h3>The AspectJ compiler API</h3><p>The AspectJ compiler is implemented completely in Java and can be
+        called as a Java class.  The only interface that should be considered
+        public are the public methods in <code class="literal">org.aspectj.tools.ajc.Main</code>.
+        E.g., <code class="literal">main(String[] args)</code> takes the
+        the standard <span class="command"><strong>ajc</strong></span> command line arguments. 
+        This means that an alternative way to run the
+        compiler is </p><div class="cmdsynopsis"><p><code class="command"><code class="literal">java org.aspectj.tools.ajc.Main</code></code>  [<em class="replaceable"><code>option...</code></em>] [<em class="replaceable"><code>file...</code></em>]</p></div><p>To access compiler messages programmatically, use the methods
+         <code class="literal">setHolder(IMessageHolder holder)</code> and/or
+         <code class="literal">run(String[] args, IMessageHolder holder)</code>.
+		  <code class="literal">ajc</code> reports each message to the holder
+		  using <code class="literal">IMessageHolder.handleMessage(..)</code>.
+		  If you just want to collect the messages, use
+		  <code class="literal">MessageHandler</code> as your		  
+		  <code class="literal">IMessageHolder</code>.
+		  For example, compile and run the following with 
+		  <code class="literal">aspectjtools.jar</code> on the classpath:
+      </p><pre class="programlisting">
+import org.aspectj.bridge.*;
+import org.aspectj.tools.ajc.Main;
+import java.util.Arrays;
+
+public class WrapAjc {
+  public static void main(String[] args) {
+    Main compiler = new Main();
+    MessageHandler m = new MessageHandler();
+    compiler.run(args, m);
+    IMessage[] ms = m.getMessages(null, true);
+    System.out.println("messages: " + Arrays.asList(ms));
+  }
+}
+        </pre></div><div class="refsect2" title="Stack Traces and the SourceFile attribute"><a name="idp5009872"></a><h3>Stack Traces and the SourceFile attribute</h3><p>Unlike traditional java compilers, the AspectJ compiler may in
+            certain cases generate classfiles from multiple source files.
+            Unfortunately, the original Java class file format does not support 
+            multiple
+            SourceFile attributes.  In order to make sure all source file
+            information is available, the AspectJ compiler may in some cases
+            encode multiple filenames in the SourceFile attribute.  
+            When the Java VM generates stack traces, it uses this attribute
+            to specify the source file.
+      </p><p>(The AspectJ 1.0 compiler also supports the .class file extensions of JSR-45.
+      These permit compliant debuggers (such as jdb in Java 1.4.1) to identify 
+      the right file and line even given many source files for a single class.
+      JSR-45 support is planned for ajc in AspectJ 1.1, but is not in the initial
+      release.  To get fully debuggable .class files, use the -XnoInline option.)  
+      </p><p>Probably the only time you may see this format is when you view
+            stack traces, where you may encounter traces of the format
+      </p><pre class="programlisting">
+java.lang.NullPointerException
+  at Main.new$constructor_call37(Main.java;SynchAspect.java[1k]:1030)
+</pre><p>where instead of the usual 
+      </p><pre class="programlisting">
+File:LineNumber
+</pre><p>format, you see
+      </p><pre class="programlisting">
+File0;File1[Number1];File2[Number2] ... :LineNumber
+</pre><p>In this case, LineNumber is the usual offset in lines plus the 
+      "start line" of the actual source file.  That means you use LineNumber 
+      both to identify the source file and to find the line at issue. 
+      The number in [brackets] after each file tells you the
+      virtual "start line" for that file (the first file has a start of 0).  
+      </p><p> In our example from the null pointer exception trace, 
+      the virtual start line is 1030.  Since the file SynchAspect.java
+      "starts" at line 1000 [1k], the LineNumber points to line 30 of
+      SynchAspect.java.
+      </p><p> So, when faced with such stack traces, the way to find the actual
+      source location is to look through the list of "start line" numbers to
+      find the one just under the shown line number.  That is the file where
+      the source location can actually be found.  Then, subtract that "start
+      line" from the shown line number to find the actual line number within
+      that file.
+      </p><p>In a class file that comes from only a single source file, the AspectJ
+            compiler generates SourceFile attributes consistent with
+            traditional Java compilers.
+      </p></div></div></div></div><div class="sect1" title="ajdoc, the AspectJ documentation tool"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajdoc-ref-top"></a><code class="literal">ajdoc</code>, the AspectJ documentation tool</h2></div></div></div><p><code class="literal">ajdoc</code> produces JavaDoc-style documentation
+        including crosscutting information.</p><div class="refentry" title="ajdoc"><a name="ajdoc-ref"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ajdoc &#8212; generate HTML API documentation, including crosscutting structure
+    </p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">ajdoc</code>  [
+        -bootclasspath <em class="replaceable"><code>classpathlist</code></em>
+      ] [
+        -classpath <em class="replaceable"><code>classpathlist</code></em>
+      ] [-d <em class="replaceable"><code>path</code></em>] [-help] [-package] [-protected] [-private] [-public] [-overview <em class="replaceable"><code>overviewFile</code></em>] [
+        -sourcepath <em class="replaceable"><code>sourcepathlist</code></em>
+      ] [-verbose] [-version] [[<em class="replaceable"><code>sourcefiles...</code></em>] |  [<em class="replaceable"><code>packages...</code></em>] |  [@<em class="replaceable"><code>file...</code></em>] |  [-argfile <em class="replaceable"><code>file...</code></em>]] [
+        <em class="replaceable"><code>ajc options</code></em>
+      ]</p></div></div><div class="refsect1" title="Description"><a name="idp5207296"></a><h2>Description</h2><p>
+      <span class="command"><strong>ajdoc</strong></span> renders HTML documentation for AspectJ 
+      constructs as well as the Java constructs that 
+      <span class="command"><strong>javadoc</strong></span> renders.
+      In addition <span class="command"><strong>ajdoc</strong></span> displays the crosscutting
+      nature in the form of links. That means, for example, that 
+      you can see everything affecting a method when reading 
+      the documentation for the method.
+    </p><p>
+      To run <span class="command"><strong>ajdoc</strong></span>, use one of the scripts in the 
+      AspectJ <code class="filename">bin</code> directory. 
+      The <span class="command"><strong>ajdoc</strong></span> implementation builds on Sun's <span class="command"><strong>javadoc</strong></span> 
+      command line tool, and you use it in the same way with many of
+      the same options
+      (<span class="command"><strong>javadoc</strong></span> options are not documented here;
+      for more information on <span class="command"><strong>javadoc</strong></span> usage, see the
+      <a class="ulink" href="http://java.sun.com/j2se/javadoc/" target="_top">Javadoc homepage</a>.)
+    </p><p>
+      As with <span class="command"><strong>ajc</strong></span> (but unlike <span class="command"><strong>javadoc</strong></span>),
+      you pass <span class="command"><strong>ajdoc</strong></span> all your aspect source files 
+      and any files containing types affected by the aspects;
+      it's often easiest to just pass all the <code class="filename">.java</code> 
+      and <code class="filename">.aj</code> files in your system.
+      Unlike <span class="command"><strong>ajc</strong></span>,
+      <span class="command"><strong>ajdoc</strong></span> will try to find package sources using the
+      specified sourcepath if you list packages on the command line. 
+    </p><p>
+      To provide an argfile listing the source files, you can use
+      use the same argfile (<code class="filename">@filename</code>) conventions 
+      as with <span class="command"><strong>ajc</strong></span>.  
+      For example, the following documents all the source files listed
+      in <code class="filename">argfile.lst</code>, sending the output to
+      the <code class="literal">docDir</code> output directory.
+
+      </p><pre class="programlisting">ajdoc -d docDir @argfile.lst</pre><p>
+
+      See the <a class="link" href="#ajc" title="Description">ajc documentation</a> 
+      for details on the text file format.
+    </p><p>
+	  <span class="command"><strong>ajdoc</strong></span> honours <span class="command"><strong>ajc</strong></span> options. See
+      the <a class="link" href="#ajc_options" title="Options">ajc documentation</a> for details on
+      these options.
+	</p><p>
+      <span class="command"><strong>ajdoc</strong></span> currently requires the 
+      <code class="filename">tools.jar</code> from J2SE 1.3 to be on the classpath.
+      Normally the scripts set this up, assuming that your <code class="literal">JAVA_HOME</code>
+      variable points to an appropriate installation of Java.
+      You may need to provide this jar when using a different
+      version of Java or a JRE.
+    </p></div><div class="refsect1" title="Examples"><a name="idp5229584"></a><h2>Examples</h2><div class="example"><a name="ajdocdocumentingspacewar"></a><p class="title"><b>Example 2.4. Documenting Spacewar</b></p><div class="example-contents"><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+  	        Change into the <code class="filename">examples</code> directory.
+  	      </p></li><li class="listitem"><p>
+  	        Type <strong class="userinput"><code>mkdir doc</code></strong> to create the
+  	        destination directory for the documentation.
+  	      </p></li><li class="listitem"><p>
+	          Type <strong class="userinput"><code>ajdoc -private -d doc spacewar
+	            coordination</code></strong> to generate the documentation.
+	        </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
+		      (Use <code class="literal">-private</code> to get all members, since
+            may of the interesting ones in spacewar are not public.)
+	            </p></li></ul></div></li><li class="listitem"><p>
+              Type <strong class="userinput"><code>ajdoc -private -d doc @spacewar/demo.lst</code></strong> 
+              to use the argfile associated with Spacewar.  
+  	            </p></li><li class="listitem"><p>
+  	          To view the documentation, open the file <code class="filename">index.html</code> 
+              in the <code class="filename">doc</code> directory using a web browser.
+  	        </p></li></ul></div></div></div><br class="example-break"></div></div></div><div class="sect1" title="aj, the AspectJ load-time weaving script"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aj-ref-top"></a><code class="literal">aj</code>, the AspectJ load-time weaving script</h2></div></div></div><p><code class="literal">aj</code> launches programs,
+            configuring basic load-time weaving.</p><div class="refentry" title="aj"><a name="aj-ref"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>aj &#8212; command-line launcher for basic load-time weaving</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">aj</code>  [<em class="replaceable"><code>Options</code></em>] [[<em class="replaceable"><code>arg...</code></em>]]</p></div></div><div class="refsect1" title="Description"><a name="aj"></a><h2>Description</h2><p>The
+            <span class="command"><strong>aj</strong></span> command runs Java programs in Java 1.4 or
+            later by setting up
+            <code class="literal">WeavingURLClassLoader</code> as the system class
+            loader, to do load-time bytecode weaving. </p><p> The arguments are the same as those used to launch the Java program.
+            Users should define the environment variables
+            <code class="literal">CLASSPATH</code> and
+            <code class="literal">ASPECTPATH</code>. </p><p>For more information and alternatives for load-time weaving,
+        see <a class="xref" href="#ltw" title="Chapter 5. Load-Time Weaving">Load-Time Weaving</a>.
+        </p><div class="refsect2" title="Examples"><a name="idp5320432"></a><h3>Examples</h3><div class="example"><a name="simpleajexample"></a><p class="title"><b>Example 2.5. A simple example</b></p><div class="example-contents"><p>Use ajc to build a library, then weave at load time</p><pre class="programlisting">                     
+    REM compile library
+    ${ASPECTJ_HOME}\bin\ajc.bat -outjar lib\aspects.jar @aspects.lst
+                
+    REM run, weaving into application at load-time set
+    ASPECTPATH=lib\aspects.jar set CLASSPATH=app\app.jar
+    ${ASPECTJ_HOME}\bin\aj.bat com.company.app.Main "Hello, World!" 
+                </pre></div></div><br class="example-break"></div></div></div></div></div><div class="chapter" title="Chapter 3. AspectJ Browser"><div class="titlepage"><div><div><h2 class="title"><a name="ajbrowser"></a>Chapter 3. AspectJ Browser</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#ajbrowser-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#ajbrowser-building">Building Programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#build-configurations">Build Configurations</a></span></dt><dt><span class="sect2"><a href="#compiling-a-program-build-configuration">Compiling a Program Build Configuration</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ajbrowser-navigating">Navigating Program Structure</a></span></dt><dd><dl><dt><span class="sect2"><a href="#example">Example: Exploring the "Spacewar" sample code </a></span></dt></dl></dd><dt><span class="sect1"><a href="#ajbrowser-running">Running Programs</a></span></dt><dt><span class="sect1"><a href="#ajbrowser-problems">Isolating problems running the AspectJ browser</a></span></dt><dd><dl><dt><span class="sect2"><a href="#ajbrowser-knownProblems">Known issues with the AspectJ browser</a></span></dt><dt><span class="sect2"><a href="#ajbrowser-limitations">Limitations</a></span></dt><dt><span class="sect2"><a href="#ajbrowser-feedback">AspectJ Browser questions and bugs</a></span></dt></dl></dd></dl></div><div class="sect1" title="Introduction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajbrowser-intro"></a>Introduction</h2></div></div></div><p>
+	AJBrowser presents a GUI for compiling programs with ajc 
+	and navigating crosscutting structure.
+	</p><p>
+            The AspectJ Browser can edit program source files,
+            compile using the AspectJ compiler <code class="literal">ajc</code>
+            run a program,
+            and graphically navigate the program's 
+            crosscutting structure.
+            For more information on <code class="literal">ajc</code>, 
+            see <a class="xref" href="#ajc-ref" title="ajc">The ajc Command-line Reference</a>.
+            
+            
+        </p><p>
+            Launch the browser from the command line either
+            by typing "ajbrowser" to invoke the script in
+            <code class="literal">{aspectj}/bin</code>
+             (if AspectJ is installed correctly) 
+            or by using the
+            <code class="literal">aspectjtools.jar</code> directly,
+            and specifying no arguments or some number of
+            build configuration files 
+            (suffix <code class="literal">.lst</code>):
+            </p><pre class="programlisting">
+  java -jar aspectj1.1/lib/aspectjtools.jar aspectj1.1/doc/examples/spacewar/debug.lst                    
+            </pre><p>
+        </p></div><div class="sect1" title="Building Programs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajbrowser-building"></a>Building Programs</h2></div></div></div><div class="sect2" title="Build Configurations"><div class="titlepage"><div><div><h3 class="title"><a name="build-configurations"></a>Build Configurations</h3></div></div></div><p>A build configuration is a set of files to compile for a
+        program (and optionally some additional compile arguments).
+        Because <code class="literal">ajc</code> requires all sources to be specified
+        (at least using the <code class="literal">-sourceroots</code> option),
+        most users create <code class="literal">.lst</code> files that list
+        the files to compile (one argument per line, globbing 
+        permitted - for more details, see <a class="xref" href="#ajc-ref" title="ajc">The ajc Command-line Reference</a>).
+        </p><p>
+        	To work with a particular program, select the 
+        	corresponding ".lst" build configuration file
+            from the GUI using the File menu, "open" item, 
+            or by using the 
+            "Open Build Configuration" button
+	        (<span class="inlinemediaobject"><img src="openConfig.gif"></span>).
+            
+            You can populate the build list from the command line
+            by passing any number of ".lst" paths. 
+            (However, if you pass in any non-".lst" arguments, 
+            it will run the command-line compiler directly.)
+        </p><p>
+            To switch between build configurations,
+            select, add, or remove them
+            using the corresponding toolbar buttons.  
+        </p><p>Global build options are stored in an 
+        <code class="literal">.ajbrowser</code> file in your HOME directory.
+        Edit these from the GUI by clicking the "Options" button 
+        or selecting the Tools menu item "Options...".  
+        This is how to set classpath, aspectpath, etc.
+        </p><p>The following sections walk through a build.
+        </p></div><div class="sect2" title="Compiling a Program Build Configuration"><div class="titlepage"><div><div><h3 class="title"><a name="compiling-a-program-build-configuration"></a>Compiling a Program Build Configuration</h3></div></div></div><p>
+        To compile click the "Build" button
+        (<span class="inlinemediaobject"><img src="build.gif"></span>), or 
+		or use the tools menu. 
+	</p><p>
+        You may select
+        from different build configurations in the GUI
+        (see label 1 in the graphic below).
+        (If you get classpath or other errors, set up the
+        global build options as described above.)
+		<span class="inlinemediaobject"><img src="ajbrowser-building.gif"></span>
+    </p></div></div><div class="sect1" title="Navigating Program Structure"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajbrowser-navigating"></a>Navigating Program Structure</h2></div></div></div><p>
+        Select nodes in the program structure by clicking them (see label 2).
+        If one node is related to one or more other nodes by an association the
+        name of the association will appear below that node and will be
+        displayed in italics.  Links to other structure nodes appear in blue
+        below the association.  If there is no corresponding source for the
+        link it will appear light-blue.
+		<span class="inlinemediaobject"><img src="ajbrowser-building.gif"></span>
+    </p><div class="sect2" title='Example: Exploring the "Spacewar" sample code'><div class="titlepage"><div><div><h3 class="title"><a name="example"></a>Example: Exploring the "Spacewar" sample code </h3></div></div></div><p>
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Launch <code class="literal">ajbrowser</code></p></li><li class="listitem"><p>Choose "File -&gt; Open" or click the "Open Build
+          Configuration" button
+           (<span class="inlinemediaobject"><img src="openConfig.gif"></span>) and select the configuration file for debugging
+          the spacewar example, in
+          <code class="literal">examples/spacewar/debug.lst</code>.</p></li><li class="listitem"><p>Click the "Build" button (<span class="inlinemediaobject"><img src="build.gif"></span>) to
+             compile.  The left pane should fill with a spacewar declaration
+             tree.  If there is a compiler error, the clickable error message
+             shows up as in label 4.
+              </p><p>Note: If you did not set up your classpath, the
+          compile will fail with a message that you need to install
+          aspectjrt.jar on your compile classpath.  To do that, select "Tools
+          -&gt; Options" or click the "Options" button
+          (<span class="inlinemediaobject"><img src="browseroptions.gif"></span>).  Click the <code class="literal">Build Options</code> tab
+           to view the Build Paths pane.  Edit the classpath entry to use your
+           install location.  For example, if you ran from the base Aspectj
+           directory, the classpath need only include 
+           <code class="literal">lib/aspectjrt.jar</code> (though the browser may populate
+           the classpath with the bootclasspath and classpath initially.) 
+           Be sure to use the
+           <code class="literal">lib/aspectjrt.jar</code> that came with the browser.
+              </p><p>
+          <span class="inlinemediaobject"><img src="ajbrowser-options.gif"></span>&gt;
+              </p></li><li class="listitem"><p>Different structure views: The structure tree at the
+          left can display different orderings and granularity for structure:
+
+           </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>The package hierarchy view shows the traditional hierarchy
+               of package, class, and members.</p></li><li class="listitem"><p>The inheritance view shows the hierarchy from topmost
+               parent classes through subclasses to members.</p></li><li class="listitem"><p>The crosscutting view shows the aspect members
+               and the code they affect.</p></li><li class="listitem"><p>Additional buttons in the pane can be used to change the
+               granularity and filter out items.</p></li></ul></div><p>
+
+             </p><p>Whenever you select an item in the tree view, the
+                   source pane scrolls to that item. If you select a leaf item
+                   representing another program element, then the tree
+                   selection will go to the corresponding node.  (See below for
+                   how to use two panes to maintain your place.)
+             </p></li><li class="listitem"><p>When working with aspects, it helps to be able to navigate
+               between different program elements:
+             </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>When looking at a method, find the advice that
+              affects it.  </p></li><li class="listitem"><p>When looking at a pointcut, find the advice that
+              uses it.  </p></li><li class="listitem"><p>When looking at advice, find what it advises -
+              e.g., method calls or executions, initializers, etc.
+              </p></li><li class="listitem"><p>When looking at a type, find any aspects that
+                              declare members or supertypes of the type, or
+                              vice-versa.
+              </p></li></ul></div><p>You can view the advice on a particular method using the
+                   default, hierarchical view.  Navigate to the tree item for
+                   <code class="literal">spacewar.Registry.register(SpaceObject)</code>
+                   in the <code class="literal">debug.lst</code> config file.  Now, in
+                   the lower, file view, you can see and navigate to the advice
+                   using the subtree whose parent is the <code class="literal">method
+                   affected by</code> relation.
+             </p><p>You can also use crosscutting view to see the
+                   advice using a pointcut or the methods affected by advice.
+                   For example, to see what advice uses a particular pointcut,
+                   navigate to the tree item for the pointcut
+                   <code class="literal">spacewar.Debug.allConstructorsCut()</code> in
+                   the <code class="literal">debug.lst</code> config file.  You can see
+                   and navigate to the advice that uses the pointcut using the
+                   <code class="literal">pointcut used by</code> relation.
+             </p><p>As an example of seeing the methods affected by advice,
+                   while still in the same view, select the first
+                   <code class="literal">before</code> advice in
+                   <code class="literal">spacewar.Debug</code>.  It has relation
+                   sub-trees for both <code class="literal">uses pointcut</code> and
+                   <code class="literal">affects constructions</code>.  The
+                   <code class="literal">affects</code> relations will list different
+                   kinds of join points - constructor or method calls, etc.
+             </p><p>Note that the AspectJ browser can only display 
+             static structure (whether hierarchical or crosscutting).
+             That means that dynamicly-determined pointcuts (like
+             <code class="literal">cflow(pointcut)</code>) 
+             will not be shown as picking out static points in
+             source code.  Displayable pointcuts roughly correspond
+             to those that can be used in a 
+             <code class="literal">declare error</code> statement.
+             </p></li></ul></div><p>
+      </p></div></div><div class="sect1" title="Running Programs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajbrowser-running"></a>Running Programs</h2></div></div></div><p>
+    The browser supports a limited form of running compiled programs.
+    To run programs that have been built, click the run button
+    or select one of the run menu items in the project menu.
+    You can run in the same VM or spawn a new process;
+    the latter is generally better for GUI programs.
+    </p><p>Both require that any classpath you set be specified 
+    using platform-specific paths and path separators (the
+    compiler might be more tolerant).
+    Output and error streams will be
+    merged into the streams of the browser (using separate
+    threads, so it may take a few seconds for the pipe
+    threads to gain control.) Errors should 
+    be detected and displayed in a dialog.
+    </p><p>
+    The GUI does not support killing a running program,
+    so if your program might hang,
+    be sure to save your files since you may need to 
+    kill the browser itself to kill its child processes.
+    </p></div><div class="sect1" title="Isolating problems running the AspectJ browser"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajbrowser-problems"></a>Isolating problems running the AspectJ browser</h2></div></div></div><p>
+	If you have problems with the browser not solved by the documentation, 
+	please try to see if you have the same problems when running ajc 
+	directly on the command line.
+	</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		If the problem occurs on the command line also, then the problem 
+		is not in the browser. 
+		(It may be in the compiler; please send bug reports.)
+		</p></li><li class="listitem"><p>
+		If the problem does not occur on the command line, then it may 
+		lie in the parameters you are supplying in the build options.
+		</p></li><li class="listitem"><p>
+		If the build options look correct and the problem only occurs 
+		when building from the browser, then please submit a bug report.
+		</p></li></ul></div><div class="sect2" title="Known issues with the AspectJ browser"><div class="titlepage"><div><div><h3 class="title"><a name="ajbrowser-knownProblems"></a>Known issues with the AspectJ browser</h3></div></div></div><p>
+		For the most up-to-date information on known problems, 
+		see the 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs" target="_top">bug database</a>
+		for unresolved 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs/buglist.cgi?&amp;product=AspectJ&amp;component=Compiler&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED" target="_top">
+			compiler bugs
+			</a> or 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs/buglist.cgi?&amp;product=AspectJ&amp;component=IDE&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED" target="_top">
+			IDE bugs
+			</a>.
+		</p><p>
+		</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+	    Memory and forking: Users email most about the browser task running 
+	    out of memory. 
+	    This is not a problem with the browser; some compiles take a lot of 
+	    memory, often more than similar compiles using javac.
+	    The browser does not support forking, so the only solution is to
+	    edit the java command line or script that launches the browser
+	    to add memory.
+		</p></li><li class="listitem"><p>
+		Editing build configuration files: this is not currently supported.
+		</p></li><li class="listitem"><p>
+		The structure model is incomplete after incremental compiles.
+		To get a complete structure model requires a full build.
+		</p></li><li class="listitem"><p>
+		If you change the output directory, you must do a
+		full build. 
+		</p></li></ul></div><p>
+		</p></div><div class="sect2" title="Limitations"><div class="titlepage"><div><div><h3 class="title"><a name="ajbrowser-limitations"></a>Limitations</h3></div></div></div><p>      
+		</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		The AJBrowser expects the package and directory structure to match.  If they do not 
+		it will be unable to browse to the corresponding file.
+		</p></li><li class="listitem"><p>
+		The "Run" feature launches applications in the same VM.  As a result, if a Swing application
+		is disposed the AJBrowser will be disposed as well.
+		</p></li></ul></div><p>
+		</p></div><div class="sect2" title="AspectJ Browser questions and bugs"><div class="titlepage"><div><div><h3 class="title"><a name="ajbrowser-feedback"></a>AspectJ Browser questions and bugs</h3></div></div></div><p>      
+        You can send email to 
+        <a class="ulink" href="mailto:aspectj-users@dev.eclipse.org" target="_top">
+        aspectj-users@dev.eclipse.org</a>. 
+        (Do join the list to participate!) 
+        We also welcome any bug reports, patches, and feature requests; 
+        you can submit them to the bug database at 
+        <a class="ulink" href="http://bugs.eclipse.org/bugs" target="_top">
+           http://bugs.eclipse.org/bugs</a>
+        using the AspectJ product and IDE component. 
+		</p></div></div></div><div class="chapter" title="Chapter 4. AspectJ Ant Tasks"><div class="titlepage"><div><div><h2 class="title"><a name="antTasks"></a>Chapter 4. AspectJ Ant Tasks</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#antTasks-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#antTasks-install">Installing Ant Tasks</a></span></dt><dt><span class="sect1"><a href="#antTasks-iajc">AjcTask (iajc)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-iajc-options">AjcTask (iajc) Options</a></span></dt><dt><span class="sect2"><a href="#antTasks-nested-includes">AjcTask matching parameters specified as nested elements</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-paths">AjcTask Path-like Structures</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-sample">Sample of iajc task</a></span></dt><dt><span class="sect2"><a href="#antTasks-iajc-uptodate">Avoiding clean compiles</a></span></dt><dt><span class="sect2"><a href="#programmatically-handling-compiler-messages">Programmatically handling compiler messages</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-adapter">Ajc11CompilerAdapter (javac)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-adapter-sample">Sample of compiler adapter</a></span></dt><dt><span class="sect2"><a href="#antTasks-adapter-options">Compiler adapter compilerarg options</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-ajc">Ajc10 (ajc)</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-ajc-options">Ajc10 (ajc) Options</a></span></dt><dt><span class="sect2"><a href="#antTasks-ajc-nested">Ajc10 parameters specified as nested elements</a></span></dt><dt><span class="sect2"><a href="#antTasks-ajc-sample">Sample of ajc task</a></span></dt></dl></dd><dt><span class="sect1"><a href="#antTasks-problems">Isolating problems running the Ant tasks</a></span></dt><dd><dl><dt><span class="sect2"><a href="#antTasks-knownProblems">Known issues with the Ant tasks</a></span></dt><dt><span class="sect2"><a href="#antTasks-feedback">Ant task questions and bugs</a></span></dt></dl></dd></dl></div><div class="sect1" title="Introduction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-intro"></a>Introduction</h2></div></div></div><p>
+	AspectJ contains a compiler, <code class="literal">ajc</code>, 
+	that can be run from Ant. 
+	Included in the <code class="literal">aspectjtools.jar</code>
+	are Ant binaries to support three 
+	ways of running the compiler:
+    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+	<a class="xref" href="#antTasks-iajc" title="AjcTask (iajc)">AjcTask (iajc)</a>, 
+	a task to run the AspectJ post-1.1 compiler, 
+	which supports all the eclipse and ajc options, including incremental mode.
+        </p></li><li class="listitem"><p>
+	<a class="xref" href="#antTasks-adapter" title="Ajc11CompilerAdapter (javac)">Ajc11CompilerAdapter (javac)</a>, 
+	an adapter class to run the new compiler using Javac tasks 
+	by setting the build.compiler property
+        </p></li><li class="listitem"><p>
+	<a class="xref" href="#antTasks-ajc" title="Ajc10 (ajc)">Ajc10 (ajc)</a>, 
+	a task to run build scripts compatible with the AspectJ 1.0 tasks
+        </p></li></ol></div><p>
+	</p><p>
+	This describes how to install and use the tasks and the adapter. 
+	For an example Ant script, see 
+		<a class="ulink" href="../examples/build.xml" target="_top">examples/build.xml</a>.
+    </p></div><div class="sect1" title="Installing Ant Tasks"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-install"></a>Installing Ant Tasks</h2></div></div></div><p>
+	Install Jakarta Ant 1.5.1:  
+	Please see the official Jakarta Ant website for more information 
+	and the 1.5.1 distribution. This release is source-compatible 
+	with Ant 1.3 and Ant 1.4, but the task sources must be 
+	compiled with those versions of the Ant libraries to be used 
+	under those versions of Ant. 
+	Sources are available under the Eclipse Public License v. 1.0 
+	at <a class="ulink" href="http://eclipse.org/aspectj" target="_top">http://eclipse.org/aspectj</a>.
+	</p><p>
+	In Ant 1.5, third-party tasks can be declared using a taskdef entry in 
+	the build script, to identify the name and classes. 
+	When declaring a task, include the 
+	<code class="literal">aspectjtools.jar</code> either in the 
+	taskdef classpath or in <code class="literal">${ANT_HOME}/lib</code> where it will be added 
+	to the system class path by the ant script. 
+	You may specify the task script names directly, 
+	or use the "resource" attribute to specify the default names:
+    </p><pre class="programlisting">
+    
+  &lt;taskdef 
+      resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"/&gt;
+
+    </pre><p>
+	The current resource file retains the name "ajc" for the Ajc10 task, 
+	and uses "iajc" for the AspectJ post-1.1 task.
+    </p><p>
+	In Ant 1.6, third-party tasks are declared in their own namespace 
+	using <code class="literal">antlib.xml</code>.  For example, the following
+	script would build and run the spacewar example, if you put the
+	script in the examples directory and <code class="literal">aspectjtools.jar</code>
+	in the <code class="literal">${ANT_HOME}/lib</code> directory.
+    </p><pre class="programlisting">
+    
+&lt;project name="aspectj-ant1.6" default="spacewar" 
+    xmlns:aspectj="antlib:org.aspectj" basedir="."&gt;
+    &lt;target name="spacewar"&gt;
+        &lt;aspectj:iajc
+            argfiles="spacewar/debug.lst"
+            outjar="spacewar.jar"
+            classpath="../../lib/aspectjrt.jar"
+       /&gt;
+       &lt;java classname="spacewar.Game"
+        classpath="spacewar.jar:../../lib/aspectjrt.jar"/&gt;
+    &lt;/target&gt;
+&lt;/project&gt;
+
+    </pre><p>
+	For more information on using Ant, please refer to Jakarta's 
+	documentation on integrating user-defined Ant tasks into builds.
+    </p></div><div class="sect1" title="AjcTask (iajc)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-iajc"></a>AjcTask (iajc)</h2></div></div></div><p>
+	This task uses the AspectJ post-1.1 compiler ajc. 
+	The AspectJ compiler can be used like Javac to compile Java sources, 
+	but it can also compile AspectJ sources or weave binary aspects 
+	with Java bytecode. 
+	It can run in normal "batch" mode or in an "incremental" mode, 
+	where it only recompiles files it has to revisit. 
+	For more information on ajc, see <a class="xref" href="#ajc-ref" title="ajc">The ajc Command-line Reference</a>.
+	Unlike Javac or the Javac Ant task, this task always compiles the 
+	specified files since aspects can apply to other (updated) files.
+	For a workaround, see <a class="xref" href="#antTasks-iajc-uptodate" title="Avoiding clean compiles">Avoiding clean compiles</a>.
+    </p><p>
+		Beyond the normal ajc compiler options, this task also supports
+		an experimental option for an incremental "tag" file, and it
+		can copy resources from source directories or 
+		input jars to the output jar or directory.
+    </p><p>
+    This task is named iajc to avoid conflict with the 1.0 task ajc. 
+    </p><div class="sect2" title="AjcTask (iajc) Options"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-iajc-options"></a>AjcTask (iajc) Options</h3></div></div></div><p>
+		The following tables list the supported parameters. 
+		For any parameter specified as a Path, a single path can be 
+		specified directly as an attribute, 
+		multiple paths can be specified using a nested element of 
+		the same name, and a common path can be reused by defining it as a
+		global and passing the id to the corresponding {name}ref attribute. 
+		See <a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a> 
+		below for more details.
+	    </p><p>
+		Most attributes and nested elements are optional.	
+		The compiler requires that the same version of 
+		<code class="literal">aspectjrt.jar</code>
+		be specified on the classpath, and that some sources be
+		be specified
+	    (using one or more of 
+	    <code class="literal">sourceroots</code>,
+	    <code class="literal">injars</code>,
+	    <code class="literal">inpath</code>,
+	    <code class="literal">argfiles</code>, and/or 
+	    <code class="literal">srcdir</code> (with patterns)).
+	    When in incremental mode, only
+	    <code class="literal">sourceroots</code> may be specified.
+	    </p><p>Boolean parameters default to <code class="literal">false</code>
+	    unless otherwise stated.
+	    </p><p>
+			<span class="strong"><strong>
+			AjcTask (iajc) options for specifying sources
+			</strong></span>		
+		</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>argfiles, argfilesRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				An argument file contains a list of arguments read by the compiler. 
+				Each line is read into one element of the argument array 
+				and may include another argfile by reference.		
+				</p></td></tr><tr><td><p>sourceRoots, sourceRootsRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				 Directories containing source files (ending with .java or .aj) to compile.						
+				</p></td></tr><tr><td><p>srcdir
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>						
+				Base directory of sources to compile, assuming there are 
+				<a class="xref" href="#antTasks-nested-includes" title="AjcTask matching parameters specified as nested elements">nested matches</a>.
+				This approach uses the Ant process 
+				for matching .java files and is not compatible with incremental 
+				mode. Unless using filters to limit the sources included, 
+				use sourceroots instead.
+				</p></td></tr><tr><td><p>injars, injarsRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				Deprecated - use inpath instead.
+				Read .class files for bytecode weaving
+				from zip files (only).
+				</p></td></tr><tr><td><p>inpath, inpathRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				Read .class files for bytecode weaving
+				from directories or zip files (like classpath).					
+				</p></td></tr><tr><td><p>classpath, classpathRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				The classpath used by the sources being compiled.
+				When compiling aspects, include the same version of the
+				<code class="literal">aspectjrt.jar</code>.
+				</p></td></tr><tr><td><p>bootclasspath, bootclasspathRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				The bootclasspath specifies types to use instead of the 
+				invoking VM's when seeking types during compilation.					
+				</p></td></tr><tr><td><p>extDirs, extDirsRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>					
+				The extension directories to use instead of those in the 
+				invoking VM when seeking types during compilation.	
+				</p></td></tr><tr><td><p>aspectPath, aspectPathRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>						
+				Similar to classpath, aspectpath contains read-only, 
+				binary aspect libraries that are woven into sources
+				but not included in the output.
+				<code class="literal">aspectpath</code> accepts jar/zip files
+				(but, unlike classpath, not directories).
+				</p></td></tr></tbody></table></div><p>
+			<span class="strong"><strong>
+		AjcTask (iajc) options for specifying output
+			</strong></span>		
+		</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>destDir
+				</p></td><td><p>						
+				The directory in which to place the generated class files. 
+				Only one of <code class="literal">destDir</code> and 
+				<code class="literal">outJar</code> may be set.
+				</p></td></tr><tr><td><p>outJar
+				</p></td><td><p>						
+				The zip file in which to place the generated output class files. 
+				Only one of <code class="literal">destDir</code> and 
+				<code class="literal">outJar</code> may be set.
+				</p></td></tr><tr><td><p>copyInjars
+				</p></td><td><p>
+				(Deprecated/ignored; ajc does this.)						
+				If true, copy all non-.class files from input jar(s) 
+				to the output jar or destination directory after the 
+				compile (or incremental compile) completes.
+				In forked mode, this copies only after the process
+				completes, not after incremental compiles.
+				</p></td></tr><tr><td><p>sourceRootCopyFilter
+				</p></td><td><p>						
+				When set, copy all files from the sourceroot directories to the output jar 
+				or destination directory except those specified in the filter pattern. 
+				The pattern should be compatible with an Ant fileset excludes filter; 
+				when using this, most developers pass 
+				<code class="literal">**/CVS/*,**/*.java</code> to exclude any CVS directories 
+				or source files. 
+				See <code class="literal">inpathDirCopyFilter</code>.
+				Requires <code class="literal">destDir</code> or <code class="literal">outJar</code>.
+				</p></td></tr><tr><td><p>inpathDirCopyFilter
+				</p></td><td>
+					<p> When set, copy all files from the inpath directories 
+						to the output jar or destination directory except those 
+						specified in the filter pattern. The pattern should be 
+						compatible with an Ant fileset excludes filter; when 
+						using this, most developers pass 
+						<code class="literal">**/CVS/*,**/*.java,**/*.class</code> to 
+						exclude any CVS directories, source files, or unwoven 
+						.class files. (If <code class="literal">**/*.class</code> is not 
+						specified, it will be prepended to the filter.) See 
+						<code class="literal">sourceRootCopyFilter</code>. (Note that ajc 
+						itself copies all resources from input jar/zip files on 
+						the inpath.) Requires <code class="literal">destDir</code> or 
+						<code class="literal">outJar</code>.</p>
+				</td></tr></tbody></table></div><p>
+			<span class="strong"><strong>
+		AjcTask (iajc) options for specifying compiler behavior
+			</strong></span>		
+		</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>fork
+				</p></td><td><p>						
+				Run process in another VM. 
+				This gets the forking classpath either explicitly
+				from a <code class="literal">forkclasspath</code> entry 
+				or by searching the task or system/Ant classpath for the
+				first readable file with a name of the form
+				<code class="literal">aspectj{-}tools{.*}.jar</code>.
+				When forking you can specify the amount of memory used
+				with <code class="literal">maxmem</code>.
+				Fork cannot be used in incremental mode, 
+				unless using a tag file.
+				</p></td></tr><tr><td><p>forkclasspath, forkclasspathRef
+				(<a class="xref" href="#antTasks-iajc-paths" title="AjcTask Path-like Structures">Path</a>)
+				</p></td><td><p>
+				Specify the classpath to use for the compiler when forking.
+				</p></td></tr><tr><td><p>maxmem
+				</p></td><td><p>		
+				The maximum memory to use for the new VM when fork is true. 
+				Values should have the same form as accepted by the VM, e.g., "128m".				
+				</p></td></tr><tr><td><p>incremental
+				</p></td><td><p>		
+				incremental mode: Build once, then recompile only required source 
+				files when user provides input. 
+				Requires that source files be specified only using 
+				<code class="literal">sourceroots</code>. 
+				Incompatible with forking.
+				</p></td></tr><tr><td><p>tagfile
+				</p></td><td><p>		
+				incremental mode: Build once, then recompile only required source 
+				files when the tag file is updated, finally exiting when tag file 
+				is deleted.
+				Requires that source files be specified only using 
+				<code class="literal">sourceroots</code>. 
+				</p></td></tr><tr><td><p>X
+				</p></td><td><p>
+					Set experimental option(s), using comma-separated list of accepted options 
+				    Options should not contain the leading X.
+                    Some commonly-used experimental options have their
+                    own entries.  The other permitted ones (currently) are
+                    serializableAspects, incrementalFile, lazyTjp,
+        		reweavable, notReweavable, noInline,
+            	terminateAfterCompilation,
+                ajruntimelevel:1.2, and ajruntimelevel:1.5.
+                Of these, some were deprecated in AspectJ 5
+                    (reweavable, terminateAfterCompilation, etc.).
+				</p></td></tr><tr><td><p>XterminateAfterCompilation
+				</p></td><td><p>
+				Terminates before the weaving process, dumping out unfinished class files.
+				</p></td></tr></tbody></table></div><p>
+			<span class="strong"><strong>
+		AjcTask (iajc) options for specifying compiler side-effects and messages
+			</strong></span>		
+		</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>emacssym
+				</p></td><td><p>
+				If true, emit <code class="literal">.ajesym</code> symbol files for Emacs support.
+				</p></td></tr><tr><td><p>crossref
+				</p></td><td><p>
+				If true, emit <code class="literal">.ajsym</code> file into the output directory.
+				</p></td></tr><tr><td><p>verbose
+				</p></td><td><p>
+				If true, log compiler verbose messages as Project.INFO during the compile.
+				</p></td></tr><tr><td><p>logCommand
+				</p></td><td><p>
+				If true, log compiler command elements as Project.INFO
+				(rather than the usual Project.VERBOSE level).				
+				</p></td></tr><tr><td><p>Xlistfileargs
+				</p></td><td><p>			
+				If true, emit list of file arguments during 
+				the compile (but behaves now like verbose).			
+				</p></td></tr><tr><td><p>version
+				</p></td><td><p>	
+				If true, do not compile - just print AspectJ version.
+				</p></td></tr><tr><td><p>help
+				</p></td><td><p>	
+					If true, just print help for the command-line compiler.					
+				</p></td></tr><tr><td><p>Xlintwarnings
+				</p></td><td><p>			
+				Same as <code class="literal">xlint:warning</code>:
+				if true, set default level of all language 
+				usage messages to warning.
+				</p></td></tr><tr><td><p>Xlint
+				</p></td><td><p>
+				Specify default level of all language usage messages to one of 
+				[<code class="literal">error warning ignore</code>].						
+				</p></td></tr><tr><td><p>XlintFile
+				</p></td><td><p>		
+				Specify property file containing <code class="literal">name:level</code> associations 
+				setting level for language messages emitted during compilation. 
+				Any levels set override the default associations in 
+				<code class="literal">org/aspectj/weaver/XLintDefault.properties</code>.				
+				</p></td></tr><tr><td><p>failonerror
+				</p></td><td><p>			
+				If true, throw BuildException to halt build if there
+				are any compiler errors.
+				If false, continue notwithstanding compile errors.
+				Defaults to <code class="literal">true</code>.
+				</p></td></tr><tr><td><p>messageHolderClass
+				</p></td><td><p>					
+				Specify a class to use as the message holder for the compile process. 
+				The entry must be a fully-qualified name of a class resolveable from 
+				the task classpath complying with the 
+				<code class="literal">org.aspectj.bridge.IMessageHolder</code> interface 
+				and having a public no-argument constructor.	
+				</p></td></tr><tr><td><p>showWeaveInfo
+				</p></td><td><p>			
+				If true, emit weaver messages.
+				Defaults to <code class="literal">false</code>.
+				</p></td></tr></tbody></table></div><p>
+			<span class="strong"><strong>
+		AjcTask (iajc) options for specifying Eclipse compiler options
+			</strong></span>		
+		</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>nowarn
+				</p></td><td><p>		
+				 	If true, same as <code class="literal">warn:none</code>.
+				</p></td></tr><tr><td><p>deprecation
+				</p></td><td><p>			
+				If true, same as <code class="literal">warn:deprecation</code>			
+				</p></td></tr><tr><td><p>warn
+				</p></td><td><p>		
+				One or more comma-separated warning specifications from
+				[<code class="literal">constructorName packageDefaultMethod deprecation, 
+				  maskedCatchBlocks unusedLocals unusedArguments, 
+				 unusedImports syntheticAccess assertIdentifier</code>].				
+				</p></td></tr><tr><td><p>debug
+				</p></td><td><p>
+				If true, same as <code class="literal">debug:lines,vars,source</code>					
+				</p></td></tr><tr><td><p>debugLevel
+				</p></td><td><p>
+				 	One or more comma-separated debug specifications from
+				 	[<code class="literal">lines vars source</code>].			
+				</p></td></tr><tr><td><p>PreserveAllLocals
+				</p></td><td><p>			
+				 	If true, code gen preserves all local variables (for debug purposes).		
+				</p></td></tr><tr><td><p>noimporterror
+				</p></td><td><p>			
+				 	If true, emit no errors for unresolved imports.			
+				</p></td></tr><tr><td><p>referenceinfo
+				</p></td><td><p>			
+				If true, compute reference info.			
+				</p></td></tr><tr><td><p>log
+				</p></td><td><p>	
+				 	File to log compiler messages to.					
+				</p></td></tr><tr><td><p>encoding
+				</p></td><td><p>Default source encoding format
+				(per-file encoding not supported in Ant tasks).				
+				</p></td></tr><tr><td><p>proceedOnError
+				</p></td><td><p>				
+				If true, keep compiling after errors encountered, 
+				dumping class files with problem methods.		
+				</p></td></tr><tr><td><p>progress
+				</p></td><td><p>		
+				 	If true, emit progress (requires log).				
+				</p></td></tr><tr><td><p>time
+				</p></td><td><p>	
+				 	If true, display speed information.					
+				</p></td></tr><tr><td><p>target
+				</p></td><td><p>		
+				 	Specify target class file format as one of
+				 	[<code class="literal">1.1 1.2</code>].
+				 	Defaults to 1.1 class file.				
+				</p></td></tr><tr><td><p>source
+				</p></td><td><p>		
+				 	Set source compliance level to one of
+				 	[<code class="literal">1.3 1.4 1.5</code>]
+                    (default is 1.4).
+                    1.3 implies -source 1.3 and -target 1.1.
+                    1.4 implies -source 1.4 and -target 1.2.
+                    1.5 implies -source 1.5 and -target 1.5.
+				</p></td></tr><tr><td><p>source
+				</p></td><td><p>
+				Set source assertion mode to one of
+				 	[<code class="literal">1.3 1.4</code>].
+				Default depends on compliance mode.				
+				</p></td></tr></tbody></table></div></div><div class="sect2" title="AjcTask matching parameters specified as nested elements"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-nested-includes"></a>AjcTask matching parameters specified as nested elements</h3></div></div></div><p>
+	This task forms an implicit FileSet and supports all attributes of 
+	<code class="literal">&lt;fileset&gt;</code> (dir becomes srcdir) as well as 
+	the nested 
+	<code class="literal">&lt;include&gt;</code>, 
+	<code class="literal">&lt;exclude&gt;</code>, and 
+	<code class="literal">&lt;patternset&gt;</code> elements.
+	These can be used to specify source files. 
+	However, it is better to use <code class="literal">sourceroots</code>
+	to specify source directories unless using filters to exclude 
+	some files from compilation.
+    </p></div><div class="sect2" title="AjcTask Path-like Structures"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-iajc-paths"></a>AjcTask Path-like Structures</h3></div></div></div><p>
+	Some parameters are path-like structures containing one or more 
+	elements; these are
+	<code class="literal">sourceroots</code>,
+	<code class="literal">argfiles</code>,
+	<code class="literal">injars</code>,
+	<code class="literal">inpath</code>,
+	<code class="literal">classpath</code>,
+	<code class="literal">bootclasspath</code>,
+	<code class="literal">forkclasspath</code>, and
+	<code class="literal">aspectpath</code>.
+	In all cases, these may be specified as nested elements, something 
+	like this:
+    </p><pre class="programlisting">
+    
+    &lt;iajc {attributes..} /&gt;
+        &lt;{name}&gt;    
+            &lt;pathelement path="{first-location}"/&gt;
+            &lt;pathelement path="{second-location}"/&gt;
+            ...
+        &lt;{name}&gt;    
+        ...
+    &lt;/iajc&gt;
+
+	</pre><p>
+	As with other Path-like structures, they may be defined elsewhere 
+	and specified using the refid attribute:
+	</p><pre class="programlisting">
+    
+    &lt;path id="aspect.path"&gt;
+        &lt;pathelement path="${home}/lib/persist.jar"/&gt;
+        &lt;pathelement path="${home}/lib/trace.jar"/&gt;
+    &lt;/path&gt;
+    ...
+    &lt;iajc {attributes..} /&gt;
+        &lt;aspectpath refid="aspect.path"/&gt;    
+        ...
+    &lt;/iajc&gt;
+
+	</pre><p>
+	The task also supports an attribute <code class="literal">{name}ref</code>
+	for each such parameter. E.g., for <code class="literal">aspectpath</code>:
+	</p><pre class="programlisting">
+    
+    &lt;iajc {attributes..} aspectpathref="aspect.path"/&gt;    
+
+	</pre></div><div class="sect2" title="Sample of iajc task"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-iajc-sample"></a>Sample of iajc task</h3></div></div></div><p>
+		A minimal build script defines the task and runs it, specifying the sources:
+		</p><pre class="programlisting">
+		
+&lt;project name="simple-example" default="compile" &gt;
+  &lt;taskdef 
+      resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"&gt;
+    &lt;classpath&gt;
+      &lt;pathelement location="${home.dir}/tools/aspectj/lib/aspectjtools.jar"/&gt;
+    &lt;/classpath&gt;
+  &lt;/taskdef&gt;
+
+  &lt;target name="compile" &gt;
+    &lt;iajc sourceroots="${home.dir}/ec/project/src" 
+        classpath="${home.dir}/tools/aspectj/lib/aspectjrt.jar"/&gt; 
+  &lt;/target&gt;
+&lt;/project&gt;
+
+		</pre><p>
+		Below is script with most everything in it. The compile process...
+		</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Runs in incremental mode, recompiling when the user hits return;
+	        </p></li><li class="listitem"><p>Reads all the source files from two directories;
+	        </p></li><li class="listitem"><p>Reads binary .class files from input jar and directory; 
+				</p></li><li class="listitem"><p>Uses a binary aspect library for persistence;
+	        </p></li><li class="listitem"><p>Outputs to an application jar; and
+	        </p></li><li class="listitem"><p>Copies resources from the source directories and binary input 
+				jar and directories to the application jar. </p></li></ol></div><p>
+		When this target is built, the compiler will build once and then 
+		wait for input from the user. 
+		Messages are printed as usual. 
+		When the user has quit, then this runs the application.
+		</p><pre class="programlisting">
+		
+  &lt;target name="build-test" &gt;
+    &lt;iajc outjar="${home.dir}/output/application.jar" 
+            sourceRootCopyFilter="**/CVS/*,**/*.java"
+            inpathDirCopyFilter="**/CVS/*,**/*.java,**/*.class"
+            incremental="true" &gt;
+      &lt;sourceroots&gt;
+        &lt;pathelement location="${home.dir}/ec/project/src"/&gt;
+        &lt;pathelement location="${home.dir}/ec/project/testsrc"/&gt;
+      &lt;/sourceroots&gt;
+      &lt;inpath&gt;
+        &lt;pathelement location="${home.dir}/build/module.jar"/&gt;
+        &lt;pathelement location="${home.dir}/build/binary-input"/&gt;
+      &lt;/inpath&gt;
+      &lt;aspectpath&gt;
+        &lt;pathelement location="${home.dir}/ec/int/persist.jar"/&gt;
+      &lt;/aspectpath&gt;
+      &lt;classpath&gt;
+        &lt;pathelement location="${home.dir}/tools/aspectj/lib/aspectjrt.jar"/&gt;
+      &lt;/classpath&gt;
+    &lt;/iajc&gt;
+    
+    &lt;java classname="org.smart.app.Main"&gt;
+      &lt;classpath&gt;
+        &lt;pathelement location="${home.dir}/tools/aspectj/lib/aspectjrt.jar"/&gt;
+        &lt;pathelement location="${home.dir}/ec/int/persist.jar"/&gt;
+        &lt;pathelement location="${home.dir}/output/application.jar"/&gt;
+      &lt;/classpath&gt;
+    &lt;/java&gt;
+  &lt;/target&gt;
+
+		</pre><p>
+		For an example of a build script,
+		see <a class="ulink" href="../examples/build.xml" target="_top">
+						../examples/build.xml</a>.
+		</p></div><div class="sect2" title="Avoiding clean compiles"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-iajc-uptodate"></a>Avoiding clean compiles</h3></div></div></div><p>
+		Unlike javac, the ajc compiler always processes all input because
+		new aspects can apply to updated classes and vice-versa.
+		However, in the case where no files have been updated, there
+		is no reason to recompile sources.  One way to implement that
+		is with an explicit dependency check using the uptodate task:
+		</p><pre class="programlisting">
+		
+  &lt;target name="check.aspects.jar"&gt;
+    &lt;uptodate property="build.unnecessary" 
+        targetfile="${aspects.module-jar}" &gt;
+       &lt;srcfiles dir="${src1}" includes="**/*.aj"/&gt;
+       &lt;srcfiles dir="${src2}/" includes="**/*.aj"/&gt;
+    &lt;/uptodate&gt;
+  &lt;/target&gt;
+
+  &lt;target name="compile.aspects" depends="prepare,check.aspects.jar" 
+          unless="build.unnecessary"&gt;
+     &lt;iajc ... 
+
+		</pre><p>
+		When using this technique, be careful to verify that binary
+		input jars are themselves up-to-date after they would have been
+		modified by any build commands.
+		</p></div><div class="sect2" title="Programmatically handling compiler messages"><div class="titlepage"><div><div><h3 class="title"><a name="programmatically-handling-compiler-messages"></a>Programmatically handling compiler messages</h3></div></div></div><p>
+	Users may specify a message holder to which the compiler will pass 
+	all messages as they are generated. This will override all of the 
+	normal message printing, but does not prevent the task from failing 
+	if exceptions were thrown or if failonerror is true and the compiler 
+	detected errors in the sources.
+	</p><p>
+	Handling messages programmatically could be useful when using the 
+	compiler to verify code. If aspects consist of declare [error|warning],
+	then the compiler can act to detect invariants in the code being 
+	processed. For code to compare expected and actual messages, see the 
+	AspectJ testing module (which is not included in the binary 
+	distribution). 
+	</p></div></div><div class="sect1" title="Ajc11CompilerAdapter (javac)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-adapter"></a>Ajc11CompilerAdapter (javac)</h2></div></div></div><p>
+	This CompilerAdapter can be used in javac task calls by setting the 
+	<code class="literal">build.compiler</code> property. 
+	This enables users to to easily switch between the Javac and AspectJ 
+	compilers. However, because there are differences in source file 
+    handling between the Javac task and the ajc compiler, not all
+    Javac task invocations can be turned over to iajc.  However, ajc can
+    compile anything that Javac can, so it should be possible for any
+    given compile job to restate the Javac task in a way that can be
+    handled by iajc/ajc.
+    </p><div class="sect2" title="Sample of compiler adapter"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-adapter-sample"></a>Sample of compiler adapter</h3></div></div></div><p>
+		To build using the adapter, put the 
+		<code class="literal">aspectjtools.jar</code> 
+		on the system/ant classpath (e.g., in 
+		<code class="literal">${ANT_HOME}/lib</code>) 
+		and define the 
+		<code class="literal">build.compiler</code>
+		property as the fully-qualified name of the class, 
+		<code class="literal">org.aspectj.tools.ant.taskdefs.Ajc11CompilerAdapter</code>. 
+		</p><p>
+		The AspectJ compiler should run for any compile using the Javac task 
+		(for options, see the Ant documentation for the Javac task). 
+		For example, the call below passes all out-of-date source files in the 
+		<code class="literal">src/org/aspectj</code> subdirectories to the 
+		<code class="literal">ajc</code> command along with the destination directory:
+		</p><pre class="programlisting">
+		
+-- command:
+
+    cp aspectj1.1/lib/aspectjtools.jar ant/lib
+    ant/bin/ant -Dbuild.compiler=org.aspectj.tools.ant.taskdefs.Ajc11CompilerAdapter ...
+
+-- task invocation in the build script:
+
+  &lt;javac srcdir="src" includes="org/aspectj/**/*.java" destdir="dest" /&gt;
+
+		</pre><p>
+		To pass ajc-specific arguments, use a compilerarg entry.
+		</p><pre class="programlisting">
+		
+-- command
+
+  Ant -Dbuild.compiler=org.aspectj.tools.ant.taskdefs.Ajc11CompilerAdapter
+
+-- build script
+
+  &lt;property name="ajc" 
+              value="org.aspectj.tools.ant.taskdefs.Ajc11CompilerAdapter"/&gt;
+
+  &lt;javac srcdir="src" includes="org/aspectj/**/*.java" destdir="dest" &gt;
+    &lt;compilerarg compiler="${ajc}" line="-argfile src/args.lst"/&gt;
+  &lt;javac/&gt;
+
+		</pre><p>The Javac task does special handling of source files that 
+        can interfere with ajc.  It removes any files that are not out-of-date
+        with respect to the corresponding .class files.  But ajc requires all 
+        source files, since an aspect may affect a source file that is not out
+        of date.  (For a solution to this, see the <code class="literal">build.compiler.clean</code>
+        property described below.)  Conversely, developers sometimes specify a source directory 
+        to javac, and let it search for files for types it cannot find.
+        AspectJ will not do this kind of searching under the source directory
+        (since the programmer needs to control which sources are affected).
+        (Don't confuse the source directory used by Javac with the source root
+        used by ajc; if you specify a source root to ajc, it will compile
+        any source file under that source root (without exception or filtering).)
+        To replace source dir searching in Javac, use an Ant filter to specify
+        the source files.
+        </p></div><div class="sect2" title="Compiler adapter compilerarg options"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-adapter-options"></a>Compiler adapter compilerarg options</h3></div></div></div><p>
+	The adapter supports any ajc command-line option passed using compilerarg, 
+	as well as the following options available only in AjcTask. 
+	Find more details on the following options in <a class="xref" href="#antTasks-iajc" title="AjcTask (iajc)">AjcTask (iajc)</a>.
+	</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		<code class="literal">-Xmaxmem</code>: 
+			set maximum memory for forking (also settable in javac).		
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xlistfileargs</code>: 
+			list file arguments (also settable in javac).		
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xfailonerror</code>: 
+			throw BuildException on compiler error (also settable in javac).
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xmessageholderclass</code>: 
+			specify fully-qualified name of class to use as the message holder.	
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xcopyinjars</code>: 
+			copy resources from any input jars to output
+			(default behavior since 1.1.1)
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xsourcerootcopyfilter {filter}</code>: 
+			copy resources from source directories to output (minus files specified in filter)
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xtagfile {file}</code>: 
+			use file to control incremental compilation		
+		</p></li><li class="listitem"><p>
+		<code class="literal">-Xsrcdir {dir}</code>: 		
+			add to list of ajc source roots (all source files will be included).
+		</p></li></ul></div><p>
+	Special considerations when using Javac and compilerarg:
+	</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		The names above may differ slightly from what you might expect 
+		from AjcTask; use these forms when specifying compilerarg.
+		</p></li></ul></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		By default the adapter will mimic the Javac task's copying of resource 
+		files by specifying 
+		<code class="literal">"**/CVS/*,**/*.java,**/*.aj"</code>
+		for the sourceroot copy filter. 
+		To change this behavior, supply your own value 
+		(e.g., <code class="literal">"**/*"</code> to copy nothing).
+		</p></li></ul></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		Warning - define the system property
+		<code class="literal">build.compiler.clean</code> to compile all files, 
+		when available.
+		Javac prunes the source file list of "up-to-date" source files 
+		based on the timestamps of corresponding .class files, 
+		and will not compile if no sources are out of date. 
+		This is wrong for ajc which requires all the files for each compile 
+		and which may refer indirectly to sources using argument files. 
+		</p><p>
+		To work around this, set the global property 
+		<code class="literal">build.compiler.clean</code>. 
+		This tells the compiler adapter to delete all .class files 
+		in the destination directory and re-execute the javac 
+		task so javac can recalculate the list of source files. e.g.,
+		</p><pre class="programlisting">
+		
+  Ant -Dbuild.compiler=org.aspectj.tools.ant.taskdefs.Ajc11CompilerAdapter
+      -Dbuild.compiler.clean=anything ...
+
+		</pre><p>		
+		Caveats to consider when using this global 
+		<code class="literal">build.compiler.clean</code> property:
+		</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+		   If javac believes there are no out-of-date source files, 
+		   then the adapter is never called and cannot clean up, 
+		   and the "compile" will appear to complete successfully 
+		   though it did nothing.
+			</p></li><li class="listitem"><p>
+		   Cleaning will makes stepwise build processes fail if 
+		   they depend on the results of the prior compilation being 
+		   in the same directory, since cleaning deletes all .class files.
+			</p></li><li class="listitem"><p>
+		   This clean process only permits one compile process at a 
+		   time for each destination directory because it tracks 
+		   recursion by writing a tag file to the destination directory.
+			</p></li><li class="listitem"><p>
+		   When running incrementally, the clean happens only before 
+		   the initial compile.
+			</p></li></ol></div></li></ul></div></div></div><div class="sect1" title="Ajc10 (ajc)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-ajc"></a>Ajc10 (ajc)</h2></div></div></div><p>
+	This task handles the same arguments as those used by the AspectJ 1.0 task.
+	This should permit those with existing build scripts using the Ajc Ant 
+	task to continue using the same scripts when compiling with 1.1.
+	This will list any use of options no longer supported in 1.1 
+	(e.g., <code class="literal">lenient, strict, workingdir, preprocess, usejavac</code>,...), 
+	and does not provide access to the new features of AspectJ 1.1. 
+	(Developers using AspectJ 1.1 only should upgrade their scripts 
+	to use AjcTask instead.  This will not work for AspectJ 1.2 or later.)
+	</p><div class="sect2" title="Ajc10 (ajc) Options"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-ajc-options"></a>Ajc10 (ajc) Options</h3></div></div></div><p>
+	    </p><p>
+		Most attributes and nested elements are optional.	
+		The compiler requires that the same version of 
+		<code class="literal">aspectjrt.jar</code>
+		be specified on the classpath, and that some sources be
+		be specified
+	    (using one or more of 
+	    <code class="literal">argfiles</code> and 
+	    <code class="literal">srcdir</code> (with patterns)).
+	    </p><p>Boolean parameters default to <code class="literal">false</code>
+	    unless otherwise stated.
+	    </p><div class="table"><a name="idp5769616"></a><p class="title"><b>Table 4.1. AjcTask (ajc) options for specifying sources</b></p><div class="table-contents"><table summary="AjcTask (ajc) options for specifying sources" border="1"><colgroup><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><p>srcdir
+				</p></td><td><p>
+				The base directory of the java files.
+				See 
+				</p></td></tr><tr><td><p>destdir
+				</p></td><td><p>
+				The target directory for the output .class files
+				</p></td></tr><tr><td><p>includes
+				</p></td><td><p>
+				Comma-separated list of patterns of files that must be included.
+				No files are included when omitted.
+				</p></td></tr><tr><td><p>includesfile
+				</p></td><td><p>
+				The path to a file containing include patterns.
+				</p></td></tr><tr><td><p>excludes
+				</p></td><td><p>
+				Comma-separated list of patterns of files that must be excluded.
+				No files (except default excludes) are excluded when omitted.
+				</p></td></tr><tr><td><p>excludesfile
+				</p></td><td><p>
+				The path to a file containing exclude patterns.
+				</p></td></tr><tr><td><p>defaultexcludes
+				</p></td><td><p>
+				If true, then default excludes are used.
+				Default excludes are used when omitted
+				(i.e., defaults to <code class="literal">true</code>).
+				</p></td></tr><tr><td><p>classpath, classpathref
+				</p></td><td><p>
+				The classpath to use, 
+				optionally given as a reference to a classpath Path
+				element defined elsewhere. 
+				</p></td></tr><tr><td><p>bootclasspath, bootclasspathref
+				</p></td><td><p>
+				The bootclasspath to use, 
+				optionally given as a reference to a bootclasspath Path
+				element defined elsewhere. 
+				</p></td></tr><tr><td><p>extdirs
+				</p></td><td><p>
+				Paths to directories containting installed extensions.
+				</p></td></tr><tr><td><p>debug
+				</p></td><td><p>
+				If true, emit debug info in the .class files.
+				</p></td></tr><tr><td><p>deprecation
+				</p></td><td><p>
+				If true, emit messages about use of deprecated API.
+				</p></td></tr><tr><td><p>verbose
+				</p></td><td><p>
+				Emit compiler status messages during the compile.
+				</p></td></tr><tr><td><p>version
+				</p></td><td><p>
+				Emit version information and quit.
+				</p></td></tr><tr><td><p>failonerror
+				</p></td><td><p>
+				If true, throw BuildException to halt build if there
+				are any compiler errors.
+				If false, continue notwithstanding compile errors.
+				Defaults to <code class="literal">true</code>.
+				</p></td></tr><tr><td><p>source
+				</p></td><td><p>
+				Value of -source option - ignored unless <code class="literal">1.4</code>.
+				</p></td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="idp5798688"></a><p class="title"><b>Table 4.2. Parameters ignored by the old ajc taskdef, 
+				but now supported or buggy</b></p><div class="table-contents"><table summary="Parameters ignored by the old ajc taskdef, 
+				but now supported or buggy" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th><th>Supported?</th></tr></thead><tbody><tr><td><p>encoding
+				</p></td><td><p>Default encoding of source files.
+				</p></td><td><p>yes
+				</p></td></tr><tr><td><p>optimize
+				</p></td><td><p>
+					Whether source should be compiled with optimization.
+				</p></td><td><p>yes?
+				</p></td></tr><tr><td><p>target
+				</p></td><td><p>
+				Generate class files for specific VM version, one of
+				[<code class="literal">1.1 1.2</code>].
+				</p></td><td><p>yes
+				</p></td></tr><tr><td><p>depend
+				</p></td><td><p>
+				Enables dependency-tracking.
+				</p></td><td><p>no
+				</p></td></tr><tr><td><p>includeAntRuntime
+				</p></td><td><p>
+				Whether to include the Ant run-time libraries.
+				</p></td><td><p>no
+				</p></td></tr><tr><td><p>includeJavaRuntime
+				</p></td><td><p>
+				Whether to include the run-time libraries from the executing VM.
+				</p></td><td><p>no
+				</p></td></tr><tr><td><p>threads
+				</p></td><td><p>Multi-threaded compilation
+				</p></td><td><p>no
+				</p></td></tr></tbody></table></div></div><br class="table-break"><p>
+		The following table shows that many of the unique parameters in 
+		AspectJ 1.0 are no longer supported.
+		</p><div class="table"><a name="idp5817392"></a><p class="title"><b>Table 4.3. Parameters unique to ajc</b></p><div class="table-contents"><table summary="Parameters unique to ajc" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Attribute</th><th>Description</th><td class="auto-generated"> </td></tr></thead><tbody><tr><td><p>X
+				</p></td><td><p>
+				 	deprecated X options include
+					reweavable (on by default)
+					reweavable:compress (compressed by default)
+				</p></td><td class="auto-generated"> </td></tr><tr><td><p>emacssym
+				</p></td><td><p>
+				Generate symbols for Emacs IDE support.
+				</p></td><td class="auto-generated"> </td></tr><tr><td><p>argfiles
+				</p></td><td><p>
+				A comma-delimited list of argfiles that contain a line-delimited 
+				list of source file paths (absolute or relative to the argfile).
+				</p></td><td class="auto-generated"> </td></tr></tbody></table></div></div><br class="table-break"><div class="sect3" title="argfiles - argument list files"><div class="titlepage"><div><div><h4 class="title"><a name="idp5825232"></a>argfiles - argument list files</h4></div></div></div><p>
+		An argument file is a file (usually <code class="literal">{file}.lst</code>) 
+		containing a list of source file paths 
+		(absolute or relative to the argfile). 
+		You can use it to specify all source files to be compiled, 
+		which ajc requires to avoid searching every possible source file 
+		in the source path when building aspects. 
+		If you specify an argfile to the ajc task, it will not include all 
+		files in any specified source directory (which is the default 
+		behavior for the Javac task when no includes are specified). 
+		Conversely, if you specify excludes, they will be removed from 
+		the list of files compiled even if they were specified 
+		in an argument file. 
+		</p><p>
+		The compiler also accepts arguments that are not source files,
+		but the IDE support for such files varies, and Javac does not
+		support them.  Be sure to include exactly one argument on each line.
+		</p></div></div><div class="sect2" title="Ajc10 parameters specified as nested elements"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-ajc-nested"></a>Ajc10 parameters specified as nested elements</h3></div></div></div><p>
+		This task forms an implicit FileSet and supports all attributes of 
+		<code class="literal">&lt;fileset&gt;</code> (dir becomes srcdir) as well as 
+		the nested 
+		<code class="literal">&lt;include&gt;</code>, 
+		<code class="literal">&lt;exclude&gt;</code>, and 
+		<code class="literal">&lt;patternset&gt;</code> elements. 
+		These can be used to specify source files. 
+	    </p><p>
+		<code class="literal">ajc</code>'s
+		<code class="literal">srcdir</code>, 
+		<code class="literal">classpath</code>, 
+		<code class="literal">bootclasspath</code>, 
+		<code class="literal">extdirs</code>, and 
+		<code class="literal">jvmarg</code>
+		attributes are path-like structures and can also be set via nested 
+		<code class="literal">&lt;src&gt;</code>, 
+		<code class="literal">&lt;classpath&gt;</code>, 
+		<code class="literal">&lt;bootclasspath&gt;</code>, 
+		<code class="literal">&lt;extdirs&gt;</code>, and 
+		<code class="literal">&lt;jvmargs&gt;</code> elements, respectively.
+		</p></div><div class="sect2" title="Sample of ajc task"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-ajc-sample"></a>Sample of ajc task</h3></div></div></div><p>
+		Following is a declaration for the ajc task and a sample invocation 
+		that uses the ajc compiler to compile the files listed in 
+		<code class="literal">default.lst</code> into the dest dir:
+		</p><pre class="programlisting">
+		
+&lt;project name="example" default="compile" &gt;
+  &lt;taskdef name="ajc"
+    classname="org.aspectj.tools.ant.taskdefs.Ajc10" &gt;
+    &lt;!-- declare classes needed to run the tasks and tools --&gt;
+    &lt;classpath&gt;
+      &lt;pathelement location="${home.dir}/tools/aspectj/lib/aspectjtools.jar"/&gt;
+    &lt;/classpath&gt;
+  &lt;/taskdef&gt;
+
+  &lt;target name="compile" &gt;
+    &lt;mkdir dir="dest" /&gt;
+    &lt;ajc destdir="dest" argfiles="default.lst" &gt;
+      &lt;!-- declare classes needed to compile the target files --&gt;
+      &lt;classpath&gt;
+        &lt;pathelement location="${home.dir}/tools/aspectj/lib/aspectjrt.jar"/&gt;
+      &lt;/classpath&gt;
+    &lt;/ajc&gt;
+  &lt;/target&gt;
+&lt;/project&gt;
+
+		</pre><p>
+		This build script snippet
+		</p><pre class="programlisting">
+				
+		  &lt;ajc srcdir="${src}"
+		       destdir="${build}"
+		       argfiles="demo.lst"
+		  /&gt;
+
+		</pre><p>		
+		compiles all .java files specified in the demo.lst and stores the .class files in the ${build} directory.  Unlike the Javac task, the includes attribute is empty by default, so only those files specified in demo.lst are included.
+		</p><p>				
+		This next example
+		</p><pre class="programlisting">
+				
+		  &lt;ajc srcdir="${src}"
+		       destdir="${build}"
+		       includes="spacewar/*,coordination/*"
+		       excludes="spacewar/Debug.java"
+		  /&gt;
+
+		</pre><p>		
+		compiles .java files under the <code class="literal">${src}</code> directory in the 
+		spacewar and coordination packages, and stores the .class files in the 
+		<code class="literal">${build}</code> directory.  
+		All source files under spacewar/ and coordination/ are used, except Debug.java.		
+		</p><p>
+		See <a class="ulink" href="../examples/build.xml" target="_top">../examples/build.xml</a>
+		for an example build script.
+		</p></div></div><div class="sect1" title="Isolating problems running the Ant tasks"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="antTasks-problems"></a>Isolating problems running the Ant tasks</h2></div></div></div><p>
+	If you have problems with the tasks not solved by the documentation, 
+	please try to see if you have the same problems when running ajc 
+	directly on the command line.
+	</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		If the problem occurs on the command line also, then the problem 
+		is not in the task. 
+		(It may be in the tools; please send bug reports.)
+		</p></li><li class="listitem"><p>
+		If the problem does not occur on the command line, then it may 
+		lie in the parameters you are supplying in Ant or in the task's 
+		handling of them.
+		</p></li><li class="listitem"><p>
+		If the build script looks correct and the problem only occurs when 
+		building from Ant, then please send a report 
+		(including your build file, if possible).
+		</p></li></ul></div><div class="sect2" title="Known issues with the Ant tasks"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-knownProblems"></a>Known issues with the Ant tasks</h3></div></div></div><p>
+		For the most up-to-date information on known problems, 
+		see the 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs" target="_top">bug database</a>
+		for unresolved 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs/buglist.cgi?&amp;product=AspectJ&amp;component=Compiler&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED" target="_top">
+			compiler bugs
+			</a> or 
+		<a class="ulink" href="http://bugs.eclipse.org/bugs/buglist.cgi?&amp;product=AspectJ&amp;component=Ant&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED" target="_top">
+			taskdef bugs
+			</a>.
+		</p><p>
+	    When running Ant build scripts under Eclipse 2.x variants, you will get a 
+	    VerifyError because the Eclipse Ant support fails to isolate the Ant runtime
+	    properly.  To run in this context, set up iajc to fork (and use forkclasspath).
+	    Eclipse 3.0 will fork Ant processes to avoid problems like this.
+		</p><p>
+	    Memory and forking: Users email most often about the ajc task running 
+	    out of memory. 
+	    This is not a problem with the task; some compiles take a lot of 
+	    memory, often more than similar compiles using javac.
+		</p><p>      
+    	Forking is now supported in both the 
+    	<a class="xref" href="#antTasks-adapter" title="Ajc11CompilerAdapter (javac)">Ajc11CompilerAdapter (javac)</a> and 
+    	<a class="xref" href="#antTasks-iajc" title="AjcTask (iajc)">AjcTask (iajc)</a>, 
+    	and you can set the maximum memory available. 
+    	You can also not fork and increase the memory available to Ant 
+    	(see the Ant documentation, searching for ANT_OPTS, 
+    	the variable they use in their scripts to pass VM options, 
+    	e.g., ANT_OPTS=-Xmx128m).
+		</p></div><div class="sect2" title="Ant task questions and bugs"><div class="titlepage"><div><div><h3 class="title"><a name="antTasks-feedback"></a>Ant task questions and bugs</h3></div></div></div><p>
+        For questions, you can send email to 
+        <a class="ulink" href="mailto:aspectj-users@dev.eclipse.org" target="_top">
+        aspectj-users@dev.eclipse.org</a>. 
+        (Do join the list to participate!) 
+        We also welcome any bug reports, patches, and features; 
+        you can submit them to the bug database at 
+        <a class="ulink" href="http://bugs.eclipse.org/bugs" target="_top">
+           http://bugs.eclipse.org/bugs</a>
+        using the AspectJ product and Ant component. 
+		</p></div></div></div><div class="chapter" title="Chapter 5. Load-Time Weaving"><div class="titlepage"><div><div><h2 class="title"><a name="ltw"></a>Chapter 5. Load-Time Weaving</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#ltw-introduction">Introduction</a></span></dt><dd><dl><dt><span class="sect2"><a href="#weaving-class-files-more-than-once">Weaving class files more than once</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ltw-rules">Load-time Weaving Requirements</a></span></dt><dt><span class="sect1"><a href="#ltw-configuration">Configuration</a></span></dt><dd><dl><dt><span class="sect2"><a href="#enabling-load-time-weaving">Enabling Load-time Weaving</a></span></dt><dt><span class="sect2"><a href="#configuring-load-time-weaving-with-aopxml-files">Configuring Load-time Weaving with aop.xml files</a></span></dt><dt><span class="sect2"><a href="#concrete-aspect">Using Concrete Aspects</a></span></dt><dt><span class="sect2"><a href="#concrete-aspect-precedence">Using Concrete Aspects to define precedence</a></span></dt><dt><span class="sect2"><a href="#weaver-options">Weaver Options</a></span></dt></dl></dd><dt><span class="sect1"><a href="#ltw-specialcases">Special cases</a></span></dt><dt><span class="sect1"><a href="#ltw-packaging">Runtime Requirements for Load-time Weaving</a></span></dt><dt><span class="sect1"><a href="#ltw-agents">Supported Agents</a></span></dt><dd><dl><dt><span class="sect2"><a href="#jvmti">JVMTI</a></span></dt><dt><span class="sect2"><a href="#jrockit">JRockit with Java 1.3/1.4 (use JVMTI on Java 5)</a></span></dt></dl></dd></dl></div><div class="sect1" title="Introduction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-introduction"></a>Introduction</h2></div></div></div><p> The AspectJ weaver takes class files as input and produces class files as output.
+            The weaving process itself can take place at one of three different times: compile-time,
+            post-compile time, and load-time. The class files produced by the weaving process (and
+            hence the run-time behaviour of an application) are the same regardless of the approach
+            chosen. </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Compile-time weaving is the simplest approach. When you have the source code
+                for an application, ajc will compile from source and produce woven class files as
+                output. The invocation of the weaver is integral to the ajc compilation process. The
+                aspects themselves may be in source or binary form. 
+                If the aspects are required for the affected classes to compile, then
+                you must weave at compile-time.  Aspects are required, e.g., when they
+                add members to a class and other classes being compiled reference the 
+                added members.
+                </p></li><li class="listitem"><p>Post-compile weaving (also sometimes called binary weaving) is used to weave
+                existing class files and JAR files. As with compile-time weaving,
+                the aspects used for weaving may be in source or binary form,
+                and may themselves be woven by aspects.</p></li><li class="listitem"><p>Load-time weaving (LTW) is simply binary weaving defered until the point that
+                a class loader loads a class file and defines the class to the JVM. To support this,
+                one or more "weaving class loaders", either provided explicitly by the run-time
+                environment or enabled through a "weaving agent" are required. </p></li></ul></div><p> You may also hear the term "run-time weaving". We define this as the weaving of
+            classes that have already been defined to the JVM (without reloading those
+            classes). AspectJ 5 does not provide explicit support for run-time weaving although
+            simple coding patterns can support dynamically enabling and disabling advice in aspects. </p><div class="sect2" title="Weaving class files more than once"><div class="titlepage"><div><div><h3 class="title"><a name="weaving-class-files-more-than-once"></a>Weaving class files more than once</h3></div></div></div><p> As of AspectJ 5 aspects (code style or annotation style) and woven classes are
+            	reweavable by default. If you are developing AspectJ applications that are to be used 
+            	in a load-time weaving environment with an older version of the compiler you
+                need to specify the <code class="literal">-Xreweavable</code> compiler option when building
+                them. This causes AspectJ to save additional state in the class files that is used
+                to support subsequent reweaving. </p></div></div><div class="sect1" title="Load-time Weaving Requirements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-rules"></a>Load-time Weaving Requirements</h2></div></div></div><p> All load-time weaving is done in the context of a class loader, and hence the set of
+            aspects used for weaving and the types that can be woven are affected by the class
+            loader delegation model. This ensures that LTW complies with the Java 2 security model.
+            The following rules govern the interaction of load-time weaving with class loading: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>All aspects to be used for weaving must be defined to the weaver before any
+                types to be woven are loaded.  This avoids types being "missed" by aspects added
+                later, with the result that invariants across types fail.</p></li><li class="listitem"><p>All aspects visible to the weaver are usable.
+                A visible aspect is one defined by the
+                weaving class loader or one of its parent class loaders.
+                All concrete visible aspects are woven and all abstract visible aspects
+                may be extended.
+            </p></li><li class="listitem"><p>A class loader may only weave classes that it defines. It may not weave
+                classes loaded by a delegate or parent class loader.</p></li></ol></div></div><div class="sect1" title="Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-configuration"></a>Configuration</h2></div></div></div><p>New in AspectJ 5 are a number of mechanisms to make load-time weaving
+        easy to use. The load-time weaving mechanism is chosen through JVM startup options. 
+        Configuration files determine the set of aspects to be used for weaving and which 
+        types will be woven. Additional diagnostic options allow the user to debug the configuration and 
+        weaving process. </p><div class="sect2" title="Enabling Load-time Weaving"><div class="titlepage"><div><div><h3 class="title"><a name="enabling-load-time-weaving"></a>Enabling Load-time Weaving</h3></div></div></div><p> AspectJ 5 supports several ways of enabling load-time weaving for
+            an application: agents, a command-line launch script, and a set of interfaces for
+            integration of AspectJ load-time weaving in custom environments. </p><div class="variablelist"><dl><dt><span class="term">Agents</span></dt><dd><p>AspectJ 5 ships with a number of load-time weaving agents that
+                            enable load-time weaving. These agents and their configuration
+                            are execution environment dependent. Configuration for the supported environments is discussed
+                            later in this chapter.</p><p>
+                            Using Java 5 JVMTI you can specify the <code class="literal">-javaagent:pathto/aspectjweaver.jar</code> option
+                            to the JVM.</p><p>
+                            Using BEA JRockit and Java 1.3/1.4, the very same behavior can be obtained using BEA JRockit JMAPI features with
+                            the <code class="literal">-Xmanagement:class=org.aspectj.weaver.loadtime.JRockitAgent</code>
+                        </p></dd><dt><span class="term">Command-line wrapper scripts <code class="literal">aj</code></span></dt><dd><p>The <span class="command"><strong>aj</strong></span> command runs Java programs in Java 1.4 or
+                        later by setting up <code class="literal">WeavingURLClassLoader</code> as the 
+                            system class loader.  
+                            For more information, see <a class="xref" href="#aj" title="Description">aj</a>.
+                        </p><p>The <span class="command"><strong>aj5</strong></span> command runs Java programs in Java 5
+                        by using the <code class="literal">-javaagent:pathto/aspectjweaver.jar</code> option 
+                            described above.
+                            For more information, see <a class="xref" href="#aj" title="Description">aj</a>.
+                        </p></dd><dt><span class="term">Custom class loader</span></dt><dd><p> A public interface is provided to allow a user written class loader
+                            to instantiate a weaver and weave classes after loading and before
+                            defining them in the JVM. This enables load-time weaving to be supported in
+                            environments where no weaving agent is available. It also allows the
+                            user to explicitly restrict by class loader which classes can be woven.
+                            For more information, see <a class="xref" href="#aj" title="Description">aj</a> and the
+                            API documentation and source for
+                            <code class="literal">WeavingURLClassLoader</code> and
+                            <code class="literal">WeavingAdapter</code>.
+                        </p></dd></dl></div></div><div class="sect2" title="Configuring Load-time Weaving with aop.xml files"><div class="titlepage"><div><div><h3 class="title"><a name="configuring-load-time-weaving-with-aopxml-files"></a>Configuring Load-time Weaving with aop.xml files</h3></div></div></div><p>The weaver is configured using one or more <code class="literal">META-INF/aop.xml</code>
+                files located on the class loader search path. Each file may declare a list of
+                aspects to be used for weaving, type patterns describing which types
+                should woven, and a set of options to be passed to the weaver. In addition AspectJ 5
+                supports the definition of concrete aspects in XML. Aspects defined in this way
+                must extend an abstract aspect visible to the weaver. The abstract aspect
+                may define abstract pointcuts (but not abstract
+                methods). The following example shows a simple aop.xml file: </p><pre class="programlisting">
+          &lt;aspectj&gt;
+
+            &lt;aspects&gt;
+              &lt;!-- declare two existing aspects to the weaver --&gt;
+              &lt;aspect name="com.MyAspect"/&gt;
+              &lt;aspect name="com.MyAspect.Inner"/&gt;
+
+              &lt;!-- define a concrete aspect inline --&gt;
+              &lt;concrete-aspect name="com.xyz.tracing.MyTracing"
+                               extends="tracing.AbstractTracing"
+                               precedence="com.xyz.first, *"&gt;
+                &lt;pointcut name="tracingScope" expression="within(org.maw.*)"/&gt;
+              &lt;/concrete-aspect&gt;
+
+              &lt;!-- Of the set of aspects declared to the weaver
+                   use aspects matching the type pattern "com..*" for weaving. --&gt;
+              &lt;include within="com..*"/&gt;
+
+              &lt;!-- Of the set of aspects declared to the weaver
+                   do not use any aspects with the @CoolAspect annotation for weaving --&gt;
+              &lt;exclude within="@CoolAspect *"/&gt;
+
+            &lt;/aspects&gt;
+
+            &lt;weaver options="-verbose"&gt;
+              &lt;!-- Weave types that are within the javax.* or org.aspectj.*
+                   packages. Also weave all types in the foo package that do
+                   not have the @NoWeave annotation. --&gt;
+              &lt;include within="javax.*"/&gt;
+              &lt;include within="org.aspectj.*"/&gt;
+              &lt;include within="(!@NoWeave foo.*) AND foo.*"/&gt;
+
+              &lt;!-- Do not weave types within the "bar" pakage --&gt;
+              &lt;exclude within="bar.*"/&gt;
+
+              &lt;!-- Dump all types within the "com.foo.bar" package
+                   to the "./_ajdump" folder on disk (for diagnostic purposes) --&gt;
+              &lt;dump within="com.foo.bar.*"/&gt;
+
+              &lt;!-- Dump all types within the "com.foo.bar" package and sub-packages,
+                   both before are after they are woven,
+                   which can be used for byte-code generated at runtime
+              &lt;dump within="com.foo.bar..*" beforeandafter="true"/&gt; 
+            &lt;/weaver&gt;
+
+          &lt;/aspectj&gt;
+
+		  </pre><p>
+                The DTD defining the format of this file is available here: 
+                http://www.eclipse.org/aspectj/dtd/aspectj.dtd. 
+            </p><p>
+                An aop.xml file contains two key sections: <code class="literal">aspects</code> defines one
+                or more aspects to the weaver and controls which aspects are to be
+                used in the weaving process; <code class="literal">weaver</code> defines weaver options and which
+                types should be woven.
+            </p><p>
+                The simplest way to define an aspect to the weaver is to 
+                specify the fully-qualified name of the aspect type in an aspect element. 
+                You can also
+                declare (and define to the weaver) aspects inline in the aop.xml file.
+                This is done using the <code class="literal">concrete-aspect</code> element. A concrete-aspect
+                declaration must provide a pointcut definition for every abstract 
+                pointcut in the abstract aspect it extends. This mechanism is a 
+                useful way of externalizing configuration for infrastructure and
+                auxiliary aspects where the pointcut definitions themselves can be
+                considered part of the configuration of the service.
+                Refer to the next section for more details.
+            </p><p>
+                The <code class="literal">aspects</code> element may optionally contain one or more <code class="literal">include</code> and
+                <code class="literal">exclude</code> elements (by default, all defined aspects are used for weaving).
+                Specifying include or exclude elements restricts the set of defined
+                aspects to be used for weaving to those that are matched by an include
+                pattern, but not by an exclude pattern. The <code class="literal">within</code> attribute accepts
+                a type pattern of the same form as a within pcd, except that &amp;&amp;
+                and || are replaced by 'AND' and 'OR'.
+            </p><p>
+                Note that <code class="literal">include</code> and <code class="literal">exclude</code> elements affect all aspects 
+                declared to the weaver including those in other aop.xml files. To help avoid unexpected 
+                behaviour a lint warning is issued
+                if an aspect is not declared as a result of of applying these filters.
+                Also note <code class="literal">aspect</code> and <code class="literal">concrete-aspect</code> elements
+                must be used to declare aspects to the weaver i.e. <code class="literal">include</code> and <code class="literal">exclude</code>
+                elements cannot be used find aspects on the class loader search path.
+            </p><p>
+                The <code class="literal">weaver</code> element is used to pass options to the weaver and to specify
+                the set of types that should be woven. If no include elements are specified
+                then all types visible to the weaver will be woven. In addition the <code class="literal">dump</code>
+                element can be used capture on disk byte-code of woven classes for diagnostic purposes both before,
+                in the case of those generated at runtime, and after the weaving process.
+            </p><p> When several configuration files are visible from a given weaving class loader
+                their contents are conceptually merged. 
+                The files are merged in the order they are
+                found on the search path (with a regular <code class="literal">getResourceAsStream</code> lookup)
+                according to the following rules: </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>The set of available aspects is the set of all
+                    declared and defined aspects (<code class="literal">aspect</code> and
+                    <code class="literal">concrete-aspect</code> elements of the <code class="literal">aspects</code>
+                    section).</p></li><li class="listitem"><p>The set of aspects used for weaving is the subset of the available
+                    aspects that are matched by at least one include statement and are not matched
+                    by any exclude statements. If there are no include statements then all non-excluded
+                    aspects are included.</p></li><li class="listitem"><p> The set of types to be woven are those types matched by at
+                    least one weaver <code class="literal">include</code> element and not matched by any 
+                    weaver <code class="literal">exclude</code> element. If there are no weaver include
+                    statements then all non-excluded types are included.</p></li><li class="listitem"><p> The weaver options are derived by taking the union of the
+                    options specified in each of the weaver options attribute specifications. Where an
+                    option takes a value e.g. <code class="literal">-warn:none</code> the most recently defined value
+                    will be used.</p></li></ul></div><p>It is not an error for the same aspect to be defined to the weaver in 
+                more than one visible <code class="literal">META-INF/aop.xml</code> file. 
+                However, if the same concrete aspect
+                is defined in more than one aop.xml file then an error will be issued.
+                A concrete aspect 
+                defined in this way will be used to weave types loaded by the
+                class loader that loaded the aop.xml file in which it was defined. 
+                </p><p> A <code class="literal">META-INF/aop.xml</code> can be generated by
+                using either the <code class="literal">-outxml</code> or <code class="literal">-outxmlfile</code> options of the AspectJ compiler. 
+                It will simply contain a (possibly empty) set of aspect elements; one for
+                each abstract or concrete aspect defined. 
+                When used in conjuction with the <code class="literal">-outjar</code> option
+                a JAR is produced that can be used
+                with the <span class="command"><strong>aj5</strong></span> command or a load-time weaving environment.</p></div><div class="sect2" title="Using Concrete Aspects"><div class="titlepage"><div><div><h3 class="title"><a name="concrete-aspect"></a>Using Concrete Aspects</h3></div></div></div><p>
+                It is possible to make an abstract aspect concrete by means of the <code class="literal">META-INF/aop.xml</code>
+                file. This is useful way to implement abstract pointcuts at deployment time, and also gives control
+                over precedence through the <code class="literal">precedence</code> attribute of the
+                <code class="literal">concrete-aspect</code> XML element.
+                Consider the following:
+            </p><pre class="programlisting">
+            package mypack;
+
+            @Aspect
+            public abstract class AbstractAspect {
+
+                // abstract pointcut: no expression is defined
+                @Pointcut
+                abstract void scope();
+
+                @Before("scope() &amp;&amp; execution(* *..doSome(..))")
+                public void before(JoinPoint jp) {
+                   ....
+                }
+            }
+            </pre><p>
+                This aspect is equivalent to the following in code style:
+            </p><pre class="programlisting">
+            package mypack;
+
+            public abstract aspect AbstractAspect {
+
+                // abstract pointcut: no expression is defined
+                abstract pointcut scope();
+
+                before() : scope() &amp;&amp; execution(* *..doSome(..)) {
+                   ....
+                }
+            }
+            </pre><p>
+                This aspect (in either style) can be made concrete using <code class="literal">META-INF/aop.xml</code>.
+                It defines the abstract pointcut <code class="literal">scope()</code>. When using this mechanism the 
+                following rules apply:
+                </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>The parent aspect must be abstract. It can be an @AspectJ or a
+                            regular code style aspect.</p></li><li class="listitem"><p>Only a simple abstract pointcut can be implemented i.e. a pointcut that doesn't expose
+                            state (through <code class="literal">args(), this(), target(), if()</code>). In @AspectJ syntax
+                            as illustrated in this sample, this means the method that hosts the pointcut must be abstract,
+                            have no arguments, and return void.</p></li><li class="listitem"><p>The concrete aspect must implement all inherited abstract pointcuts.</p></li><li class="listitem"><p>The concrete aspect may not implement methods so the abstract aspect it 
+                            extends may not contain any abstract methods.</p></li></ul></div><p>
+            </p><p>
+		        <span class="emphasis"><em>A limitation of the implementation of this feature in AspectJ 1.5.0 is that aspects defined using
+		        aop.xml are not exposed to the weaver. This means that they are not affected by advice and ITDs defined in
+		        other aspects. Support for this capability will be considered in a future release.</em></span>
+            </p><p>
+                If more complex aspect inheritance is required use regular aspect
+                inheritance instead of XML.
+                The following XML definition shows a valid concrete sub-aspect for the abstract aspects above:
+            </p><pre class="programlisting">
+            &lt;aspectj&gt;
+                &lt;aspects&gt;
+                    &lt;concrete-aspect name="mypack.__My__AbstractAspect" extends="mypack.AbstractAspect"&gt;
+                        &lt;pointcut name="scope" expression="within(yourpackage..*)"/&gt;
+                    &lt;/concrete-aspect&gt;
+                &lt;aspects&gt;
+            &lt;/aspectj&gt;
+            </pre><p>
+                It is important to remember that the <code class="literal">name</code> attribute in the
+                <code class="literal">concrete-aspect</code> directive defines the fully qualified name that will be given to the
+                concrete aspect. It must a valid class name because the aspect will be generated on the fly by the weaver.
+                You must
+                also ensure that there are no name collisions. Note that the concrete aspect will be
+                defined at the classloader level for which the aop.xml is visible. This implies that if you need
+                to use the <code class="literal">aspectof</code> methods to access the aspect instance(s) (depending on the perclause
+                of the aspect it extends) you have to use the helper API <code class="literal">org.aspectj.lang.Aspects.aspectOf(..)</code>
+                as in:
+            </p><pre class="programlisting">
+                // exception handling omitted
+                Class myConcreteAspectClass = Class.forName("mypack.__My__AbstractAspect");
+
+                // here we are using a singleton aspect
+                AbstractAspect concreteInstance = Aspects.aspectOf(myConcreteAspectClass);
+            </pre></div><div class="sect2" title="Using Concrete Aspects to define precedence"><div class="titlepage"><div><div><h3 class="title"><a name="concrete-aspect-precedence"></a>Using Concrete Aspects to define precedence</h3></div></div></div><p>
+                As described in the previous section, the <code class="literal">concrete-aspect</code> element in
+                <code class="literal">META-INF/aop.xml</code> gives the option to declare the precedence, just as
+                <code class="literal">@DeclarePrecedence</code> or <code class="literal">declare precedence</code> do in
+                aspect source code.
+            </p><p>
+                Sometimes it is necessary to declare precedence without extending any abstract aspect.
+                It is therefore possible to use the <code class="literal">concrete-aspect</code>
+                element without the <code class="literal">extends</code> attribute and without any
+                <code class="literal">pointcut</code> nested elements, just a <code class="literal">precedence</code>
+                attribute.
+                Consider the following:
+            </p><pre class="programlisting">
+                &lt;aspectj&gt;
+                    &lt;aspects&gt;
+                        &lt;concrete-aspect name="mypack.__MyDeclarePrecedence"
+                                         precedence="*..*Security*, Logging+, *"/&gt;
+                    &lt;/aspects&gt;
+                &lt;/aspectj&gt;
+            </pre><p>
+                This deployment time definitions is only declaring a precedence rule. You have to remember
+                that the <code class="literal">name</code> attribute must be a valid fully qualified class name
+                that will be then reserved for this concrete-aspect and must not conflict with other classes
+                you deploy.
+            </p></div><div class="sect2" title="Weaver Options"><div class="titlepage"><div><div><h3 class="title"><a name="weaver-options"></a>Weaver Options</h3></div></div></div><p> The table below lists the AspectJ options supported by LTW. All other options
+                will be ignored and a warning issued. </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Option</th><th>Purpose</th></tr></thead><tbody><tr><td>
+                                <code class="literal">-verbose</code>
+                            </td><td>Issue informational messages about the weaving process. Messages issued while the weaver is being 
+                                   bootstrapped are accumulated until all options are parsed. If the messages are required to be output
+                                   immediately you can use the option <code class="literal">-Daj.weaving.verbose=true</code> on the JVM startup command line.
+                            </td></tr><tr><td>
+                                <code class="literal">-debug</code>
+                            </td><td>
+                            	Issue a messages for each class passed to the weaver 
+                            	indicating whether it was woven, excluded or ignored. 
+                            	Also issue messages for classes
+                            	defined during the weaving process such as around advice
+                            	closures and concrete aspects defined in 
+                            	<code class="literal">META-INF/aop.xml</code>.
+                            </td></tr><tr><td>
+                                <code class="literal">-showWeaveInfo</code>
+                            </td><td>
+                            	Issue informational messages whenever the weaver touches a class file.
+                            	This option may also be enabled using the System property
+                            	<code class="literal">-Dorg.aspectj.weaver.showWeaveInfo=true</code>.
+                            </td></tr><tr><td>
+                                <code class="literal">-Xlintfile:pathToAResource</code>
+                            </td><td>Configure lint messages as specified in the given resource (visible from this aop.xml file' classloader)</td></tr><tr><td>
+                                <code class="literal">-Xlint:default, -Xlint:ignore, ...</code>
+                            </td><td>Configure lint messages, refer to documentation for meaningfull values</td></tr><tr><td>
+                                <code class="literal">-nowarn, -warn:none</code>
+                            </td><td>Suppress warning messages</td></tr><tr><td>
+                                <code class="literal">-Xreweavable</code>
+                            </td><td>Produce class files that can subsequently be rewoven</td></tr><tr><td>
+                                <code class="literal">-XnoInline</code>
+                            </td><td>Don't inline around advice.</td></tr><tr><td>
+                                <code class="literal">-XmessageHandlerClass:...</code>
+                            </td><td>Provide alternative output destination to stdout/stderr for all weaver messages.
+                            The given value must be the full qualified class name of a class that implements the
+                            <code class="literal">org.aspectj.bridge.IMessageHandler</code> interface
+                            and is visible to the classloader with which the weaver being configured is associated.
+                            Exercise caution when packaging a custom message handler with an application that is to 
+                            be woven. The handler (as well as classes on which it depends) cannot itself be woven
+                            by the aspects that are declared to the same weaver.
+                            </td></tr></tbody></table></div></div></div><div class="sect1" title="Special cases"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-specialcases"></a>Special cases</h2></div></div></div><p>
+            The following classes are not exposed to the LTW infrastructure regardless of 
+            the <code class="literal">aop.xml</code> file(s) used:
+            </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>All <code class="literal">org.aspectj.*</code> classes (and subpackages) - as those are needed by the infrastructure itself</p></li><li class="listitem"><p>All <code class="literal">java.*</code> and <code class="literal">javax.*</code> classes (and subpackages)</p></li><li class="listitem"><p>All <code class="literal">sun.reflect.*</code> classes - as those are JDK specific classes used when reflective calls occurs</p></li></ul></div><p>
+        </p><p>
+            Despite these restrictions, it is perfectly possible to match call join points for calls to these types providing the calling
+            class is exposed to the weaver. Subtypes of these excluded types that are exposed to the weaver may of course be woven.
+        </p><p>
+            Note that dynamic proxy representations are exposed to the LTW infrastructure and are not considered
+            a special case.
+        </p><p>
+            Some lint options behave differently when used under load-time weaving. The <code class="literal">adviceDidNotMatch</code>
+            won't be handled as a warn (as during compile time) but as an info message.
+        </p></div><div class="sect1" title="Runtime Requirements for Load-time Weaving"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-packaging"></a>Runtime Requirements for Load-time Weaving</h2></div></div></div><p> To use LTW the <code class="literal">aspectjweaver.jar</code> library must be added to the
+            classpath. This contains the AspectJ 5 runtime, weaver, weaving class loader and
+            weaving agents. It also contains the DTD for parsing XML weaving configuration files. </p></div><div class="sect1" title="Supported Agents"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ltw-agents"></a>Supported Agents</h2></div></div></div><div class="sect2" title="JVMTI"><div class="titlepage"><div><div><h3 class="title"><a name="jvmti"></a>JVMTI</h3></div></div></div><p> When using Java 5 the JVMTI agent can be used by starting the JVM with the
+                following option (adapt according to the path to aspectjweaver.jar): </p><pre class="programlisting">
+			-javaagent:pathto/aspectjweaver.jar
+		  </pre></div><div class="sect2" title="JRockit with Java 1.3/1.4 (use JVMTI on Java 5)"><div class="titlepage"><div><div><h3 class="title"><a name="jrockit"></a>JRockit with Java 1.3/1.4 (use JVMTI on Java 5)</h3></div></div></div><p> The JRockit agent is configured with the following JVM option: </p><pre class="programlisting">
+			-Xmanagement:class=org.aspectj.weaver.loadtime.JRockitAgent
+		  </pre></div></div></div><div class="chapter" title="Chapter 6. AspectJ version compatibility"><div class="titlepage"><div><div><h2 class="title"><a name="compatibility"></a>Chapter 6. AspectJ version compatibility</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#versionCompatibility">Version Compatibility</a></span></dt><dd><dl><dt><span class="sect2"><a href="#javaCompatibility">Java compatibility</a></span></dt><dt><span class="sect2"><a href="#runtimeCompatibility">Runtime library compatibility</a></span></dt><dt><span class="sect2"><a href="#binaryCompatibility">Aspect binary compatibility</a></span></dt><dt><span class="sect2"><a href="#sourceCompatibility">Aspect source compatibility</a></span></dt><dt><span class="sect2"><a href="#upgrading">Problems when upgrading to new AspectJ versions</a></span></dt></dl></dd></dl></div><div class="sect1" title="Version Compatibility"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="versionCompatibility"></a>Version Compatibility</h2></div></div></div><p>Systems, code, and build tools change over time, often not in step.
+        Generally, later versions of the build tools understand earlier
+        versions of the code, but systems should include versions of the runtime
+        used to build the AspectJ program. </p><div class="sect2" title="Java compatibility"><div class="titlepage"><div><div><h3 class="title"><a name="javaCompatibility"></a>Java compatibility</h3></div></div></div><p>
+            AspectJ programs can run on any Java VM of the required version.
+            The AspectJ tools produce Java bytecode .class files that run on 
+            Java compatible VM's.  If a Java class is changed by an aspect, 
+            the resulting class is binary compatible 
+            (as defined in the Java Language Specification).  Further, the
+            AspectJ compiler and weaving do all the exception checking
+            required of Java compilers by the Java specifications.
+        </p><p>Like other Java compilers,
+            the AspectJ compiler can target particular Java versions. Obviously, code
+            targeted at one version cannot be run in a VM of a lesser version. The
+            <code class="literal">aspectjrt.jar</code> is designed to take advantage
+            of features available in Java 2 or Java 5, but will run in a JDK 1.1.x
+            environment, so you can use AspectJ to target older or restricted
+            versions of Java.  However, there may be restricted variants of 
+            JDK 1.1.x that do not have API's used by the AspectJ runtime.  If
+            you deploy to one of those, you can email 
+            <a class="ulink" href="mailto:aspectj-dev@eclipse.org" target="_top">aspectj-dev@eclipse.org</a>
+            or download the runtime code to modify it for your environment.
+        </p><p>
+            Aside from the runtime, running the AspectJ tools themselves will 
+            require a more recent version of Java.
+            You might use Java 5 to run the AspectJ compiler to produce code
+            for Java 1.1.8.
+        </p></div><div class="sect2" title="Runtime library compatibility"><div class="titlepage"><div><div><h3 class="title"><a name="runtimeCompatibility"></a>Runtime library compatibility</h3></div></div></div><p> When deploying AspectJ programs, include on the classpath the
+            classes, aspects, and the AspectJ runtime library
+            (<code class="literal">aspectjrt.jar</code>). Use the version of the
+            runtime that came with the tools used to build the program. If the
+            runtime is earlier than the build tools used, it's very likely to
+            fail. If the runtime is later than the build tools used, it's possible
+            (but not guaranteed) that it will work. </p><p> Given that, three scenarios cause problems. First, you deploy new
+            aspects into an an existing system that already has aspects that were
+            built with a different version. Second, the runtime is already
+            deployed in your system and cannot be changed (e.g., some
+            application servers put <code class="literal">aspectjrt.jar</code> on the
+            bootclasspath). Third, you (unintentionally) deploy two versions
+            of the runtime, and the one loaded by a parent loader is used). </p><p> In earlier versions of AspectJ, these problems present in obscure
+            ways (e.g., unable to resolve a class). In later versions, a stack
+            trace might even specify that the runtime version is out of sync with
+            an aspect. To find out if the runtime you deployed is the one actually
+            being used, log the defining class loader for the aspects and
+            runtime. </p></div><div class="sect2" title="Aspect binary compatibility"><div class="titlepage"><div><div><h3 class="title"><a name="binaryCompatibility"></a>Aspect binary compatibility</h3></div></div></div><p>Generally, binary aspects can be read by later versions of the
+            weaver if the aspects were built by version 1.2.1 or later. (Some
+            future weavers might have documented limitations in how far back
+            they go.) If a post-1.2.1 weaver reads an aspect built by a later
+            version, it will emit a message. If the weaver reads in a binary aspect
+            and writes it out again, the result will be in the form produced by that
+            weaver, not the original form of the aspect (just like other weaver
+            output). </p><p>With unreleased or development versions of the tools, there are no
+            guarantees for binary compatibility, unless they are stated in the
+            release notes. If you use aspects built with development versions of
+            the weaver, be careful to rebuild and redeploy with the next released
+            version. </p></div><div class="sect2" title="Aspect source compatibility"><div class="titlepage"><div><div><h3 class="title"><a name="sourceCompatibility"></a>Aspect source compatibility</h3></div></div></div><p>Generally, AspectJ source files can be read by later versions of
+            the compiler. Language features do not change in dot releases (e.g.,
+            from 1.2.1 to 1.2.2). In some very rare cases, a language feature will
+            no longer be supported or may change its meaning; these cases are
+            documented in the release notes for that version. Some changes like
+            this were necessary when moving to binary weaving in the 1.1 release,
+            but at this time we don't anticipate more in the future. You might
+        also find that the program behaves differently if you relied on behavior
+        specific to that compiler/weaver, but which is not specified in the
+        <a class="ulink" href="../progguide/semantics.html" target="_top">Semantics appendix to the 
+        Programming Guide</a>.</p></div><div class="sect2" title="Problems when upgrading to new AspectJ versions"><div class="titlepage"><div><div><h3 class="title"><a name="upgrading"></a>Problems when upgrading to new AspectJ versions</h3></div></div></div><p> Let's say your program behaves differently after being built with
+            a new version of the AspectJ tools. It could be a bug that was
+            introduced by the tools, but often it results from relying on
+            behavior that was not guaranteed by the compiler. For example, the
+            order of advice across two aspects is not guaranteed unless there is a
+            precedence relationship between the aspects. If the program
+            implicitly relies on a certain order that obtains in one compiler, it
+            can fail when built with a different compiler. </p><p> Another trap is deploying into the same system, when the
+            <code class="literal">aspectjrt.jar</code> has not been changed
+            accordingly. </p><p> Finally, when updating to a version that has new language
+            features, there is a temptation to change both the code and the tools
+            at the same time. It's best to validate the old code with the new tools
+            before updating the code to use new features. That distinguishes
+            problems of new engineering from those of new semantics. </p></div></div></div></div></body></html>

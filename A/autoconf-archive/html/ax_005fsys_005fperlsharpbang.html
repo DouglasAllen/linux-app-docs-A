@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>ax_sys_perlsharpbang - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Macros.html#The-Macros" title="The Macros">
+<link rel="prev" href="ax_005fsys_005flargefile_005fsensitive.html#ax_005fsys_005flargefile_005fsensitive" title="ax_sys_largefile_sensitive">
+<link rel="next" href="ax_005fsys_005fweak_005falias.html#ax_005fsys_005fweak_005falias" title="ax_sys_weak_alias">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ax_sys_perlsharpbang"></a>
+<a name="ax_005fsys_005fperlsharpbang"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ax_005fsys_005fweak_005falias.html#ax_005fsys_005fweak_005falias">ax_sys_weak_alias</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ax_005fsys_005flargefile_005fsensitive.html#ax_005fsys_005flargefile_005fsensitive">ax_sys_largefile_sensitive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Macros.html#The-Macros">The Macros</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ax_sys_perlsharpbang</h3>
+
+<h2 class="majorheading">Synopsis</h2>
+
+<pre class="smallexample">     AX_SYS_PERLSHARPBANG
+</pre>
+<h2 class="majorheading">Description</h2>
+
+<p>Determine how the perl interpreter is located by the OS kernel and make
+substitution variable PERL_SHEBANG available. Does AC_PATH_PROG to find
+the path to perl. As a side-effect, that sets PERLINTERP and makes it
+available as a substitution variable.
+
+<p>Note: The macro allows for the possibility (expected to be seldom used)
+of an explicit user override (the "user" being the operator executing
+the final 'configure' script, in this context) by making the option
+argument like:
+
+<pre class="smallexample">       --with-perl-shebang='#! /my/funky/perlpath' # OR
+       --with-perl-shebang='/my/funky/perlpath'  # we just throw away the #! anyway
+                                                 # bec it must be absent in Makefile
+</pre>
+<p>Rationale: The are various ways of starting an interpreter on different
+*nix-like systems. Many use the simple
+
+<pre class="smallexample">       #!/usr/bin/perl
+</pre>
+<p>but it could be instead
+
+<pre class="smallexample">       #!/usr/local/bin/perl
+</pre>
+<p>and there is even the possibility that the user wants
+
+<pre class="smallexample">       #!/usr/bin/env perl
+</pre>
+<p>to find whichever perl comes first in the current $PATH. This is
+preferred by some of us because we run multiple perl installations on
+the same box. Adjusting our $PATH then allows us to set precedence over
+other perls, even whatever the "house" version is.
+
+<p>Users on very non-unix systems like MS Windows do not have a kernel that
+does this kind of thing from the first line of script files, but instead
+the perl on their machine is started and merely notices whatever comes
+after the interpreter path on this first line of the script (options
+like "-w").
+
+<p>Acknowledgement: this macro was in part inspired by Dean Povey's
+AC_PROG_PERL_VERSION.
+
+<h2 class="majorheading">Source Code</h2>
+
+<p>Download the
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_sys_perlsharpbang.m4">latest version of <samp><span class="file">ax_sys_perlsharpbang.m4</span></samp></a> or browse
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=history;f=m4/ax_sys_perlsharpbang.m4">the macro's revision history</a>.
+
+<h2 class="majorheading">License</h2>
+
+<p>Copyright&nbsp;&copy;&nbsp;2009&nbsp;Soren&nbsp;Andersen&nbsp;<a href="mailto:somian@pobox.com">somian@pobox.com</a><!-- /@w -->
+
+<p>Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved. This file is offered as-is, without any
+warranty.
+
+</body></html>
+

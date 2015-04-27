@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intro to Playbooks &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Playbooks" href="playbooks.html" />
+    <link rel="next" title="Playbook Roles and Include Statements" href="playbooks_roles.html" />
+    <link rel="prev" title="Playbooks" href="playbooks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="playbooks_roles.html" title="Playbook Roles and Include Statements"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="playbooks.html" title="Playbooks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks.html" accesskey="U">Playbooks</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intro-to-playbooks">
+<h1>Intro to Playbooks<a class="headerlink" href="#intro-to-playbooks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="about-playbooks">
+<span id="id1"></span><h2>About Playbooks<a class="headerlink" href="#about-playbooks" title="Permalink to this headline">¶</a></h2>
+<p>Playbooks are a completely different way to use ansible than in adhoc task execution mode, and are
+particularly powerful.</p>
+<p>Simply put, playbooks are the basis for a really simple configuration management and multi-machine deployment system,
+unlike any that already exist, and one that is very well suited to deploying complex applications.</p>
+<p>Playbooks can declare configurations, but they can also orchestrate steps of
+any manual ordered process, even as different steps must bounce back and forth
+between sets of machines in particular orders.  They can launch tasks
+synchronously or asynchronously.</p>
+<p>While you might run the main /usr/bin/ansible program for ad-hoc
+tasks, playbooks are more likely to be kept in source control and used
+to push out your configuration or assure the configurations of your
+remote systems are in spec.</p>
+<p>There are also some full sets of playbooks illustrating a lot of these techniques in the
+<a class="reference external" href="https://github.com/ansible/ansible-examples">ansible-examples repository</a>.  We&#8217;d recommend
+looking at these in another tab as you go along.</p>
+<p>There are also many jumping off points after you learn playbooks, so hop back to the documentation
+index after you&#8217;re done with this section.</p>
+</div>
+<div class="section" id="playbook-language-example">
+<span id="id2"></span><h2>Playbook Language Example<a class="headerlink" href="#playbook-language-example" title="Permalink to this headline">¶</a></h2>
+<p>Playbooks are expressed in YAML format (see <a class="reference internal" href="YAMLSyntax.html"><em>YAML Syntax</em></a>) and have a minimum of syntax, which intentionally
+tries to not be a programming language or script, but rather a model of a configuration or a process.</p>
+<p>Each playbook is composed of one or more &#8216;plays&#8217; in a list.</p>
+<p>The goal of a play is to map a group of hosts to some well defined roles, represented by
+things ansible calls tasks.  At a basic level, a task is nothing more than a call
+to an ansible module, which you should have learned about in earlier chapters.</p>
+<p>By composing a playbook of multiple &#8216;plays&#8217;, it is possible to
+orchestrate multi-machine deployments, running certain steps on all
+machines in the webservers group, then certain steps on the database
+server group, then more commands back on the webservers group, etc.</p>
+<p>&#8220;plays&#8221; are more or less a sports analogy.  You can have quite a lot of plays that affect your systems
+to do different things.  It&#8217;s not as if you were just defining one particular state or model, and you
+can run different plays at different times.</p>
+<p>For starters, here&#8217;s a playbook that contains just one play:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: ensure apache is at the latest version
+    yum: pkg=httpd state=latest
+  - name: write the apache config file
+    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+    notify:
+    - restart apache
+  - name: ensure apache is running
+    service: name=httpd state=started
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted</pre>
+</div>
+<p>Below, we&#8217;ll break down what the various features of the playbook language are.</p>
+</div>
+<div class="section" id="basics">
+<span id="playbook-basics"></span><h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hosts-and-users">
+<span id="playbook-hosts-and-users"></span><h3>Hosts and Users<a class="headerlink" href="#hosts-and-users" title="Permalink to this headline">¶</a></h3>
+<p>For each play in a playbook, you get to choose which machines in your infrastructure
+to target and what remote user to complete the steps (called tasks) as.</p>
+<p>The <cite>hosts</cite> line is a list of one or more groups or host patterns,
+separated by colons, as described in the <a class="reference internal" href="intro_patterns.html"><em>Patterns</em></a>
+documentation.  The <cite>remote_user</cite> is just the name of the user account:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  remote_user: root</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <cite>remote_user</cite> parameter was formerly called just <cite>user</cite>. It was renamed in Ansible 1.4 to make it more distinguishable from the <cite>user</cite> module (used to create users on remote systems).</p>
+</div>
+<p>Remote users can also be defined per task:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  remote_user: root
+  tasks:
+    - name: test connection
+      ping:
+      remote_user: yourname</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <cite>remote_user</cite> parameter for tasks was added in 1.4.</p>
+</div>
+<p>Support for running things from sudo is also available:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  remote_user: yourname
+  sudo: yes</pre>
+</div>
+<p>You can also use sudo on a particular task instead of the whole play:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  remote_user: yourname
+  tasks:
+    - service: name=nginx state=started
+      sudo: yes</pre>
+</div>
+<p>You can also login as you, and then sudo to different users than root:</p>
+<div class="highlight-python"><pre>---
+- hosts: webservers
+  remote_user: yourname
+  sudo: yes
+  sudo_user: postgres</pre>
+</div>
+<p>If you need to specify a password to sudo, run <cite>ansible-playbook</cite> with <tt class="docutils literal"><span class="pre">--ask-sudo-pass</span></tt> (<cite>-K</cite>).
+If you run a sudo playbook and the playbook seems to hang, it&#8217;s probably stuck at the sudo prompt.
+Just <cite>Control-C</cite> to kill it and run it again with <cite>-K</cite>.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">When using <cite>sudo_user</cite> to a user other than root, the module
+arguments are briefly written into a random tempfile in /tmp.
+These are deleted immediately after the command is executed.  This
+only occurs when sudoing from a user like &#8216;bob&#8217; to &#8216;timmy&#8217;, not
+when going from &#8216;bob&#8217; to &#8216;root&#8217;, or logging in directly as &#8216;bob&#8217; or
+&#8216;root&#8217;.  If this concerns you that this data is briefly readable
+(not writable), avoid transferring uncrypted passwords with
+<cite>sudo_user</cite> set.  In other cases, &#8216;/tmp&#8217; is not used and this does
+not come into play. Ansible also takes care to not log password
+parameters.</p>
+</div>
+</div>
+<div class="section" id="tasks-list">
+<span id="id3"></span><h3>Tasks list<a class="headerlink" href="#tasks-list" title="Permalink to this headline">¶</a></h3>
+<p>Each play contains a list of tasks.  Tasks are executed in order, one
+at a time, against all machines matched by the host pattern,
+before moving on to the next task.  It is important to understand that, within a play,
+all hosts are going to get the same task directives.  It is the purpose of a play to map
+a selection of hosts to tasks.</p>
+<p>When running the playbook, which runs top to bottom, hosts with failed tasks are
+taken out of the rotation for the entire playbook.  If things fail, simply correct the playbook file and rerun.</p>
+<p>The goal of each task is to execute a module, with very specific arguments.
+Variables, as mentioned above, can be used in arguments to modules.</p>
+<p>Modules are &#8216;idempotent&#8217;, meaning if you run them
+again, they will make only the changes they must in order to bring the
+system to the desired state.  This makes it very safe to rerun
+the same playbook multiple times.  They won&#8217;t change things
+unless they have to change things.</p>
+<p>The <cite>command</cite> and <cite>shell</cite> modules will typically rerun the same command again,
+which is totally ok if the command is something like
+&#8216;chmod&#8217; or &#8216;setsebool&#8217;, etc.  Though there is a &#8216;creates&#8217; flag available which can
+be used to make these modules also idempotent.</p>
+<p>Every task should have a <cite>name</cite>, which is included in the output from
+running the playbook.   This is output for humans, so it is
+nice to have reasonably good descriptions of each task step.  If the name
+is not provided though, the string fed to &#8216;action&#8217; will be used for
+output.</p>
+<p>Tasks can be declared using the legacy &#8220;action: module options&#8221; format, but
+it is recommended that you use the more conventional &#8220;module: options&#8221; format.
+This recommended format is used throughout the documentation, but you may
+encounter the older format in some playbooks.</p>
+<p>Here is what a basic task looks like, as with most modules,
+the service module takes key=value arguments:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: make sure apache is running
+    service: name=httpd state=running</pre>
+</div>
+<p>The <cite>command</cite> and <cite>shell</cite> modules are the only modules that just take a list
+of arguments and don&#8217;t use the key=value form.  This makes
+them work as simply as you would expect:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: disable selinux
+    command: /sbin/setenforce 0</pre>
+</div>
+<p>The command and shell module care about return codes, so if you have a command
+whose successful exit code is not zero, you may wish to do this:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: run this command and ignore the result
+    shell: /usr/bin/somecommand || /bin/true</pre>
+</div>
+<p>Or this:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: run this command and ignore the result
+    shell: /usr/bin/somecommand
+    ignore_errors: True</pre>
+</div>
+<p>If the action line is getting too long for comfort you can break it on
+a space and indent any continuation lines:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: Copy ansible inventory file to client
+    copy: src=/etc/ansible/hosts dest=/etc/ansible/hosts
+            owner=root group=root mode=0644</pre>
+</div>
+<p>Variables can be used in action lines.   Suppose you defined
+a variable called &#8216;vhost&#8217; in the &#8216;vars&#8217; section, you could do this:</p>
+<div class="highlight-python"><pre>tasks:
+  - name: create a virtual host file for {{ vhost }}
+    template: src=somefile.j2 dest=/etc/httpd/conf.d/{{ vhost }}</pre>
+</div>
+<p>Those same variables are usable in templates, which we&#8217;ll get to later.</p>
+<p>Now in a very basic playbook all the tasks will be listed directly in that play, though it will usually
+make more sense to break up tasks using the &#8216;include:&#8217; directive.  We&#8217;ll show that a bit later.</p>
+</div>
+</div>
+<div class="section" id="action-shorthand">
+<span id="id4"></span><h2>Action Shorthand<a class="headerlink" href="#action-shorthand" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.8.</span></p>
+<p>Ansible prefers listing modules like this in 0.8 and later:</p>
+<div class="highlight-python"><pre>template: src=templates/foo.j2 dest=/etc/foo.conf</pre>
+</div>
+<p>You will notice in earlier versions, this was only available as:</p>
+<div class="highlight-python"><pre>action: template src=templates/foo.j2 dest=/etc/foo.conf</pre>
+</div>
+<p>The old form continues to work in newer versions without any plan of deprecation.</p>
+</div>
+<div class="section" id="handlers-running-operations-on-change">
+<span id="handlers"></span><h2>Handlers: Running Operations On Change<a class="headerlink" href="#handlers-running-operations-on-change" title="Permalink to this headline">¶</a></h2>
+<p>As we&#8217;ve mentioned, modules are written to be &#8216;idempotent&#8217; and can relay  when
+they have made a change on the remote system.   Playbooks recognize this and
+have a basic event system that can be used to respond to change.</p>
+<p>These &#8216;notify&#8217; actions are triggered at the end of each block of tasks in a playbook, and will only be
+triggered once even if notified by multiple different tasks.</p>
+<p>For instance, multiple resources may indicate
+that apache needs to be restarted because they have changed a config file,
+but apache will only be bounced once to avoid unnecessary restarts.</p>
+<p>Here&#8217;s an example of restarting two services when the contents of a file
+change, but only if the file changes:</p>
+<div class="highlight-python"><pre>- name: template configuration file
+  template: src=template.j2 dest=/etc/foo.conf
+  notify:
+     - restart memcached
+     - restart apache</pre>
+</div>
+<p>The things listed in the &#8216;notify&#8217; section of a task are called
+handlers.</p>
+<p>Handlers are lists of tasks, not really any different from regular
+tasks, that are referenced by name.  Handlers are what notifiers
+notify.  If nothing notifies a handler, it will not run.  Regardless
+of how many things notify a handler, it will run only once, after all
+of the tasks complete in a particular play.</p>
+<p>Here&#8217;s an example handlers section:</p>
+<div class="highlight-python"><pre>handlers:
+    - name: restart memcached
+      service:  name=memcached state=restarted
+    - name: restart apache
+      service: name=apache state=restarted</pre>
+</div>
+<p>Handlers are best used to restart services and trigger reboots.  You probably
+won&#8217;t need them for much else.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Notify handlers are always run in the order written.</p>
+</div>
+<p>Roles are described later on.  It&#8217;s worthwhile to point out that handlers are
+automatically processed between &#8216;pre_tasks&#8217;, &#8216;roles&#8217;, &#8216;tasks&#8217;, and &#8216;post_tasks&#8217;
+sections.  If you ever want to flush all the handler commands immediately though,
+in 1.2 and later, you can:</p>
+<div class="highlight-python"><pre>tasks:
+   - shell: some tasks go here
+   - meta: flush_handlers
+   - shell: some other tasks</pre>
+</div>
+<p>In the above example any queued up handlers would be processed early when the &#8216;meta&#8217;
+statement was reached.  This is a bit of a niche case but can come in handy from
+time to time.</p>
+</div>
+<div class="section" id="executing-a-playbook">
+<span id="id5"></span><h2>Executing A Playbook<a class="headerlink" href="#executing-a-playbook" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve learned playbook syntax, how do you run a playbook?  It&#8217;s simple.
+Let&#8217;s run a playbook using a parallelism level of 10:</p>
+<div class="highlight-python"><pre>ansible-playbook playbook.yml -f 10</pre>
+</div>
+</div>
+<div class="section" id="ansible-pull">
+<span id="id6"></span><h2>Ansible-Pull<a class="headerlink" href="#ansible-pull" title="Permalink to this headline">¶</a></h2>
+<p>Should you want to invert the architecture of Ansible, so that nodes check in to a central location, instead
+of pushing configuration out to them, you can.</p>
+<p>Ansible-pull is a small script that will checkout a repo of configuration instructions from git, and then
+run ansible-playbook against that content.</p>
+<p>Assuming you load balance your checkout location, ansible-pull scales essentially infinitely.</p>
+<p>Run <tt class="docutils literal"><span class="pre">ansible-pull</span> <span class="pre">--help</span></tt> for details.</p>
+<p>There&#8217;s also a <a class="reference external" href="https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml">clever playbook</a> available to configure ansible-pull via a crontab from push mode.</p>
+</div>
+<div class="section" id="tips-and-tricks">
+<span id="id7"></span><h2>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h2>
+<p>Look at the bottom of the playbook execution for a summary of the nodes that were targeted
+and how they performed.   General failures and fatal &#8220;unreachable&#8221; communication attempts are
+kept separate in the counts.</p>
+<p>If you ever want to see detailed output from successful modules as well as unsuccessful ones,
+use the <tt class="docutils literal"><span class="pre">--verbose</span></tt> flag.  This is available in Ansible 0.5 and later.</p>
+<p>Ansible playbook output is vastly upgraded if the cowsay
+package is installed.  Try it!</p>
+<p>To see what hosts would be affected by a playbook before you run it, you
+can do this:</p>
+<div class="highlight-python"><pre>ansible-playbook playbook.yml --list-hosts</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="YAMLSyntax.html"><em>YAML Syntax</em></a></dt>
+<dd>Learn about YAML syntax</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html"><em>Best Practices</em></a></dt>
+<dd>Various tips about managing playbooks in the real world</dd>
+<dt><a class="reference internal" href="index.html"><em>Ansible Documentation</em></a></dt>
+<dd>Hop back to the documentation index for a lot of special topics about playbooks</dd>
+<dt><a class="reference internal" href="modules.html"><em>About Modules</em></a></dt>
+<dd>Learn about available modules</dd>
+<dt><a class="reference internal" href="developing_modules.html"><em>Developing Modules</em></a></dt>
+<dd>Learn how to extend Ansible by writing your own modules</dd>
+<dt><a class="reference internal" href="intro_patterns.html"><em>Patterns</em></a></dt>
+<dd>Learn about how to select hosts</dd>
+<dt><a class="reference external" href="https://github.com/ansible/ansible-examples">Github examples directory</a></dt>
+<dd>Complete end-to-end playbook examples</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-project">Mailing List</a></dt>
+<dd>Questions? Help? Ideas?  Stop by the list on Google Groups</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Intro to Playbooks</a><ul>
+<li><a class="reference internal" href="#about-playbooks">About Playbooks</a></li>
+<li><a class="reference internal" href="#playbook-language-example">Playbook Language Example</a></li>
+<li><a class="reference internal" href="#basics">Basics</a><ul>
+<li><a class="reference internal" href="#hosts-and-users">Hosts and Users</a></li>
+<li><a class="reference internal" href="#tasks-list">Tasks list</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#action-shorthand">Action Shorthand</a></li>
+<li><a class="reference internal" href="#handlers-running-operations-on-change">Handlers: Running Operations On Change</a></li>
+<li><a class="reference internal" href="#executing-a-playbook">Executing A Playbook</a></li>
+<li><a class="reference internal" href="#ansible-pull">Ansible-Pull</a></li>
+<li><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="playbooks.html"
+                        title="previous chapter">Playbooks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="playbooks_roles.html"
+                        title="next chapter">Playbook Roles and Include Statements</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="playbooks_roles.html" title="Playbook Roles and Include Statements"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="playbooks.html" title="Playbooks"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="playbooks.html" >Playbooks</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

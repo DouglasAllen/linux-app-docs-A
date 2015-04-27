@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Declare Annotation</title><link rel="stylesheet" type="text/css" href="aspectj-docs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The AspectJTM 5 Development Kit Developer's Notebook"><link rel="up" href="annotations.html" title="Chapter 2. Annotations"><link rel="prev" href="annotations-decp.html" title="Using Annotations with declare statements"><link rel="next" href="annotations-itds.html" title="Inter-type Declarations"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Declare Annotation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="annotations-decp.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Annotations</th><td width="20%" align="right"> <a accesskey="n" href="annotations-itds.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Declare Annotation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="annotations-declare"></a>Declare Annotation</h2></div></div></div><p>AspectJ 5 supports a new kind of declare statement, <code class="literal">declare annotation</code>.
+      This takes different forms according to the recipient of the annotation: 
+      <code class="literal">declare @type</code> for types, <code class="literal">declare @method</code> for methods,
+      <code class="literal">declare @constructor</code> for constructors, and <code class="literal">declare @field</code>
+      for fields. <code class="literal">declare @package</code> may be supported in a future release.
+      </p><p>The general form is:</p><pre class="programlisting">
+  	declare @&lt;kind&gt; : ElementPattern : Annotation ;
+	</pre><p>Where annotation is a regular annotation expression as defined in the Java 5 language. If the annotation has 
+    the <code class="literal">@Target</code> meta-annotation, then the elements matched by <code class="literal">ElementPattern</code>
+    must be of the kind specified by the <code class="literal">@Target</code> annotation.</p><p><code class="literal">ElementPattern</code> is defined as follows:</p><pre class="programlisting">
+  	        ElementPattern := TypePattern |
+  	                          MethodPattern |
+  	                          ConstructorPattern |
+  	                          FieldPattern
+	</pre><p>The following examples illustrate the use of <code class="literal">declare annotation</code>.</p><div class="variablelist"><dl><dt><span class="term">declare @type : org.xyz.model..* : @BusinessDomain ;</span></dt><dd><p>
+                    All types defined in a package with the prefix <code class="literal">org.xyz.model</code>
+                    have the <code class="literal">@BusinessDomain</code> annotation.
+	            </p></dd><dt><span class="term">declare @method : public * BankAccount+.*(..) : @Secured(role="supervisor")</span></dt><dd><p>
+	                All public methods in <code class="literal">BankAccount</code> and its subtypes have the
+	                annotation <code class="literal">@Secured(role="supervisor")</code>.
+	            </p></dd><dt><span class="term">declare @constructor : BankAccount+.new(..) : @Secured(role="supervisor")</span></dt><dd><p>
+	                All constructors in <code class="literal">BankAccount</code> and its subtypes have the
+	                annotation <code class="literal">@Secured(role="supervisor")</code>.
+	            </p></dd><dt><span class="term">declare @field : * DAO+.* : @Persisted;</span></dt><dd><p>
+	            	All fields defined in <code class="literal">DAO</code> or its subtypes have the
+	            	<code class="literal">@Persisted</code> annotation.
+	            </p></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="annotations-decp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="annotations.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="annotations-itds.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Using Annotations with declare statements </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Inter-type Declarations</td></tr></table></div></body></html>

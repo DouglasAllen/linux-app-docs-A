@@ -1,0 +1,683 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT User's Guide: 3. ASIS Overview</title>
+
+<meta name="description" content="ASIS-for-GNAT User's Guide: 3. ASIS Overview">
+<meta name="keywords" content="ASIS-for-GNAT User's Guide: 3. ASIS Overview">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="ASIS-Overview"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_2.html#Running-an-ASIS-Application" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Main-ASIS-Abstractions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_2.html#Getting-Started" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Overview-1"></a>
+<h1 class="chapter">3. ASIS Overview</h1>
+
+<p>This chapter contains a short overview of the ASIS definition as given in
+the ISO/IEC 15291:1999 ASIS Standard. This overview is aimed at helping an ASIS
+newcomer find needed information in the ASIS definition.
+<a name="index-ASIS-overview"></a>
+</p>
+<p>For more details, please refer to the ASIS definition itself. To gain some initial
+experience with ASIS, try the examples in <a href="asis_ug_7.html#ASIS-Tutorials">ASIS Tutorials</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Main-ASIS-Abstractions">3.1 Main ASIS Abstractions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ASIS-Package-Hierarchy">3.2 ASIS Package Hierarchy</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Structural-and-Semantic-Queries">3.3 Structural and Semantic Queries</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ASIS-Error-Handling-Policy">3.4 ASIS Error Handling Policy</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Dynamic-Typing-of-ASIS-Queries">3.5 Dynamic Typing of ASIS Queries</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#ASIS-Iterator">3.6 ASIS Iterator</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#How-to-Navigate-through-the-Asis-Package-Hierarchy">3.7 How to Navigate through the <code>Asis</code> Package Hierarchy</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Main-ASIS-Abstractions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Overview" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Package-Hierarchy" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Main-ASIS-Abstractions-1"></a>
+<h2 class="section">3.1 Main ASIS Abstractions</h2>
+
+<p>ASIS is based on three main abstractions used to describe Ada programs;
+these abstractions are implemented as Ada private types:
+</p>
+<dl compact="compact">
+<dt> <code>Context</code></dt>
+<dd><a name="index-Context-type-4"></a>
+<p>An ASIS <code>Context</code> is a logical handle to an Ada environment, as defined in the
+<cite>Ada Reference Manual</cite>,
+Chapter 10. An ASIS application developer may view an ASIS <code>Context</code> as a way
+to define a set of compilation units available through the ASIS queries.
+<a name="index-ASIS-queries-2"></a>
+</p>
+</dd>
+<dt> <code>Compilation_Unit</code></dt>
+<dd><a name="index-Compilation_005fUnit-type-4"></a>
+<p>An ASIS <code>Compilation_Unit</code> is a logical handle to an Ada compilation unit. It
+reflects practically all the properties of compilation units
+defined by the <cite>Ada Reference Manual</cite>,
+and it also reflects some properties of &ldquo;physical objects&rdquo;
+used by an underlying Ada implementation to model compilation units.  Examples of
+such properties are the time of the last update, and
+the name of the object containing the unit&rsquo;s source text.
+An ASIS <code>Compilation_Unit</code> provides the &ldquo;black-box&rdquo; view of a
+compilation unit, considering the unit as a whole. It may be decomposed
+into ASIS <code>Element</code>s
+<a name="index-Element-type-3"></a>
+and then analyzed in &ldquo;white-box&rdquo; fashion.
+</p>
+</dd>
+<dt> <code>Element</code></dt>
+<dd><a name="index-Element-type-4"></a>
+<p>An ASIS <code>Element</code> is a logical handle to a syntactic component of an ASIS
+<code>Compilation_Unit</code> (either explicit or implicit).
+</p></dd>
+</dl>
+
+<p>Some ASIS components use additional abstractions (private types) needed for
+specific pieces of functionality:
+</p>
+<dl compact="compact">
+<dt> <code>Container</code></dt>
+<dd><a name="index-Container-type"></a>
+<p>An ASIS <code>Container</code> (defined by the
+<code>Asis.Ada_Environments.Containers</code> package)
+<a name="index-Asis_002eAda_005fEnvironments_002eContainers-package"></a>
+provides a means for
+structuring the content of an ASIS <code>Context</code>; i.e., ASIS <code>Compilation_Unit</code>s
+are grouped into <code>Container</code>s.
+</p>
+</dd>
+<dt> <code>Line</code></dt>
+<dd><a name="index-Line-type-1"></a>
+<p>An ASIS <code>Line</code> (defined by the <code>Asis.Text</code> package)
+<a name="index-Asis_002eText-package"></a>
+is the
+abstraction of a line of code in an Ada source text. An ASIS <code>Line</code> has a length, a
+string image and a number.
+</p>
+</dd>
+<dt> <code>Span</code></dt>
+<dd><a name="index-Span-type"></a>
+<p>An ASIS <code>Span</code> (defined by the <code>Asis.Text</code> package)
+<a name="index-Asis_002eText-package-1"></a>
+defines the
+location of an <code>Element</code>, a <code>Compilation_Unit</code>, or a whole compilation in the
+corresponding source text.
+</p>
+</dd>
+<dt> <code>Id</code></dt>
+<dd><a name="index-Id-type"></a>
+<p>An ASIS <code>Id</code> (defined by the <code>Asis.Ids</code>
+<a name="index-Asis_002eIds-package"></a>
+package)  provides a way to
+store some &ldquo;image&rdquo; of an ASIS <code>Element</code> outside an ASIS application. An
+application may create an <code>Id</code> value from an <code>Element</code> and store it in a
+file. Subsequently the same or another application may read this <code>Id</code> value
+and convert it back into the corresponding <code>Element</code> value.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="ASIS-Package-Hierarchy"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Main-ASIS-Abstractions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Structural-and-Semantic-Queries" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Package-Hierarchy-1"></a>
+<h2 class="section">3.2 ASIS Package Hierarchy</h2>
+<a name="index-ASIS-package-hierarchy"></a>
+
+<p>ASIS is defined as a hierarchy of Ada packages. Below is a
+short description of this hierarchy.
+</p>
+<dl compact="compact">
+<dt> <code>Asis</code></dt>
+<dd><a name="index-Asis-package-1"></a>
+<p>The root package of the hierarchy. It defines the main ASIS
+ abstractions - <code>Context</code>,
+<a name="index-Context-type-5"></a>
+<code>Compilation_Unit</code>
+<a name="index-Compilation_005fUnit-type-5"></a>
+and <code>Element</code>
+<a name="index-Element-type-5"></a>
+- as Ada private types. It also contains a set of enumeration types that define
+ the classification hierarchy for ASIS <code>Element</code>s (which closely reflects the
+ Ada syntax defined in the <cite>Ada Reference Manual</cite>) and the classification of
+ ASIS <code>Compilation_Unit</code>s.
+ This package does not contain any queries.
+</p>
+</dd>
+<dt> <code>Asis.Implementation</code></dt>
+<dd><a name="index-Asis_002eImplementation-package"></a>
+<p>Contains subprograms that control an ASIS implementation: initializing and
+ finalizing it, retrieving and resetting diagnosis information. Its child
+ package <code>Asis.Implementation.Permissions</code>
+<a name="index-Asis_002eImplementation_002ePermissions-package"></a>
+contains boolean queries that
+ reflect how ASIS implementation-specific features are implemented.
+</p>
+</dd>
+<dt> <code>Asis.Ada_Environments</code></dt>
+<dd><a name="index-Asis_002eAda_005fEnvironments-package"></a>
+<p>Contains queries
+<a name="index-ASIS-queries-3"></a>
+that deal with an ASIS <code>Context</code>: associating and dissociating,
+ opening and closing a <code>Context</code>.
+<a name="index-Context-type-6"></a>
+</p>
+</dd>
+<dt> <code>Asis.Compilation_Units</code></dt>
+<dd><a name="index-Asis_002eCompilation_005fUnits-package"></a>
+<p>Contains queries
+<a name="index-ASIS-queries-4"></a>
+that work with ASIS <code>Compilation_Unit</code>s: obtaining units from a
+ <code>Context</code>, getting semantic dependencies between units and &ldquo;black-box&rdquo; unit
+ properties.
+</p>
+</dd>
+<dt> <code>Asis.Compilation_Units.Relations</code></dt>
+<dd><a name="index-Asis_002eCompilation_005fUnits_002eRelations-package"></a>
+<p>Contains queries
+<a name="index-ASIS-queries-5"></a>
+that return integrated semantic dependencies among ASIS
+ <code>Compilation_Unit</code>s; e.g., all the units needed by a given unit to be included
+ in a partition.
+</p>
+</dd>
+<dt> <code>Asis.Elements</code></dt>
+<dd><a name="index-Asis_002eElements-package"></a>
+<p>Contains queries
+<a name="index-ASIS-queries-6"></a>
+working on <code>Element</code>s and implementing general <code>Element</code>
+ properties: gateway queries from ASIS Compilation Units to ASIS <code>Element</code>s,
+ queries defining the position of an <code>Element</code> in the <code>Element</code> classification
+ hierarchy, queries which define for a given <code>Element</code> its enclosing
+ <code>Compilation_Unit</code> and its enclosing <code>Element</code>.
+ It also contains queries for processing pragmas.
+</p>
+</dd>
+<dt> Packages working on specific <code>Element</code>s</dt>
+<dd><p>This group contains the following packages: <code>Asis.Declarations</code>,
+<a name="index-Asis_002eDeclarations-package"></a>
+ <code>Asis.Definitions</code>,
+<a name="index-Asis_002eDefinitions-package"></a>
+ <code>Asis.Statements</code>,
+<a name="index-Asis_002eStatements-package"></a>
+<code>Asis.Expressions</code>
+<a name="index-Asis_002eExpressions-package"></a>
+and
+ <code>ASIS.Clauses</code>.
+<a name="index-ASIS_002eClauses-package"></a>
+Each of these packages contains queries working on
+ <code>Element</code>s of the corresponding kind - that is, representing Ada declarations,
+ definitions, statements, expressions and clauses respectively.
+</p>
+</dd>
+<dt> <code>Asis.Text</code></dt>
+<dd><a name="index-Asis_002eText-package-2"></a>
+<p>Contains queries
+<a name="index-ASIS-queries-7"></a>
+returning information about the source representation of ASIS
+<code>Compilation_Unit</code>s and ASIS <code>Element</code>s.
+</p>
+</dd>
+<dt> <code>Asis.Exceptions</code></dt>
+<dd><a name="index-Asis_002eExceptions-package"></a>
+<p>Defines ASIS exceptions.
+</p>
+</dd>
+<dt> <code>Asis.Errors</code></dt>
+<dd><a name="index-Asis_002eErrors-package"></a>
+<p>Defines possible ASIS error status values.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="Structural-and-Semantic-Queries"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Package-Hierarchy" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Error-Handling-Policy" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Structural-and-Semantic-Queries-1"></a>
+<h2 class="section">3.3 Structural and Semantic Queries</h2>
+
+<a name="index-ASIS-queries-8"></a>
+<p>Queries working on <code>Element</code>s and returning <code>Element</code>s or <code>Element</code> lists
+are divided into structural and semantic queries.
+<a name="index-Structural-ASIS-queries"></a>
+<a name="index-Semantic-ASIS-queries"></a>
+</p>
+<p>Each structural query (except <code>Enclosing_Element</code>)
+<a name="index-Enclosing_005fElement-query"></a>
+implements one step of
+the parent-to-child decomposition of an Ada program according to the ASIS
+<code>Element</code> classification hierarchy. <code>Asis.Elements.Enclosing_Element</code> query
+<a name="index-Asis_002eElements_002eEnclosing_005fElement-query"></a>
+implements the reverse child-to-parent step. (For implicit <code>Element</code>s obtained
+as results of semantic queries, <code>Enclosing_Element</code> might not correspond to what
+could be expected from the Ada syntax and semantics; in
+this case the documentation of a semantic query also defines the effect of
+<code>Enclosing_Element</code> applied to its result).
+</p>
+<p>A semantic query for a given <code>Element</code> returns the <code>Element</code> or the list of
+<code>Element</code>s representing some semantic property - e.g., a type
+declaration for an expression as the expression&rsquo;s type, a defining identifier as a
+definition for a simple name, etc.
+</p>
+<p>For example, if we have <code>Element</code> <code>El</code> representing an assignment statement:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">     X := A + B;
+</pre></td></tr></table>
+
+<p>then we can retrieve the structural components of this assignment statement by
+applying the appropriate structural queries:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">    El_Var  := Asis.Statements.Assignment_Variable_Name (El); --  X
+   El_Expr := Asis.Statements.Assignment_Expression    (El); --  A + B
+</pre></td></tr></table>
+
+<p>Then we can analyze semantic properties of the variable name represented by
+<code>El_Var</code> and of the expression represented by <code>El_Expr</code> by means of
+appropriate semantic queries:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">    El_Var_Def   :=
+      Asis.Expressions.Corresponding_Name_Definition (El_Var);
+   El_Expt_Type :=
+      Asis.Expressions.Corresponding_Expression_Type (El_Expr);
+</pre></td></tr></table>
+
+<p>As a result, <code>El_Var_Def</code> will be of <code>A_Defining_Identifier</code> kind
+and will represent the defining occurrence of <code>X</code>, while
+<code>El_Expt_Type</code> of a kind <code>An_Ordinary_Type_Declaration</code> will
+represent the declaration of the type of the expression <code>A + B</code>.
+</p>
+<p>If we apply <code>Asis.Elements.Enclosing_Element</code> to <code>El_Var</code> or to
+<code>El_Expr</code>, we will get back to the <code>Element</code> representing the
+assignment statement.
+</p>
+<p>An important difference between classifying queries working on <code>Element</code>s as
+structural versus
+semantic is that all the structural queries must be within one ASIS
+<code>Compilation_Unit</code>, but for semantic queries it is typical for the
+argument of a query to be in one ASIS <code>Compilation_Unit</code>, while the result of this
+query is in another ASIS <code>Compilation_Unit</code>.
+</p>
+
+<hr size="6">
+<a name="ASIS-Error-Handling-Policy"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Structural-and-Semantic-Queries" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Dynamic-Typing-of-ASIS-Queries" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Error-Handling-Policy-1"></a>
+<h2 class="section">3.4 ASIS Error Handling Policy</h2>
+<a name="index-Error-Handling"></a>
+
+<p>Only ASIS-defined exceptions (and the Ada predefined <code>Storage_Error</code>
+<a name="index-Storage_005fError-_0028propagated-from-ASIS-queries_0029"></a>
+exception) propagate out from ASIS queries. ASIS exceptions
+are defined in the <code>Asis.Exceptions</code> package.
+<a name="index-Asis_002eExceptions-package-1"></a>
+</p>
+<p>When an ASIS exception is raised, ASIS sets the Error Status (the possible
+ASIS error conditions are defined as the values of the
+<code>Asis.Errors.Error_Kinds</code> type)
+<a name="index-Asis_002eErrors_002eError_005fKinds-type"></a>
+and forms the <code>Diagnosis</code> string.
+<a name="index-Diagnosis-string"></a>
+An application can query the current value of the ASIS Error Status by the
+<code>Asis.Implementation.Status</code> query,
+<a name="index-Asis_002eImplementation_002eStatus-query"></a>
+and the current content of the
+<code>Diagnosis</code> string by <code>Asis.Implementation.Diagnosis</code> query.
+<a name="index-Asis_002eImplementation_002eDiagnosis-query"></a>
+An application
+can reset the Error Status and the <code>Diagnosis</code> string by
+invoking the <code>Asis.Implementation.Set_Status</code> procedure.
+<a name="index-Asis_002eImplementation_002eSet_005fStatus-procedure"></a>
+</p>
+<p><em>Caution:</em> The ASIS way of providing error information is not tasking safe.
+The <code>Diagnosis</code> string and Error Kind are global to an entire partition,
+and are not &ldquo;per task&rdquo;.
+If ASIS exceptions are raised in more then
+one task of a multi-tasking ASIS application, the result of
+querying the error information in a particular task may be incorrect.
+<a name="index-Tasking-and-error-information"></a>
+</p>
+
+<hr size="6">
+<a name="Dynamic-Typing-of-ASIS-Queries"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Error-Handling-Policy" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Iterator" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Dynamic-Typing-of-ASIS-Queries-1"></a>
+<h2 class="section">3.5 Dynamic Typing of ASIS Queries</h2>
+<a name="index-ASIS-queries-_0028dynamic-typing_0029"></a>
+
+<p>The ASIS type <code>Element</code>
+<a name="index-Element-type-6"></a>
+covers all Ada syntactic constructs,
+and <code>Compilation_Unit</code>
+<a name="index-Compilation_005fUnit-type-6"></a>
+covers all Ada compilation
+units. ASIS defines an <code>Element</code> classification hierarchy (which reflects
+very closely the hierarchy of Ada syntactic categories defined in the
+<cite>Ada Reference Manual</cite>,
+and ASIS similarly defines a classification scheme for ASIS <code>Compilation_Unit</code>s.
+For
+any <code>Element</code> you can get its position in the <code>Element</code>
+classification hierarchy by means of classification queries defined in the
+package <code>Asis.Elements</code>.
+<a name="index-Asis_002eElements-package-1"></a>
+The classification queries for <code>Compilation_Unit</code>s
+are defined in the package <code>Asis.Compilation_Units</code>.
+<a name="index-Asis_002eCompilation_005fUnits-package-1"></a>
+</p>
+<p>Many of the queries working on <code>Element</code>s and <code>Compilation_Unit</code>s can be applied
+only to specific kinds of <code>Element</code>s and <code>Compilation_Unit</code>s respectively. For
+example, it does not make sense to query
+<code>Assignment_Variable_Name</code> for an <code>Element</code> of
+<code>An_Ordinary_Type_Declaration</code> kind.
+An attempt to perform such an operation will be detected at run-time, and
+an exception will be raised as explained in the next paragraph.
+</p>
+<p>ASIS may be viewed as a dynamically typed interface. For any <code>Element</code> structural
+or semantic query (that is, for a query having an <code>Element</code> as an argument and
+returning either an <code>Element</code> or <code>Element</code> list as a result) a list of appropriate
+<code>Element</code> kinds is explicitly defined in the query documentation which
+immediately follows the declaration of the corresponding subprogram in the
+code of the ASIS package. This means that the query can be applied only to
+argument <code>Element</code>s being of the kinds from this list. If the kind of the
+argument <code>Element</code> does not belong to this list, the corresponding call to this
+query raises the <code>Asis.Exceptions.ASIS_Inappropriate_Element</code> exception
+<a name="index-Asis_002eExceptions_002eASIS_005fInappropriate_005fElement-exception"></a>
+with <code>Asis.Errors.Value_Error</code> error status set.
+<a name="index-Asis_002eErrors_002eValue_005fError-error-status"></a>
+</p>
+<p>The situation for the queries working on <code>Compilation_Unit</code>s is similar. If a
+query lists appropriate unit kinds in its documentation, then this query can
+work only on <code>Compilation_Unit</code>s of the kinds from this list. The query should
+raise <code>Asis.Exceptions.ASIS_Inappropriate_Compilation_Unit</code>
+<a name="index-Asis_002eExceptions_002eASIS_005fInappropriate_005fCompilation_005fUnit-exception"></a>
+with <code>Asis.Errors.Value_Error</code> error status set when called for any
+<code>Compilation_Unit</code> with a kind not from the list of the appropriate unit kinds.
+</p>
+<p>If a query has a list of expected <code>Element</code> kinds or expected <code>Compilation_Unit</code>
+kinds in its documentation, this query does not raise any exception when
+called with any argument, but it produces a meaningful result only when called
+with an argument with the kind from this list. For example, if
+<code>Asis.Elements.Statement_Kind</code> query
+<a name="index-Asis_002eElements_002eStatement_005fKind-query"></a>
+is called for an argument of
+<code>A_Declaration</code> kind, it just returns <code>Not_A_Statement</code>, but without
+raising any exception.
+</p>
+
+<hr size="6">
+<a name="ASIS-Iterator"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Dynamic-Typing-of-ASIS-Queries" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#How-to-Navigate-through-the-Asis-Package-Hierarchy" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Iterator-1"></a>
+<h2 class="section">3.6 ASIS Iterator</h2>
+<a name="index-ASIS-Iterator"></a>
+
+<p>ASIS provides a powerful mechanism to traverse an Ada unit, the generic
+procedure <code>Asis.Iterator.Traverse_Element</code>.
+<a name="index-Asis_002eIterator_002eTraverse_005fElement-generic-procedure"></a>
+This procedure makes a top-down
+left-to-right (or depth-first) traversal of the ASIS tree (that is, of
+the syntax structure of the Ada code viewed as the hierarchy of ASIS
+<code>Element</code>s). In the course of this traversal, it applies to each <code>Element</code> the
+formal <code>Pre_Operation</code> procedure when visiting this <code>Element</code> for the first
+time, and the formal <code>Post_Operation</code> procedure when leaving this <code>Element</code>.
+By providing specific procedures for <code>Pre_Operation</code> and
+<code>Post_Operation</code> when instantiating the generic unit, you
+can automatically process all ASIS <code>Element</code>s found
+in a given ASIS tree.
+</p>
+<p>For example, suppose we have an assignment statement:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">     X := F (Y);
+</pre></td></tr></table>
+
+<p>When called for an <code>Element</code> representing this statement, a
+<code>Traverse_Element</code> instantiation does the following (below <code>Pre_Op</code>
+and <code>Post_Op</code> stand for actual procedures provided for formal
+<code>Pre_Operation</code> and <code>Post_Operation</code>, and numbers indicate the
+sequence of calls to <code>Pre_Op</code> and <code>Post_Op</code> during traversal):
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">             (1 Pre_Op)  X := F (Y) (10 Post_Op)
+                             |
+                             |
+           -----------------------------------
+           |                                 |
+(2 Pre_Op) X (3 Post_Op)                     |
+                                             |
+                                (4 Pre_Op) F(Y) (9 Post_Op)
+                                             |
+                                             |
+                                ---------------------------
+                                |                         |
+                    (5 Pre_Op)  F (6 Post_Op)  (7 Pre_Op) Y (8 Post_Op)
+</pre></td></tr></table>
+
+<p>To see in more detail how <code>Traverse_Element</code> may be used for rapid
+development of a number of useful ASIS applications, try the examples in
+<a href="asis_ug_7.html#ASIS-Tutorials">ASIS Tutorials</a>.
+</p>
+
+<hr size="6">
+<a name="How-to-Navigate-through-the-Asis-Package-Hierarchy"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Iterator" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="How-to-Navigate-through-the-Asis-Package-Hierarchy-1"></a>
+<h2 class="section">3.7 How to Navigate through the <code>Asis</code> Package Hierarchy</h2>
+
+<p>The following hints and tips may be useful when looking for some specific
+information in the ASIS source files:
+</p>
+<ul>
+<li>
+Use the short overview of the ASIS packages given in
+<a href="#ASIS-Package-Hierarchy">ASIS Package Hierarchy</a>, to limit your browsing to a smaller set
+of ASIS packages (e.g., if
+ you are interested in what can be done with <code>Compilation_Unit</code>s then look only in
+ <code>Asis.Compilation_Units</code>; if you are looking for queries that can be
+ used to decompose and analyze declarations, limit your search to
+ <code>Asis.Declarations</code>).
+
+</li><li>
+Inside ASIS packages working with particular kinds of <code>Element</code>s
+ (<code>Asis.Declarations</code>, <code>Asis.Definitions</code>, <code>Asis.Statements</code>,
+ <code>Asis.Expressions</code> and <code>ASIS.Clauses</code>) queries are ordered according
+ to the order of the description of the corresponding constructions in the
+ <cite>Ada Reference Manual</cite>
+ (e.g., package <code>Asis.Statements</code> starts from a query retrieving labels
+ and ends with the query decomposing a code statement).
+
+</li><li>
+The names of all the semantic queries (and only ones) start from
+ <code>Corresponding_...</code> or <code>Implicit_...</code>
+
+</li><li>
+Use comment sentinels given in the specification of the ASIS packages. A
+ sentinel of the form &ldquo;<code>--|ER</code>&rdquo; (from &ldquo;<code>Element</code> Reference&rdquo;) introduces a new
+ <code>Element</code> kind, and it is followed by a group of sentinels of the form
+&ldquo;<code>--|CR</code>&rdquo; (from &ldquo;Child Reference&rdquo;), which list queries yielding the child
+ <code>Element</code>s for the <code>Element</code> just introduced.
+</li></ul>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_4.html#ASIS-Context" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

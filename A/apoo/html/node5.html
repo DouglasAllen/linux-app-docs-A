@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Manipulation of activation records in Apoo</TITLE>
+<META NAME="description" CONTENT="Manipulation of activation records in Apoo">
+<META NAME="keywords" CONTENT="apoo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="apoo.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="node3.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFF0" TEXT="DARKBLUE" LINK="RED" VLINK="DARKRED"
+  ALINK="#FF0000" ALINK="YELLOW">
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html138"
+  HREF="node6.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html136"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html130"
+  HREF="node4.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html139"
+  HREF="node6.html">Apoo Interface</A>
+<B> Up:</B> <A NAME="tex2html137"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html131"
+  HREF="node4.html">Apoo assembly language</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00032000000000000000"></A>
+<A NAME="apooar"></A>
+<BR>
+<TT>Manipulation of activation records in Apoo</TT>
+</H2>
+
+<P>
+This is an extension of the <TT>Apoo</TT> vpu for dealing with activation
+records. It is available as  version 3.0.
+
+<P>
+There are two programmable
+registers to address the system stack: stack register and frame
+register. They correspond to the last two registers of a <TT>Apoo</TT> vpu
+configuration, <TT>Rn-1</TT> and <TT>Rn-2</TT>, but are aliased to <TT>rs</TT>
+and <TT>rf</TT>, respectively.  The stack register <TT>rs</TT>
+contains the address of the last stack memory cell (or -1 if no static
+memory is allocated).  The instructions <TT>jsr</TT>, <TT>rtn</TT>,
+<TT>push</TT> and <TT>pop</TT> manipulates the stack in the usual way.
+Besides that, the contents of the stack register can be manipulated as
+any other register.
+
+<P>
+The frame register can be
+used for the implementation of local information (on the system stack).
+It contents should be the first stack address of the current activation
+record. Like the stack register it can be manipulated as any other
+register, but it is also used in two special instructions:
+<TT>storeo</TT> and <TT>loado</TT>. 
+<DL>
+<DT><STRONG><TT>storeo Ri Num</TT></STRONG></DT>
+<DD>stores the contents of register
+<TT>Ri</TT> at memory address <TT>(rf) + Num</TT>, where Num is an integer.
+
+<P>
+</DD>
+<DT><STRONG><TT>loadeo Num Ri</TT></STRONG></DT>
+<DD>loads the contents of memory
+address <TT>(rf) + Num</TT> into register <TT>Ri</TT>, where Num is an integer.
+</DD>
+</DL>
+
+<P>
+In both instructions, if <TT>Num</TT> is non negative it should correspond
+ to local memory and if it is negative, possibly corresponds to arguments of a
+ subroutine call.
+
+<P>
+Here is an example of the use of these
+ registers, for the implementation of  subroutines with arguments (passed on the
+ stack) and local memory.
+
+<P>
+<PRE>
+n:	const 5
+	loadn 4 r1
+      # an argument
+	push r1
+	zero r1
+	jsr test
+	pop r1
+	halt
+test:	push rf 
+	#saves the current frame pointer
+	#current frame pointer
+	storer rs rf 
+	loadn  6 r2
+	# reserves some local space
+	add    r2 rs 
+	# gets the argument  
+        loado -2 r1 
+      # only testing the rs
+	push r1    
+	pop r1
+	#stores contents of r1 at rf+1
+	storeo r1 1
+	#loads the same value into r3
+	loado 1 r3  
+	# restores stack before return 
+	sub rs r2   
+	storer r2 rs
+	# restores frame before return
+	pop rf      
+	rtn
+</PRE>
+
+<P>
+A more complete example can be found <A NAME="tex2html12"
+  HREF="examples/fact2.apoo">here</A>.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html138"
+  HREF="node6.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html136"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html130"
+  HREF="node4.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html139"
+  HREF="node6.html">Apoo Interface</A>
+<B> Up:</B> <A NAME="tex2html137"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html131"
+  HREF="node4.html">Apoo assembly language</A></DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<a href="http://www.ncc.up.pt/~rvr">Rogério Reis</a>,<a href="http://www.ncc.up.pt/~nam">Nelma Moreira</a> <I>2008-01-22</I>
+</ADDRESS>
+</BODY>
+</HTML>

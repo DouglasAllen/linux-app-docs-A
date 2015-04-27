@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>glance_image - Add/Delete images from glance &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="keystone_user - Manage OpenStack Identity (keystone) users, tenants and roles" href="keystone_user_module.html" />
+    <link rel="prev" title="gce_pd - utilize GCE persistent disk resources" href="gce_pd_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keystone_user_module.html" title="keystone_user - Manage OpenStack Identity (keystone) users, tenants and roles"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gce_pd_module.html" title="gce_pd - utilize GCE persistent disk resources"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glance-image-add-delete-images-from-glance">
+<span id="glance-image"></span><h1>glance_image - Add/Delete images from glance<a class="headerlink" href="#glance-image-add-delete-images-from-glance" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.2.</span></p>
+<p>Add or Remove images from the glance repository.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>auth_url</td>
+<td>no</td>
+<td>http://127.0.0.1:35357/v2.0/</td>
+    <td><ul></ul></td>
+    <td>The keystone url for authentication</td>
+</tr>
+        <tr>
+<td>container_format</td>
+<td>no</td>
+<td>bare</td>
+    <td><ul></ul></td>
+    <td>The format of the container</td>
+</tr>
+        <tr>
+<td>copy_from</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>A url from where the image can be downloaded, mutually exclusive with file parameter</td>
+</tr>
+        <tr>
+<td>disk_format</td>
+<td>no</td>
+<td>qcow2</td>
+    <td><ul></ul></td>
+    <td>The format of the disk that is getting uploaded</td>
+</tr>
+        <tr>
+<td>endpoint_type</td>
+<td>no</td>
+<td>publicURL</td>
+    <td><ul><li>publicURL</li><li>internalURL</li></ul></td>
+    <td>endpoint URL type</td>
+</tr>
+        <tr>
+<td>file</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>The path to the file which has to be uploaded, mutually exclusive with copy_from</td>
+</tr>
+        <tr>
+<td>is_public</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul></ul></td>
+    <td>Whether the image can be accessed publicly</td>
+</tr>
+        <tr>
+<td>login_password</td>
+<td>yes</td>
+<td>yes</td>
+    <td><ul></ul></td>
+    <td>Password of login user</td>
+</tr>
+        <tr>
+<td>login_tenant_name</td>
+<td>yes</td>
+<td>yes</td>
+    <td><ul></ul></td>
+    <td>The tenant name of the login user</td>
+</tr>
+        <tr>
+<td>login_username</td>
+<td>yes</td>
+<td>admin</td>
+    <td><ul></ul></td>
+    <td>login username to authenticate to keystone</td>
+</tr>
+        <tr>
+<td>min_disk</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>The minimum disk space required to deploy this image</td>
+</tr>
+        <tr>
+<td>min_ram</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>The minimum ram required to deploy this image</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Name that has to be given to the image</td>
+</tr>
+        <tr>
+<td>owner</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>The owner of the image</td>
+</tr>
+        <tr>
+<td>region_name</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Name of the region</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Indicate desired state of the resource</td>
+</tr>
+        <tr>
+<td>timeout</td>
+<td>no</td>
+<td>180</td>
+    <td><ul></ul></td>
+    <td>The time to wait for the image process to complete in seconds</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires glanceclient</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires keystoneclient</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Upload an image from an HTTP URL
+- glance_image: login_username=admin
+                login_password=passme
+                login_tenant_name=admin
+                name=cirros
+                container_format=bare
+                disk_format=qcow2
+                state=present
+                copy_from=http:launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">glance_image - Add/Delete images from glance</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gce_pd_module.html"
+                        title="previous chapter">gce_pd - utilize GCE persistent disk resources</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="keystone_user_module.html"
+                        title="next chapter">keystone_user - Manage OpenStack Identity (keystone) users, tenants and roles</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keystone_user_module.html" title="keystone_user - Manage OpenStack Identity (keystone) users, tenants and roles"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gce_pd_module.html" title="gce_pd - utilize GCE persistent disk resources"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

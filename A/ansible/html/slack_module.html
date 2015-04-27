@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>slack - Send Slack notifications &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Notification Modules" href="list_of_notification_modules.html" />
+    <link rel="next" title="sns - Send Amazon Simple Notification Service (SNS) messages" href="sns_module.html" />
+    <link rel="prev" title="osx_say - Makes an OSX computer to speak." href="osx_say_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sns_module.html" title="sns - Send Amazon Simple Notification Service (SNS) messages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="osx_say_module.html" title="osx_say - Makes an OSX computer to speak."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_notification_modules.html" accesskey="U">Notification Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="slack-send-slack-notifications">
+<span id="slack"></span><h1>slack - Send Slack notifications<a class="headerlink" href="#slack-send-slack-notifications" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Ramon de la Fuente &lt;<a class="reference external" href="mailto:ramon&#37;&#52;&#48;delafuente&#46;nl">ramon<span>&#64;</span>delafuente<span>&#46;</span>nl</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+<p>The <tt class="docutils literal"><span class="pre">slack</span></tt> module sends notifications to <a class="reference external" href="http://slack.com">http://slack.com</a> via the Incoming WebHook integration</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>channel</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Channel to send the message to. If absent, the message goes to the channel selected for the <em>token</em>.</td>
+</tr>
+        <tr>
+<td>domain</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Slack (sub)domain for your environment without protocol. (i.e. <code>future500.slack.com</code>)</td>
+</tr>
+        <tr>
+<td>icon_emoji</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Emoji for the message sender. See Slack documentation for options. (if <em>icon_emoji</em> is set, <em>icon_url</em> will not be used)</td>
+</tr>
+        <tr>
+<td>icon_url</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Url for the message sender's icon (default <code>http://www.ansible.com/favicon.ico</code>)</td>
+</tr>
+        <tr>
+<td>link_names</td>
+<td>no</td>
+<td>1</td>
+    <td><ul><li>1</li><li>0</li></ul></td>
+    <td>Automatically create links for channels and usernames in <em>msg</em>.</td>
+</tr>
+        <tr>
+<td>msg</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Message to send.</td>
+</tr>
+        <tr>
+<td>parse</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>full</li><li>none</li></ul></td>
+    <td>Setting for the message parser at Slack</td>
+</tr>
+        <tr>
+<td>token</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Slack integration token</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td>ansible</td>
+    <td><ul></ul></td>
+    <td>This is the sender of the message.</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates.</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- name: Send notification message via Slack
+  local_action:
+    module: slack
+    domain: future500.slack.com
+    token: thetokengeneratedbyslack
+    msg: "{{ inventory_hostname }} completed"
+
+- name: Send notification message via Slack all options
+  local_action:
+    module: slack
+    domain: future500.slack.com
+    token: thetokengeneratedbyslack
+    msg: "{{ inventory_hostname }} completed"
+    channel: "#ansible"
+    username: "Ansible on {{ inventory_hostname }}"
+    icon_url: "http://www.example.com/some-image-file.png"
+    link_names: 0
+    parse: 'none'</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">slack - Send Slack notifications</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="osx_say_module.html"
+                        title="previous chapter">osx_say - Makes an OSX computer to speak.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sns_module.html"
+                        title="next chapter">sns - Send Amazon Simple Notification Service (SNS) messages</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sns_module.html" title="sns - Send Amazon Simple Notification Service (SNS) messages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="osx_say_module.html" title="osx_say - Makes an OSX computer to speak."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_notification_modules.html" >Notification Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

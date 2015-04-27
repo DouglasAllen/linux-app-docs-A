@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>fill - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Drawing-commands.html#Drawing-commands" title="Drawing commands">
+<link rel="prev" href="draw.html#draw" title="draw">
+<link rel="next" href="clip.html#clip" title="clip">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="fill"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="clip.html#clip">clip</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="draw.html#draw">draw</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Drawing-commands.html#Drawing-commands">Drawing commands</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 fill</h3>
+
+<pre class="verbatim">void fill(picture pic=currentpicture, path g, pen p=currentpen);
+</pre>
+
+<p>Fill the interior region bounded by the cyclic path <code>g</code> on the picture
+<code>pic</code>, using the pen <code>p</code>.
+
+   <p><a name="index-g_t_0040code_007bfilldraw_007d-143"></a>There is also a convenient <code>filldraw</code> command, which fills the path
+and then draws in the boundary. One can specify separate pens for each
+operation:
+<pre class="verbatim">void filldraw(picture pic=currentpicture, path g, pen fillpen=currentpen,
+              pen drawpen=currentpen);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bfill_007d-144"></a>This fixed-size version of <code>fill</code> allows one to fill an object
+described in <code>PostScript</code> coordinates about the user coordinate
+<code>origin</code>:
+<pre class="verbatim">void fill(pair origin, picture pic=currentpicture, path g, pen p=currentpen);
+</pre>
+
+<p class="noindent">This is just a convenient abbreviation for the commands:
+<pre class="verbatim">picture opic;
+fill(opic,g,p);
+add(pic,opic,origin);
+</pre>
+
+   <p>The routine
+<a name="index-g_t_0040code_007bfilloutside_007d-145"></a>
+<pre class="verbatim">void filloutside(picture pic=currentpicture, path g, pen p=currentpen);
+</pre>
+fills the region exterior to the path <code>g</code>, out to the current
+boundary of picture <code>pic</code>.
+
+   <p><a name="gradient-shading"></a><a name="index-gradient-shading-146"></a>
+<a name="index-shading-147"></a><a name="index-g_t_0040code_007blatticeshade_007d-148"></a>Lattice gradient shading varying smoothly over a two-dimensional
+array of pens <code>p</code>, using fill rule <code>fillrule</code>, can be produced with
+<pre class="verbatim">void latticeshade(picture pic=currentpicture, path g, bool stroke=false,
+                  pen fillrule=currentpen, pen[][] p)
+</pre>
+<a name="index-g_t_0040code_007bstroke_007d-149"></a>If <code>stroke=true</code>, the region filled is the same as the region that
+would be drawn by <code>draw(pic,g,fillrule+zerowinding)</code>; in this case the path
+<code>g</code> need not be cyclic. 
+The pens in <code>p</code> must belong to the same color space. One can use the
+functions <code>rgb(pen)</code> or <code>cmyk(pen)</code> to promote pens to a
+higher color space, as illustrated in the example file
+<code>latticeshading.asy</code>.
+
+   <p><a name="index-g_t_0040code_007baxialshade_007d-150"></a>Axial gradient shading varying smoothly from <code>pena</code> to <code>penb</code> in the
+direction of the line segment <code>a--b</code> can be achieved with
+<pre class="verbatim">void axialshade(picture pic=currentpicture, path g, bool stroke=false,
+                pen pena, pair a,
+                pen penb, pair b);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bradialshade_007d-151"></a>Radial gradient shading varying smoothly from
+<code>pena</code> on the circle with center <code>a</code> and radius <code>ra</code> to
+<code>penb</code> on the circle with center <code>b</code> and radius <code>rb</code>
+is similar:
+<pre class="verbatim">void radialshade(picture pic=currentpicture, path g, bool stroke=false,
+                 pen pena, pair a, real ra,
+                 pen penb, pair b, real rb);
+</pre>
+Illustrations of radial shading are provided in the example files
+<code>shade.asy</code>, <code>ring.asy</code>, and <code>shadestroke.asy</code>.
+
+   <p><a name="index-g_t_0040code_007bgouraudshade_007d-152"></a>Gouraud shading using fill rule <code>fillrule</code> and the vertex colors in the
+pen array <code>p</code> on a triangular lattice defined by the vertices
+<code>z</code> and edge flags <code>edges</code> is implemented with
+<pre class="verbatim">void gouraudshade(picture pic=currentpicture, path g, bool stroke=false,
+                  pen fillrule=currentpen, pen[] p, pair[] z,
+                  int[] edges);
+void gouraudshade(picture pic=currentpicture, path g, bool stroke=false,
+                  pen fillrule=currentpen, pen[] p, int[] edges);
+</pre>
+In the second form, the elements of <code>z</code> are taken to be successive
+nodes of path <code>g</code>. The pens in <code>p</code> must belong to the same
+color space. Illustrations of Gouraud shading are provided in the example file
+<code>Gouraud.asy</code> and in the solid geometry module <code>solids.asy</code>. 
+The edge flags used in Gouraud shading are documented here:
+<blockquote>
+<a href="http://partners.adobe.com/public/developer/en/ps/sdk/TN5600.SmoothShading.pdf">http://partners.adobe.com/public/developer/en/ps/sdk/TN5600.SmoothShading.pdf</a>. 
+</blockquote>
+
+   <p><a name="index-Coons-shading-153"></a><a name="index-tensor-product-shading-154"></a><a name="index-g_t_0040code_007btensorshade_007d-155"></a>Tensor product shading using fill rule <code>fillrule</code> on patches
+bounded by the n cyclic paths of length 4 in path array <code>b</code>,
+using the vertex colors specified in the n \times 4 pen array
+<code>p</code> and internal control points in the n \times 4
+array <code>z</code>, is implemented with
+<pre class="verbatim">void tensorshade(picture pic=currentpicture, path g, bool stroke=false,
+                 pen fillrule=currentpen, pen[][] p, path[] b=g,
+                 pair[][] z=new pair[][]);
+</pre>
+If the array <code>z</code> is empty, Coons shading, in which the color
+control points are calculated automatically, is used. 
+The pens in <code>p</code> must belong to the same color space. 
+A simpler interface for the case of a single patch (n=1) is also
+available:
+<pre class="verbatim">void tensorshade(picture pic=currentpicture, path g, bool stroke=false,
+                 pen fillrule=currentpen, pen[] p, path b=g,
+                 pair[] z=new pair[]);
+</pre>
+One can also smoothly shade the regions between consecutive paths of a
+sequence using a given array of pens:
+<pre class="verbatim">void draw(picture pic=currentpicture, pen fillrule=currentpen, path[] g,
+          pen[] p);
+</pre>
+Illustrations of tensor product and Coons shading are provided in the
+example files <code>tensor.asy</code>, <code>Coons.asy</code>, <code>BezierSurface.asy</code>,
+and <code>rainbow.asy</code>.
+
+   <p><a name="index-Function-shading-156"></a><a name="index-function-shading-157"></a><a name="index-g_t_0040code_007bfunctionshade_007d-158"></a>More general shading possibilities are available with the <code>pdflatex</code>,
+<code>context</code>, and <code>pdftex</code> TeX engines: the routine
+<pre class="verbatim">void functionshade(picture pic=currentpicture, path[] g, bool stroke=false,
+                   pen fillrule=currentpen, string shader);
+</pre>
+shades on picture <code>pic</code> the interior of path <code>g</code> according
+to fill rule <code>fillrule</code> using the <code>PostScript</code> calculator routine
+specified by the string <code>shader</code>; this routine takes 2 arguments,
+each in [0,1], and returns <code>colors(fillrule).length</code> color components. 
+Function shading is illustrated in the example <code>functionshading.asy</code>.
+
+   <p><a name="index-unfill-159"></a>The following routine uses <code>evenodd</code> clipping together with the
+<code>^^</code> operator to unfill a region:
+
+<pre class="verbatim">void unfill(picture pic=currentpicture, path g);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bclip_007d-160"></a><a name="index-g_t_0040code_007bstroke_007d-161"></a>
+
+   </body></html>
+

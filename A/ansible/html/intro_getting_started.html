@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Introduction" href="intro.html" />
+    <link rel="next" title="Inventory" href="intro_inventory.html" />
+    <link rel="prev" title="Installation" href="intro_installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intro_inventory.html" title="Inventory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro_installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" accesskey="U">Introduction</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1><a class="toc-backref" href="#id3">Getting Started</a><a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#getting-started" id="id3">Getting Started</a><ul>
+<li><a class="reference internal" href="#foreword" id="id4">Foreword</a></li>
+<li><a class="reference internal" href="#remote-connection-information" id="id5">Remote Connection Information</a></li>
+<li><a class="reference internal" href="#your-first-commands" id="id6">Your first commands</a></li>
+<li><a class="reference internal" href="#host-key-checking" id="id7">Host Key Checking</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="foreword">
+<span id="gs-about"></span><h2><a class="toc-backref" href="#id4">Foreword</a><a class="headerlink" href="#foreword" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve read <a class="reference internal" href="intro_installation.html"><em>Installation</em></a> and installed Ansible, it&#8217;s time to dig in and get
+started with some commands.</p>
+<p>What we are showing first are not the powerful configuration/deployment/orchestration of Ansible, called playbooks.
+Playbooks are covered in a separate section.</p>
+<p>This section is about how to get going initially.  Once you have these concepts down, read <a class="reference internal" href="intro_adhoc.html"><em>Introduction To Ad-Hoc Commands</em></a> for some more
+detail, and then you&#8217;ll be ready to dive into playbooks and explore the most interesting parts!</p>
+</div>
+<div class="section" id="remote-connection-information">
+<span id="id1"></span><h2><a class="toc-backref" href="#id5">Remote Connection Information</a><a class="headerlink" href="#remote-connection-information" title="Permalink to this headline">¶</a></h2>
+<p>Before we get started, it&#8217;s important to understand how Ansible is communicating with remote
+machines over SSH.</p>
+<p>By default, Ansible 1.3 and later will try to use native
+OpenSSH for remote communication  when possible.  This enables both ControlPersist (a performance feature), Kerberos, and options in ~/.ssh/config such as Jump Host setup.  When using Enterprise Linux 6 operating systems as the control machine (Red Hat Enterprise Linux and derivatives such as CentOS), however, the version of OpenSSH may be too old to support ControlPersist. On these operating systems, Ansible will fallback into using a high-quality Python implementation of
+OpenSSH called &#8216;paramiko&#8217;.  If you wish to use features like Kerberized SSH and more, consider using Fedora, OS X, or Ubuntu as your control machine until a newer version of OpenSSH is available for your platform &#8211; or engage &#8216;accelerated mode&#8217; in Ansible.  See <a class="reference internal" href="playbooks_acceleration.html"><em>Accelerated Mode</em></a>.</p>
+<p>In Ansible 1.2 and before, the default was strictly paramiko and native SSH had to be explicitly selected with -c ssh or set in the configuration file.</p>
+<p>Occasionally you&#8217;ll encounter a device that doesn&#8217;t do SFTP. This is rare, but if talking with some remote devices that don&#8217;t support SFTP, you can switch to SCP mode in <a class="reference internal" href="intro_configuration.html"><em>The Ansible Configuration File</em></a>.</p>
+<p>When speaking with remote machines, Ansible will by default assume you are using SSH keys &#8211; which we encourage &#8211; but passwords are fine too.  To enable password auth, supply the option <tt class="docutils literal"><span class="pre">--ask-pass</span></tt> where needed.  If using sudo features and when sudo requires a password, also supply <tt class="docutils literal"><span class="pre">--ask-sudo-pass</span></tt> as appropriate.</p>
+<p>While it may be common sense, it is worth sharing: Any management system benefits from being run near the machines being managed. If running in a cloud, consider running Ansible from a machine inside that cloud.  It will work better than on the open
+internet in most cases.</p>
+<p>As an advanced topic, Ansible doesn&#8217;t just have to connect remotely over SSH.  The transports are pluggable, and there are options for managing things locally, as well as managing chroot, lxc, and jail containers.  A mode called &#8216;ansible-pull&#8217; can also invert the system and have systems &#8216;phone home&#8217; via scheduled git checkouts to pull configuration directives from a central repository.</p>
+</div>
+<div class="section" id="your-first-commands">
+<span id="id2"></span><h2><a class="toc-backref" href="#id6">Your first commands</a><a class="headerlink" href="#your-first-commands" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve installed Ansible, it&#8217;s time to get started with some basics.</p>
+<p>Edit (or create) /etc/ansible/hosts and put one or more remote systems in it, for
+which you have your SSH key in <tt class="docutils literal"><span class="pre">authorized_keys</span></tt>:</p>
+<div class="highlight-python"><pre>192.168.1.50
+aserver.example.org
+bserver.example.org</pre>
+</div>
+<p>This is an inventory file, which is also explained in greater depth here:  <a class="reference internal" href="intro_inventory.html"><em>Inventory</em></a>.</p>
+<p>We&#8217;ll assume you are using SSH keys for authentication.  To set up SSH agent to avoid retyping passwords, you can
+do:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-agent bash
+<span class="nv">$ </span>ssh-add ~/.ssh/id_rsa
+</pre></div>
+</div>
+<p>(Depending on your setup, you may wish to use Ansible&#8217;s <tt class="docutils literal"><span class="pre">--private-key</span></tt> option to specify a pem file instead)</p>
+<p>Now ping all your nodes:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -m ping
+</pre></div>
+</div>
+<p>Ansible will attempt to remote connect to the machines using your current
+user name, just like SSH would.  To override the remote user name, just use the &#8216;-u&#8217; parameter.</p>
+<p>If you would like to access sudo mode, there are also flags to do that:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># as bruce</span>
+<span class="nv">$ </span>ansible all -m ping -u bruce
+<span class="c"># as bruce, sudoing to root</span>
+<span class="nv">$ </span>ansible all -m ping -u bruce --sudo
+<span class="c"># as bruce, sudoing to batman</span>
+<span class="nv">$ </span>ansible all -m ping -u bruce --sudo --sudo-user batman
+</pre></div>
+</div>
+<p>(The sudo implementation is changeable in Ansible&#8217;s configuration file if you happen to want to use a sudo
+replacement.  Flags passed to sudo (like -H) can also be set there.)</p>
+<p>Now run a live command on all of your nodes:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -a <span class="s2">&quot;/bin/echo hello&quot;</span>
+</pre></div>
+</div>
+<p>Congratulations.  You&#8217;ve just contacted your nodes with Ansible.  It&#8217;s
+soon going to be time to read some of the more real-world <a class="reference internal" href="intro_adhoc.html"><em>Introduction To Ad-Hoc Commands</em></a>, and explore
+what you can do with different modules, as well as the Ansible
+<a class="reference internal" href="playbooks.html"><em>Playbooks</em></a> language.  Ansible is not just about running commands, it
+also has powerful configuration management and deployment features.  There&#8217;s more to
+explore, but you already have a fully working infrastructure!</p>
+</div>
+<div class="section" id="host-key-checking">
+<span id="a-note-about-host-key-checking"></span><h2><a class="toc-backref" href="#id7">Host Key Checking</a><a class="headerlink" href="#host-key-checking" title="Permalink to this headline">¶</a></h2>
+<p>Ansible 1.2.1 and later have host key checking enabled by default.</p>
+<p>If a host is reinstalled and has a different key in &#8216;known_hosts&#8217;, this will result in an error message until corrected.  If a host is not initially in &#8216;known_hosts&#8217; this will result in prompting for confirmation of the key, which results in an interactive experience if using Ansible, from say, cron.  You might not want this.</p>
+<p>If you wish to disable this behavior and understand the implications, you can do so by editing /etc/ansible/ansible.cfg or ~/.ansible.cfg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">defaults</span><span class="p">]</span>
+<span class="n">host_key_checking</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Alternatively this can be set by an environment variable:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">export </span><span class="nv">ANSIBLE_HOST_KEY_CHECKING</span><span class="o">=</span>False
+</pre></div>
+</div>
+<p>Also note that host key checking in paramiko mode is reasonably slow, therefore switching to &#8216;ssh&#8217; is also recommended when using this feature.</p>
+<p id="a-note-about-logging">Ansible will log some information about module arguments on the remote system in the remote syslog.  To enable basic
+logging on the control machine see <a class="reference internal" href="intro_configuration.html"><em>The Ansible Configuration File</em></a> document and set the &#8216;log_path&#8217; configuration file setting.  Enterprise users may also be interested in <a class="reference internal" href="tower.html"><em>Ansible Tower</em></a>.  Tower provides a very robust database logging feature where it is possible to drill down and see history based on hosts, projects, and particular inventories over time &#8211; explorable both graphically and through a REST API.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="intro_inventory.html"><em>Inventory</em></a></dt>
+<dd>More information about inventory</dd>
+<dt><a class="reference internal" href="intro_adhoc.html"><em>Introduction To Ad-Hoc Commands</em></a></dt>
+<dd>Examples of basic commands</dd>
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>Learning Ansible&#8217;s configuration management language</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-project">Mailing List</a></dt>
+<dd>Questions? Help? Ideas?  Stop by the list on Google Groups</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#foreword">Foreword</a></li>
+<li><a class="reference internal" href="#remote-connection-information">Remote Connection Information</a></li>
+<li><a class="reference internal" href="#your-first-commands">Your first commands</a></li>
+<li><a class="reference internal" href="#host-key-checking">Host Key Checking</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro_installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intro_inventory.html"
+                        title="next chapter">Inventory</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intro_inventory.html" title="Inventory"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro_installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" >Introduction</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

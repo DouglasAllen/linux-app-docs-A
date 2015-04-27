@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Accessing package information</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s02.html" title="Managing packages"><link rel="prev" href="ch02s02s01.html" title="Managing the package list"><link rel="next" href="ch02s02s03.html" title="Modifying package states"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s02s02.html#idp3365720" title="The package list"><link rel="subsection" href="ch02s02s02.html#secPackageInfo" title="Detailed package information"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Accessing package information</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02s01.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Managing packages</th><td width="20%" align="right"> <a accesskey="n" href="ch02s02s03.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Accessing package information"><div class="titlepage"><div><div><h3 class="title"><a name="secAccessingPackageInformation"></a>Accessing package information</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s02s02.html#idp3365720">The package list</a></span></dt><dt><span class="section"><a href="ch02s02s02.html#secPackageInfo">Detailed package information</a></span></dt></dl></div><p>
+	    Information about packages is presented in several
+	    locations in <span class="command"><strong>aptitude</strong></span>: the package list gives a quick
+	    overview of the state of each package, and additional
+	    views providing detailed information about a package are
+	    also available.
+	  </p><div class="section" title="The package list"><div class="titlepage"><div><div><h4 class="title"><a name="idp3365720"></a>The package list</h4></div></div></div><p>
+	      The package list displays an <span class="quote">“<span class="quote">at-a-glance</span>”</span> synopsis of a
+	      package's state.  For instance, the package
+	      <code class="systemitem">webmin</code> might have the
+	      following synopsis:
+	    </p><pre class="screen">piAU  webmin                                        +5837kB &lt;none&gt;     1.160-2</pre><p>
+	      The four characters on the left-hand side of the
+	      synopsis show that the package is not installed
+	      (<span class="quote">“<span class="quote">p</span>”</span>), that it is going to be installed
+	      (<span class="quote">“<span class="quote">i</span>”</span>), that it was automatically chosen to
+	      be installed (<span class="quote">“<span class="quote">A</span>”</span>), and that it is
+	      untrusted (<span class="quote">“<span class="quote">U</span>”</span>).  On the right-hand side of
+	      the synopsis, the current version and the most recent
+	      available version are displayed, along with an
+	      indication of how much space will be used by the
+	      upgrade.
+	    </p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+		You can customize how package synopses are displayed;
+		see <a class="xref" href="ch02s05s01.html#secDisplayFormat" title="Customizing how packages are displayed">the section called “Customizing how packages are displayed”</a> for details.
+	      </p></td></tr></table></div><p>
+	      The four status flags on the left-hand side of the
+	      screen give the basic information about a package's
+	      state.  The first character is the package's
+	      <span class="emphasis"><em>current state</em></span>.  The second
+	      character is the <span class="emphasis"><em>action</em></span> which will
+	      be taken on the package.  The third character indicates
+	      whether the package was <span class="emphasis"><em>automatically
+	      installed</em></span> (see <a class="xref" href="ch02s02s06.html" title="Managing automatically installed packages">the section called “Managing automatically installed packages”</a>), and the fourth character
+	      indicates whether the package is trusted (see <a class="xref" href="ch02s02s05.html" title="Understanding and managing package trust">the section called “Understanding and managing package trust”</a>).
+	    </p><p>
+	      The possible values of the <span class="quote">“<span class="quote">current state</span>”</span> flag are
+	      given in <a class="xref" href="ch02s02s02.html#figureCurrentFlag" title="Figure 2.9. Values of the “current state” flag">Figure 2.9, “Values of the <span class="quote">“<span class="quote">current state</span>”</span> flag”</a> and the
+	      possible values of the <span class="quote">“<span class="quote">action</span>”</span> flag are given in <a class="xref" href="ch02s02s02.html#figureActionFlag" title="Figure 2.10. Values of the “action” flag">Figure 2.10, “Values of the <span class="quote">“<span class="quote">action</span>”</span> flag”</a>.
+	    </p><div class="figure"><a name="figureCurrentFlag"></a><p class="title"><b>Figure 2.9. Values of the <span class="quote">“<span class="quote">current state</span>”</span> flag</b></p><div class="figure-contents"><div class="informaltable"><table border="0"><colgroup><col><col><col></colgroup><tbody><tr><td><code class="computeroutput">i</code></td><td>-</td><td>
+			the package is installed and all its
+			dependencies are satisfied.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">c</code></td><td>-</td><td>
+			the package was removed, but its configuration
+			files are still present.
+		      </td></tr><tr><td><code class="computeroutput">p</code></td><td>-</td><td>
+			the package and all its configuration files
+			were removed, or the package was never
+			installed.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">v</code></td><td>-</td><td>
+			the package is virtual.
+		      </td></tr><tr><td><code class="computeroutput">B</code></td><td>-</td><td>the package has broken dependencies.</td></tr><tr class="oddrow"><td><code class="computeroutput">u</code></td><td>-</td><td>
+			the package has been unpacked but not
+			configured.
+		      </td></tr><tr><td><code class="computeroutput">C</code></td><td>-</td><td>
+			half-configured: the package's configuration
+			was interrupted.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">H</code></td><td>-</td><td>
+			half-installed: the package's installation was
+			interrupted.
+		      </td></tr></tbody></table></div></div></div><br class="figure-break"><div class="figure"><a name="figureActionFlag"></a><p class="title"><b>Figure 2.10. Values of the <span class="quote">“<span class="quote">action</span>”</span> flag</b></p><div class="figure-contents"><div class="informaltable"><table border="0"><colgroup><col><col><col></colgroup><tbody><tr><td><code class="computeroutput">i</code></td><td>-</td><td>the package will be installed.</td></tr><tr class="oddrow"><td><code class="computeroutput">u</code></td><td>-</td><td>the package will be upgraded.</td></tr><tr><td><code class="computeroutput">d</code></td><td>-</td><td>
+			the package will be deleted: it will be
+			removed, but its configuration files will
+			remain on the system.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">p</code></td><td>-</td><td>
+			the package will be purged: it and its
+			configuration files will be removed.
+		      </td></tr><tr><td><code class="computeroutput">h</code></td><td>-</td><td>
+			the package will be held back: it will be kept
+			at its current version, even if a newer
+			version becomes available, until the hold is
+			cancelled.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">F</code></td><td>-</td><td>
+			An upgrade of the package has been forbidden.
+		      </td></tr><tr><td><code class="computeroutput">r</code></td><td>-</td><td>
+			the package will be reinstalled.
+		      </td></tr><tr class="oddrow"><td><code class="computeroutput">B</code></td><td>-</td><td>
+			the package is <span class="quote">“<span class="quote">broken</span>”</span>: some of its
+			dependencies will not be satisfied.
+			<span class="command"><strong>aptitude</strong></span> will not allow you to install,
+			remove, or upgrade anything while you have
+			broken packages.
+		      </td></tr></tbody></table></div></div></div><br class="figure-break"><p>
+	      In addition, <span class="command"><strong>aptitude</strong></span> will use colors to indicate
+	      package state if your terminal supports it.  State
+	      distinctions are mainly displayed using the background
+	      color:
+	    </p><div class="variablelist"><dl><dt><span class="term">Black</span></dt><dd><p>
+		    The package cannot be upgraded (or is not going to
+		    be installed), and it has no dependency problems.
+		    If the package is installed, its name will be
+		    highlighted.
+		  </p></dd><dt><span class="term">Green</span></dt><dd><p>
+		    The package is going to be installed.
+		  </p></dd><dt><span class="term">Blue</span></dt><dd><p>
+		    The package is currently installed, and it will be
+		    upgraded.
+		  </p></dd><dt><span class="term">Magenta</span></dt><dd><p>
+		    The package is currently installed, but it will be
+		    removed.
+		  </p></dd><dt><span class="term">White</span></dt><dd><p>
+		    The package is currently installed, and it is
+		    <span class="quote">“<span class="quote">held</span>”</span> at its current version: automatic upgrades
+		    will ignore it.
+		  </p></dd><dt><span class="term">Red</span></dt><dd><p>
+		    This package is broken: some of its dependencies
+		    will not be satisfied.
+		  </p></dd></dl></div><p>
+	    Finally, the lower half of the screen displays the long
+	    description.  <span class="command"><strong>aptitude</strong></span> will attempt to detect whether
+	    the package is involved in a dependency problem; if so,
+	    information regarding the dependency problem will be
+	    displayed here.  To cycle between dependency information
+	    and the package description, press <span class="keycap"><strong>i</strong></span>.
+	  </p></div><div class="section" title="Detailed package information"><div class="titlepage"><div><div><h4 class="title"><a name="secPackageInfo"></a>Detailed package information</h4></div></div></div><p>
+	    Pressing <span class="keycap"><strong>Enter</strong></span> while a package is
+	    highlighted will display the package information screen:
+	  </p><div class="screenshot"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/info-snapshot.png" width="100%" longdesc="ld-idp3401848.html"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-idp3401848.html" target="longdesc">D</a>]</span></div></div></div><p>
+	    This display can be navigated in a manner similar to the
+	    package list: for instance, in the screenshot above, I
+	    expanded the dependency on
+	    <code class="systemitem">apt-doc</code>, revealing the available
+	    versions of <code class="systemitem">apt-doc</code> which will
+	    fulfill the dependency.  These versions can be manipulated
+	    in the same way that packages can: for instance, to
+	    install version <code class="systemitem">0.5.25</code> of
+	    <code class="systemitem">apt-doc</code>, you would highlight it
+	    and press <span class="keycap"><strong>+</strong></span>.
+	  </p><div class="tip" title="Tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+	      To quickly satisfy a dependency, select the dependency
+	      and press <span class="keycap"><strong>+</strong></span>; <span class="command"><strong>aptitude</strong></span> will
+	      attempt to automatically satisfy it.
+	    </p></td></tr></table></div><p>
+	    In addition to the dependencies of a package, you can view
+	    the package names that it Provides, the packages which
+	    depend upon it, and the available versions of the package
+	    (including any other packages that Provide it).
+	  </p><p>
+	    As usual, you can dismiss this screen and return to the
+	    main view by pressing <span class="keycap"><strong>q</strong></span>.  For
+	    convenience, a few other information screens (which only
+	    display some commonly-used information, hiding the rest)
+	    are available: press <span class="keycap"><strong>v</strong></span> to view the
+	    versions of a package, <span class="keycap"><strong>d</strong></span> to view the
+	    dependencies of a package, and <span class="keycap"><strong>r</strong></span> to view
+	    the <span class="quote">“<span class="quote">reverse dependencies</span>”</span> of a package (packages which
+	    depend upon it).
+	  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02s01.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s02s03.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Managing the package list </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Modifying package states</td></tr></table></div></body></html>

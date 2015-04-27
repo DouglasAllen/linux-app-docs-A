@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Using aptitude from the command line</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch01.html" title="Chapter 1. Getting started"><link rel="prev" href="ch01s01s05.html" title="Updating the package list and installing packages"><link rel="next" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Using <span class="command"><strong>aptitude</strong></span> from the command line</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s01s05.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Chapter 1. Getting started</th><td width="20%" align="right"> <a accesskey="n" href="ch02.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Using aptitude from the command line"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="secUsingCmdline"></a>Using <span class="command"><strong>aptitude</strong></span> from the command line</h2></div></div></div><p>
+	In addition to its <span class="quote">“<span class="quote">visual</span>”</span> interface described in the
+	previous section, <span class="command"><strong>aptitude</strong></span> can be used to manage packages
+	directly from the command-line in the same way that you would
+	use <span class="command"><strong>apt-get</strong></span>.  This section covers the most common <span class="command"><strong>aptitude</strong></span>
+	command-line actions; for more information, see <a class="link" href="rn01.html" title="Command-line reference">the <span class="command"><strong>aptitude</strong></span> command-line reference</a>.
+      </p><p>
+	In general, a command-line invocation of <span class="command"><strong>aptitude</strong></span> will look
+	like this:
+      </p><div class="cmdsynopsis"><p><code class="command">aptitude</code>   <em class="replaceable"><code>action</code></em>  [<em class="replaceable"><code>arguments</code></em>...]</p></div><p>
+	<em class="replaceable"><code>action</code></em> tells <span class="command"><strong>aptitude</strong></span> what action
+	it is to take; the remaining arguments are used in an
+	option-specific fashion.  Typically they will consist of
+	package names and command-line switches<sup>[<a name="idp3144288" href="#ftn.idp3144288" class="footnote">4</a>]</sup>.
+      </p><p>
+	The most important actions are:
+      </p><div class="variablelist"><dl><dt><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>   update </p></div>
+	  </span></dt><dd><p>
+	      This command updates the package lists, as if you had
+	      entered the visual interface and pressed
+	    <span class="keycap"><strong>u</strong></span>.
+	    </p></dd><dt><a name="safeUpgrade"></a><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>   safe-upgrade </p></div>
+	  </span></dt><dd><p>
+	      This command will upgrade as many packages as it can
+	      upgrade without removing existing packages.
+	    </p><p>
+	      It is sometimes necessary to remove one package in order
+	      to upgrade another; this command is not able to upgrade
+	      packages in such situations.  Use the <a class="link" href="ch01s02.html#fullUpgrade"><code class="literal">full-upgrade</code></a>
+	      command to upgrade those packages as well.
+	    </p></dd><dt><a name="fullUpgrade"></a><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>   full-upgrade </p></div>
+	  </span></dt><dd><p>
+	      Like <a class="link" href="ch01s02.html#safeUpgrade"><code class="literal">safe-upgrade</code></a>,
+	      this command will attempt to upgrade packages, but it is
+	      more aggressive about solving dependency problems: it
+	      will install and remove packages until all dependencies
+	      are satisfied.  Because of the nature of this command,
+	      it is possible that it will do undesirable things, and
+	      so you should be careful when using it.
+	    </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		For historical reasons, this command was originally
+		named <code class="literal">dist-upgrade</code>, and that name
+		is still recognized by <span class="command"><strong>aptitude</strong></span>.
+	      </p></td></tr></table></div></dd><dt><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>  [ install  |   remove  |   purge ]  <em class="replaceable"><code>pkg1</code></em>  [<em class="replaceable"><code>pkg2</code></em>...]</p></div>
+	  </span></dt><dd><p>
+	      These commands install, remove, or
+	      purge<sup>[<a name="idp3158800" href="#ftn.idp3158800" class="footnote">5</a>]</sup> the specified packages.
+	      <span class="quote">“<span class="quote">Installing</span>”</span> a package which is already installed but
+	      can be upgraded will cause it to be upgraded.
+	    </p></dd><dt><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>   search   <em class="replaceable"><code>pattern1</code></em>  [<em class="replaceable"><code>pattern2</code></em>...]</p></div>
+	  </span></dt><dd><p>
+	      This command searches for packages whose name contains
+	      any of the given <em class="replaceable"><code>pattern</code></em>s,
+	      printing the result to the terminal.  In addition to
+	      just being a string of text, each
+	      <em class="replaceable"><code>pattern</code></em> can be a search
+	      pattern as described in <a class="xref" href="ch02s04.html" title="Search patterns">the section called “Search patterns”</a>.
+	      <sup>[<a name="idp3163224" href="#ftn.idp3163224" class="footnote">6</a>]</sup> For instance, <span class="quote">“<span class="quote"><code class="literal">aptitude
+	      search gnome kde</code></span>”</span> will list all
+	      packages whose name contains either
+	      <span class="quote">“<span class="quote"><code class="literal">gnome</code></span>”</span> or
+	      <span class="quote">“<span class="quote"><code class="literal">kde</code></span>”</span>.
+	    </p></dd><dt><span class="term">
+	    <div class="cmdsynopsis"><p><code class="command">aptitude</code>   show   <em class="replaceable"><code>pkg1</code></em>  [<em class="replaceable"><code>pkg2</code></em>...]</p></div>
+	  </span></dt><dd><p>
+	      Prints information about each
+	      <em class="replaceable"><code>pkg</code></em> to the terminal.
+	    </p></dd></dl></div><p>
+	The commands that install, upgrade, and remove packages all
+	accept the parameter <code class="literal">-s</code>, which stands for <span class="quote">“<span class="quote">simulate</span>”</span>.  When
+	<code class="literal">-s</code> is passed on the command line, the program performs all
+	the actions it would normally perform, but does not actually
+	download or install/remove any files.
+      </p><p>
+	<span class="command"><strong>aptitude</strong></span> will sometimes present a prompt like this:
+      </p><pre class="screen">The following NEW packages will be automatically installed:
+  space-orbit-common 
+The following NEW packages will be installed:
+  space-orbit space-orbit-common 
+0 packages upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3200kB of archives. After unpacking 8413kB will be used.
+<code class="prompt">Do you want to continue? [Y/n/?]</code></pre><p>
+	In addition to the obvious options of <span class="quote">“<span class="quote">Yes</span>”</span> and <span class="quote">“<span class="quote">No</span>”</span>, a number
+	of commands are available which can be used to change the
+	information displayed at the prompt, or to specify further
+	actions.  For instance, typing <strong class="userinput"><code>s</code></strong> will display or hide
+	information about how much space each package will use:
+      </p><pre class="screen"><code class="prompt">Do you want to continue? [Y/n/?]</code> <strong class="userinput"><code>s</code></strong>
+
+Size changes will be shown.
+
+The following NEW packages will be automatically installed:
+  space-orbit-common &lt;+8020kB&gt; 
+The following NEW packages will be installed:
+  space-orbit &lt;+393kB&gt; space-orbit-common &lt;+8020kB&gt; 
+0 packages upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3200kB of archives. After unpacking 8413kB will be used.
+<code class="prompt">Do you want to continue? [Y/n/?]</code></pre><p>
+	Similarly, typing <strong class="userinput"><code>d</code></strong> will display information about
+	automatically installed or removed packages:
+      </p><pre class="screen">The following NEW packages will be automatically installed:
+  space-orbit-common (D: space-orbit)
+The following NEW packages will be installed:
+  space-orbit space-orbit-common 
+0 packages upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3200kB of archives. After unpacking 8413kB will be used.</pre><p>
+	This shows that <code class="systemitem">space-orbit-common</code> is
+	being installed because <code class="systemitem">space-orbit</code>
+	depends on it.  You can see the entire list of possible
+	entries by entering <strong class="userinput"><code>?</code></strong> at the prompt.
+      </p><p>
+	If your request violates dependencies in a way that cannot be
+	trivially resolved, <span class="command"><strong>aptitude</strong></span> will ask you what to do:
+      </p><pre class="screen">The following packages are BROKEN:
+  libsdl1.2debian
+The following packages will be REMOVED:
+  libsdl1.2debian-alsa
+.
+.
+.
+The following actions will resolve these dependencies:
+
+Install the following packages:
+libsdl1.2debian-all [1.2.12-1 (unstable)]
+
+Score is 41
+
+<code class="prompt">Accept this solution? [Y/n/q/?]</code></pre><p>
+	Typing <strong class="userinput"><code>y</code></strong> (or simply pressing
+	<span class="keycap"><strong>enter</strong></span>) will accept the proposed solution.
+	Typing <strong class="userinput"><code>n</code></strong> will display the <span class="quote">“<span class="quote">next
+	best</span>”</span> solution:
+      </p><pre class="screen"><code class="prompt">Accept this solution? [Y/n/q/?]</code> <strong class="userinput"><code>n</code></strong>
+The following actions will resolve these dependencies:
+
+Install the following packages:
+libsdl1.2debian-esd [1.2.12-1 (unstable)]
+
+Score is 19
+
+<code class="prompt">Accept this solution? [Y/n/q/?]</code></pre><p>
+	As with the main command-line prompt, you can perform a number
+	of additional actions, including manually altering the states
+	of packages, from the dependency resolution prompt.  Type
+	<strong class="userinput"><code>?</code></strong> to see a complete list.
+      </p><p>
+	Typing <strong class="userinput"><code>q</code></strong> will abort the automatic
+	resolver and allow you to resolve the dependencies manually:
+      </p><pre class="screen"><code class="prompt">Accept this solution? [Y/n/q/?]</code> <strong class="userinput"><code>q</code></strong>
+aptitude failed to find a solution to these dependencies.  You can solve them yourself by hand or type 'n' to quit.
+The following packages have unmet dependencies:
+  libsdl1.2debian: Depends: libsdl1.2debian-alsa (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-all (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-esd (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-arts (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-oss (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-nas (= 1.2.12-1) but it is not installable or
+                            libsdl1.2debian-pulseaudio (= 1.2.12-1) but it is not installable
+Resolve these dependencies by hand? [N/+/-/_/:/?]</pre><p>
+	You can use any of the package manipulation commands to
+	resolve the broken dependencies (type <strong class="userinput"><code>?</code></strong>
+	for a full list of the available commands).  Type
+	<strong class="userinput"><code>n</code></strong> or press <span class="keycap"><strong>enter</strong></span> to
+	quit <span class="command"><strong>aptitude</strong></span>:
+      </p><pre class="screen">Resolve these dependencies by hand? [N/+/-/_/:/?] n
+Abort.</pre><p>
+	For complete documentation of the command-line features of
+	<span class="command"><strong>aptitude</strong></span>, see <a class="xref" href="rn01.html" title="Command-line reference">Command-line reference</a>.
+      </p><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp3144288" href="#idp3144288" class="para">4</a>] </sup>A
+	<span class="quote">“<span class="quote">switch</span>”</span> is a letter preceded by a hyphen: for instance, <span class="quote">“<span class="quote">-a</span>”</span>,
+	<span class="quote">“<span class="quote">-v</span>”</span>, etc.</p></div><div class="footnote"><p><sup>[<a id="ftn.idp3158800" href="#idp3158800" class="para">5</a>] </sup>Purging a package removes the
+	      package, as well as all its configuration
+	      files.</p></div><div class="footnote"><p><sup>[<a id="ftn.idp3163224" href="#idp3163224" class="para">6</a>] </sup>
+		  In fact, the same is true of the commands that take
+		  packages as arguments, such as
+		  <code class="literal">install</code> or
+		  <code class="literal">show</code>.
+		</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s01s05.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch01.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Updating the package list and installing packages </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Chapter 2. <span class="command"><strong>aptitude</strong></span> reference guide</td></tr></table></div></body></html>

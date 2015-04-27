@@ -1,0 +1,442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Customizing the package list</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s05.html" title="Customizing aptitude"><link rel="prev" href="ch02s05.html" title="Customizing aptitude"><link rel="next" href="ch02s05s02.html" title="Customizing keybindings"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="subsection" href="ch02s05s01.html#secDisplayFormat" title="Customizing how packages are displayed"><link rel="subsection" href="ch02s05s01.html#secGroupingPolicy" title="Customizing the package hierarchy"><link rel="subsection" href="ch02s05s01.html#secSortingPolicy" title="Customizing how packages are sorted"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Customizing the package list</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Customizing <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s05s02.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Customizing the package list"><div class="titlepage"><div><div><h3 class="title"><a name="idp4075200"></a>Customizing the package list</h3></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch02s05s01.html#secDisplayFormat">Customizing how packages are displayed</a></span></dt><dt><span class="section"><a href="ch02s05s01.html#secGroupingPolicy">Customizing the package hierarchy</a></span></dt><dt><span class="section"><a href="ch02s05s01.html#secSortingPolicy">Customizing how packages are sorted</a></span></dt></dl></div><p>
+	  The package list can be heavily customized: how packages are
+	  displayed, how the package hierarchy is formed, how packages
+	  are sorted, and even how the display is organized are all
+	  open to change.
+	</p><div class="section" title="Customizing how packages are displayed"><div class="titlepage"><div><div><h4 class="title"><a name="secDisplayFormat"></a>Customizing how packages are displayed</h4></div></div></div><p>
+	    This section describes how to configure the contents and
+	    format of the package list, status line, and header line,
+	    as well as the output of <code class="literal"><a class="link" href="rn01re01.html#cmdlineSearch">aptitude search</a></code>.
+	  </p><p>
+	    The format of each of these locations is defined by a
+	    <span class="quote">“<span class="quote">format string</span>”</span>.  A format string is a string of text
+	    containing <code class="literal">%</code>-escapes such as
+	    <code class="literal">%p</code>, <code class="literal">%S</code>, and so on.
+	    The resulting output is created by taking the text and
+	    replacing the <code class="literal">%</code>-escapes according to
+	    their meanings (given below).
+	  </p><p>
+	    A <code class="literal">%</code>-escape can either have a fixed
+	    size, in which case it is always replaced by the same
+	    amount of text (with extra space characters added to fill
+	    it out as necessary), or it can be <span class="quote">“<span class="quote">expandable</span>”</span>, meaning
+	    that it takes up the space that is not claimed by
+	    fixed-size columns.  If there are several expandable
+	    columns, the extra space is divided evenly between them.
+	  </p><p>
+	    All <code class="literal">%</code>-escapes come with a default size
+	    and/or expandability.  The size of a
+	    <code class="literal">%</code>-escape can be changed by writing it
+	    between the <code class="literal">%</code> and the character
+	    identifying the escape; for instance,
+	    <code class="literal">%20V</code> generates the <a class="link" href="ch02s05s01.html#formatCandVer">candidate version</a> of the
+	    package, 20 characters wide.  Placing a question mark
+	    (<code class="literal">?</code>) between the <code class="literal">%</code>
+	    and the character identifying the escape causes the
+	    column's <span class="quote">“<span class="quote">basic</span>”</span> width to vary depending on
+	    its content.  Note that the resulting columns might not
+	    line up vertically!
+	  </p><p>
+	    If you want a particular <code class="literal">%</code>-escape to be
+	    expandable, even though it normally has a fixed width,
+	    place a pound sign (ie,
+	    <span class="quote">“<span class="quote"><code class="literal">#</code></span>”</span>) immediately after it.
+	    For instance, to display the candidate version of a
+	    package, no matter how long it is, use the format string
+	    <code class="literal">%V#</code>.  You can also place
+	    <code class="literal">#</code> after something that is not a
+	    <code class="literal">%</code>-escape; <span class="command"><strong>aptitude</strong></span> will
+	    <span class="quote">“<span class="quote">expand</span>”</span> the text preceding the
+	    <code class="literal">#</code> by inserting extra spaces after it.
+	  </p><p>
+	    In summary, the syntax of a <code class="literal">%</code>-escape is:
+	  </p><pre class="synopsis"><code class="literal">%</code>[<span class="optional"><em class="replaceable"><code>width</code></em></span>][<span class="optional"><code class="literal">?</code></span>]<em class="replaceable"><code>code</code></em>[<span class="optional"><code class="literal">#</code></span>]</pre><p>
+	    The configuration variables <code class="literal"><a class="link" href="ch02s05s05.html#configPackage-Display-Format">Aptitude::UI::Package-Display-Format</a></code>,
+	    <code class="literal"><a class="link" href="ch02s05s05.html#configPackage-Status-Format">Aptitude::UI::Package-Status-Format</a></code>,
+	    and <code class="literal"><a class="link" href="ch02s05s05.html#configPackage-Header-Format">Aptitude::UI::Package-Header-Format</a></code>
+	    define the default formats the package list, the header at
+	    the top of the package list, and the status line below the
+	    package list respectively.  To change how the results of
+	    an <code class="literal"><a class="link" href="rn01re01.html#cmdlineSearch">aptitude
+	    search</a></code> command are displayed, use the
+	    <code class="literal"><a class="link" href="rn01re01.html#cmdlineOptionFormat">-F</a></code> option.
+	  </p><p>
+	    The following <code class="literal">%</code>-escapes are available
+	    in format strings:
+	  </p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+	      Some of the descriptions below refer to <span class="quote">“<span class="quote">the package</span>”</span>.
+	      In the GUI, this is either the package being displayed
+	      or the currently selected package; in the command-line
+	      search, this is the package being displayed.
+	    </p></td></tr></table></div><div class="segmentedlist"><table border="0"><thead><tr class="segtitle"><th>Escape</th><th>Name</th><th>Default size</th><th>Expandable</th><th>Description</th></tr></thead><tbody><tr class="oddrow"><td class="seg"><code class="literal">%%</code></td><td class="seg">Literal <code class="literal">%</code></td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		This is not really an escape; it simply inserts a
+		percent sign into the output at the point at which it
+		occurs.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%#<em class="replaceable"><code>number</code></em></code></td><td class="seg">Parameter Replacement</td><td class="seg">Variable</td><td class="seg">No</td><td class="seg">
+		In some circumstances, a display format string will
+		have <span class="quote">“<span class="quote">parameters</span>”</span>: for instance, in the
+		command-line <code class="literal">search</code>, the groups
+		matched by the search are used as parameters when
+		displaying the result.  This format code will be
+		replaced by the parameter indicated by
+		<em class="replaceable"><code>number</code></em>.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%a</code></td><td class="seg">Action Flag</td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		A single-character flag summarizing any action to be
+		performed on the package, as described in
+		<a class="xref" href="ch02s02s02.html#figureActionFlag" title="Figure 2.10. Values of the “action” flag">Figure 2.10, “Values of the <span class="quote">“<span class="quote">action</span>”</span> flag”</a>.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%A</code></td><td class="seg">Action</td><td class="seg">10</td><td class="seg">No</td><td class="seg">
+		A somewhat more verbose description of the action to
+		be performed on the package.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%B</code></td><td class="seg">Broken Count</td><td class="seg">12</td><td class="seg">No</td><td class="seg">
+		If there are no broken packages, produces nothing.
+		Otherwise, produces a string such as
+		<span class="quote">“<span class="quote"><code class="computeroutput">Broken: 10</code></span>”</span>
+		describing the number of broken packages.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%c</code></td><td class="seg">Current State Flag</td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		A single-character flag summarizing the current state
+		of the package, as described in <a class="xref" href="ch02s02s02.html#figureCurrentFlag" title="Figure 2.9. Values of the “current state” flag">Figure 2.9, “Values of the <span class="quote">“<span class="quote">current state</span>”</span> flag”</a>.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%C</code></td><td class="seg">Current State</td><td class="seg">11</td><td class="seg">No</td><td class="seg">
+		A more verbose description of the current state of the
+		package.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%d</code></td><td class="seg">Description</td><td class="seg">40</td><td class="seg">Yes</td><td class="seg">
+		The package's short description.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%D</code></td><td class="seg">Package Size</td><td class="seg">8</td><td class="seg">No</td><td class="seg">
+		The size of the package file containing the package.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%H</code></td><td class="seg">Hostname</td><td class="seg">15</td><td class="seg">No</td><td class="seg">
+		The name of the computer on which <span class="command"><strong>aptitude</strong></span> is running.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%i</code></td><td class="seg">Pin priority</td><td class="seg">4</td><td class="seg">No</td><td class="seg">
+		Displays the highest priority assigned to a package
+		version; for packages, displays the priority of the
+		version which will be forced to be installed (if any).
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%I</code></td><td class="seg">Installed Size</td><td class="seg">8</td><td class="seg">No</td><td class="seg">
+		The (estimated) amount of space the package takes up on disk.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%m</code></td><td class="seg">Maintainer</td><td class="seg">30</td><td class="seg">Yes</td><td class="seg">
+		The maintainer of the package.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%M</code></td><td class="seg">Automatic Flag</td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		If the package is automatically installed, outputs
+		<span class="quote">“<span class="quote"><code class="computeroutput">A</code></span>”</span>; otherwise,
+		outputs nothing.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%n</code></td><td class="seg">Program Version</td><td class="seg">The length of <span class="quote">“<span class="quote">0.6.8.2</span>”</span>.</td><td class="seg">No</td><td class="seg">
+		Outputs the version of <span class="command"><strong>aptitude</strong></span> that is running,
+		currently
+		<span class="quote">“<span class="quote"><code class="computeroutput">0.6.8.2</code></span>”</span>.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%N</code></td><td class="seg">Program Name</td><td class="seg">The length of the name.</td><td class="seg">No</td><td class="seg">
+		Outputs the name of the program; usually
+		<span class="quote">“<span class="quote"><code class="computeroutput">aptitude</code></span>”</span>.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%o</code></td><td class="seg">Download Size</td><td class="seg">17</td><td class="seg">No</td><td class="seg">
+		If no packages are going to be installed, outputs
+		nothing.  Otherwise, outputs a string describing the
+		total size of all the package files which will be
+		installed (an estimate of how much needs to be
+		downloaded); for instance, <span class="quote">“<span class="quote"><code class="computeroutput">DL size:
+		1000B</code></span>”</span>.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%p</code></td><td class="seg">Package Name</td><td class="seg">30</td><td class="seg">Yes</td><td class="seg">
+		Outputs the name of the package.  When a package is
+		displayed in a tree context, the name of the package
+		will be indented, if possible, according to its depth
+		in the tree.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%P</code></td><td class="seg">Priority</td><td class="seg">9</td><td class="seg">No</td><td class="seg">
+		Outputs the priority of the package.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%r</code></td><td class="seg">Reverse Depends Count</td><td class="seg">2</td><td class="seg">No</td><td class="seg">
+		Outputs the approximate number of installed packages
+		which depend upon the package.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%R</code></td><td class="seg">Abbreviated Priority</td><td class="seg">3</td><td class="seg">No</td><td class="seg">
+		Outputs an abbreviated description of the package's
+		priority: for instance,
+		<span class="quote">“<span class="quote"><code class="computeroutput">Important</code></span>”</span> becomes
+		<span class="quote">“<span class="quote"><code class="computeroutput">Imp</code></span>”</span>.
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%s</code></td><td class="seg">Section</td><td class="seg">10</td><td class="seg">No</td><td class="seg">
+		Outputs the section of the package.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%S</code></td><td class="seg">Trust Status</td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		If the package is untrusted, displays the letter "U".
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%t</code></td><td class="seg">Archive</td><td class="seg">10</td><td class="seg">Yes</td><td class="seg">
+		The archive in which the package is found.
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%T</code></td><td class="seg">Tagged</td><td class="seg">1</td><td class="seg">No</td><td class="seg">
+		Outputs <span class="quote">“<span class="quote"><code class="computeroutput">*</code></span>”</span> if the
+		package is tagged, nothing
+		otherwise.<sup>[<a name="idp4140128" href="#ftn.idp4140128" class="footnote">19</a>]</sup>
+	      </td></tr><tr class="seglistitem"><td class="seg"><code class="literal">%u</code></td><td class="seg">Disk Usage Change</td><td class="seg">30</td><td class="seg">No</td><td class="seg">
+		If the scheduled actions will alter the amount of
+		space used on the disk, outputs a description of the
+		change in disk space; for instance,
+		<span class="quote">“<span class="quote"><code class="computeroutput">Will use 100MB of disk
+		space.</code></span>”</span>
+	      </td></tr><tr class="oddrow"><td class="seg"><code class="literal">%v</code></td><td class="seg">Current Version</td><td class="seg">14</td><td class="seg">No</td><td class="seg">
+		Outputs the currently installed version of the
+		package, or
+		<code class="computeroutput">&lt;none&gt;</code> if the
+		package is not currently installed.
+	      </td></tr><tr class="seglistitem"><td class="seg"><a name="formatCandVer"></a><code class="literal">%V</code></td><td class="seg">Candidate Version</td><td class="seg">14</td><td class="seg">No</td><td class="seg">
+		Outputs the version of the package which would be
+		installed if <span class="guimenu">Package</span> → <span class="guimenuitem">Install</span> (<span class="shortcut"><strong><span class="keycap"><strong>+</strong></span></strong></span>) were issued on the
+		package, or
+		<code class="computeroutput">&lt;none&gt;</code> if the
+		package is not currently available.
+	      </td></tr><tr class="oddrow"><td class="seg"><a name="formatSizeChange"></a><code class="literal">%Z</code></td><td class="seg">Size Change</td><td class="seg">9</td><td class="seg">No</td><td class="seg">
+		Outputs how much additional space will be used or how
+		much space will be freed by installing, upgrading, or
+		removing a package.
+	      </td></tr></tbody></table></div></div><div class="section" title="Customizing the package hierarchy"><div class="titlepage"><div><div><h4 class="title"><a name="secGroupingPolicy"></a>Customizing the package hierarchy</h4></div></div></div><p>
+	    The package hierarchy is generated by a
+	    <em class="firstterm">grouping policy</em>: rules describing
+	    how the hierarchy should be built.  The grouping policy
+	    describes a <span class="quote">“<span class="quote">pipeline</span>”</span> of rules; each rule
+	    can discard packages, create sub-hierarchies in which
+	    packages reside, or otherwise manipulate the tree.  The
+	    configuration items <code class="literal"><a class="link" href="ch02s05s05.html#configDefault-Grouping">Aptitude::UI::Default-Grouping</a></code>
+	    and <code class="literal"><a class="link" href="ch02s05s05.html#configDefault-Preview-Grouping">Aptitude::UI::Default-Preview-Grouping</a></code>
+	    set the grouping policies for newly created package lists
+	    and preview screens, respectively.  You can set the
+	    grouping policy for the <span class="emphasis"><em>current</em></span>
+	    package list by pressing <span class="keycap"><strong>G</strong></span>.
+	  </p><p>
+	    The grouping policy is described by a comma-separated list
+	    of rules:
+	    <code class="literal"><em class="replaceable"><code>rule1</code></em>,<em class="replaceable"><code>rule2</code></em>,<em class="replaceable"><code>...</code></em></code>.
+	    Each <em class="replaceable"><code>rule</code></em> consists of the name
+	    of the rule, possibly followed by arguments: for instance,
+	    <code class="literal">versions</code> or
+	    <code class="literal">section(subdir)</code>.  Whether arguments are
+	    required and how many arguments are required (or allowed)
+	    depends on the type of rule.
+	  </p><p>
+	    Rules can be <em class="firstterm">non-terminal</em> or
+	    <em class="firstterm">terminal</em>.  A non-terminal rule will
+	    process a package by generating some part of the
+	    hierarchy, then passing the package on to a later rule.  A
+	    terminal rule, on the other hand, will also generate part
+	    of the tree (typically items corresponding to the
+	    package), but does not pass its package to a later rule.
+	    If no terminal rule is specified, <span class="command"><strong>aptitude</strong></span> will use the
+	    default rule, which is to create the standard <span class="quote">“<span class="quote">package
+	    items</span>”</span>.
+	  </p><div class="variablelist"><dl><dt><span class="term"><pre class="synopsis">action</pre></span></dt><dd><p>
+		  Groups packages according to the action scheduled on
+		  them; packages that are not upgradable and will be
+		  unchanged are ignored.  This is the grouping that is
+		  used in preview trees.
+		</p></dd><dt><span class="term"><pre class="synopsis">architecture</pre></span></dt><dd><p>
+                  Groups packages according to their architecture.
+                </p></dd><dt><span class="term"><pre class="synopsis">deps</pre></span></dt><dd><p>
+		  This is a terminal rule.
+		</p><p>
+		  Creates standard package items which can be expanded
+		  to reveal the dependencies of the package.
+		</p></dd><dt><span class="term"><pre class="synopsis">filter(<em class="replaceable"><code>pattern</code></em>)</pre></span></dt><dd><p>
+		  Include only packages for which at least one version
+		  matches <em class="replaceable"><code>pattern</code></em>.
+		</p><p>
+		  If <em class="replaceable"><code>pattern</code></em> is
+		  <span class="quote">“<span class="quote">missing</span>”</span>, no packages are discarded.
+		  This is a backwards compatibility feature and may be
+		  removed in the future.
+		</p></dd><dt><span class="term"><pre class="synopsis">firstchar</pre></span></dt><dd><p>
+		  Groups packages based on the first character of
+		  their name.
+		</p></dd><dt><span class="term"><pre class="synopsis">hier</pre></span></dt><dd><p>
+		  Groups packages according to an extra data file
+		  describing a <span class="quote">“<span class="quote">hierarchy</span>”</span> of packages.
+		</p></dd><dt><span class="term"><pre class="synopsis">pattern(<em class="replaceable"><code>pattern</code></em> [<span class="optional">=&gt; <em class="replaceable"><code>title</code></em></span>] [<span class="optional">{ <em class="replaceable"><code>policy</code></em> }</span>] [<span class="optional">, ...</span>])</pre></span></dt><dd><p>
+		  A customizable grouping policy.  Each version of
+		  every package is matched against the given
+		  <em class="replaceable"><code>pattern</code></em>s.  The first
+		  match found is used to assign a
+		  <em class="replaceable"><code>title</code></em> to the package;
+		  packages are then grouped by their
+		  <em class="replaceable"><code>title</code></em>.  Strings of the
+		  form <code class="literal">\N</code> that occur in
+		  <em class="replaceable"><code>title</code></em> will be replaced by
+		  the Nth result of the match.  If
+		  <em class="replaceable"><code>title</code></em> is not present, it
+		  is assumed to be <code class="literal">\1</code>.  Note that
+		  packages which do not match any
+		  <em class="replaceable"><code>pattern</code></em>s will not appear
+		  in the tree at all.
+		</p><div class="example"><a name="idp4170440"></a><p class="title"><b>Example 2.7. Use of <code class="literal">pattern</code> to group packages by their maintainer</b></p><div class="example-contents"><p>
+		    <code class="literal">pattern(<code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>() =&gt; \1)</code>
+		  </p></div></div><br class="example-break"><p>
+		  The example above will group packages according to
+		  their Maintainer field.  The policy
+		  <code class="literal">pattern(<code class="literal"><a class="link" href="ch02s04s05.html#searchMaintainer">?maintainer</a></code>())</code> will do
+		  the same thing, as the absent
+		  <em class="replaceable"><code>title</code></em> defaults to
+		  <code class="literal">\1</code>.
+		</p><p>
+		  Instead of <code class="literal">=&gt;
+		  <em class="replaceable"><code>title</code></em></code>, an entry
+		  may end with <code class="literal">||</code>.  This indicates
+		  that packages matching the corresponding
+		  <em class="replaceable"><code>pattern</code></em> will be inserted
+		  into the tree at the same level as the
+		  <code class="literal">pattern</code> grouping, rather than
+		  being placed in subtrees.
+		</p><div class="example"><a name="idp4176048"></a><p class="title"><b>Example 2.8. 
+		    Use of <code class="literal">pattern</code> with some
+		    packages placed at the top level
+		  </b></p><div class="example-contents"><p>
+		    <code class="literal">pattern(<code class="literal"><a class="link" href="ch02s04s05.html#searchAction">?action</a></code>(remove) =&gt; Packages
+		    Being Removed, <code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code> ||)</code>
+		  </p></div></div><br class="example-break"><p>
+		  The example above will place packages that are being
+		  removed into a subtree, and place all the other
+		  packages at the current level, grouped according to
+		  the policies that follow <code class="literal">pattern</code>.
+		</p><p>
+		  By default, all the packages that match each pattern
+		  are grouped according to the rules that follow the
+		  <code class="literal">pattern</code> policy.  To specify a
+		  different policy for some packages, write the policy
+		  in braces (<code class="literal">{}</code>) after the title of
+		  the group, after the <code class="literal">||</code>, or after
+		  the pattern if neither is present.  For instance:
+		</p><div class="example"><a name="examplePatternGroupingPolicyWithSubPolicies"></a><p class="title"><b>Example 2.9. 
+		    Use of the <code class="literal">pattern</code> grouping policy with sub-policies
+		  </b></p><div class="example-contents"><p>
+		    <code class="literal">pattern(<code class="literal"><a class="link" href="ch02s04s05.html#searchAction">?action</a></code>(remove) =&gt; Packages
+		    Being Removed {}, <code class="literal"><a class="link" href="ch02s04s05.html#searchAction">?action</a></code>(install) =&gt; Packages
+		    Being Installed, <code class="literal"><a class="link" href="ch02s04s05.html#searchTrue">?true</a></code> || {status})</code>
+		  </p></div></div><br class="example-break"><p>
+		  The policy in the above example has the following
+		  effects:
+		</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+		      Packages that are being removed are placed into
+		      a subtree labeled <span class="quote">“<span class="quote">Packages Being
+		      Removed</span>”</span>; the grouping policy for this
+		      subtree is empty, so the packages are placed
+		      into a flat list.
+		    </p></li><li class="listitem"><p>
+		      Packages that are being installed are placed
+		      into a subtree labeled <code class="literal">Packages Being
+		      Installed</code> and grouped according to the
+		      policies that follow <code class="literal">pattern</code>.
+		    </p></li><li class="listitem"><p>
+		      All remaining packages are placed at the top
+		      level of the tree, grouped according to their
+		      status.
+		    </p></li></ul></div><p>
+		  See <a class="xref" href="ch02s04.html" title="Search patterns">the section called “Search patterns”</a>
+		  for more information on the format of
+		  <em class="replaceable"><code>pattern</code></em>.
+		</p></dd><dt><span class="term"><pre class="synopsis">priority</pre></span></dt><dd><p>
+		  Groups packages according to their priority.
+		</p></dd><dt><span class="term"><pre class="synopsis">section[<span class="optional">(<em class="replaceable"><code>mode</code></em>[<span class="optional">,passthrough</span>])</span>]</pre></span></dt><dd><p>
+		  Groups packages according to their Section field.
+		</p><p>
+		  <em class="replaceable"><code>mode</code></em> can be one of the
+		  following:
+		</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">none</code></span></dt><dd><p>
+			Group based on the whole Section field, so
+			categories like <span class="quote">“<span class="quote">non-free/games</span>”</span> will be
+			created.  This is the default if no
+			<em class="replaceable"><code>mode</code></em> is specified.
+		      </p></dd><dt><span class="term"><code class="literal">topdir</code></span></dt><dd><p>
+			Group based on the part of the Section field
+			before the first <code class="literal">/</code>
+			character; if this part of the Section is not
+			recognized, or if there is no
+			<code class="literal">/</code>, the first entry in the
+			list <code class="literal"><a class="link" href="ch02s05s05.html#configTop-Sections">Aptitude::Sections::Top-Sections</a></code>
+			will be used instead.
+		      </p></dd><dt><span class="term"><code class="literal">subdir</code></span></dt><dd><p>
+			Group based on the part of the Section field
+			after the first <code class="literal">/</code>
+			character, if it is contained in the list
+			<code class="literal"><a class="link" href="ch02s05s05.html#configTop-Sections">Aptitude::Sections::Top-Sections</a></code>.
+			If not, or if there is no
+			<code class="literal">/</code>, group based on the
+			entire Section field instead.
+		      </p></dd><dt><span class="term"><code class="literal">subdirs</code></span></dt><dd><p>
+			Group based on the part of the Section field
+			after the first <code class="literal">/</code>
+			character, if the portion of the field
+			preceding it is contained in the list
+			<code class="literal"><a class="link" href="ch02s05s05.html#configTop-Sections">Aptitude::Sections::Top-Sections</a></code>;
+			if not, or if there is no
+			<code class="literal">/</code>, the entire field will be
+			used.  If there are multiple
+			<code class="literal">/</code> characters in the portion
+			of the field that is used, a hierarchy of
+			groups will be formed.  For instance, if
+			<span class="quote">“<span class="quote"><code class="literal">games</code></span>”</span> is not
+			a member of <code class="literal"><a class="link" href="ch02s05s05.html#configTop-Sections">Aptitude::Sections::Top-Sections</a></code>,
+			then a package with a section of
+			<span class="quote">“<span class="quote"><code class="literal">games/arcade</code></span>”</span>
+			will be placed under the top-level heading
+			<span class="quote">“<span class="quote"><code class="literal">games</code></span>”</span>, in a
+			sub-tree named
+			<span class="quote">“<span class="quote"><code class="literal">arcade</code></span>”</span>.
+		      </p></dd></dl></div><p>
+		  If <code class="literal">passthrough</code> is present,
+		  packages which for some reason lack a true Section
+		  (for instance, virtual packages) will be passed
+		  directly to the next level of grouping without first
+		  being placed in sub-categories.
+		</p></dd><dt><span class="term"><pre class="synopsis">status</pre></span></dt><dd><p>
+		  Groups packages into the following categories:
+		</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Security Updates</p></li><li class="listitem"><p>Upgradable</p></li><li class="listitem"><p>New</p></li><li class="listitem"><p>Installed</p></li><li class="listitem"><p>Not Installed</p></li><li class="listitem"><p>Obsolete and Locally Created</p></li><li class="listitem"><p>Virtual</p></li></ul></div></dd><dt><span class="term"><pre class="synopsis">source</pre></span></dt><dd><p>
+                  Groups packages according to their source package name.
+                </p></dd><dt><span class="term"><pre class="synopsis">tag[<span class="optional">(<em class="replaceable"><code>facet</code></em>)</span>]</pre></span></dt><dd><p>
+		  Groups packages according to the Tag information
+		  stored in the Debian package files.  If
+		  <em class="replaceable"><code>facet</code></em> is provided, then
+		  only tags corresponding to that facet will be
+		  displayed, and packages lacking this facet will be
+		  hidden; otherwise, all packages will be displayed at
+		  least once (with tagless packages listed separately
+		  from packages that have tags).
+		</p><p>
+		  For more information on debtags, see <a class="ulink" href="http://debtags.alioth.debian.org" target="_top">http://debtags.alioth.debian.org</a>.
+		</p></dd><dt><span class="term"><pre class="synopsis">task</pre></span></dt><dd><p>
+		  Creates a tree called <span class="quote">“<span class="quote">Tasks</span>”</span> which contains the
+		  available tasks (information on tasks is read from
+		  <code class="filename">debian-tasks.desc</code> in the
+		  package <code class="systemitem">tasksel</code>).  The rule
+		  following <code class="literal">task</code> will create its
+		  categories as siblings of Tasks.
+		</p></dd><dt><span class="term"><pre class="synopsis">versions</pre></span></dt><dd><p>
+		  This is a terminal rule.
+		</p><p>
+		  Creates standard package items which can be expanded
+		  to reveal the versions of the package.
+		</p></dd></dl></div></div><div class="section" title="Customizing how packages are sorted"><div class="titlepage"><div><div><h4 class="title"><a name="secSortingPolicy"></a>Customizing how packages are sorted</h4></div></div></div><p>
+	    By default, packages in the package list or in the output
+	    of <code class="literal"><a class="link" href="rn01re01.html#cmdlineSearch">aptitude
+	    search</a></code> are sorted by name.  However, it
+	    is often useful to sort them according to different
+	    criteria (for instance, package size), and <span class="command"><strong>aptitude</strong></span>
+	    allows you to do just that by modifying the
+	    <em class="firstterm">sorting policy</em>.
+	  </p><p>
+	    Like the grouping policy described in <a class="link" href="ch02s05s01.html#secGroupingPolicy" title="Customizing the package hierarchy">the previous section</a>,
+	    the sorting policy is a comma-separated list.  Each item
+	    in the list is the name of a sorting rule; if packages are
+	    <span class="quote">“<span class="quote">equal</span>”</span> according to the first rule, the second rule is
+	    used to sort them, and so on.  Placing a tilde character
+	    (<code class="literal">~</code>) in front of a rule reverses the
+	    usual meaning of that rule.  For instance,
+	    <code class="literal">priority,~name</code> will sort packages by
+	    priority, but packages with the same priority will be
+	    placed in reverse order according to name.
+	  </p><p>
+	    To change the sorting policy for an active package list,
+	    press <span class="keycap"><strong>S</strong></span>.  To change the default sorting
+	    for all package lists, set the configuration option
+	    <code class="literal"><a class="link" href="ch02s05s05.html#configDefault-Sorting">Aptitude::UI::Default-Sorting</a></code>.
+	    To change the sorting policy for <code class="literal"><a class="link" href="rn01re01.html#cmdlineSearch">aptitude search</a></code>,
+	    use the <code class="literal"><a class="link" href="rn01re01.html#cmdlineOptionSort">--sort</a></code>
+	    command-line option.
+	  </p><p>
+	    The available rules are:
+	  </p><div class="variablelist"><dl><dt><span class="term"><code class="literal">installsize</code></span></dt><dd><p>
+		  Sorts packages by the estimated amount of size they
+		  require when installed.
+		</p></dd><dt><span class="term"><code class="literal">name</code></span></dt><dd><p>
+		  Sorts packages by name.
+		</p></dd><dt><span class="term"><code class="literal">priority</code></span></dt><dd><p>
+		  Sorts packages by priority.
+		</p></dd><dt><span class="term"><code class="literal">version</code></span></dt><dd><p>
+		  Sorts packages according to their version number.
+		</p></dd></dl></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp4140128" href="#idp4140128" class="para">19</a>] </sup>Currently tagging is not
+		supported; this escape is for future
+		use.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s05s02.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Customizing <span class="command"><strong>aptitude</strong></span> </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Customizing keybindings</td></tr></table></div></body></html>

@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Apoo Interface</TITLE>
+<META NAME="description" CONTENT="Apoo Interface">
+<META NAME="keywords" CONTENT="apoo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="apoo.css">
+
+<LINK REL="next" HREF="node7.html">
+<LINK REL="previous" HREF="node5.html">
+<LINK REL="up" HREF="node3.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFF0" TEXT="DARKBLUE" LINK="RED" VLINK="DARKRED"
+  ALINK="#FF0000" ALINK="YELLOW">
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html148"
+  HREF="node7.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html146"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html140"
+  HREF="node5.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html149"
+  HREF="node7.html">Apoo Tutor</A>
+<B> Up:</B> <A NAME="tex2html147"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html141"
+  HREF="node5.html">Manipulation of activation records</A>
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html150"
+  HREF="node6.html#SECTION00033100000000000000">How to execute a program</A>
+<LI><A NAME="tex2html151"
+  HREF="node6.html#SECTION00033200000000000000">Edit Mode</A>
+<LI><A NAME="tex2html152"
+  HREF="node6.html#SECTION00033300000000000000">Implementation</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION00033000000000000000"></A>
+<A NAME="sec:apoointerface"></A>
+<BR>
+<TT>Apoo Interface</TT>
+</H2>
+
+<P>
+This module is launched by the <TT>apoo</TT> command.
+
+<P>
+The <TT>Apoo Interface</TT> is an environment to monitoring the execution of a
+Virtual Processor Unit. 
+
+<DIV ALIGN="CENTER"><A NAME="218"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+Apoo Interface</CAPTION>
+<TR><TD><A NAME="figure215"
+ HREF="img2.png"><IMG
+ WIDTH="200" HEIGHT="247"
+ SRC="Timg2.png"
+ ALT="\begin{figure}\centering
+\epsfxsize =400pt
+\epsfbox{apoo_gtk_interface.eps}
+\par\par
+\end{figure}"></A></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+During the execution of a program, it shows
+the contents of the program counter, register, memory data and output
+window. The
+program in memory is displayed in an Assembly language (not in a
+machine language). As is usual with processor units emulators, Apoo
+has two memory segments: the program-segment and the data-segment. In
+this way, both addresses for program instructions and data will begin
+in 0.
+
+<P>
+It has two modes:
+
+<P>
+<DL>
+<DT><STRONG>The Apoo Workbench</STRONG></DT>
+<DD><A NAME="aw"></A> allows also the editing/saving of the text program,
+providing an easy way to write/edit/debug/execute Apoo assembly
+programs. It is launched when <TT>apoo</TT> is called without options
+(optionally with a filename).
+</DD>
+<DT><STRONG>The Apoo Tester</STRONG></DT>
+<DD><A NAME="at"></A> allows only to execute a program. It is
+  launched with option <TT>-t</TT> (or <TT>-tester</TT>), and a
+  filename is mandatory. This module is can be used during examinations.
+</DD>
+</DL>
+
+<P>
+
+<H3><A NAME="SECTION00033100000000000000">
+How to execute a program</A>
+</H3>
+
+<P>
+To execute a program in the Apoo Virtual Processor Unit you must first or:
+
+<P>
+
+<UL>
+<LI>enter in Edit Mode and write its instructions
+</LI>
+<LI>open a text file with its code
+</LI>
+</UL>
+
+<P>
+After that, you can <TT>Load</TT> it; if a "parsing error" occurs,
+enter edit mode and correct it; the interface will show the text line
+in which the error occurred.
+
+<P>
+When the program is loaded (in memory) you can execute it in three ways:
+
+<P>
+<DL>
+<DT><STRONG><TT>Run</TT></STRONG></DT>
+<DD>will execute all the instructions 
+</DD>
+<DT><STRONG><TT>Step</TT></STRONG></DT>
+<DD>will execute the next instruction and the values of the
+       program counter, registers and memory data will be updated; the
+       next instruction line, if exists, will have the background
+       white
+</DD>
+<DT><STRONG><TT>Continue</TT></STRONG></DT>
+<DD>will execute instructions until the next breakpoint
+</DD>
+</DL>
+
+<P>
+In an instruction line, you can set/clear a breakpoint: 
+
+<P>
+<DL>
+<DT><STRONG>to set a breakpoint:</STRONG></DT>
+<DD>Press <TT>&lt;Double&gt;-Button1</TT> in that
+  line 
+
+<P>
+</DD>
+<DT><STRONG>to clear breakpoint:</STRONG></DT>
+<DD>Press <TT>&lt;Double&gt;-Button1</TT> (or
+  <TT>&lt;Double&gt;-Button2</TT>)
+</DD>
+</DL>
+
+<P>
+The button labelled <TT>Clear</TT> can be used to clear all breakpoints 
+
+<P>
+
+<H3><A NAME="SECTION00033200000000000000">
+Edit Mode</A>
+</H3>
+
+<P>
+In edit mode you can change the text code of a program or create a new
+one. To enter Edit Mode press the Edit button or New button.
+After editing you can Save or SaveAs the current edited text.
+You leave Edit Mode by loading the program (Load button) or opening a
+new file.
+
+<P>
+The following <SPAN  CLASS="textbf">Emacs</SPAN>-like commands are implemented:
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-k&gt;</TT></TD>
+<TD ALIGN="LEFT">kill-line</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-y&gt;</TT></TD>
+<TD ALIGN="LEFT">yank</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-w&gt;</TT></TD>
+<TD ALIGN="LEFT">kill-region</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Escape&gt;w</TT>(or <TT>&lt;Alt-Space&gt;</TT>)</TD>
+<TD ALIGN="LEFT">copy-region-as-kill</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-at&gt;</TT>(or <TT>&lt;Control-Space&gt;</TT>)</TD>
+<TD ALIGN="LEFT">set-mark-command</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-a&gt;</TT></TD>
+<TD ALIGN="LEFT">beginning-of-line</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-e&gt;</TT></TD>
+<TD ALIGN="LEFT">end-of-line</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-Home&gt;</TT></TD>
+<TD ALIGN="LEFT">beginning-of-buffer</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-End&gt;</TT></TD>
+<TD ALIGN="LEFT">end-of-buffer</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>&lt;Control-d&gt;</TT></TD>
+<TD ALIGN="LEFT">deletes the character to the right of the
+                insertion cursor.
+
+<P></TD>
+</TR>
+</TABLE>
+
+<P>
+
+<H3><A NAME="SECTION00033300000000000000">
+Implementation</A>
+</H3>
+
+<P>
+Until version 1.4, apoo interface was based in <TT>TkInter</TT>. Newer
+versions are based in <TT>pygtk</TT>, and are being developed by
+<A NAME="tex2html14"
+  HREF="http://rpmcruz.planetaclix.pt/">Ricardo Cruz</A>.  For
+the new versions we also thanks the comments of several students from
+<A NAME="tex2html15"
+  HREF="http://www.dcc.fc.up.pt/">DCC</A>, specially Norberto Lopes and Hugo Serrano.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html148"
+  HREF="node7.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html146"
+  HREF="node3.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html140"
+  HREF="node5.html">
+<IMG WIDTH="30" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html149"
+  HREF="node7.html">Apoo Tutor</A>
+<B> Up:</B> <A NAME="tex2html147"
+  HREF="node3.html">How to use</A>
+<B> Previous:</B> <A NAME="tex2html141"
+  HREF="node5.html">Manipulation of activation records</A></DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<a href="http://www.ncc.up.pt/~rvr">Rogério Reis</a>,<a href="http://www.ncc.up.pt/~nam">Nelma Moreira</a> <I>2008-01-22</I>
+</ADDRESS>
+</BODY>
+</HTML>

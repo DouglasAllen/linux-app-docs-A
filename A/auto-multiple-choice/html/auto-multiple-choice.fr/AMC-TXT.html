@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Source au format AMC-TXT</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="index.html" title="Auto Multiple Choice" /><link rel="prev" href="notesutilisation.html" title="Notes d'utilisation" /><link rel="next" href="latex.html" title="Source au format LaTeX" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Source au format AMC-TXT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="notesutilisation.html">Précédent</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="latex.html">Suivant</a></td></tr></table><hr /></div><div class="sect1" title="Source au format AMC-TXT"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="AMC-TXT"></a>Source au format AMC-TXT</h2></div></div></div><p>Pour les utilisateurs qui ne souhaitent pas se mettre à LaTeX, AMC
+    embarque un filtre qui rédige pour vous le fichier LaTeX à partir d'une
+    représentation en texte simple de votre questionnaire. Ce format est
+    appelé AMC-TXT, et ce chapitre détaille la syntaxe à utiliser. Si vous
+    souhaitez profiter de la puissance de LaTeX pour la rédaction de vos
+    questionnaires, passez au chapitre suivant.</p><p>Commençons par un exemple simple de fichier source utilisable par
+    AMC :</p><a id="modeles-simple-txt.txt"></a><pre class="programlisting"># AMC-TXT source
+PaperSize: A4
+Lang: FR
+Title: Mon premier questionnaire
+
+Presentation: Veuillez répondre aux questions
+ci-dessous du mieux que vous pouvez.
+
+* Quelle est la capitale du Cameroun ?
++ Yaoundé
+- Douala
+- Kribi
+
+** Parmi les nombres suivants,
+lesquels sont positifs ?
++ 2
+- -2
++ 10</pre><div class="important" title="Important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../images/important.png" /></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Le fichier qui contient la description de votre sujet doit être
+      codé en UTF-8. C'est le codage par défaut de plusieurs éditeurs de
+      texte, dont fait partie <span class="command"><strong>gedit</strong></span> par exemple. N'utilisez
+      pas d'éditeur de texte permettant d'appliquer des mise en forme à votre
+      texte, comme OpenOffice/LibreOffice ou abiword : ils n'enregistrent pas
+      seulement votre texte, mais beaucoup d'autres informations de mise en
+      forme qu'AMC ne sait pas lire...</p></td></tr></table></div><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>La police de caractères qui sera utilisée par défaut pour votre
+      questionnaire est la police <a class="ulink" href="http://www.linuxlibertine.org/" target="_top">libertine</a>. C'est une police
+      libre qui définit un très grand nombre de caractères de toutes langues.
+      Cette police doit être installée sur votre système pour que votre sujet
+      puisse être préparé (c'est le cas si vous installez AMC sur debian ou
+      Ubuntu avec les paquets qu'il recommande).</p></td></tr></table></div><p>Vous remarquez dès maintenant la structure du fichier de description
+    du questionnaire : il commence par quelques définitions ou options
+    générales de mise en forme, puis viennent les questions.</p><div class="sect2" title="Commentaires"><div class="titlepage"><div><div><h3 class="title"><a id="idp6799552"></a>Commentaires</h3></div></div></div><p>Vous pouvez écrire des commentaires dans votre fichier AMC-TXT sur
+      des lignes <span class="emphasis"><em>commençant</em></span> par le caractère
+      <code class="code">#</code>. Ces lignes seront tout simplement ignorées par
+      AMC.</p></div><div class="sect2" title="Options générales"><div class="titlepage"><div><div><h3 class="title"><a id="idp6801808"></a>Options générales</h3></div></div></div><p>Voici les options que vous pouvez utiliser au début de votre
+      fichier (dans n'importe quel ordre) :</p><div class="variablelist"><dl><dt><span class="term">PaperSize:</span></dt><dd><p>Indique le format de papier utilisé. Parmi les valeurs
+            possibles, on trouve <code class="code">A3</code>, <code class="code">A4</code>,
+            <code class="code">A5</code>, <code class="code">A6</code>, <code class="code">B3</code>,
+            <code class="code">B4</code>, <code class="code">B5</code>, <code class="code">B6</code>,
+            <code class="code">letter</code>, <code class="code">legal</code>, <code class="code">ANSIA</code>,
+            <code class="code">ANSIB</code>, <code class="code">ANSIC</code>, <code class="code">ANSID</code>,
+            <code class="code">ANSIE</code>.</p></dd><dt><span class="term">Lang:</span></dt><dd><p>donne la langue dans laquelle le questionnaire est écrit.
+            Pour l'instant, les seules langues disponibles sont FR (français),
+            ES (espagnol), DE (allemand), IT (Italien), NL (Néerlandais), JA
+            (Japonais, voir <a class="xref" href="AMC-TXT.html#txt-japanese" title="En japonais">la section intitulée « En japonais »</a>) et AR (arabe, voir
+            <a class="xref" href="AMC-TXT.html#txt-arabic" title="En langue arabe">la section intitulée « En langue arabe »</a>). Si vous n'utilisez pas cette
+            option, ce sera l'anglais qui sera choisi.</p></dd><dt><span class="term">Title:</span></dt><dd><p>Le titre de l'examen, qui sera écrit en haut de la
+            copie.</p></dd><dt><span class="term">Presentation:</span></dt><dd><p>Un texte introductif pour l'examen, présentant par exemple
+            la durée, les consignes...</p></dd><dt><span class="term">ShuffleQuestions:</span></dt><dd><p>Si cette option est mise à 1 (c'est la valeur par défaut),
+            les questions ne seront pas dans le même ordre dans chaque copie.
+            Si vous lui donnez la valeur 0, les questions ne seront pas
+            mélangées.</p></dd><dt><span class="term">Code:</span></dt><dd><p>Affectez à cette option une valeur entière
+            <em class="replaceable"><code>n</code></em> (par exemple 8) pour demander la
+            présence de cases à cocher pour que les étudiants codent leur
+            numéro d'étudiant sur <em class="replaceable"><code>n</code></em>
+            chiffres.</p></dd><dt><span class="term">Columns:</span></dt><dd><p>Si vous donnez à cette option une valeur
+            <em class="replaceable"><code>n</code></em> entière supérieure à 1, le
+            questionnaire sera écrit sur <em class="replaceable"><code>n</code></em>
+            colonnes.</p></dd><dt><span class="term">CompleteMulti:</span></dt><dd><p>Cette option prend la valeur 1 par défaut, ce qui signifie
+            qu'une réponse "Aucune des réponses ci-dessus n'est correcte" sera
+            ajoutée à la fin de toutes les questions multiples de votre
+            questionnaire. Sans celle-ci, il serait impossible de faire la
+            différence entre "l'étudiant ne répond pas à cette question" et
+            "l'étudiant pense qu'aucune des réponses proposées n'est exacte".
+            Si vous ne souhaitez pas que cette dernière réponse soit ajoutée,
+            donnez la valeur 0 à cette option.</p></dd><dt><span class="term">L-None:</span></dt><dd><p>Cette option indique un texte qui remplacera
+            <span class="emphasis"><em>Aucune des réponses ci-dessus n'est correcte</em></span>
+            (voir option précédente) pour votre questionnaire.</p></dd><dt><span class="term">QuestionBlocks:</span></dt><dd><p>Si cette option prend la valeur 1 (sa valeur par défaut),
+            toutes vos questions seront enfermées dans des boîtes
+            (invisibles), de sorte qu'elles ne puissent pas être coupées sur
+            deux pages, ou sur plusieurs colonnes. Avec la valeur 0, les
+            questions pourront être coupées ci besoin, ce qui peut gagner de
+            la place mais perd en lisibilité.</p></dd><dt><span class="term">L-Question:</span></dt><dd><p>Cette option sert à remplacer le mot
+            <span class="emphasis"><em>Question</em></span> dans votre questionnaire si vous
+            utilisez une autre langue que celle indiquée par l'option
+            <code class="option">Lang</code>.</p></dd><dt><span class="term">L-Name:</span></dt><dd><p>Cette option sert à remplacer le texte <span class="emphasis"><em>Nom et
+            prénom</em></span> inscrit dans le cadre où l'étudiant doit
+            inscrire son identité.</p></dd><dt><span class="term">L-Student:</span></dt><dd><p>Cette option sert à remplacer le petit texte qui demande de
+            coder son numéro d'étudiant et d'inscrire son nom sur les copies
+            (quand l'option <code class="option">Code</code> a été utilisée).</p></dd><dt><span class="term">BoxColor:</span></dt><dd><p>Permet de choisir une couleur pour les cases qui peuvent
+            être cochées par les étudiants, afin de perturber le moins
+            possible la saisie automatique à partir des scans
+            (<span class="emphasis"><em>red</em></span>, pour rouge, est une valeur commune,
+            mais on peut aussi penser à un gris clair). La couleur fournie
+            doit être une couleur valide pour <span class="command"><strong>xcolor</strong></span> (voir
+            la documentation du paquet LaTeX <span class="command"><strong>xcolor</strong></span> pour
+            plus de détails), comme <span class="emphasis"><em>red</em></span>,
+            <span class="emphasis"><em>magenta</em></span>, <span class="emphasis"><em>pink</em></span>,
+            <span class="emphasis"><em>lightgray</em></span>, <span class="emphasis"><em>cyan</em></span>, ou bien
+            sous la forme <code class="code">#RRGGBB</code>, comme <code class="code">#FFBEC8</code>
+            pour un rouge clair.</p></dd><dt><span class="term">DefaultScoringS:</span></dt><dd><p>Donne la barème par défaut pour les questions simples
+            (Reportez-vous à <a class="xref" href="interface-graphique.html#bareme" title="Barème">la section intitulée « Barème »</a> pour la description des
+            barèmes possibles). La valeur par défaut à cette option est le
+            barème qui donne un point à la bonne réponse, et zéro aux
+            autres.</p></dd><dt><span class="term">DefaultScoringM:</span></dt><dd><p>Donne le barème par défaut pour les questions multiple
+            (Reportez-vous à <a class="xref" href="interface-graphique.html#bareme" title="Barème">la section intitulée « Barème »</a> pour la description des
+            barèmes possibles). La valeur par défaut de cette option est
+            <code class="code">haut=2</code>, ce qui correspond à un barème donnant deux
+            points pour une réponse parfaitement exacte, et qui enlève un
+            point à chaque erreur (case cochée alors qu'elle ne devrait pas
+            l'être, ou case non-cochée alors qu'elle devrait l'être), sans
+            passer en-dessous de zéro.</p></dd><dt><span class="term">LaTeX:</span></dt><dd><p>Si cette option prend la valeur 1, tous les textes de votre
+            questionnaire sont considérés comme étant écrits en TeX (ou
+            LaTeX). Vous pourrez ainsi écrire des formules mathématiques comme
+            <code class="code">$\sqrt{a+b}$</code>. Avec la valeur 0 (valeur par défaut),
+            vos textes seront reproduits sans modification.</p></dd><dt><span class="term">LaTeX-Preambule:</span></dt><dd><p>Donne des commandes LaTeX à ajouter dans le préambule (par
+            exemple des <span class="command"><strong>\usepackage</strong></span>).</p></dd><dt><span class="term">LaTeX-BeginDocument:</span></dt><dd><p>Donne des commandes LaTeX à ajouter au début de
+            l'environnement <span class="command"><strong>document</strong></span> (par exemple des
+            définitions de macros).</p></dd></dl></div><div class="sect3" title="Sujet avec feuille de réponses séparée"><div class="titlepage"><div><div><h4 class="title"><a id="idp6858672"></a>Sujet avec feuille de réponses séparée</h4></div></div></div><p>Dans le cas d'un sujet avec feuille de réponses séparée, vous
+        pourrez considérer l'emploi des options suivantes :</p><div class="variablelist"><dl><dt><span class="term">SeparateAnswerSheet:</span></dt><dd><p>Donner la valeur 1 à cette option pour obtenir une feuille
+              de réponses séparée.</p></dd><dt><span class="term">AnswerSheetTitle:</span></dt><dd><p>Donne le titre à inscrire en tête de la feuille de
+              réponse.</p></dd><dt><span class="term">AnswerSheetPresentation:</span></dt><dd><p>Donne le texte de présentation de la feuille de réponse.
+              On pourra par exemple y préciser que les réponses doivent
+              uniquement être données sur cette feuille.</p></dd><dt><span class="term">AnswerSheetColumns:</span></dt><dd><p>Nombre de colonnes pour la feuille de réponses.</p></dd></dl></div></div></div><div class="sect2" title="Questions"><div class="titlepage"><div><div><h3 class="title"><a id="idp6867648"></a>Questions</h3></div></div></div><p>Les questions simples (qui acceptent une et une seule bonne
+      réponse) commencent par un <code class="code">*</code> en début de ligne, et les
+      questions multiples (celles qui peuvent comporter zéro, une ou
+      plusieures bonnes réponses), commencent par un <code class="code">**</code> en début
+      de ligne. Vient ensuite le texte de la question, puis les réponses,
+      introduites par un <code class="code">+</code> quand la réponse est correcte ou un
+      <code class="code">-</code> quand elle ne l'est pas.</p><div class="sect3" title="Options pour les questions"><div class="titlepage"><div><div><h4 class="title"><a id="idp6871088"></a>Options pour les questions</h4></div></div></div><p>Des options particulières peuvent être indiquées pour chaque
+        question, entre crochets, juste après l'étoile (ou les deux étoiles
+        pour des questions multiples) qui commence la question (sans espace
+        avant), comme dans l'exemple suivant :</p><pre class="programlisting">*[ordered,horiz,name=addition] Combien font
+un plus un ?
+- 0
+- 1
++ 2</pre><p>Les options disponibles sont les suivantes :</p><div class="variablelist"><dl><dt><span class="term">horiz</span></dt><dd><p>Avec cette option, les réponses se suivront
+              horizontalement plutôt que verticalement une par ligne.</p></dd><dt><span class="term">columns=<em class="replaceable"><code>n</code></em></span></dt><dd><p>Avec cette option, les réponses seront réparties sur
+              <em class="replaceable"><code>n</code></em> colonnes.</p></dd><dt><span class="term">ordered</span></dt><dd><p>Avec cette option, les réponses ne seront pas mélangées
+              dans chaque copies : elles resteront toujours dans l'ordre
+              indiqué.</p></dd><dt><span class="term">name=<em class="replaceable"><code>xxxx</code></em></span></dt><dd><p>Avec cette option, le nom <em class="replaceable"><code>xxxx</code></em>
+              sera donné à la question. Ce nom apparaît dans les fichiers de
+              notes exportés par AMC pour identifier la question plus
+              facilement. Il ne doit comporter que des caractères simples non
+              accentués.</p></dd></dl></div></div><div class="sect3" title="Barèmes particuliers"><div class="titlepage"><div><div><h4 class="title"><a id="idp6882976"></a>Barèmes particuliers</h4></div></div></div><p>Si vous voulez utiliser un barème particulier pour une question
+        ou une réponse, vous pouvez l'indiquer entre accolades, après le signe
+        <code class="code">*</code>, <code class="code">**</code>, <code class="code">+</code>, ou <code class="code">-</code>, et
+        après les éventuelles options, comme dans l'exemple suivant.
+        Reportez-vous à <a class="xref" href="interface-graphique.html#bareme" title="Barème">la section intitulée « Barème »</a> pour la syntaxe de
+        description des barèmes à utiliser.</p><pre class="programlisting">*{b=2,m=-1} Quelle est la capitale de la France ?
++ Paris
+- Lille
+-{-2} Ouagadougou
+
+**[ordered,horiz,name=positifs]{haut=1} Parmi les nombres suivants,
+lesquels sont positifs ?
+- -2
++ 2
++ 10</pre></div></div><div class="sect2" title="Lignes multiples"><div class="titlepage"><div><div><h3 class="title"><a id="idp6887808"></a>Lignes multiples</h3></div></div></div><p>Tout texte peut se continuer sur la ou les lignes suivantes (même
+      si certaines sont vides), pourvu qu'elles ne puissent pas être
+      interprétées comme un début de définition d'option générale, un début de
+      question ou de réponse. Considérons par exemple l'écriture de question
+      suivante :</p><pre class="programlisting">* Combien font 2
+  + 2 ?
+- 0
++ 4
+- 10</pre><p>Cette écriture suit bien la syntaxe AMC-TXT, mais ne correspond
+      pas à ce que l'on voulait écrire : ici, la deuxième ligne sera
+      considérée comme une réponse possible, et non comme la suite de la
+      question !</p><p>Un problème similaire sera rencontré dans la portion de fichier
+      source suivante, où "<code class="code">Chopin:</code>" sera considéré comme une
+      définition d'option générale :</p><pre class="programlisting">* Vous connaissez sans doute Frédéric
+  Chopin: c'est un compositeur. De quel pays est-il
+  originaire ?
++ la Pologne
+- le Vénézuela
+- la Suisse</pre><p>La version correcte est la suivante :</p><pre class="programlisting">* Vous connaissez sans doute Frédéric Chopin:
+  c'est un compositeur. De quel pays est-il
+  originaire ?
++ la Pologne
+- le Vénézuela
+- la Suisse</pre><p>Notez enfin que pour passer à la ligne suivante, il faut laisser
+      une ligne vide dans le fichier source de l'examen, comme ceci :</p><pre class="programlisting">Description: Titre
+
+Description de l'examen sur la ligne suivante.
+
+** Question difficile.
+
+Combien y a-t-il d'étoiles dans le ciel ?
+
+- une
+- deux
+- dix millions</pre></div><div class="sect2" title="En langue arabe"><div class="titlepage"><div><div><h3 class="title"><a id="txt-arabic"></a>En langue arabe</h3></div></div></div><p>La rédaction d'un questionnaire en langue arabe comporte quelques
+      spécificités. Vous utiliserez bien entendu l'option</p><pre class="programlisting">Lang: AR</pre><p>Mais vous devrez également prêter attention aux options
+      suivantes :</p><div class="variablelist"><dl><dt><span class="term">ArabicFont:</span></dt><dd><p>C'est la police de caractères qui sera utilisée pour les
+            textes en arabe. Par défaut, AMC utilisera
+            <span class="emphasis"><em>Rasheeq</em></span>, une police du projet <a class="ulink" href="http://arabeyes.org/" target="_top">ArabEyes</a> (disponible dans la
+            paquet ttf-arabeyes sur debian et ubuntu par exemple).</p></dd></dl></div><div class="warning" title="Avertissement" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Avertissement]" src="../images/warning.png" /></td><th align="left">Avertissement</th></tr><tr><td align="left" valign="top"><p>Pour un meilleur fonctionnement et une meilleure portabilité,
+        vous devrez également spécifier explicitement la valeur des options
+        <code class="option">L-Name</code> et <code class="option">L-Student</code>.</p></td></tr></table></div><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Pour pouvoir insérer des textes en d'autres caractères dans
+        votre questionnaire, vous devrez utiliser l'option
+        <code class="option">LaTeX</code> pour passer en mode LaTeX, et englober toutes
+        les portions de texte en caractères non-arabes par la commande LaTeX
+        <span class="command"><strong>\textLR</strong></span> comme dans <code class="code">\textLR{la commande
+        xelatex}</code>.</p></td></tr></table></div></div><div class="sect2" title="En japonais"><div class="titlepage"><div><div><h3 class="title"><a id="txt-japanese"></a>En japonais</h3></div></div></div><p>Vous pourrez construire des questionnaires incluant des caractères
+      japonais grâce à l'option</p><pre class="programlisting">Lang: JA</pre><p>AMC fera les ajustements nécessaires pour permettre un bon rendu
+      de ces caractères.</p><div class="warning" title="Avertissement" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Avertissement]" src="../images/warning.png" /></td><th align="left">Avertissement</th></tr><tr><td align="left" valign="top"><p>Dans ce cas, AMC utilisera <span class="command"><strong>pTex</strong></span> comme moteur
+        LaTeX. Une version <span class="emphasis"><em>récente</em></span> de
+        <span class="command"><strong>pTex</strong></span> est nécessaire. La distribution texlive 2009,
+        disponible par exemple sur les distributions linux debian et dérivées,
+        n'est <span class="emphasis"><em>pas</em></span> suffisante. Vous devrez installer la
+        version texlive 2011 vanille (sans passer par les paquets
+        debian).</p></td></tr></table></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="notesutilisation.html">Précédent</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="latex.html">Suivant</a></td></tr><tr><td width="40%" align="left" valign="top">Notes d'utilisation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Sommaire</a></td><td width="40%" align="right" valign="top"> Source au format LaTeX</td></tr></table></div></body></html>

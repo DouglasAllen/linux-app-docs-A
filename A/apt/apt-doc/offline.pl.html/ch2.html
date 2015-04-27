@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>Używanie APT w trybie offline - Używanie programu APT na obu komputerach</title>
+
+<link href="index.html" rel="start">
+<link href="ch1.html" rel="prev">
+<link href="ch3.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Wstęp">
+<link href="ch2.html" rel="chapter" title="2 Używanie programu APT na obu komputerach">
+<link href="ch3.html" rel="chapter" title="3 Używanie programów APT i wget">
+<link href="ch1.html#s1.1" rel="section" title="1.1 Wprowadzenie">
+<link href="ch2.html#s2.1" rel="section" title="2.1 Wprowadzenie">
+<link href="ch2.html#s2.2" rel="section" title="2.2 Plik konfiguracyjny">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Wprowadzenie">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Kolejne kroki">
+
+</head>
+
+<body>
+
+<p><a name="ch2"></a></p>
+<hr>
+
+<p>
+[ <a href="ch1.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">dalej</a> ]
+</p>
+
+<hr>
+
+<h1>
+Używanie APT w trybie offline
+<br>Część 2 - Używanie programu APT na obu komputerach
+</h1>
+
+<hr>
+
+<h2><a name="s2.1"></a>2.1 Wprowadzenie</h2>
+
+<p>
+APT dostępny na obu komputerach daje najprostszą kombinację.  Zasadniczym
+pomysłem tej metody jest umieszczenie kopii pliku status na dysku i użycie
+odległego komputera, aby uzyskać najnowsze pliki pakietów i zdecydować,
+które pakiety trzeba pobrać.  Struktura katalogów na dysku powinna
+wyglądać następująco:
+</p>
+
+<pre>
+       /disc/
+         archives/
+            partial/
+         lists/
+            partial/
+         status
+         sources.list
+         apt.conf
+</pre>
+
+<hr>
+
+<h2><a name="s2.2"></a>2.2 Plik konfiguracyjny</h2>
+
+<p>
+Plik konfiguracyjny powinien informować program APT, aby przechowywał swoje
+pliki na dysku, a także używał plików konfiguracyjnych z dysku.  Plik
+sources.list powinien zawierać prawidłowe odnośniki, których należy użyć
+na zdalnym komputerze, a plik status powinien być kopią
+<em>/var/lib/dpkg/status</em>.  Należy zauważyć, że podczas używania
+lokalnego archiwum trzeba użyć tych samych odnośników o identycznej
+składni.
+</p>
+
+<p>
+<em>apt.conf</em> musi zawierać niezbędne wpisy, by APT korzystał z dysku:
+</p>
+
+<pre>
+      APT
+      {
+        /* Wpis nie jest wymagany, jeśli oba komputery mają tę samą architekturę;
+         podaje architekturę naszego komputera programowi APT na odległym komputerze */
+        Architecture &quot;i386&quot;;
+        
+        Get::Download-Only &quot;true&quot;;
+      };
+      
+      Dir
+      {
+        /* Używaj katalogu disc na informacje stanu i przekieruj plik status
+           z domyślnego /var/lib/dpkg */
+        State &quot;/disc/&quot;;
+        State::status &quot;status&quot;;
+     
+        // Katalog lokalnie przechowywanych pakietów binarnych
+        Cache::archives &quot;/disc/archives/&quot;;
+        Cache &quot;/tmp/&quot;;
+        
+        // Lokalizacja pliku sources.list.
+        Etc &quot;/disc&quot;;
+      };
+</pre>
+
+<p>
+Więcej szczegółów można zobaczyć w stronie podręcznika apt.conf i w
+przykładowym pliku konfiguracyjnym
+<em>/usr/share/doc/apt/examples/apt.conf</em>.
+</p>
+
+<p>
+Pierwszą rzeczą, jaką należy zrobić na oddalonym komputerze z Debianem to
+zamontować dysk i przekopiować na niego plik <em>/var/lib/dpkg/status</em>.
+Trzeba także utworzyć strukturę katalogów przedstawioną we
+&quot;Wprowadzeniu&quot;: <em>archives/partial/</em> i <em>lists/partial/</em>.
+Następnie należy przenieść dysk do oddalonego komputera z szybkim łączem
+i skonfigurować plik sources.list.  Na oddalonym komputerze wykonujemy
+kolejno:
+</p>
+
+<pre>
+      # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+      # apt-get update
+      [ APT aktualizuje ustawienia ]
+      # apt-get dist-upgrade
+      [ APT pobiera wszystkie pakiety potrzebne do aktualizacji Twojego systemu ]
+</pre>
+
+<p>
+Polecenie dist-upgrade można zastąpić każdym innym podstawowym poleceniem
+APT, w szczególności dselect-upgrade.  Można nawet użyć APT jako metody
+dostępu dla <em>dselect</em>.  Jednak stworzy to problem w przeniesieniu
+Twoich operacji wyborów z powrotem na lokalny komputer.
+</p>
+
+<p>
+W tej chwili katalog disc zawiera wszystkie pliki indeksowe oraz archiwa
+niezbędne do aktualizacji maszyny z Debianem.  Bierzemy dysk z powrotem do
+siebie i wpisujemy:
+</p>
+
+<pre>
+       # export APT_CONFIG=&quot;/disc/apt.conf&quot;
+       # apt-get check
+       [ APT tworzy lokalną kopię plików cache ]
+       # apt-get --no-d -o dir::state::status=/var/lib/dpkg/status dist-upgrade
+       [ Może też być inne polecenie programu APT ]
+</pre>
+
+<p>
+Do prawidłowego działania koniecznie należy podać plik status z lokalnej
+maszyny.  To jest bardzo ważne!
+</p>
+
+<p>
+Jeśli używasz dselect, możesz wykonać bardzo ryzykowną operację
+skopiowania disc/status do /var/lib/dpkg/status, tak że wszystkie zmiany,
+których dokonałeś na odległym komputerze, będą przeniesione.  Mocno
+zalecam, aby dokonywać doboru pakietów tylko na lokalnym komputerze, ale nie
+zawsze jest to możliwe.  NIE podmieniaj pliku status, jeśli dpkg lub APT
+były uruchamiane w międzyczasie!
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch1.html">powrót</a> ]
+[ <a href="index.html#contents">Spis treści</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch3.html">dalej</a> ]
+</p>
+
+<hr>
+
+<p>
+Używanie APT w trybie offline
+</p>
+
+<address>
+$Id: offline.sgml,v 1.8 2003/02/12 15:06:41 doogie Exp $<br>
+<br>
+Jason Gunthorpe <code><a href="mailto:jgg@debian.org">jgg@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

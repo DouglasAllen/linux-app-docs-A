@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Změna stavu balíků</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="ch02s02.html" title="Správa balíků"><link rel="prev" href="ch02s02s02.html" title="Získání informací o balíku"><link rel="next" href="ch02s02s04.html" title="Řešení problémů se závislostmi"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Změna stavu balíků</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02s02.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Správa balíků</th><td width="20%" align="right"> <a accesskey="n" href="ch02s02s04.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="section" title="Změna stavu balíků"><div class="titlepage"><div><div><h3 class="title"><a name="idp3616272"></a>Změna stavu balíků</h3></div></div></div><p>
+
+Následující příkazy slouží ke změně stavu balíků. Změny nabudou
+účinnosti při příštím <a class="link" href="ch02s02s05.html" title="Stažení, instalace a odstranění balíků">spuštění
+instalace</a>; do té doby můžete všechny příkazy vrátit zpět
+příkazem <span class="guimenu">Zpět</span> → <span class="guimenuitem">Zpět</span> (<span class="shortcut"><strong><span class="keycap"><strong>Control</strong></span>+<span class="keycap"><strong>u</strong></span></strong></span>).
+
+</p><p>
+
+Pro aplikování příkazu jednoduše vyberte balík ze seznamu balíků
+a spusťte příkaz. Tyto příkazy můžete použít také na celé skupiny
+balíků tak, že vyberete záhlaví skupiny (např. <span class="quote">„<span class="quote">Aktualizovatelné
+balíky</span>“</span>) a spustíte požadovaný příkaz.
+
+</p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Příkaz</th><th>Popis</th></tr></thead><tbody><tr><td><a name="pkgCmdInstall"></a>Instalovat: <span class="guimenu">Balík</span> → <span class="guimenuitem">Instalovat</span> (<span class="shortcut"><strong><span class="keycap"><strong>+</strong></span></strong></span>)</td><td>
+<p>
+
+Označí vybraný balík pro instalaci.
+
+</p><p>
+
+Jestliže balík není nainstalován, nainstaluje se. Jestliže již
+nainstalován je, bude aktualizován (pokud je to možné) a zruší se
+všechny příznaky, které aktualizaci bránily (např. Podržení).
+
+</p>
+  </td></tr><tr class="oddrow"><td><a name="pkgCmdRemove"></a>Odstranit: <span class="guimenu">Balík</span> → <span class="guimenuitem">Odstranit</span> (<span class="shortcut"><strong><span class="keycap"><strong>-</strong></span></strong></span>)</td><td>
+<p>
+
+Označí vybraný balík pro odstranění.
+
+</p><p>
+
+Pokud je balík instalovaný, bude odstraněn.
+
+</p>
+  </td></tr><tr><td><a name="pkgCmdPurge"></a>Vyčistit: <span class="guimenu">Balík</span> → <span class="guimenuitem">Vyčistit</span> (<span class="shortcut"><strong><span class="keycap"><strong>_</strong></span></strong></span>)</td><td>
+<p>
+
+Označí vybraný balík pro vyčištění.
+
+</p><p>
+
+Pokud je balík nainstalován, bude odstraněn včetně konfiguračních
+souborů. Pokud již byl odstraněn, ale v systému po něm zůstaly nějaké
+soubory, budou také odstraněny.
+
+</p>
+  </td></tr><tr class="oddrow"><td><a name="pkgCmdKeep"></a>Ponechat: <span class="guimenu">Balík</span> → <span class="guimenuitem">Ponechat</span> (<span class="shortcut"><strong><span class="keycap"><strong>:</strong></span></strong></span>)</td><td>
+<p>
+
+U vybraného balíku nastaví, že má zůstat v aktuální verzi.
+
+</p><p>
+
+Veškeré předchozí naplánované akce - instalace, odstranění nebo
+aktualizace - budou zrušeny. Zruší se i podržení v aktuálním stavu.
+
+</p>
+  </td></tr><tr><td><a name="pkgCmdHold"></a>Podržet: <span class="guimenu">Balík</span> → <span class="guimenuitem">Přidržet</span> (<span class="shortcut"><strong><span class="keycap"><strong>=</strong></span></strong></span>)</td><td>
+<p>
+
+Převede balík do stavu trvalého podržení.
+
+</p><p>
+
+Podobně jako u předchozího se u balíku zruší všechny plánované akce,
+ale navíc se balík nebude automaticky aktualizovat. <sup>[<a name="footAutoUpgrade" href="#ftn.footAutoUpgrade" class="footnote">a</a>]</sup> Podržení bude platit tak dlouho, dokud jej explicitně
+nezrušíte např. příkazem <span class="guimenu">Akce</span> → <span class="guimenuitem">Instalovat/odstranit balíky</span> (<span class="shortcut"><strong><span class="keycap"><strong>g</strong></span></strong></span>).
+
+</p>
+  </td></tr><tr class="oddrow"><td><a name="pkgCmdForbid"></a>Zakázat aktualizaci: <span class="guimenu">Balík</span> → <span class="guimenuitem">Zakázat verzi</span> (<span class="shortcut"><strong><span class="keycap"><strong>F</strong></span></strong></span>)</td><td>
+<p>
+
+Balík nebude automaticky aktualizován<sup>[<a href="ch02s02s03.html#ftn.footAutoUpgrade" class="footnoteref">a</a>]</sup> na novější verzi. Pokud již byla
+aktualizace naplánovaná, bude zrušena.
+
+</p><p>
+
+Použijete-li tento příkaz na konkrétní verzi balíku, balík na ni
+nebude aktualizován. Najednou může být zakázaná pouze jedna verze.
+
+</p><p>
+
+Tato funkce existuje hlavně pro pohodlí uživatelů
+<span class="quote">„<span class="quote">nestabilní</span>“</span> distribuce, aby mohli přeskakovat známé
+nefunkční verze balíků.
+
+</p>
+  </td></tr><tr><td><a name="pkgCmdReinstall"></a>Reinstalovat: klávesa <span class="keycap"><strong>L</strong></span></td><td>
+<p>
+
+Znovu nainstaluje vybraný balík.
+
+</p><p>
+
+Poznamenejme, že příznak reinstalace se nezachová po ukončení
+<span class="command"><strong>aptitude</strong></span> nebo po skončení instalace. (Je to kvůli tomu, že programy
+<span class="command"><strong>dpkg</strong></span> a <code class="systemitem">apt</code> nenabízí možnost zjistit, zda byla
+reinstalace úspěšná.)
+
+</p>
+  </td></tr><tr class="oddrow"><td><a name="pkgCmdAuto"></a><span class="guimenu">Balík</span> → <span class="guimenuitem">Spravovat automaticky</span> (<span class="shortcut"><strong><span class="keycap"><strong>M</strong></span></strong></span>), <span class="guimenu">Balík</span> → <span class="guimenuitem">Spravovat ručně</span> (<span class="shortcut"><strong><span class="keycap"><strong>m</strong></span></strong></span>)</td><td>
+<p>
+
+Nastaví příznak, zda je balík brán jako instalovaný automaticky nebo
+na vyžádání. Automaticky instalované balíky totiž budou - pokud na
+nich už žádný balík nezávisí - odstraněny. Pro více informací
+nahlédněte do <a class="xref" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">„Správa automaticky instalovaných balíků“</a>.
+
+</p>
+  </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div class="footnote"><p><sup>[<a id="ftn.footAutoUpgrade" href="#footAutoUpgrade" class="para">a</a>] </sup> Tj. nebude ovlivněn akcemi
+<span class="guimenu">Akce</span> → <span class="guimenuitem">Označit aktualizovatelné</span> (<span class="shortcut"><strong><span class="keycap"><strong>U</strong></span></strong></span>) nebo z příkazové řádky
+<a class="link" href="ch01s02.html#fullUpgrade"><code class="literal">full-upgrade</code></a> a
+<a class="link" href="ch01s02.html#safeUpgrade"><code class="literal">safe-upgrade</code></a>.
+</p></div></td></tr></tbody></table></div><p>
+
+Kromě zmíněných příkazů, které ovlivňují vybraný balík, existují ještě
+dva příkazy, které ovlivní spoustu balíků bez ohledu na to, co je
+vybráno. <span class="guimenu">Akce</span> → <span class="guimenuitem">Zapomenout nové balíky</span> (<span class="shortcut"><strong><span class="keycap"><strong>f</strong></span></strong></span>) vymaže stav <span class="quote">„<span class="quote">nový</span>“</span> u všech
+balíků v seznamu a <span class="guimenu">Akce</span> → <span class="guimenuitem">Označit aktualizovatelné</span> (<span class="shortcut"><strong><span class="keycap"><strong>U</strong></span></strong></span>) označí každý aktualizovatelný
+balík pro aktualizaci (kromě balíků, které jsou podrženy nebo by byly
+aktualizovány na zakázanou verzi).
+
+</p><div class="note" title="Poznámka" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Poznámka]" src="images/note.png"></td><th align="left">Poznámka</th></tr><tr><td align="left" valign="top"><p>
+
+Všechny změny týkající se stavu balíků se automaticky ukládají při
+ukončení programu, aktualizaci seznamu balíků nebo při spuštění
+instalace. Nechcete-li uložit provedené změny, můžete <span class="command"><strong>aptitude</strong></span>
+ukončit klávesovou zkratkou <span class="keycap"><strong>Ctrl-C</strong></span>.
+
+</p></td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02s02.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s02s04.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Získání informací o balíku </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> Řešení problémů se závislostmi</td></tr></table></div></body></html>

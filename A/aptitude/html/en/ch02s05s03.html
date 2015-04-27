@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Customizing text colors and styles</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude user's manual"><link rel="up" href="ch02s05.html" title="Customizing aptitude"><link rel="prev" href="ch02s05s02.html" title="Customizing keybindings"><link rel="next" href="ch02s05s04.html" title="Customizing the display layout"><link rel="preface" href="pr01.html" title="Introduction"><link rel="chapter" href="ch01.html" title="Chapter 1. Getting started"><link rel="chapter" href="ch02.html" title="Chapter 2. aptitude reference guide"><link rel="chapter" href="ch03.html" title="Chapter 3. aptitude frequently asked questions"><link rel="chapter" href="ch04.html" title="Chapter 4. Credits"><link rel="reference" href="rn01.html" title="Command-line reference"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Customizing text colors and styles</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Customizing <span class="command"><strong>aptitude</strong></span></th><td width="20%" align="right"> <a accesskey="n" href="ch02s05s04.html"><img src="images/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="section" title="Customizing text colors and styles"><div class="titlepage"><div><div><h3 class="title"><a name="secStyle"></a>Customizing text colors and styles</h3></div></div></div><p>
+	  The colors and visual styles used by <span class="command"><strong>aptitude</strong></span> to display
+	  text can be extensively customized.  Each visual element has
+	  an associated <span class="quote">“<span class="quote">style</span>”</span>, which describes the
+	  particular colors and visual attributes that will be used to
+	  display that element.  Styles take the form of a list of
+	  color and attribute settings.  This list is not necessarily
+	  exhaustive; if some colors or attributes are not explicitly
+	  specified, their values will be taken from the surrounding
+	  visual context.  In fact, most visual elements have an
+	  <span class="quote">“<span class="quote">empty</span>”</span> style by default.
+	</p><p>
+	  You can change the contents of a style by creating a
+	  configuration group of the same name in the <code class="systemitem">apt</code> or
+	  <span class="command"><strong>aptitude</strong></span> configuration file.  For instance, the
+	  <span class="quote">“<span class="quote"><code class="literal">MenuBorder</code></span>”</span> style is used
+	  to draw the visual border around drop-down menus.  By
+	  default, this border is drawn bold and white-on-blue.
+	  Placing the following text in the configuration file would
+	  change it to white-on-cyan:
+	</p><pre class="screen">Aptitude::UI::Styles {
+  MenuBorder {fg white; bg cyan; set bold;};
+};</pre><p>
+	  As you can see, a style's configuration group consists of a
+	  sequence of instructions.  The general classes of
+	  instructions are:
+	</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">fg</code> <em class="replaceable"><code>color</code></em></span></dt><dd><p>
+		Sets the text foreground to the given
+		<em class="replaceable"><code>color</code></em>.  See below for a
+		list of the colors known to <span class="command"><strong>aptitude</strong></span>.
+	      </p></dd><dt><span class="term"><code class="literal">bg</code> <em class="replaceable"><code>color</code></em></span></dt><dd><p>
+		Sets the text background to the given
+		<em class="replaceable"><code>color</code></em>.  See below for a
+		list of the colors known to <span class="command"><strong>aptitude</strong></span>.
+	      </p></dd><dt><span class="term"><code class="literal">set</code> <em class="replaceable"><code>attribute</code></em></span></dt><dd><p>
+		Enables the given text
+		<em class="replaceable"><code>attribute</code></em>.  See below for a
+		list of the text attributes known to <span class="command"><strong>aptitude</strong></span>.
+	      </p></dd><dt><span class="term"><code class="literal">clear</code> <em class="replaceable"><code>attribute</code></em></span></dt><dd><p>
+		Disables the given text
+		<em class="replaceable"><code>attribute</code></em>.  See below for a
+		list of the text attributes known to <span class="command"><strong>aptitude</strong></span>.
+	      </p></dd><dt><span class="term"><code class="literal">flip</code> <em class="replaceable"><code>attribute</code></em></span></dt><dd><p>
+		Toggles the given text
+		<em class="replaceable"><code>attribute</code></em>: if it is enabled
+		in the surrounding element, it will be disabled, and
+		vice versa.  See below for a list of the text
+		attributes known to <span class="command"><strong>aptitude</strong></span>.
+	      </p></dd></dl></div><p>
+	  The colors that <span class="command"><strong>aptitude</strong></span> recognizes are <code class="literal">black</code>,
+	  <code class="literal">blue</code>, <code class="literal">cyan</code>,
+	  <code class="literal">green</code>, <code class="literal">magenta</code>,
+	  <code class="literal">red</code>, <code class="literal">white</code>, and
+	  <code class="literal">yellow</code>
+	  <sup>[<a name="idp4448952" href="#ftn.idp4448952" class="footnote">20</a>]</sup>.  In addition, you may specify
+	  <code class="literal">default</code> in place of a background color to
+	  use the default terminal background (this could be the
+	  default color, an image file, or even
+	  <span class="quote">“<span class="quote">transparent</span>”</span>).  The styles that <span class="command"><strong>aptitude</strong></span>
+	  recognizes are:
+	</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">blink</code></span></dt><dd><p>
+		Enables blinking text.
+	      </p></dd><dt><span class="term"><code class="literal">bold</code></span></dt><dd><p>
+		Makes the foreground color of the text (or the
+		background if reverse video is enabled) brighter.
+	      </p></dd><dt><span class="term"><code class="literal">dim</code></span></dt><dd><p>
+		May cause text to be extra-dim on some terminals.  No
+		effect has been observed on common Linux terminals.
+	      </p></dd><dt><span class="term"><code class="literal">reverse</code></span></dt><dd><p>
+		Swaps the foreground and background colors.  Many
+		visual elements flip this attribute to perform common
+		highlighting tasks.
+	      </p></dd><dt><span class="term"><code class="literal">standout</code></span></dt><dd><p>
+		This enables <span class="quote">“<span class="quote">the best highlighting mode of the
+		terminal</span>”</span>.  In xterms it is similar, but
+		not idential to, reverse video; behavior on other
+		terminals may vary.
+	      </p></dd><dt><span class="term"><code class="literal">underline</code></span></dt><dd><p>
+		Enables underlined text.
+	      </p></dd></dl></div><p>
+	  You can select several attributes at once by separating them
+	  with commas; for instance, <code class="literal">set
+	  bold,standout;</code>.
+	</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+	    As hinted at above, the interpretation of both styles and
+	    text attributes is highly terminal-dependent.  You may
+	    need to experiment a bit to find out exactly what some
+	    settings do on your terminal.
+	  </p></td></tr></table></div><p>
+	  The following styles can be customized in <span class="command"><strong>aptitude</strong></span>:
+	</p><div class="figure"><a name="figStyles"></a><p class="title"><b>Figure 2.14. Customizable styles in <span class="command">aptitude</span></b></p><div class="figure-contents"><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Style</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">Bullet</code></td><td><code class="literal">fg yellow; set bold;</code></td><td>
+		    The style of the bullets in bulleted lists.
+		  </td></tr><tr class="oddrow"><td><code class="literal">ChangelogNewerVersion</code></td><td><code class="literal">set bold;</code></td><td>
+		    The style of newer versions of the package in the
+		    changelog view.  Note that <span class="command"><strong>aptitude</strong></span> will only
+		    highlight newer versions of the package if you
+		    have the package libparse-debianchangelog-perl
+		    installed.
+		  </td></tr><tr><td><a name="colorDefaultWidgetBackground"></a><code class="literal">Default</code></td><td><code class="literal">fg white; bg black;</code></td><td>
+		    The basic style of the screen.
+		  </td></tr><tr class="oddrow"><td><code class="literal">DepBroken</code></td><td><code class="literal">fg black; bg red;</code></td><td>
+		    The style of unfulfilled dependencies.
+		  </td></tr><tr><td><code class="literal">DisabledMenuEntry</code></td><td><code class="literal">fg black; bg blue; set dim;</code></td><td>
+		    The style of menu entries that are disabled and
+		    cannot be used.
+		  </td></tr><tr class="oddrow"><td><code class="literal">DownloadHit</code></td><td><code class="literal">fg black; bg green;</code></td><td>
+		    The style used to indicate that a file was
+		    <span class="quote">“<span class="quote">hit</span>”</span>: i.e., it has not changed since
+		    the last time it was downloaded.
+		  </td></tr><tr><td><code class="literal">DownloadProgress</code></td><td><code class="literal">fg blue; bg yellow;</code></td><td>
+		    The style of the progress indicator for a
+		    download.
+		  </td></tr><tr class="oddrow"><td><code class="literal">EditLine</code></td><td><code class="literal">fg white; bg black; clear reverse;</code></td><td>
+		    The style of line editors (for instance, the entry
+		    in the <span class="quote">“<span class="quote">Search</span>”</span> dialog).
+		  </td></tr><tr><td><code class="literal">Error</code></td><td><code class="literal">fg white; bg red; set bold;</code></td><td>The style of error messages.</td></tr><tr class="oddrow"><td><code class="literal">Header</code></td><td><code class="literal">fg white; bg blue; set bold;</code></td><td>
+		    The style of screen headers.
+		  </td></tr><tr><td><code class="literal">HighlightedMenuBar</code></td><td><code class="literal">fg white; bg blue; set bold,reverse;</code></td><td>
+		    The style of the currently selected menu name in
+		    the menu bar.
+		  </td></tr><tr class="oddrow"><td><code class="literal">HighlightedMenuEntry</code></td><td><code class="literal">fg white; bg blue; set bold,reverse;</code></td><td>
+		    The style of the currently selected choice in a
+		    menu.
+		  </td></tr><tr><td><code class="literal">MediaChange</code></td><td><code class="literal">fg yellow; bg red; set bold;</code></td><td>
+		    The style of the dialog used to ask the user to
+		    insert a new CD.
+		  </td></tr><tr class="oddrow"><td><code class="literal">MenuBar</code></td><td><code class="literal">fg white; bg blue; set bold;</code></td><td>
+		    The style of the menu bar.
+		  </td></tr><tr><td><code class="literal">MenuBorder</code></td><td><code class="literal">fg white; bg blue; set bold;</code></td><td>
+		    The style of the borders that surround a drop-down
+		    menu.
+		  </td></tr><tr class="oddrow"><td><code class="literal">MenuEntry</code></td><td><code class="literal">fg white; bg blue;</code></td><td>
+		    The style of each entry in a drop-down menu.
+		  </td></tr><tr><td><code class="literal">MineBomb</code></td><td><code class="literal">fg red; set bold;</code></td><td>
+		    The style of bombs in <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a>.
+		  </td></tr><tr class="oddrow"><td><code class="literal">MineBorder</code></td><td><code class="literal">set bold;</code></td><td>
+		    The style of the border drawn around a <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a> board.
+		  </td></tr><tr><td><code class="literal">MineFlag</code></td><td><code class="literal">fg red; set bold;</code></td><td>
+		    The style of flags in <a class="link" href="ch02s06.html" title="Playing Minesweeper">Minesweeper</a>.
+		  </td></tr><tr class="oddrow"><td><code class="literal">MineNumber</code><em class="replaceable"><code>N</code></em></td><td>Various</td><td>
+		    The style of the number
+		    <em class="replaceable"><code>N</code></em> in Minesweeper;
+		    <em class="replaceable"><code>N</code></em> may range from 0 to
+		    8.
+		  </td></tr><tr><td><code class="literal">MultiplexTab</code></td><td><code class="literal">fg white; bg blue;</code></td><td>
+		    The color used to display <span class="quote">“<span class="quote">tabs</span>”</span>
+		    other than the currently selected one.
+		  </td></tr><tr class="oddrow"><td><code class="literal">MultiplexTabHighlighted</code></td><td><code class="literal">fg blue; bg white;</code></td><td>
+		    The color used to display the currently selected
+		    <span class="quote">“<span class="quote">tab</span>”</span>.
+		  </td></tr><tr><td><code class="literal">PkgBroken</code></td><td><code class="literal">fg red; flip reverse;</code></td><td>
+		    The style of packages in the package list which
+		    have unfulfilled dependencies.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgBrokenHighlighted</code></td><td><code class="literal">fg red;</code></td><td>
+		    The style of highlighted packages in the package
+		    list which have unfulfilled dependencies.
+		  </td></tr><tr><td><code class="literal">PkgNotInstalled</code></td><td> </td><td>
+		    The style of packages which are not currently
+		    installed and will not be installed.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgNotInstalledHighlighted</code></td><td> </td><td>
+		    The style of highlighted packages which are not
+		    currently installed and will not be installed.
+		  </td></tr><tr><td><code class="literal">PkgIsInstalled</code></td><td><code class="literal">set bold;</code></td><td>
+		    The style of packages which are currently
+		    installed and for which no actions are scheduled.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgIsInstalledHighlighted</code></td><td><code class="literal">set bold; flip reverse;</code></td><td>
+		    The style of highlighted packages which are
+		    currently installed and for which no actions are
+		    scheduled.
+		  </td></tr><tr><td><code class="literal">PkgToDowngrade</code></td><td><code class="literal">set bold;</code></td><td>
+		    The style of packages in the package list which
+		    will be downgraded.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgToDowngradeHighlighted</code></td><td><code class="literal">set bold; flip reverse</code></td><td>
+		    The style of highlighted packages in the package
+		    list which will be downgraded.
+		  </td></tr><tr><td><code class="literal">PkgToHold</code></td><td><code class="literal">fg white; flip reverse;</code></td><td>
+		    The style of packages in the package list which
+		    are <a class="link" href="ch02s02s03.html#pkgCmdHold">on hold</a>.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgToHoldHighlighted</code></td><td><code class="literal">fg white;</code></td><td>
+		    The style of highlighted packages in the package
+		    list which are <a class="link" href="ch02s02s03.html#pkgCmdHold">on
+		    hold</a>.
+		  </td></tr><tr><td><code class="literal">PkgToInstall</code></td><td><code class="literal">fg green; flip reverse;</code></td><td>
+		    The style of packages in the package list which
+		    are being <a class="link" href="ch02s02s03.html#pkgCmdInstall">installed</a> (not
+		    upgraded) or <a class="link" href="ch02s02s03.html#pkgCmdReinstall">reinstalled</a>.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgToInstallHighlighted</code></td><td><code class="literal">fg green;</code></td><td>
+		    The style of highlighted packages in the package
+		    list which are being <a class="link" href="ch02s02s03.html#pkgCmdInstall">installed</a> (not
+		    upgraded) or <a class="link" href="ch02s02s03.html#pkgCmdReinstall">reinstalled</a>.
+		  </td></tr><tr><td><code class="literal">PkgToRemove</code></td><td><code class="literal">fg magenta; flip reverse;</code></td><td>
+		    The style of packages in the package list which
+		    will be <a class="link" href="ch02s02s03.html#pkgCmdRemove">removed</a> or <a class="link" href="ch02s02s03.html#pkgCmdPurge">purged</a>.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgToRemoveHighlighted</code></td><td><code class="literal">fg magenta;</code></td><td>
+		    The style of highlighted packages in the package
+		    list which will be <a class="link" href="ch02s02s03.html#pkgCmdRemove">removed</a> or <a class="link" href="ch02s02s03.html#pkgCmdPurge">purged</a>.
+		  </td></tr><tr><td><code class="literal">PkgToUpgrade</code></td><td><code class="literal">fg cyan; flip reverse;</code></td><td>
+		    The style of packages in the package list which
+		    will be upgraded.
+		  </td></tr><tr class="oddrow"><td><code class="literal">PkgToUpgradeHighlighted</code></td><td><code class="literal">fg cyan;</code></td><td>
+		    The style of highlighted packages in the package
+		    list which will be upgraded.
+		  </td></tr><tr><td><code class="literal">Progress</code></td><td><code class="literal">fg blue; bg yellow;</code></td><td>
+		    The style of progress indicators such as the one
+		    that appears while the package cache is being
+		    loaded.
+		  </td></tr><tr class="oddrow"><td><code class="literal">SolutionActionApproved</code></td><td><code class="literal">bg green;</code></td><td>
+		    The style of approved actions in a solution.
+		  </td></tr><tr><td><code class="literal">SolutionActionRejected</code></td><td><code class="literal">bg red;</code></td><td>
+		    The style of rejected actions in a solution.
+		  </td></tr><tr class="oddrow"><td><a name="colorScreenStatusColor"></a><code class="literal">Status</code></td><td><code class="literal">fg white; bg blue; set bold;</code></td><td>
+		    The style of status lines at the bottom of the
+		    screen.
+		  </td></tr><tr><td><a name="colorTreeBackground"></a><code class="literal">TreeBackground</code></td><td> </td><td>
+		    The basic color of all visual lists and trees.
+		  </td></tr><tr class="oddrow"><td><a name="colorTrustWarning"></a><code class="literal">TrustWarning</code></td><td><code class="literal">fg red; bg black; set bold;</code></td><td>
+		    The color used to display warnings about <a class="link" href="ch02s02s05.html" title="Understanding and managing package trust">package trust</a>.
+		  </td></tr></tbody></table></div></div></div><br class="figure-break"><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.idp4448952" href="#idp4448952" class="para">20</a>] </sup>
+	      On some terminals, a <span class="quote">“<span class="quote">yellow</span>”</span> background
+	      will actually come out brown.
+	    </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05s02.html"><img src="images/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html"><img src="images/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s05s04.html"><img src="images/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Customizing keybindings </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Customizing the display layout</td></tr></table></div></body></html>

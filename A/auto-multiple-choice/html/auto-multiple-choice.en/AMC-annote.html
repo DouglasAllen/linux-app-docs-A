@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>AMC-annote</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="commands.html" title="Commands manual" /><link rel="prev" href="AMC-export.html" title="AMC-export" /><link rel="next" href="AMC-regroupe.html" title="AMC-regroupe" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AMC-annote</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AMC-export.html">Prev</a> </td><th width="60%" align="center">Commands manual</th><td width="20%" align="right"> <a accesskey="n" href="AMC-regroupe.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="AMC-annote"><a id="AMC-annote"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>AMC-annote — completed answer sheets annotation after marking for AMC
+        multiple choice exams.</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   annote   --projet
+          <em class="replaceable"><code>project-dir</code></em>   --data
+          <em class="replaceable"><code>project-data-dir</code></em>   --fich-assoc
+          <em class="replaceable"><code>assoc.xml</code></em>  [annotation options...]</p></div></div><div class="refsect1" title="Description"><a id="idp6723840"></a><h2>Description</h2><p>The <span class="command"><strong>AMC-annote.pl</strong></span> command annotates papers
+        scans with scores for all questions, global score and mark, resulting
+        in JPEG files (one for each page).</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--projet
+            <em class="replaceable"><code>project-dir</code></em></code></span></dt><dd><p>sets the project directory.</p></dd><dt><span class="term"><code class="option">--data
+            <em class="replaceable"><code>project-data-dir</code></em></code></span></dt><dd><p>gives the directory where data files are (see for example
+              <span class="citerefentry"><span class="refentrytitle">AMC-prepare</span>(1)</span>).</p></dd><dt><span class="term"><code class="option">--cr
+            <em class="replaceable"><code>project-cr-dir</code></em></code></span></dt><dd><p>sets the project reports directory, where to find data
+              capture reports prepared by <span class="citerefentry"><span class="refentrytitle">AMC-analyse</span>(1)</span>, and where to output annotated scans. Default
+              value is
+              <code class="filename"><em class="replaceable"><code>project-dir</code></em>/cr</code>.</p></dd><dt><span class="term"><code class="option">--fich-noms
+            <em class="replaceable"><code>students-list.csv</code></em></code></span></dt><dd><p>sets the students list file name.</p></dd><dt><span class="term"><code class="option">--noms-encodage
+            <em class="replaceable"><code>encoding</code></em></code></span></dt><dd><p>selects an encoding for file
+              <em class="replaceable"><code>students-list.csv</code></em> (default is
+              utf-8).</p></dd><dt><span class="term"><code class="option">--qualite
+            <em class="replaceable"><code>qual</code></em></code></span></dt><dd><p>sets JPEG quality for output files. Default value is
+              65.</p></dd><dt><span class="term"><code class="option">--taille-max
+            <em class="replaceable"><code>maxsize</code></em></code></span></dt><dd><p>sets the maximal size for output files (in the format
+              <code class="literal"><em class="replaceable"><code>width</code></em>x<em class="replaceable"><code>height</code></em></code>,
+              in pixels). Default value is
+              <code class="literal">1000x1500</code>.</p></dd><dt><span class="term"><code class="option">--pointsize-nl
+            <em class="replaceable"><code>lines</code></em></code></span></dt><dd><p>sets the size of texts requiring that with this size, the
+              number of text lines that fits on the page height must be
+              <em class="replaceable"><code>lines</code></em>. Default value is
+              <code class="literal">60</code>.</p></dd><dt><span class="term"><code class="option">--verdict
+            <em class="replaceable"><code>header</code></em></code></span></dt><dd><p>sets the text header to be printed on each first page of
+              the students copies. This text may contain CR characters for
+              multi-line headers. Some sequences are substituted in it:</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">%S</code></span></dt><dd><p>is replaced by the student total score.</p></dd><dt><span class="term"><code class="literal">%M</code></span></dt><dd><p>is replaced by the maximum total score.</p></dd><dt><span class="term"><code class="literal">%s</code></span></dt><dd><p>is replaced by the student mark.</p></dd><dt><span class="term"><code class="literal">%m</code></span></dt><dd><p>is replaced by the maximum mark.</p></dd><dt><span class="term"><code class="literal">%(ID)</code></span></dt><dd><p>is replaced by the student's name.</p></dd><dt><span class="term"><code class="literal">%(<em class="replaceable"><code>COL</code></em>)</code></span></dt><dd><p>is replaced by the value of column
+                    <em class="replaceable"><code>COL</code></em> in the students list for
+                    the curent student.</p></dd></dl></div></dd><dt><span class="term"><code class="option">--ch-sign
+            <em class="replaceable"><code>nc</code></em></code></span></dt><dd><p>Sets the number <em class="replaceable"><code>nc</code></em> of
+              significant digits to use when printing global mark.</p></dd><dt><span class="term"><code class="option">--symbols
+            <em class="replaceable"><code>symbols-definition</code></em></code></span></dt><dd><p>defines how boxes will be annotated. symbols-definition is
+              a comma separated list of
+              <code class="literal"><em class="replaceable"><code>H</code></em>-<em class="replaceable"><code>A</code></em>:<em class="replaceable"><code>shape</code></em>:<em class="replaceable"><code>colour</code></em></code>
+              constructs, where <em class="replaceable"><code>H</code></em> is
+              <code class="literal">0</code> or <code class="literal">1</code> depending on wether
+              the box has to be checked or not, <em class="replaceable"><code>A</code></em>
+              is <code class="literal">0</code> or <code class="literal">1</code> depending on
+              wether the box is actually checked or not,
+              <em class="replaceable"><code>shape</code></em> is one of
+              <code class="literal">none</code>, <code class="literal">circle</code>,
+              <code class="literal">mark</code>, <code class="literal">box</code> and
+              <em class="replaceable"><code>coulour</code></em> is a colour (name or #RGB,
+              see ImageMagick or GraphicsMagick documentation for details).
+              Default value is
+              "<code class="code">0-0:none,0-1:circle:red,1-0:mark:red,1-1:mark:blue</code>".</p></dd><dt><span class="term"><code class="option">--position
+            <em class="replaceable"><code>pos</code></em></code></span></dt><dd><p>sets the position of individual questions scores.
+              <em class="replaceable"><code>pos</code></em> may be '<code class="literal">none</code>'
+              (do dot write individual scores), '<code class="literal">marge</code>'
+              (write scores in the margin) or '<code class="literal">case</code>' (write
+              scores at the left of the left-most box for the question.</p></dd><dt><span class="term"><code class="option">--ecart
+            <em class="replaceable"><code>dx</code></em></code></span></dt><dd><p>sets the horizontal space to let between individual
+              question score and the leftmost box when <code class="option">--position
+              case</code> is used.</p></dd><dt><span class="term"><code class="option">--ecart-marge
+            <em class="replaceable"><code>x</code></em></code></span></dt><dd><p>sets the x position for individual questions scores when
+              written in the margin (in <span class="emphasis"><em>em</em></span> units).</p></dd><dt><span class="term"><code class="option">--line-width
+            <em class="replaceable"><code>lw</code></em></code></span></dt><dd><p>sets the line width for symbols drwan on the scans (in
+              pixels). Default value is 2.</p></dd><dt><span class="term"><code class="option">--indicatives
+            <em class="replaceable"><code>bool</code></em></code></span></dt><dd><p>say if indicative questions are to be annotated (use 1 for
+              a true value; default is false).</p></dd><dt><span class="term"><code class="option">--debug
+            <em class="replaceable"><code>file.log</code></em></code></span></dt><dd><p>gives a file to fill with debugging information.</p></dd></dl></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AMC-export.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="commands.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AMC-regroupe.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AMC-export </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AMC-regroupe</td></tr></table></div></body></html>

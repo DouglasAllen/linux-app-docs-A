@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT User's Guide: 12. Exception Handling and Reporting Internal Bugs</title>
+
+<meta name="description" content="ASIS-for-GNAT User's Guide: 12. Exception Handling and Reporting Internal Bugs">
+<meta name="keywords" content="ASIS-for-GNAT User's Guide: 12. Exception Handling and Reporting Internal Bugs">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Exception-Handling-and-Reporting-Internal-Bugs"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_13.html#File-Naming-Conventions-and-Application-Name-Space" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_13.html#File-Naming-Conventions-and-Application-Name-Space" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Exception-Handling-and-Reporting-Internal-Bugs-1"></a>
+<h1 class="chapter">12. Exception Handling and Reporting Internal Bugs</h1>
+
+<p>According to the ASIS Standard, only ASIS-defined exceptions can
+be propagated from ASIS queries. The same holds for the
+ASIS Extensions queries supported by ASIS-for-GNAT.
+</p>
+<p>If a non-ASIS exception is raised during the processing of
+an ASIS or ASIS extension query, this symptom reflects
+an internal implementation problem. Under such a circumstance,
+by default the ASIS query will output some diagnostic information
+to <code>Standard_Error</code> and then exit to the OS; that is,
+the execution of the ASIS application is aborted.
+</p>
+<p>In order to allow the execution of an ASIS-based program
+to continue even in case of such internal ASIS
+implementation errors, you can change the default behavior by supplying
+appropriate parameters to <code>Asis.Implementation.Initialize</code>. See
+<cite>ASIS-for-GNAT Reference Manual</cite>
+for more details.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_11.html#ASIS_002dfor_002dGNAT-Warnings" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_13.html#File-Naming-Conventions-and-Application-Name-Space" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

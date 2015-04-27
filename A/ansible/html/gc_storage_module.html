@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gc_storage - This module manages objects/buckets in Google Cloud Storage. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="gce - create or terminate GCE instances" href="gce_module.html" />
+    <link rel="prev" title="elasticache - Manage cache clusters in Amazon Elasticache." href="elasticache_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="gce_module.html" title="gce - create or terminate GCE instances"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="elasticache_module.html" title="elasticache - Manage cache clusters in Amazon Elasticache."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gc-storage-this-module-manages-objects-buckets-in-google-cloud-storage">
+<span id="gc-storage"></span><h1>gc_storage - This module manages objects/buckets in Google Cloud Storage.<a class="headerlink" href="#gc-storage-this-module-manages-objects-buckets-in-google-cloud-storage" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body"><a class="reference external" href="mailto:benno&#37;&#52;&#48;ansible&#46;com">benno<span>&#64;</span>ansible<span>&#46;</span>com</a> Note. Most of the code has been taken from the S3 module.</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>This module allows users to manage their objects/buckets in Google Cloud Storage.  It allows upload and download operations and can set some canned permissions. It also allows retrieval of URLs for objects for use in playbooks, and retrieval of string contents of objects.  This module requires setting the default project in GCS prior to playbook usage.  See <a class="reference external" href="https://developers.google.com/storage/docs/reference/v1/apiversion1">https://developers.google.com/storage/docs/reference/v1/apiversion1</a> for information about setting the default project.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>bucket</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Bucket name.</td>
+</tr>
+        <tr>
+<td>dest</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The destination file path when downloading an object/key with a GET operation.</td>
+</tr>
+        <tr>
+<td>expiration</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Time limit (in seconds) for the URL generated and returned by GCA when performing a mode=put or mode=get_url operation. This url is only avaialbe when public-read is the acl for the object.</td>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td>Forces an overwrite either locally on the filesystem or remotely with the object/key. Used with PUT and GET operations.</td>
+</tr>
+        <tr>
+<td>gcs_access_key</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>GCS access key. If not set then the value of the GCS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>gcs_secret_key</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>GCS secret key. If not set then the value of the GCS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>mode</td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>get</li><li>put</li><li>get_url</li><li>get_str</li><li>delete</li><li>create</li></ul></td>
+    <td>Switches the module behaviour between upload, download, get_url (return download url) , get_str (download object as string), create (bucket) and delete (bucket).</td>
+</tr>
+        <tr>
+<td>object</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Keyname of the object inside the bucket. Can be also be used to create "virtual directories" (see examples).</td>
+</tr>
+        <tr>
+<td>permission</td>
+<td>no</td>
+<td>private</td>
+    <td><ul></ul></td>
+    <td>This option let's the user set the canned permissions on the object/bucket that are created. The permissions that can be set are 'private', 'public-read', 'authenticated-read'.</td>
+</tr>
+        <tr>
+<td>src</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The source file path when performing a PUT operation.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto 2.9+</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># upload some content
+- gc_storage: bucket=mybucket object=key.txt src=/usr/local/myfile.txt mode=put permission=public-read
+
+# download some content
+- gc_storage: bucket=mybucket object=key.txt dest=/usr/local/myfile.txt mode=get
+
+# Download an object as a string to use else where in your playbook
+- gc_storage: bucket=mybucket object=key.txt mode=get_str
+
+# Create an empty bucket
+- gc_storage: bucket=mybucket mode=create
+
+# Create a bucket with key as directory
+- gc_storage: bucket=mybucket object=/my/directory/path mode=create
+
+# Delete a bucket and all contents
+- gc_storage: bucket=mybucket mode=delete</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">gc_storage - This module manages objects/buckets in Google Cloud Storage.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="elasticache_module.html"
+                        title="previous chapter">elasticache - Manage cache clusters in Amazon Elasticache.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gce_module.html"
+                        title="next chapter">gce - create or terminate GCE instances</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="gce_module.html" title="gce - create or terminate GCE instances"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="elasticache_module.html" title="elasticache - Manage cache clusters in Amazon Elasticache."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

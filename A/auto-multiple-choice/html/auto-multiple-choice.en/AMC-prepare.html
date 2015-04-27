@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>AMC-prepare</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="commands.html" title="Commands manual" /><link rel="prev" href="auto-multiple-choice.html" title="auto-multiple-choice" /><link rel="next" href="re03.html" title="AMC-meptex" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AMC-prepare</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="auto-multiple-choice.html">Prev</a> </td><th width="60%" align="center">Commands manual</th><td width="20%" align="right"> <a accesskey="n" href="re03.html">Next</a></td></tr></table><hr /></div><div class="refentry" title="AMC-prepare"><a id="AMC-prepare"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>AMC-prepare — prepares working documents from LaTeX source
+        file</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   prepare   --mode s   --prefix
+          <em class="replaceable"><code>project-dir</code></em>   <em class="replaceable"><code>mcq-source-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">auto-multiple-choice</code>   prepare   --mode b   --data
+          <em class="replaceable"><code>project-data-dir</code></em>   <em class="replaceable"><code>mcq-source-file</code></em> </p></div></div><div class="refsect1" title="Description"><a id="idp6409312"></a><h2>Description</h2><p>The <span class="command"><strong>AMC-prepare.pl</strong></span> command extracts working
+        documents from the source file describing the multiple choice
+        questionnaire. Information to be extracted depends on the
+        <code class="option">--mode</code> argument value. In any mode, the source
+        filename must be given as an argument.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>with "<code class="option">--mode s</code>",
+            <span class="command"><strong>AMC-prepare.pl</strong></span> makes the subject file (answer
+            sheet to be printed and given to the students), the correction
+            (single corrected answer sheet) and the positions file (file
+            containing information about the positions of the boxes on the
+            pages). The following arguments can be used:</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--out-sujet
+                <em class="replaceable"><code>subject.pdf</code></em></code></span></dt><dd><p>sets the subject file to build.</p></dd><dt><span class="term"><code class="option">--out-corrige
+                <em class="replaceable"><code>corrected.pdf</code></em></code></span></dt><dd><p>sets the correction to build.</p></dd><dt><span class="term"><code class="option">--out-calage
+                <em class="replaceable"><code>calage.xy</code></em></code></span></dt><dd><p>sets the positions file to build.</p></dd><dt><span class="term"><code class="option">--prefix
+                <em class="replaceable"><code>directory</code></em></code></span></dt><dd><p>this directory is only necessary if one or more of the
+                  three previous options are not used: default values are then
+                  <code class="filename"><em class="replaceable"><code>directory</code></em>/sujet.pdf</code>,
+                  <code class="filename"><em class="replaceable"><code>directory</code></em>/corrige.pdf</code>
+                  and
+                  <code class="filename"><em class="replaceable"><code>directory</code></em>/calage.xy</code>.</p></dd></dl></div></li><li class="listitem"><p>with "<code class="option">--mode b</code>",
+            <span class="command"><strong>AMC-prepare.pl</strong></span> extracts scoring data from the
+            source file. In this mode, the <code class="option">--data</code> argument
+            must be used (see below).</p></li></ul></div><p>The following optional arguments can be used in any mode:</p><div class="variablelist"><dl><dt><span class="term"><code class="option">--with
+            <em class="replaceable"><code>latex-engine</code></em></code></span></dt><dd><p>gives the LaTeX engine (command) to be used.
+              <em class="replaceable"><code>latex-engine</code></em> can be
+              <span class="command"><strong>pdflatex</strong></span> or <span class="command"><strong>xelatex</strong></span> for
+              exemple.</p></dd><dt><span class="term"><code class="option">--filter
+            <em class="replaceable"><code>filter</code></em></code></span></dt><dd><p>sets the filter name to transform the MCQ source file into
+              a LaTeX file. Native filters are <code class="code">latex</code> (no change
+              at all) and <code class="code">plain</code> (source is an AMC-TXT
+              file).</p></dd><dt><span class="term"><code class="option">--filtered-source
+            <em class="replaceable"><code>mcq-latex-file</code></em></code></span></dt><dd><p>gives the LaTeX file to make from the source file using
+              specified filter. If omitted, a filename derived from
+              <em class="replaceable"><code>mcq-source-file</code></em> adding
+              <code class="filename">_filtered.tex</code> is used.</p></dd><dt><span class="term"><code class="option">--n-copies
+            <em class="replaceable"><code>n</code></em></code></span></dt><dd><p>sets the number of copies to produce, overriding the
+              number given in the LaTeX source file (first argument of the
+              <span class="command"><strong>\onecopy</strong></span> command).</p></dd><dt><span class="term"><code class="option">--debug
+            <em class="replaceable"><code>file.log</code></em></code></span></dt><dd><p>gives a file to fill with debugging information.</p></dd><dt><span class="term"><code class="option">--data
+            <em class="replaceable"><code>project-data-dir</code></em></code></span></dt><dd><p>sets the directory where the project's SQLite data files
+              are.</p></dd></dl></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="auto-multiple-choice.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="commands.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="re03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">auto-multiple-choice </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AMC-meptex</td></tr></table></div></body></html>

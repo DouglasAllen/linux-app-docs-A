@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rax_scaling_group - Manipulate Rackspace Cloud Autoscale Groups &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="rax_scaling_policy - Manipulate Rackspace Cloud Autoscale Scaling Policy" href="rax_scaling_policy_module.html" />
+    <link rel="prev" title="rax_queue - create / delete a queue in Rackspace Public Cloud" href="rax_queue_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rax_scaling_policy_module.html" title="rax_scaling_policy - Manipulate Rackspace Cloud Autoscale Scaling Policy"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rax_queue_module.html" title="rax_queue - create / delete a queue in Rackspace Public Cloud"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rax-scaling-group-manipulate-rackspace-cloud-autoscale-groups">
+<span id="rax-scaling-group"></span><h1>rax_scaling_group - Manipulate Rackspace Cloud Autoscale Groups<a class="headerlink" href="#rax-scaling-group-manipulate-rackspace-cloud-autoscale-groups" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matt Martz</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.7.</span></p>
+<p>Manipulate Rackspace Cloud Autoscale Groups</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>api_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace API key (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>cooldown</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The period of time, in seconds, that must pass before any scaling can occur after the previous scaling. Must be an integer between 0 and 86400 (24 hrs).</td>
+</tr>
+        <tr>
+<td>credentials</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>File to find the Rackspace credentials in (ignored if <em>api_key</em> and <em>username</em> are provided)</td>
+</tr>
+        <tr>
+<td>disk_config</td>
+<td>no</td>
+<td>auto</td>
+    <td><ul><li>auto</li><li>manual</li></ul></td>
+    <td>Disk partitioning strategy</td>
+</tr>
+        <tr>
+<td>env</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Environment as configured in ~/.pyrax.cfg, see <a href='https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration'>https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration</a> (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>files</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Files to insert into the instance. Hash of <code>remotepath: localpath</code></td>
+</tr>
+        <tr>
+<td>flavor</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>flavor to use for the instance</td>
+</tr>
+        <tr>
+<td>image</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>image to use for the instance. Can be an <code>id</code>, <code>human_id</code> or <code>name</code></td>
+</tr>
+        <tr>
+<td>key_name</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>key pair to use on the instance</td>
+</tr>
+        <tr>
+<td>loadbalancers</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>List of load balancer <code>id</code> and <code>port</code> hashes</td>
+</tr>
+        <tr>
+<td>max_entities</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The maximum number of entities that are allowed in the scaling group. Must be an integer between 0 and 1000.</td>
+</tr>
+        <tr>
+<td>meta</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A hash of metadata to associate with the instance</td>
+</tr>
+        <tr>
+<td>min_entities</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The minimum number of entities that are allowed in the scaling group. Must be an integer between 0 and 1000.</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name to give the scaling group</td>
+</tr>
+        <tr>
+<td>networks</td>
+<td>no</td>
+<td>['public', 'private']</td>
+    <td><ul></ul></td>
+    <td>The network to attach to the instances. If specified, you must include ALL networks including the public and private interfaces. Can be <code>id</code> or <code>label</code>.</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td>DFW</td>
+    <td><ul></ul></td>
+    <td>Region to create an instance in</td>
+</tr>
+        <tr>
+<td>server_name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The base name for servers created by Autoscale</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Indicate desired state of the resource</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace username (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>verify_ssl</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Whether or not to require SSL validation of API endpoints (added in Ansible 1.5)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires pyrax</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+    - rax_scaling_group:
+        credentials: ~/.raxpub
+        region: ORD
+        cooldown: 300
+        flavor: performance1-1
+        image: bb02b1a3-bc77-4d17-ab5b-421d89850fca
+        min_entities: 5
+        max_entities: 10
+        name: ASG Test
+        server_name: asgtest
+        loadbalancers:
+            - id: 228385
+              port: 80
+      register: asg</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following environment variables can be used, <tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt>, <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt>, <tt class="docutils literal"><span class="pre">RAX_REGION</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt> and <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt> points to a credentials file appropriate for pyrax. See <a class="reference external" href="https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating">https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt> and <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt> obviate the use of a credentials file</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_REGION</span></tt> defines a Rackspace Public Cloud region (DFW, ORD, LON, ...)</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rax_scaling_group - Manipulate Rackspace Cloud Autoscale Groups</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rax_queue_module.html"
+                        title="previous chapter">rax_queue - create / delete a queue in Rackspace Public Cloud</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rax_scaling_policy_module.html"
+                        title="next chapter">rax_scaling_policy - Manipulate Rackspace Cloud Autoscale Scaling Policy</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rax_scaling_policy_module.html" title="rax_scaling_policy - Manipulate Rackspace Cloud Autoscale Scaling Policy"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rax_queue_module.html" title="rax_queue - create / delete a queue in Rackspace Public Cloud"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

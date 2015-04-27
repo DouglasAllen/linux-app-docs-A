@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dnsimple - Interface with dnsimple.com (a DNS hosting service). &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Net Infrastructure Modules" href="list_of_net_infrastructure_modules.html" />
+    <link rel="next" title="dnsmadeeasy - Interface with dnsmadeeasy.com (a DNS hosting service)." href="dnsmadeeasy_module.html" />
+    <link rel="prev" title="bigip_pool_member - Manages F5 BIG-IP LTM pool members" href="bigip_pool_member_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dnsmadeeasy_module.html" title="dnsmadeeasy - Interface with dnsmadeeasy.com (a DNS hosting service)."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bigip_pool_member_module.html" title="bigip_pool_member - Manages F5 BIG-IP LTM pool members"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_net_infrastructure_modules.html" accesskey="U">Net Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dnsimple-interface-with-dnsimple-com-a-dns-hosting-service">
+<span id="dnsimple"></span><h1>dnsimple - Interface with dnsimple.com (a DNS hosting service).<a class="headerlink" href="#dnsimple-interface-with-dnsimple-com-a-dns-hosting-service" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Alex Coomans</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+<p>Manages domains and records via the DNSimple API, see the docs: <a class="reference external" href="http://developer.dnsimple.com/">http://developer.dnsimple.com/</a></p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>account_api_token</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Account API token. See <em>account_email</em> for info.</td>
+</tr>
+        <tr>
+<td>account_email</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Account email. If ommitted, the env variables DNSIMPLE_EMAIL and DNSIMPLE_API_TOKEN will be looked for. If those aren't found, a <code>.dnsimple</code> file will be looked for, see: <a href='https://github.com/mikemaccana/dnsimple-python#getting-started'>https://github.com/mikemaccana/dnsimple-python#getting-started</a></td>
+</tr>
+        <tr>
+<td>domain</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Domain to work with. Can be the domain name (e.g. "mydomain.com") or the numeric ID of the domain in DNSimple. If ommitted, a list of domains will be returned.If domain is present but the domain doesn't exist, it will be created.</td>
+</tr>
+        <tr>
+<td>priority</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Record priority</td>
+</tr>
+        <tr>
+<td>record</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Record to add, if blank a record for the domain will be created, supports the wildcard (*)</td>
+</tr>
+        <tr>
+<td>record_ids</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>List of records to ensure they either exist or don't exist</td>
+</tr>
+        <tr>
+<td>solo</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Whether the record should be the only one for that record type and record name. Only use with state=present on a record</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>whether the record should exist or not</td>
+</tr>
+        <tr>
+<td>ttl</td>
+<td>no</td>
+<td>3600 (one hour)</td>
+    <td><ul></ul></td>
+    <td>The TTL to give the new record</td>
+</tr>
+        <tr>
+<td>type</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>A</li><li>ALIAS</li><li>CNAME</li><li>MX</li><li>SPF</li><li>URL</li><li>TXT</li><li>NS</li><li>SRV</li><li>NAPTR</li><li>PTR</li><li>AAAA</li><li>SSHFP</li><li>HINFO</li><li>POOL</li></ul></td>
+    <td>The type of DNS record to create</td>
+</tr>
+        <tr>
+<td>value</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Record valueMust be specified when trying to ensure a record exists</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires dnsimple</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># authenicate using email and API token
+- local_action: dnsimple account_email=test@example.com account_api_token=dummyapitoken
+
+# fetch all domains
+- local_action dnsimple
+  register: domains
+
+# fetch my.com domain records
+- local_action: dnsimple domain=my.com state=present
+  register: records
+
+# delete a domain
+- local_action: dnsimple domain=my.com state=absent
+
+# create a test.my.com A record to point to 127.0.0.01
+- local_action: dnsimple domain=my.com record=test type=A value=127.0.0.1
+  register: record
+
+# and then delete it
+- local_action: dnsimple domain=my.com record_ids={{ record['id'] }}
+
+# create a my.com CNAME record to example.com
+- local_action: dnsimple domain=my.com record= type=CNAME value=example.com state=present
+
+# change it's ttl
+- local_action: dnsimple domain=my.com record= type=CNAME value=example.com ttl=600 state=present
+
+# and delete the record
+- local_action: dnsimpledomain=my.com record= type=CNAME value=example.com state=absent</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">dnsimple - Interface with dnsimple.com (a DNS hosting service).</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bigip_pool_member_module.html"
+                        title="previous chapter">bigip_pool_member - Manages F5 BIG-IP LTM pool members</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dnsmadeeasy_module.html"
+                        title="next chapter">dnsmadeeasy - Interface with dnsmadeeasy.com (a DNS hosting service).</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dnsmadeeasy_module.html" title="dnsmadeeasy - Interface with dnsmadeeasy.com (a DNS hosting service)."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bigip_pool_member_module.html" title="bigip_pool_member - Manages F5 BIG-IP LTM pool members"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_net_infrastructure_modules.html" >Net Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

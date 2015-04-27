@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head><title>
+Asymptote FAQ - Section 2
+</title>
+<link rev="made" href="mailto:">
+<link rel="Contents" href="index.html">
+<link rel="Start" href="index.html">
+<link rel="Next" href="section3.html"><link rel="Previous" href="section1.html"><link rel="Bookmark" title="Asymptote FAQ" href="index.html">
+</head><body text="#000000" bgcolor="#FFFFFF"><h1>
+Asymptote FAQ - Section 2 <br>
+Questions about installation and setup
+</h1>
+
+<ul>
+<li><a href="#osx" rel=subdocument>Q2.1. Is it possible to install Asymptote on Mac OS
+X?</a>
+<li><a href="#osxbadCPU" rel=subdocument>Q2.2. Why do I get the error <code>Bad CPU type in executable</code> on installing Asymptote from the MAC OS
+binary?</a>
+<li><a href="#brokenpdftex" rel=subdocument>Q2.3. What do I do if I get the error: <code>Error: pdfetex (file pdftex.cfg): cannot open config
+file...texinfo.tex appears to be broken</code>?</a>
+<li><a href="#brokentexinfo" rel=subdocument>Q2.4. What do I do if I get the error: <code>! Undefined control sequence. l.6 @copying</code>?</a>
+<li><a href="#latexintegration" rel=subdocument>Q2.5. Is it possible to integrate Asymptote into
+LaTeX?</a>
+<li><a href="#pdflatex" rel=subdocument>Q2.6. Is it possible to integrate Asymptote into latex or
+pdflatex?</a>
+<li><a href="#tkinterdepend" rel=subdocument>Q2.7. Do I need the <code>tkinter</code> package to install an Asymptote rpm binary?</a>
+<li><a href="#windir" rel=subdocument>Q2.8. What does the path <code>%USERPROFILE%\.asy\config.asy</code> mean?</a>
+<li><a href="#escapechar" rel=subdocument>Q2.9. Why do I get the error &quot;string not terminated&quot; when I try to
+set <code>settings.dir=&quot;C:\asymptote\&quot;;</code>?</a>
+<li><a href="#winglobal" rel=subdocument>Q2.10. How do I change environment variables in Microsoft Windows, for
+example, in order to change the default PostScript
+viewer?</a>
+<li><a href="#convert" rel=subdocument>Q2.11. Under Microsoft Windows XP, why do I get an error like &quot;Invalid
+Parameter - 432x432&quot;?</a>
+<li><a href="#miktex" rel=subdocument>Q2.12. Why does Asymptote freeze upon trying to draw a label with my MikTex
+installation under Microsoft Windows?</a>
+</ul><hr>
+
+<h2><A name="osx">
+Question 2.1.  Is it possible to install Asymptote on Mac OS
+X?
+</A></h2>
+
+It is easy to compile Asymptote directly from the source code at
+<A href="http://sourceforge.net/project/showfiles.php?group_id=120000">http://sourceforge.net/project/showfiles.php?group_id=120000</A> We recommend first upgrading to the latest GNU readline library,
+unless you don't care about interactive readline support (in which case configure
+will automatically detect and disable obsolete versions of the readline
+library).  Marius Schamschula also maintains a binary package for various MacOS X
+platforms  <A href="http://www.hmug.org/pub/MacOS_X/X/Applications/Publishing/asymptote">http://www.hmug.org/pub/MacOS_X/X/Applications/Publishing/asymptote</A>.  
+<h2><A name="osxbadCPU">
+Question 2.2.  Why do I get the error <code>Bad CPU type in executable</code> on installing Asymptote from the MAC OS
+binary?
+</A></h2>
+
+This means either that you have a binary distribution for another MAC
+architecture, or (according to Marius Schamschula) that you may have a
+missing library. The simplest solution is to compile Asymptote directly from
+the official source: <A href="http://sourceforge.net/project/showfiles.php?group_id=120000">http://sourceforge.net/project/showfiles.php?group_id=120000</A>.  
+<h2><A name="brokenpdftex">
+Question 2.3.  What do I do if I get the error:
+<code>Error: pdfetex (file pdftex.cfg): cannot open config
+file...texinfo.tex appears to be broken</code>?
+</A></h2>
+
+Simply put <A href="http://asymptote.sourceforge.net/asymptote.pdf">http://asymptote.sourceforge.net/asymptote.pdf</A> in the directory <code>doc</code> and repeat the command <code>make all</code>.  Or, if you don't want to build a local copy of the documentation,
+simply proceed with <code>make install-asy</code>.  
+<h2><A name="brokentexinfo">
+Question 2.4.  What do I do if I get the error:
+<code>! Undefined control sequence. l.6 @copying</code>?
+</A></h2>
+
+Either upgrade your <code>texinfo</code> package or follow one of the easy work arounds in
+<A href="#brokenpdftex">Q2.3 `What do I do if I get the error: <code>Error: pdfetex (file pdftex.cfg): cannot open config
+file...texinfo.tex appears to be broken</code>?'</A>.  
+<h2><A name="latexintegration">
+Question 2.5.  Is it possible to integrate Asymptote into
+LaTeX?
+</A></h2>
+
+Yes, see the example latexusage.tex. Dario Teixeira has also written a
+detailed guide on the topic. You can download it from
+<A href="http://dario.dse.nl/projects/asylatex/">http://dario.dse.nl/projects/asylatex/</A>.  
+<p>
+Philippe Ivaldi has contributed an Asymptote mode for Emacs users
+<A href="http://asymptote.sourceforge.net/doc/Editing-modes.html">http://asymptote.sourceforge.net/doc/Editing-modes.html</A>, which includes a <code>lasy-mode</code> that allows one to compile and view the output of one \begin{asy}...\end{asy} section at a time.  
+<h2><A name="pdflatex">
+Question 2.6.  Is it possible to integrate Asymptote into latex or
+pdflatex?
+</A></h2>
+
+Yes, as of version 1.14, Asymptote supports latex and pdflatex (both
+in EPS/PDF and inline mode), as illustrated by the example
+<code>latexusage.tex</code>: <pre>
+pdflatex latexusage
+asy latexusage
+pdflatex latexusage
+</pre>
+
+<h2><A name="tkinterdepend">
+Question 2.7.  Do I need the <code>tkinter</code> package to install an Asymptote rpm binary?
+</A></h2>
+
+No, you don't need <code>tkinter</code> unless you want to try out the GUI <code>xasy</code>. Try <pre>
+rpm -Uvh --nodeps asymptote-x.xx-1.i386.rpm
+</pre>
+where <code>x.xx</code> represents the version number.  
+<h2><A name="windir">
+Question 2.8.  What does the path <code>%USERPROFILE%\.asy\config.asy</code> mean?
+</A></h2>
+
+That is the way that Microsoft Windows refers to the user profile
+directory.  There's nothing really to understand here, just put your configuration
+commands in the file <code>config.asy</code> in a new folder <code>%USERPROFILE%\.asy</code>.  
+<h2><A name="escapechar">
+Question 2.9.  Why do I get the error &quot;string not
+terminated&quot; when I try to set <code>settings.dir=&quot;C:\asymptote\&quot;;</code>?
+</A></h2>
+
+The backslash is an escape character here, so
+<code>\&quot;</code> is interpreted as a verbatim quotation mark, leaving the string
+without a terminating quotation mark. Fortunately, this is the
+only escaped character in double-quoted strings. A final backslash
+isn't needed here anyway, but should you really want one somewhere, you can
+say: <code>settings.dir=&quot;C:\asymptote&quot;+'\\';</code>.  
+<h2><A name="winglobal">
+Question 2.10.  How do I change environment variables in Microsoft
+Windows, for example, in order to change the default PostScript
+viewer?
+</A></h2>
+
+While it is easier to set the corresponding Asymptote configuration
+variable in your <code>config.asy</code> file, here is the procedure for changing
+Microsoft Windows environment variables:
+
+<p>
+Click on the [Start] button  
+<p>
+* RIGHT-click on 'My Computer'  
+<p>
+* Choose 'Properties' from the popup menu 
+
+<p>
+* Click the 'Advanced' tab  
+<p>
+* Click the 'Environment Variables' button. 
+
+<h2><A name="convert">
+Question 2.11.  Under Microsoft Windows XP, why do I get an error like
+&quot;Invalid Parameter - 432x432&quot;?
+</A></h2>
+
+This means that ImageMagick wasn't properly installed and you are
+using the MSDOS convert program rather than the ImageMagick one. Or you may have
+installed ImageMagick but ran Asymptote from an existing MSDOS window.
+ In that case, simply open a new window and try again. If that doesn't
+work, check that  <pre>
+convert --version 
+</pre>
+returns something like <pre>
+Version: ImageMagick 6.2.8 06/27/06 Q16 http://www.imagemagick.org
+</pre>
+
+<h2><A name="miktex">
+Question 2.12.  Why does Asymptote freeze upon trying to draw a label
+with my MikTex installation under Microsoft
+Windows?
+</A></h2>
+
+Likely, this means that latex and dvips are not in your default path. 
+Try adding the appropriate paths in your
+<code>config.asy</code> file,  for example: <pre>
+import settings;
+latex=&quot;C:\Program Files\MiKTeX 2.7\miktex\bin\latex.exe&quot;;
+dvips=&quot;C:\Program Files\MiKTeX 2.7\miktex\bin\dvips.exe&quot;;
+</pre>
+<hr>
+Next: <a href="section3.html" rel=precedes>Questions about paths</a>.<br>
+Back: <a href="section1.html" rev=precedes>About Asymptote</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+<A href="http://asymptote.sourceforge.net">Asymptote</A> 
+- 26 August 2012
+</address><br>
+Extracted from Asymptote Frequently Asked Questions,
+Copyright &copy; 2012 .
+</body></html>

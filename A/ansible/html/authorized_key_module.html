@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>authorized_key - Adds or removes an SSH authorized key &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="System Modules" href="list_of_system_modules.html" />
+    <link rel="next" title="capabilities - Manage Linux capabilities" href="capabilities_module.html" />
+    <link rel="prev" title="at - Schedule the execution of a command or script file via the at command." href="at_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="capabilities_module.html" title="capabilities - Manage Linux capabilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="at_module.html" title="at - Schedule the execution of a command or script file via the at command."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" accesskey="U">System Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="authorized-key-adds-or-removes-an-ssh-authorized-key">
+<span id="authorized-key"></span><h1>authorized_key - Adds or removes an SSH authorized key<a class="headerlink" href="#authorized-key-adds-or-removes-an-ssh-authorized-key" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Brad Olson</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Adds or removes authorized keys for particular user accounts</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>key</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The SSH public key, as a string</td>
+</tr>
+        <tr>
+<td>key_options</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A string of ssh key options to be prepended to the key in the authorized_keys file (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>manage_dir</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Whether this module should manage the directory of the authorized key file.  If set, the module will create the directory, as well as set the owner and permissions of an existing directory. Be sure to set <code>manage_dir=no</code> if you are using an alternate directory for authorized_keys, as set with <code>path</code>, since you could lock yourself out of SSH access. See the example below. (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>path</td>
+<td>no</td>
+<td>(homedir)+/.ssh/authorized_keys</td>
+    <td><ul></ul></td>
+    <td>Alternate path to the authorized_keys file (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Whether the given key (with the given key_options) should or should not be in the file</td>
+</tr>
+        <tr>
+<td>user</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The username on the remote host whose authorized_keys file will be modified</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Example using key data from a local file on the management machine
+- authorized_key: user=charlie key="{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+
+# Using alternate directory locations:
+- authorized_key: user=charlie
+                  key="{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+                  path='/etc/ssh/authorized_keys/charlie'
+                  manage_dir=no
+
+# Using with_file
+- name: Set up authorized_keys for the deploy user
+  authorized_key: user=deploy
+                  key="{{ item }}"
+  with_file:
+    - public_keys/doe-jane
+    - public_keys/doe-john
+
+# Using key_options:
+- authorized_key: user=charlie
+                  key="{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+                  key_options='no-port-forwarding,host="10.0.1.1"'</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">authorized_key - Adds or removes an SSH authorized key</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="at_module.html"
+                        title="previous chapter">at - Schedule the execution of a command or script file via the at command.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="capabilities_module.html"
+                        title="next chapter">capabilities - Manage Linux capabilities</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="capabilities_module.html" title="capabilities - Manage Linux capabilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="at_module.html" title="at - Schedule the execution of a command or script file via the at command."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_system_modules.html" >System Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

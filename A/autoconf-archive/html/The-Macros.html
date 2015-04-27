@@ -1,0 +1,529 @@
+<html lang="en">
+<head>
+<title>The Macros - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="How-to-contribute.html#How-to-contribute" title="How to contribute">
+<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="The-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="How-to-contribute.html#How-to-contribute">How to contribute</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 The Macros</h2>
+
+<ul class="menu">
+<li><a accesskey="1" href="ax_005fabsolute_005fheader.html#ax_005fabsolute_005fheader">ax_absolute_header</a>
+<li><a accesskey="2" href="ax_005fac_005fappend_005fto_005ffile.html#ax_005fac_005fappend_005fto_005ffile">ax_ac_append_to_file</a>
+<li><a accesskey="3" href="ax_005fac_005fprint_005fto_005ffile.html#ax_005fac_005fprint_005fto_005ffile">ax_ac_print_to_file</a>
+<li><a accesskey="4" href="ax_005fadd_005fam_005fmacro.html#ax_005fadd_005fam_005fmacro">ax_add_am_macro</a>
+<li><a accesskey="5" href="ax_005fadd_005fam_005fmacro_005fstatic.html#ax_005fadd_005fam_005fmacro_005fstatic">ax_add_am_macro_static</a>
+<li><a accesskey="6" href="ax_005fadd_005fam_005ftrilinos_005fmakefile_005fexport.html#ax_005fadd_005fam_005ftrilinos_005fmakefile_005fexport">ax_add_am_trilinos_makefile_export</a>
+<li><a accesskey="7" href="ax_005fadd_005frecursive_005fam_005fmacro.html#ax_005fadd_005frecursive_005fam_005fmacro">ax_add_recursive_am_macro</a>
+<li><a accesskey="8" href="ax_005fadd_005frecursive_005fam_005fmacro_005fstatic.html#ax_005fadd_005frecursive_005fam_005fmacro_005fstatic">ax_add_recursive_am_macro_static</a>
+<li><a accesskey="9" href="ax_005fafs.html#ax_005fafs">ax_afs</a>
+<li><a href="ax_005fam_005fjobserver.html#ax_005fam_005fjobserver">ax_am_jobserver</a>
+<li><a href="ax_005fam_005fmacros.html#ax_005fam_005fmacros">ax_am_macros</a>
+<li><a href="ax_005fam_005fmacros_005fstatic.html#ax_005fam_005fmacros_005fstatic">ax_am_macros_static</a>
+<li><a href="ax_005fappend_005fcompile_005fflags.html#ax_005fappend_005fcompile_005fflags">ax_append_compile_flags</a>
+<li><a href="ax_005fappend_005fflag.html#ax_005fappend_005fflag">ax_append_flag</a>
+<li><a href="ax_005fappend_005flink_005fflags.html#ax_005fappend_005flink_005fflags">ax_append_link_flags</a>
+<li><a href="ax_005fappend_005fto_005ffile.html#ax_005fappend_005fto_005ffile">ax_append_to_file</a>
+<li><a href="ax_005farg_005fwith_005fpath_005fstyle.html#ax_005farg_005fwith_005fpath_005fstyle">ax_arg_with_path_style</a>
+<li><a href="ax_005fasm_005finline.html#ax_005fasm_005finline">ax_asm_inline</a>
+<li><a href="ax_005fauto_005finclude_005fheaders.html#ax_005fauto_005finclude_005fheaders">ax_auto_include_headers</a>
+<li><a href="ax_005fberkeley_005fdb.html#ax_005fberkeley_005fdb">ax_berkeley_db</a>
+<li><a href="ax_005fberkeley_005fdb_005fcxx.html#ax_005fberkeley_005fdb_005fcxx">ax_berkeley_db_cxx</a>
+<li><a href="ax_005fblas.html#ax_005fblas">ax_blas</a>
+<li><a href="ax_005fblas_005ff77_005ffunc.html#ax_005fblas_005ff77_005ffunc">ax_blas_f77_func</a>
+<li><a href="ax_005fboost_005fasio.html#ax_005fboost_005fasio">ax_boost_asio</a>
+<li><a href="ax_005fboost_005fbase.html#ax_005fboost_005fbase">ax_boost_base</a>
+<li><a href="ax_005fboost_005fdate_005ftime.html#ax_005fboost_005fdate_005ftime">ax_boost_date_time</a>
+<li><a href="ax_005fboost_005ffilesystem.html#ax_005fboost_005ffilesystem">ax_boost_filesystem</a>
+<li><a href="ax_005fboost_005fiostreams.html#ax_005fboost_005fiostreams">ax_boost_iostreams</a>
+<li><a href="ax_005fboost_005fprogram_005foptions.html#ax_005fboost_005fprogram_005foptions">ax_boost_program_options</a>
+<li><a href="ax_005fboost_005fpython.html#ax_005fboost_005fpython">ax_boost_python</a>
+<li><a href="ax_005fboost_005fregex.html#ax_005fboost_005fregex">ax_boost_regex</a>
+<li><a href="ax_005fboost_005fserialization.html#ax_005fboost_005fserialization">ax_boost_serialization</a>
+<li><a href="ax_005fboost_005fsignals.html#ax_005fboost_005fsignals">ax_boost_signals</a>
+<li><a href="ax_005fboost_005fsystem.html#ax_005fboost_005fsystem">ax_boost_system</a>
+<li><a href="ax_005fboost_005ftest_005fexec_005fmonitor.html#ax_005fboost_005ftest_005fexec_005fmonitor">ax_boost_test_exec_monitor</a>
+<li><a href="ax_005fboost_005fthread.html#ax_005fboost_005fthread">ax_boost_thread</a>
+<li><a href="ax_005fboost_005funit_005ftest_005fframework.html#ax_005fboost_005funit_005ftest_005fframework">ax_boost_unit_test_framework</a>
+<li><a href="ax_005fboost_005fwave.html#ax_005fboost_005fwave">ax_boost_wave</a>
+<li><a href="ax_005fboost_005fwserialization.html#ax_005fboost_005fwserialization">ax_boost_wserialization</a>
+<li><a href="ax_005fc99_005finline.html#ax_005fc99_005finline">ax_c99_inline</a>
+<li><a href="ax_005fc_005f_005f_005fattribute_005f_005f.html#ax_005fc_005f_005f_005fattribute_005f_005f">ax_c___attribute__</a>
+<li><a href="ax_005fc_005farithmetic_005frshift.html#ax_005fc_005farithmetic_005frshift">ax_c_arithmetic_rshift</a>
+<li><a href="ax_005fc_005fbigendian_005fcross.html#ax_005fc_005fbigendian_005fcross">ax_c_bigendian_cross</a>
+<li><a href="ax_005fc_005fcompile_005fvalue.html#ax_005fc_005fcompile_005fvalue">ax_c_compile_value</a>
+<li><a href="ax_005fc_005fdeclare_005fblock.html#ax_005fc_005fdeclare_005fblock">ax_c_declare_block</a>
+<li><a href="ax_005fc_005ffloat_005fwords_005fbigendian.html#ax_005fc_005ffloat_005fwords_005fbigendian">ax_c_float_words_bigendian</a>
+<li><a href="ax_005fc_005flong_005flong.html#ax_005fc_005flong_005flong">ax_c_long_long</a>
+<li><a href="ax_005fc_005freferenceable_005fpassed_005fva_005flist.html#ax_005fc_005freferenceable_005fpassed_005fva_005flist">ax_c_referenceable_passed_va_list</a>
+<li><a href="ax_005fc_005fvar_005ffunc.html#ax_005fc_005fvar_005ffunc">ax_c_var_func</a>
+<li><a href="ax_005fcache_005fsize.html#ax_005fcache_005fsize">ax_cache_size</a>
+<li><a href="ax_005fcaolan_005fcheck_005fpackage.html#ax_005fcaolan_005fcheck_005fpackage">ax_caolan_check_package</a>
+<li><a href="ax_005fcaolan_005fsearch_005fpackage.html#ax_005fcaolan_005fsearch_005fpackage">ax_caolan_search_package</a>
+<li><a href="ax_005fcc_005ffor_005fbuild.html#ax_005fcc_005ffor_005fbuild">ax_cc_for_build</a>
+<li><a href="ax_005fcc_005fmaxopt.html#ax_005fcc_005fmaxopt">ax_cc_maxopt</a>
+<li><a href="ax_005fcf_005febcdic.html#ax_005fcf_005febcdic">ax_cf_ebcdic</a>
+<li><a href="ax_005fcflags_005faix_005foption.html#ax_005fcflags_005faix_005foption">ax_cflags_aix_option</a>
+<li><a href="ax_005fcflags_005fforce_005fc89.html#ax_005fcflags_005fforce_005fc89">ax_cflags_force_c89</a>
+<li><a href="ax_005fcflags_005fhpux_005foption.html#ax_005fcflags_005fhpux_005foption">ax_cflags_hpux_option</a>
+<li><a href="ax_005fcflags_005firix_005foption.html#ax_005fcflags_005firix_005foption">ax_cflags_irix_option</a>
+<li><a href="ax_005fcflags_005fno_005fwritable_005fstrings.html#ax_005fcflags_005fno_005fwritable_005fstrings">ax_cflags_no_writable_strings</a>
+<li><a href="ax_005fcflags_005fstrict_005fprototypes.html#ax_005fcflags_005fstrict_005fprototypes">ax_cflags_strict_prototypes</a>
+<li><a href="ax_005fcflags_005fsun_005foption.html#ax_005fcflags_005fsun_005foption">ax_cflags_sun_option</a>
+<li><a href="ax_005fcflags_005fwarn_005fall.html#ax_005fcflags_005fwarn_005fall">ax_cflags_warn_all</a>
+<li><a href="ax_005fcheck_005faligned_005faccess_005frequired.html#ax_005fcheck_005faligned_005faccess_005frequired">ax_check_aligned_access_required</a>
+<li><a href="ax_005fcheck_005fallocated_005fctime.html#ax_005fcheck_005fallocated_005fctime">ax_check_allocated_ctime</a>
+<li><a href="ax_005fcheck_005fawk_005f_005fv.html#ax_005fcheck_005fawk_005f_005fv">ax_check_awk__v</a>
+<li><a href="ax_005fcheck_005fawk_005f_005fx_005fescapes.html#ax_005fcheck_005fawk_005f_005fx_005fescapes">ax_check_awk__x_escapes</a>
+<li><a href="ax_005fcheck_005fawk_005fand.html#ax_005fcheck_005fawk_005fand">ax_check_awk_and</a>
+<li><a href="ax_005fcheck_005fawk_005fargind.html#ax_005fcheck_005fawk_005fargind">ax_check_awk_argind</a>
+<li><a href="ax_005fcheck_005fawk_005farray_005fdelete.html#ax_005fcheck_005fawk_005farray_005fdelete">ax_check_awk_array_delete</a>
+<li><a href="ax_005fcheck_005fawk_005farray_005fdelete_005felem.html#ax_005fcheck_005fawk_005farray_005fdelete_005felem">ax_check_awk_array_delete_elem</a>
+<li><a href="ax_005fcheck_005fawk_005farray_005fin.html#ax_005fcheck_005fawk_005farray_005fin">ax_check_awk_array_in</a>
+<li><a href="ax_005fcheck_005fawk_005fasort.html#ax_005fcheck_005fawk_005fasort">ax_check_awk_asort</a>
+<li><a href="ax_005fcheck_005fawk_005fasorti.html#ax_005fcheck_005fawk_005fasorti">ax_check_awk_asorti</a>
+<li><a href="ax_005fcheck_005fawk_005fassociative_005farray.html#ax_005fcheck_005fawk_005fassociative_005farray">ax_check_awk_associative_array</a>
+<li><a href="ax_005fcheck_005fawk_005fatan2.html#ax_005fcheck_005fawk_005fatan2">ax_check_awk_atan2</a>
+<li><a href="ax_005fcheck_005fawk_005fcompl.html#ax_005fcheck_005fawk_005fcompl">ax_check_awk_compl</a>
+<li><a href="ax_005fcheck_005fawk_005fconditional_005fexpression.html#ax_005fcheck_005fawk_005fconditional_005fexpression">ax_check_awk_conditional_expression</a>
+<li><a href="ax_005fcheck_005fawk_005fcos.html#ax_005fcheck_005fawk_005fcos">ax_check_awk_cos</a>
+<li><a href="ax_005fcheck_005fawk_005fenviron.html#ax_005fcheck_005fawk_005fenviron">ax_check_awk_environ</a>
+<li><a href="ax_005fcheck_005fawk_005ferrno.html#ax_005fcheck_005fawk_005ferrno">ax_check_awk_errno</a>
+<li><a href="ax_005fcheck_005fawk_005fexit.html#ax_005fcheck_005fawk_005fexit">ax_check_awk_exit</a>
+<li><a href="ax_005fcheck_005fawk_005fexp.html#ax_005fcheck_005fawk_005fexp">ax_check_awk_exp</a>
+<li><a href="ax_005fcheck_005fawk_005fgensub.html#ax_005fcheck_005fawk_005fgensub">ax_check_awk_gensub</a>
+<li><a href="ax_005fcheck_005fawk_005fgetline.html#ax_005fcheck_005fawk_005fgetline">ax_check_awk_getline</a>
+<li><a href="ax_005fcheck_005fawk_005fgsub.html#ax_005fcheck_005fawk_005fgsub">ax_check_awk_gsub</a>
+<li><a href="ax_005fcheck_005fawk_005fignorecase.html#ax_005fcheck_005fawk_005fignorecase">ax_check_awk_ignorecase</a>
+<li><a href="ax_005fcheck_005fawk_005findex.html#ax_005fcheck_005fawk_005findex">ax_check_awk_index</a>
+<li><a href="ax_005fcheck_005fawk_005fint.html#ax_005fcheck_005fawk_005fint">ax_check_awk_int</a>
+<li><a href="ax_005fcheck_005fawk_005flength.html#ax_005fcheck_005fawk_005flength">ax_check_awk_length</a>
+<li><a href="ax_005fcheck_005fawk_005flog.html#ax_005fcheck_005fawk_005flog">ax_check_awk_log</a>
+<li><a href="ax_005fcheck_005fawk_005flshift.html#ax_005fcheck_005fawk_005flshift">ax_check_awk_lshift</a>
+<li><a href="ax_005fcheck_005fawk_005fmatch_005f2parms.html#ax_005fcheck_005fawk_005fmatch_005f2parms">ax_check_awk_match_2parms</a>
+<li><a href="ax_005fcheck_005fawk_005fmatch_005f3parms.html#ax_005fcheck_005fawk_005fmatch_005f3parms">ax_check_awk_match_3parms</a>
+<li><a href="ax_005fcheck_005fawk_005foperator_005fmultiply_005fmultiply.html#ax_005fcheck_005fawk_005foperator_005fmultiply_005fmultiply">ax_check_awk_operator_multiply_multiply</a>
+<li><a href="ax_005fcheck_005fawk_005foperator_005fsquare.html#ax_005fcheck_005fawk_005foperator_005fsquare">ax_check_awk_operator_square</a>
+<li><a href="ax_005fcheck_005fawk_005for.html#ax_005fcheck_005fawk_005for">ax_check_awk_or</a>
+<li><a href="ax_005fcheck_005fawk_005fprintf.html#ax_005fcheck_005fawk_005fprintf">ax_check_awk_printf</a>
+<li><a href="ax_005fcheck_005fawk_005frand.html#ax_005fcheck_005fawk_005frand">ax_check_awk_rand</a>
+<li><a href="ax_005fcheck_005fawk_005frshift.html#ax_005fcheck_005fawk_005frshift">ax_check_awk_rshift</a>
+<li><a href="ax_005fcheck_005fawk_005fsin.html#ax_005fcheck_005fawk_005fsin">ax_check_awk_sin</a>
+<li><a href="ax_005fcheck_005fawk_005fsplit.html#ax_005fcheck_005fawk_005fsplit">ax_check_awk_split</a>
+<li><a href="ax_005fcheck_005fawk_005fsprintf.html#ax_005fcheck_005fawk_005fsprintf">ax_check_awk_sprintf</a>
+<li><a href="ax_005fcheck_005fawk_005fsqrt.html#ax_005fcheck_005fawk_005fsqrt">ax_check_awk_sqrt</a>
+<li><a href="ax_005fcheck_005fawk_005fsrand.html#ax_005fcheck_005fawk_005fsrand">ax_check_awk_srand</a>
+<li><a href="ax_005fcheck_005fawk_005fstrftime.html#ax_005fcheck_005fawk_005fstrftime">ax_check_awk_strftime</a>
+<li><a href="ax_005fcheck_005fawk_005fstrtonum.html#ax_005fcheck_005fawk_005fstrtonum">ax_check_awk_strtonum</a>
+<li><a href="ax_005fcheck_005fawk_005fsub.html#ax_005fcheck_005fawk_005fsub">ax_check_awk_sub</a>
+<li><a href="ax_005fcheck_005fawk_005fsubstr.html#ax_005fcheck_005fawk_005fsubstr">ax_check_awk_substr</a>
+<li><a href="ax_005fcheck_005fawk_005fsystem.html#ax_005fcheck_005fawk_005fsystem">ax_check_awk_system</a>
+<li><a href="ax_005fcheck_005fawk_005fsystime.html#ax_005fcheck_005fawk_005fsystime">ax_check_awk_systime</a>
+<li><a href="ax_005fcheck_005fawk_005ftolower.html#ax_005fcheck_005fawk_005ftolower">ax_check_awk_tolower</a>
+<li><a href="ax_005fcheck_005fawk_005ftoupper.html#ax_005fcheck_005fawk_005ftoupper">ax_check_awk_toupper</a>
+<li><a href="ax_005fcheck_005fawk_005fuser_005fdefined_005ffunctions.html#ax_005fcheck_005fawk_005fuser_005fdefined_005ffunctions">ax_check_awk_user_defined_functions</a>
+<li><a href="ax_005fcheck_005fawk_005fvar_005fregexp.html#ax_005fcheck_005fawk_005fvar_005fregexp">ax_check_awk_var_regexp</a>
+<li><a href="ax_005fcheck_005fawk_005fvariable_005fvalue_005fpairs.html#ax_005fcheck_005fawk_005fvariable_005fvalue_005fpairs">ax_check_awk_variable_value_pairs</a>
+<li><a href="ax_005fcheck_005fawk_005fxor.html#ax_005fcheck_005fawk_005fxor">ax_check_awk_xor</a>
+<li><a href="ax_005fcheck_005fclass.html#ax_005fcheck_005fclass">ax_check_class</a>
+<li><a href="ax_005fcheck_005fclasspath.html#ax_005fcheck_005fclasspath">ax_check_classpath</a>
+<li><a href="ax_005fcheck_005fcompile_005fflag.html#ax_005fcheck_005fcompile_005fflag">ax_check_compile_flag</a>
+<li><a href="ax_005fcheck_005fdefine.html#ax_005fcheck_005fdefine">ax_check_define</a>
+<li><a href="ax_005fcheck_005fdocbook_005fdtd.html#ax_005fcheck_005fdocbook_005fdtd">ax_check_docbook_dtd</a>
+<li><a href="ax_005fcheck_005fdocbook_005fxslt.html#ax_005fcheck_005fdocbook_005fxslt">ax_check_docbook_xslt</a>
+<li><a href="ax_005fcheck_005fdocbook_005fxslt_005fmin.html#ax_005fcheck_005fdocbook_005fxslt_005fmin">ax_check_docbook_xslt_min</a>
+<li><a href="ax_005fcheck_005fdos_005ffilesys.html#ax_005fcheck_005fdos_005ffilesys">ax_check_dos_filesys</a>
+<li><a href="ax_005fcheck_005ffunc_005fin.html#ax_005fcheck_005ffunc_005fin">ax_check_func_in</a>
+<li><a href="ax_005fcheck_005fgd.html#ax_005fcheck_005fgd">ax_check_gd</a>
+<li><a href="ax_005fcheck_005fgnu_005fmake.html#ax_005fcheck_005fgnu_005fmake">ax_check_gnu_make</a>
+<li><a href="ax_005fcheck_005ficu.html#ax_005fcheck_005ficu">ax_check_icu</a>
+<li><a href="ax_005fcheck_005fjava_005fhome.html#ax_005fcheck_005fjava_005fhome">ax_check_java_home</a>
+<li><a href="ax_005fcheck_005fjava_005fplugin.html#ax_005fcheck_005fjava_005fplugin">ax_check_java_plugin</a>
+<li><a href="ax_005fcheck_005fjunit.html#ax_005fcheck_005fjunit">ax_check_junit</a>
+<li><a href="ax_005fcheck_005flibrary.html#ax_005fcheck_005flibrary">ax_check_library</a>
+<li><a href="ax_005fcheck_005flink_005fflag.html#ax_005fcheck_005flink_005fflag">ax_check_link_flag</a>
+<li><a href="ax_005fcheck_005fmysql.html#ax_005fcheck_005fmysql">ax_check_mysql</a>
+<li><a href="ax_005fcheck_005fmysql_005fdb.html#ax_005fcheck_005fmysql_005fdb">ax_check_mysql_db</a>
+<li><a href="ax_005fcheck_005fmysqlr.html#ax_005fcheck_005fmysqlr">ax_check_mysqlr</a>
+<li><a href="ax_005fcheck_005foff64_005ft.html#ax_005fcheck_005foff64_005ft">ax_check_off64_t</a>
+<li><a href="ax_005fcheck_005fopenssl.html#ax_005fcheck_005fopenssl">ax_check_openssl</a>
+<li><a href="ax_005fcheck_005fpage_005faligned_005fmalloc.html#ax_005fcheck_005fpage_005faligned_005fmalloc">ax_check_page_aligned_malloc</a>
+<li><a href="ax_005fcheck_005fpathfind.html#ax_005fcheck_005fpathfind">ax_check_pathfind</a>
+<li><a href="ax_005fcheck_005fpathname_005fstyle.html#ax_005fcheck_005fpathname_005fstyle">ax_check_pathname_style</a>
+<li><a href="ax_005fcheck_005fpgsql_005fdb.html#ax_005fcheck_005fpgsql_005fdb">ax_check_pgsql_db</a>
+<li><a href="ax_005fcheck_005fposix_005fregcomp.html#ax_005fcheck_005fposix_005fregcomp">ax_check_posix_regcomp</a>
+<li><a href="ax_005fcheck_005fposix_005fsysinfo.html#ax_005fcheck_005fposix_005fsysinfo">ax_check_posix_sysinfo</a>
+<li><a href="ax_005fcheck_005fpostgres_005fdb.html#ax_005fcheck_005fpostgres_005fdb">ax_check_postgres_db</a>
+<li><a href="ax_005fcheck_005fpreproc_005fflag.html#ax_005fcheck_005fpreproc_005fflag">ax_check_preproc_flag</a>
+<li><a href="ax_005fcheck_005frqrd_005fclass.html#ax_005fcheck_005frqrd_005fclass">ax_check_rqrd_class</a>
+<li><a href="ax_005fcheck_005fsign.html#ax_005fcheck_005fsign">ax_check_sign</a>
+<li><a href="ax_005fcheck_005fstrcspn.html#ax_005fcheck_005fstrcspn">ax_check_strcspn</a>
+<li><a href="ax_005fcheck_005fstrftime.html#ax_005fcheck_005fstrftime">ax_check_strftime</a>
+<li><a href="ax_005fcheck_005fstruct_005ffor.html#ax_005fcheck_005fstruct_005ffor">ax_check_struct_for</a>
+<li><a href="ax_005fcheck_005fsymbol.html#ax_005fcheck_005fsymbol">ax_check_symbol</a>
+<li><a href="ax_005fcheck_005fsys_005fsiglist.html#ax_005fcheck_005fsys_005fsiglist">ax_check_sys_siglist</a>
+<li><a href="ax_005fcheck_005ftypedef.html#ax_005fcheck_005ftypedef">ax_check_typedef</a>
+<li><a href="ax_005fcheck_005funame_005fsyscall.html#ax_005fcheck_005funame_005fsyscall">ax_check_uname_syscall</a>
+<li><a href="ax_005fcheck_005fuser.html#ax_005fcheck_005fuser">ax_check_user</a>
+<li><a href="ax_005fcheck_005fzlib.html#ax_005fcheck_005fzlib">ax_check_zlib</a>
+<li><a href="ax_005fcompare_005fversion.html#ax_005fcompare_005fversion">ax_compare_version</a>
+<li><a href="ax_005fcompile_005fcheck_005fsizeof.html#ax_005fcompile_005fcheck_005fsizeof">ax_compile_check_sizeof</a>
+<li><a href="ax_005fcompiler_005fvendor.html#ax_005fcompiler_005fvendor">ax_compiler_vendor</a>
+<li><a href="ax_005fcompute_005frelative_005fpaths.html#ax_005fcompute_005frelative_005fpaths">ax_compute_relative_paths</a>
+<li><a href="ax_005fcompute_005fstandard_005frelative_005fpaths.html#ax_005fcompute_005fstandard_005frelative_005fpaths">ax_compute_standard_relative_paths</a>
+<li><a href="ax_005fcond_005fwith_005flevel.html#ax_005fcond_005fwith_005flevel">ax_cond_with_level</a>
+<li><a href="ax_005fconfig_005ffeature.html#ax_005fconfig_005ffeature">ax_config_feature</a>
+<li><a href="ax_005fconfigure_005fargs.html#ax_005fconfigure_005fargs">ax_configure_args</a>
+<li><a href="ax_005fcount_005fcpus.html#ax_005fcount_005fcpus">ax_count_cpus</a>
+<li><a href="ax_005fcpu_005ffreq.html#ax_005fcpu_005ffreq">ax_cpu_freq</a>
+<li><a href="ax_005fcpu_005fvendor.html#ax_005fcpu_005fvendor">ax_cpu_vendor</a>
+<li><a href="ax_005fcreate_005fgeneric_005fconfig.html#ax_005fcreate_005fgeneric_005fconfig">ax_create_generic_config</a>
+<li><a href="ax_005fcreate_005fpkgconfig_005finfo.html#ax_005fcreate_005fpkgconfig_005finfo">ax_create_pkgconfig_info</a>
+<li><a href="ax_005fcreate_005fstdint_005fh.html#ax_005fcreate_005fstdint_005fh">ax_create_stdint_h</a>
+<li><a href="ax_005fcreate_005ftarget_005fh.html#ax_005fcreate_005ftarget_005fh">ax_create_target_h</a>
+<li><a href="ax_005fcvs.html#ax_005fcvs">ax_cvs</a>
+<li><a href="ax_005fcxx_005fbool.html#ax_005fcxx_005fbool">ax_cxx_bool</a>
+<li><a href="ax_005fcxx_005fcompile_005fstdcxx_005f0x.html#ax_005fcxx_005fcompile_005fstdcxx_005f0x">ax_cxx_compile_stdcxx_0x</a>
+<li><a href="ax_005fcxx_005fcompiler_005fvendor.html#ax_005fcxx_005fcompiler_005fvendor">ax_cxx_compiler_vendor</a>
+<li><a href="ax_005fcxx_005fcomplex_005fmath_005fin_005fnamespace_005fstd.html#ax_005fcxx_005fcomplex_005fmath_005fin_005fnamespace_005fstd">ax_cxx_complex_math_in_namespace_std</a>
+<li><a href="ax_005fcxx_005fconst_005fcast.html#ax_005fcxx_005fconst_005fcast">ax_cxx_const_cast</a>
+<li><a href="ax_005fcxx_005fcppflags_005fstd_005flang.html#ax_005fcxx_005fcppflags_005fstd_005flang">ax_cxx_cppflags_std_lang</a>
+<li><a href="ax_005fcxx_005fcxxflags_005fstd_005flang.html#ax_005fcxx_005fcxxflags_005fstd_005flang">ax_cxx_cxxflags_std_lang</a>
+<li><a href="ax_005fcxx_005fdefault_005ftemplate_005fparameters.html#ax_005fcxx_005fdefault_005ftemplate_005fparameters">ax_cxx_default_template_parameters</a>
+<li><a href="ax_005fcxx_005fdtor_005fafter_005fatexit.html#ax_005fcxx_005fdtor_005fafter_005fatexit">ax_cxx_dtor_after_atexit</a>
+<li><a href="ax_005fcxx_005fdynamic_005fcast.html#ax_005fcxx_005fdynamic_005fcast">ax_cxx_dynamic_cast</a>
+<li><a href="ax_005fcxx_005fenum_005fcomputations.html#ax_005fcxx_005fenum_005fcomputations">ax_cxx_enum_computations</a>
+<li><a href="ax_005fcxx_005fenum_005fcomputations_005fwith_005fcast.html#ax_005fcxx_005fenum_005fcomputations_005fwith_005fcast">ax_cxx_enum_computations_with_cast</a>
+<li><a href="ax_005fcxx_005fexceptions.html#ax_005fcxx_005fexceptions">ax_cxx_exceptions</a>
+<li><a href="ax_005fcxx_005fexplicit.html#ax_005fcxx_005fexplicit">ax_cxx_explicit</a>
+<li><a href="ax_005fcxx_005fexplicit_005finstantiations.html#ax_005fcxx_005fexplicit_005finstantiations">ax_cxx_explicit_instantiations</a>
+<li><a href="ax_005fcxx_005fexplicit_005ftemplate_005ffunction_005fqualification.html#ax_005fcxx_005fexplicit_005ftemplate_005ffunction_005fqualification">ax_cxx_explicit_template_function_qualification</a>
+<li><a href="ax_005fcxx_005fextern_005ftemplate.html#ax_005fcxx_005fextern_005ftemplate">ax_cxx_extern_template</a>
+<li><a href="ax_005fcxx_005ffull_005fspecialization_005fsyntax.html#ax_005fcxx_005ffull_005fspecialization_005fsyntax">ax_cxx_full_specialization_syntax</a>
+<li><a href="ax_005fcxx_005ffunction_005fnontype_005fparameters.html#ax_005fcxx_005ffunction_005fnontype_005fparameters">ax_cxx_function_nontype_parameters</a>
+<li><a href="ax_005fcxx_005ffunction_005ftry_005fblocks.html#ax_005fcxx_005ffunction_005ftry_005fblocks">ax_cxx_function_try_blocks</a>
+<li><a href="ax_005fcxx_005fgcc_005fabi_005fdemangle.html#ax_005fcxx_005fgcc_005fabi_005fdemangle">ax_cxx_gcc_abi_demangle</a>
+<li><a href="ax_005fcxx_005fgnucxx_005fhashmap.html#ax_005fcxx_005fgnucxx_005fhashmap">ax_cxx_gnucxx_hashmap</a>
+<li><a href="ax_005fcxx_005fhave_005fcomplex.html#ax_005fcxx_005fhave_005fcomplex">ax_cxx_have_complex</a>
+<li><a href="ax_005fcxx_005fhave_005fcomplex_005fmath1.html#ax_005fcxx_005fhave_005fcomplex_005fmath1">ax_cxx_have_complex_math1</a>
+<li><a href="ax_005fcxx_005fhave_005fcomplex_005fmath2.html#ax_005fcxx_005fhave_005fcomplex_005fmath2">ax_cxx_have_complex_math2</a>
+<li><a href="ax_005fcxx_005fhave_005fempty_005fiostream.html#ax_005fcxx_005fhave_005fempty_005fiostream">ax_cxx_have_empty_iostream</a>
+<li><a href="ax_005fcxx_005fhave_005fext_005fhash_005fmap.html#ax_005fcxx_005fhave_005fext_005fhash_005fmap">ax_cxx_have_ext_hash_map</a>
+<li><a href="ax_005fcxx_005fhave_005fext_005fhash_005fset.html#ax_005fcxx_005fhave_005fext_005fhash_005fset">ax_cxx_have_ext_hash_set</a>
+<li><a href="ax_005fcxx_005fhave_005fext_005fslist.html#ax_005fcxx_005fhave_005fext_005fslist">ax_cxx_have_ext_slist</a>
+<li><a href="ax_005fcxx_005fhave_005ffreeze_005fsstream.html#ax_005fcxx_005fhave_005ffreeze_005fsstream">ax_cxx_have_freeze_sstream</a>
+<li><a href="ax_005fcxx_005fhave_005fieee_005fmath.html#ax_005fcxx_005fhave_005fieee_005fmath">ax_cxx_have_ieee_math</a>
+<li><a href="ax_005fcxx_005fhave_005fkoenig_005flookup.html#ax_005fcxx_005fhave_005fkoenig_005flookup">ax_cxx_have_koenig_lookup</a>
+<li><a href="ax_005fcxx_005fhave_005flong_005flong_005ffor_005fiostream.html#ax_005fcxx_005fhave_005flong_005flong_005ffor_005fiostream">ax_cxx_have_long_long_for_iostream</a>
+<li><a href="ax_005fcxx_005fhave_005fnumeric_005flimits.html#ax_005fcxx_005fhave_005fnumeric_005flimits">ax_cxx_have_numeric_limits</a>
+<li><a href="ax_005fcxx_005fhave_005fsstream.html#ax_005fcxx_005fhave_005fsstream">ax_cxx_have_sstream</a>
+<li><a href="ax_005fcxx_005fhave_005fstd.html#ax_005fcxx_005fhave_005fstd">ax_cxx_have_std</a>
+<li><a href="ax_005fcxx_005fhave_005fstl.html#ax_005fcxx_005fhave_005fstl">ax_cxx_have_stl</a>
+<li><a href="ax_005fcxx_005fhave_005fstring_005fpush_005fback.html#ax_005fcxx_005fhave_005fstring_005fpush_005fback">ax_cxx_have_string_push_back</a>
+<li><a href="ax_005fcxx_005fhave_005fsystem_005fv_005fmath.html#ax_005fcxx_005fhave_005fsystem_005fv_005fmath">ax_cxx_have_system_v_math</a>
+<li><a href="ax_005fcxx_005fhave_005fvalarray.html#ax_005fcxx_005fhave_005fvalarray">ax_cxx_have_valarray</a>
+<li><a href="ax_005fcxx_005fhave_005fvector_005fat.html#ax_005fcxx_005fhave_005fvector_005fat">ax_cxx_have_vector_at</a>
+<li><a href="ax_005fcxx_005fheader_005fpre_005fstdcxx.html#ax_005fcxx_005fheader_005fpre_005fstdcxx">ax_cxx_header_pre_stdcxx</a>
+<li><a href="ax_005fcxx_005fheader_005fstdcxx_005f0x.html#ax_005fcxx_005fheader_005fstdcxx_005f0x">ax_cxx_header_stdcxx_0x</a>
+<li><a href="ax_005fcxx_005fheader_005fstdcxx_005f98.html#ax_005fcxx_005fheader_005fstdcxx_005f98">ax_cxx_header_stdcxx_98</a>
+<li><a href="ax_005fcxx_005fheader_005fstdcxx_005ftr1.html#ax_005fcxx_005fheader_005fstdcxx_005ftr1">ax_cxx_header_stdcxx_tr1</a>
+<li><a href="ax_005fcxx_005fheader_005ftr1_005funordered_005fmap.html#ax_005fcxx_005fheader_005ftr1_005funordered_005fmap">ax_cxx_header_tr1_unordered_map</a>
+<li><a href="ax_005fcxx_005fheader_005ftr1_005funordered_005fset.html#ax_005fcxx_005fheader_005ftr1_005funordered_005fset">ax_cxx_header_tr1_unordered_set</a>
+<li><a href="ax_005fcxx_005fheader_005funordered_005fmap.html#ax_005fcxx_005fheader_005funordered_005fmap">ax_cxx_header_unordered_map</a>
+<li><a href="ax_005fcxx_005fheader_005funordered_005fset.html#ax_005fcxx_005fheader_005funordered_005fset">ax_cxx_header_unordered_set</a>
+<li><a href="ax_005fcxx_005fldflags_005fstd_005flang.html#ax_005fcxx_005fldflags_005fstd_005flang">ax_cxx_ldflags_std_lang</a>
+<li><a href="ax_005fcxx_005fmember_005fconstants.html#ax_005fcxx_005fmember_005fconstants">ax_cxx_member_constants</a>
+<li><a href="ax_005fcxx_005fmember_005ftemplates.html#ax_005fcxx_005fmember_005ftemplates">ax_cxx_member_templates</a>
+<li><a href="ax_005fcxx_005fmember_005ftemplates_005foutside_005fclass.html#ax_005fcxx_005fmember_005ftemplates_005foutside_005fclass">ax_cxx_member_templates_outside_class</a>
+<li><a href="ax_005fcxx_005fmutable.html#ax_005fcxx_005fmutable">ax_cxx_mutable</a>
+<li><a href="ax_005fcxx_005fnamespace_005fstd.html#ax_005fcxx_005fnamespace_005fstd">ax_cxx_namespace_std</a>
+<li><a href="ax_005fcxx_005fnamespaces.html#ax_005fcxx_005fnamespaces">ax_cxx_namespaces</a>
+<li><a href="ax_005fcxx_005fnew_005ffor_005fscoping.html#ax_005fcxx_005fnew_005ffor_005fscoping">ax_cxx_new_for_scoping</a>
+<li><a href="ax_005fcxx_005fold_005ffor_005fscoping.html#ax_005fcxx_005fold_005ffor_005fscoping">ax_cxx_old_for_scoping</a>
+<li><a href="ax_005fcxx_005fpartial_005fordering.html#ax_005fcxx_005fpartial_005fordering">ax_cxx_partial_ordering</a>
+<li><a href="ax_005fcxx_005fpartial_005fspecialization.html#ax_005fcxx_005fpartial_005fspecialization">ax_cxx_partial_specialization</a>
+<li><a href="ax_005fcxx_005freinterpret_005fcast.html#ax_005fcxx_005freinterpret_005fcast">ax_cxx_reinterpret_cast</a>
+<li><a href="ax_005fcxx_005frestrict_005fthis.html#ax_005fcxx_005frestrict_005fthis">ax_cxx_restrict_this</a>
+<li><a href="ax_005fcxx_005frtti.html#ax_005fcxx_005frtti">ax_cxx_rtti</a>
+<li><a href="ax_005fcxx_005fstatic_005fcast.html#ax_005fcxx_005fstatic_005fcast">ax_cxx_static_cast</a>
+<li><a href="ax_005fcxx_005fstlport_005fhashmap.html#ax_005fcxx_005fstlport_005fhashmap">ax_cxx_stlport_hashmap</a>
+<li><a href="ax_005fcxx_005ftemplate_005fkeyword_005fqualifier.html#ax_005fcxx_005ftemplate_005fkeyword_005fqualifier">ax_cxx_template_keyword_qualifier</a>
+<li><a href="ax_005fcxx_005ftemplate_005fqualified_005fbase_005fclass.html#ax_005fcxx_005ftemplate_005fqualified_005fbase_005fclass">ax_cxx_template_qualified_base_class</a>
+<li><a href="ax_005fcxx_005ftemplate_005fqualified_005freturn_005ftype.html#ax_005fcxx_005ftemplate_005fqualified_005freturn_005ftype">ax_cxx_template_qualified_return_type</a>
+<li><a href="ax_005fcxx_005ftemplate_005fscoped_005fargument_005fmatching.html#ax_005fcxx_005ftemplate_005fscoped_005fargument_005fmatching">ax_cxx_template_scoped_argument_matching</a>
+<li><a href="ax_005fcxx_005ftemplates.html#ax_005fcxx_005ftemplates">ax_cxx_templates</a>
+<li><a href="ax_005fcxx_005ftemplates_005fas_005ftemplate_005farguments.html#ax_005fcxx_005ftemplates_005fas_005ftemplate_005farguments">ax_cxx_templates_as_template_arguments</a>
+<li><a href="ax_005fcxx_005ftypename.html#ax_005fcxx_005ftypename">ax_cxx_typename</a>
+<li><a href="ax_005fcxx_005fuse_005fnumtrait.html#ax_005fcxx_005fuse_005fnumtrait">ax_cxx_use_numtrait</a>
+<li><a href="ax_005fcxx_005fverbose_005fterminate_005fhandler.html#ax_005fcxx_005fverbose_005fterminate_005fhandler">ax_cxx_verbose_terminate_handler</a>
+<li><a href="ax_005fdecl_005fwchar_005fmax.html#ax_005fdecl_005fwchar_005fmax">ax_decl_wchar_max</a>
+<li><a href="ax_005fdefine_005finteger_005fbits.html#ax_005fdefine_005finteger_005fbits">ax_define_integer_bits</a>
+<li><a href="ax_005fdefine_005fsub_005fpath.html#ax_005fdefine_005fsub_005fpath">ax_define_sub_path</a>
+<li><a href="ax_005fdirname.html#ax_005fdirname">ax_dirname</a>
+<li><a href="ax_005fdist_005fmsi.html#ax_005fdist_005fmsi">ax_dist_msi</a>
+<li><a href="ax_005fdist_005frpm.html#ax_005fdist_005frpm">ax_dist_rpm</a>
+<li><a href="ax_005fdll_005fstring.html#ax_005fdll_005fstring">ax_dll_string</a>
+<li><a href="ax_005fenable_005fbuilddir.html#ax_005fenable_005fbuilddir">ax_enable_builddir</a>
+<li><a href="ax_005fexpand_005fprefix.html#ax_005fexpand_005fprefix">ax_expand_prefix</a>
+<li><a href="ax_005fext.html#ax_005fext">ax_ext</a>
+<li><a href="ax_005fext_005fcheck_005fheader.html#ax_005fext_005fcheck_005fheader">ax_ext_check_header</a>
+<li><a href="ax_005fext_005fhave_005flib.html#ax_005fext_005fhave_005flib">ax_ext_have_lib</a>
+<li><a href="ax_005fextra_005fdist.html#ax_005fextra_005fdist">ax_extra_dist</a>
+<li><a href="ax_005ff77_005fcmain_005ffflags.html#ax_005ff77_005fcmain_005ffflags">ax_f77_cmain_fflags</a>
+<li><a href="ax_005ff90_005fheader.html#ax_005ff90_005fheader">ax_f90_header</a>
+<li><a href="ax_005ff90_005finternal_005fheadmod.html#ax_005ff90_005finternal_005fheadmod">ax_f90_internal_headmod</a>
+<li><a href="ax_005ff90_005flibrary.html#ax_005ff90_005flibrary">ax_f90_library</a>
+<li><a href="ax_005ff90_005flibrary_005fsetup.html#ax_005ff90_005flibrary_005fsetup">ax_f90_library_setup</a>
+<li><a href="ax_005ff90_005fmodule.html#ax_005ff90_005fmodule">ax_f90_module</a>
+<li><a href="ax_005ff90_005fmodule_005fextension.html#ax_005ff90_005fmodule_005fextension">ax_f90_module_extension</a>
+<li><a href="ax_005ff90_005fmodule_005fflag.html#ax_005ff90_005fmodule_005fflag">ax_f90_module_flag</a>
+<li><a href="ax_005ffile_005fescapes.html#ax_005ffile_005fescapes">ax_file_escapes</a>
+<li><a href="ax_005fforceinline.html#ax_005fforceinline">ax_forceinline</a>
+<li><a href="ax_005ffunc_005faccept_005fargtypes.html#ax_005ffunc_005faccept_005fargtypes">ax_func_accept_argtypes</a>
+<li><a href="ax_005ffunc_005fgetopt_005flong.html#ax_005ffunc_005fgetopt_005flong">ax_func_getopt_long</a>
+<li><a href="ax_005ffunc_005fmemmove.html#ax_005ffunc_005fmemmove">ax_func_memmove</a>
+<li><a href="ax_005ffunc_005fmkdir.html#ax_005ffunc_005fmkdir">ax_func_mkdir</a>
+<li><a href="ax_005ffunc_005fposix_005fmemalign.html#ax_005ffunc_005fposix_005fmemalign">ax_func_posix_memalign</a>
+<li><a href="ax_005ffunc_005fsnprintf.html#ax_005ffunc_005fsnprintf">ax_func_snprintf</a>
+<li><a href="ax_005ffunc_005fwhich_005fgethostbyname_005fr.html#ax_005ffunc_005fwhich_005fgethostbyname_005fr">ax_func_which_gethostbyname_r</a>
+<li><a href="ax_005ffunc_005fwhich_005fgetservbyname_005fr.html#ax_005ffunc_005fwhich_005fgetservbyname_005fr">ax_func_which_getservbyname_r</a>
+<li><a href="ax_005fgcc_005farchflag.html#ax_005fgcc_005farchflag">ax_gcc_archflag</a>
+<li><a href="ax_005fgcc_005fconst_005fcall.html#ax_005fgcc_005fconst_005fcall">ax_gcc_const_call</a>
+<li><a href="ax_005fgcc_005flib.html#ax_005fgcc_005flib">ax_gcc_lib</a>
+<li><a href="ax_005fgcc_005flibgcc_005feh.html#ax_005fgcc_005flibgcc_005feh">ax_gcc_libgcc_eh</a>
+<li><a href="ax_005fgcc_005flibraries_005fdir.html#ax_005fgcc_005flibraries_005fdir">ax_gcc_libraries_dir</a>
+<li><a href="ax_005fgcc_005flibsupcxx.html#ax_005fgcc_005flibsupcxx">ax_gcc_libsupcxx</a>
+<li><a href="ax_005fgcc_005fmalloc_005fcall.html#ax_005fgcc_005fmalloc_005fcall">ax_gcc_malloc_call</a>
+<li><a href="ax_005fgcc_005fversion.html#ax_005fgcc_005fversion">ax_gcc_version</a>
+<li><a href="ax_005fgcc_005fwarn_005funused_005fresult.html#ax_005fgcc_005fwarn_005funused_005fresult">ax_gcc_warn_unused_result</a>
+<li><a href="ax_005fgcc_005fx86_005fcpuid.html#ax_005fgcc_005fx86_005fcpuid">ax_gcc_x86_cpuid</a>
+<li><a href="ax_005fhave_005fadns.html#ax_005fhave_005fadns">ax_have_adns</a>
+<li><a href="ax_005fhave_005fepoll.html#ax_005fhave_005fepoll">ax_have_epoll</a>
+<li><a href="ax_005fhave_005fopengl.html#ax_005fhave_005fopengl">ax_have_opengl</a>
+<li><a href="ax_005fhave_005fpoll.html#ax_005fhave_005fpoll">ax_have_poll</a>
+<li><a href="ax_005fhave_005fqt.html#ax_005fhave_005fqt">ax_have_qt</a>
+<li><a href="ax_005fhave_005fselect.html#ax_005fhave_005fselect">ax_have_select</a>
+<li><a href="ax_005finstall_005ffiles.html#ax_005finstall_005ffiles">ax_install_files</a>
+<li><a href="ax_005fjava_005fcheck_005fclass.html#ax_005fjava_005fcheck_005fclass">ax_java_check_class</a>
+<li><a href="ax_005fjava_005foptions.html#ax_005fjava_005foptions">ax_java_options</a>
+<li><a href="ax_005fjni_005finclude_005fdir.html#ax_005fjni_005finclude_005fdir">ax_jni_include_dir</a>
+<li><a href="ax_005flapack.html#ax_005flapack">ax_lapack</a>
+<li><a href="ax_005flib_005fbeecrypt.html#ax_005flib_005fbeecrypt">ax_lib_beecrypt</a>
+<li><a href="ax_005flib_005fcgal_005fcore.html#ax_005flib_005fcgal_005fcore">ax_lib_cgal_core</a>
+<li><a href="ax_005flib_005fcrypto.html#ax_005flib_005fcrypto">ax_lib_crypto</a>
+<li><a href="ax_005flib_005fcurl.html#ax_005flib_005fcurl">ax_lib_curl</a>
+<li><a href="ax_005flib_005fexpat.html#ax_005flib_005fexpat">ax_lib_expat</a>
+<li><a href="ax_005flib_005ffirebird.html#ax_005flib_005ffirebird">ax_lib_firebird</a>
+<li><a href="ax_005flib_005fgcrypt.html#ax_005flib_005fgcrypt">ax_lib_gcrypt</a>
+<li><a href="ax_005flib_005fgdal.html#ax_005flib_005fgdal">ax_lib_gdal</a>
+<li><a href="ax_005flib_005fhdf5.html#ax_005flib_005fhdf5">ax_lib_hdf5</a>
+<li><a href="ax_005flib_005fid3.html#ax_005flib_005fid3">ax_lib_id3</a>
+<li><a href="ax_005flib_005flibkml.html#ax_005flib_005flibkml">ax_lib_libkml</a>
+<li><a href="ax_005flib_005fmetis.html#ax_005flib_005fmetis">ax_lib_metis</a>
+<li><a href="ax_005flib_005fmysql.html#ax_005flib_005fmysql">ax_lib_mysql</a>
+<li><a href="ax_005flib_005fmysqlcppconn.html#ax_005flib_005fmysqlcppconn">ax_lib_mysqlcppconn</a>
+<li><a href="ax_005flib_005fnettle.html#ax_005flib_005fnettle">ax_lib_nettle</a>
+<li><a href="ax_005flib_005fnokalva.html#ax_005flib_005fnokalva">ax_lib_nokalva</a>
+<li><a href="ax_005flib_005foracle_005foci.html#ax_005flib_005foracle_005foci">ax_lib_oracle_oci</a>
+<li><a href="ax_005flib_005forbit2.html#ax_005flib_005forbit2">ax_lib_orbit2</a>
+<li><a href="ax_005flib_005fpostgresql.html#ax_005flib_005fpostgresql">ax_lib_postgresql</a>
+<li><a href="ax_005flib_005freadline.html#ax_005flib_005freadline">ax_lib_readline</a>
+<li><a href="ax_005flib_005fsocket_005fnsl.html#ax_005flib_005fsocket_005fnsl">ax_lib_socket_nsl</a>
+<li><a href="ax_005flib_005fsqlite3.html#ax_005flib_005fsqlite3">ax_lib_sqlite3</a>
+<li><a href="ax_005flib_005ftaglib.html#ax_005flib_005ftaglib">ax_lib_taglib</a>
+<li><a href="ax_005flib_005ftrace.html#ax_005flib_005ftrace">ax_lib_trace</a>
+<li><a href="ax_005flib_005fupnp.html#ax_005flib_005fupnp">ax_lib_upnp</a>
+<li><a href="ax_005flib_005fwad.html#ax_005flib_005fwad">ax_lib_wad</a>
+<li><a href="ax_005flib_005fxalan.html#ax_005flib_005fxalan">ax_lib_xalan</a>
+<li><a href="ax_005flib_005fxerces.html#ax_005flib_005fxerces">ax_lib_xerces</a>
+<li><a href="ax_005flib_005fxml_005fsecurity.html#ax_005flib_005fxml_005fsecurity">ax_lib_xml_security</a>
+<li><a href="ax_005flibgcj_005fjar.html#ax_005flibgcj_005fjar">ax_libgcj_jar</a>
+<li><a href="ax_005flibtoolize_005fcflags.html#ax_005flibtoolize_005fcflags">ax_libtoolize_cflags</a>
+<li><a href="ax_005fllvm.html#ax_005fllvm">ax_llvm</a>
+<li><a href="ax_005flua.html#ax_005flua">ax_lua</a>
+<li><a href="ax_005fmaintainer_005fmode_005fauto_005fsilent.html#ax_005fmaintainer_005fmode_005fauto_005fsilent">ax_maintainer_mode_auto_silent</a>
+<li><a href="ax_005fmissing_005fprog.html#ax_005fmissing_005fprog">ax_missing_prog</a>
+<li><a href="ax_005fmpi.html#ax_005fmpi">ax_mpi</a>
+<li><a href="ax_005fmpip.html#ax_005fmpip">ax_mpip</a>
+<li><a href="ax_005fneed_005fawk.html#ax_005fneed_005fawk">ax_need_awk</a>
+<li><a href="ax_005fnormalize_005fpath.html#ax_005fnormalize_005fpath">ax_normalize_path</a>
+<li><a href="ax_005fnot_005fenable_005fframe_005fpointer.html#ax_005fnot_005fenable_005fframe_005fpointer">ax_not_enable_frame_pointer</a>
+<li><a href="ax_005fnumeric_005fnamedlevel.html#ax_005fnumeric_005fnamedlevel">ax_numeric_namedlevel</a>
+<li><a href="ax_005fopenmp.html#ax_005fopenmp">ax_openmp</a>
+<li><a href="ax_005fpatch_005flibtool_005fchanging_005fcmds_005fifs.html#ax_005fpatch_005flibtool_005fchanging_005fcmds_005fifs">ax_patch_libtool_changing_cmds_ifs</a>
+<li><a href="ax_005fpath_005fbdb.html#ax_005fpath_005fbdb">ax_path_bdb</a>
+<li><a href="ax_005fpath_005fgeneric.html#ax_005fpath_005fgeneric">ax_path_generic</a>
+<li><a href="ax_005fpath_005flib_005fpcre.html#ax_005fpath_005flib_005fpcre">ax_path_lib_pcre</a>
+<li><a href="ax_005fpath_005fmilter.html#ax_005fpath_005fmilter">ax_path_milter</a>
+<li><a href="ax_005fpath_005fmissing.html#ax_005fpath_005fmissing">ax_path_missing</a>
+<li><a href="ax_005fperl_005fext.html#ax_005fperl_005fext">ax_perl_ext</a>
+<li><a href="ax_005fperl_005fext_005fflags.html#ax_005fperl_005fext_005fflags">ax_perl_ext_flags</a>
+<li><a href="ax_005fperl_005fmodule_005fversion.html#ax_005fperl_005fmodule_005fversion">ax_perl_module_version</a>
+<li><a href="ax_005fpgsql_005fpriv_005froot.html#ax_005fpgsql_005fpriv_005froot">ax_pgsql_priv_root</a>
+<li><a href="ax_005fpkg_005fmico.html#ax_005fpkg_005fmico">ax_pkg_mico</a>
+<li><a href="ax_005fpkg_005fswig.html#ax_005fpkg_005fswig">ax_pkg_swig</a>
+<li><a href="ax_005fprefix_005fconfig_005fh.html#ax_005fprefix_005fconfig_005fh">ax_prefix_config_h</a>
+<li><a href="ax_005fprint_005fto_005ffile.html#ax_005fprint_005fto_005ffile">ax_print_to_file</a>
+<li><a href="ax_005fprog_005fapache.html#ax_005fprog_005fapache">ax_prog_apache</a>
+<li><a href="ax_005fprog_005fbison.html#ax_005fprog_005fbison">ax_prog_bison</a>
+<li><a href="ax_005fprog_005fcc_005fchar_005fsubscripts.html#ax_005fprog_005fcc_005fchar_005fsubscripts">ax_prog_cc_char_subscripts</a>
+<li><a href="ax_005fprog_005fcc_005ffor_005fbuild.html#ax_005fprog_005fcc_005ffor_005fbuild">ax_prog_cc_for_build</a>
+<li><a href="ax_005fprog_005fcc_005fmpi.html#ax_005fprog_005fcc_005fmpi">ax_prog_cc_mpi</a>
+<li><a href="ax_005fprog_005fcp_005fs.html#ax_005fprog_005fcp_005fs">ax_prog_cp_s</a>
+<li><a href="ax_005fprog_005fcrontab.html#ax_005fprog_005fcrontab">ax_prog_crontab</a>
+<li><a href="ax_005fprog_005fcxx_005fmpi.html#ax_005fprog_005fcxx_005fmpi">ax_prog_cxx_mpi</a>
+<li><a href="ax_005fprog_005fdoxygen.html#ax_005fprog_005fdoxygen">ax_prog_doxygen</a>
+<li><a href="ax_005fprog_005ff77_005fmpi.html#ax_005fprog_005ff77_005fmpi">ax_prog_f77_mpi</a>
+<li><a href="ax_005fprog_005ffasm.html#ax_005fprog_005ffasm">ax_prog_fasm</a>
+<li><a href="ax_005fprog_005ffasm_005fopt.html#ax_005fprog_005ffasm_005fopt">ax_prog_fasm_opt</a>
+<li><a href="ax_005fprog_005ffc_005fmpi.html#ax_005fprog_005ffc_005fmpi">ax_prog_fc_mpi</a>
+<li><a href="ax_005fprog_005ffig2dev.html#ax_005fprog_005ffig2dev">ax_prog_fig2dev</a>
+<li><a href="ax_005fprog_005fflex.html#ax_005fprog_005fflex">ax_prog_flex</a>
+<li><a href="ax_005fprog_005fguile_005fversion.html#ax_005fprog_005fguile_005fversion">ax_prog_guile_version</a>
+<li><a href="ax_005fprog_005fhla.html#ax_005fprog_005fhla">ax_prog_hla</a>
+<li><a href="ax_005fprog_005fhla_005fopt.html#ax_005fprog_005fhla_005fopt">ax_prog_hla_opt</a>
+<li><a href="ax_005fprog_005fhttpd.html#ax_005fprog_005fhttpd">ax_prog_httpd</a>
+<li><a href="ax_005fprog_005fjar.html#ax_005fprog_005fjar">ax_prog_jar</a>
+<li><a href="ax_005fprog_005fjava.html#ax_005fprog_005fjava">ax_prog_java</a>
+<li><a href="ax_005fprog_005fjava_005fcc.html#ax_005fprog_005fjava_005fcc">ax_prog_java_cc</a>
+<li><a href="ax_005fprog_005fjava_005fworks.html#ax_005fprog_005fjava_005fworks">ax_prog_java_works</a>
+<li><a href="ax_005fprog_005fjavac.html#ax_005fprog_005fjavac">ax_prog_javac</a>
+<li><a href="ax_005fprog_005fjavac_005fworks.html#ax_005fprog_005fjavac_005fworks">ax_prog_javac_works</a>
+<li><a href="ax_005fprog_005fjavadoc.html#ax_005fprog_005fjavadoc">ax_prog_javadoc</a>
+<li><a href="ax_005fprog_005fjavah.html#ax_005fprog_005fjavah">ax_prog_javah</a>
+<li><a href="ax_005fprog_005fmasm.html#ax_005fprog_005fmasm">ax_prog_masm</a>
+<li><a href="ax_005fprog_005fmasm_005fopt.html#ax_005fprog_005fmasm_005fopt">ax_prog_masm_opt</a>
+<li><a href="ax_005fprog_005fmd5sum.html#ax_005fprog_005fmd5sum">ax_prog_md5sum</a>
+<li><a href="ax_005fprog_005fmodprobe.html#ax_005fprog_005fmodprobe">ax_prog_modprobe</a>
+<li><a href="ax_005fprog_005fmysql.html#ax_005fprog_005fmysql">ax_prog_mysql</a>
+<li><a href="ax_005fprog_005fmysqladmin.html#ax_005fprog_005fmysqladmin">ax_prog_mysqladmin</a>
+<li><a href="ax_005fprog_005fmysqld.html#ax_005fprog_005fmysqld">ax_prog_mysqld</a>
+<li><a href="ax_005fprog_005fmysqlimport.html#ax_005fprog_005fmysqlimport">ax_prog_mysqlimport</a>
+<li><a href="ax_005fprog_005fmysqlshow.html#ax_005fprog_005fmysqlshow">ax_prog_mysqlshow</a>
+<li><a href="ax_005fprog_005fnasm.html#ax_005fprog_005fnasm">ax_prog_nasm</a>
+<li><a href="ax_005fprog_005fnasm_005fopt.html#ax_005fprog_005fnasm_005fopt">ax_prog_nasm_opt</a>
+<li><a href="ax_005fprog_005fperl_005fmodules.html#ax_005fprog_005fperl_005fmodules">ax_prog_perl_modules</a>
+<li><a href="ax_005fprog_005fperl_005fversion.html#ax_005fprog_005fperl_005fversion">ax_prog_perl_version</a>
+<li><a href="ax_005fprog_005fpgclient.html#ax_005fprog_005fpgclient">ax_prog_pgclient</a>
+<li><a href="ax_005fprog_005fpython_005fversion.html#ax_005fprog_005fpython_005fversion">ax_prog_python_version</a>
+<li><a href="ax_005fprog_005fruby_005fversion.html#ax_005fprog_005fruby_005fversion">ax_prog_ruby_version</a>
+<li><a href="ax_005fprog_005fscp.html#ax_005fprog_005fscp">ax_prog_scp</a>
+<li><a href="ax_005fprog_005fsplint.html#ax_005fprog_005fsplint">ax_prog_splint</a>
+<li><a href="ax_005fprog_005fssh.html#ax_005fprog_005fssh">ax_prog_ssh</a>
+<li><a href="ax_005fprog_005ftasm.html#ax_005fprog_005ftasm">ax_prog_tasm</a>
+<li><a href="ax_005fprog_005ftasm_005fopt.html#ax_005fprog_005ftasm_005fopt">ax_prog_tasm_opt</a>
+<li><a href="ax_005fprog_005ftcl.html#ax_005fprog_005ftcl">ax_prog_tcl</a>
+<li><a href="ax_005fprog_005fxsltproc.html#ax_005fprog_005fxsltproc">ax_prog_xsltproc</a>
+<li><a href="ax_005fprog_005fyasm.html#ax_005fprog_005fyasm">ax_prog_yasm</a>
+<li><a href="ax_005fprog_005fyasm_005fopt.html#ax_005fprog_005fyasm_005fopt">ax_prog_yasm_opt</a>
+<li><a href="ax_005fprototype.html#ax_005fprototype">ax_prototype</a>
+<li><a href="ax_005fprototype_005faccept.html#ax_005fprototype_005faccept">ax_prototype_accept</a>
+<li><a href="ax_005fprototype_005fgetsockname.html#ax_005fprototype_005fgetsockname">ax_prototype_getsockname</a>
+<li><a href="ax_005fprototype_005fsetsockopt.html#ax_005fprototype_005fsetsockopt">ax_prototype_setsockopt</a>
+<li><a href="ax_005fpthread.html#ax_005fpthread">ax_pthread</a>
+<li><a href="ax_005fpython.html#ax_005fpython">ax_python</a>
+<li><a href="ax_005fpython_005fconfig_005fvar.html#ax_005fpython_005fconfig_005fvar">ax_python_config_var</a>
+<li><a href="ax_005fpython_005fdevel.html#ax_005fpython_005fdevel">ax_python_devel</a>
+<li><a href="ax_005fpython_005fembed.html#ax_005fpython_005fembed">ax_python_embed</a>
+<li><a href="ax_005fpython_005fmodule.html#ax_005fpython_005fmodule">ax_python_module</a>
+<li><a href="ax_005frequire_005fone_005ffunc.html#ax_005frequire_005fone_005ffunc">ax_require_one_func</a>
+<li><a href="ax_005frestore_005fflags.html#ax_005frestore_005fflags">ax_restore_flags</a>
+<li><a href="ax_005frpm_005finit.html#ax_005frpm_005finit">ax_rpm_init</a>
+<li><a href="ax_005fruby_005fdevel.html#ax_005fruby_005fdevel">ax_ruby_devel</a>
+<li><a href="ax_005fruby_005fext.html#ax_005fruby_005fext">ax_ruby_ext</a>
+<li><a href="ax_005fsave_005fflags.html#ax_005fsave_005fflags">ax_save_flags</a>
+<li><a href="ax_005fset_005fdefault_005fpaths_005fsystem.html#ax_005fset_005fdefault_005fpaths_005fsystem">ax_set_default_paths_system</a>
+<li><a href="ax_005fshort_005fsleep.html#ax_005fshort_005fsleep">ax_short_sleep</a>
+<li><a href="ax_005fsilent_005fmode.html#ax_005fsilent_005fmode">ax_silent_mode</a>
+<li><a href="ax_005fsip_005fdevel.html#ax_005fsip_005fdevel">ax_sip_devel</a>
+<li><a href="ax_005fspec_005ffile.html#ax_005fspec_005ffile">ax_spec_file</a>
+<li><a href="ax_005fspec_005fpackage_005fversion.html#ax_005fspec_005fpackage_005fversion">ax_spec_package_version</a>
+<li><a href="ax_005fsplit_005fversion.html#ax_005fsplit_005fversion">ax_split_version</a>
+<li><a href="ax_005fstring_005fstrcasecmp.html#ax_005fstring_005fstrcasecmp">ax_string_strcasecmp</a>
+<li><a href="ax_005fstrings_005fstrcasecmp.html#ax_005fstrings_005fstrcasecmp">ax_strings_strcasecmp</a>
+<li><a href="ax_005fstruct_005fsemun.html#ax_005fstruct_005fsemun">ax_struct_semun</a>
+<li><a href="ax_005fsubdir_005ffiles.html#ax_005fsubdir_005ffiles">ax_subdir_files</a>
+<li><a href="ax_005fsubst_005fwith.html#ax_005fsubst_005fwith">ax_subst_with</a>
+<li><a href="ax_005fswig_005fenable_005fcxx.html#ax_005fswig_005fenable_005fcxx">ax_swig_enable_cxx</a>
+<li><a href="ax_005fswig_005fmulti_005fmodule_005fsupport.html#ax_005fswig_005fmulti_005fmodule_005fsupport">ax_swig_multi_module_support</a>
+<li><a href="ax_005fswig_005fpython.html#ax_005fswig_005fpython">ax_swig_python</a>
+<li><a href="ax_005fsys_005fdev_005fpoll.html#ax_005fsys_005fdev_005fpoll">ax_sys_dev_poll</a>
+<li><a href="ax_005fsys_005flargefile_005fsensitive.html#ax_005fsys_005flargefile_005fsensitive">ax_sys_largefile_sensitive</a>
+<li><a href="ax_005fsys_005fperlsharpbang.html#ax_005fsys_005fperlsharpbang">ax_sys_perlsharpbang</a>
+<li><a href="ax_005fsys_005fweak_005falias.html#ax_005fsys_005fweak_005falias">ax_sys_weak_alias</a>
+<li><a href="ax_005fsysv_005fipc.html#ax_005fsysv_005fipc">ax_sysv_ipc</a>
+<li><a href="ax_005ftls.html#ax_005ftls">ax_tls</a>
+<li><a href="ax_005ftrilinos_005famesos.html#ax_005ftrilinos_005famesos">ax_trilinos_amesos</a>
+<li><a href="ax_005ftrilinos_005fbase.html#ax_005ftrilinos_005fbase">ax_trilinos_base</a>
+<li><a href="ax_005ftrilinos_005fepetra.html#ax_005ftrilinos_005fepetra">ax_trilinos_epetra</a>
+<li><a href="ax_005ftrilinos_005fepetraext.html#ax_005ftrilinos_005fepetraext">ax_trilinos_epetraext</a>
+<li><a href="ax_005ftrilinos_005fepetraext_005fhdf5.html#ax_005ftrilinos_005fepetraext_005fhdf5">ax_trilinos_epetraext_hdf5</a>
+<li><a href="ax_005ftrilinos_005frtop.html#ax_005ftrilinos_005frtop">ax_trilinos_rtop</a>
+<li><a href="ax_005ftrilinos_005frythmos.html#ax_005ftrilinos_005frythmos">ax_trilinos_rythmos</a>
+<li><a href="ax_005ftrilinos_005fteuchos.html#ax_005ftrilinos_005fteuchos">ax_trilinos_teuchos</a>
+<li><a href="ax_005ftrilinos_005fthyra.html#ax_005ftrilinos_005fthyra">ax_trilinos_thyra</a>
+<li><a href="ax_005ftrilinos_005fthyra_005fepetra.html#ax_005ftrilinos_005fthyra_005fepetra">ax_trilinos_thyra_epetra</a>
+<li><a href="ax_005ftrilinos_005fthyra_005fepetraext.html#ax_005ftrilinos_005fthyra_005fepetraext">ax_trilinos_thyra_epetraext</a>
+<li><a href="ax_005ftry_005fawk_005fanyout.html#ax_005ftry_005fawk_005fanyout">ax_try_awk_anyout</a>
+<li><a href="ax_005ftry_005fawk_005fexpout.html#ax_005ftry_005fawk_005fexpout">ax_try_awk_expout</a>
+<li><a href="ax_005ftry_005fcompile_005fjava.html#ax_005ftry_005fcompile_005fjava">ax_try_compile_java</a>
+<li><a href="ax_005ftry_005frun_005fjavac.html#ax_005ftry_005frun_005fjavac">ax_try_run_javac</a>
+<li><a href="ax_005ftype_005fsocklen_005ft.html#ax_005ftype_005fsocklen_005ft">ax_type_socklen_t</a>
+<li><a href="ax_005fupload.html#ax_005fupload">ax_upload</a>
+<li><a href="ax_005fvar_005ftimezone_005fexternals.html#ax_005fvar_005ftimezone_005fexternals">ax_var_timezone_externals</a>
+<li><a href="ax_005fvery_005fnice.html#ax_005fvery_005fnice">ax_very_nice</a>
+<li><a href="ax_005fwarning_005fdefault_005faclocaldir.html#ax_005fwarning_005fdefault_005faclocaldir">ax_warning_default_aclocaldir</a>
+<li><a href="ax_005fwarning_005fdefault_005fpkgconfig.html#ax_005fwarning_005fdefault_005fpkgconfig">ax_warning_default_pkgconfig</a>
+<li><a href="ax_005fwint_005ft.html#ax_005fwint_005ft">ax_wint_t</a>
+<li><a href="ax_005fwith_005fapxs.html#ax_005fwith_005fapxs">ax_with_apxs</a>
+<li><a href="ax_005fwith_005fbuild_005fpath.html#ax_005fwith_005fbuild_005fpath">ax_with_build_path</a>
+<li><a href="ax_005fwith_005fcurses.html#ax_005fwith_005fcurses">ax_with_curses</a>
+<li><a href="ax_005fwith_005fcurses_005fextra.html#ax_005fwith_005fcurses_005fextra">ax_with_curses_extra</a>
+<li><a href="ax_005fwith_005fdmalloc.html#ax_005fwith_005fdmalloc">ax_with_dmalloc</a>
+<li><a href="ax_005fwith_005fmpatrol.html#ax_005fwith_005fmpatrol">ax_with_mpatrol</a>
+<li><a href="ax_005fwith_005fprog.html#ax_005fwith_005fprog">ax_with_prog</a>
+<li><a href="ax_005fxercesc.html#ax_005fxercesc">ax_xercesc</a>
+<li><a href="ax_005fxtra_005fclasspath.html#ax_005fxtra_005fclasspath">ax_xtra_classpath</a>
+</ul>
+
+</body></html>
+

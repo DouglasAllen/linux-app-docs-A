@@ -1,0 +1,70 @@
+# 			*** WARNING ***
+# 
+# 	DO NOT BLINDLY CUT AND PASTE FROM THIS EXAMPLE
+# 
+# If you do so you are likely to cause serious disruption to the
+# projects whose configurations are kindly reproduced here for your
+# enlightenment.
+# 
+# Please in particular be careful with email addresses and URLs.
+# 
+# If you need to copy out of these files please search your resulting
+# configuration for the `@' character and check that the addresses are
+# all correct and none of them belong to anyone else.
+
+PATH=/home/ian/autopkgtest/runner:/usr/local/sbin:/usr/sbin:$PATH
+export PATH
+
+tmp=/volatile/ian/adt-tmp
+mirror=http://mirror.relativity.greenend.org.uk/mirror/debian-ftp/
+distro=lenny
+suite=main
+administrator_email=ian@davenant.greenend.org.uk
+salutation="Ian"
+from="$salutation Jackson <ian@davenant.greenend.org.uk>"
+disable=false
+desthttphead=http://www.chiark.greenend.org.uk/~ijackson
+destrsynchead=ijackson@chiark:public-html/
+destdircommon=autopkgtest/
+adtvirt_extra_opts=--userv
+upload_if_ok=false
+upload_if_notests=true
+suppressrepeatedemails=false
+suppresspackages=openbugs
+blacklistbinarypackages=blacklist
+
+rsync='rsync --bwlimit=16'
+# 16kby/s = 128kbit/s
+
+email_extra_info='
+The test environment is an i386 Xen guest with limited amounts of
+memory.  The relevant dependencies are installed for each test but
+very few other packages.  Most autopkgtest reports are FTBFS problems.
+Failures to satisfy build-dependencies are sometimes due to ambiguity
+rather than simple lack of a suitable package.
+
+While this bug remains open and assigned to this package, no further
+retesting will be done and no additional bugs will be filed.  When you
+have corrected the problem, close the bug and your package will be
+immediately eligible for retesting.
+
+If this automatic testing and bug filing is undesirable for certain
+packages(s) please let me know and I will add them to my blacklist.
+'
+
+maintainer_email_override="$administrator_email"
+
+email_sourcepackage_header=\
+"Source: @p
+Version: @v
+User: autopkgtest@_packages.debian.org
+Usertags: autopkgtest
+
+"
+email_binarypackage_header=\
+"Package: @p
+Version: @v
+User: autopkgtest@_packages.debian.org
+Usertags: autopkgtest
+
+"

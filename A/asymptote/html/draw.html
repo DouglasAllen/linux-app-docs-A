@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+<title>draw - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Drawing-commands.html#Drawing-commands" title="Drawing commands">
+<link rel="next" href="fill.html#fill" title="fill">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="draw"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="fill.html#fill">fill</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Drawing-commands.html#Drawing-commands">Drawing commands</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 draw</h3>
+
+<pre class="verbatim">void draw(picture pic=currentpicture, Label L="", path g,
+          align align=NoAlign, pen p=currentpen,
+          arrowbar arrow=None, arrowbar bar=None, margin margin=NoMargin,
+          Label legend="", marker marker=nomarker);
+</pre>
+
+<p>Draw the path <code>g</code> on the picture <code>pic</code> using pen <code>p</code>
+for drawing, with optional drawing attributes (Label <code>L</code>,
+explicit label alignment <code>align</code>,
+arrows and bars <code>arrow</code> and <code>bar</code>, margins <code>margin</code>,
+legend, and markers <code>marker</code>). Only one parameter, the path, is
+required. For convenience, the arguments <code>arrow</code> and <code>bar</code> may be
+specified in either order. The argument <code>legend</code> is a Label to
+use in constructing an optional legend entry.
+
+   <p><a name="index-g_t_0040code_007bNone_007d-95"></a><a name="index-g_t_0040code_007bBeginBar_007d-96"></a><a name="index-g_t_0040code_007bEndBar_007d-97"></a><a name="index-g_t_0040code_007bBar_007d-98"></a><a name="index-g_t_0040code_007bBars_007d-99"></a><a name="index-g_t_0040code_007bbarsize_007d-100"></a>Bars are useful for indicating dimensions. The possible values of
+<code>bar</code> are <code>None</code>, <code>BeginBar</code>, <code>EndBar</code> (or
+equivalently <code>Bar</code>), and <code>Bars</code> (which draws a bar at both
+ends of the path). Each of these bar specifiers (except for
+<code>None</code>) will accept an optional real argument that denotes the
+length of the bar in <code>PostScript</code> coordinates. The default
+bar length is <code>barsize(pen)</code>.
+
+   <p><a name="index-arrows-101"></a><a name="arrows"></a><a name="index-g_t_0040code_007bNone_007d-102"></a><a name="index-g_t_0040code_007bBlank_007d-103"></a><a name="index-g_t_0040code_007bBeginArrow_007d-104"></a><a name="index-g_t_0040code_007bMidArrow_007d-105"></a><a name="index-g_t_0040code_007bEndArrow_007d-106"></a><a name="index-g_t_0040code_007bArrow_007d-107"></a><a name="index-g_t_0040code_007bArrows_007d-108"></a><a name="index-g_t_0040code_007bFillDraw_007d-109"></a><a name="index-g_t_0040code_007bFill_007d-110"></a><a name="index-g_t_0040code_007bDraw_007d-111"></a><a name="index-g_t_0040code_007bNoFill_007d-112"></a><a name="index-g_t_0040code_007bUnFill_007d-113"></a><a name="index-g_t_0040code_007bBeginArcArrow_007d-114"></a><a name="index-g_t_0040code_007bMidArcArrow_007d-115"></a><a name="index-g_t_0040code_007bEndArcArrow_007d-116"></a><a name="index-g_t_0040code_007bArcArrow_007d-117"></a><a name="index-g_t_0040code_007bArcArrows_007d-118"></a>
+<a name="index-g_t_0040code_007bDefaultHead_007d-119"></a><a name="index-g_t_0040code_007bSimpleHead_007d-120"></a><a name="index-g_t_0040code_007bHookHead_007d-121"></a><a name="index-g_t_0040code_007bTeXHead_007d-122"></a>The possible values of <code>arrow</code> are <code>None</code>, <code>Blank</code>
+(which draws no arrows or path), <code>BeginArrow</code>, <code>MidArrow</code>,
+<code>EndArrow</code> (or equivalently <code>Arrow</code>),
+and <code>Arrows</code> (which draws an arrow at both ends of the path). 
+All of the arrow specifiers except for <code>None</code> and <code>Blank</code>
+may be given the optional arguments arrowhead <code>arrowhead</code> (one of
+the predefined arrowhead styles <code>DefaultHead</code>, <code>SimpleHead</code>,
+<code>HookHead</code>, <code>TeXHead</code>),
+real <code>size</code> (arrowhead size in <code>PostScript</code> coordinates),
+real <code>angle</code> (arrowhead angle
+in degrees), filltype <code>filltype</code> (one of <code>FillDraw</code>, <code>Fill</code>,
+<code>NoFill</code>, <code>UnFill</code>, <code>Draw</code>) and (except for
+<code>MidArrow</code> and <code>Arrows</code>) a real <code>position</code> (in the
+sense of <code>point(path p, real t)</code>) along the path where the tip of
+the arrow should be placed. The default arrowhead size when drawn
+with a pen <code>p</code> is <code>arrowsize(p)</code>. There are also arrow versions with
+slightly modified default values of <code>size</code> and <code>angle</code> suitable for
+curved arrows: <code>BeginArcArrow</code>, <code>EndArcArrow</code> (or equivalently
+<code>ArcArrow</code>), <code>MidArcArrow</code>, and <code>ArcArrows</code>.
+
+   <p><a name="index-g_t_0040code_007bNoMargin_007d-123"></a><a name="index-g_t_0040code_007bBeginMargin_007d-124"></a><a name="index-g_t_0040code_007bEndMargin_007d-125"></a><a name="index-g_t_0040code_007bMargin_007d-126"></a><a name="index-g_t_0040code_007bMargins_007d-127"></a><a name="index-g_t_0040code_007bBeginPenMargin_007d-128"></a><a name="index-g_t_0040code_007bEndPenMargin_007d-129"></a><a name="index-g_t_0040code_007bPenMargin_007d-130"></a><a name="index-g_t_0040code_007bPenMargins_007d-131"></a><a name="index-g_t_0040code_007bBeginDotMargin_007d-132"></a><a name="index-g_t_0040code_007bEndDotMargin_007d-133"></a><a name="index-g_t_0040code_007bDotMargin_007d-134"></a><a name="index-g_t_0040code_007bDotMargins_007d-135"></a><a name="index-g_t_0040code_007bMargin_007d-136"></a><a name="index-g_t_0040code_007bTrueMargin_007d-137"></a>Margins can be used to shrink the visible portion of a path by
+<code>labelmargin(p)</code> to avoid overlap with other drawn objects. 
+Typical values of <code>margin</code>
+are <code>NoMargin</code>, <code>BeginMargin</code>, <code>EndMargin</code> (or
+equivalently <code>Margin</code>), and <code>Margins</code> (which leaves a margin
+at both ends of the path). One may use <code>Margin(real begin, real end)</code>
+to specify the size of the beginning and ending margin, respectively,
+in multiples of the units <code>labelmargin(p)</code> used for aligning labels. 
+Alternatively, <code>BeginPenMargin</code>, <code>EndPenMargin</code>
+(or equivalently <code>PenMargin</code>), <code>PenMargins</code>,
+<code>PenMargin(real begin, real end)</code> specify a margin in units of
+the pen line width, taking account of the pen line width when drawing
+the path or arrow. For example, use <code>DotMargin</code>, an
+abbreviation for <code>PenMargin(-0.5*dotfactor,0.5*dotfactor)</code>,
+to draw from the usual beginning point just up to the boundary of an
+end dot of width <code>dotfactor*linewidth(p)</code>.  The qualifiers
+<code>BeginDotMargin</code>, <code>EndDotMargin</code>, and <code>DotMargins</code> work
+similarly. The qualifier <code>TrueMargin(real begin, real end)</code> allows one to
+specify a margin directly in <code>PostScript</code> units, independent of
+the pen line width.
+
+   <p>The use of arrows, bars, and margins is illustrated by the examples
+<code>Pythagoras.asy</code>, <code>sqrtx01.asy</code>, and <code>triads.asy</code>.
+
+   <p>The legend for a picture <code>pic</code> can be fit and aligned to a frame
+with the routine:
+<a name="index-g_t_0040code_007blegend_007d-138"></a>
+<pre class="verbatim">frame legend(picture pic=currentpicture, int perline=1,
+             real xmargin=legendmargin, real ymargin=xmargin,
+             real linelength=legendlinelength,
+             real hskip=legendhskip, real vskip=legendvskip,
+             real maxwidth=0, real maxheight=0, 
+             bool hstretch=false, bool vstretch=false, pen p=currentpen);
+</pre>
+Here <code>xmargin</code> and <code>ymargin</code> specify the surrounding x
+and y margins, <code>perline</code> specifies the number of entries
+per line (default 1; 0 means choose this number automatically),
+<code>linelength</code> specifies the length of the path lines, <code>hskip</code>
+and <code>vskip</code> specify the line skip (as a multiple of the legend entry
+size), <code>maxwidth</code> and <code>maxheight</code> specify optional upper limits
+on the width and height of the resulting legend (0 means unlimited),
+<code>hstretch</code> and <code>vstretch</code> allow the legend to stretch
+horizontally or vertically, and <code>p</code> specifies the pen used to draw
+the bounding box. The legend frame can then be added and aligned about a
+point on a picture <code>dest</code> using <code>add</code> or <code>attach</code>
+(see <a href="add-about.html#add-about">add about</a>).
+
+   <p><a name="index-g_t_0040code_007bdot_007d-139"></a>To draw a dot, simply draw a path containing a single point. 
+The <code>dot</code> command defined in the module <code>plain</code> draws a
+dot having a diameter equal to an explicit pen line width or the
+default line width magnified by <code>dotfactor</code> (6 by default),
+using the specified filltype (see <a href="filltype.html#filltype">filltype</a>):
+<pre class="verbatim">void dot(picture pic=currentpicture, pair z, pen p=currentpen,
+         filltype filltype=Fill);
+void dot(picture pic=currentpicture, Label L, pair z, align align=NoAlign,
+         string format=defaultformat, pen p=currentpen, filltype filltype=Fill);
+void dot(picture pic=currentpicture, Label[] L=new Label[], pair[] z,
+         align align=NoAlign, string format=defaultformat, pen p=currentpen,
+         filltype filltype=Fill)
+void dot(picture pic=currentpicture, Label L, pen p=currentpen,
+         filltype filltype=Fill);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bLabel_007d-140"></a>If the variable <code>Label</code> is given as the <code>Label</code>
+argument to the second routine, the <code>format</code> argument will be
+used to format a string based on the dot location (here <code>defaultformat</code>
+is <code>"$%.4g$"</code>). 
+The third routine draws a dot at every point of a pair array <code>z</code>. 
+One can also draw a dot at every node of a path:
+<pre class="verbatim">void dot(picture pic=currentpicture, Label[] L=new Label[],
+         path g, align align=RightSide, string format=defaultformat,
+         pen p=currentpen, filltype filltype=Fill);
+</pre>
+See <a href="pathmarkers.html#pathmarkers">pathmarkers</a> and <a href="markers.html#markers">markers</a> for more general
+methods for marking path nodes.
+
+   <p>To draw a fixed-sized object (in <code>PostScript</code> coordinates) about
+the user coordinate <code>origin</code>, use the routine
+<a name="index-g_t_0040code_007bdraw_007d-141"></a>
+<pre class="verbatim">void draw(pair origin, picture pic=currentpicture, Label L="", path g,
+          align align=NoAlign, pen p=currentpen, arrowbar arrow=None,
+          arrowbar bar=None, margin margin=NoMargin, Label legend="",
+          marker marker=nomarker);
+</pre>
+
+   <p><a name="index-g_t_0040code_007bfill_007d-142"></a>
+
+   </body></html>
+

@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction To Ad-Hoc Commands &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Introduction" href="intro.html" />
+    <link rel="next" title="The Ansible Configuration File" href="intro_configuration.html" />
+    <link rel="prev" title="Patterns" href="intro_patterns.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intro_configuration.html" title="The Ansible Configuration File"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro_patterns.html" title="Patterns"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" accesskey="U">Introduction</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-ad-hoc-commands">
+<h1><a class="toc-backref" href="#id7">Introduction To Ad-Hoc Commands</a><a class="headerlink" href="#introduction-to-ad-hoc-commands" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title first">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction-to-ad-hoc-commands" id="id7">Introduction To Ad-Hoc Commands</a><ul>
+<li><a class="reference internal" href="#parallelism-and-shell-commands" id="id8">Parallelism and Shell Commands</a></li>
+<li><a class="reference internal" href="#file-transfer" id="id9">File Transfer</a></li>
+<li><a class="reference internal" href="#managing-packages" id="id10">Managing Packages</a></li>
+<li><a class="reference internal" href="#users-and-groups" id="id11">Users and Groups</a></li>
+<li><a class="reference internal" href="#deploying-from-source-control" id="id12">Deploying From Source Control</a></li>
+<li><a class="reference internal" href="#managing-services" id="id13">Managing Services</a></li>
+<li><a class="reference internal" href="#time-limited-background-operations" id="id14">Time Limited Background Operations</a></li>
+<li><a class="reference internal" href="#gathering-facts" id="id15">Gathering Facts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The following examples show how to use <cite>/usr/bin/ansible</cite> for running
+ad hoc tasks.</p>
+<p>What&#8217;s an ad-hoc command?</p>
+<p>An ad-hoc command is something that you might type in to do something really
+quick, but don&#8217;t want to save for later.</p>
+<p>This is a good place to start to understand the basics of what Ansible can do
+prior to learning the playbooks language &#8211; ad-hoc commands can also be used
+to do quick things that you might not necessarily want to write a full playbook
+for.</p>
+<p>Generally speaking, the true power of Ansible lies in playbooks.
+Why would you use ad-hoc tasks versus playbooks?</p>
+<p>For instance, if you wanted to power off all of your lab for Christmas vacation,
+you could execute a quick one-liner in Ansible without writing a playbook.</p>
+<p>For configuration management and deployments, though, you&#8217;ll want to pick up on
+using &#8216;/usr/bin/ansible-playbook&#8217; &#8211; the concepts you will learn here will
+port over directly to the playbook language.</p>
+<p>(See <a class="reference internal" href="playbooks.html"><em>Playbooks</em></a> for more information about those)</p>
+<p>If you haven&#8217;t read <a class="reference internal" href="intro_inventory.html"><em>Inventory</em></a> already, please look that over a bit first
+and then we&#8217;ll get going.</p>
+<div class="section" id="parallelism-and-shell-commands">
+<span id="id1"></span><h2><a class="toc-backref" href="#id8">Parallelism and Shell Commands</a><a class="headerlink" href="#parallelism-and-shell-commands" title="Permalink to this headline">¶</a></h2>
+<p>Arbitrary example.</p>
+<p>Let&#8217;s use Ansible&#8217;s command line tool to reboot all web servers in Atlanta, 10 at a time.  First, let&#8217;s
+set up SSH-agent so it can remember our credentials:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-agent bash
+<span class="nv">$ </span>ssh-add ~/.ssh/id_rsa
+</pre></div>
+</div>
+<p>If you don&#8217;t want to use ssh-agent and want to instead SSH with a
+password instead of keys, you can with <tt class="docutils literal"><span class="pre">--ask-pass</span></tt> (<tt class="docutils literal"><span class="pre">-k</span></tt>), but
+it&#8217;s much better to just use ssh-agent.</p>
+<p>Now to run the command on all servers in a group, in this case,
+<em>atlanta</em>, in 10 parallel forks:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible atlanta -a <span class="s2">&quot;/sbin/reboot&quot;</span> -f 10
+</pre></div>
+</div>
+<p>/usr/bin/ansible will default to running from your user account.  If you do not like this
+behavior, pass in &#8220;-u username&#8221;.  If you want to run commands as a different user, it looks like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible atlanta -a <span class="s2">&quot;/usr/bin/foo&quot;</span> -u username
+</pre></div>
+</div>
+<p>Often you&#8217;ll not want to just do things from your user account.  If you want to run commands through sudo:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible atlanta -a <span class="s2">&quot;/usr/bin/foo&quot;</span> -u username --sudo <span class="o">[</span>--ask-sudo-pass<span class="o">]</span>
+</pre></div>
+</div>
+<p>Use <tt class="docutils literal"><span class="pre">--ask-sudo-pass</span></tt> (<tt class="docutils literal"><span class="pre">-K</span></tt>) if you are not using passwordless
+sudo.  This will interactively prompt you for the password to use.
+Use of passwordless sudo makes things easier to automate, but it&#8217;s not
+required.</p>
+<p>It is also possible to sudo to a user other than root using
+<tt class="docutils literal"><span class="pre">--sudo-user</span></tt> (<tt class="docutils literal"><span class="pre">-U</span></tt>):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible atlanta -a <span class="s2">&quot;/usr/bin/foo&quot;</span> -u username -U otheruser <span class="o">[</span>--ask-sudo-pass<span class="o">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Rarely, some users have security rules where they constrain their sudo environment to running specific command paths only.
+This does not work with ansible&#8217;s no-bootstrapping philosophy and hundreds of different modules.
+If doing this, use Ansible from a special account that does not have this constraint.
+One way of doing this without sharing access to unauthorized users would be gating Ansible with <a class="reference internal" href="tower.html"><em>Ansible Tower</em></a>, which
+can hold on to an SSH credential and let members of certain organizations use it on their behalf without having direct access.</p>
+</div>
+<p>Ok, so those are basics.  If you didn&#8217;t read about patterns and groups yet, go back and read <a class="reference internal" href="intro_patterns.html"><em>Patterns</em></a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">-f</span> <span class="pre">10</span></tt> in the above specifies the usage of 10 simultaneous
+processes to use.   You can also set this in <a class="reference internal" href="intro_configuration.html"><em>The Ansible Configuration File</em></a> to avoid setting it again.  The default is actually 5, which
+is really small and conservative.  You are probably going to want to talk to a lot more simultaneous hosts so feel free
+to crank this up.  If you have more hosts than the value set for the fork count, Ansible will talk to them, but it will
+take a little longer.  Feel free to push this value as high as your system can handle it!</p>
+<p>You can also select what Ansible &#8220;module&#8221; you want to run.  Normally commands also take a <tt class="docutils literal"><span class="pre">-m</span></tt> for module name, but
+the default module name is &#8216;command&#8217;, so we didn&#8217;t need to
+specify that all of the time.  We&#8217;ll use <tt class="docutils literal"><span class="pre">-m</span></tt> in later examples to
+run some other <a class="reference internal" href="modules.html"><em>About Modules</em></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="command_module.html#command"><em>command - Executes a command on a remote node</em></a> module does not
+support shell variables and things like piping.  If we want to execute a module using a
+shell, use the &#8216;shell&#8217; module instead. Read more about the differences on the <a class="reference internal" href="modules.html"><em>About Modules</em></a>
+page.</p>
+</div>
+<p>Using the <a class="reference internal" href="shell_module.html#shell"><em>shell - Execute commands in nodes.</em></a> module looks like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible raleigh -m shell -a <span class="s1">&#39;echo $TERM&#39;</span>
+</pre></div>
+</div>
+<p>When running any command with the Ansible <em>ad hoc</em> CLI (as opposed to
+<a class="reference internal" href="playbooks.html"><em>Playbooks</em></a>), pay particular attention to shell quoting rules, so
+the local shell doesn&#8217;t eat a variable before it gets passed to Ansible.
+For example, using double vs single quotes in the above example would
+evaluate the variable on the box you were on.</p>
+<p>So far we&#8217;ve been demoing simple command execution, but most Ansible modules usually do not work like
+simple scripts. They make the remote system look like you state, and run the commands necessary to
+get it there.  This is commonly referred to as &#8216;idempotence&#8217;, and is a core design goal of Ansible.
+However, we also recognize that running arbitrary commands is equally important, so Ansible easily supports both.</p>
+</div>
+<div class="section" id="file-transfer">
+<span id="id2"></span><h2><a class="toc-backref" href="#id9">File Transfer</a><a class="headerlink" href="#file-transfer" title="Permalink to this headline">¶</a></h2>
+<p>Here&#8217;s another use case for the <cite>/usr/bin/ansible</cite> command line.  Ansible can SCP lots of files to multiple machines in parallel.</p>
+<p>To transfer a file directly to many servers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible atlanta -m copy -a <span class="s2">&quot;src=/etc/hosts dest=/tmp/hosts&quot;</span>
+</pre></div>
+</div>
+<p>If you use playbooks, you can also take advantage of the <tt class="docutils literal"><span class="pre">template</span></tt> module,
+which takes this another step further.  (See module and playbook documentation).</p>
+<p>The <tt class="docutils literal"><span class="pre">file</span></tt> module allows changing ownership and permissions on files.  These
+same options can be passed directly to the <tt class="docutils literal"><span class="pre">copy</span></tt> module as well:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m file -a <span class="s2">&quot;dest=/srv/foo/a.txt mode=600&quot;</span>
+<span class="nv">$ </span>ansible webservers -m file -a <span class="s2">&quot;dest=/srv/foo/b.txt mode=600 owner=mdehaan group=mdehaan&quot;</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">file</span></tt> module can also create directories, similar to <tt class="docutils literal"><span class="pre">mkdir</span> <span class="pre">-p</span></tt>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m file -a <span class="s2">&quot;dest=/path/to/c mode=755 owner=mdehaan group=mdehaan state=directory&quot;</span>
+</pre></div>
+</div>
+<p>As well as delete directories (recursively) and delete files:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m file -a <span class="s2">&quot;dest=/path/to/c state=absent&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="managing-packages">
+<span id="id3"></span><h2><a class="toc-backref" href="#id10">Managing Packages</a><a class="headerlink" href="#managing-packages" title="Permalink to this headline">¶</a></h2>
+<p>There are modules available for yum and apt.  Here are some examples
+with yum.</p>
+<p>Ensure a package is installed, but don&#8217;t update it:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m yum -a <span class="s2">&quot;name=acme state=installed&quot;</span>
+</pre></div>
+</div>
+<p>Ensure a package is installed to a specific version:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m yum -a <span class="s2">&quot;name=acme-1.5 state=installed&quot;</span>
+</pre></div>
+</div>
+<p>Ensure a package is at the latest version:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m yum -a <span class="s2">&quot;name=acme state=latest&quot;</span>
+</pre></div>
+</div>
+<p>Ensure a package is not installed:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m yum -a <span class="s2">&quot;name=acme state=removed&quot;</span>
+</pre></div>
+</div>
+<p>Ansible has modules for managing packages under many platforms.  If your package manager
+does not have a module available for it, you can install
+for other packages using the command module or (better!) contribute a module
+for other package managers.  Stop by the mailing list for info/details.</p>
+</div>
+<div class="section" id="users-and-groups">
+<span id="id4"></span><h2><a class="toc-backref" href="#id11">Users and Groups</a><a class="headerlink" href="#users-and-groups" title="Permalink to this headline">¶</a></h2>
+<p>The &#8216;user&#8217; module allows easy creation and manipulation of
+existing user accounts, as well as removal of user accounts that may
+exist:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -m user -a <span class="s2">&quot;name=foo password=&lt;crypted password here&gt;&quot;</span>
+
+<span class="nv">$ </span>ansible all -m user -a <span class="s2">&quot;name=foo state=absent&quot;</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="modules.html"><em>About Modules</em></a> section for details on all of the available options, including
+how to manipulate groups and group membership.</p>
+</div>
+<div class="section" id="deploying-from-source-control">
+<span id="from-source-control"></span><h2><a class="toc-backref" href="#id12">Deploying From Source Control</a><a class="headerlink" href="#deploying-from-source-control" title="Permalink to this headline">¶</a></h2>
+<p>Deploy your webapp straight from git:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m git -a <span class="s2">&quot;repo=git://foo.example.org/repo.git dest=/srv/myapp version=HEAD&quot;</span>
+</pre></div>
+</div>
+<p>Since Ansible modules can notify change handlers it is possible to
+tell Ansible to run specific tasks when the code is updated, such as
+deploying Perl/Python/PHP/Ruby directly from git and then restarting
+apache.</p>
+</div>
+<div class="section" id="managing-services">
+<span id="id5"></span><h2><a class="toc-backref" href="#id13">Managing Services</a><a class="headerlink" href="#managing-services" title="Permalink to this headline">¶</a></h2>
+<p>Ensure a service is started on all webservers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m service -a <span class="s2">&quot;name=httpd state=started&quot;</span>
+</pre></div>
+</div>
+<p>Alternatively, restart a service on all webservers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m service -a <span class="s2">&quot;name=httpd state=restarted&quot;</span>
+</pre></div>
+</div>
+<p>Ensure a service is stopped:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible webservers -m service -a <span class="s2">&quot;name=httpd state=stopped&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="time-limited-background-operations">
+<span id="id6"></span><h2><a class="toc-backref" href="#id14">Time Limited Background Operations</a><a class="headerlink" href="#time-limited-background-operations" title="Permalink to this headline">¶</a></h2>
+<p>Long running operations can be backgrounded, and their status can be
+checked on later. The same job ID is given to the same task on all
+hosts, so you won&#8217;t lose track.  If you kick hosts and don&#8217;t want
+to poll, it looks like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -B 3600 -a <span class="s2">&quot;/usr/bin/long_running_operation --do-stuff&quot;</span>
+</pre></div>
+</div>
+<p>If you do decide you want to check on the job status later, you can:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -m async_status -a <span class="s2">&quot;jid=123456789&quot;</span>
+</pre></div>
+</div>
+<p>Polling is built-in and looks like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -B 1800 -P 60 -a <span class="s2">&quot;/usr/bin/long_running_operation --do-stuff&quot;</span>
+</pre></div>
+</div>
+<p>The above example says &#8220;run for 30 minutes max (<tt class="docutils literal"><span class="pre">-B</span></tt>: 30*60=1800),
+poll for status (<tt class="docutils literal"><span class="pre">-P</span></tt>) every 60 seconds&#8221;.</p>
+<p>Poll mode is smart so all jobs will be started before polling will begin on any machine.
+Be sure to use a high enough <tt class="docutils literal"><span class="pre">--forks</span></tt> value if you want to get all of your jobs started
+very quickly. After the time limit (in seconds) runs out (<tt class="docutils literal"><span class="pre">-B</span></tt>), the process on
+the remote nodes will be terminated.</p>
+<p>Typically you&#8217;ll only be backgrounding long-running
+shell commands or software upgrades only.  Backgrounding the copy module does not do a background file transfer.  <a class="reference internal" href="playbooks.html"><em>Playbooks</em></a> also support polling, and have a simplified syntax for this.</p>
+</div>
+<div class="section" id="gathering-facts">
+<span id="checking-facts"></span><h2><a class="toc-backref" href="#id15">Gathering Facts</a><a class="headerlink" href="#gathering-facts" title="Permalink to this headline">¶</a></h2>
+<p>Facts are described in the playbooks section and represent discovered variables about a
+system.  These can be used to implement conditional execution of tasks but also just to get ad-hoc information about your system. You can see all facts via:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ansible all -m setup
+</pre></div>
+</div>
+<p>Its also possible to filter this output to just export certain facts, see the &#8220;setup&#8221; module documentation for details.</p>
+<p>Read more about facts at <a class="reference internal" href="playbooks_variables.html"><em>Variables</em></a> once you&#8217;re ready to read up on <a class="reference internal" href="playbooks.html"><em>Playbooks</em></a>.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="intro_configuration.html"><em>The Ansible Configuration File</em></a></dt>
+<dd>All about the Ansible config file</dd>
+<dt><a class="reference internal" href="modules.html"><em>About Modules</em></a></dt>
+<dd>A list of available modules</dd>
+<dt><a class="reference internal" href="playbooks.html"><em>Playbooks</em></a></dt>
+<dd>Using Ansible for configuration management &amp; deployment</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-project">Mailing List</a></dt>
+<dd>Questions? Help? Ideas?  Stop by the list on Google Groups</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction To Ad-Hoc Commands</a><ul>
+<li><a class="reference internal" href="#parallelism-and-shell-commands">Parallelism and Shell Commands</a></li>
+<li><a class="reference internal" href="#file-transfer">File Transfer</a></li>
+<li><a class="reference internal" href="#managing-packages">Managing Packages</a></li>
+<li><a class="reference internal" href="#users-and-groups">Users and Groups</a></li>
+<li><a class="reference internal" href="#deploying-from-source-control">Deploying From Source Control</a></li>
+<li><a class="reference internal" href="#managing-services">Managing Services</a></li>
+<li><a class="reference internal" href="#time-limited-background-operations">Time Limited Background Operations</a></li>
+<li><a class="reference internal" href="#gathering-facts">Gathering Facts</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro_patterns.html"
+                        title="previous chapter">Patterns</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intro_configuration.html"
+                        title="next chapter">The Ansible Configuration File</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intro_configuration.html" title="The Ansible Configuration File"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro_patterns.html" title="Patterns"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="intro.html" >Introduction</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

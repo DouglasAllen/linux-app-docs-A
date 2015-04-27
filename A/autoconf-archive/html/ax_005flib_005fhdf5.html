@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>ax_lib_hdf5 - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Macros.html#The-Macros" title="The Macros">
+<link rel="prev" href="ax_005flib_005fgdal.html#ax_005flib_005fgdal" title="ax_lib_gdal">
+<link rel="next" href="ax_005flib_005fid3.html#ax_005flib_005fid3" title="ax_lib_id3">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ax_lib_hdf5"></a>
+<a name="ax_005flib_005fhdf5"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ax_005flib_005fid3.html#ax_005flib_005fid3">ax_lib_id3</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ax_005flib_005fgdal.html#ax_005flib_005fgdal">ax_lib_gdal</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Macros.html#The-Macros">The Macros</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ax_lib_hdf5</h3>
+
+<h2 class="majorheading">Synopsis</h2>
+
+<pre class="smallexample">     AX_LIB_HDF5([serial/parallel])
+</pre>
+<h2 class="majorheading">Description</h2>
+
+<p>This macro provides tests of the availability of HDF5 library.
+
+<p>The optional macro argument should be either 'serial' or 'parallel'. The
+former only looks for serial HDF5 installations via h5cc. The latter
+only looks for parallel HDF5 installations via h5pcc. If the optional
+argument is omitted, serial installations will be preferred over
+parallel ones.
+
+<p>The macro adds a &ndash;with-hdf5 option accepting one of three values:
+
+<pre class="smallexample">       no   - do not check for the HDF5 library.
+       yes  - do check for HDF5 library in standard locations.
+       path - complete path to where lib/libhdf5* libraries and
+              include/H5* include files reside.
+</pre>
+<p>If HDF5 is successfully found, this macro calls
+
+<pre class="smallexample">       AC_SUBST(HDF5_VERSION)
+       AC_SUBST(HDF5_CFLAGS)
+       AC_SUBST(HDF5_CPPFLAGS)
+       AC_SUBST(HDF5_LDFLAGS)
+       AC_SUBST(HDF5_FFLAGS)
+       AC_SUBST(HDF5_FLIBS)
+       AC_DEFINE(HAVE_HDF5)
+</pre>
+<p>and sets with_hdf5="yes".  Additionally, the macro sets
+with_hdf5_fortran="yes" if a matching Fortran wrapper script is found. 
+Note that Autconf's Fortran support is not used to perform this check. 
+H5CC and H5FC will contain the appropriate serial or parallel HDF5
+wrapper script locations.
+
+<p>If HDF5 is disabled or not found, this macros sets with_hdf5="no" and
+with_hdf5_fortran="no".
+
+<p>Your configuration script can test $with_hdf to take any further
+actions. HDF5_{C,CPP,LD}FLAGS may be used when building with C or C++. 
+HDF5_F{FLAGS,LIBS} should be used when building Fortran applications.
+
+<p>To use the macro, one would code one of the following in "configure.ac"
+before AC_OUTPUT:
+
+<pre class="smallexample">       1) dnl Check for HDF5 support
+          AX_LIB_HDF5()
+</pre>
+<pre class="smallexample">       2) dnl Check for serial HDF5 support
+          AX_LIB_HDF5([serial])
+</pre>
+<pre class="smallexample">       3) dnl Check for parallel HDF5 support
+          AX_LIB_HDF5([parallel])
+</pre>
+<p>One could test $with_hdf5 for the outcome or display it as follows
+
+<pre class="smallexample">       echo "HDF5 support:  $with_hdf5"
+</pre>
+<h2 class="majorheading">Source Code</h2>
+
+<p>Download the
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_lib_hdf5.m4">latest version of <samp><span class="file">ax_lib_hdf5.m4</span></samp></a> or browse
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=history;f=m4/ax_lib_hdf5.m4">the macro's revision history</a>.
+
+<h2 class="majorheading">License</h2>
+
+<p>Copyright&nbsp;&copy;&nbsp;2009&nbsp;Timothy&nbsp;Brown&nbsp;<a href="mailto:tbrown@freeshell.org">tbrown@freeshell.org</a><!-- /@w --> <br> Copyright&nbsp;&copy;&nbsp;2010&nbsp;Rhys&nbsp;Ulerich&nbsp;<a href="mailto:rhys.ulerich@gmail.com">rhys.ulerich@gmail.com</a><!-- /@w -->
+
+<p>Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved. This file is offered as-is, without any
+warranty.
+
+</body></html>
+

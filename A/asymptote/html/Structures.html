@@ -1,0 +1,273 @@
+<html lang="en">
+<head>
+<title>Structures - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Variable-initializers.html#Variable-initializers" title="Variable initializers">
+<link rel="next" href="Operators.html#Operators" title="Operators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Structures"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Operators.html#Operators">Operators</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Variable-initializers.html#Variable-initializers">Variable initializers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">6.8 Structures</h3>
+
+<p><a name="index-g_t_0040code_007bstruct_007d-565"></a><a name="index-structures-566"></a><a name="index-g_t_0040code_007bpublic_007d-567"></a><a name="index-g_t_0040code_007brestricted_007d-568"></a><a name="index-g_t_0040code_007bprivate_007d-569"></a><a name="index-g_t_0040code_007bthis_007d-570"></a><a name="index-g_t_0040code_007bnew_007d-571"></a><a name="index-g_t_0040code_007bnull_007d-572"></a>
+Users may also define their own data types as structures, along with
+user-defined operators, much as in C++. By default, structure members
+are <code>public</code> (may be read and modified anywhere in the code), but may be
+optionally declared <code>restricted</code> (readable anywhere but writeable
+only inside the structure where they are defined) or <code>private</code>
+(readable and writable only inside the structure). In a structure definition,
+the keyword <code>this</code> can be used as an expression to refer to the enclosing
+structure. Any code at the
+top-level scope within the structure is executed on initialization.
+
+   <p>Variables hold references to structures.  That is, in the example:
+<pre class="verbatim">struct T {
+  int x;
+}
+
+T foo=new T;
+T bar=foo;
+bar.x=5;
+</pre>
+
+   <p>The variable <code>foo</code> holds a reference to an instance of the structure
+<code>T</code>.  When <code>bar</code> is assigned the value of <code>foo</code>, it too
+now holds a reference to the same instance as <code>foo</code> does.  The assignment
+<code>bar.x=5</code> changes the value of the field <code>x</code> in that instance, so
+that <code>foo.x</code> will also be equal to <code>5</code>.
+
+   <p>The expression <code>new T</code> creates a new instance of the structure <code>T</code> and
+returns a reference to that instance.  In creating the new instance, any code in
+the body of the record definition is executed.  For example:
+<pre class="verbatim">int Tcount=0;
+struct T {
+  int x;
+  ++Tcount;
+}
+
+T foo=new T;
+</pre>
+
+   <p>Here, the expression <code>new T</code> will produce a new instance of the class, but
+will also cause <code>Tcount</code> to be incremented, so that it keeps track of the
+number of instances produced.
+
+   <p>The expression <code>null</code> can be cast to any structure type to yield a null
+reference, a reference that does not actually refer to any instance of the
+structure.  Trying to use a field of a null reference will cause an error.
+
+   <p><a name="index-alias-573"></a><a name="index-g_t_0040code_007b_003d_003d_007d-574"></a><a name="index-g_t_0040code_007b_0021_003d_007d-575"></a>The function <code>bool alias(T,T)</code> checks to see if two structure references
+refer to the same instance of the structure (or both to <code>null</code>).  For
+example, in the example code at the start of the section, <code>alias(foo,bar)</code>
+would return true, but <code>alias(foo,new T)</code> would return false, as <code>new
+T</code> creates a new instance of the structure <code>T</code>.  The boolean operators
+<code>==</code> and <code>!=</code> are by default equivalent to <code>alias</code> and
+<code>!alias</code> respectively, but may be overwritten for a particular type
+(for example, to do a deep comparison).
+
+   <p>After the definition of a structure <code>T</code>, a variable of type <code>T</code> is
+initialized to a new instance (<code>new T</code>) by default.  During the definition
+of the structure, however, variables of type <code>T</code> are initialized to
+<code>null</code> by default. This special behaviour is to avoid infinite
+recursion of creating new instances in code such as
+<pre class="verbatim">struct tree {
+  int value;
+  tree left;
+  tree right;
+}
+</pre>
+
+   <p>Here is a simple example that illustrates the use of structures:
+<pre class="verbatim">struct S {
+  real a=1;
+  real f(real a) {return a+this.a;}
+}
+
+S s;                            // Initializes s with new S;
+
+write(s.f(2));                  // Outputs 3
+
+S operator + (S s1, S s2)
+{
+  S result;
+  result.a=s1.a+s2.a;
+  return result;
+}
+
+write((s+s).f(0));              // Outputs 2
+
+</pre>
+
+   <p><a name="index-constructors-576"></a>It is often convenient to have functions that construct new instances of a
+structure.  Say we have a <code>Person</code> structure:
+<pre class="verbatim">struct Person {
+  string firstname;
+  string lastname;
+}
+
+Person joe=new Person;
+joe.firstname="Joe";
+joe.lastname="Jones";
+</pre>
+Creating a new Person is a chore; it takes three lines to create a new instance
+and to initialize its fields (that's still considerably less effort than
+creating a new person in real life, though).
+
+   <p>We can reduce the work by defining a constructor function
+<code>Person(string,string)</code>:
+<pre class="verbatim">struct Person {
+  string firstname;
+  string lastname;
+
+  static Person Person(string firstname, string lastname) {
+    Person p=new Person;
+    p.firstname=firstname;
+    p.lastname=lastname;
+    return p;
+  }
+}
+
+Person joe=Person.Person("Joe", "Jones");
+</pre>
+
+   <p>While it is now easier than before to create a new instance, we still
+have to refer to the constructor by the qualified name
+<code>Person.Person</code>.  If we add the line
+<pre class="verbatim">from Person unravel Person;
+</pre>
+immediately after the structure definition, then the constructor can be used
+without qualification: <code>Person joe=Person("Joe", "Jones");</code>.
+
+   <p>The constructor is now easy to use, but it is quite a hassle to define.  If you
+write a lot of constructors, you will find that you are repeating a lot of code
+in each of them.  Fortunately, your friendly neighbourhood Asymptote
+developers have devised a way to automate much of the process.
+
+   <p><a name="index-g_t_0040code_007boperator-init_007d-577"></a>If, in the body of a structure, Asymptote encounters the definition of
+a function of the form <code>void operator init(</code><var>args</var><code>)</code>,  it implicitly
+defines a constructor function of the arguments <var>args</var> that
+uses the <code>void operator init</code> function to initialize a
+new instance of the structure. 
+That is, it essentially defines the following constructor (assuming the
+structure is called <code>Foo</code>):
+
+<pre class="example">     static Foo Foo(<var>args</var>) {
+       Foo instance=new Foo;
+       instance.operator init(<var>args</var>);
+       return instance;
+     }
+</pre>
+   <p>This constructor is also implicitly copied to the enclosing scope after the end
+of the structure definition, so that it can used subsequently without qualifying
+it by the structure name.  Our <code>Person</code> example can thus be implemented as:
+<pre class="verbatim">struct Person {
+  string firstname;
+  string lastname;
+
+  void operator init(string firstname, string lastname) {
+    this.firstname=firstname;
+    this.lastname=lastname;
+  }
+}
+
+Person joe=Person("Joe", "Jones");
+</pre>
+
+   <p>The use of <code>operator init</code> to implicitly define constructors should not be
+confused with its use to define default values for variables
+(see <a href="Variable-initializers.html#Variable-initializers">Variable initializers</a>).  Indeed, in the
+first case, the return type of the <code>operator init</code> must be <code>void</code>
+while in the second, it must be the (non-<code>void</code>) type of the variable.
+
+   <p><a name="index-g_t_0040code_007bcputime_007d-578"></a>The function <code>cputime()</code>
+returns a structure <code>cputime</code> with cumulative <acronym>CPU</acronym> times
+broken down into the fields <code>parent.user</code>, <code>parent.system</code>,
+<code>child.user</code>, and <code>child.system</code>. For convenience, the
+incremental fields <code>change.user</code> and <code>change.system</code> indicate
+the change in the corresponding total parent and child <acronym>CPU</acronym>
+times since the last call to <code>cputime()</code>. The function
+<pre class="verbatim">void write(file file=stdout, string s="", cputime c,
+           string format=cputimeformat, suffix suffix=none); 
+</pre>
+displays the incremental user cputime followed by &ldquo;u&rdquo;,
+the incremental system cputime followed by &ldquo;s&rdquo;,
+the total user cputime followed by &ldquo;U&rdquo;, and
+the total system cputime followed by &ldquo;S&rdquo;.
+
+   <p><a name="index-inheritance-579"></a><a name="index-virtual-functions-580"></a>Much like in C++, casting (see <a href="Casts.html#Casts">Casts</a>) provides for an elegant
+implementation of structure inheritance, including virtual functions:
+<pre class="verbatim">struct parent {
+  real x;
+  void operator init(int x) {this.x=x;}
+  void virtual(int) {write(0);}
+  void f() {virtual(1);}
+}
+
+void write(parent p) {write(p.x);}
+  
+struct child {
+  parent parent;
+  real y=3;
+  void operator init(int x) {parent.operator init(x);}
+  void virtual(int x) {write(x);}
+  parent.virtual=virtual;
+  void f()=parent.f;
+}
+
+parent operator cast(child child) {return child.parent;}
+  
+parent p=parent(1);
+child c=child(2);
+
+write(c);                       // Outputs 2;
+
+p.f();                          // Outputs 0;
+c.f();                          // Outputs 1;
+
+write(c.parent.x);              // Outputs 2;
+write(c.y);                     // Outputs 3;
+</pre>
+
+   <p>For further examples of structures, see <code>Legend</code> and <code>picture</code> in
+the <code>Asymptote</code> base module <code>plain</code>.
+
+   </body></html>
+

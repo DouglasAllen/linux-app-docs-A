@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>apt_repository - Add and remove APT repositories &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="apt_rpm - apt_rpm package manager" href="apt_rpm_module.html" />
+    <link rel="prev" title="apt_key - Add or remove an apt key" href="apt_key_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="apt_rpm_module.html" title="apt_rpm - apt_rpm package manager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apt_key_module.html" title="apt_key - Add or remove an apt key"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="apt-repository-add-and-remove-apt-repositories">
+<span id="apt-repository"></span><h1>apt_repository - Add and remove APT repositories<a class="headerlink" href="#apt-repository-add-and-remove-apt-repositories" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Alexander Saltanov</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Add or remove an APT repositories in Ubuntu and Debian.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>mode</td>
+<td>no</td>
+<td>420</td>
+    <td><ul></ul></td>
+    <td>The octal mode for newly created files in sources.list.d (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>repo</td>
+<td>yes</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>A source string for the repository.</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>absent</li><li>present</li></ul></td>
+    <td>A source string state.</td>
+</tr>
+        <tr>
+<td>update_cache</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Run the equivalent of <code>apt-get update</code> when a change occurs.  Cache updates are run after making changes.</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, SSL certificates for the target repo will not be validated. This should only be used on personally controlled sites using self-signed certificates.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires python-apt</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Add specified repository into sources list.
+apt_repository: repo='deb http://archive.canonical.com/ubuntu hardy partner' state=present
+
+# Add source repository into sources list.
+apt_repository: repo='deb-src http://archive.canonical.com/ubuntu hardy partner' state=present
+
+# Remove specified repository from sources list.
+apt_repository: repo='deb http://archive.canonical.com/ubuntu hardy partner' state=absent
+
+# On Ubuntu target: add nginx stable repository from PPA and install its signing key.
+# On Debian target: adding PPA is not available, so it will fail immediately.
+apt_repository: repo='ppa:nginx/stable'</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module works on Debian and Ubuntu and requires <tt class="docutils literal"><span class="pre">python-apt</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module supports Debian Squeeze (version 6) as well as its successors.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module treats Debian and Ubuntu distributions separately. So PPA could be installed only on Ubuntu machines.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">apt_repository - Add and remove APT repositories</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="apt_key_module.html"
+                        title="previous chapter">apt_key - Add or remove an apt key</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="apt_rpm_module.html"
+                        title="next chapter">apt_rpm - apt_rpm package manager</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="apt_rpm_module.html" title="apt_rpm - apt_rpm package manager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apt_key_module.html" title="apt_key - Add or remove an apt key"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

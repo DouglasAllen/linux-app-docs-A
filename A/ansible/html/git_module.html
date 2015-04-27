@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>git - Deploy software (or files) from git checkouts &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Source Control Modules" href="list_of_source_control_modules.html" />
+    <link rel="next" title="github_hooks - Manages github service hooks." href="github_hooks_module.html" />
+    <link rel="prev" title="bzr - Deploy software (or files) from bzr branches" href="bzr_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="github_hooks_module.html" title="github_hooks - Manages github service hooks."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bzr_module.html" title="bzr - Deploy software (or files) from bzr branches"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_source_control_modules.html" accesskey="U">Source Control Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="git-deploy-software-or-files-from-git-checkouts">
+<span id="git"></span><h1>git - Deploy software (or files) from git checkouts<a class="headerlink" href="#git-deploy-software-or-files-from-git-checkouts" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Michael DeHaan</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Manage <em>git</em> checkouts of repositories to deploy files or software.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>accept_hostkey</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>if <code>yes</code>, adds the hostkey for the repo url if not already added. If ssh_args contains "-o StrictHostKeyChecking=no", this parameter is ignored. (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>bare</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>if <code>yes</code>, repository will be created as a bare repo, otherwise it will be a standard repo with a workspace. (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>depth</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Create a shallow clone with a history truncated to the specified number or revisions. The minimum possible value is <code>1</code>, otherwise ignored. (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>dest</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Absolute path of where the repository should be checked out to.</td>
+</tr>
+        <tr>
+<td>executable</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Path to git executable to use. If not supplied, the normal mechanism for resolving binary paths will be used. (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>yes</code>, any modified files in the working repository will be discarded.  Prior to 0.7, this was always 'yes' and could not be disabled. (added in Ansible 0.7)</td>
+</tr>
+        <tr>
+<td>key_file</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Uses the same wrapper method as ssh_opts to pass "-i &lt;key_file&gt;" to the ssh arguments used by git (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>recursive</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>if <code>no</code>, repository will be cloned without the --recursive option, skipping sub-modules. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>reference</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Reference repository (see "git clone --reference ...") (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>remote</td>
+<td>no</td>
+<td>origin</td>
+    <td><ul></ul></td>
+    <td>Name of the remote.</td>
+</tr>
+        <tr>
+<td>repo</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>git, SSH, or HTTP protocol address of the git repository.</td>
+</tr>
+        <tr>
+<td>ssh_opts</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>Creates a wrapper script and exports the path as GIT_SSH which git then automatically uses to override ssh arguments. An example value could be "-o StrictHostKeyChecking=no" (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>update</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, just returns information about the repository without updating. (added in Ansible 1.2)</td>
+</tr>
+        <tr>
+<td>version</td>
+<td>no</td>
+<td>HEAD</td>
+    <td><ul></ul></td>
+    <td>What version of the repository to check out.  This can be the full 40-character <em>SHA-1</em> hash, the literal string <code>HEAD</code>, a branch name, or a tag name.</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Example git checkout from Ansible Playbooks
+- git: repo=git://foosball.example.org/path/to/repo.git
+       dest=/srv/checkout
+       version=release-0.22
+
+# Example read-write git checkout from github
+- git: repo=ssh://git@github.com/mylogin/hello.git dest=/home/mylogin/hello
+
+# Example just ensuring the repo checkout exists
+- git: repo=git://foosball.example.org/path/to/repo.git dest=/srv/checkout update=no</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the task seems to be hanging, first verify remote host is in <tt class="docutils literal"><span class="pre">known_hosts</span></tt>. SSH will prompt user to authorize the first contact with a remote host.  To avoid this prompt, one solution is to add the remote host public key in <tt class="docutils literal"><span class="pre">/etc/ssh/ssh_known_hosts</span></tt> before calling the git module, with the following command: ssh-keyscan -H remote_host.com &gt;&gt; /etc/ssh/ssh_known_hosts.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">git - Deploy software (or files) from git checkouts</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bzr_module.html"
+                        title="previous chapter">bzr - Deploy software (or files) from bzr branches</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="github_hooks_module.html"
+                        title="next chapter">github_hooks - Manages github service hooks.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="github_hooks_module.html" title="github_hooks - Manages github service hooks."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bzr_module.html" title="bzr - Deploy software (or files) from bzr branches"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_source_control_modules.html" >Source Control Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- This manual is for GNU AutoGen version 5.12, updated July 2011.
+
+Copyright C 1992-2011 by Bruce Korb.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+
+ -->
+<!-- Created on July 10, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>GNU AutoGen - The Automated Program Generator: 4. Augmenting AutoGen Features</title>
+
+<meta name="description" content="GNU AutoGen - The Automated Program Generator: 4. Augmenting AutoGen Features">
+<meta name="keywords" content="GNU AutoGen - The Automated Program Generator: 4. Augmenting AutoGen Features">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Augmenting-AutoGen"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="autogen_2.html#output-controls" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#shell-commands" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_2.html#Template-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Augmenting-AutoGen-Features"></a>
+<h1 class="chapter">4. Augmenting AutoGen Features</h1>
+<a name="index-Augmenting-AutoGen"></a>
+
+<p>AutoGen was designed to be simple to enhance.  You can do it by
+providing shell commands, Guile/Scheme macros or callout functions
+that can be invoked as a Guile macro.  Here is how you do these.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#shell-commands">4.1 Shell Output Commands</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#guile-macros">4.2 Guile Macros</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#guile-callouts">4.3 Guile Callout Functions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#AutoGen-macros">4.4 AutoGen Macros</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+
+<hr size="6">
+<a name="shell-commands"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#guile-macros" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Shell-Output-Commands"></a>
+<h2 class="section">4.1 Shell Output Commands</h2>
+
+<p>Shell commands are run inside of a server process.  This means that,
+unlike &lsquo;<tt>make</tt>&rsquo;, context is kept from one command to the next.
+Consequently, you can define a shell function in one place inside of
+your template and invoke it in another.  You may also store values
+in shell variables for later reference.  If you load functions from
+a file containing shell functions, they will remain until AutoGen exits.
+</p>
+<p>If your shell script should determine that AutoGen should stop
+processing, the recommended method for stopping AutoGen is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">die &quot;some error text&quot;
+</pre></td></tr></table>
+
+<p>That is a shell function added by AutoGen.  It will send a SIGTERM
+to autogen and exit from the &quot;persistent&quot; shell.
+</p>
+
+<hr size="6">
+<a name="guile-macros"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#shell-commands" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#guile-callouts" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Guile-Macros"></a>
+<h2 class="section">4.2 Guile Macros</h2>
+
+<p>Guile also maintains context from one command to the next.  This means you may
+define functions and variables in one place and reference them elsewhere.
+You also may load Guile macro definitions from a Scheme file by using the
+<code>--load-scheme</code> command line option (see section <a href="autogen_4.html#autogen-load_002dscheme">load-scheme option (-S)</a>).
+Beware, however, that the AutoGen specific scheme functions have not been
+loaded at this time, so though you may define functions that reference them,
+do not invoke the AutoGen functions at this time.
+</p>
+<p>If your Scheme script should determine that AutoGen should stop
+processing, the recommended method for stopping AutoGen is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">(error &quot;some error text&quot;)
+</pre></td></tr></table>
+
+
+<hr size="6">
+<a name="guile-callouts"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#guile-macros" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#AutoGen-macros" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Guile-Callout-Functions"></a>
+<h2 class="section">4.3 Guile Callout Functions</h2>
+
+<p>Callout functions must be registered with Guile to work.  This can
+be accomplished either by putting your routines into a shared library
+that contains a <code>void scm_init( void )</code> routine that registers
+these routines, or by building them into AutoGen.
+</p>
+<p>To build them into AutoGen, you must place your routines in the source
+directory and name the files &lsquo;<tt>exp*.c</tt>&rsquo;.  You also must have a stylized
+comment that &lsquo;<tt>getdefs</tt>&rsquo; can find that conforms to the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/*=gfunc &lt;function-name&gt;
+ *
+ *  what:    &lt;short one-liner&gt;
+ *  general_use:
+ *  string:  &lt;invocation-name-string&gt;
+ *  exparg:  &lt;name&gt;, &lt;description&gt; [, ['optional'] [, 'list']]
+ *  doc:     A long description telling people how to use
+ *           this function.
+=*/
+SCM
+ag_scm_&lt;function-name&gt;( SCM arg_name[, ...] )
+{ &lt;code&gt; }
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>gfunc</samp>&rsquo;</dt>
+<dd><p>You must have this exactly thus.
+</p>
+</dd>
+<dt> &lsquo;<samp>&lt;function-name&gt;</samp>&rsquo;</dt>
+<dd><p>This must follow C syntax for variable names
+</p>
+</dd>
+<dt> &lsquo;<samp>&lt;short one-liner&gt;</samp>&rsquo;</dt>
+<dd><p>This should be about a half a line long.
+It is used as a subsection title in this document.
+</p>
+</dd>
+<dt> &lsquo;<samp>general_use:</samp>&rsquo;</dt>
+<dd><p>You must supply this unless you are an AutoGen maintainer and are writing
+a function that queries or modifies the state of AutoGen.
+</p>
+</dd>
+<dt> &lsquo;<samp>&lt;invocation-name-string&gt;</samp>&rsquo;</dt>
+<dd><p>Normally, the <code>function-name</code> string will be transformed into
+a reasonable invocation name.  However, that is not always true.
+If the result does not suit your needs, then supply an alternate string.
+</p>
+</dd>
+<dt> &lsquo;<samp>exparg:</samp>&rsquo;</dt>
+<dd><p>You must supply one for each argument to your function.
+All optional arguments must be last.
+The last of the optional arguments may be a list, if you choose.
+</p>
+</dd>
+<dt> &lsquo;<samp>doc:</samp>&rsquo;</dt>
+<dd><p>Please say something meaningful.
+</p>
+</dd>
+<dt> &lsquo;<samp>[, ...]</samp>&rsquo;</dt>
+<dd><p>Do not actually specify an ANSI ellipsis here.  You must provide
+for all the arguments you specified with <code>exparg</code>.
+</p></dd>
+</dl>
+
+<p>See the Guile documentation for more details.
+More information is also available in a large comment at the
+beginning of the &lsquo;<tt>agen5/snarf.tpl</tt>&rsquo; template file.
+</p>
+
+<hr size="6">
+<a name="AutoGen-macros"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#guile-callouts" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="AutoGen-Macros"></a>
+<h2 class="section">4.4 AutoGen Macros</h2>
+
+<p>There are two kinds  those you define yourself and AutoGen native.
+The user-defined macros may be defined in your templates or loaded
+with the <code>--lib-template</code> option
+(See <a href="autogen_2.html#DEFINE">DEFINE - Define a user AutoGen macro</a> and  <a href="autogen_4.html#autogen-lib_002dtemplate">lib-template option (-l)</a>).
+</p>
+<p>As for AutoGen native macros, do not add any. It is easy to do, but I
+won&rsquo;t like it.  The basic functions needed to accomplish looping over
+and selecting blocks of text have proved to be sufficient over a period
+of several years.  New text transformations can be easily added via any
+of the AutoGen extension methods, as discussed above.
+</p>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Augmenting-AutoGen" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="autogen_4.html#autogen-Invocation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="autogen_0.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_6.html#AutoOpts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="autogen_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon</em> on <em>July 10, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>apt_key - Add or remove an apt key &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="apt_repository - Add and remove APT repositories" href="apt_repository_module.html" />
+    <link rel="prev" title="apt - Manages apt-packages" href="apt_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="apt_repository_module.html" title="apt_repository - Add and remove APT repositories"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apt_module.html" title="apt - Manages apt-packages"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="apt-key-add-or-remove-an-apt-key">
+<span id="apt-key"></span><h1>apt_key - Add or remove an apt key<a class="headerlink" href="#apt-key-add-or-remove-an-apt-key" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jayson Vantuyl &amp; others</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.0.</span></p>
+<p>Add or remove an <em>apt</em> key, optionally downloading it</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>data</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>keyfile contents</td>
+</tr>
+        <tr>
+<td>file</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>keyfile path</td>
+</tr>
+        <tr>
+<td>id</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>identifier of key</td>
+</tr>
+        <tr>
+<td>keyring</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>path to specific keyring file in /etc/apt/trusted.gpg.d (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>keyserver</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>keyserver to retrieve key from. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>absent</li><li>present</li></ul></td>
+    <td>used to specify if key is being added or revoked</td>
+</tr>
+        <tr>
+<td>url</td>
+<td>no</td>
+<td>none</td>
+    <td><ul></ul></td>
+    <td>url to retrieve key from.</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, SSL certificates for the target url will not be validated. This should only be used on personally controlled sites using self-signed certificates.</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Add an Apt signing key, uses whichever key is at the URL
+- apt_key: url=https://ftp-master.debian.org/keys/archive-key-6.0.asc state=present
+
+# Add an Apt signing key, will not download if present
+- apt_key: id=473041FA url=https://ftp-master.debian.org/keys/archive-key-6.0.asc state=present
+
+# Remove an Apt signing key, uses whichever key is at the URL
+- apt_key: url=https://ftp-master.debian.org/keys/archive-key-6.0.asc state=absent
+
+# Remove a Apt specific signing key, leading 0x is valid
+- apt_key: id=0x473041FA state=absent
+
+# Add a key from a file on the Ansible server
+- apt_key: data="{{ lookup('file', 'apt.gpg') }}" state=present
+
+# Add an Apt signing key to a specific keyring file
+- apt_key: id=473041FA url=https://ftp-master.debian.org/keys/archive-key-6.0.asc keyring=/etc/apt/trusted.gpg.d/debian.gpg state=present</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">doesn&#8217;t download the key unless it really needs it</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">as a sanity check, downloaded key id must match the one specified</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">best practice is to specify the key id and the url</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">apt_key - Add or remove an apt key</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="apt_module.html"
+                        title="previous chapter">apt - Manages apt-packages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="apt_repository_module.html"
+                        title="next chapter">apt_repository - Add and remove APT repositories</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="apt_repository_module.html" title="apt_repository - Add and remove APT repositories"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apt_module.html" title="apt - Manages apt-packages"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

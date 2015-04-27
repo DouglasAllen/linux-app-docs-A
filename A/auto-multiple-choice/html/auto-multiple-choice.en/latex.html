@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>LaTeX source file</title><link rel="stylesheet" type="text/css" href="../style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Auto Multiple Choice" /><link rel="up" href="index.html" title="Auto Multiple Choice" /><link rel="prev" href="AMC-TXT.html" title="AMC-TXT syntax" /><link rel="next" href="graphical-interface.html" title="Usage - Graphical interface" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">LaTeX source file</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AMC-TXT.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="graphical-interface.html">Next</a></td></tr></table><hr /></div><div class="sect1" title="LaTeX source file"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="latex"></a>LaTeX source file</h2></div></div></div><p>This section describes the LaTeX commands that allows you to design
+    your exam answer sheets from a LaTeX souce file. If you chose another
+    format for your source file, you can skip this section. The MCQ can be
+    described as a LaTeX file using the <span class="package">automultiplechoice</span>
+    package. You can check the LaTeX file you are designing at any moment by
+    compiling it with the <span class="command"><strong>latex</strong></span> command, then visualizing
+    the resulting dvi file.</p><p>We start with a few examples giving quick illustrations of how to
+    build LaTeX files for MCQs; the corresponding tex file are available as
+    templates, so that one can create a new MCQ project starting with one of
+    these templates.</p><div class="sect2" title="A simple example"><div class="titlepage"><div><div><h3 class="title"><a id="idp5701248"></a>A simple example</h3></div></div></div><p><a id="modeles-simple.tex"></a></p><pre class="programlisting">\documentclass[a4paper]{article}
+
+\usepackage[utf8x]{inputenc}    <a class="co" id="simple.latin1" href="latex.html#simple.latin1.exp"><img src="../images/callouts/1.png" alt="1" border="0" /></a>
+\usepackage[T1]{fontenc}
+
+\usepackage[box,completemulti]{automultiplechoice}    <a class="co" id="simple.amc" href="latex.html#simple.amc.exp"><img src="../images/callouts/2.png" alt="2" border="0" /></a>
+\begin{document}
+
+\onecopy{10}{    <a class="co" id="simple.exemplaire" href="latex.html#simple.exemplaire.exp"><img src="../images/callouts/3.png" alt="3" border="0" /></a>
+
+%%% beginning of the test sheet header:    <a class="co" id="simple.entete" href="latex.html#simple.entete.exp"><img src="../images/callouts/4.png" alt="4" border="0" /></a>
+
+\noindent{\bf QCM  \hfill TEST}
+
+\vspace*{.5cm}
+\begin{minipage}{.4\linewidth}
+\centering\large\bf Test\\ Examination on Jan., 1st, 2008\end{minipage}
+\namefield{\fbox{    <a class="co" id="simple.champnom" href="latex.html#simple.champnom.exp"><img src="../images/callouts/5.png" alt="5" border="0" /></a>
+                \begin{minipage}{.5\linewidth}
+                  Firstname and lastname:
+
+                  \vspace*{.5cm}\dotfill
+                  \vspace*{1mm}
+                \end{minipage}
+         }}
+
+\begin{center}\em
+Duration : 10 minutes.
+
+  No documents allowed. The use of electronic calculators is forbidden.
+
+
+  Questions using the sign \multiSymbole{} may have
+  zero, one or several correct answers.  Other questions have a single correct answer.
+
+  Negative points may be attributed to \emph{very
+    bad} answers.
+\end{center}
+\vspace{1ex}
+
+%%% end of the header
+
+\begin{question}{prez}    <a class="co" id="simple.qr" href="latex.html#simple.qr.exp"><img src="../images/callouts/6.png" alt="6" border="0" /></a>
+  Among the following persons, which one has ever been a President of the French Republic?
+  \begin{choices}
+    \correctchoice{René Coty}
+    \wrongchoice{Alain Prost}
+    \wrongchoice{Marcel Proust}
+    \wrongchoice{Claude Monet}
+  \end{choices}
+\end{question}
+
+\begin{questionmult}{pref}    <a class="co" id="simple.qrmult" href="latex.html#simple.qrmult.exp"><img src="../images/callouts/7.png" alt="7" border="0" /></a>
+  Among the following cities, which ones are french prefectures?
+  \begin{choices}
+    \correctchoice{Poitiers}
+    \wrongchoice{Sainte-Menehould}
+    \correctchoice{Avignon}
+  \end{choices}
+\end{questionmult}
+
+\clearpage    <a class="co" id="simple.clear" href="latex.html#simple.clear.exp"><img src="../images/callouts/8.png" alt="8" border="0" /></a>
+
+}   <a class="co" id="simple.fin" href="latex.html#simple.fin.exp"><img src="../images/callouts/9.png" alt="9" border="0" /></a>
+
+\end{document}
+</pre><p>A few extra details on this example:</p><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a id="simple.latin1.exp"></a><a href="#simple.latin1"><img src="../images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>The packages <span class="package">inputenc</span> and
+            <span class="package">fontenc</span> allow one to use the UTF-8 encoding.
+            You can of course modify them depending on the encoding you want
+            to use.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.amc.exp"></a><a href="#simple.amc"><img src="../images/callouts/2.png" alt="2" border="0" /></a> </p></td><td valign="top" align="left"><p>The options used here for the <span class="package">automultiplechoice
+            </span>LaTeX package prevent questions from being split between
+            two pages (<code class="option">box</code>) and to automatically complete any
+            multiple choice question by a standard answer allowing the student
+            to mention that, in her/his opinion, none of the listed answers is
+            correct (<code class="option">completemulti</code>).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.exemplaire.exp"></a><a href="#simple.exemplaire"><img src="../images/callouts/3.png" alt="3" border="0" /></a> </p></td><td valign="top" align="left"><p>The <span class="command"><strong>onecopy</strong></span> command produces as many
+            (distinct) realizations of the MCQ test as desired (here 10).
+            See <a class="xref" href="latex.html#sec.unecopie" title="Description of a copy">the section called “Description of a copy”</a> for an alternative syntax using
+            an environment.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.entete.exp"></a><a href="#simple.entete"><img src="../images/callouts/4.png" alt="4" border="0" /></a> </p></td><td valign="top" align="left"><p>Lines that start here describe the header of the
+            test-sheet.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.champnom.exp"></a><a href="#simple.champnom"><img src="../images/callouts/5.png" alt="5" border="0" /></a> </p></td><td valign="top" align="left"><p>The <span class="command"><strong>namefield</strong></span> command specifies where
+            students write their name.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.qr.exp"></a><a href="#simple.qr"><img src="../images/callouts/6.png" alt="6" border="0" /></a> </p></td><td valign="top" align="left"><p>The environments <span class="command"><strong>question</strong></span> and
+            <span class="command"><strong>choices</strong></span> allow one to build a multiple choice
+            question for which there is a single correct answer. A unique
+            identifier for the question has to be specified (here:
+            <span class="emphasis"><em>prez</em></span>).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.qrmult.exp"></a><a href="#simple.qrmult"><img src="../images/callouts/7.png" alt="7" border="0" /></a> </p></td><td valign="top" align="left"><p>The environments <span class="command"><strong>questionmult</strong></span> and
+            <span class="command"><strong>choices</strong></span> allow one to build a multiple choice
+            question that may have zero, one or several correct answers.
+            Student are asked to check all the boxes corresponding to an
+            answer that she/he thinks is correct, or the last box (added
+            automatically thanks to the <code class="option">completemulti</code> option
+            used in the reference to the package in line 6).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.clear.exp"></a><a href="#simple.clear"><img src="../images/callouts/8.png" alt="8" border="0" /></a> </p></td><td valign="top" align="left"><p>The <span class="command"><strong>clearpage</strong></span> is used to start the next
+            realization of the MCQ test on a new page.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="simple.fin.exp"></a><a href="#simple.fin"><img src="../images/callouts/9.png" alt="9" border="0" /></a> </p></td><td valign="top" align="left"><p>This marks the end of the <span class="command"><strong>onecopy</strong></span> command
+            (started at line 9).</p></td></tr></table></div></div><div class="sect2" title="An example with groups of questions and shuffling"><div class="titlepage"><div><div><h3 class="title"><a id="idp5734080"></a>An example with groups of questions and shuffling</h3></div></div></div><p>In this example, we want the order in which questions appear in
+      the MCQ test to be different from one realization of the test to the
+      other, but still keeping together questions dealing with the same
+      subject. To this end, we create two groups of questions, within which
+      questions are shuffled at random.</p><p><a id="modeles-groups.tex"></a></p><pre class="programlisting">\documentclass[a4paper]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[box,completemulti]{automultiplechoice}
+\begin{document}
+
+%%% preparation of the groups
+
+\element{geographie}{
+  \begin{question}{Paris}
+    In which continent is Paris?
+    \begin{choices}
+      \correctchoice{Europe}
+      \wrongchoice{Africa}
+      \wrongchoice{Asia}
+      \wrongchoice{planet Mars}
+    \end{choices}
+  \end{question}
+}
+
+\element{geographie}{
+  \begin{question}{Cameroon}
+    Which is the capital city of Cameroon?
+    \begin{choices}
+      \correctchoice{Yaoundé}
+      \wrongchoice{Douala}
+      \wrongchoice{Abou-Dabi}
+    \end{choices}
+  \end{question}
+}
+
+\element{histoire}{
+  \begin{question}{Marignan}
+    In which year did the battle of Marignan take place?
+    \begin{choiceshoriz}
+      \correctchoice{1515}
+      \wrongchoice{1915}
+      \wrongchoice{1519}
+    \end{choiceshoriz}
+  \end{question}
+}
+
+\element{histoire}{
+  \begin{questionmult}{Nantes}
+    What can be said about the \emph{Édit de Nantes}?
+    \begin{choices}
+      \correctchoice{It was signed in 1598}
+      \correctchoice{Il has been revoked by Louis XIV}
+      \wrongchoice{It was signed by Henri II}
+    \end{choices}
+  \end{questionmult}
+}
+
+%%% copies
+
+\onecopy{10}{
+
+%%% beginning of the test sheet header:
+
+\noindent{\bf QCM  \hfill TEST}
+
+\vspace*{.5cm}
+\begin{minipage}{.4\linewidth}
+  \centering\large\bf History and geography\\ Examination on Jan. 1st, 2008
+\end{minipage}
+\namefield{\fbox{\begin{minipage}{.5\linewidth}
+Firstname and lastname:
+
+\vspace*{.5cm}\dotfill
+\vspace*{1mm}
+\end{minipage}}}
+
+%%% end of the header
+
+\begin{center}
+  \hrule\vspace{2mm}
+  \bf\Large Geography
+  \vspace{1mm}\hrule
+\end{center}
+
+\shufflegroup{geographie}
+\insertgroup{geographie}
+
+\begin{center}
+  \hrule\vspace{2mm}
+  \bf\Large History
+  \vspace{2mm}\hrule
+\end{center}
+
+\shufflegroup{histoire}
+\insertgroup{histoire}
+
+\clearpage
+
+}
+
+\end{document}
+</pre></div><div class="sect2" title="An example with a separate answer sheet"><div class="titlepage"><div><div><h3 class="title"><a id="secensemble"></a>An example with a separate answer sheet</h3></div></div></div><p>In this example, one wants the check-boxes to be put together in a
+      separate sheet. This makes cheating more difficult, and, more
+      importantly, it is enough to scan a single sheet per student, which
+      makes things easier if one has to do a manual scan. In this example, the
+      number of questions is limited: they fit into a single page, so that
+      such a layout would not be really useful in this particular case. It is
+      up to you to modify this example in order to use this layout with a
+      large number of questions!</p><p><a id="modeles-separate.tex"></a></p><pre class="programlisting">\documentclass[a4paper]{article}
+
+\usepackage[utf8x]{inputenc}    
+\usepackage[T1]{fontenc}
+
+\usepackage[box,completemulti,separateanswersheet]{automultiplechoice}    <a class="co" id="ensemble.opt" href="latex.html#ensemble.opt.exp"><img src="../images/callouts/1.png" alt="1" border="0" /></a>
+\begin{document}
+
+\AMCrandomseed{1237893}
+
+\def\AMCformQuestion#1{\vspace{\AMCformVSpace}\par {\sc Question #1:} }    <a class="co" id="ensemble.fq" href="latex.html#ensemble.fq.exp"><img src="../images/callouts/2.png" alt="2" border="0" /></a>
+
+\element{general}{
+  \begin{question}{prez}    
+    Among the following persons, which one has ever been a President of the French Republic?
+    \begin{choices}
+      \correctchoice{René Coty}
+      \wrongchoice{Alain Prost}
+      \wrongchoice{Marcel Proust}
+      \wrongchoice{Claude Monet}
+    \end{choices}
+  \end{question}
+}
+
+\element{general}{
+  \begin{questionmult}{pref}    
+    Among the following cities, which ones are french prefectures?
+    \begin{choices}
+      \correctchoice{Poitiers}
+      \wrongchoice{Sainte-Menehould}
+      \correctchoice{Avignon}
+    \end{choices}
+  \end{questionmult}
+}
+
+\element{general}{
+  \begin{question}{nb-ue}
+    How many different states were members of the European Union in Jan. 2009?
+    \begin{choiceshoriz}[o]
+      \wrongchoice{15}
+      \wrongchoice{21}
+      \wrongchoice{25}
+      \correctchoice{27}
+      \wrongchoice{31}
+    \end{choiceshoriz}
+  \end{question}
+}
+
+\onecopy{5}{    
+
+%%% beginning of the test sheet header:    
+
+\noindent{\bf QCM  \hfill TEST}
+
+\vspace*{.5cm}
+\begin{minipage}{.4\linewidth}
+  \centering\large\bf Test\\ Examination on Jan. 1st, 2008
+\end{minipage}
+
+\begin{center}\em
+Durée : 10 minutes.
+
+  No documents allowed. The use of electronic calculators is forbidden.
+
+  Questions using the sign \multiSymbole{} may have
+  zero, one or several correct answers.  Other questions have a single correct answer.
+
+  Negative points may be attributed to \emph{very
+    bad} answers.
+
+\end{center}
+\vspace{1ex}
+
+%%% end of the header
+
+\shufflegroup{general}
+\insertgroup{general}
+
+\AMCcleardoublepage    <a class="co" id="ensemble.cp" href="latex.html#ensemble.cp.exp"><img src="../images/callouts/3.png" alt="3" border="0" /></a>
+
+\AMCformBegin    <a class="co" id="debut.form" href="latex.html#debut.form.exp"><img src="../images/callouts/4.png" alt="4" border="0" /></a>
+
+%%% beginning of the answer sheet header
+
+{\large\bf Answer sheet:}
+\hfill \namefield{\fbox{    <a class="co" id="ensemble.nom" href="latex.html#ensemble.nom.exp"><img src="../images/callouts/5.png" alt="5" border="0" /></a>
+    \begin{minipage}{.5\linewidth}
+      Firstname and lastname:
+      
+      \vspace*{.5cm}\dotfill
+      \vspace*{1mm}
+    \end{minipage}
+  }}
+
+\begin{center}
+  \bf\em Answers must be given exclusively on this sheet: 
+  answers given on the other sheets will be ignored.
+\end{center}
+
+%%% end of the answer sheet header
+
+\AMCform    <a class="co" id="ensemble.formulaire" href="latex.html#ensemble.formulaire.exp"><img src="../images/callouts/6.png" alt="6" border="0" /></a>
+
+\clearpage    
+
+}  
+
+\end{document}</pre><p>The following remarks should make the above
+      example clearer :</p><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a id="ensemble.opt.exp"></a><a href="#ensemble.opt"><img src="../images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>The <code class="option">separateanswersheet</code> option is what
+            allows us to do what we wanted.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="ensemble.fq.exp"></a><a href="#ensemble.fq"><img src="../images/callouts/2.png" alt="2" border="0" /></a> </p></td><td valign="top" align="left"><p>One can re-define in this manner the way the questions are
+            identified on the answer sheet (this line is optional).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="ensemble.cp.exp"></a><a href="#ensemble.cp"><img src="../images/callouts/3.png" alt="3" border="0" /></a> </p></td><td valign="top" align="left"><p>This page break is put before the special page where the
+            check-boxes are put together. If one does recto-verso printing, it
+            is preferable to use <span class="command"><strong>\AMCcleardoublepage</strong></span> so
+            that this page is printed apart from the others. In the case of
+            recto printing, one can simply use
+            <span class="command"><strong>\clearpage</strong></span>.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="debut.form.exp"></a><a href="#debut.form"><img src="../images/callouts/4.png" alt="4" border="0" /></a> </p></td><td valign="top" align="left"><p>This command marks the beginning of the answer sheet part.
+            Its use is necessary for the appropriate treatment of the
+            questions which appear only in that part, e.g. those generated by
+            <span class="command"><strong>AMCcode</strong></span>.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="ensemble.nom.exp"></a><a href="#ensemble.nom"><img src="../images/callouts/5.png" alt="5" border="0" /></a> </p></td><td valign="top" align="left"><p>Students should normally write their name on the answer
+            sheet!</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="ensemble.formulaire.exp"></a><a href="#ensemble.formulaire"><img src="../images/callouts/6.png" alt="6" border="0" /></a> </p></td><td valign="top" align="left"><p>The LaTeX command <span class="command"><strong>AMCform</strong></span> writes all the
+            check-boxes.</p></td></tr></table></div><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>When one uses a separate answer sheet, letters (or digits, if
+        one uses the option <code class="option">digits</code>, see <a class="xref" href="latex.html#sec.package.options" title="Package options">the section called “Package options”</a>) are written in the check-boxes. To
+        achieve a correct detection of the checked boxes, one has to ask
+        students to completely fill the relevant boxes (checking by simply
+        drawing a cross would not suffice). One also has to tune the grey
+        level threshold (defining the proportion of black dots in a box above
+        which that box is considered to be checked) to a value of order
+        0.5.</p></td></tr></table></div></div><div class="sect2" title="Description of the LaTeX commands"><div class="titlepage"><div><div><h3 class="title"><a id="idp5775472"></a>Description of the LaTeX commands</h3></div></div></div><div class="sect3" title="Package options"><div class="titlepage"><div><div><h4 class="title"><a id="sec.package.options"></a>Package options</h4></div></div></div><p>To use the <span class="package">automultiplechoice</span> package, one
+        uses the line </p><pre class="programlisting">\usepackage[...]{automultiplechoice}</pre><p>where
+        the dots are replaced by a list of options separated by commas. Here
+        are the available options:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="option">lang=<em class="replaceable"><code>XX</code></em></code>: sets
+            the subject language to <em class="replaceable"><code>XX</code></em>. At present,
+            only DE (German), ES (Spanish), FR (French), IT (Italian), JA
+            (Japanese) and NL (Dutch) are available. Several strings added by
+            <span class="package">automultiplechoice</span> will be translated, such as
+            "None of these answers are correct", see option
+            <code class="option">completemulti</code>.</p></li><li class="listitem"><p><code class="option">box</code>: puts every question in a block, so
+            that it cannot be split by a page break.</p></li><li class="listitem"><p><code class="option">completemulti</code>: automatically adds a "None
+            of these answers are correct" choice at the end of each multiple
+            question. Thus, for these questions, a distinction can be made
+            between no answer and the answer consisting in treating none of
+            the listed answers as correct. This behaviour can be forced or
+            cancelled for a particular question using one of the commands
+            <span class="command"><strong>\AMCcompleteMulti</strong></span> or
+            <span class="command"><strong>\AMCnoCompleteMulti</strong></span> inside the corresponding
+            <span class="command"><strong>questionmult</strong></span> environnement.</p></li><li class="listitem"><p><code class="option">noshuffle</code>: stops the automatic shuffling of
+            the answers for every question</p></li><li class="listitem"><p><code class="option">answers</code>: produces the corrected version of
+            the MCQ test, not the test sheet itself.</p></li><li class="listitem"><p><code class="option">separateanswersheet</code>: requires that all
+            check-boxes be put together at the end of the test sheet (usually,
+            this option is used when one wants to have only one sheet to scan
+            per student - see the example in <a class="xref" href="latex.html#secensemble" title="An example with a separate answer sheet">the section called “An example with a separate answer sheet”</a>).</p></li><li class="listitem"><p><code class="option">digits</code>: if one uses the
+            <code class="option">separateanswersheet</code> option, the
+            <code class="option">digits</code> option requires the question to be
+            identified with digits rather than with letters (which corresponds
+            to the default setting). With this option, one has to take care
+            that the number of answers does not exceed 9.</p></li><li class="listitem"><p><code class="option">outsidebox</code>: when using
+            <code class="option">separateanswersheet</code>, this option asks to print
+            letters (or digits) outside the boxes on the answer sheet.</p></li><li class="listitem"><p><code class="option">insidebox</code>: when not using
+            <code class="option">separateanswersheet</code>, this options asks to print
+            letters (or digits) inside the boxes to be filled by the
+            students.</p></li><li class="listitem"><p><code class="option">catalog</code>: use this option to make a catalog
+            of your questions to be used to compose future exams. No need to
+            use <span class="command"><strong>\onecopy</strong></span> with this layout.</p></li><li class="listitem"><p><code class="option">postcorrect</code>: use this option if you want to
+            give the correct answers after scans analysis, from a teacher
+            completed answer sheet - see <a class="xref" href="ar01s07.html#postcorrect" title="Post correcting">the section called “Post correcting”</a> for
+            details.</p></li></ul></div></div><div class="sect3" title="Description of a copy"><div class="titlepage"><div><div><h4 class="title"><a id="sec.unecopie"></a>Description of a copy</h4></div></div></div><p>The LaTeX source code describing the content of the test sheet
+        has to be included in a call to the command
+        <span class="command"><strong>\onecopy</strong></span>, the first argument being the number of
+        distinct realizations to be produced, and the second argument being
+        the code used to generate a realization.</p><pre class="programlisting">\onecopy{50}{ ... }</pre><p>If you have downloaded the LaTeX package
+        <span class="package">environ</span> <span class="emphasis"><em>before</em></span>
+        <span class="package">automultiplechoice</span>, an alternative syntax is
+        available, using the <span class="command"><strong>examcopy</strong></span> environment, where
+        the number of realizations is an option (default is 5).</p><pre class="programlisting">\begin{examcopy}[50]
+...
+\end{examcopy}</pre><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <span class="package">environ</span> package is not available in the
+          TeX Live 2007 distribution, which is still used in Ubuntu
+          distributions up to version 9.10 (Karmic Koala).</p></td></tr></table></div></div><div class="sect3" title="Questions and answers"><div class="titlepage"><div><div><h4 class="title"><a id="latex.qr"></a>Questions and answers</h4></div></div></div><p>For simple questions (a single correct answer), one uses the
+        following model: </p><pre class="programlisting">\begin{question}{identifiant}
+  Here is the question...
+  \begin{choices}
+    \correctchoice{The correct answer}
+    \wrongchoice{A wrong answer}
+    \wrongchoice{Another wrong answer}
+  \end{choices}
+\end{question}</pre><div class="important" title="Important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../images/important.png" /></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>One must use a different identifier for every question. An
+          identifier can be made of digits, letters, and simple characters
+          (but do not use e.g. braces or brackets). Don't end your question
+          identifier with a dot followed by digits, as this syntax is reserved
+          to codes input.</p></td></tr></table></div><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The maximum number of answers for a given question is limited
+          to 199.</p></td></tr></table></div><p>To keep the original order of the answers and prevent shuffling
+        for this specific question, one can use the <code class="option">o</code> option
+        of the <code class="option">choices</code> environment, replacing line 3 by the
+        following:</p><pre class="programlisting">\begin{choices}[o]</pre><p>To put the answers on two columns, one can use the
+        <span class="package">multicol</span> package: load it in the preamble (just
+        after the reference to the package
+        <span class="package">automultiplechoice</span> for instance) with
+        </p><pre class="programlisting">\usepackage{multicol}</pre><p>and include the
+        choices environment inside a multicols environment in the following
+        manner:</p><pre class="programlisting">  \begin{multicols}{2}
+    \begin{choices}
+      \correctchoice{The correct answer}
+      \wrongchoice{A wrong answer}
+      \wrongchoice{Another wrong answer}
+    \end{choices}
+  \end{multicols}</pre><p>For even shorter answers, one can require questions to be
+        printed following one another, using the <code class="option">choiceshoriz</code>
+        environment instead of <code class="option">choices</code>.</p><p>Multiple questions (those for which no, one, or several answers
+        can be correct) use the <code class="option">questionmult</code> environment
+        instead of <code class="option">question</code>.</p><p>When the answer to the question is not supposed to be taken into
+        account in the grading, one uses the <code class="code">\QuestionIndicative</code>
+        command, as in the following example:</p><pre class="programlisting">\begin{question}{difficulty}\QuestionIndicative
+  \scoring{auto=0,v=-1,e=-2}
+  Did you find this class easy or difficult? Please answer on a scale from 0 (very difficult) to 5 
+(very easy).
+  \begin{choiceshoriz}[o]
+    \correctchoice{0}
+    \correctchoice{1}
+    \correctchoice{2}
+    \correctchoice{3}
+    \correctchoice{4}
+    \correctchoice{5}
+  \end{choiceshoriz}
+\end{question}</pre></div><div class="sect3" title="Putting answers on multiple columns"><div class="titlepage"><div><div><h4 class="title"><a id="idp5820272"></a>Putting answers on multiple columns</h4></div></div></div><p>To put answers on several columns (and thus save space), one can
+        embed the <code class="option">choices</code> environment in a
+        <code class="option">multicols</code> environment, using the LaTeX package
+        <span class="package">multicol</span>.</p><p>If, moreover, the answers do not fit into a single line, an
+        answer might be split over several columns, which might be a little
+        puzzling for the reader. The <span class="command"><strong>\AMCBoxedAnswers</strong></span>
+        command was defined in order to prevent this phenomenon, by embedding
+        each answer into a box. Here is an example of use:</p><pre class="programlisting">\begin{question}{two columns}
+  What is a bird ?
+  \begin{multicols}{2}\AMCBoxedAnswers
+    \begin{choices}
+      \correctchoice{It is an animal with wings, laying eggs. There are birds with all sorts of colors.}
+      \wrongchoice{It is a large piece of furniture, made of wood, and used most of the time to store 
+      household linen}
+      \wrongchoice{It is a steam machine devised to seal cans at high speed.}
+    \end{choices}
+  \end{multicols}
+\end{question}</pre><p>Let us note that it is also possible to parametrize the vertical
+        space between two answer blocks, thanks to the dimension
+        <em class="parameter"><code>AMCinterBrep</code></em>:</p><pre class="programlisting">\AMCinterBrep=.5ex</pre></div><div class="sect3" title="Groups of questions"><div class="titlepage"><div><div><h4 class="title"><a id="idp5827184"></a>Groups of questions</h4></div></div></div><p>Putting questions into groups allows one to shuffle questions
+        inside these groups, in a different way for each realization of the
+        test. Every group of questions must have a name formed solely with
+        plain letters.</p><p>One can put questions in a group one by one, as in the following
+        example.</p><pre class="programlisting">\element{mygroup}{
+  \begin{question}{easy}
+    So, how much is one plus one?
+    \begin{choiceshoriz}
+      \correctchoice{two}
+      \wrongchoice{zero}
+      \wrongchoice{three}
+    \end{choiceshoriz}
+  \end{question}
+}</pre><div class="important" title="Important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../images/important.png" /></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>The formation of the group, using the
+          <span class="command"><strong>element</strong></span> commands, must be made only once: thus,
+          these commands have to be used <span class="emphasis"><em>before</em></span> the
+          <span class="command"><strong>onecopy</strong></span> command, which repeats some actions for
+          every realization.</p></td></tr></table></div><p>Once a group is formed, it is possible to shuffle questions
+        inside this group using the <span class="command"><strong>shufflegroup</strong></span> command.
+        For instance</p><pre class="programlisting">\shufflegroup{mygroup}</pre><p>Finally, the group content can be output to the test sheet using
+        command <span class="command"><strong>insertgroup</strong></span>, as in</p><pre class="programlisting">\insertgroup{mygroup}</pre><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>These last two commands (<span class="command"><strong>shufflegroup</strong></span> and
+          <span class="command"><strong>insertgroup</strong></span>) are to be used inside the argument
+          of the command <span class="command"><strong>onecopy</strong></span>, so that shuffling is
+          performed before each realization.</p></td></tr></table></div><p>Groups of questions can be manipulated more precisely thanks to
+        the following commands:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">\insertgroup[n]{mygroup}</code> (using optional
+            parameterl <em class="replaceable"><code>n</code></em>) only inserts the
+            <em class="replaceable"><code>n</code></em> first elements from the group.</p></li><li class="listitem"><p><code class="code">\cleargroup{mygroup}</code> clears all group
+            content.</p></li><li class="listitem"><p><code class="code">\copygroup{groupA}{groupB}</code> copies all the
+            elements from group <em class="replaceable"><code>groupA</code></em> to the end
+            of group <em class="replaceable"><code>groupB</code></em>. With an optional
+            argument <em class="replaceable"><code>n</code></em>, only the n first elements
+            will be copied: <code class="code">\copygroup[n]{groupA}{groupB}</code>.</p></li></ul></div><p>With these commands, you can for exemple make a exam taking 4
+        questions from group GA at random, 5 questions from group GB at
+        random, and all the questions from group GO, shuffling all these
+        questions, with the following code (to be used inside the argument of
+        the command <span class="command"><strong>onecopy</strong></span>):</p><pre class="programlisting">\cleargroup{all}
+\shufflegroup{GA}\copygroup[4]{GA}{all}
+\shufflegroup{GB}\copygroup[5]{GB}{all}
+\copygroup{GO}{all}
+\shufflegroupe{all}
+\insertgroup{all}</pre></div><div class="sect3" title="Page size, margins"><div class="titlepage"><div><div><h4 class="title"><a id="idp5847120"></a>Page size, margins</h4></div></div></div><p>The <span class="command"><strong>automultiplechoice</strong></span> LaTeX package uses
+        <span class="command"><strong>geometry</strong></span> to set the margins and page layout. You
+        can overwrite its settings using the <span class="command"><strong>\geometry</strong></span>
+        command just before the <code class="code">\begin{document}</code> - see the
+        geometry package documentation for details. The values initially set
+        by AMC are:</p><pre class="programlisting">\geometry{hmargin=3cm,headheight=2cm,headsep=.3cm,footskip=1cm,top=3.5cm,bottom=2.5cm}</pre><p>When reducing the margins to gain some space, keep in mind
+        that:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>The four corner marks must be printed entirely (they could
+            disappear due to the printer margins).</p></li><li class="listitem"><p>The four corner marks must be entirely visible on the scans
+            (if they are too close from the border and the paper moved a
+            little or turned a little during scanning, this could not be the
+            case).</p></li></ul></div><p>It is also possible to set the paper size as an option to add to
+        the list given as argument to the <span class="command"><strong>\geometry</strong></span>
+        command. Available values include <code class="code">a4paper</code>,
+        <code class="code">a5paper</code>, <code class="code">a6paper</code>, <code class="code">b4paper</code>,
+        <code class="code">b5paper</code>, <code class="code">ansibpaper</code>,
+        <code class="code">ansicpaper</code>, <code class="code">ansidpaper</code>,
+        <code class="code">letterpaper</code>, <code class="code">executivepaper</code>,
+        <code class="code">legalpaper</code>.</p><p>For small paper sizes, it may also be interesting to change the
+        position of the human readable sheet IDs (like <code class="code">+1/1/53+</code>)
+        in the header. This can be done using the
+        <span class="command"><strong>\AMCidsPosition</strong></span> command, in the form</p><pre class="programlisting">\AMCidsPosition{pos=<em class="replaceable"><code>p</code></em>,width=<em class="replaceable"><code>w</code></em>,height=<em class="replaceable"><code>h</code></em>}</pre><p>where <em class="replaceable"><code>p</code></em> can be <code class="code">none</code>,
+        <code class="code">top</code> or <code class="code">side</code>, and the dimensions
+        <em class="replaceable"><code>w</code></em> and <em class="replaceable"><code>h</code></em> refers
+        to the (invisible) box containing the ID. The default values
+        are</p><pre class="programlisting">\AMCidsPosition{pos=side,width=4cm,height=3ex}</pre><p>Let us end with an example for A5 paper sheets:</p><pre class="programlisting">\geometry{a5paper,hmargin=1.6cm,top=2.5cm}
+\AMCidsPosition{pos=top}</pre></div><div class="sect3" title="Check-box presentation style"><div class="titlepage"><div><div><h4 class="title"><a id="idp5867488"></a>Check-box presentation style</h4></div></div></div><p>The <span class="command"><strong>\AMCboxDimensions</strong></span> command allows one to
+        modify one or several dimensions of the check-boxes.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="option">size</code> is the size of the box;</p></li><li class="listitem"><p><code class="option">rule</code> is the thickness of the boundary of
+            the box;</p></li><li class="listitem"><p><code class="option">down</code> controls by how much boxes are pushed
+            down.</p></li></ul></div><p>To obtain smaller boxes, one can e.g. use the command</p><pre class="programlisting">\AMCboxDimensions{size=1.7ex,down=.2ex}</pre><p>When using <code class="option">separateanswersheet</code> package option,
+        you can also customize the boxes labelling. The default behaviour is
+        to use uppercase alphabetical labelling, or arabic numbering if the
+        <code class="option">digits</code> package option is used. To use your own
+        labelling, one has to redefine the <span class="command"><strong>\AMCchoiceLabel</strong></span>
+        command which takes as argument the name of the counter used to number
+        the choices. For example, the following code will ask for lowercase
+        letters to label the boxes:</p><pre class="programlisting">\def\AMCchoiceLabel#1{\alph{#1}}</pre><p>As an other example, when using <span class="package">arabxetex</span>
+        package, the following code may be useful:</p><pre class="programlisting">\def\AMCchoiceLabel#1{\textLR{\Alph{#1}}}</pre><p>Also note that the color of the boxes to be ticked by the
+        students can be set using</p><pre class="programlisting">\AMCboxColor{red}</pre><p>replacing <code class="code">red</code> by the desired color (that must be
+        recognized by the <span class="command"><strong>xcolor</strong></span> package). For example, you
+        can get a light green with</p><pre class="programlisting">\definecolor{amcboxcolor}{rgb}{0.67,0.88,0.5}
+\AMCboxColor{amcboxcolor}</pre></div><div class="sect3" title="Questions presentation style"><div class="titlepage"><div><div><h4 class="title"><a id="idp5881648"></a>Questions presentation style</h4></div></div></div><p>The way each question is presented can be modified by redefining
+        the LaTeX command <span class="command"><strong>AMCbeginQuestion</strong></span>, whose default
+        definition is the following:</p><pre class="programlisting">\def\AMCbeginQuestion#1#2{\par\noindent{\bf Question #1} #2\hspace*{1em}}</pre><p>The first parameter transmitted to this command is the number of
+        the question to be displayed. The second parameter contains
+        <code class="code">\multiSymbole</code> in the case of a multiple question, and is
+        void in all other cases. The <code class="code">\multiSymbole</code> command too
+        can be modified: its goal is to distinguish multiple questions from
+        the others. By default, it displays a club.</p><pre class="programlisting">\def\multiSymbole{$\clubsuit$}</pre><p>Finally, one can modify the number of the next question with the
+        <code class="code">\AMCnumero command</code>. At the beginning of each realization
+        of the test, a call to</p><pre class="programlisting">\AMCnumero{1}</pre><p>is performed, but this command can be used at any place.</p><p>The display of answers can be modified in the same fashion, if
+        one uses the <code class="option">choicescustom</code> environment instead of
+        <code class="option">choices</code> or <code class="option">choiceshoriz</code>, redefining
+        the three following LaTeX macros:</p><pre class="programlisting">\def\AMCbeginAnswer{}
+\def\AMCendAnswer{}
+\def\AMCanswer#1#2{#1 #2}
+</pre></div><div class="sect3" title="Separate answer sheet presentation style"><div class="titlepage"><div><div><h4 class="title"><a id="idp5891328"></a>Separate answer sheet presentation style</h4></div></div></div><p>It is also possible to modify the layout of the separate answer
+        sheet produced with the <code class="option">separateanswersheet</code> option
+        (see section <a class="xref" href="latex.html#secensemble" title="An example with a separate answer sheet">the section called “An example with a separate answer sheet”</a>).</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>If one only wants to modify the horizontal spacing between
+            two check-boxes or the vertical spacing between two questions, one
+            just has to redefine the following dimensions:</p><pre class="programlisting">\AMCformHSpace=.3em
+\AMCformVSpace=1.2ex
+</pre></li><li class="listitem"><p>For a deeper modification of the display settings, one can
+            also redefine the commands that are used at the beginning of each
+            question and for each answer (here follows the default
+            definitions):</p><pre class="programlisting">\def\AMCformQuestion#1{\vspace{\AMCformVSpace}\par{\bf Question #1:}}
+\def\AMCformAnswer#1{\hspace{\AMCformHSpace} #1}
+</pre></li></ol></div><p>These definitions have to be inserted just after
+        <code class="code">\begin{document}</code> in the LaTeX file.</p></div><div class="sect3" title="Code acquisition"><div class="titlepage"><div><div><h4 class="title"><a id="latex.codes"></a>Code acquisition</h4></div></div></div><p>Code acquisition can be easily performed thanks to the LaTeX
+        command <span class="command"><strong>AMCcode</strong></span>, for instance to allow each student
+        to enter her/his student number by herself/himself on the answer
+        sheet. The two arguments of this command are a code/question
+        identifier, and the number of digits to be used by the code. One can
+        e.g. use the following header</p><pre class="programlisting">{\setlength{\parindent}{0pt}\hspace*{\fill}\AMCcode{etu}{8}\hspace*{\fill}
+\begin{minipage}[b]{6.5cm}
+$\longleftarrow{}$\hspace{0pt plus 1cm} please encode your student number below,
+and write your first and last names below.
+
+\vspace{3ex}
+
+\hfill\namefield{\fbox{    
+    \begin{minipage}{.9\linewidth}
+      Firstname and lastname:
+      
+      \vspace*{.5cm}\dotfill
+      
+      \vspace*{.5cm}\dotfill
+      \vspace*{1mm}
+    \end{minipage}
+  }}\hfill\vspace{5ex}\end{minipage}\hspace*{\fill}
+
+}
+</pre><p>If the <code class="option">separateanswersheet</code> option is used, the
+        <span class="command"><strong>AMCcode</strong></span> command has to be placed after the
+        <span class="command"><strong>AMCformBegin</strong></span> command.</p><p>Note that the codes rendering from <span class="command"><strong>\AMCcode</strong></span>
+        can be adapted modifying the lenghts
+        <span class="command"><strong>\AMCcodeHspace</strong></span>, <span class="command"><strong>\AMCcodeVspace</strong></span>
+        and <span class="command"><strong>\AMCcodeBoxSep</strong></span>, representing the horizontal and
+        vertical amount of space between boxes, and the amount of space
+        between boxes and labels (when the labels are written outside the
+        boxes). Defaut values are set with the following commands:</p><pre class="programlisting">\AMCcodeHspace=.5em
+\AMCcodeVspace=.5em
+\AMCcodeBoxSep=.1em</pre><p>Note that an horizontal version <span class="command"><strong>AMCcodeH</strong></span> is
+        also available, specially for the case of small number of
+        digits.</p></div><div class="sect3" title="Open questions"><div class="titlepage"><div><div><h4 class="title"><a id="idp5909264"></a>Open questions</h4></div></div></div><p>One can sometimes require some open questions to be added to the
+        subject. One way to do so is to reserve boxes use to the teacher for
+        these questions. After the exam, the teacher reads the completed
+        answer sheets and tick the boxes according to the answers written by
+        the students for open questions. He will then scan the sheets and let
+        AMC correct the multiple choice questions and integrate the open
+        questions scores into the marks.</p><pre class="programlisting">\begin{question}{open}
+  Define \emph{inflation}.
+  \AMCOpen{lines=5}{\wrongchoice[W]{w}\scoring{0}\wrongchoice[P]{p}\scoring{1}\correctchoice[C]{c}\scoring{2}}
+\end{question}
+</pre><p>In this example, the teacher will get three boxes. If the first
+        (labelled W for wrong) is ticked, the student will get 0 points. If
+        the second (labelled P for partial) is ticked, the student will get 1
+        point. If the third (labelled C for correct) is ticked, the student
+        will get 2 points.</p><p>The first argument to <span class="command"><strong>\AMCOpen</strong></span> is a comma
+        separated list of options. The available options are:</p><div class="variablelist"><dl><dt><span class="term">lineup=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">true</code>, the answering area and the scoring
+              boxes will be on the same line. If <code class="code">false</code> (this is
+              default), the answering area is enclosed in a frame and placed
+              below the scoring boxes.</p></dd><dt><span class="term">lines=<em class="replaceable"><code>num</code></em></span></dt><dd><p>sets the number of lines for the answer. Default value is
+              <code class="code">1</code>.</p></dd><dt><span class="term">lineheight=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the height of each line. Default value is
+              <code class="code">1cm</code>.</p></dd><dt><span class="term">dots=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">true</code> (defaut), each line will be realized
+              by a line of dots.</p></dd><dt><span class="term">hspace=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the space between boxes in the marking area.</p></dd><dt><span class="term">backgroundcol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the background color of the marking area.</p></dd><dt><span class="term">foregroundcol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the foreground color of the marking area.</p></dd><dt><span class="term">scan=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">false</code>, the boxes are not scanned (this can
+              be useful if you plan to use manual data capture only to mark
+              this question, and don't want to take into account the students
+              drawings on the boxes). Defaults to <code class="code">true</code>.</p></dd><dt><span class="term">annotate=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">false</code> (default value), the boxes from this
+              question won't be annotated when annotating the answer sheets
+              (only the score will be written).</p></dd><dt><span class="term">question=<em class="replaceable"><code>text</code></em></span></dt><dd><p>sets a short text that helps the examiner to identify the
+              question. This text will be written before the scoring boxes,
+              only if a separate answer sheet is used.</p></dd><dt><span class="term">answer=<em class="replaceable"><code>text</code></em></span></dt><dd><p>sets a short text that will be written in the answering
+              area for corrected answer sheets.</p></dd><dt><span class="term">width=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the width of the frame enclosing the answering area
+              when <code class="code">lineup=false</code>. Default value is
+              <code class="code">.95\linewidth</code>.</p></dd><dt><span class="term">framerule=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the line width for the frame enclosing the answering
+              area.</p></dd><dt><span class="term">framerulecol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the frame color for the answering area.</p></dd><dt><span class="term">boxmargin=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the margin around the scoring boxes.</p></dd><dt><span class="term">boxframerule=<em class="replaceable"><code>dim</code></em></span></dt><dd><p>sets the line width for the frame around the scoring
+              boxes.</p></dd><dt><span class="term">boxframerulecol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the color of the frame around the scoring
+              boxes.</p></dd></dl></div><p>You can set other default values (for the whole exam) for all
+        these parameters using the command <span class="command"><strong>\AMCopenOpts</strong></span>,
+        like</p><pre class="programlisting">\AMCopenOpts{boxframerule=2pt,boxframerulecol=red}</pre><p>Moreover, a little text can be written in the marking area to
+        tell the students not to tick these boxes, redefining the
+        <span class="command"><strong>\AMCotextReserved</strong></span> command, as:</p><pre class="programlisting">\def\AMCotextReserved{\emph{Reserved}}</pre><p>When using separate answer sheets, the text added to each open
+        question can also be defined, as:</p><pre class="programlisting">\def\AMCotextGoto{\par{\bf\emph{Please write the answer on the separate answer sheet.}}}</pre></div><div class="sect3" title="Choice of shuffling parameters"><div class="titlepage"><div><div><h4 class="title"><a id="idp5954528"></a>Choice of shuffling parameters</h4></div></div></div><p>One can modify the seed of the random number generator used to
+        produce the shuffle, thanks to the following command (to be used just
+        at the beginning of the document, and in any case outside the
+        <span class="command"><strong>onecopy</strong></span> command):</p><pre class="programlisting">\AMCrandomseed{1527384}</pre><p>If the value that is assigned (to be chosen between 1 and
+        4194303) is modified, then the shuffling will differ. Of course, one
+        must not modify this value after the test sheets have been
+        printed.</p></div><div class="sect3" title="Using references inside the test sheets"><div class="titlepage"><div><div><h4 class="title"><a id="idp5957920"></a>Using references inside the test sheets</h4></div></div></div><p>Using LaTeX commands <span class="command"><strong>\label</strong></span>,
+        <span class="command"><strong>\ref</strong></span> and <span class="command"><strong>\pageref</strong></span> within
+        questions or answers is problematic since they will be called with the
+        same arguments for every realization of the test, which will alter the
+        numbering of references. To solve this problem, one should use instead
+        the commands<span class="command"><strong>\AMClabel</strong></span>, <span class="command"><strong>\AMCref</strong></span>
+        and <span class="command"><strong>\AMCpageref</strong></span>: they add the realization number to
+        their argument before transmitting it to <span class="command"><strong>\label</strong></span>,
+        <span class="command"><strong>\ref</strong></span> and <span class="command"><strong>\pageref</strong></span>.</p><p>One also has to reset counters to zero at the beginning of each
+        realization. For instance, if one wants to include references to
+        pictures that are put together in a separate page, one might write
+        something like</p><pre class="programlisting">\element{animals}{
+  \begin{figure}[p]
+    \centering
+    \includegraphics[width=.6\linewidth]{tiger}
+    \caption{An animal}
+    \AMClabel{tiger}
+  \end{figure}
+    
+  \begin{question}{tiger}
+    Which is the animal on figure~\AMCref{tiger} page~\AMCpageref{tiger}?
+    \begin{choices}
+      \correctchoice{A tiger}
+      \wrongchoice{A giraffe}
+      \wrongchoice{An elephant}
+      \wrongchoice{A cat}
+    \end{choices}
+  \end{question}
+}</pre><p>and it is then important to add, just after the command
+        <span class="command"><strong>\onecopy</strong></span> the line</p><pre class="programlisting">\setcounter{figure}{0}</pre><p>so that the numbering of figures starts at 1 for every
+        realization. Without that last command, the numbering of figures would
+        go on from one realization to the next one, which is clearly not
+        desirable.</p></div><div class="sect3" title="Customizing some texts inserted by AMC"><div class="titlepage"><div><div><h4 class="title"><a id="idp5969136"></a>Customizing some texts inserted by AMC</h4></div></div></div><p>Use <span class="command"><strong>\AMCtext</strong></span> for the following
+        customizations:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">\AMCtext{none}{<em class="replaceable"><code>sentence</code></em>}</code>
+            replaces « None of these answers are correct. » (the English
+            default text) with the given <em class="replaceable"><code>sentence</code></em>
+            when using option <code class="option">completemulti</code>.</p></li><li class="listitem"><p><code class="code">\AMCtext{corrected}{<em class="replaceable"><code>title</code></em>}</code>
+            replaces « Corrected » (the English default text) with the given
+            <em class="replaceable"><code>title</code></em> on the corrected answer
+            sheet.</p></li><li class="listitem"><p><code class="code">\AMCtext{catalog}{<em class="replaceable"><code>title</code></em>}</code>
+            replaces « Catalog » (the English default text) with the given
+            <em class="replaceable"><code>title</code></em> on the questions catalog produced
+            thanks to option <code class="option">catalog</code>.</p></li><li class="listitem"><p>You can also consider using commands like the following ones
+            (here the second argument is set to the default English
+            value):</p><pre class="programlisting">\AMCtext{draft}{DRAFT}
+\AMCtext{message}{For your examination, preferably print documents
+                  compiled from auto-multiple-choice.}</pre></li></ul></div></div></div><div class="sect2" title="Mathematical questions with randomized statements"><div class="titlepage"><div><div><h3 class="title"><a id="idp5980032"></a>Mathematical questions with randomized statements</h3></div></div></div><div class="sect3" title="Using package fp"><div class="titlepage"><div><div><h4 class="title"><a id="idp5980672"></a>Using package fp</h4></div></div></div><p>Thanks to the LaTeX package <span class="package">fp</span>, whose
+        documentation is available at <a class="ulink" href="http://mirrors.ctan.org/macros/latex/contrib/fp/README" target="_top">http://mirrors.ctan.org/macros/latex/contrib/fp/README</a>,
+        and which can be downloaded with the command </p><pre class="programlisting">\usepackage{fp}</pre><p>added
+        before that corresponding to <span class="package">automultiplechoice</span>,
+        one can create exercises with randomized numerical data. Let us start
+        with a simple example.</p><pre class="programlisting">\begin{question}{addition}
+  \FPeval\VQa{trunc(1+random*8,0)}  <a class="co" id="alea.random" href="latex.html#alea.random.exp"><img src="../images/callouts/1.png" alt="1" border="0" /></a>
+  \FPeval\VQb{trunc(4+random*5,0)}
+  \FPeval\VQsomme{clip(VQa+VQb)}  <a class="co" id="alea.result" href="latex.html#alea.result.exp"><img src="../images/callouts/2.png" alt="2" border="0" /></a>
+  \FPeval\VQnonA{clip(VQa+VQb-1)}  <a class="co" id="alea.fausse" href="latex.html#alea.fausse.exp"><img src="../images/callouts/3.png" alt="3" border="0" /></a>
+  \FPeval\VQnonB{clip(VQa*VQb)}
+  \FPeval\VQnonC{clip(VQa-VQb)}
+
+  What is the sum of \VQa{} et \VQb{} ?
+  \begin{choiceshoriz}
+    \correctchoice{\VQsomme}
+    \wrongchoice{\VQnonA}
+    \wrongchoice{\VQnonB}
+    \wrongchoice{\VQnonC}
+  \end{choiceshoriz}
+\end{question}</pre><p>The <span class="command"><strong>\FPeval</strong></span> command is used to perform
+        computations:</p><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a id="alea.random.exp"></a><a href="#alea.random"><img src="../images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>Since <span class="command"><strong>random</strong></span> returns a real number in
+              the interval [0,1], this command sets VQa to a random integer
+              value between 1 et 8. The next line sets VQb to a random integer
+              value between 4 et 8.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="alea.result.exp"></a><a href="#alea.result"><img src="../images/callouts/2.png" alt="2" border="0" /></a> </p></td><td valign="top" align="left"><p>Putting the correct answer in the variable VQsomme.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a id="alea.fausse.exp"></a><a href="#alea.fausse"><img src="../images/callouts/3.png" alt="3" border="0" /></a> </p></td><td valign="top" align="left"><p>Putting wrong answers in variables VQnonA, VQnonB et
+              VQnonC...</p></td></tr></table></div><p>Variable names beginning with VQ have been chosen so
+        as to avoid interference with other LaTeX commands.</p><div class="sect4" title="Choosing an interval"><div class="titlepage"><div><div><h5 class="title"><a id="latex.intervals"></a>Choosing an interval</h5></div></div></div><p>The <span class="command"><strong>automultiplechoice</strong></span> package moreover
+          defines a <span class="command"><strong>\AMCIntervals</strong></span> command which makes this
+          kind of construction simpler, as illustrated in the next
+          example:</p><pre class="programlisting">\begin{question}{inf-expo-indep}
+  \FPeval\VQa{trunc(2 + random * 4,0)}
+  \FPeval\VQb{trunc(6 + random * 5,0)}
+  \FPeval\VQr{VQa/(VQa+VQb)}
+  
+  Let $X$ and $Y$ be two independent random variables, following the exponential distribution with
+respective parameters \VQa{} et \VQb{}.
+  To which interval does the probability $\mathbb{P}[X&lt;Y]$ belong ?
+
+  \begin{multicols}{5}
+    \begin{choices}[o]
+      \AMCIntervals{\VQr}{0}{1}{0.1}  <a class="co" id="choix.intervalles" href="latex.html#choix.intervalles.exp"><img src="../images/callouts/1.png" alt="1" border="0" /></a>
+    \end{choices}
+  \end{multicols}
+\end{question}</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a id="choix.intervalles.exp"></a><a href="#choix.intervalles"><img src="../images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>This lines inserts ten answers corresponding to the
+              intervals [0,0.1[ [0.1,0.2[ ... [0.9,1[, while indicating that
+              the correct interval is the one containing VQr. The arguments of
+              the <span class="command"><strong>\AMCIntervals</strong></span> command are the
+              following:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>The correct answer,</p></li><li class="listitem"><p>The left point of the first interval,</p></li><li class="listitem"><p>The right point of the last interval,</p></li><li class="listitem"><p>The length of each interval.</p></li></ol></div></td></tr></table></div><p>Note that the interval formatting can be changed redefining
+          the <span class="command"><strong>\AMCintervalFormat</strong></span> command, which is
+          originally defined as</p><pre class="programlisting">\def\AMCIntervalFormat#1#2{[#1,\,#2[}</pre><p>to follow local conventions (writting [a,b) instead of [a,b[
+          is for example a common usage).</p></div><div class="sect4" title="Coding the result"><div class="titlepage"><div><div><h5 class="title"><a id="latex.numeric"></a>Coding the result</h5></div></div></div><p>The students can also be asked to code the numerical answer,
+          using the <span class="command"><strong>\AMCnumericChoices</strong></span> command, as in the
+          following example:</p><pre class="programlisting">\begin{questionmultx}{sqrt}
+  \FPeval\VQa{trunc(5+random*15,0)}
+  \FPeval\VQs{VQa^0.5}
+  Compute $\sqrt{\VQa}$ and round it with two digits after period.
+
+  \AMCnumericChoices{\VQs}{digits=3,decimals=2,sign=true,
+                 borderwidth=0pt,backgroundcol=lightgray,approx=5}
+\end{questionmultx}
+</pre><p>Note the use of <code class="code">questionmultx</code> environment: we
+          need this question to be multiple as several boxes has to be ticked,
+          but we can’t say that several answers are correct, so we don’t show
+          the symbol for multiple questions.</p><p>Available options that can be used in the second argument of
+          the <span class="command"><strong>\AMCnumericChoices</strong></span> command are the following
+          (<em class="replaceable"><code>bool</code></em> can be <code class="code">true</code> or
+          <code class="code">false</code>, and <em class="replaceable"><code>color</code></em> must be a
+          color known by the <span class="command"><strong>xcolor</strong></span> package):</p><div class="variablelist"><dl><dt><span class="term">digits=<em class="replaceable"><code>num</code></em></span></dt><dd><p>gives the number of significant digits to request
+                (defaults to 3).</p></dd><dt><span class="term">decimals=<em class="replaceable"><code>num</code></em></span></dt><dd><p>gives the number of digits after period to request
+                (defaults to 0). Note that when <em class="replaceable"><code>num</code></em>
+                is positive, the LaTeX package <span class="command"><strong>fp</strong></span> must be
+                loaded.</p></dd><dt><span class="term">base=<em class="replaceable"><code>num</code></em></span></dt><dd><p>gives the base for <code class="code">digits</code> and
+                <code class="code">decimals</code> (defaults to 10).</p></dd><dt><span class="term">sign=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>requests (or not) a signed value (defaults to
+                true).</p></dd><dt><span class="term">strict=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">true</code>, a box has to be ticked for every
+                digit and for the sign. If <code class="code">false</code>, if some digits
+                has no ticked box, they will be set to zero. Defaults to
+                <code class="code">false</code>.</p></dd><dt><span class="term">vertical=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if true, each digit is represented on one raw. If false
+                (default), each digit is represented on one line.</p></dd><dt><span class="term">reverse=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if true, place higher values of the digits on the top in
+                <code class="code">vertical</code> mode (defaults to true).</p></dd><dt><span class="term">vhead=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if true, in <code class="code">vertical</code> mode, a header is
+                placed over all digits rows, made using the command
+                <span class="command"><strong>\AMCntextVHead</strong></span> that is originally defined
+                as</p><pre class="programlisting">\def\AMCntextVHead#1{\emph{b#1}}</pre><p>This default value is useful to number the binary
+                digits.</p><p>Default value is <code class="code">false</code>.</p></dd><dt><span class="term">hspace=<em class="replaceable"><code>space</code></em></span></dt><dd><p>sets the horizontal space between boxes (defaults to
+                <code class="code">.5em</code>).</p></dd><dt><span class="term">vspace=<em class="replaceable"><code>space</code></em></span></dt><dd><p>sets the vertical space between boxes (defaults to
+                <code class="code">1ex</code>).</p></dd><dt><span class="term">borderwidth=<em class="replaceable"><code>space</code></em></span></dt><dd><p>sets the width of the frame border around all the boxes
+                (defaults to <code class="code">1mm</code>).</p></dd><dt><span class="term">bordercol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the color of the frame (defaults to
+                <code class="code">lightgray</code>).</p></dd><dt><span class="term">backgroundcol=<em class="replaceable"><code>color</code></em></span></dt><dd><p>sets the background color (defaults to
+                <code class="code">white</code>).</p></dd><dt><span class="term">Tsign=<em class="replaceable"><code>text</code></em></span></dt><dd><p>sets the text to print at the top of the boxes to set
+                the sign (Can also be redefined by
+                <code class="code">\def\AMCntextSign{<em class="replaceable"><code>text</code></em>}</code>,
+                and defaults to be empty).</p></dd><dt><span class="term">Tpoint=<em class="replaceable"><code>text</code></em></span></dt><dd><p>sets the text for the period. Can also be redefined by
+                <code class="code">\def\AMCdecimalPoint{<em class="replaceable"><code>text</code></em>}</code>,
+                and defaults to <code class="code">\raisebox{1ex}{\bf .}</code>.</p></dd><dt><span class="term">scoring=<em class="replaceable"><code>bool</code></em></span></dt><dd><p>if <code class="code">true</code>, a scoring strategy is given to AMC
+                for this question. Defaults to <code class="code">true</code>.</p></dd><dt><span class="term">scoreexact=<em class="replaceable"><code>num</code></em></span></dt><dd><p>gives the score for an exact answer (defaults to
+                2).</p></dd><dt><span class="term">scoreapprox=<em class="replaceable"><code>num</code></em></span></dt><dd><p>gives the score for an
+                <span class="emphasis"><em>approximative</em></span> answer (defaults to
+                1).</p></dd><dt><span class="term">approx=<em class="replaceable"><code>num</code></em></span></dt><dd><p>sets the maximal distance to the correct integer value
+                (value without the decimal point) for an answer to be said
+                <span class="emphasis"><em>approximative</em></span> and be rewarded to
+                <code class="code">scoreapprox</code> points (defaults to 0).</p></dd></dl></div><p>You can set other default values (for the whole exam) for all
+          these parameters using the command
+          <span class="command"><strong>\AMCnumericOpts</strong></span>, like</p><pre class="programlisting">\AMCnumericOpts{scoreexact=3,borderwidth=2pt}</pre><p>Moreover, the text added at the end of the questions using
+          <span class="command"><strong>\AMCnumericChoices</strong></span> when not in the separate
+          answer sheet (and when a separate answer sheet is requested by the
+          <code class="code">separateanswersheet</code> package option) can also be set
+          redefining the <span class="command"><strong>\AMCntextGoto</strong></span> command, as:</p><pre class="programlisting">\def\AMCntextGoto{\par{\bf\emph{Please code the answer on
+                           the separate answer sheet.}}}</pre></div></div><div class="sect3" title="Using package pgf/tikz"><div class="titlepage"><div><div><h4 class="title"><a id="idp6068064"></a>Using package pgf/tikz</h4></div></div></div><p>LaTeX package <span class="package">pgf/tikz</span> (see <a class="ulink" href="http://www.ctan.org/tex-archive/graphics/pgf/base" target="_top">http://www.ctan.org/tex-archive/graphics/pgf/base</a>)
+        provides mathematical functions that can be loaded with
+        </p><pre class="programlisting">\usepackage{tikz}</pre><p>First of all, you must set the random seed to be sure to get the
+        same result each time latex is run to compile the subject:</p><pre class="programlisting">\pgfmathsetseed{2056}</pre><div class="sect4" title="A simple computation"><div class="titlepage"><div><div><h5 class="title"><a id="idp6071872"></a>A simple computation</h5></div></div></div><p>Here is an exemple with a simple computation:</p><pre class="programlisting">\begin{question}{inverse}
+  \pgfmathrandominteger{\x}{1}{50}
+       
+  How much is the reciprocal of $x=\x$?
+
+  \begin{choices}
+    \correctchoice{\pgfmathparse{1/\x}\pgfmathresult }
+    \wrongchoice{\pgfmathparse{1/(\x +1))}\pgfmathresult}
+    \wrongchoice{\pgfmathparse{cos(\x)} \pgfmathresult}
+    \wrongchoice{\pgfmathparse{\x^(-0.5)}\pgfmathresult}
+  \end{choices}
+\end{question}
+</pre><p>Here, the command <span class="command"><strong>\pgfmathparse</strong></span> makes the
+          computation, and <span class="command"><strong>\pgfmathresult</strong></span> outputs the
+          result.</p><p>Output formatting is also available with the command
+          <span class="command"><strong>\pgfmathprintnumber</strong></span>, as in the following exemple
+          (three digits after decimal point, and use of the comma as a decimal
+          point).</p><pre class="programlisting">\begin{question}{inverse3}
+  \pgfmathrandominteger{\x}{1}{50}
+  \pgfkeys{/pgf/number format/.cd,fixed,fixed zerofill,precision=3,use comma}
+  How much is the reciprocal of $x=\pgfmathprintnumber{\x}$?
+
+  \begin{choices}
+    \correctchoice{\pgfmathparse{1/\x}\pgfmathprintnumber{\pgfmathresult}} 
+    \wrongchoice{\pgfmathparse{1/(\x +1))} \pgfmathprintnumber{\pgfmathresult}}
+    \wrongchoice{\pgfmathparse{cos(\x)} \pgfmathprintnumber{\pgfmathresult}}
+    \wrongchoice{\pgfmathparse{\x^(-0.5)} \pgfmathprintnumber{\pgfmathresult}}
+  \end{choices}
+\end{question}
+</pre><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can also use the <span class="command"><strong>\AMCIntervals</strong></span> and
+              <span class="command"><strong>\AMCnumericChoices</strong></span> commands (see <a class="xref" href="latex.html#latex.intervals" title="Choosing an interval">the section called “Choosing an interval”</a> and <a class="xref" href="latex.html#latex.numeric" title="Coding the result">the section called “Coding the result”</a>)</p></td></tr></table></div></div><div class="sect4" title="Graphics"><div class="titlepage"><div><div><h5 class="title"><a id="idp6081248"></a>Graphics</h5></div></div></div><p>The tkiz package also allows to make (random or not)
+          graphs.</p><pre class="programlisting">\begin{questionmult}{graph}
+  Let us consider the three functions which graphs are plotted below:
+  \pgfmathrandominteger{\a}{2}{4}  
+  \begin{center}
+    \begin{tikzpicture}[domain=0:4]
+      \draw[very thin,color=gray] (-0.1,-4.1) grid (3.9,3.9);
+      \draw[-&gt;] (-0.2,0) -- (4.2,0) node[right] {$x$};
+      \draw[-&gt;] (0,-4.2) -- (0,4.2) node[above] {$f(x)$};
+      \draw[color=red] plot (\x,{(1+\a/4)*\x-\a}) node[right] {$f_{1} (x)$};
+      \draw[color=blue] plot (\x,{\a*sin(\x r)}) node[right] {$f_{2}(x)$};
+      \draw[color=orange] plot (\x,{\a*cos(\x r)}) node[right] {$f_{3}(x)$};
+    \end{tikzpicture}
+  \end{center}
+  Then:
+  \begin{choices}
+    \pgfmathrandominteger{\x0}{2}{4}  
+    \correctchoice{$f_{2}(\x0)$=\pgfmathparse{\a*sin(\x0 r)} \pgfmathprintnumber{\pgfmathresult}.}
+    \correctchoice{$f_{3}(\x0)$=\pgfmathparse{\a*cos(\x0 r)} \pgfmathprintnumber{\pgfmathresult}.}
+    \wrongchoice{La fonction $f_{1}(x)$ est une fonction linéaire.}
+  \end{choices}
+\end{questionmult}
+</pre><p>To make pretty graphs, package <span class="package">pgfplots</span> can
+          also be useful.</p><p>With pgfmath, precision is limited, so that a "Arithmetic
+          overflow" error can be encountered. Packages <span class="package">tikz</span>
+          and <span class="package">pgfplots</span> allows to overcome this problem,
+          using <span class="command"><strong>gnuplot</strong></span> as a backend. You need to install
+          <span class="command"><strong>gnuplot</strong></span> on your system, and use LaTeX option
+          <code class="option">--shell-escape</code>. To this purpose, go to AMC
+          preferences window, and set the LaTeX engine for your project to
+          "<code class="option">pdflatex --shell-escape</code>" (without the
+          quotes).</p></div></div><div class="sect3" title="Using LuaLaTeX"><div class="titlepage"><div><div><h4 class="title"><a id="idp6089888"></a>Using LuaLaTeX</h4></div></div></div><p>LUA language can be used inside LaTeX documents thanks to the
+        <span class="command"><strong>lualatex</strong></span> command. If you uses it, your document
+        needs to be UTF-8 encoded, and you must not load the
+        <span class="package">inputenc</span> package. See <a class="ulink" href="http://www.luatex.org/documentation.html" target="_top">http://www.luatex.org/documentation.html</a>
+        for some information.</p><p>LUA commands are to be given as a <span class="command"><strong>\directlua</strong></span>
+        argument. The most useful LUA function is
+        <span class="command"><strong>tex.print</strong></span>, which will output results back to
+        LaTeX.</p><p>Once again, if you use random numbers, allways fix the random
+        seed to get the same results across differents compilations:</p><pre class="programlisting">\directlua{math.randomseed (2048)}</pre><p>Here is a very simple sample source file:</p><pre class="programlisting">\documentclass[a4paper]{article}
+%\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[box,completemulti]{automultiplechoice}
+\begin{document}
+
+\onecopy{10}{
+
+%%% head
+
+\noindent{\bf QCM  \hfill TEST}
+
+\vspace*{.5cm}
+\begin{minipage}{.4\linewidth}
+  \centering\large\bf LuaLaTeX sample exam
+\end{minipage}
+\namefield{\fbox{\begin{minipage}{.5\linewidth}
+Name :
+
+\vspace*{.5cm}\dotfill
+\vspace*{1mm}
+\end{minipage}}}
+
+%%%
+
+\directlua{math.randomseed (2048)}
+\directlua{a=math.random()}
+
+\begin{question}{square-root}
+  How much is the square root of \directlua{tex.print(a)}?
+
+  \begin{choices}
+    \correctchoice{\directlua{tex.print(math.sqrt(a))}} 
+    \wrongchoice{\directlua{tex.print(math.sqrt(2*a))}} 
+    \wrongchoice{\directlua{tex.print(math.sqrt(a*1.001))}} 
+  \end{choices}
+\end{question}
+
+\clearpage
+}
+
+\end{document}      </pre><p>Output formatting can be obtained using lua functions, or with
+        the <span class="package">siunitx</span> package.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can also use the <span class="command"><strong>\AMCIntervals</strong></span> and
+          <span class="command"><strong>\AMCnumericChoices</strong></span> commands (see <a class="xref" href="latex.html#latex.intervals" title="Choosing an interval">the section called “Choosing an interval”</a> and <a class="xref" href="latex.html#latex.numeric" title="Coding the result">the section called “Coding the result”</a>)</p></td></tr></table></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AMC-TXT.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="graphical-interface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AMC-TXT syntax </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Usage - Graphical interface</td></tr></table></div></body></html>

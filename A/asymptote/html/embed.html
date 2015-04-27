@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>embed - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Base-modules.html#Base-modules" title="Base modules">
+<link rel="prev" href="animation.html#animation" title="animation">
+<link rel="next" href="slide.html#slide" title="slide">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="embed"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="slide.html#slide">slide</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="animation.html#animation">animation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Base-modules.html#Base-modules">Base modules</a>
+<hr>
+</div>
+
+<h3 class="section">8.17 <code>embed</code></h3>
+
+<p><a name="index-g_t_0040code_007bembed_007d-881"></a>This module provides an interface to the <code>LaTeX</code> package
+(included with <code>MikTeX</code>)
+<blockquote>
+<a href="http://www.ctan.org/tex-archive/macros/latex/contrib/movie15">http://www.ctan.org/tex-archive/macros/latex/contrib/movie15</a>
+</blockquote>
+   for embedding movies, sounds, and 3D objects into a <acronym>PDF</acronym> document. 
+<a name="index-g_t_0040code_007bxelatex_007d-882"></a>However, <code>XeLaTeX</code> users need to rename the modified version
+<code>movie15_dvipdfmx.sty</code> from
+<blockquote>
+<a href="http://asymptote.svn.sourceforge.net/viewvc/asymptote/trunk/asymptote/patches/">http://asymptote.svn.sourceforge.net/viewvc/asymptote/trunk/asymptote/patches/</a>
+</blockquote>
+   to <code>movie15.sty</code> and place it in their <code>LaTeX</code> path.
+
+   <p>The latest version of the <code>movie15</code> package requires both
+<code>pdflatex</code> version 1.20 or later and the file
+<blockquote>
+<a href="http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/ifdraft.dtx">http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/ifdraft.dtx</a>
+</blockquote>
+   which can be installed by placing it in a directory <code>ifdraft</code> in
+the local <code>LaTeX</code> directory
+(e.g. <code>/usr/local/share/texmf/tex/latex/ifdraft</code>) and executing in that
+directory the commands:
+<pre class="verbatim">tex ifdraft.dtx
+texhash
+</pre>
+
+   <p><a name="index-g_t_0040code_007bexternal_007d-883"></a>A more portable method for embedding movie files, which should work on any
+platform and does not require the <code>movie15</code> or <code>ifdraft</code>
+packages, is provided by using the <code>external</code> module instead of
+<code>embed</code>. An example of these
+interfaces is provided in the file <code>embeddedmovie.asy</code> and
+<code>externalmovie.asy</code> in the <code>animations</code> subdirectory of the
+examples directory. For a higher quality movie generated directly by
+<code>Asymptote</code>, use the <code>animate</code> module along with the
+<code>animate.sty</code> package to embed a portable <acronym>PDF</acronym> animation
+(see <a href="animate.html#animate">animate</a>).
+
+   <p><a name="index-g_t_0040code_007bU3D_007d-884"></a>An example of embedding <code>U3D</code> code is provided in the file
+<code>embeddedu3d.asy</code>.
+
+   </body></html>
+

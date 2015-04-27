@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>ax_create_target_h - Autoconf Archive</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Autoconf Archive">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Macros.html#The-Macros" title="The Macros">
+<link rel="prev" href="ax_005fcreate_005fstdint_005fh.html#ax_005fcreate_005fstdint_005fh" title="ax_create_stdint_h">
+<link rel="next" href="ax_005fcvs.html#ax_005fcvs" title="ax_cvs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Autoconf Archive version 2011.12.21, a collection of
+freely re-usable Autoconf macros.
+
+Copyright (C) 2011 Autoconf Archive Maintainers
+<autoconf-archive-maintainers@gnu.org>
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled ``GNU Free
+Documentation License''.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ax_create_target_h"></a>
+<a name="ax_005fcreate_005ftarget_005fh"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ax_005fcvs.html#ax_005fcvs">ax_cvs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ax_005fcreate_005fstdint_005fh.html#ax_005fcreate_005fstdint_005fh">ax_create_stdint_h</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Macros.html#The-Macros">The Macros</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ax_create_target_h</h3>
+
+<h2 class="majorheading">Synopsis</h2>
+
+<pre class="smallexample">     AX_CREATE_TARGET_H [(HEADER-FILE [,PREFIX)]
+</pre>
+<h2 class="majorheading">Description</h2>
+
+<p>Create the header-file and let it contain '#defines' for the target
+platform. This macro is used for libraries that have platform-specific
+quirks. Instead of inventing a target-specific target.h.in files, just
+let it create a header file from the definitions of AC_CANONICAL_SYSTEM
+and put only ifdef's in the installed header-files.
+
+<pre class="smallexample">      if the HEADER-FILE is absent, [target.h] is used.
+      if the PREFIX is absent, [TARGET] is used.
+      the prefix can be the packagename. (y:a-z-:A-Z_:)
+</pre>
+<p>The defines look like...
+
+<pre class="smallexample">      #ifndef TARGET_CPU_M68K
+      #define TARGET_CPU_M68K "m68k"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef TARGET_OS_LINUX
+      #define TARGET_OS_LINUX "linux-gnu"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef TARGET_OS_TYPE                     /* the string itself */
+      #define TARGET_OS_TYPE "linux-gnu"
+      #endif
+</pre>
+<p>Detail: in the case of hppa1.1, the three idents "hppa1_1" "hppa1" and
+"hppa" are derived, for an m68k it just two, "m68k" and "m".
+
+<p>The CREATE_TARGET_H__ variant is almost the same function, but
+everything is lowercased instead of uppercased, and there is a "__" in
+front of each prefix, so it looks like...
+
+<pre class="smallexample">      #ifndef __target_os_linux
+      #define __target_os_linux "linux-gnulibc2"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef __target_os__                     /* the string itself */
+      #define __target_os__ "linux-gnulibc2"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef __target_cpu_i586
+      #define __target_cpu_i586 "i586"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef __target_arch_i386
+      #define __target_arch_i386 "i386"
+      #endif
+</pre>
+<pre class="smallexample">      #ifndef __target_arch__                   /* cpu family arch */
+      #define __target_arch__ "i386"
+      #endif
+</pre>
+<p>Other differences: the default string-define is "__" instead of "_TYPE".
+
+<p>Personally, I prefer the second variant (which had been the first in the
+devprocess of this file but I assume people will often fallback to the
+primary variant presented herein).
+
+<p>NOTE: CREATE_TARGET_H does also fill HOST_OS-defines Functionality has
+been split over functions called CREATE_TARGET_H_UPPER,
+CREATE_TARGET_H_LOWER, CREATE_TARGET_HOST_UPPER, and
+CREATE_TARGET_HOST_LOWER.
+
+<pre class="smallexample">      CREATE_TARGET_H  uses CREATE_TARGET_H_UPPER CREATE_TARGET_HOST_UPPER
+      CREATE_TARGET_H_ uses CREATE_TARGET_H_LOWER CREATE_TARGET_HOST_LOWER
+</pre>
+<p>There is now a CREATE_PREFIX_TARGET_H in this file as a shorthand for
+PREFIX_CONFIG_H from a target.h file, however w/o the target.h ever
+created (the prefix is a bit different, since we add an extra -target-
+and -host-).
+
+<h2 class="majorheading">Source Code</h2>
+
+<p>Download the
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_create_target_h.m4">latest version of <samp><span class="file">ax_create_target_h.m4</span></samp></a> or browse
+<a href="http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=history;f=m4/ax_create_target_h.m4">the macro's revision history</a>.
+
+<h2 class="majorheading">License</h2>
+
+<p>Copyright&nbsp;&copy;&nbsp;2008&nbsp;Guido&nbsp;U.&nbsp;Draheim&nbsp;<a href="mailto:guidod@gmx.de">guidod@gmx.de</a><!-- /@w -->
+
+<p>This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3 of the License, or (at your
+option) any later version.
+
+<p>This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
+
+<p>You should have received a copy of the GNU General Public License along
+with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+
+<p>As a special exception, the respective Autoconf Macro's copyright owner
+gives unlimited permission to copy, distribute and modify the configure
+scripts that are the output of Autoconf when processing the Macro. You
+need not follow the terms of the GNU General Public License when using
+or distributing such scripts, even though portions of the text of the
+Macro appear in them. The GNU General Public License (GPL) does govern
+all other use of the material that constitutes the Autoconf Macro.
+
+<p>This special exception to the GPL applies to versions of the Autoconf
+Macro released by the Autoconf Archive. When you make and distribute a
+modified version of the Autoconf Macro, you may extend this special
+exception to the GPL to apply to your modified version as well.
+
+</body></html>
+

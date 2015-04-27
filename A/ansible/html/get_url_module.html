@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>get_url - Downloads files from HTTP, HTTPS, or FTP to node &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Network Modules" href="list_of_network_modules.html" />
+    <link rel="next" title="slurp - Slurps a file from remote nodes" href="slurp_module.html" />
+    <link rel="prev" title="Network Modules" href="list_of_network_modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="slurp_module.html" title="slurp - Slurps a file from remote nodes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="list_of_network_modules.html" title="Network Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_network_modules.html" accesskey="U">Network Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="get-url-downloads-files-from-http-https-or-ftp-to-node">
+<span id="get-url"></span><h1>get_url - Downloads files from HTTP, HTTPS, or FTP to node<a class="headerlink" href="#get-url-downloads-files-from-http-https-or-ftp-to-node" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jan-Piet Mens</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Downloads files from HTTP, HTTPS, or FTP to the remote server. The remote server <em>must</em> have direct access to the remote resource.
+By default, if an environment variable <tt class="docutils literal"><span class="pre">&lt;protocol&gt;_proxy</span></tt> is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see <a class="reference external" href="http://docs.ansible.com/playbooks_environment.html">setting the environment</a>), or by using the use_proxy option.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>dest</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>absolute path of where to download the file to.If <code>dest</code> is a directory, either the server provided filename or, if none provided, the base name of the URL on the remote server will be used. If a directory, <code>force</code> has no effect. If <code>dest</code> is a directory, the file will always be downloaded (regardless of the force option), but replaced only if the contents changed.</td>
+</tr>
+        <tr>
+<td>force</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>yes</code> and <code>dest</code> is not a directory, will download the file every time and replace the file if the contents change. If <code>no</code>, the file will only be downloaded if the destination does not exist. Generally should be <code>yes</code> only for small local files. Prior to 0.6, this module behaved as if <code>yes</code> was the default. (added in Ansible 0.7)</td>
+</tr>
+        <tr>
+<td>others</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>all arguments accepted by the <span class='module'>file</span> module also work here</td>
+</tr>
+        <tr>
+<td>sha256sum</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>If a SHA-256 checksum is passed to this parameter, the digest of the destination file will be calculated after it is downloaded to ensure its integrity and verify that the transfer completed successfully. (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>url</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>HTTP, HTTPS, or FTP URL in the form (http|https|ftp)://[user[:pass]]@host.domain[:port]/path</td>
+</tr>
+        <tr>
+<td>url_password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The password for use in HTTP basic authentication. If the <code>url_username</code> parameter is not specified, the <code>url_password</code> parameter will not be used. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>url_username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The username for use in HTTP basic authentication. This parameter can be used without <code>url_password</code> for sites that allow empty passwords. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>use_proxy</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>if <code>no</code>, it will not use a proxy, even if one is defined in an environment variable on the target hosts.</td>
+</tr>
+        <tr>
+<td>validate_certs</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>If <code>no</code>, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates.</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires urllib2</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires urlparse</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- name: download foo.conf
+  get_url: url=http://example.com/path/file.conf dest=/etc/foo.conf mode=0440
+
+- name: download file with sha256 check
+  get_url: url=http://example.com/path/file.conf dest=/etc/foo.conf sha256sum=b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module doesn&#8217;t yet support configuration for proxies.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">get_url - Downloads files from HTTP, HTTPS, or FTP to node</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="list_of_network_modules.html"
+                        title="previous chapter">Network Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="slurp_module.html"
+                        title="next chapter">slurp - Slurps a file from remote nodes</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="slurp_module.html" title="slurp - Slurps a file from remote nodes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="list_of_network_modules.html" title="Network Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_network_modules.html" >Network Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

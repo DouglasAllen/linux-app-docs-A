@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>supervisorctl - Manage the state of a program or group of programs running via supervisord &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Web Infrastructure Modules" href="list_of_web_infrastructure_modules.html" />
+    <link rel="next" title="Windows Modules" href="list_of_windows_modules.html" />
+    <link rel="prev" title="jira - create and modify issues in a JIRA instance" href="jira_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="list_of_windows_modules.html" title="Windows Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jira_module.html" title="jira - create and modify issues in a JIRA instance"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_web_infrastructure_modules.html" accesskey="U">Web Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="supervisorctl-manage-the-state-of-a-program-or-group-of-programs-running-via-supervisord">
+<span id="supervisorctl"></span><h1>supervisorctl - Manage the state of a program or group of programs running via supervisord<a class="headerlink" href="#supervisorctl-manage-the-state-of-a-program-or-group-of-programs-running-via-supervisord" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matt Wright, Aaron Wang &lt;<a class="reference external" href="mailto:inetfuture&#37;&#52;&#48;gmail&#46;com">inetfuture<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Manage the state of a program or group of programs running via supervisord</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>config</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The supervisor configuration file path (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The name of the supervisord program or group to manage.The name will be taken as group name when it ends with a colon <em>:</em>Group support is only available in Ansible version 1.6 or later.</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>password to use for authentication (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>server_url</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>URL on which supervisord server is listening (added in Ansible 1.3)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>present</li><li>started</li><li>stopped</li><li>restarted</li></ul></td>
+    <td>The desired state of program/group.</td>
+</tr>
+        <tr>
+<td>supervisorctl_path</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>path to supervisorctl executable (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>username to use for authentication (added in Ansible 1.3)</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires supervisorctl</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Manage the state of program to be in 'started' state.
+- supervisorctl: name=my_app state=started
+
+# Manage the state of program group to be in 'started' state.
+- supervisorctl: name='my_apps:' state=started
+
+# Restart my_app, reading supervisorctl configuration from a specified file.
+- supervisorctl: name=my_app state=restarted config=/var/opt/my_project/supervisord.conf
+
+# Restart my_app, connecting to supervisord with credentials and server URL.
+- supervisorctl: name=my_app state=restarted username=test password=testpass server_url=http://localhost:9001</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When <tt class="docutils literal"><span class="pre">state</span></tt> = <em>present</em>, the module will call <tt class="docutils literal"><span class="pre">supervisorctl</span> <span class="pre">reread</span></tt> then <tt class="docutils literal"><span class="pre">supervisorctl</span> <span class="pre">add</span></tt> if the program/group does not exist.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When <tt class="docutils literal"><span class="pre">state</span></tt> = <em>restarted</em>, the module will call <tt class="docutils literal"><span class="pre">supervisorctl</span> <span class="pre">update</span></tt> then call <tt class="docutils literal"><span class="pre">supervisorctl</span> <span class="pre">restart</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">supervisorctl - Manage the state of a program or group of programs running via supervisord</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jira_module.html"
+                        title="previous chapter">jira - create and modify issues in a JIRA instance</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="list_of_windows_modules.html"
+                        title="next chapter">Windows Modules</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="list_of_windows_modules.html" title="Windows Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jira_module.html" title="jira - create and modify issues in a JIRA instance"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_web_infrastructure_modules.html" >Web Infrastructure Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

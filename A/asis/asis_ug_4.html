@@ -1,0 +1,913 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT User's Guide: 4. ASIS Context</title>
+
+<meta name="description" content="ASIS-for-GNAT User's Guide: 4. ASIS Context">
+<meta name="keywords" content="ASIS-for-GNAT User's Guide: 4. ASIS Context">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="ASIS-Context"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_ug_3.html#How-to-Navigate-through-the-Asis-Package-Hierarchy" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context-and-Tree-Files" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_3.html#ASIS-Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Context-1"></a>
+<h1 class="chapter">4. ASIS <code>Context</code></h1>
+<a name="index-Context-type-7"></a>
+
+<p>From an ASIS application viewpoint we may view an ASIS <code>Context</code> as a set of
+ASIS <code>Compilation_Unit</code>s accessible through ASIS queries.
+<a name="index-ASIS-queries-9"></a>
+The common ASIS
+implementation technique is to base an implementation of an ASIS <code>Context</code> on
+some persistent data structures created by the underlying Ada compiler when
+compiling Ada compilation units maintained by this compiler. An ASIS <code>Context</code>
+can only contain compilable (that is, legal) compilation units.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#ASIS-Context-and-Tree-Files">4.1 ASIS <code>Context</code> and Tree Files</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Creating-Tree-Files-for-Use-by-ASIS">4.2 Creating Tree Files for Use by ASIS</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT">4.3 Different Ways to Define an ASIS <code>Context</code> in ASIS-for-GNAT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Consistency-Problems">4.4 Consistency Problems</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Processing-Several-Contexts-at-a-Time">4.5 Processing Several <code>Context</code>s at a Time</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using-ASIS-with-a-cross_002dcompiler">4.6 Using ASIS with a cross-compiler</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="ASIS-Context-and-Tree-Files"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Context" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Creating-Tree-Files-for-Use-by-ASIS" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Context-and-Tree-Files-1"></a>
+<h2 class="section">4.1 ASIS <code>Context</code> and Tree Files</h2>
+<a name="index-Tree-file-2"></a>
+
+<p>The ASIS-for-GNAT
+<a name="index-ASIS_002dfor_002dGNAT-2"></a>
+implementation is based on <em>tree output files</em>,
+or, simply, <em>tree files</em>. When called with the special option
+&lsquo;<samp>-gnatt</samp>&rsquo;,
+<a name="index-_002dgnatt-option"></a>
+GNAT creates and outputs a tree file if no error was
+detected during the compilation. The tree file is a kind of snapshot of
+the compiler internal data structures (basically, of the Abstract Syntax Tree
+(AST))
+<a name="index-AST-_0028Abstract-Syntax-Tree_0029"></a>
+at the end of the successful compilation. ASIS then inputs tree
+files and recreates in its internal data structures exactly the same picture
+the compiler had at the end of the corresponding successful compilation.
+</p>
+<p>An important consequence of the GNAT source-based compilation model is that the
+AST contains full information not only about the unit being compiled, but also
+about all the units upon which this unit depends semantically. Therefore,
+having read a tree file, ASIS can in general provide information about more
+than one unit. By processing a tree file, a tool can provide information about the
+unit for which this tree was created and about all the units upon which it
+depends semantically. However, to process several units, ASIS sometimes has to
+change the tree being processed (in particular, this occurs when an
+application switches between units which do not semantically depend on each
+other, for example, two package bodies). Therefore, in the course of an ASIS
+application, ASIS may read different tree files and it may read the same tree
+file more then once.
+</p>
+<p>The name of a tree file is obtained from the name of the source file being
+compiled by replacing its suffix with &rsquo;&lsquo;<tt>.adt</tt>&rsquo;&rsquo;. For example, the tree
+file for &lsquo;<tt>foo.adb</tt>&rsquo; is named &lsquo;<tt>foo.adt</tt>&rsquo;.
+<a name="index-adt-extension-for-tree-files"></a>
+</p>
+
+<hr size="6">
+<a name="Creating-Tree-Files-for-Use-by-ASIS"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Context-and-Tree-Files" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Creating-Trees-for-Data-Decomposition-Annex" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Creating-Tree-Files-for-Use-by-ASIS-1"></a>
+<h2 class="section">4.2 Creating Tree Files for Use by ASIS</h2>
+<a name="index-Tree-file-3"></a>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Creating-Trees-for-Data-Decomposition-Annex">4.2.1 Creating Trees for Data Decomposition Annex</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<p>Neither <code>gcc</code> nor <code>gnatmake</code> will create tree files automatically when you
+are working with your Ada program. It is your responsibility as a user of an
+ASIS application to create a set of tree files that correctly reflect
+the set of the Ada components to be processed by the ASIS application, as
+well as to maintain the consistency of the trees and the related source files.
+</p>
+<p>To create a tree file for a given source file, you need to compile the corresponding source file
+with the &lsquo;<samp>-gnatct</samp>&rsquo; option.
+<a name="index-_002dgnatct-option-1"></a>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct foo.adb
+</pre></td></tr></table>
+
+<p>will produce &lsquo;<tt>foo.adt</tt>&rsquo;, provided that &lsquo;<tt>foo.adb</tt>&rsquo; contains the source
+of a legal Ada compilation unit. Actially, the &lsquo;<samp>-gnatct</samp>&rsquo; is an
+ASIS-specific combination of two compileation options, &lsquo;<samp>-gnatt</samp>&rsquo; and
+&lsquo;<samp>-gnatc</samp>&rsquo;. The &lsquo;<samp>-gnatt</samp>&rsquo; option generates a tree file,
+<a name="index-Tree-file-4"></a>
+<a name="index-_002dgnatc-option"></a>
+<a name="index-_002dgnatt-option-1"></a>
+and
+&lsquo;<samp>-gnatc</samp>&rsquo; turns off AST expansion. ASIS needs tree files created without
+AST expansion, whereas to create an object file, GNAT needs an expanded AST.
+<a name="index-AST-_0028Abstract-Syntax-Tree_0029-1"></a>
+Therefore it is impossible for one compilation command to
+to produce both a tree file and an object file for a given source file.
+</p>
+<p>The following points are important to remember when generating and dealing
+with tree files:
+</p>
+<ul>
+<li>
+ASIS-for-GNAT is distributed for a particular version of
+ GNAT.
+<a name="index-ASIS_002dfor_002dGNAT-3"></a>
+All the trees to be processed by an ASIS application should be
+generated by this specific version of the compiler.
+
+</li><li>
+A tree file is not created if an error has been detected during the
+ compilation.
+
+</li><li>
+In contrast with object files, a tree file may be generated for any legal Ada
+ compilation unit, including a library package declaration requiring a body
+ or a subunit.
+
+</li><li>
+A set of tree files processed by an ASIS application may be inconsistent;
+for example, two tree files may have been created with different versions
+ of the source of the same unit. This will lead to inconsistencies in the
+ corresponding ASIS <code>Context</code>. See <a href="#Consistency-Problems">Consistency Problems</a>, for more details.
+
+</li><li>
+Do not move tree, object or source files among directories in the underlying
+ file system! ASIS might assume an inconsistency between
+ tree and source files when opening a <code>Context</code>, or you may get wrong results
+ when querying the source or object file for a given ASIS
+ <code>Compilation_Unit</code>.
+
+</li><li>
+When invoking <code>gcc</code> or <code>gnatmake</code> to create tree files,
+<a name="index-Tree-file-5"></a>
+make sure that all file and
+ directory names containing relative path information start from
+ &lsquo;<tt>./</tt>&rsquo;  or &lsquo;<tt>../</tt>&rsquo; (&lsquo;<tt>.\</tt>&rsquo; and &lsquo;<tt>..\</tt>&rsquo; respectively in MS Windows).
+ That is, to create a
+ tree file for the source file &lsquo;<tt>foo.adb</tt>&rsquo; located in the inner directory
+ named &lsquo;<tt>inner</tt>&rsquo;, you should invoke gcc (assuming an MS Windows platform) as:
+
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct  .\inner\foo.adb
+</pre></td></tr></table>
+
+<p>but not as
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct inner\foo.ads
+</pre></td></tr></table>
+
+<p>Otherwise ASIS will not perform correctly.
+</p>
+</li><li>
+When reading in a tree file, ASIS checks that this tree file was created with
+the &lsquo;<samp>-gnatc</samp>&rsquo; option, and it does not accept trees created without
+this option.
+<a name="index-_002dgnatc-option-1"></a>
+
+</li><li>
+If called to create a tree, GNAT does not destroy an &lsquo;<tt>ALI</tt>&rsquo; file if the &lsquo;<tt>ALI</tt>&rsquo; file
+ already exists for the unit being compiled and if this &lsquo;<tt>ALI</tt>&rsquo; file is
+ up-to-date. Moreover, GNAT may place some information from the existing &lsquo;<tt>ALI</tt>&rsquo;
+ file into the tree file. If you would like to have both object
+ and tree files for your program, first create the object files, and then the tree
+ files.
+
+</li><li>
+There is only one extension for tree files, namely &lsquo;<tt>.adt</tt>&rsquo;, whereas the standard
+ GNAT name convention for the Ada source files uses different extensions
+ for a spec (&lsquo;<tt>.ads</tt>&rsquo;) and for a body (&lsquo;<tt>.adb</tt>&rsquo;). This means that if you
+ first generate a tree for a unit&rsquo;s body:
+
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct foo.adb
+</pre></td></tr></table>
+
+<p>and then generate the tree for the corresponding spec:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct foo.ads
+</pre></td></tr></table>
+
+<p>then the tree file &lsquo;<tt>foo.adt</tt>&rsquo;
+<a name="index-Tree-file-6"></a>
+will be created twice: first for the
+ body, and then for the spec. The tree for the spec will override
+ the tree for the body, and the information about the body will be lost
+ for ASIS. If you first create the tree for a spec, and then for a body,
+ the second tree will also override the first one, but no information will
+ be lost for ASIS, because the tree for a body contains full
+ information about the corresponding spec.
+</p>
+<p> To avoid losing information when creating trees for a set of Ada sources,
+ try to use <code>gnatmake</code> whenever possible (see
+ <a href="asis_ug_8.html#Using-gnatmake-to-Create-Tree-Files">Using <code>gnatmake</code> to Create Tree Files</a> for more details).
+ Otherwise, first create trees for specs and then for bodies:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample">$ gcc -c -gnatct *.ads
+$ gcc -c -gnatct *.adb
+</pre></td></tr></table>
+
+</li><li>
+Reading tree files is a time-consuming operation. Try to minimize the number
+ of tree files to be processed by your application, and try to avoid unnecessary
+ tree swappings.
+<a name="index-Tree-swapping-_0028ASIS-performance-issue_0029"></a>
+ (See <a href="asis_ug_8.html#How-to-Build-Efficient-ASIS-Applications">How to Build Efficient ASIS Applications</a>, for some
+ tips).
+
+</li><li>
+It is possible to create tree files &ldquo;on the fly&rdquo;, as part of the
+ processing of the ASIS queries that obtain units from a <code>Context</code>. In this
+ case there is no need to create tree files before running an ASIS application
+ using the corresponding <code>Context</code> mode. Note that this possibility goes beyond
+ the ASIS Standard, and there are some limitations imposed on
+ some ASIS queries, but this functionality may be useful for
+ ASIS tools that process only one <code>Compilation_Unit</code> at a time. See the
+ <cite>ASIS-for-GNAT Reference Manual</cite> for more details.
+</li></ul>
+
+<p>Note that between opening and closing a <code>Context</code>, an ASIS application should
+not change its working directory; otherwise execution of the application is
+erroneous.
+<a name="index-Erroneous-execution-3"></a>
+</p>
+
+<hr size="6">
+<a name="Creating-Trees-for-Data-Decomposition-Annex"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Creating-Tree-Files-for-Use-by-ASIS" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Creating-Tree-Files-for-Use-by-ASIS" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Creating-Trees-for-Data-Decomposition-Annex-1"></a>
+<h3 class="subsection">4.2.1 Creating Trees for Data Decomposition Annex</h3>
+<a name="index-Data-Decomposition-Annex-_0028DDA_0029"></a>
+<a name="index-Tree-file-7"></a>
+
+<p>Using the ASIS Data Decomposition Annex (DDA) does not require anything special
+to be done by an ASIS user, with one exception. The implementation of the ASIS
+DDA is based on some special annotations added by the compiler to the trees
+used by ASIS. An ASIS user should be aware of the fact that trees created for
+subunits do not have this special annotation.
+<a name="index-Subunits-and-the-Data-Decomposition-Annex"></a>
+Therefore ASIS DDA queries do
+not work correctly on trees created for subunits (and these queries might not
+work correctly if a set of tree files making up a <code>Context</code> contains a tree
+created for a subunit).
+</p>
+<p>Thus, when working with the ASIS DDA, you should avoid creating separate trees
+for subunits. Actually, this is not a limitation: to create a tree for a
+subunit, you should also have the source of the parent body available. If in
+this situation you create the tree for the parent body, it will contain
+the full information (including DDA-specific annotation) for all the subunits
+that are present. From the other side, a tree created for a single subunit has
+to contain information about the parent body, so it has about the same size
+as the tree for the parent body.
+</p>
+<p>The best way to create trees when using ASIS DDA is to use <code>gnatmake</code>: it will
+never create separate trees for subunits.
+</p>
+
+<hr size="6">
+<a name="Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Creating-Trees-for-Data-Decomposition-Annex" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Defining-a-set-of-tree-files-making-up-a-Context" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT-1"></a>
+<h2 class="section">4.3 Different Ways to Define an ASIS <code>Context</code> in ASIS-for-GNAT</h2>
+<a name="index-Context-type-8"></a>
+<a name="index-ASIS_002dfor_002dGNAT-4"></a>
+
+<p>The <code>Asis.Ada_Environments.Associate</code> query
+<a name="index-Asis_002eAda_005fEnvironments_002eAssociate-query"></a>
+that defines a <code>Context</code> has the following spec:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="smallexample"> procedure Associate
+             (The_Context : in out Asis.Context;
+              Name        : in Wide_String;
+              Parameters  : in Wide_String := Default_Parameters);
+</pre></td></tr></table>
+
+<p>In ASIS-for-GNAT, <code>Name</code> does not have any special meaning, and the
+properties of the <code>Context</code> are set by &ldquo;options&rdquo; specified
+in the <code>Parameters</code> string:
+</p>
+<ul>
+<li>
+How to define a set of tree files making up the <code>Context</code> (&lsquo;<samp>-C</samp>&rsquo; options);
+
+</li><li>
+How to deal with tree files when opening a <code>Context</code> and when
+ processing ASIS queries (&lsquo;<samp>-F</samp>&rsquo; options);
+
+</li><li>
+How to process the source files during the consistency check when
+opening the <code>Context</code> (&lsquo;<samp>-S</samp>&rsquo; options):
+
+</li><li>
+The search path for tree files making up the <code>Context</code> (&lsquo;<samp>-T</samp>&rsquo; options);
+
+</li><li>
+The search path for source files used for calling GNAT to create a tree
+file &ldquo;on the fly&rdquo; (&lsquo;<samp>-I</samp>&rsquo; options);
+</li></ul>
+
+<p>The association parameters may (and in some cases must) also contain the
+names of tree files or directories making up search paths for tree and/or
+source files. Below is the overview of the <code>Context</code> association parameters in
+ASIS-for-GNAT; for full details refer to the <cite>ASIS-for-GNAT Reference Manual</cite>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Defining-a-set-of-tree-files-making-up-a-Context">4.3.1 Defining a set of tree files making up a <code>Context</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Dealing-with-tree-files-when-opening-a-Context-and-processing-ASIS-queries">4.3.2 Dealing with tree files when opening a <code>Context</code> and processing ASIS queries</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Processing-source-files-during-the-consistency-check">4.3.3 Processing source files during the consistency check</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Setting-search-paths">4.3.4 Setting search paths</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Defining-a-set-of-tree-files-making-up-a-Context"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Dealing-with-tree-files-when-opening-a-Context-and-processing-ASIS-queries" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Defining-a-set-of-tree-files-making-up-a-Context-1"></a>
+<h3 class="subsection">4.3.1 Defining a set of tree files making up a <code>Context</code></h3>
+
+<p>The following options are available:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>-C1</samp>&rsquo;</dt>
+<dd><p>&ldquo;One tree&rdquo; <code>Context</code>,
+<a name="index-One_002dtree-Context"></a>
+defining a <code>Context</code> comprising a single tree file; this tree
+ file name should be given explicitly in the <code>Parameters</code> string.
+</p>
+</dd>
+<dt> &lsquo;<samp>-CN</samp>&rsquo;</dt>
+<dd><p>&ldquo;N-trees&rdquo; <code>Context</code>,
+<a name="index-N_002dtrees-Context"></a>
+defining a <code>Context</code> comprising a set of tree files; the names
+ of the tree files making up the <code>Context</code> should be given explicitly in the
+ <code>Parameters</code> string.
+</p>
+</dd>
+<dt> &lsquo;<samp>-CA</samp>&rsquo;</dt>
+<dd><p>&ldquo;All trees&rdquo; <code>Context</code>,
+<a name="index-All-trees-Context"></a>
+defining a <code>Context</code> comprising all the tree files in the
+ tree search path given in the same <code>Parameters</code> string; if this option
+ is set together with &lsquo;<samp>-FM</samp>&rsquo; option, ASIS can also create new tree files
+ &ldquo;on the fly&rdquo; when processing queries yielding ASIS <code>Compilation_Unit</code>s.
+</p></dd>
+</dl>
+
+<p>The default option is &lsquo;<samp>-CA</samp>&rsquo;.
+</p>
+<p>Note that for &lsquo;<samp>-C1</samp>&rsquo;, the <code>Parameters</code> string should contain the name of exactly
+one tree file. Moreover, if during the opening of such a
+<code>Context</code> this tree file could not be successfully read in because of any
+reason, the <code>Asis_Failed</code> exception is raised.
+<a name="index-Asis_005fFailed-exception"></a>
+</p>
+
+
+<hr size="6">
+<a name="Dealing-with-tree-files-when-opening-a-Context-and-processing-ASIS-queries"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Defining-a-set-of-tree-files-making-up-a-Context" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Processing-source-files-during-the-consistency-check" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Dealing-with-tree-files-when-opening-a-Context-and-processing-ASIS-queries-1"></a>
+<h3 class="subsection">4.3.2 Dealing with tree files when opening a <code>Context</code> and processing ASIS queries</h3>
+
+<p>The following options are available:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>-FT</samp>&rsquo;</dt>
+<dd><p>Only pre-created trees are used, no tree file can be created by ASIS.
+</p>
+</dd>
+<dt> &lsquo;<samp>-FS</samp>&rsquo;</dt>
+<dd><p>All the trees considered as making up a given <code>Context</code> are created &ldquo;on
+ the fly&rdquo;, whether or not the corresponding tree file already exists;
+ once created, a tree file may then be reused while the <code>Context</code> remains
+ open. This option can be set only with &lsquo;<samp>-CA</samp>&rsquo; option.
+</p>
+</dd>
+<dt> &lsquo;<samp>-FM</samp>&rsquo;</dt>
+<dd><p>Mixed approach: if a needed tree does not exist, the attempt to create
+ it &ldquo;on the fly&rdquo; is made. This option can only be set with &lsquo;<samp>-CA</samp>&rsquo; option.
+</p></dd>
+</dl>
+
+<p>The default option is &lsquo;<samp>-FT</samp>&rsquo;.
+</p>
+<p>Note that the &lsquo;<samp>-FS</samp>&rsquo; and &lsquo;<samp>-FM</samp>&rsquo; options
+go beyond the scope of the
+official ASIS standard. They may be useful for some ASIS applications with
+specific requirements for defining and processing an ASIS <code>Context</code>,
+but in each case the ramifications of using such non-standard options
+should be carefully considered. See the <cite>ASIS-for-GNAT Reference Manual</cite>
+for a detailed description of these option.
+</p>
+
+<hr size="6">
+<a name="Processing-source-files-during-the-consistency-check"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Dealing-with-tree-files-when-opening-a-Context-and-processing-ASIS-queries" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Setting-search-paths" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Processing-source-files-during-the-consistency-check-1"></a>
+<h3 class="subsection">4.3.3 Processing source files during the consistency check</h3>
+
+<p>When ASIS reads a tree fule as a part of opening a <code>Context</code>, it
+checks, that the tree is consistent with the source files of the
+<code>Compilation_Unit</code>s represented by this tree.
+</p>
+<p>The following options are available to control this check:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>-SA</samp>&rsquo;</dt>
+<dd><p>Source files for all the <code>Compilation_Unit</code>s belonging to the <code>Context</code> (except
+  the predefined <code>Standard</code> package) have to be available, and all of them
+  are taken into account for consistency checks when opening the <code>Context</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>-SE</samp>&rsquo;</dt>
+<dd><p>Only existing source files for all the <code>Compilation_Unit</code>s belonging to the
+ <code>Context</code> are taken into account for consistency checks when opening the <code>Context</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>-SN</samp>&rsquo;</dt>
+<dd><p>None of the source files from the underlying file system are taken into
+ account when checking the consistency of the set of tree files making up a
+ <code>Context</code> (that is, no check is made).
+</p></dd>
+</dl>
+
+<p>The default option is &lsquo;<samp>-SA</samp>&rsquo;.
+See <a href="#Consistency-Problems">Consistency Problems</a>, concerning consistency issues in ASIS-for-GNAT.
+</p>
+
+<hr size="6">
+<a name="Setting-search-paths"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Processing-source-files-during-the-consistency-check" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Consistency-Problems" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Different-Ways-to-Define-an-ASIS-Context-in-ASIS_002dfor_002dGNAT" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Setting-search-paths-1"></a>
+<h3 class="subsection">4.3.4 Setting search paths</h3>
+
+<p>Using the &lsquo;<samp>-I</samp>&rsquo;, &lsquo;<samp>-gnatec</samp>&rsquo; and &lsquo;<samp>-gnatA</samp>&rsquo; options for defining
+an ASIS <code>Context</code> is similar to using the same optionsfor <code>gcc</code>.
+The &lsquo;<samp>-T</samp>&rsquo; option is used in the same way,
+for tree files.  For full details about the &lsquo;<samp>-T</samp>&rsquo; and &lsquo;<samp>-I</samp>&rsquo;
+options, refer to the <cite>ASIS-for-GNAT Reference Manual</cite>. Note that the &lsquo;<samp>-T</samp>&rsquo;
+option is used only to locate existing tree files, and it has no effect for
+&lsquo;<samp>-FS</samp>&rsquo; <code>Context</code>s. On the other hand, the &lsquo;<samp>-I</samp>&rsquo; option is used only to
+construct a set of arguments when ASIS calls GNAT to create a tree file &ldquo;on
+the fly&rdquo;; it has no effect for &lsquo;<samp>-FT</samp>&rsquo; <code>Context</code>s, and it cannot be used to
+tell ASIS where it should look for source files for ASIS <code>Compilation_Unit</code>s.
+</p>
+
+<hr size="6">
+<a name="Consistency-Problems"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Setting-search-paths" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Inconsistent-versions-of-ASIS-and-GNAT" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Consistency-Problems-1"></a>
+<h2 class="section">4.4 Consistency Problems</h2>
+<a name="index-Consistency-problems"></a>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Inconsistent-versions-of-ASIS-and-GNAT">4.4.1 Inconsistent versions of ASIS and GNAT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Consistency-of-a-set-of-tree-and-source-files">4.4.2 Consistency of a set of tree and source files</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<p>There are two different kinds of consistency problems existing for
+ASIS-for-GNAT, and both of them can show up when opening an ASIS <code>Context</code>.
+</p>
+<p>First, a tree file may have been created by another version of GNAT (see the
+README file about the coordination between the GNAT and ASIS-for-GNAT
+versions). This means that there is an ASIS-for-GNAT installation problem.
+<a name="index-Tree-file-8"></a>
+<a name="index-ASIS_002dfor_002dGNAT-5"></a>
+</p>
+<p>Second, the tree files may be inconsistent with the existing
+source files or with each other.
+</p>
+
+<hr size="6">
+<a name="Inconsistent-versions-of-ASIS-and-GNAT"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Consistency-Problems" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Consistency-of-a-set-of-tree-and-source-files" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Consistency-Problems" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Inconsistent-versions-of-ASIS-and-GNAT-1"></a>
+<h3 class="subsection">4.4.1 Inconsistent versions of ASIS and GNAT</h3>
+
+<p>When ASIS-for-GNAT reads a tree file created by the version of the compiler
+for which a given version of ASIS-for-GNAT is not supposed to be used, ASIS
+treats the situation as an ASIS-for-GNAT installation problem
+and raises <code>Program_Error</code>
+<a name="index-Program_005fError-exception"></a>
+with a corresponding exception message. In
+this case, <code>Program_Error</code> is not caught by any ASIS query, and it propagates
+outside ASIS.<a name="DOCF3" href="asis_ug_fot.html#FOOT3">(3)</a>
+Note that the real cause may be an old tree file you have forgotten to
+remove when reinstalling ASIS-for-GNAT. This is also considered an
+installation error.
+</p>
+<p>ASIS uses the tree files created by the GNAT compiler installed on your
+machine, and the ASIS implementation includes some compiler components to
+define and to get access to the corresponding data structures. Therefore,
+the version of the GNAT compiler installed on your machine and the version
+of the GNAT compiler whose sources are used as a part of the ASIS
+implementation should be close enough to define the same data structures.
+We do not require these versions to be exactly the same, and, by default,
+when ASIS reads a tree file it only checks for significant differences.
+That is, it will accept tree files from previous versions of GNAT as long as
+it is possible for such files to be read. In theory, this check is not 100%
+safe; that is, a tree created by one version of GNAT might not be correctly
+processed by ASIS built with GNAT sources taken from another version.
+But in practice this situation is extremely unlikely.
+</p>
+<p>An ASIS application may set a strong GNAT version check by providing the
+&lsquo;<samp>-vs</samp>&rsquo; parameter for the ASIS <code>Initialize</code> procedure, see
+<cite>ASIS-for-GNAT Reference Manual</cite>
+for more details. If the strong version check is set, then only a
+tree created by exactly the same version of GNAT whose sources are used
+as a part of the ASIS implementation can be successfully read in, and
+<code>Program_Error</code> will be raised otherwise.
+</p>
+<p>Be careful when using a <code>when others</code> exception handler in your ASIS
+application: do not use it just to catch non-ASIS exceptions and to ignore
+them without any analysis.
+</p>
+
+<hr size="6">
+<a name="Consistency-of-a-set-of-tree-and-source-files"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Inconsistent-versions-of-ASIS-and-GNAT" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Processing-Several-Contexts-at-a-Time" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Consistency-Problems" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Consistency-of-a-set-of-tree-and-source-files-1"></a>
+<h3 class="subsection">4.4.2 Consistency of a set of tree and source files</h3>
+<a name="index-Tree-file-9"></a>
+
+<p>When processing a set of more then one tree file making up the same <code>Context</code>,
+ASIS may face a consistency problem. A set of tree files is inconsistent if it
+contains two trees representing the same compilation unit, and these trees
+were created with different versions of the source of this unit. A tree file
+is inconsistent with a source of a unit represented by this tree if the source
+file currently available for the unit differs from the source used to create
+the tree file.
+</p>
+<p>When opening a <code>Context</code> (via the <code>Asis.Ada_Environments.Open</code> query),
+<a name="index-Asis_002eAda_005fEnvironments_002eOpen-query"></a>
+ASIS does the
+following checks for all the tree files making up the <code>Context</code>:
+</p>
+<ul>
+<li>
+If the &lsquo;<samp>-SA</samp>&rsquo; option is set for the <code>Context</code>, ASIS checks that for every
+  <code>Compilation_Unit</code> represented by a tree, the source file is available and it
+  is the same as the source file used to create the tree (a tree file contains
+  references to all the source files used to create this tree file).
+
+</li><li>
+If the &lsquo;<samp>-SE</samp>&rsquo; option is set for the <code>Context</code>, then if for a <code>Compilation_Unit</code>
+  represented by a tree a source file is available, ASIS checks that this
+  source is the same as the source used to create the tree. If for a
+  <code>Compilation_Unit</code> belonging to a <code>Context</code> a source file is not available, ASIS
+  checks that all the tree files containing this unit were created with the
+  same version of the source of this unit.
+
+</li><li>
+If the &lsquo;<samp>-SN</samp>&rsquo; option is set for the <code>Context</code>, ASIS checks that all the trees
+  were created from the same versions of the sources involved. It does not check if any of
+  these sources is available or if this is the same version of the source that has been
+  used to create the tree files.
+</li></ul>
+
+<p>If any of these checks fail, the <code>Asis_Failed</code> exception
+<a name="index-Asis_005fFailed-exception-1"></a>
+is raised as a result of
+opening a <code>Context</code>. If the <code>Context</code> has been successfully opened,
+you are guaranteed
+that ASIS will process only consistent sets of tree and source files until the
+<code>Context</code> is closed (provided that this set is not changed by some non-ASIS
+actions).
+</p>
+
+<hr size="6">
+<a name="Processing-Several-Contexts-at-a-Time"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Consistency-of-a-set-of-tree-and-source-files" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-ASIS-with-a-cross_002dcompiler" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Processing-Several-Contexts-at-a-Time-1"></a>
+<h2 class="section">4.5 Processing Several <code>Context</code>s at a Time</h2>
+
+<p>If your application processes more then one open <code>Context</code> at a time, and if
+at least one of the <code>Context</code>s is defined with an &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; option,
+be aware that all the tree files created by ASIS &ldquo;on the fly&rdquo; are
+placed in the current directory. Therefore, to be on the safe side when
+processing several opened <code>Context</code>s at a time, an ASIS application should
+have at most one <code>Context</code> defined with an &lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; option. If the
+application has such a <code>Context</code>, all the other <code>Context</code>s should not use
+tree files located in the current directory.
+</p>
+
+<hr size="6">
+<a name="Using-ASIS-with-a-cross_002dcompiler"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Processing-Several-Contexts-at-a-Time" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Context" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-ASIS-with-a-cross_002dcompiler-1"></a>
+<h2 class="section">4.6 Using ASIS with a cross-compiler</h2>
+
+<p>If you would like to use ASIS with a cross-compiler, you should use
+this cross-compiler to create the tree files to be used for the ASIS
+<code>Context</code> defined with &lsquo;<samp>-FS</samp>&rsquo; option. If you would like to
+use trees created on the fly (that is, to use a <code>Context</code> defined with the
+&lsquo;<samp>-FS</samp>&rsquo; or &lsquo;<samp>-FM</samp>&rsquo; option), you have to tell ASIS which compiler should
+be called to perform this function. There are two ways to do this.
+</p>
+<ul>
+<li>
+You can use the &lsquo;<samp>--GCC</samp>&rsquo; option in the <code>Context</code> definition to specify
+explicitly the name of the command to be called to create the trees on the fly
+<a name="index-_002dGCC-option"></a>
+
+</li><li>
+You may use the prefix of the name of your ASIS tool to indicate the name of the command
+  to be used to call the compiler. If the name of your tool contains a hyphen character &ldquo;<code>-</code>&rdquo;,
+  for example <code>some_specific-foo</code>, then ASIS will try to call the command with the
+  name created as a concatenation of the tool name prefix preceding the rightmost
+  hyphen, the hyphen character itself, and <code>gcc</code>. For example, for <code>some_specific-foo</code>,
+  ASIS will try to call <code>some_specific-gcc</code> to create the tree file.
+</li></ul>
+
+<p>The algorithm for defining the name of the command to be used to create trees on the fly
+is as follows. If the &lsquo;<samp>--GCC</samp>&rsquo; option is used in the <code>Context</code> definition and if the name
+that is the parameter of this option denotes some executable existing in the path, this
+executable is used. Otherwise ASIS tries to define the name of the executable from
+the name of the ASIS application. If the corresponding executable exists on the path,
+it is used. Otherwise the standard <code>gcc</code> installation is used.
+</p>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Context" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_5.html#ASIS-Interpreter-asistant" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_ug_0.html#About-This-Guide" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_14.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_ug_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

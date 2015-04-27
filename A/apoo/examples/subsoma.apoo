@@ -1,0 +1,26 @@
+values:	const	3
+	const	4
+	const	5
+n:    	const	3
+res:	mem	1
+
+	jsr	ini
+	halt
+ini:	zero 	R4
+	loadn	values	R1
+	load	n	R2
+	rtn
+loop:	jzero	R2	end
+	loadi	R1	R4
+	add	R4	R3
+	dec	R2	
+	inc	R1
+	jump	loop
+end:	store	R3	res
+	
+
+
+
+
+
+

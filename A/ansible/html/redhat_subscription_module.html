@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>redhat_subscription - Manage Red Hat Network registration and subscriptions using the subscription-manager command &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Packaging Modules" href="list_of_packaging_modules.html" />
+    <link rel="next" title="rhn_channel - Adds or removes Red Hat software channels" href="rhn_channel_module.html" />
+    <link rel="prev" title="portinstall - Installing packages from FreeBSD’s ports system" href="portinstall_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rhn_channel_module.html" title="rhn_channel - Adds or removes Red Hat software channels"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="portinstall_module.html" title="portinstall - Installing packages from FreeBSD’s ports system"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" accesskey="U">Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="redhat-subscription-manage-red-hat-network-registration-and-subscriptions-using-the-subscription-manager-command">
+<span id="redhat-subscription"></span><h1>redhat_subscription - Manage Red Hat Network registration and subscriptions using the <tt class="docutils literal"><span class="pre">subscription-manager</span></tt> command<a class="headerlink" href="#redhat-subscription-manage-red-hat-network-registration-and-subscriptions-using-the-subscription-manager-command" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">James Laska</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.2.</span></p>
+<p>Manage registration and subscription to the Red Hat Network entitlement platform.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>activationkey</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>supply an activation key for use with registration</td>
+</tr>
+        <tr>
+<td>autosubscribe</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Upon successful registration, auto-consume available subscriptions</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Red Hat Network password</td>
+</tr>
+        <tr>
+<td>pool</td>
+<td>no</td>
+<td>^$</td>
+    <td><ul></ul></td>
+    <td>Specify a subscription pool name to consume.  Regular expressions accepted.</td>
+</tr>
+        <tr>
+<td>rhsm_baseurl</td>
+<td>no</td>
+<td>Current value from C(/etc/rhsm/rhsm.conf) is the default</td>
+    <td><ul></ul></td>
+    <td>Specify CDN baseurl</td>
+</tr>
+        <tr>
+<td>server_hostname</td>
+<td>no</td>
+<td>Current value from C(/etc/rhsm/rhsm.conf) is the default</td>
+    <td><ul></ul></td>
+    <td>Specify an alternative Red Hat Network server</td>
+</tr>
+        <tr>
+<td>server_insecure</td>
+<td>no</td>
+<td>Current value from C(/etc/rhsm/rhsm.conf) is the default</td>
+    <td><ul></ul></td>
+    <td>Allow traffic over insecure http</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>whether to register and subscribe (<code>present</code>), or unregister (<code>absent</code>) a system</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Red Hat Network username</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires subscription-manager</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Register as user (joe_user) with password (somepass) and auto-subscribe to available content.
+- redhat_subscription: action=register username=joe_user password=somepass autosubscribe=true
+
+# Register with activationkey (1-222333444) and consume subscriptions matching
+# the names (Red hat Enterprise Server) and (Red Hat Virtualization)
+- redhat_subscription: action=register
+                       activationkey=1-222333444
+                       pool='^(Red Hat Enterprise Server|Red Hat Virtualization)$'</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to register a system, subscription-manager requires either a username and password, or an activationkey.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">redhat_subscription - Manage Red Hat Network registration and subscriptions using the <tt class="docutils literal"><span class="pre">subscription-manager</span></tt> command</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="portinstall_module.html"
+                        title="previous chapter">portinstall - Installing packages from FreeBSD&#8217;s ports system</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rhn_channel_module.html"
+                        title="next chapter">rhn_channel - Adds or removes Red Hat software channels</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rhn_channel_module.html" title="rhn_channel - Adds or removes Red Hat software channels"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="portinstall_module.html" title="portinstall - Installing packages from FreeBSD’s ports system"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_packaging_modules.html" >Packaging Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

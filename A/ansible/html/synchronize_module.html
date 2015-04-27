@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>synchronize - Uses rsync to make synchronizing file paths in your playbooks quick and easy. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Files Modules" href="list_of_files_modules.html" />
+    <link rel="next" title="template - Templates a file out to a remote server." href="template_module.html" />
+    <link rel="prev" title="stat - retrieve file or file system status" href="stat_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_module.html" title="template - Templates a file out to a remote server."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stat_module.html" title="stat - retrieve file or file system status"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_files_modules.html" accesskey="U">Files Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="synchronize-uses-rsync-to-make-synchronizing-file-paths-in-your-playbooks-quick-and-easy">
+<span id="synchronize"></span><h1>synchronize - Uses rsync to make synchronizing file paths in your playbooks quick and easy.<a class="headerlink" href="#synchronize-uses-rsync-to-make-synchronizing-file-paths-in-your-playbooks-quick-and-easy" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Timothy Appnel</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>This is a wrapper around rsync. Of course you could just use the command action to call rsync yourself, but you also have to add a fair number of boilerplate options and host facts. You still may need to call rsync directly via <tt class="docutils literal"><span class="pre">command</span></tt> or <tt class="docutils literal"><span class="pre">shell</span></tt> depending on your use case. The synchronize action is meant to do common things with <tt class="docutils literal"><span class="pre">rsync</span></tt> easily. It does not provide access to the full power of rsync, but does make most invocations easier to follow.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>archive</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Mirrors the rsync archive flag, enables recursive, links, perms, times, owner, group flags and -D.</td>
+</tr>
+        <tr>
+<td>checksum</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Skip based on checksum, rather than mod-time &amp; size; Note that that "archive" option is still enabled by default - the "checksum" option will not disable it. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>compress</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Compress file data during the transfer. In most cases, leave this enabled unless it causes problems. (added in Ansible 1.7)</td>
+</tr>
+        <tr>
+<td>copy_links</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Copy symlinks as the item that they point to (the referent) is copied, rather than the symlink.</td>
+</tr>
+        <tr>
+<td>delete</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Delete files that don't exist (after transfer, not before) in the <code>src</code> path. This option requires <code>recursive=yes</code>.</td>
+</tr>
+        <tr>
+<td>dest</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Path on the destination machine that will be synchronized from the source; The path can be absolute or relative.</td>
+</tr>
+        <tr>
+<td>dest_port</td>
+<td>no</td>
+<td>22</td>
+    <td><ul></ul></td>
+    <td>Port number for ssh on the destination host. The ansible_ssh_port inventory var takes precedence over this value. (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>dirs</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Transfer directories without recursing</td>
+</tr>
+        <tr>
+<td>existing_only</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Skip creating new files on receiver. (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>group</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Preserve group</td>
+</tr>
+        <tr>
+<td>links</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Copy symlinks as symlinks.</td>
+</tr>
+        <tr>
+<td>mode</td>
+<td>no</td>
+<td>push</td>
+    <td><ul><li>push</li><li>pull</li></ul></td>
+    <td>Specify the direction of the synchroniztion. In push mode the localhost or delegate is the source; In pull mode the remote host in context is the source.</td>
+</tr>
+        <tr>
+<td>owner</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Preserve owner (super user only)</td>
+</tr>
+        <tr>
+<td>perms</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Preserve permissions.</td>
+</tr>
+        <tr>
+<td>recursive</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Recurse into directories.</td>
+</tr>
+        <tr>
+<td>rsync_opts</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Specify additional rsync options by passing in an array. (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>rsync_path</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Specify the rsync command to run on the remote machine. See <code>--rsync-path</code> on the rsync man page.</td>
+</tr>
+        <tr>
+<td>rsync_timeout</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Specify a --timeout for the rsync command in seconds.</td>
+</tr>
+        <tr>
+<td>set_remote_user</td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td>put user@ for the remote paths. If you have a custom ssh config to define the remote user for a host that does not match the inventory user, you should set this parameter to "no".</td>
+</tr>
+        <tr>
+<td>src</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Path on the source machine that will be synchronized to the destination; The path can be absolute or relative.</td>
+</tr>
+        <tr>
+<td>times</td>
+<td>no</td>
+<td>the value of the archive option</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Preserve modification times</td>
+</tr>
+    </table></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Synchronization of src on the control machine to dest on the remote hosts
+synchronize: src=some/relative/path dest=/some/absolute/path
+
+# Synchronization without any --archive options enabled
+synchronize: src=some/relative/path dest=/some/absolute/path archive=no
+
+# Synchronization with --archive options enabled except for --recursive
+synchronize: src=some/relative/path dest=/some/absolute/path recursive=no
+
+# Synchronization with --archive options enabled except for --times, with --checksum option enabled
+synchronize: src=some/relative/path dest=/some/absolute/path checksum=yes times=no
+
+# Synchronization without --archive options enabled except use --links
+synchronize: src=some/relative/path dest=/some/absolute/path archive=no links=yes
+
+# Synchronization of two paths both on the control machine
+local_action: synchronize src=some/relative/path dest=/some/absolute/path
+
+# Synchronization of src on the inventory host to the dest on the localhost in
+pull mode
+synchronize: mode=pull src=some/relative/path dest=/some/absolute/path
+
+# Synchronization of src on delegate host to dest on the current inventory host
+synchronize: &gt;
+    src=some/relative/path dest=/some/absolute/path
+    delegate_to: delegate.host
+
+# Synchronize and delete files in dest on the remote host that are not found in src of localhost.
+synchronize: src=some/relative/path dest=/some/absolute/path delete=yes
+
+# Synchronize using an alternate rsync command
+synchronize: src=some/relative/path dest=/some/absolute/path rsync_path="sudo rsync"
+
+# Example .rsync-filter file in the source directory
+- var       # exclude any path whose last part is 'var'
+- /var      # exclude any path starting with 'var' starting at the source directory
++ /var/conf # include /var/conf even though it was previously excluded
+
+# Synchronize passing in extra rsync options
+synchronize: src=/tmp/helloworld dest=/var/www/helloword rsync_opts=--no-motd,--exclude=.git</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Inspect the verbose output to validate the destination user/host/path are what was expected.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The remote user for the dest path will always be the remote_user, not the sudo_user.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Expect that dest=~/x will be ~&lt;remote_user&gt;/x even if using sudo.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To exclude files and directories from being synchronized, you may add <tt class="docutils literal"><span class="pre">.rsync-filter</span></tt> files to the source directory.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">synchronize - Uses rsync to make synchronizing file paths in your playbooks quick and easy.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="stat_module.html"
+                        title="previous chapter">stat - retrieve file or file system status</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_module.html"
+                        title="next chapter">template - Templates a file out to a remote server.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_module.html" title="template - Templates a file out to a remote server."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stat_module.html" title="stat - retrieve file or file system status"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_files_modules.html" >Files Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

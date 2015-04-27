@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>postgresql_user - Adds or removes a users (roles) from a PostgreSQL database. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Database Modules" href="list_of_database_modules.html" />
+    <link rel="next" title="redis - Various redis commands, slave and flush" href="redis_module.html" />
+    <link rel="prev" title="postgresql_privs - Grant or revoke privileges on PostgreSQL database objects." href="postgresql_privs_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="redis_module.html" title="redis - Various redis commands, slave and flush"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="postgresql_privs_module.html" title="postgresql_privs - Grant or revoke privileges on PostgreSQL database objects."
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_database_modules.html" accesskey="U">Database Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="postgresql-user-adds-or-removes-a-users-roles-from-a-postgresql-database">
+<span id="postgresql-user"></span><h1>postgresql_user - Adds or removes a users (roles) from a PostgreSQL database.<a class="headerlink" href="#postgresql-user-adds-or-removes-a-users-roles-from-a-postgresql-database" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Lorin Hochstein</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Add or remove PostgreSQL users (roles) from a remote host and, optionally, grant the users access to an existing database or tables.
+The fundamental function of the module is to create, or delete, roles from a PostgreSQL cluster. Privilege assignment, or removal, is an optional step, which works on one database at a time. This allows for the module to be called several times in the same module to modify the permissions on different databases, or to grant permissions to already existing users.
+A user cannot be removed until all the privileges have been stripped from the user. In such situation, if the module tries to remove the user it will fail. To avoid this from happening the fail_on_user option signals the module to try to remove the user, but if not possible keep going; the module will report if changes happened and separately if the user was removed or not.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>db</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>name of database where permissions will be granted</td>
+</tr>
+        <tr>
+<td>encrypted</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>denotes if the password is already encrypted. boolean. (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>expires</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>sets the user's password expiration. (added in Ansible 1.4)</td>
+</tr>
+        <tr>
+<td>fail_on_user</td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>if <code>yes</code>, fail when user can't be removed. Otherwise just log and continue</td>
+</tr>
+        <tr>
+<td>login_host</td>
+<td>no</td>
+<td>localhost</td>
+    <td><ul></ul></td>
+    <td>Host running PostgreSQL.</td>
+</tr>
+        <tr>
+<td>login_password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Password used to authenticate with PostgreSQL</td>
+</tr>
+        <tr>
+<td>login_user</td>
+<td>no</td>
+<td>postgres</td>
+    <td><ul></ul></td>
+    <td>User (role) used to authenticate with PostgreSQL</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>name of the user (role) to add or remove</td>
+</tr>
+        <tr>
+<td>password</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>set the user's password, before 1.4 this was required.When passing an encrypted password, the encrypted parameter must also be true, and it must be generated with the format <code>'str["md5"] + md5[ password + username ]'</code>, resulting in a total of 35 characters.  An easy way to do this is: <code>echo "md5`echo -n "verysecretpasswordJOE" | md5`"</code>.</td>
+</tr>
+        <tr>
+<td>port</td>
+<td>no</td>
+<td>5432</td>
+    <td><ul></ul></td>
+    <td>Database port to connect to.</td>
+</tr>
+        <tr>
+<td>priv</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>PostgreSQL privileges string in the format: <code>table:priv1,priv2</code></td>
+</tr>
+        <tr>
+<td>role_attr_flags</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>[NO]SUPERUSER</li><li>[NO]CREATEROLE</li><li>[NO]CREATEUSER</li><li>[NO]CREATEDB</li><li>[NO]INHERIT</li><li>[NO]LOGIN</li><li>[NO]REPLICATION</li></ul></td>
+    <td>PostgreSQL role attributes string in the format: CREATEDB,CREATEROLE,SUPERUSER</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>The user (role) state</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires psycopg2</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Create django user and grant access to database and products table
+- postgresql_user: db=acme name=django password=ceec4eif7ya priv=CONNECT/products:ALL
+
+# Create rails user, grant privilege to create other databases and demote rails from super user status
+- postgresql_user: name=rails password=secret role_attr_flags=CREATEDB,NOSUPERUSER
+
+# Remove test user privileges from acme
+- postgresql_user: db=acme name=test priv=ALL/products:ALL state=absent fail_on_user=no
+
+# Remove test user from test database and the cluster
+- postgresql_user: db=test name=test priv=ALL state=absent
+
+# Example privileges string format
+INSERT,UPDATE/table:SELECT/anothertable:ALL
+
+# Remove an existing user's password
+- postgresql_user: db=test user=test password=NULL</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The default authentication assumes that you are either logging in as or sudo&#8217;ing to the postgres account on the host.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module uses psycopg2, a Python PostgreSQL database adapter. You must ensure that psycopg2 is installed on the host before using this module. If the remote host is the PostgreSQL server (which is the default case), then PostgreSQL must also be installed on the remote host. For Ubuntu-based systems, install the postgresql, libpq-dev, and python-psycopg2 packages on the remote host before using this module.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you specify PUBLIC as the user, then the privilege changes will apply to all users. You may not specify password or role_attr_flags when the PUBLIC user is specified.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">postgresql_user - Adds or removes a users (roles) from a PostgreSQL database.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postgresql_privs_module.html"
+                        title="previous chapter">postgresql_privs - Grant or revoke privileges on PostgreSQL database objects.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="redis_module.html"
+                        title="next chapter">redis - Various redis commands, slave and flush</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="redis_module.html" title="redis - Various redis commands, slave and flush"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="postgresql_privs_module.html" title="postgresql_privs - Grant or revoke privileges on PostgreSQL database objects."
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_database_modules.html" >Database Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

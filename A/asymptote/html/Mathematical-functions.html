@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Mathematical functions - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Rest-arguments.html#Rest-arguments" title="Rest arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mathematical-functions"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rest-arguments.html#Rest-arguments">Rest arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.11.4 Mathematical functions</h4>
+
+<p><a name="index-mathematical-functions-648"></a><a name="index-functions-649"></a><a name="index-g_t_0040code_007blibm_007d-routines-650"></a>
+<a name="index-g_t_0040code_007bsin_007d-651"></a><a name="index-g_t_0040code_007bcos_007d-652"></a><a name="index-g_t_0040code_007btan_007d-653"></a><a name="index-g_t_0040code_007basin_007d-654"></a><a name="index-g_t_0040code_007bacos_007d-655"></a><a name="index-g_t_0040code_007batan_007d-656"></a><a name="index-g_t_0040code_007bexp_007d-657"></a><a name="index-g_t_0040code_007blog_007d-658"></a><a name="index-g_t_0040code_007bpow10_007d-659"></a><a name="index-g_t_0040code_007blog10_007d-660"></a><a name="index-g_t_0040code_007bsinh_007d-661"></a><a name="index-g_t_0040code_007bcosh_007d-662"></a><a name="index-g_t_0040code_007btanh_007d-663"></a><a name="index-g_t_0040code_007basinh_007d-664"></a><a name="index-g_t_0040code_007bacosh_007d-665"></a><a name="index-g_t_0040code_007batanh_007d-666"></a><a name="index-g_t_0040code_007bsqrt_007d-667"></a><a name="index-g_t_0040code_007bcbrt_007d-668"></a><a name="index-g_t_0040code_007bfabs_007d-669"></a><a name="index-g_t_0040code_007bexpm1_007d-670"></a><a name="index-g_t_0040code_007blog1p_007d-671"></a><a name="index-g_t_0040code_007bidentity_007d-672"></a><a name="index-g_t_0040code_007bJ_007d-673"></a><a name="index-g_t_0040code_007bY_007d-674"></a><a name="index-g_t_0040code_007bgamma_007d-675"></a><a name="index-g_t_0040code_007berf_007d-676"></a><a name="index-g_t_0040code_007berfc_007d-677"></a><a name="index-g_t_0040code_007batan2_007d-678"></a><a name="index-g_t_0040code_007bhypot_007d-679"></a><a name="index-g_t_0040code_007bfmod_007d-680"></a><a name="index-g_t_0040code_007bremainder_007d-681"></a><code>Asymptote</code> has built-in versions of the standard <code>libm</code> mathematical
+real(real) functions <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>,
+<code>acos</code>, <code>atan</code>, <code>exp</code>, <code>log</code>, <code>pow10</code>,
+<code>log10</code>, <code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>asinh</code>,
+<code>acosh</code>, <code>atanh</code>, <code>sqrt</code>, <code>cbrt</code>, <code>fabs</code>, <code>expm1</code>,
+<code>log1p</code>, as well as the identity function <code>identity</code>. 
+<code>Asymptote</code> also defines the order <code>n</code> Bessel functions of
+the first kind <code>Jn(int n, real)</code> and second kind
+<code>Yn(int n, real)</code>, as well as the gamma function <code>gamma</code>,
+the error function <code>erf</code>, and the complementary error function
+<code>erfc</code>. The standard real(real, real) functions <code>atan2</code>,
+<code>hypot</code>, <code>fmod</code>, <code>remainder</code> are also included.
+
+   <p><a name="index-g_t_0040code_007bdegrees_007d-682"></a><a name="index-g_t_0040code_007bradians_007d-683"></a><a name="index-g_t_0040code_007bDegrees_007d-684"></a>The functions <code>degrees(real radians)</code> and <code>radians(real degrees)</code>
+can be used to convert between radians and degrees. The function
+<code>Degrees(real radians)</code> returns the angle in degrees in the
+interval [0,360). 
+<a name="index-g_t_0040code_007bSin_007d-685"></a><a name="index-g_t_0040code_007bCos_007d-686"></a><a name="index-g_t_0040code_007bTan_007d-687"></a><a name="index-g_t_0040code_007baSin_007d-688"></a><a name="index-g_t_0040code_007baCos_007d-689"></a><a name="index-g_t_0040code_007baTan_007d-690"></a>For convenience, <code>Asymptote</code> defines variants <code>Sin</code>,
+<code>Cos</code>, <code>Tan</code>, <code>aSin</code>, <code>aCos</code>, and <code>aTan</code> of
+the standard trigonometric functions that use degrees rather than radians. 
+We also define complex versions of the <code>sqrt</code>, <code>sin</code>, <code>cos</code>,
+<code>exp</code>, <code>log</code>, and <code>gamma</code> functions.
+
+   <p><a name="index-g_t_0040code_007bfloor_007d-691"></a><a name="index-g_t_0040code_007bceil_007d-692"></a><a name="index-g_t_0040code_007bround_007d-693"></a><a name="index-g_t_0040code_007bsgn_007d-694"></a>The functions <code>floor</code>, <code>ceil</code>, and <code>round</code> differ from
+their usual definitions in that they all return an int value rather than
+a real (since that is normally what one wants). 
+The functions <code>Floor</code>, <code>Ceil</code>, and <code>Round</code> are
+respectively similar, except that if the result cannot be converted
+to a valid int, they return <code>intMax</code>
+for positive arguments and <code>intMin</code> for negative arguments,
+rather than generating an integer overflow. 
+We also define a function <code>sgn</code>, which returns the sign of its
+real argument as an integer (-1, 0, or 1).
+
+   <p><a name="index-g_t_0040code_007babs_007d-695"></a>There is an <code>abs(int)</code> function, as well as an <code>abs(real)</code>
+function (equivalent to <code>fabs(real)</code>), an <code>abs(pair)</code> function
+(equivalent to <code>length(pair)</code>).
+
+   <p><a name="index-g_t_0040code_007bsrand_007d-696"></a><a name="index-g_t_0040code_007brand_007d-697"></a><a name="index-g_t_0040code_007brandMax_007d-698"></a><a name="index-g_t_0040code_007bunitrand_007d-699"></a><a name="index-g_t_0040code_007bGaussrand_007d-700"></a><a name="index-g_t_0040code_007bhistogram_007d-701"></a><a name="index-g_t_0040code_007bfactorial_007d-702"></a><a name="index-g_t_0040code_007bchoose_007d-703"></a>Random numbers can be seeded with <code>srand(int)</code> and generated with
+the <code>int rand()</code> function, which returns a random integer between 0
+and the integer <code>randMax</code>. The <code>unitrand()</code> function returns
+a random number uniformly distributed in the interval [0,1]. 
+A Gaussian random number generator
+<code>Gaussrand</code> and a collection of statistics routines, including
+<code>histogram</code>, are provided in the base file <code>stats.asy</code>. 
+The functions <code>factorial(int n)</code>, which returns n!, and
+<code>choose(int n, int k)</code>, which returns n!/(k!(n-k)!), are
+also defined.
+
+   <p><a name="index-g_t_0040acronym_007bGNU_007d-Scientific-Library-704"></a><a name="index-g_t_0040code_007bgsl_007d-705"></a><a name="index-Airy-706"></a><a name="index-Bessel-707"></a><a name="index-Legendre-708"></a><a name="index-elliptic-functions-709"></a><a name="index-exponential-integral-710"></a><a name="index-trigonometric-integrals-711"></a><a name="index-Riemann-zeta-function-712"></a><a name="index-g_t_0040code_007bAi_007d-713"></a><a name="index-g_t_0040code_007bBi_007d-714"></a><a name="index-g_t_0040code_007bAi_005fderiv_007d-715"></a><a name="index-g_t_0040code_007bBi_005fderiv_007d-716"></a><a name="index-g_t_0040code_007bzero_005fAi_007d-717"></a><a name="index-g_t_0040code_007bzero_005fBi_007d-718"></a><a name="index-g_t_0040code_007bzero_005fAi_005fderiv_007d-719"></a><a name="index-g_t_0040code_007bzero_005fBi_005fderiv_007d-720"></a><a name="index-g_t_0040code_007bJ_007d-721"></a><a name="index-g_t_0040code_007bY_007d-722"></a><a name="index-g_t_0040code_007bI_007d-723"></a><a name="index-g_t_0040code_007bK_007d-724"></a><a name="index-g_t_0040code_007bi_005fscaled_007d-725"></a><a name="index-g_t_0040code_007bk_005fscaled_007d-726"></a><a name="index-g_t_0040code_007bzero_005fJ_007d-727"></a><a name="index-g_t_0040code_007bF_007d-728"></a><a name="index-g_t_0040code_007bE_007d-729"></a><a name="index-g_t_0040code_007bP_007d-730"></a><a name="index-g_t_0040code_007bsndncn_007d-731"></a><a name="index-g_t_0040code_007bEi_007d-732"></a><a name="index-g_t_0040code_007bSi_007d-733"></a><a name="index-g_t_0040code_007bCi_007d-734"></a><a name="index-g_t_0040code_007bPl_007d-735"></a><a name="index-g_t_0040code_007bzeta_007d-736"></a>When configured with the <acronym>GNU</acronym> Scientific Library (GSL), available from
+<a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a>,
+<code>Asymptote</code> contains an internal module <code>gsl</code> that
+defines the airy functions <code>Ai(real)</code>,
+<code>Bi(real)</code>, <code>Ai_deriv(real)</code>, <code>Bi_deriv(real)</code>,
+<code>zero_Ai(int)</code>, <code>zero_Bi(int)</code>,
+<code>zero_Ai_deriv(int)</code>, <code>zero_Bi_deriv(int)</code>, the Bessel functions
+<code>I(int, real)</code>, <code>K(int, real)</code>, <code>j(int, real)</code>,
+<code>y(int, real)</code>, <code>i_scaled(int, real)</code>, <code>k_scaled(int, real)</code>,
+<code>J(real, real)</code>, <code>Y(real, real)</code>, <code>I(real, real)</code>,
+<code>K(real, real)</code>, <code>zero_J(real, int)</code>, the elliptic functions
+<code>F(real, real)</code>, <code>E(real, real)</code>, and <code>P(real, real)</code>,
+the Jacobi elliptic functions <code>real[] sndncn(real,real)</code>,
+the exponential/trigonometric integrals <code>Ei</code>, <code>Si</code>, and <code>Ci</code>,
+the Legendre polynomials <code>Pl(int, real)</code>, and the Riemann zeta
+function <code>zeta(real)</code>. For example, to compute the sine integral
+<code>Si</code> of 1.0:
+<pre class="verbatim">import gsl;
+write(Si(1.0));
+</pre>
+
+   <p><code>Asymptote</code> also provides a few general purpose numerical routines:
+
+     
+<a name="index-g_t_0040code_007bnewton_007d-737"></a>
+<dl><dt><code>real newton(int iterations=100, real f(real), real fprime(real), real x, bool verbose=false);</code><dd>Use Newton-Raphson iteration to solve for a root of a real-valued
+differentiable function <code>f</code>, given its derivative <code>fprime</code> and
+an initial guess <code>x</code>. Diagnostics for
+each iteration are printed if <code>verbose=true</code>. 
+If the iteration fails after the maximum allowed number of loops
+(<code>iterations</code>), <code>realMax</code> is returned.
+
+     <p><a name="index-g_t_0040code_007bnewton_007d-738"></a><br><dt><code>real newton(int iterations=100, real f(real), real fprime(real), real x1, real x2, bool verbose=false);</code><dd>Use bracketed Newton-Raphson bisection to solve for a root of a real-valued
+differentiable function <code>f</code> within an interval
+[<code>x1</code>,<code>x2</code>] (on which the endpoint values of <code>f</code> have
+opposite signs), given its derivative <code>fprime</code>. Diagnostics for
+each iteration are printed if <code>verbose=true</code>. 
+If the iteration fails after the maximum allowed number of loops
+(<code>iterations</code>), <code>realMax</code> is returned.
+
+     <p><a name="index-g_t_0040code_007bsimpson_007d-739"></a><br><dt><code>real simpson(real f(real), real a, real b, real acc=realEpsilon, real dxmax=b-a)</code><dd>returns the integral of <code>f</code> from <code>a</code> to <code>b</code> using adaptive Simpson integration.
+
+   </dl>
+
+   </body></html>
+

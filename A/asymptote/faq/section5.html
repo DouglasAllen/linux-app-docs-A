@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head><title>
+Asymptote FAQ - Section 5
+</title>
+<link rev="made" href="mailto:">
+<link rel="Contents" href="index.html">
+<link rel="Start" href="index.html">
+<link rel="Next" href="section6.html"><link rel="Previous" href="section4.html"><link rel="Bookmark" title="Asymptote FAQ" href="index.html">
+</head><body text="#000000" bgcolor="#FFFFFF"><h1>
+Asymptote FAQ - Section 5 <br>
+Questions about arrows
+</h1>
+
+<ul>
+<li><a href="#doublearrows" rel=subdocument>Q5.1. How do I draw two arrows at arbitrary positions along a
+path?</a>
+<li><a href="#reversearrow" rel=subdocument>Q5.2. How do I reverse the direction of an arrowhead?</a>
+<li><a href="#reversearrow" rel=subdocument>Q5.3. How do I change the size of all arrows?</a>
+<li><a href="#arrowhead" rel=subdocument>Q5.4. Can I create other arrowhead styles?</a>
+</ul><hr>
+
+<h2><A name="doublearrows">
+Question 5.1.  How do I draw two arrows at arbitrary positions along a
+path?
+</A></h2>
+
+Assuming that at least one of the arrowheads is to be filled, you can
+do this: <pre>
+size(200); 
+path g = (0,0)..(1,3)..(3,0); 
+draw(g,Arrow(Relative(0.9))); 
+add(arrow(g,invisible,FillDraw(black),Relative(0.5))); 
+add(arrow(reverse(g),invisible,FillDraw(white,black),Relative(0.9))); 
+</pre>
+If both of the arrowheads are to be drawn with filltype NoFill,
+one will need to create a specialized version of the arrow routine in 
+<code>plain_arrows.asy</code>: <pre>
+void arrow(frame f, arrowhead arrowhead=DefaultHead,
+           path g, pen p=currentpen, real size=0,
+           real angle=arrowangle, filltype filltype=arrowhead.defaultfilltype,
+           position position=EndPoint, bool forwards=true,
+           margin margin=NoMargin, bool center=false);
+</pre>
+
+<h2><A name="reversearrow">
+Question 5.2.  How do I reverse the direction of an
+arrowhead?
+</A></h2>
+
+Simply reverse the direction of the path. 
+<pre>
+path g=((0,0)--(5cm,0));
+draw(reverse(g),Arrow(Relative(0.55)));
+</pre>
+
+<h2><A name="reversearrow">
+Question 5.3.  How do I change the size of all
+arrows?
+</A></h2>
+
+To override the arrowsize you can give every Arrow drawing attribute a
+real size argument. If you want to do this globally, you can override the
+pen-dependent arrowsize function like this:
+<pre>
+arrowsize=new real(pen p=currentpen) {return 2mm;};
+</pre>
+
+<h2><A name="arrowhead">
+Question 5.4.  Can I create other arrowhead
+styles?
+</A></h2>
+
+Yes, you can build custom arrowheads like this (see the predefined
+arrowhead styles in <code>plain_arrows.asy</code> for further examples):  <pre>
+arrowhead DotHead;
+DotHead.head=new path(path g, position position=EndPoint, pen p=currentpen,
+                      real size=0, real angle=arrowangle) {
+  if(size == 0) size=DotHead.size(p);
+  bool relative=position.relative;
+  real position=position.position.x;
+  if(relative) position=reltime(g,position);
+  path r=subpath(g,position,0);
+  pair x=point(r,0);
+  real t=arctime(r,size);
+  pair y=point(r,t);
+  return circle(0.5(x+y),0.5size);
+};
+
+size(100);
+draw((0,0)..(1,1)..(2,0),Arrow(DotHead));
+dot((2,0),red);
+</pre>
+If you submit your alternate arrowheads to the Forum or the Patch 
+Tracking System, we'll consider including them in a future release. 
+<hr>
+Next: <a href="section6.html" rel=precedes>Questions about 2D graphs</a>.<br>
+Back: <a href="section4.html" rev=precedes>Questions about labels</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+<A href="http://asymptote.sourceforge.net">Asymptote</A> 
+- 26 August 2012
+</address><br>
+Extracted from Asymptote Frequently Asked Questions,
+Copyright &copy; 2012 .
+</body></html>

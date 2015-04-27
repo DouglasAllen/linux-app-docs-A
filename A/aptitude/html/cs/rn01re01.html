@@ -1,0 +1,1048 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>aptitude</title><link rel="stylesheet" type="text/css" href="aptitude.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="aptitude - příručka uživatele"><link rel="up" href="rn01.html" title="Přehled příkazů"><link rel="prev" href="rn01.html" title="Přehled příkazů"><link rel="next" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="preface" href="pr01.html" title="Úvod"><link rel="chapter" href="ch01.html" title="Kapitola 1. Začínáme"><link rel="chapter" href="ch02.html" title="Kapitola 2. aptitude - referenční příručka"><link rel="chapter" href="ch03.html" title="Kapitola 3. Často kladené otázky"><link rel="chapter" href="ch04.html" title="Kapitola 4. Poděkování"><link rel="reference" href="rn01.html" title="Přehled příkazů"><link rel="refentry" href="rn01re01.html" title="aptitude"><link rel="refentry" href="rn01re02.html" title="aptitude-create-state-bundle"><link rel="refentry" href="rn01re03.html" title="aptitude-run-state-bundle"><link rel="section" href="rn01re01.html#idp5119152" title="Popis"><link rel="section" href="rn01re01.html#idp5120840" title="Akce na příkazovém řádku"><link rel="section" href="rn01re01.html#idp5238144" title="Volby"><link rel="section" href="rn01re01.html#idp5390624" title="Prostředí"><link rel="section" href="rn01re01.html#idp5401784" title="Soubory"><link rel="section" href="rn01re01.html#idp5407040" title="Viz také"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">aptitude</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="rn01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><th width="60%" align="center">Přehled příkazů</th><td width="20%" align="right"> <a accesskey="n" href="rn01re02.html"><img src="images/next.gif" alt="Další"></a></td></tr></table><hr></div><div class="refentry" title="aptitude"><a name="idp5083872"></a><div class="titlepage"></div><div class="refnamediv"><h2>Jméno</h2><p>aptitude — vysokoúrovňové rozhraní k balíčkovacímu systému</p></div><div class="refsynopsisdiv" title="Přehled"><h2>Přehled</h2><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [<em class="replaceable"><code>volby</code></em>...] { autoclean  |   clean  |   forget-new  |   keep-all  |   update  |   safe-upgrade }</p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [<em class="replaceable"><code>volby</code></em>...] { changelog  |   full-upgrade  |   download  |   forbid-version  |   hold  |   install  |   keep-all  |   markauto  |   purge  |   reinstall  |   remove  |   show  |   unhold  |   unmarkauto  |   build-dep  |   build-depends }  <em class="replaceable"><code>balíky</code></em>... </p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>   extract-cache-subset   <em class="replaceable"><code>výstupní_adresář</code></em>   <em class="replaceable"><code>balíky</code></em>... </p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [<em class="replaceable"><code>volby</code></em>...]  search   <em class="replaceable"><code>vzory</code></em>... </p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [<em class="replaceable"><code>volby</code></em>...] { add-user-tag  |   remove-user-tag }  <em class="replaceable"><code>značka</code></em>   <em class="replaceable"><code>balíky</code></em>... </p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [<em class="replaceable"><code>volby</code></em>...] { why  |   why-not }  <em class="replaceable"><code>vzory</code></em>...   <em class="replaceable"><code>balík</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>  [-S <em class="replaceable"><code>jmsoub</code></em>] [ -u  |   -i ]</p></div><div class="cmdsynopsis"><p><code class="command">aptitude</code>   help </p></div></div><div class="refsect1" title="Popis"><a name="idp5119152"></a><h2>Popis</h2><p>
+
+<span class="command"><strong>aptitude</strong></span> je textové rozhraní k balíčkovacímu systému Debianu.
+
+</p><p>
+
+Umožňuje uživateli prohlížet a třídit seznamy balíků a také tyto balíky
+jednoduše spravovat (instalovat, aktualizovat a odstraňovat).
+Program může pracovat z příkazového řádku, nebo v celoobrazovkovém režimu.
+
+</p></div><div class="refsect1" title="Akce na příkazovém řádku"><a name="idp5120840"></a><h2>Akce na příkazovém řádku</h2><p>
+
+První argument, jenž nezačíná pomlčkou
+(<span class="quote">„<span class="quote"><code class="literal">-</code></span>“</span>), je považován za akci, kterou má
+program provést. Pokud není zadána žádná akce, <span class="command"><strong>aptitude</strong></span> se spustí
+v celoobrazovkovém režimu.
+
+</p><p>
+
+Dostupné jsou následující akce:
+
+</p><div class="variablelist"><dl><dt><a name="cmdlineInstall"></a><span class="term"><code class="literal">install</code></span></dt><dd><p>
+
+Instaluje jeden nebo více balíků. Seznam balíků k instalaci by měl
+následovat za příkazem <span class="quote">„<span class="quote">install</span>“</span>; Pokud jméno balíku
+obsahuje znak vlnka <span class="quote">„<span class="quote"><code class="literal">~</code></span>“</span> nebo
+otazník <span class="quote">„<span class="quote"><code class="literal">?</code></span>“</span>, bude se jméno brát jako
+vzor pro hledání a budou instalovány všechny balíky vyhovující tomuto
+vzoru. (Viz <a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>)
+
+    </p><p>
+
+Pro výběr konkrétní verze balíku přidejte ke jménu balíku
+<span class="quote">„<span class="quote"><code class="literal">=<em class="replaceable"><code>verze</code></em></code></span>“</span>,
+například <span class="quote">„<span class="quote"><code class="literal">aptitude install
+apt=0.3.1</code></span>“</span>. Chcete-li vybrat balík z určitého
+archivu, přidejte za název balíku
+<span class="quote">„<span class="quote"><code class="literal">/<em class="replaceable"><code>archiv</code></em></code></span>“</span>,
+například <span class="quote">„<span class="quote"><code class="literal">aptitude install apt/experimental</code></span>“</span>.
+
+    </p><p><a name="parOverrideSpecifiers"></a>
+
+Příkazem pro instalaci nemusíte pouze instalovat nové balíky. Přidáním
+<span class="quote">„<span class="quote">aktivní přípony</span>“</span> za název balíku můžete říci <span class="command"><strong>aptitude</strong></span>,
+aby s ním provedla nějakou jinou akci. Například <code class="literal">aptitude
+remove wesnoth+</code> balík <code class="literal">wesnoth</code> neodstraní,
+ale naopak jej nainstaluje. K dispozici jsou následující aktivní
+přípony:
+
+    </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">+</code></span></dt><dd><p>
+
+Nainstaluje <em class="replaceable"><code>balík</code></em>.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">+M</code></span></dt><dd><p>
+
+Nainstaluje <em class="replaceable"><code>balík</code></em> a okamžitě jej označí
+jako <a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">instalovaný automaticky</a>
+(pozor, pokud na <em class="replaceable"><code>balík</code></em>u nic nezávisí, tak
+bude obratem automaticky odstraněn).
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">-</code></span></dt><dd><p>
+
+Odstraní <em class="replaceable"><code>balík</code></em>.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">_</code></span></dt><dd><p>
+
+Vyčistí <em class="replaceable"><code>balík</code></em>, tj. odstraní jej včetně
+konfiguračních a datových souborů.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">=</code></span></dt><dd><p>
+
+Podrží <em class="replaceable"><code>balík</code></em> v aktuálním stavu, tj. zruší
+na něm všechny naplánované instalace, aktualizace nebo
+odstranění. Podržení bude trvat, dokud jej nezrušíte.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">:</code></span></dt><dd><p>
+
+Podrží <em class="replaceable"><code>balík</code></em> v aktuálním stavu, tj. zruší
+na něm všechny naplánované instalace, aktualizace nebo
+odstranění. Na rozdíl od předchozího platí pouze pro toto sezení.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">&amp;M</code></span></dt><dd><p>
+
+Označí <em class="replaceable"><code>balík</code></em> jako
+<a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">instalovaný automaticky</a>.
+
+        </p></dd><dt><span class="term"><em class="replaceable"><code>balík</code></em><code class="literal">&amp;m</code></span></dt><dd><p>
+
+Označí <em class="replaceable"><code>balík</code></em> jako
+<a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">instalovaný ručně</a>.
+
+	</p></dd></dl></div><p>
+
+Jako speciální případ můžete použít
+<span class="quote">„<span class="quote"><code class="literal">install</code></span>“</span> bez argumentů - tím
+provedete všechny naplánované, ale dosud nevyřízené akce.
+
+    </p><div class="note" title="Poznámka" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Poznámka]" src="images/note.png"></td><th align="left">Poznámka</th></tr><tr><td align="left" valign="top"><p>
+
+Po konečném potvrzení klávesou <strong class="userinput"><code>Y</code></strong> příkaz
+<span class="quote">„<span class="quote"><code class="literal">install</code></span>“</span> modifikuje vnitřní záznamy
+<span class="command"><strong>aptitude</strong></span> o akce, které se mají provést. Pokud např. zadáte příkaz
+<span class="quote">„<span class="quote"><code class="literal">aptitude install foo bar</code></span>“</span> a pak
+instalaci přerušíte, musíte poté zadat (třeba)
+<span class="quote">„<span class="quote"><code class="literal">aptitude remove foo bar</code></span>“</span>, aby se
+zrušil původní příkaz.
+
+    </p></td></tr></table></div></dd><dt><span class="term"><code class="literal">remove</code>, <code class="literal">purge</code>, <code class="literal">hold</code>, <code class="literal">unhold</code>, <code class="literal">keep</code>, <code class="literal">reinstall</code></span></dt><dd><p>
+
+Tyto příkazy pracují stejně jako
+<span class="quote">„<span class="quote"><code class="literal">install</code></span>“</span>, ale provedou akci podle
+svých názvů, tj. odstranění, odstranění s konfiguračními soubory,
+přidržení, uvolnění, ponechání a přeinstalování (pokud ovšem nejsou <a class="link" href="rn01re01.html#parOverrideSpecifiers">přepsány</a> <span class="quote">„<span class="quote">aktivní
+příponou</span>“</span>). Rozdíl mezi ponecháním (<code class="literal">keep</code>)
+a přidržením (<code class="literal">hold</code>) je ten, že přidržený balík bude
+i při příštích aktualizacích pomocí
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+nebo
+<a class="link" href="rn01re01.html#manpageFullUpgrade"><code class="literal">full-upgrade</code></a>
+ignorován (tj. ponechán ve stávající
+verzi), zatímco ponechání jednoduše na balíku zruší všechny
+naplánované akce. Uvolnění znamená, že při příštích aktualizacích bude
+balík svolný k aktualizaci.
+
+    </p><p>
+
+(Například <span class="quote">„<span class="quote"><code class="literal">aptitude remove '~ndeity'</code></span>“</span>
+odstraní všechny balíky, jejichž název obsahuje řetězec
+<span class="quote">„<span class="quote"><code class="literal">deity</code></span>“</span>)
+
+    </p></dd><dt><span class="term"><code class="literal">markauto</code>, <code class="literal">unmarkauto</code></span></dt><dd><p>
+
+Označí balíky jako instalované automaticky nebo ručně. Názvy balíků se
+zadávají stejně jako u předchozích akcí. Například
+<span class="quote">„<span class="quote"><code class="literal">aptitude markauto '~slibs'</code></span>“</span> označí
+všechny balíky ze sekce <span class="quote">„<span class="quote"><code class="literal">libs</code></span>“</span> jako
+instalované automaticky.
+
+    </p><p>
+
+Podrobnější informace o automaticky instalovaných balících naleznete
+v referenční příručce <span class="command"><strong>aptitude</strong></span> v kapitole <span class="quote">„<span class="quote"><a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">Správa automaticky instalovaných
+balíků</a></span>“</span>.
+
+    </p></dd><dt><span class="term"><code class="literal">build-depends</code>, <code class="literal">build-dep</code></span></dt><dd><p>
+
+Uspokojí závislosti pro sestavení balíku ze zdrojových kódů. Jména
+balíků mohou být jmény jak binárních, tak zdrojových balíků.
+Jména binárních balíků se používají stejně jako u příkazu
+<span class="quote">„<span class="quote"><code class="literal">install</code></span>“</span>.
+
+    </p><p>
+
+Je-li zadán parametr <code class="literal">--arch-only</code>, bude se brát
+ohled pouze na závislosti specifické pro danou architekturu (tzn. budou
+se ignorovat <code class="literal">Build-Depends-Indep</code>
+a <code class="literal">Build-Conflicts-Indep</code>).
+
+    </p></dd><dt><span class="term"><code class="literal">forbid-version</code></span></dt><dd><p>
+
+Zakáže, aby byl balík aktualizován na konkrétní verzi. Tím zabráníte
+aptitude, aby automaticky aktualizoval balík na konkrétní verzi, ale
+aby povolil všechny následné automatické aktualizace. Standardně
+aptitude vybere verzi, na kterou by se balík aktualizoval. Tento výběr
+můžete přebít přidáním
+<span class="quote">„<span class="quote"><code class="literal">=<em class="replaceable"><code>verze</code></em></code></span>“</span> za
+jméno balíku: např. <span class="quote">„<span class="quote"><code class="literal">aptitude forbid\-version
+vim=1.2.3.broken-4</code></span>“</span>.
+
+    </p><p>
+
+Tento příkaz je užitečný pro přeskočení nefunkčních verzí balíků, aniž
+byste museli nastavovat příznak pro podržení a následně jej zase
+rušit. Rozhodnete-li se nakonec pro instalaci zakázané verze, příkaz
+<span class="quote">„<span class="quote"><code class="literal">install</code></span>“</span> umí tento zákaz zrušit.
+
+    </p></dd><dt><span class="term"><code class="literal">reinstall</code></span></dt><dd><p>
+
+Znovu nainstaluje aktuální verze zadaných balíků.
+
+   </p></dd><dt><span class="term"><code class="literal">update</code></span></dt><dd><p>
+
+Aktualizuje seznam dostupných balíků podle zdrojů pro <code class="systemitem">apt</code>. (Tento
+příkaz je ekvivalentní k <span class="quote">„<span class="quote"><code class="literal">apt-get
+update</code></span>“</span>).
+
+   </p></dd><dt><a name="manpageSafeUpgrade"></a><span class="term"><code class="literal">safe-upgrade</code></span></dt><dd><p>
+
+Aktualizuje instalované balíky na jejich nejnovější verze. Žádné
+instalované balíky, pokud ovšem nejsou zbytečné, nebudou odstraněny
+(viz <span class="quote">„<span class="quote"><a class="link" href="ch02s02s07.html" title="Správa automaticky instalovaných balíků">Správa automaticky
+instalovaných balíků</a></span>“</span> v referenční příručce
+k <span class="command"><strong>aptitude</strong></span>). Je možné, že se pro vyřešení závislostí nainstalují
+nějaké nové balíky. Chcete-li tomu zabránit, můžete použít parametr
+<a class="link" href="rn01re01.html#cmdlineOptionSafeUpgradeNoNewInstalls"><code class="literal">--no-new-installs</code></a>.
+
+    </p><p>
+
+V některých situacích je potřeba pro aktualizaci jednoho balíku
+odstranit balík jiný, což tento příkaz nepovoluje. Chcete-li
+aktualizovat i takové balíky, použijte příkaz <a class="link" href="rn01re01.html#manpageFullUpgrade"><code class="literal">full-upgrade</code></a>.
+
+    </p></dd><dt><a name="manpageFullUpgrade"></a><span class="term"><code class="literal">full-upgrade</code></span></dt><dd><p>
+
+Aktualizuje instalované balíky na jejich nejnovější verze a podle
+potřeby doinstaluje nebo odstraní některé balíky. Tento příkaz je méně
+konzervativní než
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+a je pravděpodobné, že vykoná i nějaké nechtěné akce. Na druhou stranu
+umí aktualizovat i balíky, které
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+nezvládá.
+
+    </p><div class="note" title="Poznámka" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Poznámka]" src="images/note.png"></td><th align="left">Poznámka</th></tr><tr><td align="left" valign="top"><p>
+
+Tento příkaz se z historických důvodů nazýval
+<code class="literal">dist-upgrade</code> a <span class="command"><strong>aptitude</strong></span> jej stále pod tímto
+názvem rozpoznává jako synonymum k <code class="literal">full-upgrade</code>.
+
+    </p></td></tr></table></div></dd><dt><a name="manpageKeepAll"></a><span class="term"><code class="literal">keep-all</code></span></dt><dd><p>
+
+Na všech balících zruší všechny naplánované akce, tj. odstraní
+příznaky pro instalaci, odstranění nebo aktualizaci.
+
+    </p></dd><dt><a name="cmdlineForgetNew"></a><span class="term"><code class="literal">forget-new</code></span></dt><dd><p>
+
+Zapomene, které balíky jsou <span class="quote">„<span class="quote">nové</span>“</span> (ekvivalent klávesy
+<span class="quote">„<span class="quote"><span class="keycap"><strong>f</strong></span></span>“</span> v celoobrazovkovém režimu).
+
+    </p></dd><dt><span class="term"><code class="literal">search</code></span></dt><dd><p>
+
+Hledá balíky odpovídající zadaným výrazům. Výrazy by měly být zapsány
+za příkazem <span class="quote">„<span class="quote"><code class="literal">search</code></span>“</span>. Všechny balíky
+vyhovující zadaným kritériím budou zobrazeny. Například
+<span class="quote">„<span class="quote"><code class="literal">aptitude search '~N' edit</code></span>“</span> zobrazí
+všechny <span class="quote">„<span class="quote">nové</span>“</span> balíky a všechny balíky, v jejichž názvu
+se vyskytuje řetězec <span class="quote">„<span class="quote">edit</span>“</span>. Výrazy pro vyhledávání jsou
+podrobně popsány v referenční příručce v části <span class="quote">„<span class="quote"><a class="link" href="ch02s03.html" title="Vyhledávací vzory">Vyhledávací vzory</a></span>“</span>
+
+    </p><p>
+
+Pokud nezadáte parametr <a class="link" href="rn01re01.html#cmdlineOptionFormat"><code class="literal">-F</code></a>, bude
+výstup příkazu <code class="literal">aptitude search</code> vypadat nějak takto:
+
+    </p><pre class="screen">i   apt                             - Pokročilé rozhraní pro dpkg
+pi  apt-build                       - Rozhraní pro apt pro sestavení, optimaliz
+cp  apt-file                        - APT nástroj pro prohledávání balíků -- př
+ihA raptor-utils                    - Nástroje Raptor RDF Parser</pre><p>
+
+Každý nalezený balík je na samostatném řádku. První písmeno každého
+řádku zobrazuje aktuální stav balíku. Nejběžnější stavy jsou
+<code class="literal">p</code>, což znamená, že v systému není po balíku ani
+vidu ani slechu, <code class="literal">c</code> značí, že byl balík smazán, ale
+konfigurační soubory se stále nachází v systému, <code class="literal">i</code>
+označuje nainstalované balíky a <code class="literal">v</code> znamená, že se
+jedná o virtuální balík. Druhý znak zobrazuje očekávanou akci nad
+balíkem (pokud je naplánována; jinak se zobrazí mezera). Mezi
+nejběžnější akce patří <code class="literal">i</code>, což znamená že je balík
+naplánovaný pro instalaci, <code class="literal">d</code> říká, že se balík
+odstraní a <code class="literal">p</code> znamená, že se balík odstraní
+i s konfiguračními soubory. Je-li třetí znak <code class="literal">A</code>, byl
+balík nainstalován automaticky pro splnění závislostí.
+
+    </p><p>
+
+Úplný seznam možných stavů a akcí naleznete v referenční příručce
+<span class="command"><strong>aptitude</strong></span> v části <span class="quote">„<span class="quote"><a class="link" href="ch02s02s02.html" title="Získání informací o balíku">Získání informací
+o balíku</a></span>“</span>.
+
+    </p></dd><dt><span class="term"><code class="literal">show</code></span></dt><dd><p>
+
+Zobrazí detailní informace o zadaných balících. Pokud jméno balíku
+obsahuje znak vlnka <span class="quote">„<span class="quote"><code class="literal">~</code></span>“</span> nebo
+otazník <span class="quote">„<span class="quote"><code class="literal">?</code></span>“</span>, bude se brát jako
+vzor pro hledání a budou instalovány všechny balíky vyhovující tomuto
+vzoru. (Viz <a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>.)
+
+    </p><p>
+
+Pokud je míra upovídanosti 1 nebo větší (tj. je na příkazové řádce
+zadáno alespoň jedno <code class="literal">-v</code>), zobrazí se informace
+o všech verzích balíku. V opačném případě se zobrazí pouze informace
+o <span class="quote">„<span class="quote">kandidátské verzi</span>“</span> (což je verze, kterou by stáhl
+příkaz <span class="quote">„<span class="quote"><code class="literal">aptitude install</code></span>“</span>.)
+
+    </p><p>
+
+Informace o jiné než kandidátské verzi balíku můžete získat tak, že za
+název balíku přidáte
+<code class="literal">=<em class="replaceable"><code>verze</code></em></code>. Chcete-li
+zobrazit verzi z konkrétního archivu, stačí za název balíku přidat
+<code class="literal">/<em class="replaceable"><code>archiv</code></em></code>. Jestliže
+použijete některou z těchto dvou syntaxí, zobrazí se pouze jediná
+verze bez ohledu na míru upovídanosti.
+
+    </p><p>
+
+S mírou upovídanosti 1 nebo větší se navíc zobrazí pole architektura,
+komprimovaná velikost, jméno souboru a md5 součet. Přesáhne-li
+upovídanost úroveň 2, zobrazí se vybraná verze tolikrát, v kolika
+archivech je nalezena.
+
+    </p></dd><dt><a name="cmdlineAddOrRemoveUserTags"></a><span class="term"><code class="literal">add-user-tag</code>, <code class="literal">remove-user-tag</code></span></dt><dd><p>
+
+Přidá nebo odebere uživatelskou značku ze zadané skupiny balíků. Pokud
+jméno balíku obsahuje znak vlnka <span class="quote">„<span class="quote"><code class="literal">~</code></span>“</span>
+nebo otazník <span class="quote">„<span class="quote"><code class="literal">?</code></span>“</span>, bude se brát jako
+vzor pro hledání a značka se přidá nebo odebere ze všech balíků
+vyhovujících tomuto
+vzoru. (Viz <a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>.)
+
+    </p><p>
+
+Uživatelské značky jsou libovolné řetězce spojené s balíkem. Můžete je
+použít ve vyhledávacím termu
+<a class="link" href="ch02s03s05.html#searchUserTag"><code class="literal">?user-tag(<em class="replaceable"><code>značka</code></em>)</code></a>,
+který vybere všechny balíky, které obsahují uživatelskou značku
+odpovídající <em class="replaceable"><code>značce</code></em>.
+
+    </p></dd><dt><span class="term"><code class="literal">why</code>, <code class="literal">why-not</code></span></dt><dd><p>
+
+Vysvětlí důvod, proč by měl být daný balík nainstalován, nebo zůstat
+nenainstalovaný.
+
+    </p><p>
+
+Příkaz hledá balíky, které vyžadují, nebo naopak kolidují se zadaným
+balíkem. Je-li příkaz úspěšný, zobrazí posloupnost závislostí, které
+vedou k danému balíku. U každého z balíků je vidět i příznak, zda a
+jak je nainstalovaný:
+
+    </p><pre class="screen"><code class="prompt">$</code> <strong class="userinput"><code>aptitude why kdepim</code></strong>
+i   nautilus-data Doporučuje nautilus
+i A nautilus      Doporučuje desktop-base (&gt;= 0.2)
+i A desktop-base  Navrhuje   gnome | kde | xfce4 | wmaker
+p   kde           Závisí na  kdepim (&gt;= 4:3.4.3)</pre><p>
+
+Příkaz <code class="literal">why</code> hledá posloupnost závislostí, která
+by nainstalovala balík zadaný na příkazové řádce. Všimněte si, že se
+v tomto případě jedná pouze o slabou závislost ve formě návrhu. Je
+tomu tak proto, že že žádný aktuálně nainstalovaný balík na tomto
+počítači nezávisí na balíku <code class="systemitem">kdepim</code> a ani jej
+nedoporučuje. Pokud by byla nějaká silnější závislost k dispozici,
+<span class="command"><strong>aptitude</strong></span> by použila tu nejsilnější.
+
+    </p><p>
+
+Oproti tomu <code class="literal">why-not</code> hledá posloupnost závislostí
+vedoucích ke konfliktu s cílovým balíkem:
+
+    </p><pre class="screen"><code class="prompt">$</code> <strong class="userinput"><code>aptitude why-not textopo</code></strong>
+i   ocaml-core          Závisí na  ocamlweb
+i A ocamlweb            Závisí na  tetex-extra | texlive-latex-extra
+i A texlive-latex-extra Koliduje s textopo</pre><p>
+
+Je-li zadán i jeden nebo více <em class="replaceable"><code>vzor</code></em>ů, začne
+<span class="command"><strong>aptitude</strong></span> své hledání v těchto <em class="replaceable"><code>vzor</code></em>ech. To
+znamená, že první balík v posloupnosti se bude shodovat s některým ze
+zadaných vzorů. Vzory jsou považovány za názvy balíků, kromě případů,
+kdy obsahují znak vlnka <span class="quote">„<span class="quote"><code class="literal">~</code></span>“</span> nebo
+otazník <span class="quote">„<span class="quote"><code class="literal">?</code></span>“</span>, protože pak se budou brát
+jako vzory pro hledání
+(Viz <a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>.)
+
+    </p><p>
+
+Nejsou-li zadány žádné <em class="replaceable"><code>vzor</code></em>y, začne
+<span class="command"><strong>aptitude</strong></span> hledání závislostí od množiny ručně nainstalovaných
+balíků. Tím se vlastně zobrazí balíky, které způsobily (resp. by
+způsobily) instalaci zadaného balíku.
+
+    </p><div class="note" title="Poznámka" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Poznámka]" src="images/note.png"></td><th align="left">Poznámka</th></tr><tr><td align="left" valign="top"><p>
+
+<code class="literal">aptitude why</code> neprovádí plné řešení závislostí, ale
+zobrazuje pouze přímé vztahy mezi balíky. Například pokud balík A
+vyžaduje B, C vyžaduje D a B a C jsou v konfliktu,
+<span class="quote">„<span class="quote"><code class="literal">aptitude why-not D</code></span>“</span>
+<span class="emphasis"><em>neodpoví</em></span>, že
+<span class="quote">„<span class="quote">A závisí na B, B koliduje s C a D závisí C</span>“</span>.
+
+    </p></td></tr></table></div><p>
+
+<span class="command"><strong>aptitude</strong></span> vypisuje pouze <span class="quote">„<span class="quote">nejvíce nainstalovanou, nejsilnější,
+nejtěsnější a nejkratší</span>“</span> posloupnost závislostí. Jinými slovy
+hledá posloupnost, která obsahuje nainstalované balíky (nebo alespoň
+balíky označené k instalaci), hledá nejsilnější možné závislosti (s
+ohledem na předchozí kritérium), vyhýbá se rozvětveným závislostem
+(balík poskytuje foo NEBO bar) a konečně hledá nejkratší možný řetěz
+splňující předchozí kritéria. Nedaří-li se nalézt ideální posloupnost,
+jsou kritéria postupně uvolňována a hledání probíhá znovu.
+
+    </p><p>
+
+S mírou upovídanosti 1 se začnou vypisovat <span class="emphasis"><em>všechna</em></span>
+vysvětlení od nejvýstižnějších po fantasmagorická. Přesáhne-li
+upovídanost úroveň 2, budou se na standardní výstup vypisovat opravdu
+nadbytečná kvanta ladicích informací.
+
+    </p><p>
+
+Příkaz vrací v případě úspěchu 0, 1 pokud nenašel vysvětlení a -1
+pokud nastala chyba.
+
+
+    </p></dd><dt><span class="term"><code class="literal">clean</code></span></dt><dd><p>
+
+Smaže stažené <code class="literal">.deb</code> soubory z vyrovnávací paměti
+(obvykle v adresáři <code class="filename">/var/cache/apt/archives</code>).
+
+      </p></dd><dt><span class="term"><code class="literal">autoclean</code></span></dt><dd><p>
+
+Smaže balíky ve vyrovnávací paměti, které se již nedají
+stáhnout. Tímto můžete umravnit spotřebu diskového prostoru, aniž
+byste museli smazat celou vyrovnávací paměť.
+
+    </p></dd><dt><span class="term"><code class="literal">changelog</code></span></dt><dd><p>
+
+Stáhne a zobrazí seznamy změn provedených vývojáři Debianu u zadaných
+balíků (zdrojových nebo binárních).
+
+    </p><p>
+
+Implicitně se stáhne seznam změn pro verzi, která by se nainstalovala
+příkazem <span class="quote">„<span class="quote"><code class="literal">aptitude install</code></span>“</span>.
+Konkrétní verzi balíku můžete zadat tak, že ke jménu balíku přidáte
+<code class="literal">=<em class="replaceable"><code>verze</code></em></code>. Chcete-li použít
+verzi z konkrétního archivu, můžete ke jménu balíku přidat
+<code class="literal">/<em class="replaceable"><code>archiv</code></em></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">download</code></span></dt><dd><p>
+
+Do aktuálního adresáře stáhne <code class="literal">.deb</code> soubor zadaného
+balíku. Pokud jméno balíku obsahuje znak vlnka
+<span class="quote">„<span class="quote"><code class="literal">~</code></span>“</span> nebo otazník
+<span class="quote">„<span class="quote"><code class="literal">?</code></span>“</span>, bude se brát jako vzor pro
+hledání a budou staženy všechny balíky vyhovující tomuto
+vzoru. (Viz <a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>.)
+
+    </p><p>
+
+Implicitně se stáhne verze, která by se nainstalovala příkazem
+<span class="quote">„<span class="quote"><code class="literal">aptitude install</code></span>“</span>. Konkrétní verzi
+balíku můžete zadat tak, že ke jménu balíku přidáte
+<code class="literal">=<em class="replaceable"><code>verze</code></em></code>. Chcete-li použít
+verzi z konkrétního archivu, můžete ke jménu balíku přidat
+<code class="literal">/<em class="replaceable"><code>archiv</code></em></code>.
+
+
+    </p></dd><dt><span class="term"><code class="literal">extract-cache-subset</code></span></dt><dd><p>
+
+Vytáhne z cache balíků zvolené balíky do zadaného adresáře.
+Nezadáte-li žádné balíky žádné balíky, zkopíruje se celá cache. Každé
+jméno balíku může být vzorem pro hledání. V takovém případě budou
+zkopírovány všechny balíky vyhovující tomuto vzoru. (Viz
+<a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací
+vzory</span>“</span></a> v referenční příručce <span class="command"><strong>aptitude</strong></span>.) Stávající
+seznamy balíků v zadaném adresáři budou přepsány.
+
+    </p><p>
+
+Závislosti u binárních balíků budou přepsány tak, aby se v nich
+nevyskytovaly odkazy na balíky, které nebyly vybrány.
+
+    </p></dd><dt><span class="term"><code class="literal">help</code></span></dt><dd><p>
+
+Zobrazí krátký přehled dostupných příkazů a parametrů.
+
+    </p></dd></dl></div></div><div class="refsect1" title="Volby"><a name="idp5238144"></a><h2>Volby</h2><p>
+
+Následujícími volbami můžete měnit chování zmíněných příkazů.
+Pamatujte, že ne každý příkaz rozumí každé volbě (některé kombinace
+příkazů a voleb ani nedávají smysl).
+
+</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">--add-user-tag <em class="replaceable"><code>značka</code></em></code></span></dt><dd><p>
+
+U příkazů <code class="literal">full-upgrade</code>,
+<code class="literal">forbid-version</code>, <code class="literal">hold</code>,
+<code class="literal">install</code>, <code class="literal">keep-all</code>,
+<code class="literal">markauto</code>, <code class="literal">unmarkauto</code>,
+<code class="literal">purge</code>, <code class="literal">reinstall</code>,
+<code class="literal">remove</code>, <code class="literal">unhold</code> a
+<code class="literal">unmarkauto</code> přidá uživatelskou značku
+<em class="replaceable"><code>značka</code></em> všem balíkům, které jsou daným
+příkazem ovlivněny. Je to stejné, jako kdybyste použili příkaz
+<a class="link" href="rn01re01.html#cmdlineAddOrRemoveUserTags"><code class="literal">add-user-tag</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--add-user-tag-to <em class="replaceable"><code>značka</code></em>,<em class="replaceable"><code>vzor</code></em></code></span></dt><dd><p>
+
+U příkazů <code class="literal">full-upgrade</code>,
+<code class="literal">forbid-version</code>, <code class="literal">hold</code>,
+<code class="literal">install</code>, <code class="literal">keep-all</code>,
+<code class="literal">markauto</code>, <code class="literal">unmarkauto</code>,
+<code class="literal">purge</code>, <code class="literal">reinstall</code>,
+<code class="literal">remove</code>, <code class="literal">unhold</code> a
+<code class="literal">unmarkauto</code> přidá uživatelskou značku
+<em class="replaceable"><code>značka</code></em> všem balíkům, které se shodují se
+<em class="replaceable"><code>vzor</code></em>em. Je to stejné, jako kdybyste použili
+příkaz
+<a class="link" href="rn01re01.html#cmdlineAddOrRemoveUserTags"><code class="literal">add-user-tag</code></a>.
+Vzory jsou popsány v referenční příručce <span class="command"><strong>aptitude</strong></span> v části
+<a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací vzory</span>“</span></a>.
+
+    </p><p>
+
+Například příkaz
+<code class="literal">aptitude safe-upgrade --add-user-tag-to "nové-instalace,?action(install)"</code>
+přidá značku  <code class="literal">nové-instalace</code> všem balíkům
+instalovaným příkazem
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--allow-new-upgrades</code></span></dt><dd><p>
+
+Při použití <span class="quote">„<span class="quote">bezpečného</span>“</span> řešitele závislostí (tzn. byl
+použit parametr
+<a class="link" href="rn01re01.html#cmdlineSafeResolver"><code class="literal">--safe-resolver</code></a>,
+nebo je nastavena konfigurační volba <a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>
+na hodnotu <code class="literal">true</code>), umožní vyřešit závislosti
+instalací aktualizovaných balíků i v případě, že je nastavena volba
+<a class="link" href="ch02s04s05.html#configSafe-Resolver-No-New-Upgrades"><code class="literal">Aptitude::Safe-Resolver::No-New-Upgrades</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--allow-new-installs</code></span></dt><dd><p>
+
+Umožní příkazu
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+instalovat nové balíky. Při použití <span class="quote">„<span class="quote">bezpečného</span>“</span> řešitele
+závislostí (tzn. byl použit parametr
+<a class="link" href="rn01re01.html#cmdlineSafeResolver"><code class="literal">--safe-resolver</code></a>,
+nebo je nastavena konfigurační volba <a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>
+na hodnotu <code class="literal">true</code>), umožní vyřešit závislosti
+instalací nových balíků. Tento parametr má přednost i před volbou
+<a class="link" href="ch02s04s05.html#configSafe-Resolver-No-New-Installs"><code class="literal">Aptitude::Safe-Resolver::No-New-Installs</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--allow-untrusted</code></span></dt><dd><p>
+
+Bez ptaní instaluje balíky z nedůvěryhodných zdrojů. Měli byste použít
+jedině v případě, že víte, co děláte. Tímto můžete lehce kompromitovat
+bezpečnost systému.
+
+    </p></dd><dt><a name="cmdlineOptionDisableColumns"></a><span class="term"><code class="literal">--disable-columns</code></span></dt><dd><p>
+
+Způsobí, že výstup příkazu <code class="literal">aptitude search</code> nebude
+nijak formátován. Běžně totiž <span class="command"><strong>aptitude</strong></span> přidává neviditelné znaky,
+nebo naopak ořezává výsledky tak, aby se výstup co nejlépe vešel na
+šířku terminálu. Po použití této volby se budou šířky jednotlivých
+sloupců ignorovat.
+
+    </p><p>
+
+Například prvních několik řádků výstupu příkazu
+<span class="quote">„<span class="quote"><code class="literal">aptitude search -F '%p %V' --disable-columns libedataserver</code></span>“</span>
+by mohlo vypadat takto:
+
+    </p><pre class="screen">disksearch 1.2.1-3
+hp-search-mac 0.1.3
+libbsearch-ruby 1.5-5
+libbsearch-ruby1.8 1.5-5
+libclass-dbi-abstractsearch-perl 0.07-2
+libdbix-fulltextsearch-perl 0.73-10</pre><p>
+
+Použití <code class="literal">--disable-columns</code> je často užitečné ve
+spojení s parametrem
+<a class="link" href="rn01re01.html#cmdlineOptionFormat"><code class="literal">-F</code></a>,
+kterým můžete měnit formátování výstupu jako v předchozí ukázce.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Disable-Columns">Aptitude::CmdLine::Disable-Columns</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-D</code>, <code class="literal">--show-deps</code></span></dt><dd><p>
+
+U příkazů, které instalují nebo odstraňují balíky
+(<code class="literal">install</code>,
+<a class="link" href="rn01re01.html#manpageFullUpgrade"><code class="literal">full-upgrade</code></a>,
+apod.), krátce zobrazí důvody, proč budou některé balíky automaticky
+nainstalovány či odstraněny.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Show-Deps">Aptitude::CmdLine::Show-Deps</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-d</code>, <code class="literal">--download-only</code></span></dt><dd><p>
+
+Podle potřeby stáhne balíky do vyrovnávací paměti, ale nic neinstaluje
+nebo neodstraňuje. Implicitně je vyrovnávací paměť umístěna v adresáři
+<code class="filename">/var/cache/apt/archives</code>.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Download-Only">Aptitude::CmdLine::Download-Only</a></code>.
+
+    </p></dd><dt><a name="cmdlineOptionFormat"></a><span class="term">
+      <code class="literal">-F</code> <em class="replaceable"><code>formát</code></em>,
+      <code class="literal">--display-format</code> <em class="replaceable"><code>formát</code></em>
+    </span></dt><dd><p>
+
+Určí formát, kterým se budou zobrazovat výsledky hledání příkazu
+<code class="literal">search</code>. Například <span class="quote">„<span class="quote"><code class="literal">%p %V
+%vr</code></span>“</span> zobrazí název balíku následovaný aktuálně
+instalovanou verzí a dostupnou verzí. (Více informací viz referenční
+příručka <span class="command"><strong>aptitude</strong></span>, sekce <span class="quote">„<span class="quote"><a class="link" href="ch02s04s01.html#secDisplayFormat" title="Přizpůsobení zobrazení balíků">Přizpůsobení zobrazení
+balíků</a></span>“</span>.)
+
+    </p><p>
+
+Často se používá v kombinaci
+s <a class="link" href="rn01re01.html#cmdlineOptionDisableColumns"><code class="literal">--disable-columns</code></a>
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Package-Display-Format">Aptitude::CmdLine::Package-Display-Format</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-f</code></span></dt><dd><p>
+
+Zkusí agresivně opravit závislosti porušených balíků, i za cenu
+ignorování akcí zadaných uživatelem na příkazové řádce.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Fix-Broken">Aptitude::CmdLine::Fix-Broken</a></code>.
+
+    </p></dd><dt><a name="cmdlineFullResolver"></a><span class="term"><code class="literal">--full-resolver</code></span></dt><dd><p>
+
+Při výskytu problémů se závislostmi balíků použije pro jejich řešení
+<span class="quote">„<span class="quote">plnou</span>“</span> verzi řešitele. Ten, na rozdíl od
+<span class="quote">„<span class="quote">bezpečného</span>“</span> algoritmu aktivovaného parametrem
+<a class="link" href="rn01re01.html#cmdlineSafeResolver"><code class="literal">--safe-resolver</code></a>,
+neváhá jít přes mrtvoly a pro splnění závislostí klidně odstraní
+nějaké nainstalované balíky. Umí sice vyřešit více situací než
+<span class="quote">„<span class="quote">bezpečný</span>“</span> algoritmus, ale tato řešení nemusí vždy splnit
+očekávání.
+
+    </p><p>
+
+Tímto parametrem můžete vynutit použití plného řešitele i v případě,
+že je
+<a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>
+nastaven na hodnotu <code class="literal">true</code>. Příkaz
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+nikdy nepoužívá plného řešitele a při zadání parametru
+<code class="literal">--full-resolver</code> odmítne pracovat.
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-h</code>, <code class="literal">--help</code>
+    </span></dt><dd><p>
+
+Zobrazí krátkou nápovědu. (Shodné s akcí <code class="literal">help</code>.)
+
+    </p></dd><dt><span class="term"><code class="literal">--no-new-upgrades</code></span></dt><dd><p>
+
+Při použití <span class="quote">„<span class="quote">bezpečného</span>“</span> řešitele závislostí (tzn. byl
+použit parametr
+<a class="link" href="rn01re01.html#cmdlineSafeResolver"><code class="literal">--safe-resolver</code></a>,
+nebo je nastavena konfigurační volba
+<a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>
+na hodnotu <code class="literal">true</code>), zakáže řešiteli vyřešit
+závislosti instalací aktualizovaných verzí balíků.
+
+    </p></dd><dt><a name="cmdlineOptionSafeUpgradeNoNewInstalls"></a><span class="term"><code class="literal">--no-new-installs</code></span></dt><dd><p>
+
+Zabrání příkazu
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+instalovat nové balíky. Při použití <span class="quote">„<span class="quote">bezpečného</span>“</span> řešitele
+závislostí (tzn. byl použit parametr
+<a class="link" href="rn01re01.html#cmdlineSafeResolver"><code class="literal">--safe-resolver</code></a>,
+nebo je nastavena konfigurační volba
+<a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>
+na hodnotu <code class="literal">true</code>), zakáže řešiteli vyřešit
+závislosti instalací nových balíků.
+
+    </p><p>
+
+Parametr napodobuje historické chování příkazu
+<span class="command"><strong>apt-get upgrade</strong></span>.
+
+    </p><p>
+
+Konfigurační položka
+<code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Safe-Upgrade-No-New-Installs">Aptitude::CmdLine::Safe-Upgrade::No-New-Installs</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">--purge-unused</code></span></dt><dd><p>
+
+Vyčistí balíky, které již nejsou vyžadovány žádným instalovaným
+balíkem. To je ekvivalentní parametru <span class="quote">„<span class="quote"><code class="literal">-o <a class="link" href="ch02s04s05.html#configPurge-Unused">Aptitude::Purge-Unused=true</a></code></span>“</span>.
+
+    </p></dd><dt><span class="term"><code class="literal">-P</code>, <code class="literal">--prompt</code></span></dt><dd><p>
+
+Vždy zobrazí výzvu, i když neexistuje alternativní možnost.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Always-Prompt">Aptitude::CmdLine::Always-Prompt</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-R</code>, <code class="literal">--without-recommends</code></span></dt><dd><p>
+
+Při instalaci balíků <span class="emphasis"><em>nepovažuje</em></span> doporučení, za
+silné závislosti. (Má přednost před nastavením
+v <code class="filename">/etc/apt/apt.conf</code>
+a <code class="filename">~/.aptitude/config</code>.)
+Doporučené balíky nainstalované dříve nebudou odstraněny.
+
+    </p><p>
+
+Odpovídá konfiguračním položkám
+<code class="literal"><a class="link" href="ch02s04s05.html#configAptInstall-Recommends">Apt::Install-Recommends</a></code>
+a <code class="literal"><a class="link" href="ch02s04s05.html#configKeep-Recommends">Aptitude::Keep-Recommends</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-r</code>, <code class="literal">--with-recommends</code></span></dt><dd><p>
+
+Při instalaci nových balíků považuje doporučení za silné
+závislosti. (Má přednost před nastavením
+v <code class="filename">/etc/apt/apt.conf</code>
+a <code class="filename">~/.aptitude/config</code>.)
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configAptInstall-Recommends">Apt::Install-Recommends</a></code>.
+
+
+    </p></dd><dt><span class="term"><code class="literal">-s</code>, <code class="literal">--simulate</code></span></dt><dd><p>
+
+V příkazovém režimu simuluje akce, které by se provedly, ale reálně je
+neprovede. Nevyžaduje <code class="systemitem">root</code>ovská práva. V celoobrazovkovém režimu
+otevře cache pouze pro čtení bez ohledu na to, zda máte <code class="systemitem">root</code>ovská
+oprávnění.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configSimulate">Aptitude::Simulate</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">--remove-user-tag <em class="replaceable"><code>značka</code></em></code></span></dt><dd><p>
+
+U příkazů <code class="literal">full-upgrade</code>,
+<code class="literal">forbid-version</code>, <code class="literal">hold</code>,
+<code class="literal">install</code>, <code class="literal">keep-all</code>,
+<code class="literal">markauto</code>, <code class="literal">unmarkauto</code>,
+<code class="literal">purge</code>, <code class="literal">reinstall</code>,
+<code class="literal">remove</code>, <code class="literal">unhold</code> a
+<code class="literal">unmarkauto</code> odebere uživatelskou značku
+<em class="replaceable"><code>značka</code></em> ze všech balíků, které jsou daným
+příkazem ovlivněny. Je to stejné, jako kdybyste použili příkaz
+<a class="link" href="rn01re01.html#cmdlineAddOrRemoveUserTags"><code class="literal">add-user-tag</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--remove-user-tag-from <em class="replaceable"><code>značka</code></em>,<em class="replaceable"><code>vzor</code></em></code></span></dt><dd><p>
+
+U příkazů <code class="literal">full-upgrade</code>,
+<code class="literal">forbid-version</code>, <code class="literal">hold</code>,
+<code class="literal">install</code>, <code class="literal">keep-all</code>,
+<code class="literal">markauto</code>, <code class="literal">unmarkauto</code>,
+<code class="literal">purge</code>, <code class="literal">reinstall</code>,
+<code class="literal">remove</code>, <code class="literal">unhold</code> a
+<code class="literal">unmarkauto</code> odebere uživatelskou značku
+<em class="replaceable"><code>značka</code></em> ze všech balíků, které se shodují se
+<em class="replaceable"><code>vzor</code></em>em. Je to stejné, jako kdybyste použili
+příkaz
+<a class="link" href="rn01re01.html#cmdlineAddOrRemoveUserTags"><code class="literal">remove-user-tag</code></a>.
+Vzory jsou popsány v referenční příručce <span class="command"><strong>aptitude</strong></span> v části
+<a class="link" href="ch02s03.html" title="Vyhledávací vzory"><span class="quote">„<span class="quote">Vyhledávací vzory</span>“</span></a>.
+
+    </p><p>
+
+Například příkaz
+<code class="literal">aptitude safe-upgrade --remove-user-tag-from "neaktualizováno,?action(upgrade)"</code>
+odebere značku  <code class="literal">neaktualizováno</code> ze všech balíků,
+které může příkaz
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>
+aktualizovat na novější verze.
+
+    </p></dd><dt><a name="cmdlineSafeResolver"></a><span class="term"><code class="literal">--safe-resolver</code></span></dt><dd><p>
+
+Při výskytu problémů se závislostmi použije pro jejich řešení
+<span class="quote">„<span class="quote">bezpečný</span>“</span> algoritmus. Ten se snaží co nejvíce
+respektovat vaše nastavení. Nikdy neodstraní balík nebo nenainstaluje
+jinou verzi balíku, než kandidátskou. Jedná se o stejný algoritmus,
+jako používá příkaz
+<a class="link" href="rn01re01.html#manpageSafeUpgrade"><code class="literal">safe-upgrade</code></a>,
+takže <code class="literal">aptitude --safe-resolver full-upgrade</code> je
+stejné jako <code class="literal">aptitude safe-upgrade</code>.
+Protože příkaz <code class="literal">safe-upgrade</code> používá
+<span class="quote">„<span class="quote">bezpečný</span>“</span> algoritmus za všech okolností, je u něj
+parametr <code class="literal">--safe-resolver</code> zbytečný.
+
+    </p><p>
+
+Konfigurační položka <a class="link" href="ch02s04s05.html#configAlways-Use-Safe-Resolver"><code class="literal">Aptitude::Always-Use-Safe-Resolver</code></a>.
+
+    </p></dd><dt><span class="term"><code class="literal">--schedule-only</code></span></dt><dd><p>
+
+U příkazů, které mění stav balíků (instalace, aktualizace,
+odstranění), naplánuje zadané operace pro pozdější provedení, ale
+zatím je neprovede. Naplánované akce se spustí až po zadání příkazu
+<code class="literal">aptitude install</code> bez dalších parametrů. Je to
+podobné, jako když v <a class="link" href="ch01s01.html" title="Používáme aptitude">celoobrazovkovém
+režimu</a> provedete příslušné změny a poté program ukončíte, aniž
+byste akce provedli klávesou <span class="quote">„<span class="quote"><span class="keycap"><strong>g</strong></span></span>“</span>.
+
+    </p><p>
+
+Například <code class="literal">aptitude --schedule-only install
+evolution</code> naplánuje balík <code class="literal">evolution</code> pro
+pozdější instalaci.
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-t</code> <em class="replaceable"><code>distribuce</code></em>,
+      <code class="literal">--target-release</code>
+      <em class="replaceable"><code>distribuce</code></em>
+    </span></dt><dd><p>
+
+Nastaví distribuci, ze které se budou balíky instalovat. Například
+<span class="quote">„<span class="quote"><code class="literal">aptitude -t unstable ...</code></span>“</span> bude při
+stahování balíků upřednostňovat nestabilní distribuci.  Pro příkazy
+<span class="quote">„<span class="quote">changelog</span>“</span>, <span class="quote">„<span class="quote">download</span>“</span>
+a <span class="quote">„<span class="quote">show</span>“</span> to je ekvivalentní přidání
+<code class="literal">/<em class="replaceable"><code>distribuce</code></em></code> za název
+každého balíku na příkazové řádce. U ostatních příkazů to ovlivní
+výchozí kandidátskou verzi balíků podle pravidel popsaných
+v <span class="citerefentry"><span class="refentrytitle">apt_preferences</span>(5)</span>.
+
+    </p><p>
+
+Konfigurační položka <code class="literal">APT::Default-Release</code>.
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-O</code> <em class="replaceable"><code>pořadí</code></em>,
+      <code class="literal">--sort</code> <em class="replaceable"><code>pořadí</code></em>
+    </span></dt><dd><p>
+
+Zadá pořadí, ve kterém se bude zobrazovat výstup příkazu
+<code class="literal">search</code>. Například
+<span class="quote">„<span class="quote"><code class="literal">installsize</code></span>“</span> seřadí balíky vzestupně
+podle instalované velikosti (viz sekce v <span class="quote">„<span class="quote"><a class="link" href="ch02s04s01.html#secSortingPolicy" title="Změna řazení balíků">Přizpůsobení zobrazení
+balíků</a></span>“</span> v referenční příručce <span class="command"><strong>aptitude</strong></span>).
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-o</code>
+      <em class="replaceable"><code>klíč</code></em><code class="literal">=</code><em class="replaceable"><code>hodnota</code></em>
+    </span></dt><dd><p>
+
+Přímo nastaví volbu z konfiguračního souboru. Například <code class="literal">-o
+Aptitude::Log=/tmp/muj-denicek</code> zaznamená všechny akce
+<span class="command"><strong>aptitude</strong></span> do souboru <code class="filename">/tmp/muj-denicek</code>. Další
+informace o konfiguračním souboru naleznete v referenční příručce
+<span class="command"><strong>aptitude</strong></span> v části <span class="quote">„<span class="quote"><a class="link" href="ch02s04s05.html" title="Konfigurační soubor">Konfigurační
+soubor</a></span>“</span>.
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-q[<span class="optional">=<em class="replaceable"><code>n</code></em></span>]</code>,
+      <code class="literal">--quiet[<span class="optional">=<em class="replaceable"><code>n</code></em></span>]</code>
+    </span></dt><dd><p>
+
+Potlačí všechny ukazatele postupu, což umožní ukládat výstup programu
+do souboru pro pozdější kontrolu. Tuto volbu můžete několikrát
+zopakovat, což bude program dále ztišovat. <span class="command"><strong>aptitude</strong></span> však na rozdíl
+od <span class="command"><strong>apt-get</strong></span> při násobném použití nezapne volbu <code class="literal">-y</code>.
+
+    </p><p>
+
+Abyste parametr <code class="literal">-q</code> nemuseli zadávat několikrát,
+můžete použít i variantu s volitelným
+<code class="literal">=<em class="replaceable"><code>n</code></em></code>, kde místo
+<em class="replaceable"><code>n</code></em> zadáte míru tichosti odpovídající
+<em class="replaceable"><code>n</code></em> písmenům <code class="literal">q</code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-V</code>, <code class="literal">--show-versions</code></span></dt><dd><p>
+
+Zobrazí verze balíků připravených k instalaci.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Show-Versions">Aptitude::CmdLine::Show-Versions</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-W</code>, <code class="literal">--show-why</code></span></dt><dd><p>
+
+V náhledu před instalací, aktualizací nebo odstraněním balíků zobrazí,
+které ručně instalované balíky si vyžádaly instalaci automaticky
+instalovaných balíků. Například:
+
+    </p><p>
+
+    </p><pre class="screen"><code class="prompt">$</code> <strong class="userinput"><code>aptitude --show-why install mediawiki</code></strong>
+...
+Následující NOVÉ balíky budou instalovány:
+  libapache2-mod-php5{a} (pro mediawiki)  mediawiki  php5{a} (pro mediawiki)
+  php5-cli{a} (pro mediawiki)  php5-common{a} (pro mediawiki)
+  php5-mysql{a} (pro mediawiki)</pre><p>
+
+    </p><p>
+
+V kombinaci s parametrem <code class="literal">-v</code>, nebo nenulovou
+hodnotou volby
+<a class="link" href="ch02s04s05.html#configCmdLine-Verbose"><code class="literal">Aptitude::CmdLine::Verbose</code></a>,
+zobrazí celou posloupnost závislostí, která vedla k instalaci každého
+balíku. Například:
+
+    </p><p>
+
+    </p><pre class="screen"><code class="prompt">$</code> <strong class="userinput"><code>aptitude -v --show-why install libdb4.2-dev</code></strong>
+Následující NOVÉ balíky budou instalovány:
+  libdb4.2{a} (libdb4.2-dev D: libdb4.2)  libdb4.2-dev
+Následující balíky budou ODSTRANĚNY:
+  libdb4.4-dev{a} (libdb4.2-dev C: libdb-dev P&lt;- libdb-dev)</pre><p>
+
+    </p><p>
+
+Jak je vidět výše, zobrazí se také zdůvodnění, proč budou balíky
+odstraněny. V příkladu je balík <code class="systemitem">libdb4.2-dev</code>
+v konfliktu s <code class="systemitem">libdb-dev</code>, který je poskytován
+balíkem <code class="systemitem">libdb-dev</code>.
+
+    </p><p>
+
+Tento parametr zobrazí stejné informace, jako příkazy
+<code class="literal">aptitude why</code> a <code class="literal">aptitude why-not</code>.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Show-Why">Aptitude::CmdLine::Show-Why</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-v</code>, <code class="literal">--verbose</code></span></dt><dd><p>
+
+Zobrazí další informace (může být použito vícekrát).
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Verbose">Aptitude::CmdLine::Verbose</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">--version</code></span></dt><dd><p>
+
+Zobrazí verzi <span class="command"><strong>aptitude</strong></span> a různé informace o kompilačním prostředí.
+
+    </p></dd><dt><span class="term"><code class="literal">--visual-preview</code></span></dt><dd><p>
+
+Při instalaci/odstranění balíků z příkazové řádky zobrazí místo
+obvyklé výzvy celoobrazovkové rozhraní a jeho přehled před instalací.
+
+    </p></dd><dt><span class="term">
+      <code class="literal">-w</code> <em class="replaceable"><code>šířka</code></em>,
+      <code class="literal">--width</code> <em class="replaceable"><code>šířka</code></em>
+    </span></dt><dd><p>
+
+Zadá šířku zobrazení, která se má použít pro výstup příkazu
+<code class="literal">search</code> (implicitně se použije šířka terminálu).
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Package-Display-Width">Aptitude::CmdLine::Package-Display-Width</a></code>
+
+    </p></dd><dt><span class="term"><code class="literal">-y</code>, <code class="literal">--assume-yes</code></span></dt><dd><p>
+
+Na všechny výzvy ano/ne předpokládá odpověď
+<span class="quote">„<span class="quote">ano</span>“</span>. Nevztahuje se však na potenciálně nebezpečné akce
+jako odstranění Nezbytných balíků. Má přednost před <code class="literal">-P</code>.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Assume-Yes">Aptitude::CmdLine::Assume-Yes</a></code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-Z</code></span></dt><dd><p>
+
+U každého balíku zobrazí, kolik místa se použije nebo uvolní jeho
+instalací, aktualizací nebo odstraněním.
+
+    </p><p>
+
+Konfigurační položka <code class="literal"><a class="link" href="ch02s04s05.html#configCmdLine-Show-Size-Changes">Aptitude::CmdLine::Show-Size-Changes</a></code>.
+
+      </p></dd></dl></div><p>
+
+Následující volby slouží pro interní účely celoobrazovkového režimu
+programu a neměli byste je používat.
+
+</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">-S</code> <em class="replaceable"><code>jmsoub</code></em></span></dt><dd><p>
+
+Nahraje rozšířené stavové informace z <em class="replaceable"><code>jmsoub</code></em>.
+
+    </p></dd><dt><span class="term"><code class="literal">-u</code></span></dt><dd><p>
+
+Při startu programu aktualizuje seznamy balíků. Tuto volbu nemůžete
+použít zároveň s <code class="literal">-i</code>.
+
+    </p></dd><dt><span class="term"><code class="literal">-i</code></span></dt><dd><p>
+
+Při startu programu zobrazí obrazovku pro stahování (ekvivalentní
+stisku klávesy <span class="quote">„<span class="quote"><span class="keycap"><strong>g</strong></span></span>“</span> hned po startu). Tuto
+volbu nemůžete použít zároveň s <span class="quote">„<span class="quote"><code class="literal">-u</code></span>“</span>.
+
+    </p></dd></dl></div></div><div class="refsect1" title="Prostředí"><a name="idp5390624"></a><h2>Prostředí</h2><div class="variablelist"><dl><dt><span class="term"><code class="literal">HOME</code></span></dt><dd><p>
+
+Pokud existuje adresář <code class="filename">$HOME/.aptitude</code>,
+<span class="command"><strong>aptitude</strong></span> si zde uloží konfigurační soubor jako
+<code class="filename">$HOME/.aptitude/config</code>. V opačném případě si
+vyhledá domovský adresář uživatele pomocí <span class="citerefentry"><span class="refentrytitle">getpwuid</span>(2)</span> a konfigurační soubor uloží tam.
+
+    </p></dd><dt><span class="term"><code class="literal">PAGER</code></span></dt><dd><p>
+
+Je-li nastavena tato proměnná prostředí, <span class="command"><strong>aptitude</strong></span> ji využije pro
+zobrazení seznamu změn příkazu <span class="quote">„<span class="quote"><code class="literal">aptitude
+changelog</code></span>“</span>. V opačném případě se použije výchozí
+<code class="literal">more</code>.
+
+    </p></dd><dt><span class="term"><code class="literal">TMP</code></span></dt><dd><p>
+
+Pokud není nastavena proměnná <code class="literal">TMPDIR</code>, ale
+<code class="literal">TMP</code> ano, <span class="command"><strong>aptitude</strong></span> si zde bude ukládat své dočasné
+soubory. Pokud není nastavena ani jedna z těchto proměnných, použije
+se adresář <code class="filename">/tmp</code>.
+
+    </p></dd><dt><span class="term"><code class="literal">TMPDIR</code></span></dt><dd><p>
+
+<span class="command"><strong>aptitude</strong></span> bude ukládat své dočasné soubory do adresáře určeného touto
+proměnnou prostředí. Pokud proměnná <code class="literal">TMPDIR</code> není
+nastavena, použije se proměnná <code class="literal">TMP</code>. Jestliže není
+nastavena ani ta, použije se výchozí adresář
+<code class="filename">/tmp</code>.
+
+    </p></dd></dl></div></div><div class="refsect1" title="Soubory"><a name="idp5401784"></a><h2>Soubory</h2><div class="variablelist"><dl><dt><span class="term"><code class="filename">/var/lib/aptitude/pkgstates</code></span></dt><dd><p>
+
+V souboru jsou uloženy stavy balíků a některé příznaky.
+
+    </p></dd></dl></div><div class="variablelist"><dl><dt><span class="term">
+      <code class="filename">/etc/apt/apt.conf</code>,
+      <code class="filename">/etc/apt/apt.conf.d/*</code>,
+      <code class="filename">~/.aptitude/config</code>
+    </span></dt><dd><p>
+
+Konfigurační soubory <span class="command"><strong>aptitude</strong></span>.
+<code class="filename">~/.aptitude/config</code> má přednost před
+<code class="filename">/etc/apt/apt.conf</code>. Formát a popis těchto souborů
+naleznete v manuálové stránce
+<span class="citerefentry"><span class="refentrytitle">apt.conf</span>(5)</span>.
+
+    </p></dd></dl></div></div><div class="refsect1" title="Viz také"><a name="idp5407040"></a><h2>Viz také</h2><p>
+
+<span class="citerefentry"><span class="refentrytitle">apt-get</span>(8)</span>,
+
+<span class="citerefentry"><span class="refentrytitle">apt</span>(8)</span>
+
+a
+
+<code class="filename">/usr/share/doc/aptitude/html/<em class="replaceable"><code>jazyk</code></em>/index.html</code>
+z balíku aptitude-doc-<em class="replaceable"><code>jazyk</code></em>
+
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rn01.html"><img src="images/prev.gif" alt="Předcházející"></a> </td><td width="20%" align="center"><a accesskey="u" href="rn01.html"><img src="images/up.gif" alt="Nahoru"></a></td><td width="40%" align="right"> <a accesskey="n" href="rn01re02.html"><img src="images/next.gif" alt="Další"></a></td></tr><tr><td width="40%" align="left" valign="top">Přehled příkazů </td><td width="20%" align="center"><a accesskey="h" href="index.html"><img src="images/home.gif" alt="Domů"></a></td><td width="40%" align="right" valign="top"> aptitude-create-state-bundle</td></tr></table></div></body></html>

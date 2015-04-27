@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Named arguments - Asymptote: the Vector Graphics Language</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Asymptote: the Vector Graphics Language">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Default-arguments.html#Default-arguments" title="Default arguments">
+<link rel="next" href="Rest-arguments.html#Rest-arguments" title="Rest arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents `Asymptote', version 2.15.
+
+`http://asymptote.sourceforge.net'
+
+Copyright (C) 2004-11 Andy Hammerlindl, John Bowman, and Tom Prince.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Lesser General Public License.
+     On Debian systems, the LGPL can be found at
+     /usr/share/common-licenses/LGPL.
+
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Named-arguments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rest-arguments.html#Rest-arguments">Rest arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Default-arguments.html#Default-arguments">Default arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.11.2 Named arguments</h4>
+
+<p><a name="index-keywords-641"></a><a name="index-named-arguments-642"></a>
+It is sometimes difficult to remember the order in which arguments
+appear in a function declaration. Named (keyword) arguments make calling
+functions with multiple arguments easier. Unlike in the C and C++
+languages, an assignment in a function argument is interpreted as an
+assignment to a parameter of the same name in the function signature,
+<em>not within the local scope</em>. The command-line option <code>-d</code>
+may be used to check <code>Asymptote</code> code for cases where a
+named argument may be mistaken for a local assignment.
+
+   <p>When matching arguments to signatures, first all of the keywords are
+matched, then the arguments without names are matched against the
+unmatched formals as usual. For example,
+<pre class="verbatim">int f(int x, int y) {
+  return 10x+y;
+}
+write(f(4,x=3));
+</pre>
+outputs 34, as <code>x</code> is already matched when we try to match the
+unnamed argument <code>4</code>, so it gets matched to the next item, <code>y</code>.
+
+   <p>For the rare occasions where it is desirable to assign a value to
+local variable within a function argument (generally <em>not</em> a good
+programming practice), simply enclose the assignment in
+parentheses. For example, given the definition of <code>f</code> in the
+previous example,
+<pre class="verbatim">int x;
+write(f(4,(x=3)));
+</pre>
+is equivalent to the statements
+<pre class="verbatim">int x;
+x=3;
+write(f(4,3));
+</pre>
+and outputs 43.
+
+   <p><a name="index-g_t_0040code_007bkeyword_007d-643"></a><a name="index-keyword_002donly-644"></a>Parameters can be specified as &ldquo;keyword-only&rdquo; by putting <code>keyword</code>
+immediately before the parameter name, as in <code>int f(int keyword x)</code> or
+<code>int f(int keyword x=77)</code>.  This forces the caller of the function to use
+a named argument to give a value for this parameter.  That is, <code>f(x=42)</code>
+is legal, but <code>f(25)</code> is not.  Keyword-only parameters must be listed
+after normal parameters in a function definition.
+
+   <p>As a technical detail, we point out that, since variables of the same
+name but different signatures are allowed in the same scope, the code
+<pre class="verbatim">int f(int x, int x()) {
+  return x+x();
+}
+int seven() {return 7;}
+</pre>
+is legal in <code>Asymptote</code>, with <code>f(2,seven)</code> returning 9. 
+A named argument matches the first unmatched formal of the same name, so
+<code>f(x=2,x=seven)</code> is an equivalent call, but <code>f(x=seven,2)</code>
+is not, as the first argument is matched to the first formal, and
+<code>int ()</code> cannot be implicitly cast to <code>int</code>.  Default
+arguments do not affect which formal a named argument is matched to,
+so if <code>f</code> were defined as
+<pre class="verbatim">int f(int x=3, int x()) {
+  return x+x();
+}
+</pre>
+then <code>f(x=seven)</code> would be illegal, even though <code>f(seven)</code>
+obviously would be allowed.
+
+   </body></html>
+

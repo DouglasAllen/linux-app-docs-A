@@ -1,0 +1,455 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Join Points and Pointcuts</title><link rel="stylesheet" type="text/css" href="aspectj-docs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The AspectJTM Programming Guide"><link rel="up" href="language.html" title="Chapter 2. The AspectJ Language"><link rel="prev" href="language-anatomy.html" title="The Anatomy of an Aspect"><link rel="next" href="language-advice.html" title="Advice"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Join Points and Pointcuts</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="language-anatomy.html">Prev</a> </td><th width="60%" align="center">Chapter 2. The AspectJ Language</th><td width="20%" align="right"> <a accesskey="n" href="language-advice.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Join Points and Pointcuts"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="language-joinPoints"></a>Join Points and Pointcuts</h2></div></div></div><p>
+      Consider the following Java class:
+    </p><pre class="programlisting">
+class Point {
+    private int x, y;
+
+    Point(int x, int y) { this.x = x; this.y = y; }
+
+    void setX(int x) { this.x = x; }
+    void setY(int y) { this.y = y; }
+
+    int getX() { return x; }
+    int getY() { return y; }
+}
+</pre><p>
+      In order to get an intuitive understanding of AspectJ's join points
+      and pointcuts, let's go back to some of the basic principles of
+      Java. Consider the following a method declaration in class Point:
+    </p><pre class="programlisting">
+void setX(int x) { this.x = x; }
+</pre><p>
+      This piece of program says that that when method named
+      <code class="literal">setX</code> with an <code class="literal">int</code> argument
+      called on an object of type <code class="literal">Point</code>, then the method
+      body <code class="literal">{ this.x = x; }</code> is executed. Similarly, the
+      constructor of the class states that when an object of type
+      <code class="literal">Point</code> is instantiated through a constructor with
+      two <code class="literal">int</code> arguments, then the constructor body
+      <code class="literal">{ this.x = x; this.y = y; }</code> is executed.
+    </p><p>
+      One pattern that emerges from these descriptions is
+
+      </p><div class="blockquote"><blockquote class="blockquote">
+        When something happens, then something gets executed.
+      </blockquote></div><p>
+
+      In object-oriented programs, there are several kinds of "things that
+      happen" that are determined by the language. We call these the join
+      points of Java. Join points consist of things like method calls,
+      method executions, object instantiations, constructor executions,
+      field references and handler executions. (See the <a class="xref" href="quick.html" title="Appendix A. AspectJ Quick Reference">AspectJ Quick Reference</a> for a complete listing.)
+    </p><p>
+      Pointcuts pick out these join points. For example, the pointcut
+    </p><pre class="programlisting">
+pointcut setter(): target(Point) &amp;&amp;
+                   (call(void setX(int)) ||
+                    call(void setY(int)));
+</pre><p>
+      picks out each call to <code class="literal">setX(int)</code> or
+      <code class="literal">setY(int)</code> when called on an instance of
+      <code class="literal">Point</code>.   Here's another example:
+    </p><pre class="programlisting">
+pointcut ioHandler(): within(MyClass) &amp;&amp; handler(IOException);
+</pre><p>
+      This pointcut picks out each the join point when exceptions of type
+      <code class="literal">IOException</code> are handled inside the code defined by
+      class <code class="literal">MyClass</code>.
+    </p><p>
+      Pointcut definitions consist of a left-hand side and a right-hand side,
+      separated by a colon. The left-hand side consists of the pointcut name
+      and the pointcut parameters (i.e. the data available when the events
+      happen).  The right-hand side consists of the pointcut itself.
+    </p><div class="sect2" title="Some Example Pointcuts"><div class="titlepage"><div><div><h3 class="title"><a name="some-example-pointcuts"></a>Some Example Pointcuts</h3></div></div></div><p>
+        Here are examples of pointcuts picking out
+      </p><div class="variablelist"><dl><dt><span class="term">when a particular method body executes</span></dt><dd><p>
+              <code class="literal">execution(void Point.setX(int))</code>
+            </p></dd><dt><span class="term">when a method is called</span></dt><dd><p>
+              <code class="literal">call(void Point.setX(int))</code>
+            </p></dd><dt><span class="term">when an exception handler executes</span></dt><dd><p>
+              <code class="literal">handler(ArrayOutOfBoundsException)</code>
+            </p></dd><dt><span class="term">
+            when the object currently executing
+            (i.e. <code class="literal">this</code>) is of type
+            <code class="literal">SomeType</code>
+          </span></dt><dd><p>
+              <code class="literal">this(SomeType)</code>
+            </p></dd><dt><span class="term">
+            when the target object is of type <code class="literal">SomeType</code>
+          </span></dt><dd><p>
+              <code class="literal">target(SomeType)</code>
+            </p></dd><dt><span class="term">
+            when the executing code belongs to
+            class <code class="literal">MyClass</code>
+          </span></dt><dd><p>
+              <code class="literal">within(MyClass)</code>
+            </p></dd><dt><span class="term">
+            when the join point is in the control flow of a call to a
+            <code class="literal">Test</code>'s no-argument <code class="literal">main</code>
+            method
+          </span></dt><dd><p>
+              <code class="literal">cflow(call(void Test.main()))</code>
+            </p></dd></dl></div><p>
+        Pointcuts compose through the operations <code class="literal">or</code>
+        ("<code class="literal">||</code>"), <code class="literal">and</code>
+        ("<code class="literal">&amp;&amp;</code>") and <code class="literal">not</code>
+        ("<code class="literal">!</code>").
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+            It is possible to use wildcards. So
+
+            </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+                  <code class="literal">execution(* *(..))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">call(* set(..))</code>
+                </p></li></ol></div><p>
+
+            means (1) the execution of any method regardless of return or
+            parameter types, and (2) the call to any method named
+            <code class="literal">set</code> regardless of return or parameter types
+            -- in case of overloading there may be more than one such
+            <code class="literal">set</code> method; this pointcut picks out calls to
+            all of them.
+          </p></li><li class="listitem"><p>
+            You can select elements based on types. For example,
+            </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+                  <code class="literal">execution(int *())</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">call(* setY(long))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">call(* Point.setY(int))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">call(*.new(int, int))</code>
+                </p></li></ol></div><p>
+
+            means (1) the execution of any method with no parameters that
+            returns an <code class="literal">int</code>, (2) the call to any
+            <code class="literal">setY</code> method that takes a
+            <code class="literal">long</code> as an argument, regardless of return
+            type or declaring type, (3) the call to any of
+            <code class="literal">Point</code>'s <code class="literal">setY</code> methods that
+            take an <code class="literal">int</code> as an argument, regardless of
+            return type, and (4) the call to any classes' constructor, so
+            long as it takes exactly two <code class="literal">int</code>s as
+            arguments.
+          </p></li><li class="listitem"><p>
+            You can compose pointcuts. For example,
+            </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+                  <code class="literal">target(Point) &amp;&amp; call(int *())</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">call(* *(..)) &amp;&amp; (within(Line) || within(Point))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">within(*) &amp;&amp; execution(*.new(int))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">
+                    !this(Point) &amp;&amp; call(int *(..))
+                  </code>
+                </p></li></ol></div><p>
+
+            means (1) any call to an <code class="literal">int</code> method with no
+            arguments on an instance of <code class="literal">Point</code>,
+            regardless of its name, (2) any call to any method where the
+            call is made from the code in <code class="literal">Point</code>'s or
+            <code class="literal">Line</code>'s type declaration, (3) the execution of
+            any constructor taking exactly one <code class="literal">int</code>
+            argument, regardless of where the call is made from, and
+            (4) any method call to an <code class="literal">int</code> method when
+            the executing object is any type except <code class="literal">Point</code>.
+          </p></li><li class="listitem"><p>
+            You can select methods and constructors based on their
+            modifiers and on negations of modifiers. For example, you can
+            say:
+            </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+                  <code class="literal">call(public * *(..))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">execution(!static * *(..))</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal"> execution(public !static * *(..))</code>
+                </p></li></ol></div><p>
+            which means (1) any call to a public method, (2) any
+            execution of a non-static method, and (3) any execution of a
+            public, non-static method.
+          </p></li><li class="listitem"><p>
+            Pointcuts can also deal with interfaces. For example, given the
+            interface </p><pre class="programlisting">
+interface MyInterface { ... }
+</pre><p>
+            the pointcut <code class="literal">call(* MyInterface.*(..))</code> picks
+            out any call to a method in <code class="literal">MyInterface</code>'s
+            signature -- that is, any method defined by
+            <code class="literal">MyInterface</code> or inherited by one of its a
+            supertypes.
+          </p></li></ul></div></div><div class="sect2" title="call vs. execution"><div class="titlepage"><div><div><h3 class="title"><a name="call-vs-execution"></a>call vs. execution</h3></div></div></div><p>
+        When methods and constructors run, there are two interesting times
+        associated with them.  That is when they are called, and when they
+        actually execute.
+      </p><p>
+        AspectJ exposes these times as call and execution join points,
+        respectively, and allows them to be picked out specifically by
+        <code class="literal">call</code> and <code class="literal">execution</code> pointcuts.
+      </p><p>
+        So what's the difference between these join points?  Well, there are a
+        number of differences:
+      </p><p>
+        Firstly, the lexical pointcut declarations
+        <code class="literal">within</code> and <code class="literal">withincode</code> match
+        differently.  At a call join point, the enclosing code is that of
+        the call site.  This means that <code class="literal">call(void m())
+        &amp;&amp; withincode(void m())</code> will only capture
+        directly recursive calls, for example.  At an execution join point,
+        however, the program is already executing the method, so the
+        enclosing code is the method itself: <code class="literal">execution(void m())
+        &amp;&amp; withincode(void m())</code> is the same as
+        <code class="literal">execution(void m())</code>.
+      </p><p>
+        Secondly, the call join point does not capture super calls to
+        non-static methods.  This is because such super calls are different in
+        Java, since they don't behave via dynamic dispatch like other calls to
+        non-static methods.
+      </p><p>
+        The rule of thumb is that if you want to pick a join point that
+        runs when an actual piece of code runs (as is often the case for
+        tracing), use <code class="literal">execution</code>, but if you want to pick
+        one that runs when a particular <span class="emphasis"><em>signature</em></span> is
+        called (as is often the case for production aspects), use
+        <code class="literal">call</code>.
+      </p></div><div class="sect2" title="Pointcut composition"><div class="titlepage"><div><div><h3 class="title"><a name="pointcut-composition"></a>Pointcut composition</h3></div></div></div><p>
+        Pointcuts are put together with the operators and (spelled
+        <code class="literal">&amp;&amp;</code>), or (spelled <code class="literal">||</code>),
+        and not (spelled <code class="literal">!</code>).  This allows the creation
+        of very powerful pointcuts from the simple building blocks of
+        primitive pointcuts.  This composition can be somewhat confusing
+        when used with primitive pointcuts like <code class="literal">cflow</code>
+        and <code class="literal">cflowbelow</code>.  Here's an example:
+      </p><p>
+        <code class="literal">cflow(<em class="replaceable"><code>P</code></em>)</code> picks out
+        each join point in the control flow of the join points picked out
+        by <em class="replaceable"><code>P</code></em>.  So, pictorially:
+      </p><pre class="programlisting">
+  P ---------------------
+    \
+     \  cflow of P
+      \
+</pre><p>
+        What does <code class="literal">cflow(<em class="replaceable"><code>P</code></em>) &amp;&amp;
+        cflow(<em class="replaceable"><code>Q</code></em>)</code> pick out?  Well, it
+        picks out each join point that is in both the control flow of
+        <em class="replaceable"><code>P</code></em> and in the control flow of
+        <em class="replaceable"><code>Q</code></em>.  So...
+      </p><pre class="programlisting">
+          P ---------------------
+            \
+             \  cflow of P
+              \
+               \
+                \
+  Q -------------\-------
+    \             \
+     \  cflow of Q \ cflow(P) &amp;&amp; cflow(Q)
+      \             \
+</pre><p>
+        Note that <em class="replaceable"><code>P</code></em> and
+        <em class="replaceable"><code>Q</code></em> might not have any join points in
+        common... but their control flows might have join points in common.
+      </p><p>
+        But what does <code class="literal">cflow(<em class="replaceable"><code>P</code></em>
+        &amp;&amp; <em class="replaceable"><code>Q</code></em>)</code> mean?  Well, it
+        means the control flow of those join points that are both picked
+        out by <em class="replaceable"><code>P</code></em> and picked out by
+        <em class="replaceable"><code>Q</code></em>.
+      </p><pre class="programlisting">
+   P &amp;&amp; Q -------------------
+          \
+           \ cflow of (P &amp;&amp; Q)
+            \
+</pre><p>
+        and if there are <span class="emphasis"><em>no</em></span> join points that are both
+        picked by <em class="replaceable"><code>P</code></em> and picked out by
+        <em class="replaceable"><code>Q</code></em>, then there's no chance that there are
+        any join points in the control flow of
+        <code class="literal">(<em class="replaceable"><code>P</code></em> &amp;&amp;
+        <em class="replaceable"><code>Q</code></em>)</code>.
+      </p><p>
+        Here's some code that expresses this.
+      </p><pre class="programlisting">
+public class Test {
+    public static void main(String[] args) {
+        foo();
+    }
+    static void foo() {
+        goo();
+    }
+    static void goo() {
+        System.out.println("hi");
+    }
+}
+
+aspect A  {
+    pointcut fooPC(): execution(void Test.foo());
+    pointcut gooPC(): execution(void Test.goo());
+    pointcut printPC(): call(void java.io.PrintStream.println(String));
+
+    before(): cflow(fooPC()) &amp;&amp; cflow(gooPC()) &amp;&amp; printPC() &amp;&amp; !within(A) {
+        System.out.println("should occur");
+    }
+
+    before(): cflow(fooPC() &amp;&amp; gooPC()) &amp;&amp; printPC() &amp;&amp; !within(A) {
+        System.out.println("should not occur");
+    }
+}
+</pre><p>
+          The <code class="literal">!within(<em class="replaceable"><code>A</code></em>)</code>
+          pointcut above is required to avoid the <code class="literal">printPC</code> 
+          pointcut applying to the <code class="literal">System.out.println</code>
+          call in the advice body. If this was not present a recursive call
+          would result as the pointcut would apply to its own advice.
+          (See <a class="xref" href="pitfalls-infiniteLoops.html" title="Infinite loops">the section called &#8220;Infinite loops&#8221;</a> for more details.)
+      </p></div><div class="sect2" title="Pointcut Parameters"><div class="titlepage"><div><div><h3 class="title"><a name="pointcut-parameters"></a>Pointcut Parameters</h3></div></div></div><p>
+        Consider again the first pointcut definition in this chapter:
+      </p><pre class="programlisting">
+  pointcut setter(): target(Point) &amp;&amp;
+                     (call(void setX(int)) ||
+                      call(void setY(int)));
+</pre><p>
+        As we've seen, this pointcut picks out each call to
+        <code class="literal">setX(int)</code> or <code class="literal">setY(int)</code>
+        methods where the target is an instance of
+        <code class="literal">Point</code>. The pointcut is given the name
+        <code class="literal">setters</code> and no parameters on the left-hand
+        side. An empty parameter list means that none of the context from
+        the join points is published from this pointcut.  But consider
+        another version of version of this pointcut definition:
+      </p><pre class="programlisting">
+  pointcut setter(Point p): target(p) &amp;&amp;
+                            (call(void setX(int)) ||
+                             call(void setY(int)));
+</pre><p>
+        This version picks out exactly the same join points. But in this
+        version, the pointcut has one parameter of type
+        <code class="literal">Point</code>. This means that any advice that uses this
+        pointcut has access to a <code class="literal">Point</code> from each join
+        point picked out by the pointcut.  Inside the pointcut definition
+        this <code class="literal">Point</code> is named <code class="literal">p</code> is
+        available, and according to the right-hand side of the definition,
+        that <code class="literal">Point p</code> comes from the
+        <code class="literal">target</code> of each matched join point.
+      </p><p>
+        Here's another example that illustrates the flexible mechanism for
+        defining pointcut parameters:
+      </p><pre class="programlisting">
+  pointcut testEquality(Point p): target(Point) &amp;&amp;
+                                  args(p) &amp;&amp;
+                                  call(boolean equals(Object));
+</pre><p>
+        This pointcut also has a parameter of type
+        <code class="literal">Point</code>.  Similar to the
+        <code class="literal">setters</code> pointcut, this means that anyone using
+        this pointcut has access to a <code class="literal">Point</code> from each
+        join point.  But in this case, looking at the right-hand side we
+        find that the object named in the parameters is not the target
+        <code class="literal">Point</code> object that receives the call; it's the
+        argument (also of type <code class="literal">Point</code>) passed to the
+        <code class="literal">equals</code> method when some other
+        <code class="literal">Point</code> is the target. If we wanted access to both
+        <code class="literal">Point</code>s, then the pointcut definition that would
+        expose target <code class="literal">Point p1</code> and argument
+        <code class="literal">Point p2</code> would be
+      </p><pre class="programlisting">
+  pointcut testEquality(Point p1, Point p2): target(p1) &amp;&amp;
+                                             args(p2) &amp;&amp;
+                                             call(boolean equals(Object));
+</pre><p>
+        Let's look at another variation of the <code class="literal">setters</code> pointcut:
+      </p><pre class="programlisting">
+pointcut setter(Point p, int newval): target(p) &amp;&amp;
+                                      args(newval) &amp;&amp;
+                                      (call(void setX(int)) ||
+                                       call(void setY(int)));
+</pre><p>
+        In this case, a <code class="literal">Point</code> object and an
+        <code class="literal">int</code> value are exposed by the named
+        pointcut. Looking at the the right-hand side of the definition, we
+        find that the <code class="literal">Point</code> object is the target object,
+        and the <code class="literal">int</code> value is the called method's
+        argument.
+      </p><p>
+        The use of pointcut parameters is relatively flexible. The most
+        important rule is that all the pointcut parameters must be bound at
+        every join point picked out by the pointcut. So, for example, the
+        following pointcut definition will result in a compilation error:
+
+</p><pre class="programlisting">
+  pointcut badPointcut(Point p1, Point p2):
+      (target(p1) &amp;&amp; call(void setX(int))) ||
+      (target(p2) &amp;&amp; call(void setY(int)));
+</pre><p>
+
+        because <code class="literal">p1</code> is only bound when calling
+        <code class="literal">setX</code>, and <code class="literal">p2</code> is only bound
+        when calling <code class="literal">setY</code>, but the pointcut picks out
+        all of these join points and tries to bind both
+        <code class="literal">p1</code> and <code class="literal">p2</code>.
+      </p></div><div class="sect2" title="Example: HandleLiveness"><div class="titlepage"><div><div><h3 class="title"><a name="example"></a>Example: <code class="literal">HandleLiveness</code></h3></div></div></div><p>
+        The example below consists of two object classes (plus an exception
+        class) and one aspect. Handle objects delegate their public,
+        non-static operations to their <code class="literal">Partner</code>
+        objects. The aspect <code class="literal">HandleLiveness</code> ensures that,
+        before the delegations, the partner exists and is alive, or else it
+        throws an exception.
+      </p><pre class="programlisting">
+  class Handle {
+    Partner partner = new Partner();
+
+    public void foo() { partner.foo(); }
+    public void bar(int x) { partner.bar(x); }
+
+    public static void main(String[] args) {
+      Handle h1 = new Handle();
+      h1.foo();
+      h1.bar(2);
+    }
+  }
+
+  class Partner {
+    boolean isAlive() { return true; }
+    void foo() { System.out.println("foo"); }
+    void bar(int x) { System.out.println("bar " + x); }
+  }
+
+  aspect HandleLiveness {
+    before(Handle handle): target(handle) &amp;&amp; call(public * *(..)) {
+      if ( handle.partner == null  || !handle.partner.isAlive() ) {
+        throw new DeadPartnerException();
+      }
+    }
+  }
+
+  class DeadPartnerException extends RuntimeException {}
+</pre></div><div class="sect2" title="Writing good pointcuts"><div class="titlepage"><div><div><h3 class="title"><a name="pointcut-best-practice"></a>Writing good pointcuts</h3></div></div></div><p>
+	  During compilation, AspectJ processes pointcuts in order to try and optimize matching performance.  Examining code and determining
+	  if each join point matches (statically or dynamically) a given pointcut is a costly process.
+	  (A dynamic match means the match cannot be fully determined from static analysis and a test will be placed in the code
+	  to determine if there is an actual match when the code is running).
+	  On first encountering a pointcut declaration, AspectJ will rewrite it into an optimal form for the matching process.
+	  What does this mean?  Basically pointcuts are rewritten in DNF (Disjunctive Normal Form) and the components of the pointcut
+	  are sorted such that those components that are cheaper to evaluate are checked first.  This means users do not have to worry
+	  about understanding the performance of various pointcut designators and may supply them in any order in their
+	  pointcut declarations.
+      </p><p>
+      However, AspectJ can only work with what it is told, and for optimal performance of matching the user should think
+      about what they are trying to achieve and narrow the search space for matches as much as they can in the definition.
+      Basically there are three kinds of pointcut designator: kinded, scoping and context:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+	      Kinded designators are those which select a particular kind of join point. For example: execution, get, set, call, handler
+    	</li><li class="listitem">
+         Scoping designators are those which select a group of join points of interest (of probably many kinds). For example: within, withincode
+    	</li><li class="listitem">
+         Contextual designators are those that match (and optionally bind) based on context. For example: this, target, @annotation
+    	</li></ul></div><p>
+      A well written pointcut should 
+      try and include at least the first two types (kinded and scoping), whilst the contextual designators may be included if wishing to
+      match based on join point context, or bind that context for use in the advice.  Supplying either just a kinded designator or 
+      just a contextual designator will work but could affect weaving performance (time and memory used) 
+      due to all the extra processing and analysis. 
+      Scoping designators are very fast to match, they can very quickly dismiss groups of join points that should not be further 
+      processed - that is why a good pointcut should always include one if possible.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="language-anatomy.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="language.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="language-advice.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">The Anatomy of an Aspect </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Advice</td></tr></table></div></body></html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 12, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ASIS-for-GNAT Reference Manual: 2. ASIS Extensions</title>
+
+<meta name="description" content="ASIS-for-GNAT Reference Manual: 2. ASIS Extensions">
+<meta name="keywords" content="ASIS-for-GNAT Reference Manual: 2. ASIS Extensions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="ASIS-Extensions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="asis_rm_1.html#ASIS_002dfor_002dGNAT-and-the-ASIS-Standard" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Asis_002eExtensions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_1.html#ASIS_002dfor_002dGNAT-and-the-ASIS-Standard" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="ASIS-Extensions-1"></a>
+<h1 class="chapter">2. ASIS Extensions</h1>
+<a name="index-ASIS-Extensions"></a>
+
+<p>ASIS-for-GNAT provides some additional types and queries as ASIS extensions.
+All these queries are defined and documented in the hierarchy headed by
+package <code>Asis.Extensions</code>. They are referred as &ldquo;ASIS extensions&rdquo; or
+&ldquo;ASIS extension queries&rdquo; below.
+<a name="index-Asis_002eExtensions-package"></a>
+</p>
+<p>All the ASIS extensions obey the general ASIS rules:
+</p>
+<ul>
+<li>
+When using ASIS
+extensions, you have to follow the required sequencing of calls
+
+</li><li>
+Only ASIS-defined exceptions propagate outside ASIS extension
+queries
+</li></ul>
+
+<p>If the documentation of an ASIS extension query contains a list of
+&ldquo;appropriate&rdquo; <code>Element</code> kinds, then the query can be applied only to
+<code>Element</code>s from this list, and it raises
+<code>ASIS_Inappropriate_Element</code>
+<a name="index-ASIS_005fInappropriate_005fElement-exception"></a>
+with <code>Value_Error</code>
+<a name="index-Value_005fError-error-status"></a>
+status otherwise. If the documentation of an ASIS extension
+query contains a list of &ldquo;expected&rdquo; element kinds, then the query can be
+applied to an <code>Element</code> having any kind, but it returns a meaningful
+result only for <code>Element</code>s from this list.
+</p>
+<p>The current set of ASIS extensions originated from the ASIS implementation
+needs and from the development of some ASIS tools inside the ASIS-for-GNAT
+team. The <code>Asis.Extensions</code> hierarchy is not necessarily
+frozen: some further extension queries may be added,
+and suggestions from ASIS application developers are welcome.
+</p>
+<p>Note that some of the ASIS extensions are implemented as ASIS <em>secondary
+queries</em> &mdash; that is, the implementation of such a query is a sequence of
+primary ASIS queries. Some other extensions are <em>pure extensions</em>;
+that is, their implementation is based on direct access to GNAT&rsquo;s internal
+data structures.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Asis_002eExtensions">2.1 <code>Asis.Extensions</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Asis_002eExtensions_002eFlat_005fKinds">2.2 <code>Asis.Extensions.Flat_Kinds</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Asis_002eExtensions_002eIterator">2.3 <code>Asis.Extensions.Iterator</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Asis_002eExtensions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Asis_002eExtensions_002eFlat_005fKinds" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Asis_002eExtensions-1"></a>
+<h2 class="section">2.1 <code>Asis.Extensions</code></h2>
+<a name="index-Asis_002eExtensions-package-1"></a>
+
+<p>This package, whose spec is located in the file
+&lsquo;<tt>asis-extensions.ads</tt>&rsquo;,
+contains the declarations of various ASIS extensions, including
+dynamic <code>Element</code> and <code>Compilation_Unit</code> list types, placeholder
+actual parameters for <code>Asis.Iterator.Traverse_Element</code>,
+additional <code>Element</code> structural and
+semantic queries, queries that return information about the status of the
+source file for a <code>Compilation_Unit</code>, queries returning the (images
+of the) values of static expressions, etc.
+</p>
+
+<hr size="6">
+<a name="Asis_002eExtensions_002eFlat_005fKinds"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Asis_002eExtensions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Asis_002eExtensions_002eIterator" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Asis_002eExtensions_002eFlat_005fKinds-1"></a>
+<h2 class="section">2.2 <code>Asis.Extensions.Flat_Kinds</code></h2>
+<a name="index-Asis_002eExtensions_002eFlat_005fKinds-package"></a>
+
+<p>The ASIS <code>Element</code> classification hierarchy
+is based on a set of Ada enumeration types,
+each corresponding to a &ldquo;level&rdquo; in the hierarchy.
+The package <code>Asis.Extensions.Flat_Kinds</code>, whose spec is located in the
+file &lsquo;<tt>asis-extensions-flat_kinds.ads</tt>&rsquo;,
+defines the enumeration type <code>Flat_Element_Kinds</code>;
+<a name="index-Flat_005fElement_005fKinds-type"></a>
+this type combines the values of all these types and thus provides
+a &ldquo;flat&rdquo; view onto the syntactic <code>Element</code> classification.
+</p>
+<hr size="6">
+<a name="Asis_002eExtensions_002eIterator"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Asis_002eExtensions_002eFlat_005fKinds" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Asis_002eExtensions_002eIterator-1"></a>
+<h2 class="section">2.3 <code>Asis.Extensions.Iterator</code></h2>
+<a name="index-Asis_002eExtensions_002eIterator-package"></a>
+
+<p>This package, whose spec is located in the file
+&lsquo;<tt>asis-extensions-iterator.ads</tt>&rsquo;,
+contains the declarations of <code>Traverse_Unit</code> generic procedure that
+is a generalization of the standard ASIS <code>Asis.Iterator.Traverse_Element</code>
+iterator. <code>Traverse_Unit</code> provides the depth-first traversal of the
+whole syntactical structure of the ASIS Compilation Unit.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#ASIS-Extensions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_3.html#Implementation_002dSpecific-Features-and-Implementation-Permissions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="asis_rm_0.html#About-This-Manual" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_5.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="asis_rm_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>root</em> on <em>June 12, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

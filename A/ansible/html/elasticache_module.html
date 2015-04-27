@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>elasticache - Manage cache clusters in Amazon Elasticache. &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="gc_storage - This module manages objects/buckets in Google Cloud Storage." href="gc_storage_module.html" />
+    <link rel="prev" title="ec2_vpc - configure AWS virtual private clouds" href="ec2_vpc_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="gc_storage_module.html" title="gc_storage - This module manages objects/buckets in Google Cloud Storage."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ec2_vpc_module.html" title="ec2_vpc - configure AWS virtual private clouds"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="elasticache-manage-cache-clusters-in-amazon-elasticache">
+<span id="elasticache"></span><h1>elasticache - Manage cache clusters in Amazon Elasticache.<a class="headerlink" href="#elasticache-manage-cache-clusters-in-amazon-elasticache" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jim Dalton</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>Manage cache clusters in Amazon Elasticache.
+Returns information about the specified cache cluster.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>aws_access_key</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>aws_secret_key</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.</td>
+</tr>
+        <tr>
+<td>cache_engine_version</td>
+<td>no</td>
+<td>1.4.14</td>
+    <td><ul></ul></td>
+    <td>The version number of the cache engine</td>
+</tr>
+        <tr>
+<td>cache_port</td>
+<td>no</td>
+<td>11211</td>
+    <td><ul></ul></td>
+    <td>The port number on which each of the cache nodes will accept connections</td>
+</tr>
+        <tr>
+<td>cache_security_groups</td>
+<td>no</td>
+<td>['default']</td>
+    <td><ul></ul></td>
+    <td>A list of cache security group names to associate with this cache cluster</td>
+</tr>
+        <tr>
+<td>engine</td>
+<td>no</td>
+<td>memcached</td>
+    <td><ul></ul></td>
+    <td>Name of the cache engine to be used (memcached or redis)</td>
+</tr>
+        <tr>
+<td>hard_modify</td>
+<td>no</td>
+<td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Whether to destroy and recreate an existing cache cluster if necessary in order to modify its state</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The cache cluster identifier</td>
+</tr>
+        <tr>
+<td>node_type</td>
+<td>no</td>
+<td>cache.m1.small</td>
+    <td><ul></ul></td>
+    <td>The compute and memory capacity of the nodes in the cache cluster</td>
+</tr>
+        <tr>
+<td>num_nodes</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The initial number of cache nodes that the cache cluster will have</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.</td>
+</tr>
+        <tr>
+<td>security_group_ids</td>
+<td>no</td>
+<td>['default']</td>
+    <td><ul></ul></td>
+    <td>A list of vpc security group names to associate with this cache cluster. Only use if inside a vpc (added in Ansible 1.6)</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>present</li><li>absent</li><li>rebooted</li></ul></td>
+    <td><code>absent</code> or <code>present</code> are idempotent actions that will create or destroy a cache cluster as needed. <code>rebooted</code> will reboot the cluster, resulting in a momentary outage.</td>
+</tr>
+        <tr>
+<td>wait</td>
+<td>no</td>
+<td>True</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>Wait for cache cluster result before returning</td>
+</tr>
+        <tr>
+<td>zone</td>
+<td>no</td>
+<td>None</td>
+    <td><ul></ul></td>
+    <td>The EC2 Availability Zone in which the cache cluster will be created</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires boto</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre># Note: None of these examples set aws_access_key, aws_secret_key, or region.
+# It is assumed that their matching environment variables are set.
+
+# Basic example
+- local_action:
+    module: elasticache
+    name: "test-please-delete"
+    state: present
+    engine: memcached
+    cache_engine_version: 1.4.14
+    node_type: cache.m1.small
+    num_nodes: 1
+    cache_port: 11211
+    cache_security_groups:
+      - default
+    zone: us-east-1d
+
+
+# Ensure cache cluster is gone
+- local_action:
+    module: elasticache
+    name: "test-please-delete"
+    state: absent
+
+# Reboot cache cluster
+- local_action:
+    module: elasticache
+    name: "test-please-delete"
+    state: rebooted</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">elasticache - Manage cache clusters in Amazon Elasticache.</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ec2_vpc_module.html"
+                        title="previous chapter">ec2_vpc - configure AWS virtual private clouds</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gc_storage_module.html"
+                        title="next chapter">gc_storage - This module manages objects/buckets in Google Cloud Storage.</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="gc_storage_module.html" title="gc_storage - This module manages objects/buckets in Google Cloud Storage."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ec2_vpc_module.html" title="ec2_vpc - configure AWS virtual private clouds"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rax_clb - create / delete a load balancer in Rackspace Public Cloud &mdash; Ansible Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Ansible Documentation" href="index.html" />
+    <link rel="up" title="Cloud Modules" href="list_of_cloud_modules.html" />
+    <link rel="next" title="rax_clb_nodes - add, modify and remove nodes from a Rackspace Cloud Load Balancer" href="rax_clb_nodes_module.html" />
+    <link rel="prev" title="rax_cbs_attachments - Manipulate Rackspace Cloud Block Storage Volume Attachments" href="rax_cbs_attachments_module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rax_clb_nodes_module.html" title="rax_clb_nodes - add, modify and remove nodes from a Rackspace Cloud Load Balancer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rax_cbs_attachments_module.html" title="rax_cbs_attachments - Manipulate Rackspace Cloud Block Storage Volume Attachments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" accesskey="U">Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rax-clb-create-delete-a-load-balancer-in-rackspace-public-cloud">
+<span id="rax-clb"></span><h1>rax_clb - create / delete a load balancer in Rackspace Public Cloud<a class="headerlink" href="#rax-clb-create-delete-a-load-balancer-in-rackspace-public-cloud" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Christopher H. Laco, Matt Martz</td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.4.</span></p>
+<p>creates / deletes a Rackspace Public Cloud load balancer.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>algorithm</td>
+<td>no</td>
+<td>LEAST_CONNECTIONS</td>
+    <td><ul><li>RANDOM</li><li>LEAST_CONNECTIONS</li><li>ROUND_ROBIN</li><li>WEIGHTED_LEAST_CONNECTIONS</li><li>WEIGHTED_ROUND_ROBIN</li></ul></td>
+    <td>algorithm for the balancer being created</td>
+</tr>
+        <tr>
+<td>api_key</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace API key (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>credentials</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>File to find the Rackspace credentials in (ignored if <em>api_key</em> and <em>username</em> are provided)</td>
+</tr>
+        <tr>
+<td>env</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Environment as configured in ~/.pyrax.cfg, see <a href='https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration'>https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#pyrax-configuration</a> (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>meta</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>A hash of metadata to associate with the instance</td>
+</tr>
+        <tr>
+<td>name</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Name to give the load balancer</td>
+</tr>
+        <tr>
+<td>port</td>
+<td>no</td>
+<td>80</td>
+    <td><ul></ul></td>
+    <td>Port for the balancer being created</td>
+</tr>
+        <tr>
+<td>protocol</td>
+<td>no</td>
+<td>HTTP</td>
+    <td><ul><li>DNS_TCP</li><li>DNS_UDP</li><li>FTP</li><li>HTTP</li><li>HTTPS</li><li>IMAPS</li><li>IMAPv4</li><li>LDAP</li><li>LDAPS</li><li>MYSQL</li><li>POP3</li><li>POP3S</li><li>SMTP</li><li>TCP</li><li>TCP_CLIENT_FIRST</li><li>UDP</li><li>UDP_STREAM</li><li>SFTP</li></ul></td>
+    <td>Protocol for the balancer being created</td>
+</tr>
+        <tr>
+<td>region</td>
+<td>no</td>
+<td>DFW</td>
+    <td><ul></ul></td>
+    <td>Region to create an instance in</td>
+</tr>
+        <tr>
+<td>state</td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li></ul></td>
+    <td>Indicate desired state of the resource</td>
+</tr>
+        <tr>
+<td>timeout</td>
+<td>no</td>
+<td>30</td>
+    <td><ul></ul></td>
+    <td>timeout for communication between the balancer and the node</td>
+</tr>
+        <tr>
+<td>type</td>
+<td>no</td>
+<td>PUBLIC</td>
+    <td><ul><li>PUBLIC</li><li>SERVICENET</li></ul></td>
+    <td>type of interface for the balancer being created</td>
+</tr>
+        <tr>
+<td>username</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Rackspace username (overrides <em>credentials</em>)</td>
+</tr>
+        <tr>
+<td>verify_ssl</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Whether or not to require SSL validation of API endpoints (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>vip_id</td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td>Virtual IP ID to use when creating the load balancer for purposes of sharing an IP with another load balancer of another protocol (added in Ansible 1.5)</td>
+</tr>
+        <tr>
+<td>wait</td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>wait for the balancer to be in state 'running' before returning</td>
+</tr>
+        <tr>
+<td>wait_timeout</td>
+<td>no</td>
+<td>300</td>
+    <td><ul></ul></td>
+    <td>how long before wait gives up, in seconds</td>
+</tr>
+    </table><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires pyrax</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<br/><div class="highlight-python"><pre>- name: Build a Load Balancer
+  gather_facts: False
+  hosts: local
+  connection: local
+  tasks:
+    - name: Load Balancer create request
+      local_action:
+        module: rax_clb
+        credentials: ~/.raxpub
+        name: my-lb
+        port: 8080
+        protocol: HTTP
+        type: SERVICENET
+        timeout: 30
+        region: DFW
+        wait: yes
+        state: present
+        meta:
+          app: my-cool-app
+      register: my_lb</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following environment variables can be used, <tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt>, <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt>, <tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt>, <tt class="docutils literal"><span class="pre">RAX_REGION</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_CREDENTIALS</span></tt> and <tt class="docutils literal"><span class="pre">RAX_CREDS_FILE</span></tt> points to a credentials file appropriate for pyrax. See <a class="reference external" href="https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating">https://github.com/rackspace/pyrax/blob/master/docs/getting_started.md#authenticating</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_USERNAME</span></tt> and <tt class="docutils literal"><span class="pre">RAX_API_KEY</span></tt> obviate the use of a credentials file</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">RAX_REGION</span></tt> defines a Rackspace Public Cloud region (DFW, ORD, LON, ...)</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rax_clb - create / delete a load balancer in Rackspace Public Cloud</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rax_cbs_attachments_module.html"
+                        title="previous chapter">rax_cbs_attachments - Manipulate Rackspace Cloud Block Storage Volume Attachments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rax_clb_nodes_module.html"
+                        title="next chapter">rax_clb_nodes - add, modify and remove nodes from a Rackspace Cloud Load Balancer</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rax_clb_nodes_module.html" title="rax_clb_nodes - add, modify and remove nodes from a Rackspace Cloud Load Balancer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rax_cbs_attachments_module.html" title="rax_cbs_attachments - Manipulate Rackspace Cloud Block Storage Volume Attachments"
+             >previous</a> |</li>
+        <li><a href="index.html">Ansible Documentation</a> &raquo;</li>
+          <li><a href="modules_by_category.html" >Module Index</a> &raquo;</li>
+          <li><a href="list_of_cloud_modules.html" >Cloud Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013 Ansible, Inc.
+      Last updated on Oct 02, 2014.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
