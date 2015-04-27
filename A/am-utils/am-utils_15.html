@@ -1,0 +1,687 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 11. Examples</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 11. Examples">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 11. Examples">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Examples"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_14.html#wire_002dtest" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#User-Filesystems" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Examples-1"></a>
+<h1 class="chapter">11. Examples</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#User-Filesystems">11.1 User Filesystems</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Home-Directories">11.2 Home Directories</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Architecture-Sharing">11.3 Architecture Sharing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Wildcard-Names">11.4 Wildcard Names &amp; Replicated Servers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#rwho-servers">11.5 &lsquo;<samp>rwho</samp>&rsquo; servers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002fvol">11.6 &lsquo;<samp>/vol</samp>&rsquo;</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002fdefaults-with-selectors">11.7 &lsquo;<samp>/defaults</samp>&rsquo; with selectors</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002ftftpboot-in-a-chroot_002ded-environment">11.8 &lsquo;<samp>/tftpboot</samp>&rsquo; in a chroot-ed environment</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+</pre></th></tr></table>
+
+<hr size="6">
+<a name="User-Filesystems"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Examples" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Home-Directories" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="User-Filesystems-1"></a>
+<h2 class="section">11.1 User Filesystems</h2>
+<a name="index-User-filesystems"></a>
+<a name="index-Mounting-user-filesystems"></a>
+
+<p>With more than one fileserver, the directories most frequently
+cross-mounted are those containing user home directories.  A common
+convention used at Imperial College is to mount the user disks under
+<tt>/home/</tt><i>machine</i>.
+</p>
+<p>Typically, the &lsquo;<samp>/etc/fstab</samp>&rsquo; file contained a long list of entries
+such as:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><i>machine</i>:/home/<i>machine</i> /home/<i>machine</i> nfs ...
+</pre></td></tr></table>
+
+<p>for each fileserver on the network.
+</p>
+<p>There are numerous problems with this system.  The mount list can become
+quite large and some of the machines may be down when a system is
+booted.  When a new fileserver is installed, &lsquo;<samp>/etc/fstab</samp>&rsquo; must be
+updated on every machine, the mount directory created and the filesystem
+mounted.
+</p>
+<p>In many environments most people use the same few workstations, but
+it is convenient to go to a colleague&rsquo;s machine and access your own
+files.  When a server goes down, it can cause a process on a client
+machine to hang.  By minimizing the mounted filesystems to only include
+those actively being used, there is less chance that a filesystem will
+be mounted when a server goes down.
+</p>
+<p>The following is a short extract from a map taken from a research fileserver
+at Imperial College.
+</p>
+<p>Note the entry for &lsquo;<samp>localhost</samp>&rsquo; which is used for users such as
+the operator (&lsquo;<samp>opr</samp>&rsquo;) who have a home directory on most machine as
+&lsquo;<samp>/home/localhost/opr</samp>&rsquo;.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults       opts:=rw,intr,grpid,nosuid
+charm           host!=${key};type:=nfs;rhost:=${key};rfs:=/home/${key} \
+                host==${key};type:=ufs;dev:=/dev/xd0g
+#
+...
+
+#
+localhost       type:=link;fs:=${host}
+...
+#
+# dylan has two user disks so have a
+# top directory in which to mount them.
+#
+dylan           type:=auto;fs:=${map};pref:=${key}/
+#
+dylan/dk2       host!=dylan;type:=nfs;rhost:=dylan;rfs:=/home/${key} \
+                host==dylan;type:=ufs;dev:=/dev/dsk/2s0
+#
+dylan/dk5       host!=dylan;type:=nfs;rhost:=dylan;rfs:=/home/${key} \
+                host==dylan;type:=ufs;dev:=/dev/dsk/5s0
+...
+#
+toytown         host!=${key};type:=nfs;rhost:=${key};rfs:=/home/${key} \
+                host==${key};type:=ufs;dev:=/dev/xy1g
+...
+#
+zebedee         host!=${key};type:=nfs;rhost:=${key};rfs:=/home/${key} \
+                host==${key};type:=ufs;dev:=/dev/dsk/1s0
+#
+# Just for access...
+#
+gould           type:=auto;fs:=${map};pref:=${key}/
+gould/staff     host!=gould;type:=nfs;rhost:=gould;rfs:=/home/${key}
+#
+gummo           host!=${key};type:=nfs;rhost:=${key};rfs:=/home/${key}
+...
+</pre></td></tr></table>
+
+<p>This map is shared by most of the machines listed so on those
+systems any of the user disks is accessible via a consistent name.
+<i>Amd</i> is started with the following command
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /home amd.home
+</pre></td></tr></table>
+
+<p>Note that when mounting a remote filesystem, the <em>automounted</em>
+mount point is referenced, so that the filesystem will be mounted if
+it is not yet (at the time the remote &lsquo;<samp>mountd</samp>&rsquo; obtains the file handle).
+</p>
+<hr size="6">
+<a name="Home-Directories"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#User-Filesystems" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Architecture-Sharing" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Home-Directories-1"></a>
+<h2 class="section">11.2 Home Directories</h2>
+<a name="index-Home-directories"></a>
+<a name="index-Example-of-mounting-home-directories"></a>
+<a name="index-Mount-home-directories"></a>
+
+<p>One convention for home directories is to locate them in &lsquo;<samp>/homes</samp>&rsquo;
+so user &lsquo;<samp>jsp</samp>&rsquo;&rsquo;s home directory is &lsquo;<samp>/homes/jsp</samp>&rsquo;.  With more
+than a single fileserver it is convenient to spread user files across
+several machines.  All that is required is a mount-map which converts
+login names to an automounted directory.
+</p>
+<p>Such a map might be started by the command:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /homes amd.homes
+</pre></td></tr></table>
+
+<p>where the map &lsquo;<samp>amd.homes</samp>&rsquo; contained the entries:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults   type:=link   # All the entries are of type:=link
+jsp         fs:=/home/charm/jsp
+njw         fs:=/home/dylan/dk5/njw
+...
+phjk        fs:=/home/toytown/ai/phjk
+sjv         fs:=/home/ganymede/sjv
+</pre></td></tr></table>
+
+<p>Whenever a login name is accessed in &lsquo;<samp>/homes</samp>&rsquo; a symbolic link
+appears pointing to the real location of that user&rsquo;s home directory.  In
+this example, &lsquo;<samp>/homes/jsp</samp>&rsquo; would appear to be a symbolic link
+pointing to &lsquo;<samp>/home/charm/jsp</samp>&rsquo;.  Of course, &lsquo;<samp>/home</samp>&rsquo; would also
+be an automount point.
+</p>
+<p>This system causes an extra level of symbolic links to be used.
+Although that turns out to be relatively inexpensive, an alternative is
+to directly mount the required filesystems in the &lsquo;<samp>/homes</samp>&rsquo;
+map.  The required map is simple, but long, and its creation is best automated.
+The entry for &lsquo;<samp>jsp</samp>&rsquo; could be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">jsp   -sublink:=${key};rfs:=/home/charm \
+               host==charm;type:=ufs;dev:=/dev/xd0g \
+               host!=charm;type:=nfs;rhost:=charm
+</pre></td></tr></table>
+
+<p>This map can become quite big if it contains a large number of entries.
+By combining two other features of <i>Amd</i> it can be greatly simplified.
+</p>
+<p>First the UFS partitions should be mounted under the control of
+&lsquo;<samp>/etc/fstab</samp>&rsquo;, taking care that they are mounted in the same place
+that <i>Amd</i> would have automounted them.  In most cases this would be
+something like &lsquo;<samp>/a/<em>host</em>/home/<em>host</em></samp>&rsquo; and
+&lsquo;<samp>/etc/fstab</samp>&rsquo; on host &lsquo;<samp>charm</samp>&rsquo; would have a line:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/dev/xy0g /a/charm/home/charm 4.2 rw,nosuid,grpid 1 5
+</pre></td></tr></table>
+
+<p>The map can then be changed to:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults    type:=nfs;sublink:=${key};opts:=rw,intr,nosuid,grpid
+jsp          rhost:=charm;rfs:=/home/charm
+njw          rhost:=dylan;rfs:=/home/dylan/dk5
+...
+phjk         rhost:=toytown;rfs:=/home/toytown;sublink:=ai/${key}
+sjv          rhost:=ganymede;rfs:=/home/ganymede
+</pre></td></tr></table>
+
+<p>This map operates as usual on a remote machine (<i>ie</i> <code>${host}</code>
+not equal to <code>${rhost}</code>).  On the machine where the filesystem is
+stored (<i>ie</i> <code>${host}</code> equal to <code>${rhost}</code>), <i>Amd</i>
+will construct a local filesystem mount point which corresponds to the
+name of the locally mounted UFS partition.  If <i>Amd</i> is started with
+the <code>-r</code> option then instead of attempting an NFS mount, <i>Amd</i> will
+simply inherit the UFS mount (see section <a href="am-utils_9.html#Inheritance-Filesystem">Inheritance Filesystem (&lsquo;<samp>inherit</samp>&rsquo;)</a>).  If
+<code>-r</code> is not used then a loopback NFS mount will be made.  This type of
+mount is known to cause a deadlock on many systems.
+</p>
+<hr size="6">
+<a name="Architecture-Sharing"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Home-Directories" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Wildcard-Names" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Architecture-Sharing-1"></a>
+<h2 class="section">11.3 Architecture Sharing</h2>
+<a name="index-Architecture-sharing"></a>
+<a name="index-Sharing-a-fileserver-between-architectures"></a>
+<a name="index-Architecture-dependent-volumes"></a>
+
+<p>Often a filesystem will be shared by machines of different architectures.
+Separate trees can be maintained for the executable images for each
+architecture, but it may be more convenient to have a shared tree,
+with distinct subdirectories.
+</p>
+<p>A shared tree might have the following structure on the fileserver (called
+&lsquo;<samp>fserver</samp>&rsquo; in the example):
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">local/tex
+local/tex/fonts
+local/tex/lib
+local/tex/bin
+local/tex/bin/sun3
+local/tex/bin/sun4
+local/tex/bin/hp9000
+...
+</pre></td></tr></table>
+
+<p>In this example, the subdirectories of &lsquo;<samp>local/tex/bin</samp>&rsquo; should be
+hidden when accessed via the automount point (conventionally &lsquo;<samp>/vol</samp>&rsquo;).
+A mount-map for &lsquo;<samp>/vol</samp>&rsquo; to achieve this would look like:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults   sublink:=${/key};rhost:=fserver;type:=link
+tex         type:=auto;fs:=${map};pref:=${key}/
+tex/fonts   host!=fserver;type:=nfs;rfs:=/vol/tex \
+            host==fserver;fs:=/usr/local/tex
+tex/lib     host!=fserver;type:=nfs;rfs:=/vol/tex \
+            host==fserver;fs:=/usr/local/tex
+tex/bin     -sublink:=${/key}/${arch} \
+            host!=fserver;type:=nfs;rfs:=/vol/tex \
+            host:=fserver;fs:=/usr/local/tex
+</pre></td></tr></table>
+
+<p>When &lsquo;<samp>/vol/tex/bin</samp>&rsquo; is referenced, the current machine architecture
+is automatically appended to the path by the <code>${sublink}</code>
+variable.  This means that users can have &lsquo;<samp>/vol/tex/bin</samp>&rsquo; in their
+&lsquo;<samp>PATH</samp>&rsquo; without concern for architecture dependencies.
+</p>
+<hr size="6">
+<a name="Wildcard-Names"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Architecture-Sharing" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#rwho-servers" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Wildcard-Names-_0026-Replicated-Servers"></a>
+<h2 class="section">11.4 Wildcard Names &amp; Replicated Servers</h2>
+
+<p>By using the wildcard facility, <i>Amd</i> can <em>overlay</em> an existing
+directory with additional entries.
+The system files are usually mounted under &lsquo;<samp>/usr</samp>&rsquo;.  If instead,
+<i>Amd</i> is mounted on &lsquo;<samp>/usr</samp>&rsquo;, additional
+names can be overlayed to augment or replace names in the &ldquo;master&rdquo; &lsquo;<samp>/usr</samp>&rsquo;.
+A map to do this would have the form:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">local  type:=auto;fs:=local-map
+share  type:=auto;fs:=share-map
+*      -type:=nfs;rfs:=/export/exec/${arch};sublink:=&quot;${key}&quot; \
+        rhost:=fserv1  rhost:=fserv2  rhost:=fserv3
+</pre></td></tr></table>
+
+<p>Note that the assignment to <code>${sublink}</code> is surrounded by double
+quotes to prevent the incoming key from causing the map to be
+misinterpreted.  This map has the effect of directing any access to
+&lsquo;<samp>/usr/local</samp>&rsquo; or &lsquo;<samp>/usr/share</samp>&rsquo; to another automount point.
+</p>
+<p>In this example, it is assumed that the &lsquo;<samp>/usr</samp>&rsquo; files are replicated
+on three fileservers: &lsquo;<samp>fserv1</samp>&rsquo;, &lsquo;<samp>fserv2</samp>&rsquo; and &lsquo;<samp>fserv3</samp>&rsquo;.
+For any references other than to &lsquo;<samp>local</samp>&rsquo; and &lsquo;<samp>share</samp>&rsquo; one of
+the servers is used and a symbolic link to
+<tt>${autodir}/${rhost}/export/exec/${arch}/<i>whatever</i></tt> is
+returned once an appropriate filesystem has been mounted.
+</p>
+<hr size="6">
+<a name="rwho-servers"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Wildcard-Names" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002fvol" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="rwho-servers-1"></a>
+<h2 class="section">11.5 &lsquo;<samp>rwho</samp>&rsquo; servers</h2>
+<a name="index-rwho-servers"></a>
+<a name="index-Architecture-specific-mounts"></a>
+<a name="index-Example-of-architecture-specific-mounts"></a>
+
+<p>The &lsquo;<samp>/usr/spool/rwho</samp>&rsquo; directory is a good candidate for automounting.
+For efficiency reasons it is best to capture the rwho data on a small
+number of machines and then mount that information onto a large number
+of clients.  The data written into the rwho files is byte order dependent
+so only servers with the correct byte ordering can be used by a client:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults         type:=nfs
+usr/spool/rwho    -byte==little;rfs:=/usr/spool/rwho \
+                      rhost:=vaxA  rhost:=vaxB \
+                  || -rfs:=/usr/spool/rwho \
+                      rhost:=sun4  rhost:=hp300
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002fvol"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#rwho-servers" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002fdefaults-with-selectors" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002fvol-1"></a>
+<h2 class="section">11.6 &lsquo;<samp>/vol</samp>&rsquo;</h2>
+<a name="index-_002fvol"></a>
+<a name="index-Catch_002dall-mount-point"></a>
+<a name="index-Generic-volume-name"></a>
+
+<p>&lsquo;<samp>/vol</samp>&rsquo; is used as a catch-all for volumes which do not have other
+conventional names.
+</p>
+<p>Below is part of the &lsquo;<samp>/vol</samp>&rsquo; map for the domain &lsquo;<samp>doc.ic.ac.uk</samp>&rsquo;.
+The &lsquo;<samp>r+d</samp>&rsquo; tree is used for new or experimental software that needs
+to be available everywhere without installing it on all the fileservers.
+Users wishing to try out the new software then simply include
+&lsquo;<samp>/vol/r+d/{bin,ucb}</samp>&rsquo; in their path.
+</p>
+<p>The main tree resides on one host &lsquo;<samp>gould.doc.ic.ac.uk</samp>&rsquo;, which has
+different &lsquo;<samp>bin</samp>&rsquo;, &lsquo;<samp>etc</samp>&rsquo;, &lsquo;<samp>lib</samp>&rsquo; and &lsquo;<samp>ucb</samp>&rsquo;
+sub-directories for each machine architecture.  For example,
+&lsquo;<samp>/vol/r+d/bin</samp>&rsquo; for a Sun-4 would be stored in the sub-directory
+&lsquo;<samp>bin/sun4</samp>&rsquo; of the filesystem &lsquo;<samp>/usr/r+d</samp>&rsquo;.  When it was accessed
+a symbolic link pointing to &lsquo;<samp>/a/gould/usr/r+d/bin/sun4</samp>&rsquo; would be
+returned.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults    type:=nfs;opts:=rw,grpid,nosuid,intr,soft
+wp           -opts:=rw,grpid,nosuid;rhost:=charm \
+             host==charm;type:=link;fs:=/usr/local/wp \
+             host!=charm;type:=nfs;rfs:=/vol/wp
+...
+#
+src          -opts:=rw,grpid,nosuid;rhost:=charm \
+             host==charm;type:=link;fs:=/usr/src \
+             host!=charm;type:=nfs;rfs:=/vol/src
+#
+r+d          type:=auto;fs:=${map};pref:=r+d/
+# per architecture bin,etc,lib&amp;ucb...
+r+d/bin      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}/${arch}
+r+d/etc      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}/${arch}
+r+d/include  rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}
+r+d/lib      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}/${arch}
+r+d/man      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}
+r+d/src      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}
+r+d/ucb      rhost:=gould.doc.ic.ac.uk;rfs:=/usr/r+d;sublink:=${/key}/${arch}
+# hades pictures
+pictures     -opts:=rw,grpid,nosuid;rhost:=thpfs \
+             host==thpfs;type:=link;fs:=/nbsd/pictures \
+             host!=thpfs;type:=nfs;rfs:=/nbsd;sublink:=pictures
+# hades tools
+hades        -opts:=rw,grpid,nosuid;rhost:=thpfs \
+             host==thpfs;type:=link;fs:=/nbsd/hades \
+             host!=thpfs;type:=nfs;rfs:=/nbsd;sublink:=hades
+# bsd tools for hp.
+bsd          -opts:=rw,grpid,nosuid;arch==hp9000;rhost:=thpfs \
+             host==thpfs;type:=link;fs:=/nbsd/bsd \
+             host!=thpfs;type:=nfs;rfs:=/nbsd;sublink:=bsd
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002fdefaults-with-selectors"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002fvol" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002ftftpboot-in-a-chroot_002ded-environment" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002fdefaults-with-selectors-1"></a>
+<h2 class="section">11.7 &lsquo;<samp>/defaults</samp>&rsquo; with selectors</h2>
+<a name="index-_002fdefaults-with-selectors"></a>
+<a name="index-selectors-on-default"></a>
+
+<p>It is sometimes useful to have different defaults for a given map.  To
+achieve this, the &lsquo;<samp>/defaults</samp>&rsquo; entry must be able to process normal
+selectors.  This feature is turned on by setting
+&lsquo;<samp>selectors_in_defaults = yes</samp>&rsquo; in the &lsquo;<tt>amd.conf</tt>&rsquo; file.
+See section <a href="am-utils_10.html#selectors_005fin_005fdefaults-Parameter"><tt>selectors_in_defaults</tt> Parameter</a>.
+</p>
+<p>In this example, I set different default NFS mount options for hosts
+which are running over a slower network link.  By setting a smaller size
+for the NFS read and write buffer sizes, you can greatly improve remote
+file service performance.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/defaults \
+  wire==slip-net;opts:=rw,intr,rsize=1024,wsize=1024,timeo=20,retrans=10 \
+  wire!=slip-net;opts:=rw,intr
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002ftftpboot-in-a-chroot_002ded-environment"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002fdefaults-with-selectors" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Examples" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002ftftpboot-in-a-chroot_002ded-environment-1"></a>
+<h2 class="section">11.8 &lsquo;<samp>/tftpboot</samp>&rsquo; in a chroot-ed environment</h2>
+<a name="index-_002ftftpboot-in-a-chroot_002ded-environment"></a>
+<a name="index-chroot_003b-_002ftftpboot-example"></a>
+
+<p>In this complex example, we attempt to run an <i>Amd</i> process
+<em>inside</em> a chroot-ed environment.  &lsquo;<samp>tftpd</samp>&rsquo; (Trivial FTP) is
+used to trivially retrieve files used to boot X-Terminals, Network
+Printers, Network routers, diskless workstations, and other such
+devices.  For security reasons, &lsquo;<samp>tftpd</samp>&rsquo; (and also &lsquo;<samp>ftpd</samp>&rsquo;)
+processes are run using the <b>chroot</b>(2) system call.  This provides an
+environment for these processes, where access to any files outside the
+directory where the chroot-ed process runs is denied.
+</p>
+<p>For example, if you start &lsquo;<samp>tftpd</samp>&rsquo; on your system with
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">chroot /tftpboot /usr/sbin/tftpd
+</pre></td></tr></table>
+
+<p>then the &lsquo;<samp>tftpd</samp>&rsquo; process will not be able to access any files
+outside &lsquo;<tt>/tftpboot</tt>&rsquo;.  This ensures that no one can retrieve files
+such as &lsquo;<tt>/etc/passwd</tt>&rsquo; and run password crackers on it.
+</p>
+<p>Since the TFTP service works by broadcast, it is necessary to have at
+least one TFTP server running on each subnet.  If you have lots of files
+that you need to make available for &lsquo;<samp>tftp</samp>&rsquo;, and many subnets, it
+could take significant amounts of disk space on each host serving them.
+</p>
+<p>A solution we implemented at Columbia University was to have every host
+run &lsquo;<samp>tftpd</samp>&rsquo;, but have those servers retrieve the boot files from
+two replicated servers.  Those replicated servers have special
+partitions dedicated to the many network boot files.
+</p>
+<p>We start <i>Amd</i> as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd /tftpboot/.amd amd.tftpboot
+</pre></td></tr></table>
+
+<p>That is, <i>Amd</i> is serving the directory &lsquo;<tt>/tftpboot/.amd</tt>&rsquo;.  The
+&lsquo;<samp>tftp</samp>&rsquo; server runs inside &lsquo;<tt>/tftpboot</tt>&rsquo; and is chroot-ed in that
+directory too.  The &lsquo;<tt>amd.tftpboot</tt>&rsquo; map looks like:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#
+# Amd /tftpboot directory -&gt; host map
+#
+
+/defaults  opts:=nosuid,ro,intr,soft;fs:=/tftpboot/import;type:=nfs
+
+tp         host==lol;rfs:=/n/lol/import/tftpboot;type:=lofs \
+           host==ober;rfs:=/n/ober/misc/win/tftpboot;type:=lofs \
+           rhost:=ober;rfs:=/n/ober/misc/win/tftpboot \
+           rhost:=lol;rfs:=/n/lol/import/tftpboot
+</pre></td></tr></table>
+
+<p>To help understand this example, I list a few of the file entries that
+are created inside &lsquo;<tt>/tftpboot</tt>&rsquo;:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">$ ls -la /tftpboot
+dr-xr-xr-x   2 root   512 Aug 30 23:11 .amd
+drwxrwsr-x  12 root   512 Aug 30 08:00 import
+lrwxrwxrwx   1 root    33 Feb 27  1997 adminpr.cfg -&gt; ./.amd/tp/hplj/adminpr.cfg
+lrwxrwxrwx   1 root    22 Dec  5  1996 tekxp -&gt; ./.amd/tp/xterms/tekxp
+lrwxrwxrwx   1 root     1 Dec  5  1996 tftpboot -&gt; .
+</pre></td></tr></table>
+
+<p>Here is an explanation of each of the entries listed above:
+</p>
+<dl compact="compact">
+<dt> <code>.amd</code></dt>
+<dd><p>This is the <i>Amd</i> mount point.  Note that you do not need to run a
+separate <i>Amd</i> process for the TFTP service.  The <b>chroot</b>(2) system
+call only protects against file access, but the same process can still
+serve files and directories inside and outside the chroot-ed
+environment, because <i>Amd</i> itself was not run in chroot-ed mode.
+</p>
+</dd>
+<dt> <code>import</code></dt>
+<dd><p>This is the mount point where <i>Amd</i> will mount the directories
+containing the boot files.  The map is designed so that remote
+directories will be NFS mounted (even if they are already mounted
+elsewhere), and local directories are loopback mounted (since they are
+not accessible outside the chroot-ed &lsquo;<tt>/tftpboot</tt>&rsquo; directory).
+</p>
+</dd>
+<dt> <code>adminpr.cfg</code></dt>
+<dt> <code>tekxp</code></dt>
+<dd><p>Two manually created symbolic links to directories <em>inside</em> the
+<i>Amd</i>-managed directory.  The crossing of the component &lsquo;<tt>tp</tt>&rsquo; will
+cause <i>Amd</i> to automount one of the remote replicas.  Once crossed,
+access to files inside proceeds as usual.  The &lsquo;<samp>adminpr.cfg</samp>&rsquo; is a
+configuration file for an HP Laser-Jet 4si printer, and the &lsquo;<samp>tekxp</samp>&rsquo;
+is a directory for Tektronix X-Terminal boot files.
+</p>
+</dd>
+<dt> <code>tftpboot</code></dt>
+<dd><p>This innocent looking symlink is important.  Usually, when devices boot
+via the TFTP service, they perform the &lsquo;<samp>get file</samp>&rsquo; command to
+retrieve <var>file</var>.  However, some devices assume that &lsquo;<samp>tftpd</samp>&rsquo;
+does not run in a chroot-ed environment, but rather &ldquo;unprotected&rdquo;, and
+thus use a full pathname for files to retrieve, as in &lsquo;<samp>get
+/tftpboot/file</samp>&rsquo;.  This symlink effectively strips out the leading
+&lsquo;<tt>/tftpboot/</tt>&rsquo;.
+</p>
+</dd>
+</dl>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Examples" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_16.html#Internals" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

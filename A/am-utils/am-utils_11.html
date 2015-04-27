@@ -1,0 +1,895 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 7. Run-time Administration</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 7. Run-time Administration">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 7. Run-time Administration">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Run_002dtime-Administration"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_10.html#amd_002econf-Examples" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Starting-Amd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_10.html#Amd-Configuration-File" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Run_002dtime-Administration-1"></a>
+<h1 class="chapter">7. Run-time Administration</h1>
+<a name="index-Run_002dtime-administration"></a>
+<a name="index-Amq-command"></a>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Starting-Amd">7.1 Starting <i>Amd</i></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Stopping-Amd">7.2 Stopping <i>Amd</i></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Restarting-Amd">7.3 Restarting <i>Amd</i></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Controlling-Amd">7.4 Controlling <i>Amd</i></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Starting-Amd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Stopping-Amd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Starting-Amd-1"></a>
+<h2 class="section">7.1 Starting <i>Amd</i></h2>
+<a name="index-Starting-Amd"></a>
+<a name="index-Additions-to-_002fetc_002frc_002elocal"></a>
+<a name="index-_002fetc_002frc_002elocal-additions"></a>
+<a name="index-ctl_002damd"></a>
+
+<p><i>Amd</i> is best started from &lsquo;<samp>/etc/rc.local</samp>&rsquo; on BSD systems, or
+from the appropriate start-level script in &lsquo;<samp>/etc/init.d</samp>&rsquo; on System V
+systems.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">if [ -f /usr/local/sbin/ctl-amd ]; then
+    /usr/local/sbin/ctl-amd start; (echo -n ' amd') &gt; /dev/console
+fi
+</pre></td></tr></table>
+
+<p>The shell script, &lsquo;<samp>ctl-amd</samp>&rsquo; is used to start, stop, or restart
+<i>Amd</i>.  It is a relatively generic script.  All options you want to
+set should not be made in this script, but rather updated in the
+&lsquo;<tt>amd.conf</tt>&rsquo; file. See section <a href="am-utils_10.html#Amd-Configuration-File">Amd Configuration File</a>.
+</p>
+<p>If you do not wish to use an <i>Amd</i> configuration file, you may start
+<i>Amd</i> manually.  For example, getting the map entries via NIS:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -r -l /var/log/amd `ypcat -k auto.master`
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Stopping-Amd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Starting-Amd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Restarting-Amd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Stopping-Amd-1"></a>
+<h2 class="section">7.2 Stopping <i>Amd</i></h2>
+<a name="index-Stopping-Amd"></a>
+<a name="index-SIGTERM-signal"></a>
+<a name="index-SIGINT-signal"></a>
+
+<p><i>Amd</i> stops in response to two signals.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>SIGTERM</samp>&rsquo;</dt>
+<dd><p>causes the top-level automount points to be unmounted and then <i>Amd</i>
+to exit.  Any automounted filesystems are left mounted.  They can be
+recovered by restarting <i>Amd</i> with the <code>-r</code> command line option.
+</p>
+</dd>
+<dt> &lsquo;<samp>SIGINT</samp>&rsquo;</dt>
+<dd><p>causes <i>Amd</i> to attempt to unmount any filesystems which it has
+automounted, in addition to the actions of &lsquo;<samp>SIGTERM</samp>&rsquo;.  This signal
+is primarily used for debugging.
+</p></dd>
+</dl>
+
+<p>Actions taken for other signals are undefined.
+</p>
+<p>The easiest and safest way to stop <i>Amd</i>, without having to find its
+process ID by hand, is to use the &lsquo;<tt>ctl-amd</tt>&rsquo; script, as with:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ctl-amd stop
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Restarting-Amd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Stopping-Amd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Restarting-Amd-1"></a>
+<h2 class="section">7.3 Restarting <i>Amd</i></h2>
+<a name="index-Restarting-Amd"></a>
+<a name="index-Killing-and-starting-Amd"></a>
+
+<p>Before <i>Amd</i> can be started, it is vital to ensure that no other
+<i>Amd</i> processes are managing any of the mount points, and that the
+previous process(es) have terminated cleanly.  When a terminating signal
+is set to <i>Amd</i>, the automounter does <em>not</em> terminate right then.
+Rather, it starts by unmounting all of its managed mount mounts in the
+background, and then terminates.  It usually takes a few seconds for
+this process to happen, but it can take an arbitrarily longer time.  If
+two or more <i>Amd</i> processes attempt to manage the same mount point, it
+usually will result in a system lockup.
+</p>
+<p>The easiest and safest way to restart <i>Amd</i>, without having to find
+its process ID by hand, sending it the &lsquo;<samp>SIGTERM</samp>&rsquo; signal, waiting for <i>Amd</i>
+to die cleanly, and verifying so, is to use the &lsquo;<tt>ctl-amd</tt>&rsquo; script,
+as with:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ctl-amd restart
+</pre></td></tr></table>
+
+<p>The script will locate the process ID of <i>Amd</i>, kill it, and wait for
+it to die cleanly before starting a new instance of the automounter.
+&lsquo;<tt>ctl-amd</tt>&rsquo; will wait for a total of 30 seconds for <i>Amd</i> to die,
+and will check once every 5 seconds if it had.
+</p>
+<hr size="6">
+<a name="Controlling-Amd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Restarting-Amd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-default" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Controlling-Amd-1"></a>
+<h2 class="section">7.4 Controlling <i>Amd</i></h2>
+<a name="index-Controlling-Amd"></a>
+<a name="index-Discovering-what-is-going-on-at-run_002dtime"></a>
+<a name="index-Listing-currently-mounted-filesystems"></a>
+
+<p>It is sometimes desirable or necessary to exercise external control
+over some of <i>Amd</i>&rsquo;s internal state.  To support this requirement,
+<i>Amd</i> implements an RPC interface which is used by the <em>Amq</em> program.
+A variety of information is available.
+</p>
+<p><i>Amq</i> generally applies an operation, specified by a single letter option,
+to a list of mount points.  The default operation is to obtain statistics
+about each mount point.  This is similar to the output shown above
+but includes information about the number and type of accesses to each
+mount point.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Amq-default">7.4.1 <i>Amq</i> default information</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">       Default command behavior.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002df-option">7.4.2 <i>Amq</i> <code>-f</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Flushing the map cache.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dh-option">7.4.3 <i>Amq</i> <code>-h</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Controlling a non-local host.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dH-option">7.4.4 <i>Amq</i> <code>-H</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Print help message.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dl-option">7.4.5 <i>Amq</i> <code>-l</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Controlling the log file.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dm-option">7.4.6 <i>Amq</i> <code>-m</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Obtaining mount statistics.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dp-option">7.4.7 <i>Amq</i> <code>-p</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Getting Amd&rsquo;s process ID.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dP-option">7.4.8 <i>Amq</i> <code>-P</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Contacting alternate Amd processes.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dq-option">7.4.9 <i>Amq</i> <code>-q</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Suppress synchronous unmounting errors.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002ds-option">7.4.10 <i>Amq</i> <code>-s</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Obtaining global statistics.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dT-option">7.4.11 <i>Amq</i> <code>-T</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Use TCP transport.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dU-option">7.4.12 <i>Amq</i> <code>-U</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Use UDP transport.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002du-option">7.4.13 <i>Amq</i> <code>-u</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Forcing volumes to time out.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dv-option">7.4.14 <i>Amq</i> <code>-v</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Version information.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Amq-_002dw-option">7.4.15 <i>Amq</i> <code>-w</code> option</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     Print Amd current working directory.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Other-Amq-options">7.4.16 Other <i>Amq</i> options</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Three other special options.
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Amq-default"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Controlling-Amd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002df-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-default-information"></a>
+<h3 class="subsection">7.4.1 <i>Amq</i> default information</h3>
+
+<p>With no arguments, <em>Amq</em> obtains a brief list of all existing
+mounts created by <i>Amd</i>.  This is different from the list displayed by
+<b>df</b>(1) since the latter only includes system mount points.
+</p>
+<p>The output from this option includes the following information:
+</p>
+<ul>
+<li>
+the automount point,
+</li><li>
+the filesystem type,
+</li><li>
+the mount map or mount information,
+</li><li>
+the internal, or system mount point.
+</li></ul>
+
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/            root   &quot;root&quot;                    sky:(pid75)
+/homes       toplvl /usr/local/etc/amd.homes  /homes
+/home        toplvl /usr/local/etc/amd.home   /home
+/homes/jsp   nfs    charm:/home/charm         /a/charm/home/charm/jsp
+/homes/phjk  nfs    toytown:/home/toytown     /a/toytown/home/toytown/ai/phjk
+</pre></td></tr></table>
+
+<p>If an argument is given then statistics for that volume name will
+be output.  For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">What         Uid   Getattr Lookup RdDir   RdLnk   Statfs Mounted@
+/homes       0     1196    512    22      0       30     90/09/14 12:32:55
+/homes/jsp   0     0       0      0       1180    0      90/10/13 12:56:58
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> <code>What</code></dt>
+<dd><p>the volume name.
+</p>
+</dd>
+<dt> <code>Uid</code></dt>
+<dd><p>ignored.
+</p>
+</dd>
+<dt> <code>Getattr</code></dt>
+<dd><p>the count of NFS <em>getattr</em> requests on this node.  This should only be
+non-zero for directory nodes.
+</p>
+</dd>
+<dt> <code>Lookup</code></dt>
+<dd><p>the count of NFS <em>lookup</em> requests on this node.  This should only be
+non-zero for directory nodes.
+</p>
+</dd>
+<dt> <code>RdDir</code></dt>
+<dd><p>the count of NFS <em>readdir</em> requests on this node.  This should only
+be non-zero for directory nodes.
+</p>
+</dd>
+<dt> <code>RdLnk</code></dt>
+<dd><p>the count of NFS <em>readlink</em> requests on this node.  This should be
+zero for directory nodes.
+</p>
+</dd>
+<dt> <code>Statfs</code></dt>
+<dd><p>the count of NFS <em>statfs</em> requests on this node.  This should only
+be non-zero for top-level automount points.
+</p>
+</dd>
+<dt> <code>Mounted@</code></dt>
+<dd><p>the date and time the volume name was first referenced.
+</p></dd>
+</dl>
+
+<hr size="6">
+<a name="Amq-_002df-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-default" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dh-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002df-option-1"></a>
+<h3 class="subsection">7.4.2 <i>Amq</i> <code>-f</code> option</h3>
+<a name="index-Flushing-the-map-cache"></a>
+<a name="index-Map-cache_002c-flushing"></a>
+
+<p>The <code>-f</code> option causes <i>Amd</i> to flush the internal mount map cache.
+This is useful for example in Hesiod maps since <i>Amd</i> will not
+automatically notice when they have been updated.  The map cache can
+also be synchronized with the map source by using the &lsquo;<samp>sync</samp>&rsquo; option
+(see section <a href="am-utils_9.html#Automount-Filesystem">Automount Filesystem (&lsquo;<samp>auto</samp>&rsquo;)</a>).
+</p>
+<hr size="6">
+<a name="Amq-_002dh-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002df-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dH-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dh-option-1"></a>
+<h3 class="subsection">7.4.3 <i>Amq</i> <code>-h</code> option</h3>
+<a name="index-Querying-an-alternate-host"></a>
+
+<p>By default the local host is used.  In an HP-UX cluster the root server
+is used since that is the only place in the cluster where <i>Amd</i> will
+be running.  To query <i>Amd</i> on another host the <code>-h</code> option should
+be used.
+</p>
+<hr size="6">
+<a name="Amq-_002dH-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dh-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dl-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dH-option-1"></a>
+<h3 class="subsection">7.4.4 <i>Amq</i> <code>-H</code> option</h3>
+<a name="index-Displaying-brief-help-1"></a>
+<a name="index-Help_003b-showing-from-Amq"></a>
+
+<p>Print a brief help and usage string.
+</p>
+<hr size="6">
+<a name="Amq-_002dl-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dH-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dm-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dl-option-1"></a>
+<h3 class="subsection">7.4.5 <i>Amq</i> <code>-l</code> option</h3>
+<a name="index-Resetting-the-Amd-log-file"></a>
+<a name="index-Setting-the-Amd-log-file-via-Amq"></a>
+<a name="index-Log-file_002c-resetting"></a>
+
+<p>Tell <i>Amd</i> to use <i>log_file</i> as the log file name.  For security
+reasons, this <em>must</em> be the same log file which <i>Amd</i> used when
+started.  This option is therefore only useful to refresh <i>Amd</i>&rsquo;s open
+file handle on the log file, so that it can be rotated and compressed
+via daily cron jobs.
+</p>
+<hr size="6">
+<a name="Amq-_002dm-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dl-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dp-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dm-option-1"></a>
+<h3 class="subsection">7.4.6 <i>Amq</i> <code>-m</code> option</h3>
+
+<p>The <code>-m</code> option displays similar information about mounted
+filesystems, rather than automount points.  The output includes the
+following information:
+</p>
+<ul>
+<li>
+the mount information,
+</li><li>
+the mount point,
+</li><li>
+the filesystem type,
+</li><li>
+the number of references to this filesystem,
+</li><li>
+the server hostname,
+</li><li>
+the state of the file server,
+</li><li>
+any error which has occurred.
+</li></ul>
+
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&quot;root&quot;           truth:(pid602)     root   1 localhost is up
+hesiod.home      /home              toplvl 1 localhost is up
+hesiod.vol       /vol               toplvl 1 localhost is up
+hesiod.homes     /homes             toplvl 1 localhost is up
+amy:/home/amy    /a/amy/home/amy    nfs    5 amy is up
+swan:/home/swan  /a/swan/home/swan  nfs    0 swan is up (Permission denied)
+ex:/home/ex      /a/ex/home/ex      nfs    0 ex is down
+</pre></td></tr></table>
+
+<p>When the reference count is zero the filesystem is not mounted but
+the mount point and server information is still being maintained
+by <i>Amd</i>.
+</p>
+
+<hr size="6">
+<a name="Amq-_002dp-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dm-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dP-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dp-option-1"></a>
+<h3 class="subsection">7.4.7 <i>Amq</i> <code>-p</code> option</h3>
+<a name="index-Process-ID_003b-Amd"></a>
+<a name="index-Amd_0027s-process-ID"></a>
+<a name="index-Amd_0027s-PID"></a>
+<a name="index-PID_003b-Amd"></a>
+
+<p>Return the process ID of the remote or locally running <i>Amd</i>.  Useful
+when you need to send a signal to the local <i>Amd</i> process, and would
+rather not have to search through the process table.  This option is
+used in the &lsquo;<tt>ctl-amd</tt>&rsquo; script.
+</p>
+<hr size="6">
+<a name="Amq-_002dP-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dp-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dq-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dP-option-1"></a>
+<h3 class="subsection">7.4.8 <i>Amq</i> <code>-P</code> option</h3>
+<a name="index-Multiple-Amd-processes"></a>
+<a name="index-Running-multiple-Amd"></a>
+<a name="index-Debugging-a-new-Amd-configuration"></a>
+<a name="index-RPC-Program-numbers_003b-Amd"></a>
+
+<p>Contact an alternate running <i>Amd</i> that had registered itself on a
+different RPC <var>program_number</var> and apply all other operations to
+that instance of the automounter.  This is useful when you run multiple
+copies of <i>Amd</i>, and need to manage each one separately.  If not
+specified, <i>Amq</i> will use the default program number for <i>Amd</i>, 300019.
+For security reasons, the only alternate program numbers <i>Amd</i> can use
+range from 300019 to 300029, inclusive.
+</p>
+<p>For example, to kill an alternate running <i>Amd</i>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">kill `amq -p -P 300020`
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Amq-_002dq-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dP-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002ds-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dq-option-1"></a>
+<h3 class="subsection">7.4.9 <i>Amq</i> <code>-q</code> option</h3>
+<a name="index-Unmounting-a-filesystem"></a>
+
+<p>Suppress any error messages produced when a synchronous unmount fails.
+See <a href="#Amq-_002du-option"><i>Amq</i> <code>-u</code> option</a>.
+</p>
+<hr size="6">
+<a name="Amq-_002ds-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dq-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dT-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002ds-option-1"></a>
+<h3 class="subsection">7.4.10 <i>Amq</i> <code>-s</code> option</h3>
+<a name="index-Global-statistics"></a>
+<a name="index-Statistics"></a>
+
+<p>The <code>-s</code> option displays global statistics.  If any other options are specified
+or any filesystems named then this option is ignored.  For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">requests  stale     mount     mount     unmount
+deferred  fhandles  ok        failed    failed
+1054      1         487       290       7017
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>Deferred requests</samp>&rsquo;</dt>
+<dd><p>are those for which an immediate reply could not be constructed.  For
+example, this would happen if a background mount was required.
+</p>
+</dd>
+<dt> &lsquo;<samp>Stale filehandles</samp>&rsquo;</dt>
+<dd><p>counts the number of times the kernel passes a stale filehandle to <i>Amd</i>.
+Large numbers indicate problems.
+</p>
+</dd>
+<dt> &lsquo;<samp>Mount ok</samp>&rsquo;</dt>
+<dd><p>counts the number of automounts which were successful.
+</p>
+</dd>
+<dt> &lsquo;<samp>Mount failed</samp>&rsquo;</dt>
+<dd><p>counts the number of automounts which failed.
+</p>
+</dd>
+<dt> &lsquo;<samp>Unmount failed</samp>&rsquo;</dt>
+<dd><p>counts the number of times a filesystem could not be unmounted.  Very
+large numbers here indicate that the time between unmount attempts
+should be increased.
+</p></dd>
+</dl>
+
+<hr size="6">
+<a name="Amq-_002dT-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002ds-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dU-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dT-option-1"></a>
+<h3 class="subsection">7.4.11 <i>Amq</i> <code>-T</code> option</h3>
+<a name="index-Forcing-Amq-to-use-a-TCP-transport"></a>
+<a name="index-TCP_003b-using-with-Amq"></a>
+
+<p>The <code>-T</code> option causes the <i>Amq</i> to contact <i>Amd</i> using the TCP
+transport only (connection oriented).  Normally, <i>Amq</i> will use TCP
+first, and if that failed, will try UDP.
+</p>
+<hr size="6">
+<a name="Amq-_002dU-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dT-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002du-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dU-option-1"></a>
+<h3 class="subsection">7.4.12 <i>Amq</i> <code>-U</code> option</h3>
+<a name="index-Forcing-Amq-to-use-a-UDP-transport"></a>
+<a name="index-UDP_003b-using-with-Amq"></a>
+
+<p>The <code>-U</code> option causes the <i>Amq</i> to contact <i>Amd</i> using the UDP
+transport only (connectionless).  Normally, <i>Amq</i> will use TCP first,
+and if that failed, will try UDP.
+</p>
+<hr size="6">
+<a name="Amq-_002du-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dU-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dv-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002du-option-1"></a>
+<h3 class="subsection">7.4.13 <i>Amq</i> <code>-u</code> option</h3>
+<a name="index-Forcing-filesystem-to-time-out"></a>
+<a name="index-Unmounting-a-filesystem-1"></a>
+
+<p>The <code>-u</code> option causes the time-to-live interval of the named
+mount points to be expired, thus causing an unmount attempt.  This is
+the only safe way to unmount an automounted filesystem.  If <code>-u</code>
+is repeated, then <i>Amd</i> will attempt to unmount the filesystem
+synchronously.  This makes things like
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amq -uu /t/cd0d &amp;&amp; eject cd0
+</pre></td></tr></table>
+
+<p>work as expected.  Any error messages this might produce can be
+suppressed with the <code>-q</code> option.  See <a href="#Amq-_002dq-option"><i>Amq</i> <code>-q</code> option</a>.
+</p>
+
+<hr size="6">
+<a name="Amq-_002dv-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002du-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amq-_002dw-option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dv-option-1"></a>
+<h3 class="subsection">7.4.14 <i>Amq</i> <code>-v</code> option</h3>
+<a name="index-Version-information-at-run_002dtime"></a>
+
+<p>The <code>-v</code> option displays the version of <i>Amd</i> in a similar way to
+<i>Amd</i>&rsquo;s <code>-v</code> option.
+</p>
+<hr size="6">
+<a name="Amq-_002dw-option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dv-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Other-Amq-options" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amq-_002dw-option-1"></a>
+<h3 class="subsection">7.4.15 <i>Amq</i> <code>-w</code> option</h3>
+<a name="index-Getting-real-working-directory"></a>
+
+<p>The <code>-w</code> option translates a full pathname as returned by
+<b>getpwd</b>(3) into a short <i>Amd</i> pathname that goes through its mount
+points.  This option requires that <i>Amd</i> is running.
+</p>
+<hr size="6">
+<a name="Other-Amq-options"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amq-_002dw-option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Amd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Other-Amq-options-1"></a>
+<h3 class="subsection">7.4.16 Other <i>Amq</i> options</h3>
+<a name="index-Logging-options-via-Amq"></a>
+<a name="index-Debugging-options-via-Amq"></a>
+
+<p>Two other operations are implemented.  These modify the state of <i>Amd</i>
+as a whole, rather than any particular filesystem.  The <code>-x</code> and
+<code>-D</code> options have exactly the same effect as <i>Amd</i>&rsquo;s corresponding
+command line options.
+</p>
+<p>When <i>Amd</i> receives the <code>-x</code> flag, it disallows turning off the
+&lsquo;<samp>fatal</samp>&rsquo; or &lsquo;<samp>error</samp>&rsquo; flags.  Both are on by default.  They are
+mandatory so that <i>Amd</i> could report important errors, including
+errors relating to turning flags on/off.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Run_002dtime-Administration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

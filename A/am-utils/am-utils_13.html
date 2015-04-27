@@ -1,0 +1,849 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 9. Hlfsd</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 9. Hlfsd">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 9. Hlfsd">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Hlfsd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo-errors" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Introduction-to-Hlfsd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_12.html#FSinfo" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Hlfsd-1"></a>
+<h1 class="chapter">9. Hlfsd</h1>
+<a name="index-Hlfsd"></a>
+<a name="index-Home_002dLink-Filesystem"></a>
+
+<p><i>Hlfsd</i> is a daemon which implements a filesystem containing a
+symbolic link to subdirectory within a user&rsquo;s home directory, depending
+on the user which accessed that link.  It was primarily designed to
+redirect incoming mail to users&rsquo; home directories, so that it can be read
+from anywhere.  It was designed and implemented by
+<a href="http://www.cs.sunysb.edu/~ezk">Erez Zadok</a> and
+<a href="mailto:dupuy AT cs.columbia.edu">Alexander Dupuy</a>, at the
+<a href="http://www.cs.columbia.edu/">Computer Science Department</a> of
+<a href="http://www.columbia.edu/">Columbia University</a>.  A
+<a href="http://www.fsl.cs.sunysb.edu/docs/hlfsd/hlfsd.html">paper</a>
+on <i>Hlfsd</i> was presented at the Usenix LISA VII conference in 1993.
+</p>
+<p><i>Hlfsd</i> operates by mounting itself as an NFS server for the directory
+containing <i>linkname</i>, which defaults to &lsquo;<tt>/hlfs/home</tt>&rsquo;.  Lookups
+within that directory are handled by <i>Hlfsd</i>, which uses the
+password map to determine how to resolve the lookup.  The directory will
+be created if it doesn&rsquo;t already exist.  The symbolic link will be to
+the accessing user&rsquo;s home directory, with <i>subdir</i> appended to it.  If
+not specified, <i>subdir</i> defaults to &lsquo;<tt>.hlfsdir</tt>&rsquo;.  This directory
+will also be created if it does not already exist.
+</p>
+<p>A &lsquo;<samp>SIGTERM</samp>&rsquo; sent to <i>Hlfsd</i> will cause it to shutdown.  A
+&lsquo;<samp>SIGHUP</samp>&rsquo; will flush the internal caches, and reload the password
+map.  It will also close and reopen the log file, to enable the original
+log file to be removed or rotated.  A &lsquo;<samp>SIGUSR1</samp>&rsquo; will cause it to
+dump its internal table of user IDs and home directories to the file
+&lsquo;<tt>/tmp/hlfsddump</tt>&rsquo;.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Introduction-to-Hlfsd">9.1 Introduction to Hlfsd</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Background-to-Mail-Delivery">9.2 Background to Mail Delivery</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using-Hlfsd">9.3 Using Hlfsd</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Introduction-to-Hlfsd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Hlfsd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Introduction-to-Hlfsd-1"></a>
+<h2 class="section">9.1 Introduction to Hlfsd</h2>
+<a name="index-Introduction-to-Hlfsd"></a>
+<a name="index-Hlfsd_003b-introduction"></a>
+
+<p>Electronic mail has become one of the major applications for many
+computer networks, and use of this service is expected to increase over
+time, as networks proliferate and become faster.  Providing a convenient
+environment for users to read, compose, and send electronic mail has
+become a requirement for systems administrators (SAs).
+</p>
+<p>Widely used methods for handling mail usually require users to be logged
+into a designated &ldquo;home&rdquo; machine, where their mailbox files reside.
+Only on that one machine can they read newly arrived mail.  Since users
+have to be logged into that system to read their mail, they often find
+it convenient to run all of their other processes on that system as
+well, including memory and CPU-intensive jobs.  For example, in our
+department, we have allocated and configured several multi-processor
+servers to handle such demanding CPU/memory applications, but these were
+underutilized, in large part due to the inconvenience of not being able
+to read mail on those machines.  (No home directories were located on
+these designated CPU-servers, since we did not want NFS service for
+users&rsquo; home directories to have to compete with CPU-intensive jobs.  At the
+same time, we discouraged users from running demanding applications on
+their home machines.)
+</p>
+<p>Many different solutions have been proposed to allow users to read their
+mail on any host.  However, all of these solutions fail in one or more
+of several ways:
+</p>
+<ul>
+<li>
+they introduce new single points of failure
+
+</li><li>
+they require using different mail transfer agents (MTAs) or user agents
+(UAs)
+
+</li><li>
+they do not solve the problem for all cases, i.e.  the solution is only
+partially successful for a particular environment.
+
+</li></ul>
+
+<p>We have designed a simple filesystem, called the <em>Home-Link File
+System</em>, to provide the ability to deliver mail to users&rsquo; home
+directories, without modification to mail-related applications. We have
+endeavored to make it as stable as possible.  Of great importance to us
+was to make sure the HLFS daemon, &lsquo;<tt>hlfsd</tt>&rsquo; , would not hang under
+any circumstances, and would take the next-best action when faced with
+problems.  Compared to alternative methods, <i>Hlfsd</i> is a stable, more
+general solution, and easier to install/use.  In fact, in some ways, we
+have even managed to improve the reliability and security of mail
+service.
+</p>
+<p>Our server implements a small filesystem containing a symbolic link
+to a subdirectory of the invoking user&rsquo;s home directory, and named symbolic
+links to users&rsquo; mailbox files.
+</p>
+<p>The <i>Hlfsd</i> server finds out the <var>uid</var> of the process that is
+accessing its mount point, and resolves the pathname component &lsquo;<samp>home</samp>&rsquo; as a
+symbolic link to a subdirectory within the home directory given by the
+<var>uid</var>&rsquo;s entry in the password file.  If the <var>gid</var> of the process
+that attempts to access a mailbox file is a special one (called
+HLFS_GID), then the server maps the name of the <em>next</em> pathname
+component directly to the user&rsquo;s mailbox.  This is necessary so that
+access to a mailbox file by users other than the owner can succeed.  The
+server has safety features in case of failures such as hung filesystems
+or home directory filesystems that are inaccessible or full.
+</p>
+<p>On most of our machines, mail gets delivered to the directory
+&lsquo;<tt>/var/spool/mail</tt>&rsquo;. Many programs, including UAs, depend on that
+path.  <i>Hlfsd</i> creates a directory &lsquo;<tt>/mail</tt>&rsquo;, and mounts itself on
+top of that directory.  <i>Hlfsd</i> implements the path name component
+called &lsquo;<samp>home</samp>&rsquo;, pointing to a subdirectory of the user&rsquo;s home directory.
+We have made &lsquo;<tt>/var/spool/mail</tt>&rsquo; a symbolic link to
+&lsquo;<tt>/mail/home</tt>&rsquo;, so that accessing &lsquo;<tt>/var/spool/mail</tt>&rsquo; actually
+causes access to a subdirectory within a user&rsquo;s home directory.
+</p>
+<p>The following table shows an example of how resolving the pathname
+&lsquo;<tt>/var/mail/<i>NAME</i></tt>&rsquo; to &lsquo;<tt>/users/ezk/.mailspool/<i>NAME</i></tt>&rsquo; proceeds.
+</p>
+<table>
+<tr><td><b>Resolving Component</b></td><td><b>Pathname left to resolve</b></td><td><b>Value if symbolic link</b></td></tr>
+<tr><td><tt>/</tt></td><td><tt>var/mail/</tt><i>NAME</i></td></tr>
+<tr><td><tt>var/</tt></td><td><tt>mail/</tt><i>NAME</i></td></tr>
+<tr><td><tt>mail</tt>@</td><td><tt>/mail/home/</tt><i>NAME</i></td><td><tt>mail</tt>@ -&gt; <tt>/mail/home</tt></td></tr>
+<tr><td><tt>/</tt></td><td><tt>mail/home/</tt><i>NAME</i></td></tr>
+<tr><td><tt>mail/</tt></td><td><tt>home/</tt><i>NAME</i></td></tr>
+<tr><td><tt>home</tt>@</td><td><i>NAME</i></td><td><tt>home</tt>@ -&gt; <tt>/users/ezk/.mailspool</tt></td></tr>
+<tr><td><tt>/</tt></td><td><tt>users/ezk/.mailspool/</tt><i>NAME</i></td></tr>
+<tr><td><tt>users/</tt></td><td><tt>ezk/.mailspool/</tt><i>NAME</i></td></tr>
+<tr><td><tt>ezk/</tt></td><td><tt>.mailspool/</tt><i>NAME</i></td></tr>
+<tr><td><tt>.mailspool/</tt></td><td><i>NAME</i></td></tr>
+<tr><td><i>NAME</i></td></tr>
+</table>
+
+<hr size="6">
+<a name="Background-to-Mail-Delivery"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Introduction-to-Hlfsd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Single_002dHost-Mail-Spool-Directory" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Background-to-Mail-Delivery-1"></a>
+<h2 class="section">9.2 Background to Mail Delivery</h2>
+<a name="index-Background-to-Mail-Delivery"></a>
+<a name="index-Hlfsd_003b-background"></a>
+
+<p>This section provides an in-depth discussion of why available methods
+for delivering mail to home directories are not as good as the one used
+by <i>Hlfsd</i>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Single_002dHost-Mail-Spool-Directory">9.2.1 Single-Host Mail Spool Directory</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Centralized-Mail-Spool-Directory">9.2.2 Centralized Mail Spool Directory</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Distributed-Mail-Spool-Service">9.2.3 Distributed Mail Spool Service</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Why-Deliver-Into-the-Home-Directory_003f">9.2.4 Why Deliver Into the Home Directory?</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Single_002dHost-Mail-Spool-Directory"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Centralized-Mail-Spool-Directory" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Single_002dHost-Mail-Spool-Directory-1"></a>
+<h3 class="subsection">9.2.1 Single-Host Mail Spool Directory</h3>
+<a name="index-Single_002dHost-Mail-Spool-Directory"></a>
+
+<p>The most common method for mail delivery is for mail to be appended to a
+mailbox file in a standard spool directory on the designated &ldquo;mail
+home&rdquo; machine of the user. The greatest advantage of this method is
+that it is the default method most vendors provide with their systems,
+thus very little (if any) configuration is required on the SA&rsquo;s part.
+All they need to set up are mail aliases directing mail to the host on
+which the user&rsquo;s mailbox file is assigned.  (Otherwise, mail is
+delivered locally, and users find mailboxes on many machines.)
+</p>
+<p>As users become more sophisticated, and aided by windowing systems, they
+find themselves logging in on multiple hosts at once, performing several
+tasks concurrently.  They ask to be able to read their mail on any host
+on the network, not just the one designated as their &ldquo;mail home&rdquo;.
+</p>
+<hr size="6">
+<a name="Centralized-Mail-Spool-Directory"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Single_002dHost-Mail-Spool-Directory" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Distributed-Mail-Spool-Service" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Centralized-Mail-Spool-Directory-1"></a>
+<h3 class="subsection">9.2.2 Centralized Mail Spool Directory</h3>
+<a name="index-Centralized-Mail-Spool-Directory"></a>
+
+<p>A popular method for providing mail readability from any host is to have
+all mail delivered to a mail spool directory on a designated
+&ldquo;mail-server&rdquo; which is exported via NFS to all of the hosts on the
+network.  Configuring such a system is relatively easy.  On most
+systems, the bulk of the work is a one-time addition to one or two
+configuration files in &lsquo;<tt>/etc</tt>&rsquo;.  The file-server&rsquo;s spool directory
+is then hard-mounted across every machine on the local network.  In
+small environments with only a handful of hosts this can be an
+acceptable solution.  In our department, with a couple of hundred active
+hosts and thousands of mail messages processed daily, this was deemed
+completely unacceptable, as it introduced several types of problems:
+</p>
+<dl compact="compact">
+<dt> <b>Scalability and Performance</b></dt>
+<dd>
+<p>As more and more machines get added to the network, more mail traffic
+has to go over NFS to and from the mail-server. Users like to run
+mail-watchers, and read their mail often. The stress on the shared
+infrastructure increases with every user and host added; loads on the
+mail server would most certainly be high since all mail delivery goes
+through that one machine.<a name="DOCF1" href="am-utils_fot.html#FOOT1">(1)</a>  This
+leads to lower reliability and performance.  To reduce the number of
+concurrent connections between clients and the server host, some SAs
+have resorted to automounting the mail-spool directory.  But this
+solution only makes things worse: since users often run mail watchers,
+and many popular applications such as &lsquo;<samp>trn</samp>&rsquo;, &lsquo;<samp>emacs</samp>&rsquo;,
+&lsquo;<samp>csh</samp>&rsquo; or &lsquo;<samp>ksh</samp>&rsquo; check periodically for new mail, the
+automounted directory would be effectively permanently mounted.  If it
+gets unmounted automatically by the automounter program, it is most
+likely to get mounted shortly afterwards, consuming more I/O resources
+by the constant cycle of mount and umount calls.
+</p>
+</dd>
+<dt> <b>Reliability</b></dt>
+<dd>
+<p>The mail-server host and its network connectivity must be very reliable.
+Worse, since the spool directory has to be hard-mounted,<a name="DOCF2" href="am-utils_fot.html#FOOT2">(2)</a> many processes which access the
+spool directory (various shells, &lsquo;<samp>login</samp>&rsquo;, &lsquo;<samp>emacs</samp>&rsquo;, etc.)
+would be hung as long as connectivity to the mail-server is severed. To
+improve reliability, SAs may choose to backup the mail-server&rsquo;s spool
+partition several times a day.  This may make things worse since reading
+or delivering mail while backups are in progress may cause backups to be
+inconsistent; more backups consume more backup-media resources, and
+increase the load on the mail-server host.
+</p>
+</dd>
+</dl>
+
+<hr size="6">
+<a name="Distributed-Mail-Spool-Service"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Centralized-Mail-Spool-Directory" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Why-Deliver-Into-the-Home-Directory_003f" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Distributed-Mail-Spool-Service-1"></a>
+<h3 class="subsection">9.2.3 Distributed Mail Spool Service</h3>
+<a name="index-Distributed-Mail-Spool-Service"></a>
+
+<p>Despite the existence of a few systems that support delivery to users&rsquo;
+home directories, mail delivery to home directories hasn&rsquo;t caught on.
+We believe the main reason is that there are too many programs that
+&ldquo;know&rdquo; where mailbox files reside.  Besides the obvious (the delivery
+program &lsquo;<tt>/bin/mail</tt>&rsquo; and mail readers like &lsquo;<tt>/usr/ucb/Mail</tt>&rsquo;,
+&lsquo;<samp>mush</samp>&rsquo;, &lsquo;<samp>mm</samp>&rsquo;, etc.), other programs that know mailbox location
+are login, from, almost every shell, &lsquo;<samp>xbiff</samp>&rsquo;, &lsquo;<samp>xmailbox</samp>&rsquo;, and
+even some programs not directly related to mail, such as &lsquo;<samp>emacs</samp>&rsquo;
+and &lsquo;<samp>trn</samp>&rsquo;.  Although some of these programs can be configured to
+look in different directories with the use of environment variables and
+other resources, many of them cannot.  The overall porting work is
+significant.
+</p>
+<p>Other methods that have yet to catch on require the use of a special
+mail-reading server, such as IMAP or POP.  The main disadvantage of
+these systems is that UAs need to be modified to use these services &mdash;
+a long and involved task.  That is why they are not popular at this
+time.
+</p>
+<p>Several other ideas have been proposed and even used in various
+environments.  None of them is robust.  They are mostly very
+specialized, inflexible, and do not extend to the general case.  Some of
+the ideas are plain bad, potentially leading to lost or corrupt mail:
+</p>
+<dl compact="compact">
+<dt> <b>automounters</b></dt>
+<dd>
+<p>Using an automounter such as <i>Amd</i> to provide a set of symbolic links
+from the normal spool directory to user home directories is not
+sufficient.  UAs rename, unlink, and recreate the mailbox as a regular
+file, therefore it must be a real file, not a symbolic link.
+Furthermore, it must reside in a real directory which is writable by the
+UAs and MTAs.  This method may also require populating
+&lsquo;<tt>/var/spool/mail</tt>&rsquo; with symbolic links and making sure they are
+updated.  Making <i>Amd</i> manage that directory directly fails, since
+many various lock files need to be managed as well.  Also, <i>Amd</i> does
+not provide all of the NFS operations which are required to write mail
+such as write, create, remove, and unlink.
+</p>
+</dd>
+<dt> <b><code>$MAIL</code></b></dt>
+<dd>
+<p>Setting this variable to an automounted directory pointing to the user&rsquo;s
+mail spool host only solves the problem for those programs which know
+and use <code>$MAIL</code>.  Many programs don&rsquo;t, therefore this solution is partial
+and of limited flexibility.  Also, it requires the SAs or the users to
+set it themselves &mdash; an added level of inconvenience and possible
+failures.
+</p>
+</dd>
+<dt> <b><tt>/bin/mail</tt></b></dt>
+<dd>
+<p>Using a different mail delivery agent could be the solution.  One such
+example is &lsquo;<samp>hdmail</samp>&rsquo;.  However, &lsquo;<samp>hdmail</samp>&rsquo; still requires
+modifying all UAs, the MTA&rsquo;s configuration, installing new daemons, and
+changing login scripts.  This makes the system less upgradable or
+compatible with others, and adds one more complicated system for SAs to
+deal with.  It is not a complete solution because it still requires each
+user have their <code>$MAIL</code> variable setup correctly, and that every program
+use this variable.
+</p>
+</dd>
+</dl>
+
+<hr size="6">
+<a name="Why-Deliver-Into-the-Home-Directory_003f"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Distributed-Mail-Spool-Service" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-Hlfsd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Background-to-Mail-Delivery" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Why-Deliver-Into-the-Home-Directory_003f-1"></a>
+<h3 class="subsection">9.2.4 Why Deliver Into the Home Directory?</h3>
+<a name="index-Why-Deliver-Into-the-Home-Directory_003f"></a>
+<a name="index-Hlfsd_003b-Why-Deliver-Into-the-Home-Directory_003f"></a>
+
+<p>There are several major reasons why SAs might want to deliver mail
+directly into the users&rsquo; home directories:
+</p>
+<dl compact="compact">
+<dt> <b>Location</b></dt>
+<dd>
+<p>Many mail readers need to move mail from the spool directory to the
+user&rsquo;s home directory.  It speeds up this operation if the two are on
+the same filesystem.  If for some reason the user&rsquo;s home directory is
+inaccessible, it isn&rsquo;t that useful to be able to read mail, since there
+is no place to move it to.  In some cases, trying to move mail to a
+non-existent or hung filesystem may result in mail loss.
+</p>
+</dd>
+<dt> <b>Distribution</b></dt>
+<dd>
+<p>Having all mail spool directories spread among the many more filesystems
+minimizes the chances that complete environments will grind to a halt
+when a single server is down.  It does increase the chance that there
+will be someone who is not able to read their mail when a machine is
+down, but that is usually preferred to having no one be able to read
+their mail because a centralized mail server is down.  The problem of
+losing some mail due to the (presumably) higher chances that a user&rsquo;s
+machine is down is minimized in HLFS.
+</p>
+</dd>
+<dt> <b>Security</b></dt>
+<dd>
+<p>Delivering mail to users&rsquo; home directories has another advantage &mdash;
+enhanced security and privacy.  Since a shared system mail spool
+directory has to be world-readable and searchable, any user can see
+whether other users have mail, when they last received new mail, or when
+they last read their mail.  Programs such as &lsquo;<samp>finger</samp>&rsquo; display this
+information, which some consider an infringement of privacy.  While it
+is possible to disable this feature of &lsquo;<samp>finger</samp>&rsquo; so that remote
+users cannot see a mailbox file&rsquo;s status, this doesn&rsquo;t prevent local
+users from getting the information.  Furthermore, there are more
+programs which make use of this information.  In shared environments,
+disabling such programs has to be done on a system-wide basis, but with
+mail delivered to users&rsquo; home directories, users less concerned with
+privacy who do want to let others know when they last received or read
+mail can easily do so using file protection bits.
+</p>
+
+</dd>
+</dl>
+
+<p>In summary, delivering mail to home directories provides users the
+functionality sought, and also avoids most of the problems just
+discussed.
+</p>
+<hr size="6">
+<a name="Using-Hlfsd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Why-Deliver-Into-the-Home-Directory_003f" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Controlling-Hlfsd" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-Hlfsd-1"></a>
+<h2 class="section">9.3 Using Hlfsd</h2>
+<a name="index-Using-Hlfsd"></a>
+<a name="index-Hlfsd_003b-using"></a>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Controlling-Hlfsd">9.3.1 Controlling Hlfsd</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Hlfsd-Options">9.3.2 Hlfsd Options</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Hlfsd-Files">9.3.3 Hlfsd Files</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Controlling-Hlfsd"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Using-Hlfsd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hlfsd-Options" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Controlling-Hlfsd-1"></a>
+<h3 class="subsection">9.3.1 Controlling Hlfsd</h3>
+<a name="index-Controlling-Hlfsd"></a>
+<a name="index-Hlfsd_003b-controlling"></a>
+<a name="index-ctl_002dhlfsd"></a>
+
+<p>Much the same way <i>Amd</i> is controlled by &lsquo;<tt>ctl-amd</tt>&rsquo;, so does
+<i>Hlfsd</i> get controlled by the &lsquo;<tt>ctl-hlfsd</tt>&rsquo; script:
+</p>
+<dl compact="compact">
+<dt> <tt>ctl-hlfsd start</tt></dt>
+<dd><p>Start a new <i>Hlfsd</i>.
+</p>
+</dd>
+<dt> <tt>ctl-hlfsd stop</tt></dt>
+<dd><p>Stop a running <i>Hlfsd</i>.
+</p>
+</dd>
+<dt> <tt>ctl-hlfsd restart</tt></dt>
+<dd><p>Stop a running <i>Hlfsd</i>, wait for 10 seconds, and then start a new
+one.  It is hoped that within 10 seconds, the previously running
+<i>Hlfsd</i> terminate properly; otherwise, starting a second one could
+cause system lockup.
+</p>
+</dd>
+</dl>
+
+<p>For example, on our systems, we start <i>Hlfsd</i> within &lsquo;<tt>ctl-hlfsd</tt>&rsquo;
+as follows on Solaris 2 systems:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">hlfsd -a /var/alt_mail -x all -l /var/log/hlfsd /mail/home .mailspool
+</pre></td></tr></table>
+
+<p>The directory &lsquo;<tt>/var/alt_mail</tt>&rsquo; is a directory in the root partition
+where alternate mail will be delivered into, when it cannot be delivered
+into the user&rsquo;s home directory.
+</p>
+<p>Normal mail gets delivered into &lsquo;<tt>/var/mail</tt>&rsquo;, but on our systems,
+that is a symbolic link to &lsquo;<tt>/mail/home</tt>&rsquo;.  &lsquo;<tt>/mail</tt>&rsquo; is managed
+by <i>Hlfsd</i>, which creates a dynamic symlink named &lsquo;<samp>home</samp>&rsquo;,
+pointing to the subdirectory &lsquo;<tt>.mailspool</tt>&rsquo; <em>within</em> the
+accessing user&rsquo;s home directory.  This results in mail which normally
+should go to &lsquo;<tt>/var/mail/<code>$USER</code></tt>&rsquo;, to go to
+&lsquo;<tt><code>$HOME</code>/.mailspool/<code>$USER</code></tt>&rsquo;.
+</p>
+<p><i>Hlfsd</i> does not create the &lsquo;<tt>/var/mail</tt>&rsquo; symlink.  This needs to
+be created (manually) once on each host, by the system administrators,
+as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">mv /var/mail /var/alt_mail
+ln -s /mail/home /var/mail
+</pre></td></tr></table>
+
+<p><i>Hlfsd</i> also responds to the following signals:
+</p>
+<p>A &lsquo;<samp>SIGHUP</samp>&rsquo; signal sent to <i>Hlfsd</i> will force it to reload the
+password map immediately.
+</p>
+<p>A &lsquo;<samp>SIGUSR1</samp>&rsquo; signal sent to <i>Hlfsd</i> will cause it to dump its
+internal password map to the file &lsquo;<tt>/usr/tmp/hlfsd.dump.XXXXXX</tt>&rsquo;,
+where &lsquo;<samp>XXXXXX</samp>&rsquo; will be replaced by a random string generated by
+<b>mktemp</b>(3) or (the more secure) <b>mkstemp</b>(3).
+</p>
+<hr size="6">
+<a name="Hlfsd-Options"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Controlling-Hlfsd" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hlfsd-Files" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Hlfsd-Options-1"></a>
+<h3 class="subsection">9.3.2 Hlfsd Options</h3>
+<a name="index-Hlfsd-Options"></a>
+<a name="index-Hlfsd_003b-Options"></a>
+
+<dl compact="compact">
+<dt> <tt>-a <var>alt_dir</var></tt></dt>
+<dd><p>Alternate directory.  The name of the directory to which the symbolic
+link returned by <i>Hlfsd</i> will point, if it cannot access the home
+directory of the user.  This defaults to &lsquo;<tt>/var/hlfs</tt>&rsquo;.  This
+directory will be created if it doesn&rsquo;t exist.  It is expected that
+either users will read these files, or the system administrators will
+run a script to resend this &ldquo;lost mail&rdquo; to its owner.
+</p>
+</dd>
+<dt> <tt>-c <var>cache-interval</var></tt></dt>
+<dd><p>Caching interval.  <i>Hlfsd</i> will cache the validity of home directories
+for this interval, in seconds.  Entries which have been verified within
+the last <var>cache-interval</var> seconds will not be verified again, since
+the operation could be expensive, and the entries are most likely still
+valid.  After the interval has expired, <i>Hlfsd</i> will re-verify the
+validity of the user&rsquo;s home directory, and reset the cache time-counter.
+The default value for <var>cache-interval</var> is 300 seconds (5 minutes).
+</p>
+</dd>
+<dt> <tt>-f</tt></dt>
+<dd><p>Force fast startup.  This option tells <i>Hlfsd</i> to skip startup-time
+consistency checks such as existence of mount directory, alternate spool
+directory, symlink to be hidden under the mount directory, their
+permissions and validity.
+</p>
+</dd>
+<dt> <tt>-g <var>group</var></tt></dt>
+<dd><p>Set the special group HLFS_GID to <var>group</var>.  Programs such as
+&lsquo;<tt>/usr/ucb/from</tt>&rsquo; or &lsquo;<tt>/usr/sbin/in.comsat</tt>&rsquo;, which access the
+mailboxes of other users, must be setgid &lsquo;<samp>HLFS_GID</samp>&rsquo; to work properly.  The
+default group is &lsquo;<samp>hlfs</samp>&rsquo;.  If no group is provided, and there is no
+group &lsquo;<samp>hlfs</samp>&rsquo;, this feature is disabled.
+</p>
+</dd>
+<dt> <tt>-h</tt></dt>
+<dd><p>Help.  Print a brief help message, and exit.
+</p>
+</dd>
+<dt> <tt>-i <var>reload-interval</var></tt></dt>
+<dd><p>Map-reloading interval.  Each <var>reload-interval</var> seconds, <i>Hlfsd</i>
+will reload the password map.  <i>Hlfsd</i> needs the password map for the
+UIDs and home directory pathnames.  <i>Hlfsd</i> schedules a &lsquo;<samp>SIGALRM</samp>&rsquo; to
+reload the password maps.  A &lsquo;<samp>SIGHUP</samp>&rsquo; sent to <i>Hlfsd</i> will force it to
+reload the maps immediately.  The default value for
+<var>reload-interval</var> is 900 seconds (15 minutes.)
+</p>
+</dd>
+<dt> <tt>-l <var>logfile</var></tt></dt>
+<dd><p>Specify a log file to which <i>Hlfsd</i> will record events.  If
+<var>logfile</var> is the string &lsquo;<samp>syslog</samp>&rsquo; then the log messages will be
+sent to the system log daemon by <b>syslog</b>(3), using the &lsquo;<samp>LOG_DAEMON</samp>&rsquo;
+facility.  This is also the default.
+</p>
+</dd>
+<dt> <tt>-n</tt></dt>
+<dd><p>No verify.  <i>Hlfsd</i> will not verify the validity of the symbolic link
+it will be returning, or that the user&rsquo;s home directory contains
+sufficient disk-space for spooling.  This can speed up <i>Hlfsd</i> at the
+cost of possibly returning symbolic links to home directories which are
+not currently accessible or are full.  By default, <i>Hlfsd</i> validates
+the symbolic-link in the background.  The <code>-n</code> option overrides the
+meaning of the <code>-c</code> option, since no caching is necessary.
+</p>
+</dd>
+<dt> <tt>-o <var>mount-options</var></tt></dt>
+<dd><p>Mount options which <i>Hlfsd</i> will use to mount itself on top of
+<var>dirname</var>.  By default, <var>mount-options</var> is set to &lsquo;<samp>ro</samp>&rsquo;.  If
+the system supports symbolic-link caching, default options are set
+to &lsquo;<samp>ro,nocache</samp>&rsquo;.
+</p>
+</dd>
+<dt> <tt>-p</tt></dt>
+<dd><p>Print PID.  Outputs the process-id of <i>Hlfsd</i> to standard output where
+it can be saved into a file.
+</p>
+</dd>
+<dt> <tt>-v</tt></dt>
+<dd><p>Version.  Displays version information to standard error.
+</p>
+</dd>
+<dt> <tt>-x <var>log-options</var></tt></dt>
+<dd><p>Specify run-time logging options.  The options are a comma separated
+list chosen from: &lsquo;<samp>fatal</samp>&rsquo;, &lsquo;<samp>error</samp>&rsquo;, &lsquo;<samp>user</samp>&rsquo;, &lsquo;<samp>warn</samp>&rsquo;, &lsquo;<samp>info</samp>&rsquo;, &lsquo;<samp>map</samp>&rsquo;, &lsquo;<samp>stats</samp>&rsquo;, &lsquo;<samp>all</samp>&rsquo;.
+</p>
+</dd>
+<dt> <tt>-C</tt></dt>
+<dd><p>Force <i>Hlfsd</i> to run on systems that cannot turn off the NFS
+attribute-cache.  Use of this option on those systems is discouraged, as
+it may result in loss or misdelivery of mail.  The option is ignored on
+systems that can turn off the attribute-cache.
+</p>
+</dd>
+<dt> <tt>-D <var>log-options</var></tt></dt>
+<dd><p>Select from a variety of debugging options.  Prefixing an option with
+the string &lsquo;<samp>no</samp>&rsquo; reverses the effect of that option.  Options are
+cumulative.  The most useful option is &lsquo;<samp>all</samp>&rsquo;.  Since this option is
+only used for debugging other options are not documented here.  A fuller
+description is available in the program source.
+</p>
+</dd>
+<dt> <tt>-P <var>password-file</var></tt></dt>
+<dd><p>Read the user-name, user-id, and home directory information from the
+file <var>password-file</var>.  Normally, <i>Hlfsd</i> will use <b>getpwent</b>(3)
+to read the password database.  This option allows you to override the
+default database, and is useful if you want to map users&rsquo; mail files to
+a directory other than their home directory.  Only the username, uid,
+and home-directory fields of the file <var>password-file</var> are read and
+checked.  All other fields are ignored.  The file <var>password-file</var>
+must otherwise be compliant with Unix Version 7 colon-delimited format
+<b>passwd</b>(4).
+</p>
+</dd>
+</dl>
+
+<hr size="6">
+<a name="Hlfsd-Files"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Hlfsd-Options" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-Hlfsd" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Hlfsd-Files-1"></a>
+<h3 class="subsection">9.3.3 Hlfsd Files</h3>
+<a name="index-Hlfsd-Files"></a>
+<a name="index-Hlfsd_003b-Files"></a>
+
+<p>The following files are used by <i>Hlfsd</i>:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<tt>/hlfs</tt>&rsquo;</dt>
+<dd><p>directory under which <i>Hlfsd</i> mounts itself and manages the symbolic
+link &lsquo;<tt>home</tt>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<tt>.hlfsdir</tt>&rsquo;</dt>
+<dd><p>default sub-directory in the user&rsquo;s home directory, to which the
+&lsquo;<tt>home</tt>&rsquo; symbolic link returned by <i>Hlfsd</i> points.
+</p>
+</dd>
+<dt> &lsquo;<tt>/var/hlfs</tt>&rsquo;</dt>
+<dd><p>directory to which &lsquo;<tt>home</tt>&rsquo; symbolic link returned by <i>Hlfsd</i>
+points if it is unable to verify the that user&rsquo;s home directory is
+accessible.
+</p>
+</dd>
+<dt> &lsquo;<tt>/usr/tmp/hlfsd.dump.XXXXXX</tt>&rsquo;</dt>
+<dd><p>file to which <i>Hlfsd</i> will dump its internal password map when it
+receives the &lsquo;<samp>SIGUSR1</samp>&rsquo; signal. &lsquo;<samp>XXXXXX</samp>&rsquo; will be replaced by
+a random string generated by <b>mktemp</b>(3) or (the more secure)
+<b>mkstemp</b>(3).
+</p>
+</dd>
+</dl>
+
+<p>For discussion on other files used by <i>Hlfsd</i>, see See section <a href="am-utils_14.html#lostaltmail">lostaltmail</a>, and
+<a href="am-utils_14.html#lostaltmail_002econf_002dsample">lostaltmail.conf-sample</a>.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Hlfsd" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_14.html#Assorted-Tools" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

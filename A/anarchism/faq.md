@@ -1,0 +1,1 @@
+[http://flag.blackened.net/intanark/faq/mirror.html](http://flag.blackened.net/intanark/faq/mirror.html)

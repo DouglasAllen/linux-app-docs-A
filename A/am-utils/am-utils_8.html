@@ -1,0 +1,1082 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 4. Amd Command Line Options</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 4. Amd Command Line Options">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 4. Amd Command Line Options">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Amd-Command-Line-Options"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_7.html#type-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002da-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_7.html#Mount-Maps" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Amd-Command-Line-Options-1"></a>
+<h1 class="chapter">4. <i>Amd</i> Command Line Options</h1>
+<a name="index-Command-line-options_002c-Amd"></a>
+<a name="index-Amd-command-line-options"></a>
+<a name="index-Overriding-defaults-on-the-command-line"></a>
+
+<p>Many of <i>Amd</i>&rsquo;s parameters can be set from the command line.  The
+command line is also used to specify automount points and maps.
+</p>
+<p>The general format of a command line is
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd [<i>options</i>] [{ <i>directory</i> <i>map-name</i> [-<i>map-options</i>] } ...]
+</pre></td></tr></table>
+
+<p>For each directory and map-name given or specified in the
+&lsquo;<tt>amd.conf</tt>&rsquo; file, <i>Amd</i> establishes an automount point.  The
+<em>map-options</em> may be any sequence of options or
+selectors&mdash;see section <a href="am-utils_7.html#Location-Format">Location Format</a>.  The <em>map-options</em> apply only
+to <i>Amd</i>&rsquo;s mount point.
+</p>
+<p>&lsquo;<samp>type:=toplvl;cache:=mapdefault;fs:=${map}</samp>&rsquo; is the default value for the
+map options.  Default options for a map are read from a special entry in
+the map whose key is the string &lsquo;<samp>/defaults</samp>&rsquo;.  When default options
+are given they are prepended to any options specified in the mount-map
+locations as explained in <a href="am-utils_7.html#Map-Defaults">Map Defaults</a>.
+</p>
+<p>The <em>options</em> are any combination of those listed below.
+</p>
+<p>Once the command line has been parsed, the automount points are mounted.
+The mount points are created if they do not already exist, in which case they
+will be removed when <i>Amd</i> exits.
+Finally, <i>Amd</i> disassociates itself from its controlling terminal and
+forks into the background.
+</p>
+<p>Note: Even if <i>Amd</i> has been built with &lsquo;<samp>-DDEBUG</samp>&rsquo; (via
+<code>configure --enable-debug</code>), it will still background itself and
+disassociate itself from the controlling terminal.  To use a debugger it
+is necessary to specify &lsquo;<samp>-D daemon</samp>&rsquo; on the command line.
+However, even with all of this, mounts and unmounts are performed in the
+background, and <i>Amd</i> will always fork before doing them.  Therefore,
+debugging what happens closely during un/mounts is more challenging.
+</p>
+<p><em>All</em> of <i>Amd</i>&rsquo;s command options (save <code>-F</code> and <code>-T</code>)
+can be specified in the &lsquo;<tt>amd.conf</tt>&rsquo; file. See section <a href="am-utils_10.html#Amd-Configuration-File">Amd Configuration File</a>.  If <i>Amd</i> is invoked without any command line options, it will
+default to using the configuration file &lsquo;<tt>/etc/amd.conf</tt>&rsquo;, if one
+exists.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#g_t_002da-Option">4.1 <code>-a</code> <var>directory</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Automount directory.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dc-Option">4.2 <code>-c</code> <var>cache-interval</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Cache timeout interval.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dd-Option">4.3 <code>-d</code> <var>domain</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Domain name.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dk-Option">4.4 <code>-k</code> <var>kernel-architecture</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Kernel architecture.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dl-Option">4.5 <code>-l</code> <var>log-option</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Log file.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dn-Option">4.6 <code>-n</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Hostname normalization.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002do-Option">4.7 <code>-o</code> <var>op-sys-ver</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Operating system version.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dp-Option">4.8 <code>-p</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Output process id.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dr-Option">4.9 <code>-r</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Restart existing mounts.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dt-Option">4.10 <code>-t</code> <var>timeout.retransmit</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Kernel RPC timeout.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dv-Option">4.11 <code>-v</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Version information.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dw-Option">4.12 <code>-w</code> <var>wait-timeout</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Wait interval after failed unmount.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dx-Option">4.13 <code>-x</code> <var>opts</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Log options.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dy-Option">4.14 <code>-y</code> <var>NIS-domain</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   NIS domain.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dA-Option">4.15 <code>-A</code> <var>architecture</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Operating system Architecture.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dC-Option">4.16 <code>-C</code> <var>cluster-name</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Cluster name.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dD-Option">4.17 <code>-D</code> <var>opts</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Debug flags.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dF-Option">4.18 <code>-F</code> <var>conf-file</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Amd configuration file.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dH-Option">4.19 <code>-H</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Show brief help.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dO-Option">4.20 <code>-O</code> <var>op-sys-name</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Operating system name.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dS-Option">4.21 <code>-S</code></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Lock executable pages in memory.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#g_t_002dT-Option">4.22 <code>-T</code> <var>tag</var></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   Set tag for configuration file.
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="g_t_002da-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dc-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002da-directory"></a>
+<h2 class="section">4.1 <code>-a</code> <var>directory</var></h2>
+<a name="index-Automount-directory"></a>
+<a name="index-Setting-the-default-mount-directory"></a>
+
+<p>Specifies the default mount directory.  This option changes the variable
+<code>${autodir}</code> which otherwise defaults to &lsquo;<tt>/a</tt>&rsquo;.  For example,
+some sites prefer &lsquo;<tt>/amd</tt>&rsquo; or &lsquo;<tt>/n</tt>&rsquo;.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -a /amd ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dc-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002da-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dd-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dc-cache_002dinterval"></a>
+<h2 class="section">4.2 <code>-c</code> <var>cache-interval</var></h2>
+<a name="index-Cache-interval"></a>
+<a name="index-Interval-before-a-filesystem-times-out"></a>
+<a name="index-Setting-the-interval-before-a-filesystem-times-out"></a>
+<a name="index-Changing-the-interval-before-a-filesystem-times-out"></a>
+
+<p>Selects the period, in seconds, for which a name is cached by <i>Amd</i>.
+If no reference is made to the volume in this period, <i>Amd</i> discards
+the volume name to filesystem mapping.
+</p>
+<p>Once the last reference to a filesystem has been removed, <i>Amd</i>
+attempts to unmount the filesystem.  If the unmount fails the interval
+is extended by a further period as specified by the &lsquo;<samp>-w</samp>&rsquo; command
+line option or by the &lsquo;<samp>utimeout</samp>&rsquo; mount option.
+</p>
+<p>The default <em>cache-interval</em> is 300 seconds (five minutes).
+</p>
+<hr size="6">
+<a name="g_t_002dd-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dc-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dk-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dd-domain"></a>
+<h2 class="section">4.3 <code>-d</code> <var>domain</var></h2>
+<a name="index-Domain-name"></a>
+<a name="index-Setting-the-local-domain-name"></a>
+<a name="index-Overriding-the-local-domain-name"></a>
+
+<p>Specifies the host&rsquo;s domain.  This sets the internal variable
+<code>${domain}</code> and affects the <code>${hostd}</code> variable.
+</p>
+<p>If this option is not specified and the hostname already contains the
+local domain then that is used, otherwise the default value of
+<code>${domain}</code> is &lsquo;<samp>unknown.domain</samp>&rsquo;.
+</p>
+<p>For example, if the local domain was &lsquo;<samp>doc.ic.ac.uk</samp>&rsquo;, <i>Amd</i> could
+be started as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -d doc.ic.ac.uk ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dk-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dd-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dl-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dk-kernel_002darchitecture"></a>
+<h2 class="section">4.4 <code>-k</code> <var>kernel-architecture</var></h2>
+<a name="index-Setting-the-Kernel-architecture"></a>
+
+<p>Specifies the kernel architecture of the system.  This is usually the
+output of &lsquo;<samp>uname -m</samp>&rsquo; (the &ldquo;machine&rdquo; value gotten from
+<b>uname</b>(2)).  If the <b>uname</b>(2) system call is not available, the
+value of <code>${karch}</code> defaults to that of <code>${arch}</code>.
+</p>
+<p>The only effect of this option is to set the variable <code>${karch}</code>.
+</p>
+<p>This option would be used as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -k `arch -k` ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dl-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dk-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dn-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dl-log_002doption"></a>
+<h2 class="section">4.5 <code>-l</code> <var>log-option</var></h2>
+<a name="index-Log-filename"></a>
+<a name="index-Setting-the-log-file"></a>
+<a name="index-Using-syslog-to-log-errors"></a>
+<a name="index-syslog"></a>
+
+<p>Selects the form of logging to be made.  Several special <em>log-options</em>
+are recognized.
+</p>
+<ol>
+<li>
+If <em>log-option</em> is the string &lsquo;<samp>syslog</samp>&rsquo;, <i>Amd</i> will use the
+<b>syslog</b>(3) mechanism.  If your system supports syslog facilities, then
+the default facility used is &lsquo;<samp>LOG_DAEMON</samp>&rsquo;.
+
+</li><li>
+<a name="index-syslog-facility_003b-specifying-an-alternate"></a>
+When using syslog, if you wish to change the facility, append its name
+to the log option name, delimited by a single colon.  For example, if
+<em>log-options</em> is the string &lsquo;<samp>syslog:local7</samp>&rsquo; then <b>Amd</b> will
+log messages via <b>syslog</b>(3) using the &lsquo;<samp>LOG_LOCAL7</samp>&rsquo; facility.  If
+the facility name specified is not recognized, <i>Amd</i> will default to
+&lsquo;<samp>LOG_DAEMON</samp>&rsquo;.  Note: while you can use any syslog facility
+available on your system, it is generally a bad idea to use those
+reserved for other services such as &lsquo;<samp>kern</samp>&rsquo;, &lsquo;<samp>lpr</samp>&rsquo;,
+&lsquo;<samp>cron</samp>&rsquo;, etc.
+
+</li><li>
+If <em>log-option</em> is the string &lsquo;<samp>/dev/stderr</samp>&rsquo;, <i>Amd</i> will use
+standard error, which is also the default target for log messages.  To
+implement this, <i>Amd</i> simulates the effect of the &lsquo;<samp>/dev/fd</samp>&rsquo;
+driver.
+</li></ol>
+
+<p>Any other string is taken as a filename to use for logging.  Log
+messages are appended to the file if it already exists, otherwise a new
+file is created.  The file is opened once and then held open, rather
+than being re-opened for each message.
+</p>
+<p>Normally, when long-running daemons hold an open file descriptor on a
+log file, it is impossible to &ldquo;rotate&rdquo; the log file and compress older
+logs on a daily basis.  The daemon needs to be told to discard (via
+<b>close</b>(2)) its file handle, and re-open the log file.  This is done
+using <code>amq -l</code> <i>log-option</i>. See section <a href="am-utils_11.html#Amq-_002dl-option"><i>Amq</i> <code>-l</code> option</a>.
+</p>
+<p>If the &lsquo;<samp>syslog</samp>&rsquo; option is specified but the system does not support
+syslog or if the named file cannot be opened or created, <i>Amd</i> will
+use standard error.  Error messages generated before <i>Amd</i> has
+finished parsing the command line are printed on standard error.
+</p>
+<p>Since <i>Amd</i> tends to generate a lot of logging information (especially
+if debugging was turned on), and due to it being an important program
+running on the system, it is usually best to log to a separate disk
+file.  In that case <i>Amd</i> would be started as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -l /var/log/amd ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dn-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dl-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002do-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dn"></a>
+<h2 class="section">4.6 <code>-n</code></h2>
+<a name="index-Hostname-normalization"></a>
+<a name="index-Aliased-hostnames"></a>
+<a name="index-Resolving-aliased-hostnames"></a>
+<a name="index-Normalizing-hostnames"></a>
+
+<p>Normalizes the remote hostname before using it.  Normalization is done
+by replacing the value of <code>${rhost}</code> with the (generally fully
+qualified) primary name returned by a hostname lookup.
+</p>
+<p>This option should be used if several names are used to refer to a
+single host in a mount map.
+</p>
+<hr size="6">
+<a name="g_t_002do-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dn-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dp-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002do-op_002dsys_002dver"></a>
+<h2 class="section">4.7 <code>-o</code> <var>op-sys-ver</var></h2>
+<a name="index-Operating-System-version"></a>
+<a name="index-Setting-the-Operating-System-version"></a>
+
+<p>Overrides the compiled-in version number of the operating system, with
+<var>op-sys-ver</var>.  Useful when the built-in version is not desired for
+backward compatibility reasons.  For example, if the built-in version is
+&lsquo;<samp>2.5.1</samp>&rsquo;, you can override it to &lsquo;<samp>5.5.1</samp>&rsquo;, and use older maps
+that were written with the latter in mind.
+</p>
+<hr size="6">
+<a name="g_t_002dp-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002do-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dr-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dp"></a>
+<h2 class="section">4.8 <code>-p</code></h2>
+<a name="index-Process-id"></a>
+<a name="index-Displaying-the-process-id"></a>
+<a name="index-process-id-of-Amd-daemon"></a>
+<a name="index-pid-file_002c-creating-with-_002dp-option"></a>
+<a name="index-Creating-a-pid-file"></a>
+
+<p>Causes <i>Amd</i>&rsquo;s process id to be printed on standard output.
+This can be redirected to a suitable file for use with kill:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -p &gt; /var/run/amd.pid ...
+</pre></td></tr></table>
+
+<p>This option only has an affect if <i>Amd</i> is running in daemon mode.
+If <i>Amd</i> is started with the <code>-D daemon</code> debug flag, this
+option is ignored.
+</p>
+<hr size="6">
+<a name="g_t_002dr-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dp-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dt-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dr"></a>
+<h2 class="section">4.9 <code>-r</code></h2>
+<a name="index-Restarting-existing-mounts"></a>
+<a name="index-Picking-up-existing-mounts"></a>
+
+<p>Tells <i>Amd</i> to restart existing mounts (see section <a href="am-utils_9.html#Inheritance-Filesystem">Inheritance Filesystem (&lsquo;<samp>inherit</samp>&rsquo;)</a>).
+</p>
+<hr size="6">
+<a name="g_t_002dt-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dr-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dv-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dt-timeout_002eretransmit"></a>
+<h2 class="section">4.10 <code>-t</code> <var>timeout.retransmit</var></h2>
+<a name="index-Setting-Amd_0027s-RPC-parameters"></a>
+
+<p>Specifies the RPC <em>timeout</em> interval and the <em>retransmit</em>
+counter used by the kernel to communicate to <i>Amd</i>.  These are used to
+set the &lsquo;<samp>timeo</samp>&rsquo; and &lsquo;<samp>retrans</samp>&rsquo; mount options, respectively.
+The default timeout is 0.8 seconds, and the default number of
+retransmissions is 11.
+</p>
+<p><i>Amd</i> relies on the kernel RPC retransmit mechanism to trigger mount
+retries.  The values of these parameters change the overall retry
+interval.  Too long an interval gives poor interactive response; too
+short an interval causes excessive retries.
+</p>
+<hr size="6">
+<a name="g_t_002dv-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dt-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dw-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dv"></a>
+<h2 class="section">4.11 <code>-v</code></h2>
+<a name="index-Version-information"></a>
+<a name="index-Discovering-version-information"></a>
+<a name="index-How-to-discover-your-version-of-Amd"></a>
+
+<p>Print version information on standard error and then exit.  The output
+is of the form:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">Copyright (c) 1997-1999 Erez Zadok
+Copyright (c) 1990 Jan-Simon Pendry
+Copyright (c) 1990 Imperial College of Science, Technology &amp; Medicine
+Copyright (c) 1990 The Regents of the University of California.
+am-utils version 6.0a15 (build 61).
+Built by ezk@example.com on date Wed Oct 22 15:21:03 EDT 1997.
+cpu=sparc (big-endian), arch=sun4, karch=sun4u.
+full_os=solaris2.5.1, os=sos5, osver=5.5.1, vendor=sun.
+Map support for: root, passwd, union, nisplus, nis, ndbm, file, error.
+AMFS: nfs, link, nfsx, nfsl, host, linkx, program, union, inherit,
+      ufs, lofs, hsfs, pcfs, auto, direct, toplvl, error.
+FS: autofs, cachefs, cdfs, lofs, nfs, nfs3, pcfs, tfs, tmpfs, udf, ufs.
+Network 1: wire=&quot;mcl-lab-net.cs.columbia.edu&quot; (netnumber=128.59.13).
+Network 2: wire=&quot;14-net.cs.columbia.edu&quot; (netnumber=128.59.14).
+Network 3: wire=&quot;old-net.cs.columbia.edu&quot; (netnumber=128.59.16).
+</pre></td></tr></table>
+
+<p>The information includes the version number, number of times <i>Amd</i> was
+compiled on the local system, release date and name of the release.
+Following come the cpu type, byte ordering, and the architecture and
+kernel architecture as <code>${arch}</code> and <code>${karch}</code>,
+respectively.  The next line lists the operating system full name, short
+name, version, and vendor.  These four values correspond to the
+variables <code>${full_os}</code>, <code>${os}</code>, <code>${osver}</code>, and
+<code>${vendor}</code>, respectively.  See section <a href="am-utils_6.html#Supported-Platforms">Supported Platforms</a>.
+</p>
+<p>Then come a list of map types supported, filesystems internally
+supported by <i>Amd</i> (AMFS), and generic filesystems available (FS).
+Finally all known networks (if any) of this host are listed by name
+and number.  They are available via the variables
+<code>${wire}</code> or <code>${network}</code>, and
+<code>${netnumber}</code> (see section <a href="am-utils_7.html#Selectors">Selectors</a>) or the &lsquo;<samp>in_network</samp>&rsquo;
+selector function (see section <a href="am-utils_7.html#in_005fnetwork-Selector-Function">in_network Selector Function</a>).
+</p>
+<hr size="6">
+<a name="g_t_002dw-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dv-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dx-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dw-wait_002dtimeout"></a>
+<h2 class="section">4.12 <code>-w</code> <var>wait-timeout</var></h2>
+<a name="index-Setting-the-interval-between-unmount-attempts"></a>
+<a name="index-unmount-attempt-backoff-interval"></a>
+
+<p>Selects the interval in seconds between unmount attempts after the
+initial time-to-live has expired.
+</p>
+<p>This defaults to 120 seconds (two minutes).
+</p>
+<hr size="6">
+<a name="g_t_002dx-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dw-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dy-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dx-opts"></a>
+<h2 class="section">4.13 <code>-x</code> <var>opts</var></h2>
+<a name="index-Log-message-selection"></a>
+<a name="index-Selecting-specific-log-messages"></a>
+<a name="index-How-to-select-log-messages"></a>
+<a name="index-syslog-priorities"></a>
+
+<p>Specifies the type and verbosity of log messages.  <em>opts</em> is
+a comma separated list selected from the following options:
+</p>
+<dl compact="compact">
+<dt> <code>fatal</code></dt>
+<dd><p>Fatal errors (cannot be turned off)
+</p></dd>
+<dt> <code>error</code></dt>
+<dd><p>Non-fatal errors (cannot be turned off)
+</p></dd>
+<dt> <code>user</code></dt>
+<dd><p>Non-fatal user errors
+</p></dd>
+<dt> <code>warn</code></dt>
+<dd><p>Recoverable errors
+</p></dd>
+<dt> <code>warning</code></dt>
+<dd><p>Alias for <code>warn</code>
+</p></dd>
+<dt> <code>info</code></dt>
+<dd><p>Information messages
+</p></dd>
+<dt> <code>map</code></dt>
+<dd><p>Mount map usage
+</p></dd>
+<dt> <code>stats</code></dt>
+<dd><p>Additional statistics
+</p></dd>
+<dt> <code>all</code></dt>
+<dd><p>All of the above
+</p></dd>
+<dt> <code>defaults</code></dt>
+<dd><p>An alias for &quot;fatal,error,user,warning,info&quot;.
+</p></dd>
+</dl>
+
+<p>Initially a set of default logging flags is enabled.  This is as if
+&lsquo;<samp>-x defaults</samp>&rsquo;
+or
+&lsquo;<samp>-x fatal,error,user,warning,info</samp>&rsquo;
+had been selected.  The command line is
+parsed and logging is controlled by the <code>-x</code> option.  The very first
+set of logging flags is saved and can not be subsequently disabled using
+<i>Amq</i>.  This default set of options is useful for general production
+use.
+</p>
+<p>The &lsquo;<samp>info</samp>&rsquo; messages include details of what is mounted and
+unmounted and when filesystems have timed out.  If you want to have the
+default set of messages without the &lsquo;<samp>info</samp>&rsquo; messages then you simply
+need &lsquo;<samp>-x noinfo</samp>&rsquo;.  The messages given by &lsquo;<samp>user</samp>&rsquo; relate to
+errors in the mount maps, so these are useful when new maps are
+installed.  The following table lists the syslog priorities used for each
+of the message types.
+</p>
+<dl compact="compact">
+<dt> <code>fatal</code></dt>
+<dd><p>&lsquo;<samp>LOG_CRIT</samp>&rsquo;
+</p></dd>
+<dt> <code>error</code></dt>
+<dd><p>&lsquo;<samp>LOG_ERR</samp>&rsquo;
+</p></dd>
+<dt> <code>user</code></dt>
+<dd><p>&lsquo;<samp>LOG_WARNING</samp>&rsquo;
+</p></dd>
+<dt> <code>warning</code></dt>
+<dd><p>&lsquo;<samp>LOG_WARNING</samp>&rsquo;
+</p></dd>
+<dt> <code>info</code></dt>
+<dd><p>&lsquo;<samp>LOG_INFO</samp>&rsquo;
+</p></dd>
+<dt> <code>debug</code></dt>
+<dd><p>&lsquo;<samp>LOG_DEBUG</samp>&rsquo;
+</p></dd>
+<dt> <code>map</code></dt>
+<dd><p>&lsquo;<samp>LOG_DEBUG</samp>&rsquo;
+</p></dd>
+<dt> <code>stats</code></dt>
+<dd><p>&lsquo;<samp>LOG_INFO</samp>&rsquo;
+</p></dd>
+</dl>
+
+<p>The options can be prefixed by the string &lsquo;<samp>no</samp>&rsquo; to indicate
+that this option should be turned off.  For example, to obtain all
+but &lsquo;<samp>info</samp>&rsquo; messages the option &lsquo;<samp>-x all,noinfo</samp>&rsquo; would be used.
+</p>
+<p>If <i>Amd</i> was built with debugging enabled the <code>debug</code> option is
+automatically enabled regardless of the command line options.
+</p>
+<hr size="6">
+<a name="g_t_002dy-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dx-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dA-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dy-NIS_002ddomain"></a>
+<h2 class="section">4.14 <code>-y</code> <var>NIS-domain</var></h2>
+<a name="index-NIS-_0028YP_0029-domain-name"></a>
+<a name="index-Overriding-the-NIS-_0028YP_0029-domain-name"></a>
+<a name="index-Setting-the-NIS-_0028YP_0029-domain-name"></a>
+<a name="index-YP-domain-name"></a>
+
+<p>Selects an alternate NIS domain.  This is useful for debugging and
+cross-domain shared mounting.  If this flag is specified, <i>Amd</i>
+immediately attempts to bind to a server for this domain.
+</p>
+<hr size="6">
+<a name="g_t_002dA-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dy-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dC-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dA-architecture"></a>
+<h2 class="section">4.15 <code>-A</code> <var>architecture</var></h2>
+<a name="index-Setting-the-operating-system-architecture"></a>
+
+<p>Specifies the OS architecture of the system.
+The only effect of this option is to set the variable <code>${arch}</code>.
+</p>
+<p>This option would be used as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -A i386 ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dC-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dA-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dD-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dC-cluster_002dname"></a>
+<h2 class="section">4.16 <code>-C</code> <var>cluster-name</var></h2>
+<a name="index-Cluster-names"></a>
+<a name="index-Setting-the-cluster-name"></a>
+
+<p>Specifies the name of the cluster of which the local machine is a member.
+The only effect is to set the variable <code>${cluster}</code>.
+The <em>cluster-name</em> is will usually obtained by running another command which uses
+a database to map the local hostname into a cluster name.
+<code>${cluster}</code> can then be used as a selector to restrict mounting of
+replicated data.
+If this option is not given, <code>${cluster}</code> has the same value as <code>${domain}</code>.
+This would be used as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">amd -C `clustername` ...
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="g_t_002dD-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dC-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dF-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dD-opts"></a>
+<h2 class="section">4.17 <code>-D</code> <var>opts</var></h2>
+<a name="index-Debug-options"></a>
+<a name="index-Setting-debug-flags"></a>
+
+<p>Controls the verbosity and coverage of the debugging trace; <em>opts</em>
+is a comma separated list of debugging options.  The <code>-D</code> option is
+only available if <i>Amd</i> was compiled with &lsquo;<samp>-DDEBUG</samp>&rsquo;, or
+configured with <code>configure --enable-debug</code>.  The memory debugging
+facilities (&lsquo;<samp>mem</samp>&rsquo;) are only available if <i>Amd</i> was compiled with
+&lsquo;<samp>-DDEBUG_MEM</samp>&rsquo; (in addition to &lsquo;<samp>-DDEBUG</samp>&rsquo;), or configured with
+<code>configure --enable-debug=mem</code>.
+</p>
+<p>The most common options to use are &lsquo;<samp>-D trace</samp>&rsquo; and &lsquo;<samp>-D test</samp>&rsquo;
+(which turns on all the useful debug options).  As usual, every option
+can be prefixed with &lsquo;<samp>no</samp>&rsquo; to turn it off.
+</p>
+<dl compact="compact">
+<dt> <code>all</code></dt>
+<dd><p>all options (excluding hrtime and mtab)
+</p></dd>
+<dt> <code>defaults</code></dt>
+<dd><p>&ldquo;sensible&rdquo; default options (all&ndash;excluding hrtime, mtab, and xdrtrace)
+</p></dd>
+<dt> <code>test</code></dt>
+<dd><p>full debug options plus mtab,nodaemon,nofork,noamq
+</p></dd>
+<dt> <code>amq</code></dt>
+<dd><p>register <i>Amd</i> with the RPC portmapper, for <i>Amq</i>
+</p></dd>
+<dt> <code>daemon</code></dt>
+<dd><p>enter daemon mode
+</p></dd>
+<dt> <code>fork</code></dt>
+<dd><p>fork child worker (hlfsd only)
+</p></dd>
+<dt> <code>full</code></dt>
+<dd><p>program trace
+</p></dd>
+<dt> <code>hrtime</code></dt>
+<dd><p>print high resolution time stamps (only if <b>syslog</b>(3) is not used)
+</p></dd>
+<dt> <code>info</code></dt>
+<dd><a name="index-debugging-hesiod-resolver-service"></a>
+<a name="index-Hesiod_003b-turning-on-RES_005fDEBUG"></a>
+<p>info service specific debugging (hesiod, nis, etc.)  In the case of
+hesiod maps, turns on the hesiod RES_DEBUG internal debugging option.
+</p></dd>
+<dt> <code>mem</code></dt>
+<dd><p>trace memory allocations.  Needs to be explicitly enabled at compile
+time with &ndash;enable-debug=mem.
+</p></dd>
+<dt> <code>mtab</code></dt>
+<dd><p>use local mount-table file (defaults to &lsquo;<tt>/tmp/mtab</tt>&rsquo;, see section <a href="am-utils_10.html#debug_005fmtab_005ffile-Parameter"><tt>debug_mtab_file</tt> Parameter</a>)
+</p></dd>
+<dt> <code>readdir</code></dt>
+<dd><p>show readdir progress
+</p></dd>
+<dt> <code>str</code></dt>
+<dd><p>debug string munging
+</p></dd>
+<dt> <code>trace</code></dt>
+<dd><p>trace RPC protocol and NFS mount arguments
+</p></dd>
+<dt> <code>xdrtrace</code></dt>
+<dd><p>trace XDR routines
+</p></dd>
+</dl>
+
+<p>You may also refer to the program source for a more detailed explanation
+of the available options.
+</p>
+<hr size="6">
+<a name="g_t_002dF-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dD-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dH-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dF-conf_002dfile"></a>
+<h2 class="section">4.18 <code>-F</code> <var>conf-file</var></h2>
+<a name="index-Amd-configuration-file_003b-specifying-name"></a>
+<a name="index-Amd-configuration-file"></a>
+<a name="index-amd_002econf-file"></a>
+
+<p>Specify an <i>Amd</i> configuration file <var>conf-file</var> to use.  For a
+description of the format and syntax, see section <a href="am-utils_10.html#Amd-Configuration-File">Amd Configuration File</a>.
+This configuration file is used to specify any options in lieu of typing
+many of them on the command line.  The &lsquo;<tt>amd.conf</tt>&rsquo; file includes
+directives for every command line option <i>Amd</i> has, and many more that
+are only available via the configuration file facility.  The
+configuration file specified by this option is processed after all other
+options had been processed, regardless of the actual location of this
+option on the command line.
+</p>
+<hr size="6">
+<a name="g_t_002dH-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dF-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dO-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dH"></a>
+<h2 class="section">4.19 <code>-H</code></h2>
+<a name="index-Displaying-brief-help"></a>
+<a name="index-Help_003b-showing-from-Amd"></a>
+
+<p>Print a brief help and usage string.
+</p>
+<hr size="6">
+<a name="g_t_002dO-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dH-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dS-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dO-op_002dsys_002dname"></a>
+<h2 class="section">4.20 <code>-O</code> <var>op-sys-name</var></h2>
+<a name="index-Operating-System-name"></a>
+<a name="index-Setting-the-Operating-System-name"></a>
+
+<p>Overrides the compiled-in name of the operating system, with
+<var>op-sys-name</var>.  Useful when the built-in name is not desired for
+backward compatibility reasons.  For example, if the build in name is
+&lsquo;<samp>sunos5</samp>&rsquo;, you can override it to the old name &lsquo;<samp>sos5</samp>&rsquo;, and use
+older maps which were written with the latter in mind.
+</p>
+<hr size="6">
+<a name="g_t_002dS-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dO-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#g_t_002dT-Option" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dS"></a>
+<h2 class="section">4.21 <code>-S</code></h2>
+<a name="index-plock_003b-using"></a>
+<a name="index-mlockall_003b-using"></a>
+<a name="index-locking-executable-pages-in-memory"></a>
+
+<p>Do <em>not</em> lock the running executable pages of <i>Amd</i> into memory.
+To improve <i>Amd</i>&rsquo;s performance, systems that support the <b>plock</b>(3)
+or <b>mlockall</b>(2)
+call lock the <i>Amd</i> process into memory.  This way there is less
+chance the operating system will schedule, page out, and swap the
+<i>Amd</i> process as needed.  This tends to improve <i>Amd</i>&rsquo;s performance,
+at the cost of reserving the memory used by the <i>Amd</i> process (making
+it unavailable for other processes).  If this behavior is not desired,
+use the <code>-S</code> option.
+</p>
+<hr size="6">
+<a name="g_t_002dT-Option"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#g_t_002dS-Option" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="g_t_002dT-tag"></a>
+<h2 class="section">4.22 <code>-T</code> <var>tag</var></h2>
+<a name="index-Tags-for-Amd-configuration-file"></a>
+<a name="index-Configuration-file_003b-tags"></a>
+
+<p>Specify a tag to use with &lsquo;<tt>amd.conf</tt>&rsquo;.  All map entries tagged with
+<var>tag</var> will be processed.  Map entries that are not tagged are always
+processed.  Map entries that are tagged with a tag other than <var>tag</var>
+will not be processed.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Amd-Command-Line-Options" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_9.html#Filesystem-Types" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

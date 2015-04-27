@@ -1,0 +1,542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on January 18, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Am-utils (4.4BSD Automounter Utilities): 1. Overview</title>
+
+<meta name="description" content="Am-utils (4.4BSD Automounter Utilities): 1. Overview">
+<meta name="keywords" content="Am-utils (4.4BSD Automounter Utilities): 1. Overview">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Overview"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="am-utils_4.html#History" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Fundamentals" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_4.html#History" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Overview-1"></a>
+<h1 class="chapter">1. Overview</h1>
+
+<p><i>Amd</i> maintains a cache of mounted filesystems.  Filesystems are
+<em>demand-mounted</em> when they are first referenced, and unmounted after
+a period of inactivity.  <i>Amd</i> may be used as a replacement for Sun&rsquo;s
+<b>automount</b>(8) program.  It contains no proprietary source code and
+has been ported to numerous flavors of Unix.  See section <a href="am-utils_6.html#Supported-Platforms">Supported Platforms</a>.
+</p>
+<p><i>Amd</i> was designed as the basis for experimenting with filesystem
+layout and management.  Although <i>Amd</i> has many direct applications it
+is loaded with additional features which have little practical use.  At
+some point the infrequently used components may be removed to streamline
+the production system.
+</p>
+<p><i>Amd</i> supports the notion of <em>replicated</em> filesystems by evaluating
+each member of a list of possible filesystem locations one by one.
+<i>Amd</i> checks that each cached mapping remains valid.  Should a mapping be
+lost &ndash; such as happens when a fileserver goes down &ndash; <i>Amd</i> automatically
+selects a replacement should one be available.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Fundamentals">1.1 Fundamentals</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Filesystems-and-Volumes">1.2 Filesystems and Volumes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Volume-Naming">1.3 Volume Naming</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Volume-Binding">1.4 Volume Binding</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Operational-Principles">1.5 Operational Principles</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Mounting-a-Volume">1.6 Mounting a Volume</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Automatic-Unmounting">1.7 Automatic Unmounting</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Keep_002dalives">1.8 Keep-alives</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Non_002dblocking-Operation">1.9 Non-blocking Operation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Fundamentals"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Overview" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Filesystems-and-Volumes" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Fundamentals-1"></a>
+<h2 class="section">1.1 Fundamentals</h2>
+<a name="index-Automounter-fundamentals"></a>
+
+<p>The fundamental concept behind <i>Amd</i> is the ability to separate the
+name used to refer to a file from the name used to refer to its physical
+storage location.  This allows the same files to be accessed with the
+same name regardless of where in the network the name is used.  This is
+very different from placing &lsquo;<tt>/n/hostname</tt>&rsquo; in front of the pathname
+since that includes location dependent information which may change if
+files are moved to another machine.
+</p>
+<p>By placing the required mappings in a centrally administered database,
+filesystems can be re-organized without requiring changes to
+configuration files, shell scripts and so on.
+</p>
+<hr size="6">
+<a name="Filesystems-and-Volumes"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Fundamentals" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Volume-Naming" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Filesystems-and-Volumes-1"></a>
+<h2 class="section">1.2 Filesystems and Volumes</h2>
+<a name="index-Filesystem"></a>
+<a name="index-Volume"></a>
+<a name="index-Fileserver"></a>
+<a name="index-sublink"></a>
+
+<p><i>Amd</i> views the world as a set of fileservers, each containing one or
+more filesystems where each filesystem contains one or more
+<em>volumes</em>.  Here the term <em>volume</em> is used to refer to a
+coherent set of files such as a user&rsquo;s home directory or a TeX
+distribution.
+</p>
+<p>In order to access the contents of a volume, <i>Amd</i> must be told in
+which filesystem the volume resides and which host owns the filesystem.
+By default the host is assumed to be local and the volume is assumed to
+be the entire filesystem.  If a filesystem contains more than one
+volume, then a <em>sublink</em> is used to refer to the sub-directory
+within the filesystem where the volume can be found.
+</p>
+<hr size="6">
+<a name="Volume-Naming"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Filesystems-and-Volumes" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Volume-Binding" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Volume-Naming-1"></a>
+<h2 class="section">1.3 Volume Naming</h2>
+<a name="index-Volume-names"></a>
+<a name="index-Network_002dwide-naming"></a>
+<a name="index-Replicated-volumes"></a>
+<a name="index-Duplicated-volumes"></a>
+<a name="index-Replacement-volumes"></a>
+
+<p>Volume names are defined to be unique across the entire network.  A
+volume name is the pathname to the volume&rsquo;s root as known by the users
+of that volume.  Since this name uniquely identifies the volume
+contents, all volumes can be named and accessed from each host, subject
+to administrative controls.
+</p>
+<p>Volumes may be replicated or duplicated.  Replicated volumes contain
+identical copies of the same data and reside at two or more locations in
+the network.  Each of the replicated volumes can be used
+interchangeably.  Duplicated volumes each have the same name but contain
+different, though functionally identical, data.  For example,
+&lsquo;<samp>/vol/tex</samp>&rsquo; might be the name of a TeX distribution which varied
+for each machine architecture.
+</p>
+<p><i>Amd</i> provides facilities to take advantage of both replicated and
+duplicated volumes.  Configuration options allow a single set of
+configuration data to be shared across an entire network by taking
+advantage of replicated and duplicated volumes.
+</p>
+<p><i>Amd</i> can take advantage of replacement volumes by mounting them as
+required should an active fileserver become unavailable.
+</p>
+<hr size="6">
+<a name="Volume-Binding"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Volume-Naming" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Operational-Principles" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Volume-Binding-1"></a>
+<h2 class="section">1.4 Volume Binding</h2>
+<a name="index-Volume-binding"></a>
+<a name="index-Unix-namespace"></a>
+<a name="index-Namespace"></a>
+<a name="index-Binding-names-to-filesystems"></a>
+
+<p>Unix implements a namespace of hierarchically mounted filesystems.  Two
+forms of binding between names and files are provided.  A <em>hard
+link</em> completes the binding when the name is added to the filesystem.  A
+<em>soft link</em> delays the binding until the name is accessed.  An
+<em>automounter</em> adds a further form in which the binding of name to
+filesystem is delayed until the name is accessed.
+</p>
+<p>The target volume, in its general form, is a tuple (host, filesystem,
+sublink) which can be used to name the physical location of any volume
+in the network.
+</p>
+<p>When a target is referenced, <i>Amd</i> ignores the sublink element and
+determines whether the required filesystem is already mounted.  This is
+done by computing the local mount point for the filesystem and checking
+for an existing filesystem mounted at the same place.  If such a
+filesystem already exists then it is assumed to be functionally
+identical to the target filesystem.  By default there is a one-to-one
+mapping between the pair (host, filesystem) and the local mount point so
+this assumption is valid.
+</p>
+<hr size="6">
+<a name="Operational-Principles"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Volume-Binding" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Mounting-a-Volume" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Operational-Principles-1"></a>
+<h2 class="section">1.5 Operational Principles</h2>
+<a name="index-Operational-principles"></a>
+
+<p><i>Amd</i> operates by introducing new mount points into the namespace.
+These are called <em>automount</em> points.  The kernel sees these
+automount points as NFS filesystems being served by <i>Amd</i>.  Having
+attached itself to the namespace, <i>Amd</i> is now able to control the
+view the rest of the system has of those mount points.  RPC calls are
+received from the kernel one at a time.
+</p>
+<p>When a <em>lookup</em> call is received <i>Amd</i> checks whether the name is
+already known.  If it is not, the required volume is mounted.  A
+symbolic link pointing to the volume root is then returned.  Once the
+symbolic link is returned, the kernel will send all other requests
+direct to the mounted filesystem.
+</p>
+<p>If a volume is not yet mounted, <i>Amd</i> consults a configuration
+<em>mount-map</em> corresponding to the automount point.  <i>Amd</i> then
+makes a runtime decision on what and where to mount a filesystem based
+on the information obtained from the map.
+</p>
+<p><i>Amd</i> does not implement all the NFS requests; only those relevant
+to name binding such as <em>lookup</em>, <em>readlink</em> and <em>readdir</em>.
+Some other calls are also implemented but most simply return an error
+code; for example <em>mkdir</em> always returns &ldquo;read-only filesystem&rdquo;.
+</p>
+<hr size="6">
+<a name="Mounting-a-Volume"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Operational-Principles" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Automatic-Unmounting" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Mounting-a-Volume-1"></a>
+<h2 class="section">1.6 Mounting a Volume</h2>
+<a name="index-Mounting-a-volume"></a>
+<a name="index-Location-lists"></a>
+<a name="index-Alternate-locations"></a>
+<a name="index-Mount-retries"></a>
+<a name="index-Background-mounts"></a>
+
+<p>Each automount point has a corresponding mount map.  The mount map
+contains a list of key&ndash;value pairs.  The key is the name of the volume
+to be mounted.  The value is a list of locations describing where the
+filesystem is stored in the network.  In the source for the map the
+value would look like
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="display">location1  location2  &hellip;  locationN
+</pre></td></tr></table>
+
+<p><i>Amd</i> examines each location in turn.  Each location may contain
+<em>selectors</em> which control whether <i>Amd</i> can use that location.
+For example, the location may be restricted to use by certain hosts.
+Those locations which cannot be used are ignored.
+</p>
+<p><i>Amd</i> attempts to mount the filesystem described by each remaining
+location until a mount succeeds or <i>Amd</i> can no longer proceed.  The
+latter can occur in three ways:
+</p>
+<ul>
+<li>
+If none of the locations could be used, or if all of the locations
+caused an error, then the last error is returned.
+
+</li><li>
+If a location could be used but was being mounted in the background then
+<i>Amd</i> marks that mount as being &ldquo;in progress&rdquo; and continues with
+the next request; no reply is sent to the kernel.
+
+</li><li>
+Lastly, one or more of the mounts may have been <em>deferred</em>.  A mount
+is deferred if extra information is required before the mount can
+proceed.  When the information becomes available the mount will take
+place, but in the mean time no reply is sent to the kernel.  If the
+mount is deferred, <i>Amd</i> continues to try any remaining locations.
+</li></ul>
+
+<p>Once a volume has been mounted, <i>Amd</i> establishes a <em>volume
+mapping</em> which is used to satisfy subsequent requests.
+</p>
+<hr size="6">
+<a name="Automatic-Unmounting"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Mounting-a-Volume" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Keep_002dalives" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Automatic-Unmounting-1"></a>
+<h2 class="section">1.7 Automatic Unmounting</h2>
+
+<p>To avoid an ever increasing number of filesystem mounts, <i>Amd</i> removes
+volume mappings which have not been used recently.  A time-to-live
+interval is associated with each mapping and when that expires the
+mapping is removed.  When the last reference to a filesystem is removed,
+that filesystem is unmounted.  If the unmount fails, for example the
+filesystem is still busy, the mapping is re-instated and its
+time-to-live interval is extended.  The global default for this grace
+period is controlled by the <code>-w</code> command-line option (see section <a href="am-utils_8.html#g_t_002dw-Option">-w</a>) or the <i>amd.conf</i> parameter &lsquo;<samp>dismount_interval</samp>&rsquo;
+(see section <a href="am-utils_10.html#dismount_005finterval-Parameter"><tt>dismount_interval</tt> Parameter</a>).  It is also possible to set this
+value on a per-mount basis (see section <a href="am-utils_7.html#opts-Option">opts</a>).
+</p>
+<p>Filesystems can be forcefully timed out using the <i>Amq</i> command.
+See section <a href="am-utils_11.html#Run_002dtime-Administration">Run-time Administration</a>.  Note that on new enough systems that
+support forced unmounts, such as Linux, <i>Amd</i> can try to use the
+<b>umount2</b>(2) system call to force the unmount, if the regular
+<b>umount</b>(2) system call failed in a way that indicates that the
+mount point is hung or stale.  See section <a href="am-utils_10.html#forced_005funmounts-Parameter"><tt>forced_unmounts</tt> Parameter</a>.
+</p>
+<hr size="6">
+<a name="Keep_002dalives"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Automatic-Unmounting" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Non_002dblocking-Operation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Keep_002dalives-1"></a>
+<h2 class="section">1.8 Keep-alives</h2>
+<a name="index-Keep_002dalives"></a>
+<a name="index-Server-crashes"></a>
+<a name="index-NFS-ping"></a>
+
+<p>Use of some filesystem types requires the presence of a server on
+another machine.  If a machine crashes then it is of no concern to
+processes on that machine that the filesystem is unavailable.  However,
+to processes on a remote host using that machine as a fileserver this
+event is important.  This situation is most widely recognized when an
+NFS server crashes and the behavior observed on client machines is that
+more and more processes hang.  In order to provide the possibility of
+recovery, <i>Amd</i> implements a <em>keep-alive</em> interval timer for some
+filesystem types.  Currently only NFS makes use of this service.
+</p>
+<p>The basis of the NFS keep-alive implementation is the observation that
+most sites maintain replicated copies of common system data such as
+manual pages, most or all programs, system source code and so on.  If
+one of those servers goes down it would be reasonable to mount one of
+the others as a replacement.
+</p>
+<p>The first part of the process is to keep track of which fileservers are
+up and which are down.  <i>Amd</i> does this by sending RPC requests to the
+servers&rsquo; NFS <code>NullProc</code> and checking whether a reply is returned.
+While the server state is uncertain the requests are re-transmitted at
+three second intervals and if no reply is received after four attempts
+the server is marked down.  If a reply is received the fileserver is
+marked up and stays in that state for 30 seconds at which time another
+NFS ping is sent.  This interval is configurable and can even be
+turned off using the <i>ping</i> option.  See section <a href="am-utils_7.html#opts-Option">opts Option</a>.
+</p>
+<p>Once a fileserver is marked down, requests continue to be sent every 30
+seconds in order to determine when the fileserver comes back up.  During
+this time any reference through <i>Amd</i> to the filesystems on that
+server fail with the error &ldquo;Operation would block&rdquo;.  If a replacement
+volume is available then it will be mounted, otherwise the error is
+returned to the user.
+</p>
+<p>Although this action does not protect user files, which are unique on
+the network, or processes which do not access files via <i>Amd</i> or
+already have open files on the hung filesystem, it can prevent most new
+processes from hanging.
+</p>
+<hr size="6">
+<a name="Non_002dblocking-Operation"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Keep_002dalives" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Overview" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Non_002dblocking-Operation-1"></a>
+<h2 class="section">1.9 Non-blocking Operation</h2>
+<a name="index-Non_002dblocking-operation"></a>
+<a name="index-Multiple_002dthreaded-server"></a>
+<a name="index-RPC-retries"></a>
+
+<p>Since there is only one instance of <i>Amd</i> for each automount point,
+and usually only one instance on each machine, it is important that it
+is always available to service kernel calls.  <i>Amd</i> goes to great
+lengths to ensure that it does not block in a system call.  As a last
+resort <i>Amd</i> will fork before it attempts a system call that may block
+indefinitely, such as mounting an NFS filesystem.  Other tasks such as
+obtaining filehandle information for an NFS filesystem, are done using a
+purpose built non-blocking RPC library which is integrated with
+<i>Amd</i>&rsquo;s task scheduler.  This library is also used to implement NFS
+keep-alives (see section <a href="#Keep_002dalives">Keep-alives</a>).
+</p>
+<p>Whenever a mount is deferred or backgrounded, <i>Amd</i> must wait for it
+to complete before replying to the kernel.  However, this would cause
+<i>Amd</i> to block waiting for a reply to be constructed.  Rather than do
+this, <i>Amd</i> simply <em>drops</em> the call under the assumption that the
+kernel RPC mechanism will automatically retry the request.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Overview" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_6.html#Supported-Platforms" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="am-utils_0.html#License" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_18.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="am-utils_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Tim Cutts</em> on <em>January 18, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
