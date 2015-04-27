@@ -1,0 +1,1 @@
+[http://www.adaic.org/ada-resources/standards/ada05/](http://www.adaic.org/ada-resources/standards/ada05/)
