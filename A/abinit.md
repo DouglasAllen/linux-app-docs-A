@@ -1,1 +1,1 @@
-[http://www.abinit.org/about/what-is-abinit](http://www.abinit.org/about/what-is-abinit)
+[http://www.abinit.org/](http://www.abinit.org/)
